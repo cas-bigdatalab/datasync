@@ -26,3 +26,6 @@ hs_err_pid*
 .idea
 *.iml
 
+#classes directory and target directory
+trunk/classes
+trunk/portal/target
