@@ -26,7 +26,7 @@ public class SubjectMgmtController {
     }
 
     /**
-     * 添加专题库
+     * add Subject
      * @param request
      * @param subject
      * @return
@@ -40,11 +40,11 @@ public class SubjectMgmtController {
         String addedNotice = "";
         if (addItemNum > 0)
         {
-            addedNotice = "增加专题库成功";
+            addedNotice = "success to add subject ";
         }
         else
         {
-            addedNotice = "增加专题库失败";
+            addedNotice = "failed to add subject";
         }
 
         ModelAndView mv = new ModelAndView("subjectMgmt");
@@ -54,7 +54,7 @@ public class SubjectMgmtController {
     }
 
     /**
-     * 删除专题库
+     * delete subject
      * @param request
      * @param id
      * @return
@@ -67,7 +67,7 @@ public class SubjectMgmtController {
     }
 
     /**
-     * 修改专题库
+     * modifySubject
      * @param request
      * @param subject
      * @return
@@ -80,7 +80,7 @@ public class SubjectMgmtController {
     }
 
     /**
-     * 查询目前已经有的专题库
+     * querySubject
      * @param request
      * @param currentPage
      * @return
@@ -93,7 +93,7 @@ public class SubjectMgmtController {
     }
 
     /**
-     * 数据库测试接口
+     * test db connectivity
      */
     @RequestMapping(value = "/dbConnectable")
     public ModelAndView dbConnectable(HttpServletRequest request)
