@@ -15,7 +15,8 @@
 <head>
     <title>Title</title>
 
-    <link id="style_color" href="${ctx}/resources/css/default.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/default.css"/>
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/bootstrap.min.css" />
     <style type="text/css">
         td {
             text-align: center;
@@ -91,20 +92,20 @@
         <ul class="pagination">
             <!--到首页-->
             <li>
-                <a href="${ctx}/projectLib/projectLibMgmt?currentPage=1">
+                <a href="${ctx}/subject/projectLibMgmt?currentPage=1">
                     首页
                 </a>
             </li>
 
             <c:forEach begin="1" end="${totalPages}" step="1" varStatus="vs">
                 <li>
-                    <a href="${ctx}/projectLib/projectLibMgmt?currentPage=${vs.count}">${vs.count}</a>
+                    <a href="${ctx}/subject/projectLibMgmt?currentPage=${vs.count}">${vs.count}</a>
                 </li>
             </c:forEach>
 
             <!--到尾页-->
             <li>
-                <a href="${ctx}/projectLib/projectLibMgmt?currentPage=${totalPages}">
+                <a href="${ctx}/subject/projectLibMgmt?currentPage=${totalPages}">
                     尾页
                 </a>
             </li>
@@ -135,7 +136,7 @@
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control" placeholder="请输入数据源名称"
+                                                <input type="text" class="form-control" placeholder="请输入专题库名称"
                                                        id="projectLibName" name="projectLibName"/>
                                             </div>
                                         </div>
@@ -233,7 +234,7 @@
                                         <!--专题库ftp密码-->
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">
-                                                FTP账号
+                                                FTP密码
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-9">
@@ -299,6 +300,7 @@
     <script type="text/javascript">
         var ctx = '${ctx}';
 
+        //
         $("#showRelationalDatabaseForm").click(function () {
                 $("#dataSourceId").val("0");
                 $("#dataSourceName").val("");
