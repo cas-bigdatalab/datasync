@@ -32,7 +32,7 @@
 
     <hr />
 
-    <!--添加专题库页面-->
+    <!--the page to add subject-->
     <a id="showAddProjectLibDialog" data-target="#addProjectLib" data-toggle="modal" title="添加关系数据库">
         <button>
             添加专题库
@@ -43,7 +43,7 @@
     <br />
     <br />
 
-    <!--专题库列表主体-->
+    <!--the table to list all available subjects-->
     <div class="portlet-body">
         <table class="table table-hover table-bordered">
             <thead>
@@ -87,10 +87,10 @@
         </table>
     </div>
 
-    <!--专题库分页按钮-->
+    <!--paging-->
     <div align="center">
         <ul class="pagination">
-            <!--到首页-->
+            <!--to the first page-->
             <li>
                 <a href="${ctx}/subject/projectLibMgmt?currentPage=1">
                     首页
@@ -103,7 +103,7 @@
                 </li>
             </c:forEach>
 
-            <!--到尾页-->
+            <!--to the last page-->
             <li>
                 <a href="${ctx}/subject/projectLibMgmt?currentPage=${totalPages}">
                     尾页
@@ -112,24 +112,24 @@
         </ul>
     </div>
 
-    <!--添加专题库的弹出对话框-->
+    <!--the dialog for adding subject-->
     <div id="addProjectLib" class="modal fade" tabindex="-1" data-width="400">
         <div class="modal-dialog">
             <div class="modal-content">
-                <!--添加专题库对话框的标题，包括标题文字和一个右上角的关闭按钮-->
+                <!--the title for adding subject dialog，title text and a close button on the right corner of the page-->
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="false"> </button>
 
                     <h4 class="modal-title" id="titleForAddProjectLibDialog">添加专题库</h4>
                 </div>
-                <!--专题库信息输入表单-->
+                <!--subject info input form-->
                 <div class="form">
                     <form class="form-horizontal" role="form" action="addProjectLib" method="post" accept-charset="utf-8" id="projectLibInfoForm">
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-body">
-                                        <!--专题库名称-->
+                                        <!--SubjectName-->
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">
                                                 专题库名称
@@ -141,7 +141,7 @@
                                             </div>
                                         </div>
 
-                                        <!--专题库代码-->
+                                        <!--SubjectCode-->
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">
                                                 专题库代码
@@ -153,7 +153,7 @@
                                             </div>
                                         </div>
 
-                                        <!--专题库简介-->
+                                        <!--Brief-->
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">
                                                 专题库简介
@@ -165,43 +165,43 @@
                                             </div>
                                         </div>
 
-                                        <!--专题库负责人-->
+                                        <!--Contact-->
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">
-                                                专题库负责人
+                                                联系人
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control" placeholder="请输入专题库负责人姓名"
+                                                <input type="text" class="form-control" placeholder="请输入联系人姓名"
                                                        id="projectLibAdmin"
                                                        name="projectLibAdmin"/>
                                             </div>
                                         </div>
 
-                                        <!--专题库负责人电话-->
+                                        <!--phone-->
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">
-                                                负责人电话
+                                                联系电话
                                                 <span class="required">*</span>
                                             </label>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control" placeholder="请输入负责人电话"
+                                                <input type="text" class="form-control" placeholder="请输入联系人电话"
                                                        id="adminPhone"
                                                        name="adminPhone" />
                                             </div>
                                         </div>
 
-                                        <!--专题库负责人地址-->
+                                        <!--Address-->
                                         <div class="form-group">
-                                            <label class="col-md-3 control-label">负责人地址</label>
+                                            <label class="col-md-3 control-label">地址</label>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control" placeholder="请输入专题库负责人地址"
+                                                <input type="text" class="form-control" placeholder="请输入专联系人地址"
                                                        id="adminAddress"
                                                        name="adminAddress"/>
                                             </div>
                                         </div>
 
-                                        <!--专题库管理员账号-->
+                                        <!--admin-->
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">
                                                 管理员账号
@@ -216,7 +216,7 @@
                                             </div>
                                         </div>
 
-                                        <!--专题库ftp账号-->
+                                        <!--FtpUser-->
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">
                                                 FTP账号
@@ -231,7 +231,7 @@
                                             </div>
                                         </div>
 
-                                        <!--专题库ftp密码-->
+                                        <!--FtpPassword-->
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">
                                                 FTP密码
@@ -249,7 +249,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!--信息提交按钮-->
+                        <!--buttons to submit or cancel-->
                         <div class="modal-footer">
                             <button type="submit" class="btn green" id="saveButton" disabled=true>
                                 保存
@@ -264,7 +264,7 @@
         </div>
     </div>
 
-    <!--删除数据源-->
+    <!--the dialog for deleting the subject-->
     <div class="modal fade" id="deleteProjectLib" tabindex="-1" role="basic" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -282,7 +282,7 @@
 
 </body>
 
-<!--为了加快页面加载速度，请把js文件放到这个div里-->
+<!--put some js script the bottom of the page for peroformence-->
 <div id="siteMeshJavaScript">
     <script type="text/javascript" src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/jquery-validation/js/additional-methods.min.js"></script>

@@ -56,10 +56,10 @@ public class SubjectMgmtDao {
         Object[] args = new Object[]{"subjectNameTest", "subjectCodeTest", "test subject", "章太严", "13245678910", "北京市海淀区", "admin@test.cn", "abc", "def"};
         int cnt = jdbcTemplate.update(testSql, args);
 
-        String testMsg = "测试消息";
+        String testMsg = "test message";
         if (cnt > 0)
         {
-            testMsg = "测试数据插入成功";
+            testMsg = "test data inserted successfully";
         }
 
         return testMsg;
