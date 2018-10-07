@@ -1,7 +1,10 @@
 package cn.csdb.drsr.controller;
 
+import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
+import cn.csdb.drsr.service.DataSrcService;
 import cn.csdb.drsr.service.DataTaskService;
+import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
 import cn.csdb.drsr.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -16,14 +19,15 @@ import javax.annotation.Resource;
 public class DataTaskController {
     @Resource
     private DataTaskService dataTaskService;
+    @Resource
+    private DataSrcService dataSrcService;
 
     @ResponseBody
     @RequestMapping(value="/task/{id}")
     public JSONObject executeTask(@PathVariable("id") String id){
         JSONObject jsonObject = new JSONObject();
         DataTask dataTask = dataTaskService.get(Integer.parseInt(id));
-        //IDataSource dataSource = data
-        jsonObject.put("result","true");
+        jsonObject = dataTaskService.executeTask(dataTask);
         return jsonObject;
     }
 

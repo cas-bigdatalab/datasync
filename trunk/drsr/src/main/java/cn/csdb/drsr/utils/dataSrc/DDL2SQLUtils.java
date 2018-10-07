@@ -21,7 +21,7 @@ public class DDL2SQLUtils {
     public static String generateDDLFromTable(Connection jdbcConnection, String catalog, String schema,
                                         String table) {
         StringBuilder sb = new StringBuilder();
-        sb.append("DROP TABLE IF EXISTS " + table + " ; ");
+        sb.append("DROP TABLE IF EXISTS " + table + " ; \n");
         sb.append("CREATE TABLE " + table + "(");
 
         try {
@@ -81,7 +81,7 @@ public class DDL2SQLUtils {
         }
         sb.append(generatePKsDdl(jdbcConnection, catalog, schema, table));
         sb.append("\n);");
-        sb.append("\n");
+        sb.append("\n\n");
         return sb.toString();
     }
 
@@ -139,10 +139,10 @@ public class DDL2SQLUtils {
     /**
      * get the ddl from a sql string
      */
-    public String generateDDLFromSql(Connection jdbcConnection, String sql, String logicTable) {
+    public static String generateDDLFromSql(Connection jdbcConnection, String sql, String logicTable) {
         StringBuilder sb = new StringBuilder();
         try {
-            sb.append("DROP TABLE IF EXISTS " + logicTable + " ; ");
+            sb.append("DROP TABLE IF EXISTS " + logicTable + " ;\n ");
             sb.append("CREATE TABLE " + logicTable + "(");
             DatabaseMetaData meta = jdbcConnection.getMetaData();
             PreparedStatement preparedStatement = jdbcConnection.prepareStatement(sql);
@@ -200,7 +200,7 @@ public class DDL2SQLUtils {
             if (sb.toString().endsWith(",")) {
                 sb.replace(sb.length()-1, sb.length(), " ");
             }
-            sb.append("\n);");
+            sb.append("\n);\n");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -252,7 +252,7 @@ public class DDL2SQLUtils {
     /**
      * generate Insert Data Sql from a  table
      */
-    private static String generateInsertSqlFromTable(Connection jdbcConnection, String catalog, String schema, String table) {
+    public static String generateInsertSqlFromTable(Connection jdbcConnection, String catalog, String schema, String table) {
         StringBuilder result = new StringBuilder();
         //result.append("DELETE FROM " + table + ";");
         try {
