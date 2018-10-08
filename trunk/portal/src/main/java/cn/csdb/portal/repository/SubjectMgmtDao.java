@@ -53,13 +53,17 @@ public class SubjectMgmtDao {
     {
         String testSql = "insert into Subject(subjectName, subjectCode, brief, contact, phone, address, admin, ftpUser, ftpPassword) \n" +
                 " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        Object[] args = new Object[]{"subjectNameTest", "subjectCodeTest", "test subject", "章太严", "13245678910", "北京市海淀区", "admin@test.cn", "abc", "def"};
+        Object[] args = new Object[]{"subjectNameTest", "subjectCodeTest", "test subject", "subjectContact", "13245678910", "北京市海淀区", "admin@test.cn", "abc", "def"};
         int cnt = jdbcTemplate.update(testSql, args);
 
         String testMsg = "test message";
         if (cnt > 0)
         {
             testMsg = "test data inserted successfully";
+        }
+        else
+        {
+            testMsg = "test data insertion failed.";
         }
 
         return testMsg;

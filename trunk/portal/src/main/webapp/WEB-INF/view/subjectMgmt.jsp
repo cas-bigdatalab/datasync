@@ -16,7 +16,9 @@
     <title>Title</title>
 
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/default.css"/>
+<%--
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/bootstrap.min.css" />
+--%>
     <style type="text/css">
         td {
             text-align: center;
@@ -33,10 +35,16 @@
     <hr />
 
     <!--the page to add subject-->
-    <a id="showAddProjectLibDialog" data-target="#addProjectLib" data-toggle="modal" title="添加关系数据库">
+    <a id="showAddSubjectDialog" data-target="#addSubject" data-toggle="modal" title="添加关系数据库">
         <button>
             添加专题库
             <i class="glyphicon glyphicon-plus"></i>
+        </button>
+    </a>
+
+    <a id="testDbConnection" href="${ctx}/subjectMgmt/dbConnectable" title="测试数据库连接">
+        <button>
+            测试数据库连接
         </button>
     </a>
 
@@ -74,11 +82,11 @@
                     <td>ftpAccount</td>
                     <td>ftpPassword</td>
                     <td id="${ds.dataSourceId}">
-                        <a title="修改" href="#modifyProjectLib" class="updateButton">
+                        <a title="修改" href="#modifySubject" class="updateButton">
                             <i class="glyphicon glyphicon-pencil"></i>
                         </a>
                         &nbsp;&nbsp;
-                        <a title="删除" class="deleteButton" data-target="#deleteProjectLib" data-toggle="modal">
+                        <a title="删除" class="deleteButton" data-target="#deleteSubject" data-toggle="modal">
                             <i class="glyphicon glyphicon-remove"></i>
                         </a>
                     </td>
@@ -92,20 +100,20 @@
         <ul class="pagination">
             <!--to the first page-->
             <li>
-                <a href="${ctx}/subject/projectLibMgmt?currentPage=1">
+                <a href="${ctx}/subjectMgmt/querySubject?currentPage=1">
                     首页
                 </a>
             </li>
 
             <c:forEach begin="1" end="${totalPages}" step="1" varStatus="vs">
                 <li>
-                    <a href="${ctx}/subject/projectLibMgmt?currentPage=${vs.count}">${vs.count}</a>
+                    <a href="${ctx}/subjectMgmt/querySubject?currentPage=${vs.count}">${vs.count}</a>
                 </li>
             </c:forEach>
 
             <!--to the last page-->
             <li>
-                <a href="${ctx}/subject/projectLibMgmt?currentPage=${totalPages}">
+                <a href="${ctx}/subjectMgmt/querySubject?currentPage=${totalPages}">
                     尾页
                 </a>
             </li>
@@ -113,7 +121,7 @@
     </div>
 
     <!--the dialog for adding subject-->
-    <div id="addProjectLib" class="modal fade" tabindex="-1" data-width="400">
+    <div id="addSubject" class="modal fade" tabindex="-1" data-width="400">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!--the title for adding subject dialog，title text and a close button on the right corner of the page-->
@@ -265,7 +273,7 @@
     </div>
 
     <!--the dialog for deleting the subject-->
-    <div class="modal fade" id="deleteProjectLib" tabindex="-1" role="basic" aria-hidden="true">
+    <div id="deleteSubject" class="modal fade" tabindex="-1" role="basic" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -280,6 +288,12 @@
         </div>
     </div>
 
+    <!--   -->
+    <br />
+    <hr />
+    <div id="dbConnect">
+        ${dbConnectableNotice}
+    </div>
 </body>
 
 <!--put some js script the bottom of the page for peroformence-->

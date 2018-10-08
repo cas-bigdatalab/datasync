@@ -64,7 +64,7 @@
                     <td><a href="${ctx}/resource/resourcesList">资源与服务</a></td>
                     <td><a href="${ctx}/demcons/main/list/all">需求与咨询</a></td>
                     <td><a href="${ctx}/person/myApplyPage">个人中心</a></td>
-                    <td><a href="${ctx}/projectLibMgmt/queryProjectLib?currentPage=1">专题库注册</a></td>
+                    <td><a href="${ctx}/subjectMgmt/querySubject?currentPage=1">专题库注册</a></td>
                 </tr>
             </table>
         </div>

@@ -9,12 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping("/projectLibMgmt")
+@RequestMapping("/subjectMgmt")
 public class SubjectMgmtController {
     private SubjectMgmtService subjectService;
     private static final Logger logger = LogManager.getLogger(SubjectMgmtController.class);
@@ -72,10 +73,10 @@ public class SubjectMgmtController {
      * @param subject
      * @return
      */
-    @RequestMapping(value = "/modifyProjectLib")
+    @RequestMapping(value = "/modifySubject")
     public String modifySubject(HttpServletRequest request, Subject subject)
     {
-        logger.info("enterring projectLibMgmtController-modifySubject");
+        logger.info("enterring SubjectMgmtController-modifySubject");
         return "modifySubject";
     }
 
@@ -88,7 +89,7 @@ public class SubjectMgmtController {
     @RequestMapping(value = "/querySubject")
     public String querySubject(HttpServletRequest request, @RequestParam(required=false) int currentPage)
     {
-        logger.info("enterring projectLibMgmtController-querySubject");
+        logger.info("enterring SubjectMgmtController-querySubject");
         return "subjectMgmt";
     }
 
@@ -101,7 +102,7 @@ public class SubjectMgmtController {
         logger.info("enterring subjectMgmtController-dbConnectable");
         String connectableMsg = subjectService.dbConnectable();
 
-        ModelAndView mv = new ModelAndView("dbConnectable");
+        ModelAndView mv = new ModelAndView("subjectMgmt");
         mv.addObject("dbConnectableNotice", connectableMsg);
         return mv;
     }
