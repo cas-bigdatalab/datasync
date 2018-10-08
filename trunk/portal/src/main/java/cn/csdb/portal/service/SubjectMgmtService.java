@@ -19,31 +19,58 @@ public class SubjectMgmtService {
     }
 
     @Transactional
-    public int addSubject(Subject subject)
+    public String addSubject(Subject subject)
     {
-        return subjectMgmtDao.addSubject(subject);
+        String addSubjectNotice = "";
+        int addedRowCnt = subjectMgmtDao.addSubject(subject);
+        if (addedRowCnt == 1)
+        {
+            addSubjectNotice = "添加专题库：成功！";
+        }
+        else
+        {
+            addSubjectNotice = "添加专题库：失败！";
+        }
+
+        return addSubjectNotice;
     }
 
     @Transactional
-    public int deleteProjectLib(int id)
+    public String deleteSubject(int id)
     {
-        return subjectMgmtDao.deleteSubject(id);
+        String deleteSubjectNotice = "";
+        int deletedRowCnt = subjectMgmtDao.deleteSubject(id);
+        if (deletedRowCnt == 1)
+        {
+            deleteSubjectNotice = "删除专题库：成功！";
+        }
+        else
+        {
+            deleteSubjectNotice = "删除专题库：失败！";
+        }
+
+        return deleteSubjectNotice;
     }
 
     @Transactional
-    public int modifySubject(Subject subject)
+    public String modifySubject(Subject subject)
     {
-        return subjectMgmtDao.modifySubject(subject);
+        String modifySubjectNotice = "";
+        int modifiedRowCnt = subjectMgmtDao.modifySubject(subject);
+        if (modifiedRowCnt == 1)
+        {
+            modifySubjectNotice = "修改专题库：成功！";
+        }
+        else
+        {
+            modifySubjectNotice = "修改专题库：失败！";
+        }
+
+        return modifySubjectNotice;
     }
 
-    public List<Subject> querySubject(int currentNum)
+    public List<Subject> querySubject(int requestedPage)
     {
-        return null;
-    }
-
-    @Transactional
-    public String dbConnectable()
-    {
-        return subjectMgmtDao.dbConnectable();
+        return subjectMgmtDao.querySubject(requestedPage);
     }
 }

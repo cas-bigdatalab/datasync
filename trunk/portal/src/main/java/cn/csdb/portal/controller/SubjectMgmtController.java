@@ -1,6 +1,5 @@
 package cn.csdb.portal.controller;
 
-
 import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.service.SubjectMgmtService;
 import org.apache.logging.log4j.LogManager;
@@ -8,11 +7,12 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping("/subjectMgmt")
@@ -26,85 +26,55 @@ public class SubjectMgmtController {
         this.subjectService = subjectService;
     }
 
-    /**
-     * add Subject
-     * @param request
-     * @param subject
-     * @return
-     */
     @RequestMapping(value = "/addSubject")
     public ModelAndView addSubject(HttpServletRequest request, @RequestParam(required=true) Subject subject)
     {
-        logger.info("enterring subjectMgmtController-addSubject");
+        logger.info("SubjectMgmtController-addSubject");
 
-        int addItemNum = subjectService.addSubject(subject);
-        String addedNotice = "";
-        if (addItemNum > 0)
-        {
-            addedNotice = "success to add subject ";
-        }
-        else
-        {
-            addedNotice = "failed to add subject";
-        }
+        String addSubjectNotice = subjectService.addSubject(subject);
 
         ModelAndView mv = new ModelAndView("subjectMgmt");
-        mv.addObject("addedNotice", addedNotice);
+        mv.addObject("addSubjectNotice", addSubjectNotice);
 
         return mv;
     }
 
-    /**
-     * delete subject
-     * @param request
-     * @param id
-     * @return
-     */
     @RequestMapping(value = "/deleteSubject")
-    public String deleteSubject(HttpServletRequest request, @RequestParam(required=true) int id)
+    public ModelAndView deleteSubject(HttpServletRequest request, @RequestParam(required=true) int id)
     {
-        logger.info("enterring SubjectMgmtController-deleteSubject");
-        return "deleteSubject";
+        logger.info("SubjectMgmtController-deleteSubject");
+
+        String deleteSubjectNotice = subjectService.deleteSubject(id);
+
+        ModelAndView mv = new ModelAndView("subjectMgmt");
+        mv.addObject("deleteSubjectNotice", deleteSubjectNotice);
+
+        return mv;
     }
 
-    /**
-     * modifySubject
-     * @param request
-     * @param subject
-     * @return
-     */
     @RequestMapping(value = "/modifySubject")
-    public String modifySubject(HttpServletRequest request, Subject subject)
+    public ModelAndView modifySubject(HttpServletRequest request, @RequestParam(required=true)Subject subject)
     {
-        logger.info("enterring SubjectMgmtController-modifySubject");
-        return "modifySubject";
+        logger.info("SubjectMgmtController-modifySubject");
+
+        String modifySubjectNotice = subjectService.modifySubject(subject);
+
+        ModelAndView mv = new ModelAndView("subjectMgmt");
+        mv.addObject("modifySubjectNotice", modifySubjectNotice);
+
+        return mv;
     }
 
-    /**
-     * querySubject
-     * @param request
-     * @param currentPage
-     * @return
-     */
     @RequestMapping(value = "/querySubject")
-    public String querySubject(HttpServletRequest request, @RequestParam(required=false) int currentPage)
+    public ModelAndView querySubject(HttpServletRequest request, @RequestParam(required=true) int currentPage)
     {
         logger.info("enterring SubjectMgmtController-querySubject");
-        return "subjectMgmt";
-    }
 
-    /**
-     * test db connectivity
-     */
-    @RequestMapping(value = "/dbConnectable")
-    public ModelAndView dbConnectable(HttpServletRequest request)
-    {
-        logger.info("enterring subjectMgmtController-dbConnectable");
-        String connectableMsg = subjectService.dbConnectable();
+        List<Subject> subjectsOfThisPage = subjectService.querySubject(currentPage);
 
         ModelAndView mv = new ModelAndView("subjectMgmt");
-        mv.addObject("dbConnectableNotice", connectableMsg);
+        mv.addObject("subjectsOfThisPage", subjectsOfThisPage);
+
         return mv;
     }
-
 }
