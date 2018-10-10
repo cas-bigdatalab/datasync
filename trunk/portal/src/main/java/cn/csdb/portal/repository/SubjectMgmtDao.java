@@ -13,6 +13,7 @@ import java.util.List;
 
 @Repository
 public class SubjectMgmtDao {
+    private static int rowsPerPage = 10;
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -44,9 +45,16 @@ public class SubjectMgmtDao {
 
     public int modifySubject(Subject subject)
     {
-        deleteSubject(subject.getId());
+        int id = Integer.parseInt(subject.getId());
 
-        return  addSubject(subject);
+        String updateSql = "update subject set SubjectName=?, SubjectCode=?, Brief=?, Contact=?, Phone=?, Address=?, Admin=?, FtpUser=?, FtpPassword=? where ID=?";
+        Object[] args = new Object[]{subject.getSubjectName(), subject.getSubjectCode(), subject.getBrief(),
+                subject.getContact(), subject.getPhone(), subject.getAddress(), subject.getAdmin(),
+                subject.getFtpUser(), subject.getFtpPassword(), id };
+
+        int updatedRowCnt = jdbcTemplate.update(updateSql, args);
+
+        return  updatedRowCnt;
     }
 
     public List<Subject> querySubject(int pageNumber)
@@ -56,7 +64,7 @@ public class SubjectMgmtDao {
             return null;
         }
 
-        int rowsPerPage = 10;
+        //int rowsPerPage = 2;
 
         int totalPages = 1;
         totalPages = getTotalPages();
@@ -76,7 +84,7 @@ public class SubjectMgmtDao {
             public void processRow(ResultSet resultSet) throws SQLException {
                 do {
                     Subject subject = new Subject();
-                    subject.setId(resultSet.getInt("id"));
+                    subject.setId(resultSet.getString("id"));
                     subject.setSubjectName(resultSet.getString("SubjectName"));
                     subject.setSubjectCode(resultSet.getString("SubjectCode"));
                     subject.setBrief(resultSet.getString("Brief"));
@@ -98,7 +106,7 @@ public class SubjectMgmtDao {
 
     public int getTotalPages()
     {
-        int rowsPerPage = 10;
+        //int rowsPerPage = 2;
         String rowSql = "select count(*) from Subject";
         int totalRows = (Integer) jdbcTemplate.queryForObject(rowSql, Integer.class);
         int totalPages = 0;
@@ -114,7 +122,7 @@ public class SubjectMgmtDao {
         jdbcTemplate.query(querySql, new RowCallbackHandler() {
             @Override
             public void processRow(ResultSet resultSet) throws SQLException {
-                subject.setId(resultSet.getInt("id"));
+                subject.setId(resultSet.getString("id"));
                 subject.setSubjectName(resultSet.getString("SubjectName"));
                 subject.setSubjectCode(resultSet.getString("SubjectCode"));
                 subject.setBrief(resultSet.getString("Brief"));

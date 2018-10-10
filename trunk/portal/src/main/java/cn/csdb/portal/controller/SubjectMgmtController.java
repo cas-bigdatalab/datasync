@@ -50,10 +50,7 @@ public class SubjectMgmtController {
         String deleteSubjectNotice = subjectService.deleteSubject(id);
         System.out.println("SubjectMgmtController-deleteSubject，deleteSubjectNotice = " + deleteSubjectNotice);
 
-/*
         String redirectStr = "redirect:/subjectMgmt/querySubject?currentPage=" + currentPage;
-*/
-        String redirectStr = "redirect:/subjectMgmt/querySubject?currentPage=1";
 
         return redirectStr;
     }
