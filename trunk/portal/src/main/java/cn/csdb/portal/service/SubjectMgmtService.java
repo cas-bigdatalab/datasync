@@ -73,4 +73,14 @@ public class SubjectMgmtService {
     {
         return subjectMgmtDao.querySubject(requestedPage);
     }
+
+    public int getTotalPages()
+    {
+        return subjectMgmtDao.getTotalPages();
+    }
+
+    public Subject findSubjectById(int id)
+    {
+        return subjectMgmtDao.findSubjectById(id);
+    }
 }
