@@ -13,6 +13,7 @@ import java.util.List;
 
 @Repository
 public class SubjectMgmtDao {
+    private static int rowsPerPage = 10;
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -23,9 +24,9 @@ public class SubjectMgmtDao {
 
     public int addSubject(Subject subject)
     {
-        String insertSql = "insert into Subject(subjectName, subjectCode, brief, contact, phone, address, admin, ftpUser, ftpPassword) \n" +
+        String insertSql = "insert into Subject(SubjectName, SubjectCode, Brief, Contact, Phone, Address, Admin, FtpUser, FtpPassword) \n" +
                 " values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        Object[] args = new Object[] {subject.getSubjectName(), subject.getSubjectCode(), subject.getBrief(), subject.getContact(), subject.getPhone(), subject.getAdmin(), subject.getFtpUser(), subject.getFtpPassword()};
+        Object[] args = new Object[] {subject.getSubjectName(), subject.getSubjectCode(), subject.getBrief(), subject.getContact(), subject.getPhone(), subject.getAddress(), subject.getAdmin(), subject.getFtpUser(), subject.getFtpPassword()};
 
         int addedRowCnt = jdbcTemplate.update(insertSql, args);
 
@@ -44,9 +45,16 @@ public class SubjectMgmtDao {
 
     public int modifySubject(Subject subject)
     {
-        deleteSubject(subject.getId());
+        int id = Integer.parseInt(subject.getId());
 
-        return  addSubject(subject);
+        String updateSql = "update subject set SubjectName=?, SubjectCode=?, Brief=?, Contact=?, Phone=?, Address=?, Admin=?, FtpUser=?, FtpPassword=? where ID=?";
+        Object[] args = new Object[]{subject.getSubjectName(), subject.getSubjectCode(), subject.getBrief(),
+                subject.getContact(), subject.getPhone(), subject.getAddress(), subject.getAdmin(),
+                subject.getFtpUser(), subject.getFtpPassword(), id };
+
+        int updatedRowCnt = jdbcTemplate.update(updateSql, args);
+
+        return  updatedRowCnt;
     }
 
     public List<Subject> querySubject(int pageNumber)
@@ -56,11 +64,10 @@ public class SubjectMgmtDao {
             return null;
         }
 
-        int rowsPerPage = 10;
-        String rowSql="select count(*) from Subject";
-        int totalRows=(Integer)jdbcTemplate.queryForObject(rowSql, Integer.class);
-        int totalPages = 0;
-        totalPages = totalRows / rowsPerPage + (totalRows % rowsPerPage == 0 ? 0 : 1);
+        //int rowsPerPage = 2;
+
+        int totalPages = 1;
+        totalPages = getTotalPages();
 
         if (pageNumber > totalPages)
         {
@@ -75,10 +82,9 @@ public class SubjectMgmtDao {
         jdbcTemplate.query(querySql, new RowCallbackHandler() {
             @Override
             public void processRow(ResultSet resultSet) throws SQLException {
-                while (resultSet.next())
-                {
+                do {
                     Subject subject = new Subject();
-                    subject.setId(resultSet.getInt("id"));
+                    subject.setId(resultSet.getString("id"));
                     subject.setSubjectName(resultSet.getString("SubjectName"));
                     subject.setSubjectCode(resultSet.getString("SubjectCode"));
                     subject.setBrief(resultSet.getString("Brief"));
@@ -89,11 +95,46 @@ public class SubjectMgmtDao {
                     subject.setFtpUser(resultSet.getString("FtpUser"));
                     subject.setFtpPassword(resultSet.getString("FtpPassword"));
 
+                    System.out.println(subject);
                     subjectsOfThisPage.add(subject);
-                }
+                } while (resultSet.next());
             }
         });
 
         return subjectsOfThisPage;
+    }
+
+    public int getTotalPages()
+    {
+        //int rowsPerPage = 2;
+        String rowSql = "select count(*) from Subject";
+        int totalRows = (Integer) jdbcTemplate.queryForObject(rowSql, Integer.class);
+        int totalPages = 0;
+        totalPages = totalRows / rowsPerPage + (totalRows % rowsPerPage == 0 ? 0 : 1);
+
+        return totalPages;
+    }
+
+    public Subject findSubjectById(int id)
+    {
+        final Subject subject = new Subject();
+        String querySql = "select * from Subject where id = " + id;
+        jdbcTemplate.query(querySql, new RowCallbackHandler() {
+            @Override
+            public void processRow(ResultSet resultSet) throws SQLException {
+                subject.setId(resultSet.getString("id"));
+                subject.setSubjectName(resultSet.getString("SubjectName"));
+                subject.setSubjectCode(resultSet.getString("SubjectCode"));
+                subject.setBrief(resultSet.getString("Brief"));
+                subject.setContact(resultSet.getString("Contact"));
+                subject.setPhone(resultSet.getString("Phone"));
+                subject.setAddress(resultSet.getString("Address"));
+                subject.setAdmin(resultSet.getString("Admin"));
+                subject.setFtpUser(resultSet.getString("FtpUser"));
+                subject.setFtpPassword(resultSet.getString("FtpPassword"));
+            }
+        });
+
+        return subject;
     }
 }

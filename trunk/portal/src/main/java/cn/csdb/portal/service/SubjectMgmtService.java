@@ -32,8 +32,22 @@ public class SubjectMgmtService {
             addSubjectNotice = "添加专题库：失败！";
         }
 
+        createAdmin();
+        createFtp();
+
         return addSubjectNotice;
     }
+
+    private boolean createAdmin()
+    {
+        return false;
+    }
+
+    private boolean createFtp()
+    {
+        return false;
+    }
+
 
     @Transactional
     public String deleteSubject(int id)
@@ -72,5 +86,15 @@ public class SubjectMgmtService {
     public List<Subject> querySubject(int requestedPage)
     {
         return subjectMgmtDao.querySubject(requestedPage);
+    }
+
+    public int getTotalPages()
+    {
+        return subjectMgmtDao.getTotalPages();
+    }
+
+    public Subject findSubjectById(int id)
+    {
+        return subjectMgmtDao.findSubjectById(id);
     }
 }

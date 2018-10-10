@@ -12,6 +12,7 @@
     <context:component-scan base-package="cn.csdb.portal">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
+
     <!-- 将多个配置文件读取到容器中，交给Spring管理 -->
     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
@@ -45,15 +46,19 @@
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <property name="dataSource" ref="dataSource"/>
     </bean>
+
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
+
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
     <bean id="simpleClientHttpRequestFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory">
         <property name="connectTimeout" value="3000"/>
         <property name="readTimeout" value="20000"/>
     </bean>
+
     <bean id="responseErrorHandler" class="cn.csdb.portal.common.CustomResponseErrorHandler"></bean>
+
     <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
         <constructor-arg ref="simpleClientHttpRequestFactory"/>
         <property name="messageConverters">
@@ -81,6 +86,7 @@
         </property>
         <property name="errorHandler" ref="responseErrorHandler"/>
     </bean>
+
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="10000000"/>
         <property name="defaultEncoding" value="utf-8"/>

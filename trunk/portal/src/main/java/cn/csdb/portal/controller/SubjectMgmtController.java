@@ -2,6 +2,8 @@ package cn.csdb.portal.controller;
 
 import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.service.SubjectMgmtService;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,55 +28,71 @@ public class SubjectMgmtController {
         this.subjectService = subjectService;
     }
 
-    @RequestMapping(value = "/addSubject")
-    public ModelAndView addSubject(HttpServletRequest request, @RequestParam(required=true) Subject subject)
+    @RequestMapping(value = "/addSubject", method = RequestMethod.POST)
+    public String addSubject(HttpServletRequest request, Subject subject)
     {
-        logger.info("SubjectMgmtController-addSubject");
+        System.out.println("enterring subjectMgmt-addSubject.");
+        System.out.println(subject);
 
         String addSubjectNotice = subjectService.addSubject(subject);
 
-        ModelAndView mv = new ModelAndView("subjectMgmt");
-        mv.addObject("addSubjectNotice", addSubjectNotice);
+        int totalPages = subjectService.getTotalPages();
+        String redirectStr = "redirect:/subjectMgmt/querySubject?currentPage=" + totalPages;
 
-        return mv;
+        return redirectStr;
     }
 
     @RequestMapping(value = "/deleteSubject")
-    public ModelAndView deleteSubject(HttpServletRequest request, @RequestParam(required=true) int id)
+    public String deleteSubject(HttpServletRequest request, @RequestParam(required=true) int id, @RequestParam(required = true) int currentPage)
     {
-        logger.info("SubjectMgmtController-deleteSubject");
+        System.out.println("SubjectMgmtController-deleteSubject, id = " + id + ", currentPage = " + currentPage);
 
         String deleteSubjectNotice = subjectService.deleteSubject(id);
+        System.out.println("SubjectMgmtController-deleteSubject，deleteSubjectNotice = " + deleteSubjectNotice);
 
-        ModelAndView mv = new ModelAndView("subjectMgmt");
-        mv.addObject("deleteSubjectNotice", deleteSubjectNotice);
+        String redirectStr = "redirect:/subjectMgmt/querySubject?currentPage=" + currentPage;
 
-        return mv;
+        return redirectStr;
     }
 
-    @RequestMapping(value = "/modifySubject")
-    public ModelAndView modifySubject(HttpServletRequest request, @RequestParam(required=true)Subject subject)
+    @RequestMapping(value = "/updateSubject")
+    public String updateSubject(HttpServletRequest request, Subject subject)
     {
-        logger.info("SubjectMgmtController-modifySubject");
-
+        System.out.println("SubjectMgmtController-updateSubject");
+        System.out.println("SubjectMgmtController-updateSubject -" + subject);
         String modifySubjectNotice = subjectService.modifySubject(subject);
 
-        ModelAndView mv = new ModelAndView("subjectMgmt");
-        mv.addObject("modifySubjectNotice", modifySubjectNotice);
+        String redirectUrl = "redirect:/subjectMgmt/querySubject?currentPage=1";
 
-        return mv;
+        return redirectUrl;
     }
 
     @RequestMapping(value = "/querySubject")
     public ModelAndView querySubject(HttpServletRequest request, @RequestParam(required=true) int currentPage)
     {
-        logger.info("enterring SubjectMgmtController-querySubject");
+        System.out.println("enterring SubjectMgmtController-querySubject");
+
+        int totalPages = 0;
+        totalPages = subjectService.getTotalPages();
 
         List<Subject> subjectsOfThisPage = subjectService.querySubject(currentPage);
 
         ModelAndView mv = new ModelAndView("subjectMgmt");
+        mv.addObject("totalPages", totalPages);
         mv.addObject("subjectsOfThisPage", subjectsOfThisPage);
 
+
         return mv;
+    }
+
+    @RequestMapping(value = "/querySubjectById")
+    @ResponseBody
+    public JSONObject querySubjectById(HttpServletRequest request, @RequestParam(required=true) int id)
+    {
+        System.out.println("enterring SubjectMgmtController-querySubjectById");
+        Subject subject = subjectService.findSubjectById(id);
+        System.out.println("querySubjectById - " + subject);
+
+        return (JSONObject)JSON.toJSON(subject);
     }
 }
