@@ -18,9 +18,19 @@
             <list>
                 <value>classpath:jdbc.properties</value>
                 <value>classpath:cas_urls.properties</value>
+                <value>classpath:config.properties</value>
             </list>
         </property>
     </bean>
+
+    <bean id="prop" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <array>
+                <value>classpath:config.properties</value>
+            </array>
+        </property>
+    </bean>
+
 
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <property name="driverClassName" value="${db.driver}"/>

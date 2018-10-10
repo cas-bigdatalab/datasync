@@ -19,6 +19,7 @@ public class DataTaskMapper implements RowMapper {
         dataTask.setTableName(resultSet.getString("TableName"));
         dataTask.setSqlString(resultSet.getString("SqlString"));
         dataTask.setSqlTableNameEn(resultSet.getString("SqlTableNameEn"));
+        dataTask.setSqlFilePath(resultSet.getString("SqlFilePath"));
         dataTask.setFilePath(resultSet.getString("FilePath"));
         dataTask.setCreator(resultSet.getString("Creator"));
         dataTask.setCreateTime(resultSet.getTimestamp("CreateTime"));

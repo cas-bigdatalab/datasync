@@ -14,6 +14,7 @@ public class DataTask {
     private String tableName;
     private String sqlString;
     private String sqlTableNameEn;
+    private String sqlFilePath;
     private String filePath;
     private Date createTime;
     private String creator;
@@ -89,5 +90,13 @@ public class DataTask {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getSqlFilePath() {
+        return sqlFilePath;
+    }
+
+    public void setSqlFilePath(String sqlFilePath) {
+        this.sqlFilePath = sqlFilePath;
     }
 }
