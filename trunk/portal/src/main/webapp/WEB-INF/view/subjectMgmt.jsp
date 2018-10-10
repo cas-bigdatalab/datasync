@@ -45,6 +45,7 @@
         <table class="table table-hover table-bordered">
             <thead>
                 <tr>
+                    <th style="display:none;">专题库ID</th>
                     <th>编号</th>
                     <th>专题库名称</th>
                     <th>专题库代码</th>
@@ -61,6 +62,7 @@
             <tbody
                 <c:forEach items="${subjectsOfThisPage}" var="subject" varStatus="vs">
                     <tr>
+                        <td style="display:none;">${subject.id}</td>
                         <td>${vs.count}</td>
                         <td>${subject.subjectName}</td>
                         <td>${subject.subjectCode}</td>
@@ -72,11 +74,11 @@
                         <td>${subject.ftpUser}</td>
                         <td>${subject.ftpPassword}</td>
                         <td id="${subject.id}">
-                            <a title="修改" id="updateSubjectBtn" data-target="#addSubjectDialog" data-toggle="modal">
+                            <a title="修改" class="updateSubjectBtn" data-target="#addSubjectDialog" data-toggle="modal">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
                             &nbsp;&nbsp;
-                            <a title="删除" id="deleteSubjectBtn" data-target="#deleteSubjectDialog" data-toggle="modal">
+                            <a title="删除" class="deleteSubjectBtn" data-target="#deleteSubjectDialog" data-toggle="modal">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </a>
                         </td>
@@ -112,7 +114,7 @@
     </div>
 
     <!--the dialog for adding subject-->
-    <div id="addSubjectDialog" class="modal fade" tabindex="-1" data-width="400">
+    <div id="addSubjectDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -127,6 +129,12 @@
                     <div class="col-md-12">
                         <div class="form-body">
                             <!--SubjectName-->
+                            <div class="form-group">
+                                <div style="display:none;">
+                                    <input type="text" class="form-control" id="id" name="id" />
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <label class="col-md-3 control-label" for="subjectName">
                                     专题库名称<span style="color: red;">*</span>
@@ -268,7 +276,7 @@
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.js"></script>
 
     <script type="text/javascript">
-        $("#deleteSubjectBtn").click(function (){
+        $(".deleteSubjectBtn").click(function (){
             idOfSubjectToBeDeleted = $(this).parent().attr("id");
             console.log("在deleteSubjectBtn的click里, idOfSubjectToBeDeleted = " + idOfSubjectToBeDeleted);
 
@@ -287,15 +295,17 @@
             });
         });
 
-        $("#updateSubjectBtn").click(
+        $(".updateSubjectBtn").click(
             function () {
                 console.log("updateSubjectBtn的click里边")
                 $.ajax({
                     type: "GET",
+                    async: false,
                     url: '${ctx}/subjectMgmt/querySubjectById',
                     data: {id: $(this).parent().attr("id")},
                     dataType: "json",
                     success: function (data){
+                        $("#id").val(data.id);
                         $("#subjectName").val(data.subjectName);
                         $("#subjectCode").val(data.subjectCode);
                         $("#brief").val(data.brief);
@@ -307,6 +317,8 @@
                         $("#ftpPassword").val(data.ftpPassword);
                         $("#addSubjectForm").attr("action", "${ctx}/subjectMgmt/updateSubject");
                         $("#titleForAddSubjectDialog").html("修改专题库");
+                    },
+                    error: function(data) {
                         console.log(data);
                     }
                 });

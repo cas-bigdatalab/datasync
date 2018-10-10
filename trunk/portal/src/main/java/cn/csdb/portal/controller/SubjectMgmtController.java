@@ -59,7 +59,7 @@ public class SubjectMgmtController {
     public String updateSubject(HttpServletRequest request, Subject subject)
     {
         System.out.println("SubjectMgmtController-updateSubject");
-
+        System.out.println("SubjectMgmtController-updateSubject -" + subject);
         String modifySubjectNotice = subjectService.modifySubject(subject);
 
         String redirectUrl = "redirect:/subjectMgmt/querySubject?currentPage=1";
@@ -81,10 +81,12 @@ public class SubjectMgmtController {
         mv.addObject("totalPages", totalPages);
         mv.addObject("subjectsOfThisPage", subjectsOfThisPage);
 
+
         return mv;
     }
 
     @RequestMapping(value = "/querySubjectById")
+    @ResponseBody
     public JSONObject querySubjectById(HttpServletRequest request, @RequestParam(required=true) int id)
     {
         System.out.println("enterring SubjectMgmtController-querySubjectById");
