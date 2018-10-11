@@ -133,13 +133,13 @@
             <div class="modal-body" style="min-height: 100px">
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label for="chinaName" class="col-sm-3 control-label">数据源名称</label>
+                        <label for="chinaName2" class="col-sm-3 control-label">数据源名称</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="chinaName2" >
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="englishName" class="col-sm-3 control-label">数据来源</label>
+                        <label for="englishName2" class="col-sm-3 control-label">数据来源</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="englishName2">
                         </div>

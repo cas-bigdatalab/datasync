@@ -81,7 +81,7 @@
             <td>{{value.source}}</td>
             <td>{{value.time}}</td>
             <td class="upload-percent">--</td>
-            <td class="upload-over" class="{{value.id}}">--</td>
+            <td  class="{{value.id}}">--</td>
             <td><button type="button" class="btn btn-success upload-data" keyIdTd="{{value.id}}" >{{btnName(value.num)}}</button>
                 &nbsp;&nbsp;
                 <button type="button" class="btn btn-success edit-data" keyIdTd="{{value.id}}" >查看</button>
@@ -89,6 +89,49 @@
         </tr>
         {{/each}}
     </script>
+</div>
+<div id="EModal" class="modal fade" tabindex="-1" data-width="400">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加数据源信息</h4>
+            </div>
+            <div class="modal-body" style="min-height: 100px">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="chinaName" class="col-sm-3 control-label">数据源名称</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="chinaName" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="englishName" class="col-sm-3 control-label">数据来源</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="englishName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">上传位置</label>
+                        <div class="col-sm-8">
+                            <select name="" id="selDB" class="form-control">
+                                <option value="" selected="selected">------------</option>
+                                <option value="">dataOneDB</option>
+                                <option value="">dataTwoDB</option>
+                                <option value="">dataThreeDB</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn green" data-dismiss="modal" onclick="confirmEditNode();" ><i
+                        class="glyphicon glyphicon-ok"></i>完成
+                </button>
+                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
@@ -103,7 +146,7 @@
         template.helper("btnName",function (num) {
             var name=""
             if(num ==0){
-                name="&nbsp;上传&nbsp;"
+                name="&nbsp;&nbsp;&nbsp;上传&nbsp;&nbsp;&nbsp;"
             }else {
                 name="重新上传"
             }
@@ -113,6 +156,7 @@
             /*send request*/
             var souceID = $(this).attr("keyIdTd");
             var keyID = souceID + new Date().getTime();
+            $("."+souceID).text("正在上传")
             $.ajax({
                 url:"${ctx}/ftpUpload",
                 type:"POST",
@@ -121,18 +165,19 @@
                     $("."+souceID).text("正在上传")
                     console.log(data)
                     /*send request get Process */
-                    getProcess(keyID);
+
                 },
                 error:function () {
                     console.log("请求失败")
                 }
             })
+            getProcess(keyID);
         })
         $("#upload-list").delegate(".edit-data","click",function () {
             /*send request*/
             var souceID = $(this).attr("keyIdTd");
 
-            $.ajax({
+            /*$.ajax({
                 url:"${ctx}/getDataContent",
                 type:"POST",
                 data:{processId:souceID},
@@ -143,7 +188,8 @@
                 error:function () {
                     console.log("请求失败")
                 }
-            })
+            })*/
+            $("#EModal").modal('show');
         })
         var List ={
             list:[
@@ -185,17 +231,19 @@
         var aaa = template("resourceTmp1", List);
         $("#bd-data").append(aaa);
         function getProcess(keyID) {
-            $.ajax({
-                url:"${ctx}/ftpUploadProcess",
-                type:"POST",
-                data:{
-                    processId:keyID
-                },
-                success:function (data) {
-                    console.log(data)
-                    getProcess(keyID);
-                }
-            })
+            setInterval(function () {
+                $.ajax({
+                    url:"${ctx}/ftpUploadProcess",
+                    type:"POST",
+                    data:{
+                        processId:keyID
+                    },
+                    success:function (data) {
+                        console.log(data);
+                    }
+                })
+            },50)
+
         }
         function getPrecent(id) {
             setInterval(function () {
