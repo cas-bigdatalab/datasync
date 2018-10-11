@@ -9,8 +9,11 @@ import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
 import cn.csdb.drsr.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -34,9 +37,13 @@ public class DataTaskService {
     @Value("#{prop['SqlFilePath']}")
     private String sqlFilePath;
 
+    private Logger logger = LoggerFactory.getLogger(DataTaskService.class);
+
+    @Transactional(readOnly = true)
     public DataTask get(int dataTaskId){
         return dataTaskDao.get(dataTaskId);
     }
+
 
     public JSONObject executeTask(DataTask dataTask){
         JSONObject jsonObject = new JSONObject();
@@ -63,10 +70,14 @@ public class DataTaskService {
                     dataSb.append("\n");
                 }
             }
+
             if (StringUtils.isNotEmpty(sqlString) && StringUtils.isNotEmpty(sqlTableNameEn)){
                 sqlSb.append(DDL2SQLUtils.generateDDLFromSql(connection,sqlString,sqlTableNameEn));
                 dataSb.append(DDL2SQLUtils.generateInsertSqlFromSQL(connection,sqlString,sqlTableNameEn));
             }
+
+            logger.info("\n\n=========================SQL数据表结构:========================\n" + sqlSb.toString() +"\n");
+            logger.info("\n\n=========================SQL数据内容:==========================\n" + dataSb.toString() +"\n");
 
             File filePath = new File(sqlFilePath + File.separator + dataTask.getDataTaskId());
             if (!filePath.exists() || !filePath.isDirectory())
@@ -82,7 +93,7 @@ public class DataTaskService {
             String sqlFilePathStr = filePath.getPath() +File.separator + "struct.sql;"+  filePath.getPath() +File.separator + "data.sql" ;
             dataTask.setSqlFilePath(sqlFilePathStr);
             boolean result = dataTaskDao.update(dataTask);
-            System.out.println("result=" +result);
+            logger.info("result="+ result) ;
             jsonObject.put("result","true");
         }
         catch (Exception ex){
@@ -91,7 +102,7 @@ public class DataTaskService {
         return jsonObject;
     }
 
-
+    @Transactional
     public boolean update(DataTask dataTask){
         return dataTaskDao.update(dataTask);
     }

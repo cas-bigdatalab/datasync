@@ -16,4 +16,12 @@ public class PersonDao {
         String sql = "select * from person";
         return jdbcTemplate.queryForList(sql);
     }
+
+    public boolean add(String name, int age, String address){
+        boolean result = false;
+        String sql = "Insert into person(name,age,address) values(?,?,?)";
+        if ( jdbcTemplate.update(sql,new Object[]{name,age,address}) > 0 )
+            result = true;
+        return result;
+    }
 }

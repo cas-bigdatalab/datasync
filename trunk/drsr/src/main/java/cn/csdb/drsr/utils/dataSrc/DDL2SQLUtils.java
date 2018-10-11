@@ -239,7 +239,7 @@ public class DDL2SQLUtils {
             }
             rs.close();
             stmt.close();
-            System.out.println(result.toString());
+            //System.out.println(result.toString());
         } catch (SQLException e) {
             System.out.println("Error: could not retrieve data for the sql '" + sql + "' from the backend.");
             e.printStackTrace();
@@ -279,7 +279,7 @@ public class DDL2SQLUtils {
             }
             rs.close();
             stmt.close();
-            System.out.println(result.toString());
+            //System.out.println(result.toString());
         } catch (SQLException e) {
             System.out.println("Error: could not retrieve data for the table '" + table + "' from the backend.");
             e.printStackTrace();
