@@ -103,7 +103,7 @@
         template.helper("btnName",function (num) {
             var name=""
             if(num ==0){
-                name="上传"
+                name="&nbsp;上传&nbsp;"
             }else {
                 name="重新上传"
             }
@@ -114,14 +114,14 @@
             var souceID = $(this).attr("keyIdTd");
             var keyID = souceID + new Date().getTime();
             $.ajax({
-                url:"${ctx}/sendSouce",
+                url:"${ctx}/ftpUpload",
                 type:"POST",
-                data:{souceID:souceID},
+                data:{dataTaskId:souceID,processId:keyID},
                 success:function (data) {
                     $("."+souceID).text("正在上传")
                     console.log(data)
                     /*send request get Process */
-                    getProcess(souceID,keyID);
+                    getProcess(keyID);
                 },
                 error:function () {
                     console.log("请求失败")
@@ -135,7 +135,7 @@
             $.ajax({
                 url:"${ctx}/getDataContent",
                 type:"POST",
-                data:{souceID:souceID},
+                data:{processId:souceID},
                 success:function (data) {
                     console.log(data)
 
@@ -184,16 +184,16 @@
 
         var aaa = template("resourceTmp1", List);
         $("#bd-data").append(aaa);
-        function getProcess(souceID,keyID) {
+        function getProcess(keyID) {
             $.ajax({
-                url:"${ctx}/getProcess",
+                url:"${ctx}/ftpUploadProcess",
                 type:"POST",
                 data:{
-                    souceID:souceID,
-                    keyID:keyID
+                    processId:keyID
                 },
                 success:function (data) {
-                    getProcess();
+                    console.log(data)
+                    getProcess(keyID);
                 }
             })
         }
