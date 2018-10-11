@@ -32,20 +32,22 @@ public class SubjectMgmtService {
             addSubjectNotice = "添加专题库：失败！";
         }
 
-        createAdmin();
-        createFtp();
+        //createFtp();
+        createDb(subject.getSubjectCode());
 
         return addSubjectNotice;
-    }
-
-    private boolean createAdmin()
-    {
-        return false;
     }
 
     private boolean createFtp()
     {
         return false;
+    }
+
+    private boolean createDb(String dbName)
+    {
+        System.out.println("database name : " + dbName);
+
+        return subjectMgmtDao.createDb(dbName);
     }
 
 

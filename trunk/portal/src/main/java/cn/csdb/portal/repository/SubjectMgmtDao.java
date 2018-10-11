@@ -137,4 +137,23 @@ public class SubjectMgmtDao {
 
         return subject;
     }
+
+    public boolean createDb(String dbName)
+    {
+        String createDB = "create database " + dbName;
+
+        System.out.println("createDB = " + createDB);
+
+        try
+        {
+            jdbcTemplate.execute(createDB);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        System.out.println("createDB completed!");
+        return true;
+    }
 }
