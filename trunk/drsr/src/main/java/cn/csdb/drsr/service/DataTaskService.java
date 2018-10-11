@@ -9,9 +9,11 @@ import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
 import cn.csdb.drsr.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.sql.Connection;
 
 /**
@@ -29,6 +31,9 @@ public class DataTaskService {
     @Resource
     private DataSrcDao dataSrcDao;
 
+    @Value("#{prop['SqlFilePath']}")
+    private String sqlFilePath;
+
     public DataTask get(int dataTaskId){
         return dataTaskDao.get(dataTaskId);
     }
@@ -44,29 +49,50 @@ public class DataTaskService {
 
             //导出表结构
             String tableName = dataTask.getTableName();
+            //20181008可能有多个表,用","连接: t_metastruct,t_conceptword
+            String[] tables = tableName.split(",");
+
             String sqlString = dataTask.getSqlString();
             String sqlTableNameEn = dataTask.getSqlTableNameEn();
             StringBuilder sqlSb = new StringBuilder();
             StringBuilder dataSb = new StringBuilder();
-            if (StringUtils.isNotEmpty(tableName))
-            {
-                sqlSb.append(DDL2SQLUtils.generateDDLFromTable(connection,null,null,tableName));
-                dataSb.append(DDL2SQLUtils.generateInsertSqlFromTable(connection,null,null,tableName));
-                dataSb.append("\n");
+            for (String table : tables) {
+                if (StringUtils.isNotEmpty(table)) {
+                    sqlSb.append(DDL2SQLUtils.generateDDLFromTable(connection, null, null, table));
+                    dataSb.append(DDL2SQLUtils.generateInsertSqlFromTable(connection, null, null, table));
+                    dataSb.append("\n");
+                }
             }
             if (StringUtils.isNotEmpty(sqlString) && StringUtils.isNotEmpty(sqlTableNameEn)){
                 sqlSb.append(DDL2SQLUtils.generateDDLFromSql(connection,sqlString,sqlTableNameEn));
                 dataSb.append(DDL2SQLUtils.generateInsertSqlFromSQL(connection,sqlString,sqlTableNameEn));
             }
-            DDL2SQLUtils.generateFile("D:/data","struct.sql",sqlSb.toString());
+
+            File filePath = new File(sqlFilePath + File.separator + dataTask.getDataTaskId());
+            if (!filePath.exists() || !filePath.isDirectory())
+            {
+                filePath.mkdirs();
+            }
+            DDL2SQLUtils.generateFile(filePath.getPath(),"struct.sql",sqlSb.toString());
 
             //导出表数据
-            DDL2SQLUtils.generateFile("D:/data","data.sql",dataSb.toString());
+            DDL2SQLUtils.generateFile(filePath.getPath(),"data.sql",dataSb.toString());
+
+            //保存 sql文件路径到datatask表中的sqlfilePath路径中，用分号隔开
+            String sqlFilePathStr = filePath.getPath() +File.separator + "struct.sql;"+  filePath.getPath() +File.separator + "data.sql" ;
+            dataTask.setSqlFilePath(sqlFilePathStr);
+            boolean result = dataTaskDao.update(dataTask);
+            System.out.println("result=" +result);
             jsonObject.put("result","true");
         }
         catch (Exception ex){
             jsonObject.put("result","false");
         }
         return jsonObject;
+    }
+
+
+    public boolean update(DataTask dataTask){
+        return dataTaskDao.update(dataTask);
     }
 }

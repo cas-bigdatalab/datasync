@@ -20,7 +20,7 @@
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
-    <script src="${ctx}/resources/bundles/amcharts/amcharts/amcharts.js"></script>
+    <%--<script src="${ctx}/resources/bundles/amcharts/amcharts/amcharts.js"></script>--%>
 
     <script>
         $(function(){

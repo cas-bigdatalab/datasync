@@ -298,7 +298,7 @@ public class DDL2SQLUtils {
             path = path +File.separator + FileName;
             f = new File(path);
             PrintWriter out;
-            out = new PrintWriter(new FileWriter(f));
+            out = new PrintWriter(f,"UTF-8");
             out.print(body +"\n");
             out.close();
         } catch (IOException e) {
