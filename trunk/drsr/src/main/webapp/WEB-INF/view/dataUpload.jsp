@@ -171,7 +171,7 @@
                     console.log("请求失败")
                 }
             })
-            getProcess(keyID);
+            // getProcess(keyID);
         })
         $("#upload-list").delegate(".edit-data","click",function () {
             /*send request*/
@@ -194,7 +194,7 @@
         var List ={
             list:[
                 {
-                    id:"111111111",
+                    id:"1",
                     name:"aaa",
                     data:"关系数据库",
                     source:"a数据库",
