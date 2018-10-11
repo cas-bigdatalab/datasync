@@ -40,7 +40,7 @@
     <link href="${ctx}/resources/css/globle.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/css/reset.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/css/main.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx}/resources/css/dataUpload.css" rel="stylesheet" type="text/css"/>
+
     <!-- END THEME STYLES -->
     <link rel="shortcut icon" href="${ctx}/resources/img/favicon.ico"/>
     <style type="text/css">
@@ -123,7 +123,7 @@
 <div class="clearfix"></div>
 <div class="page-container" style="min-height: 750px">
     <!-- BEGIN SIDEBAR -->
-    <%--<div class="page-sidebar-wrapper">
+    <div class="page-sidebar-wrapper">
         <div class="page-sidebar navbar-collapse collapse">
             <!-- BEGIN SIDEBAR MENU -->
             <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
@@ -143,7 +143,7 @@
                         <span class="arrow"></span>
                     </a>
                 </li>
-                &lt;%&ndash; <shiro:hasRole name="Register">&ndash;%&gt;
+                <%-- <shiro:hasRole name="Register">--%>
                 <li>
                     <a href="javascript:;">
                         <i class=" icon-drawer"></i>
@@ -163,15 +163,36 @@
                 </li>
 
                 <li>
-                    <a href="${ctx}/resource/manager">
+                    <a href="${ctx}/dataUpload">
                         <i class="icon-wrench"></i>
-                        <span class="title">注册资源管理</span>
+                        <span class="title">数据任务</span>
                         <span class="arrow "></span>
                     </a>
                 </li>
-                &lt;%&ndash; </shiro:hasRole>
-                 <shiro:hasRole name="管理员">&ndash;%&gt;
-                &lt;%&ndash;<li>
+                <li>
+                    <a href="${ctx}/createTask">
+                        <i class="icon-wrench"></i>
+                        <span class="title">设置任务</span>
+                        <span class="arrow "></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="${ctx}/dataSource">
+                        <i class="icon-wrench"></i>
+                        <span class="title">数据源</span>
+                        <span class="arrow "></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="${ctx}/projectMessage">
+                        <i class="icon-wrench"></i>
+                        <span class="title">专题信息</span>
+                        <span class="arrow "></span>
+                    </a>
+                </li>
+                <%-- </shiro:hasRole>
+                 <shiro:hasRole name="管理员">--%>
+                <%--<li>
                     <a href="${ctx}/resource/audit/localAudit">
                         <i class="icon-lock"></i>
                         <span class="title">注册资源审核</span>
@@ -193,85 +214,17 @@
                         <span class="title">元数据模板管理</span>
                         <span class="arrow "></span>
                     </a>
-                </li>&ndash;%&gt;
+                </li>--%>
 
             </ul>
             <!-- END SIDEBAR MENU -->
         </div>
-    </div>--%>
+    </div>
     <!-- END SIDEBAR -->
     <!-- BEGIN CONTENT -->
     <div class="page-content-wrapper">
-        <%--<sitemesh:write property="body"/>--%>
-            <div>
-                <div class="uplod-head">
-                    <span>DataSync / 传输信息</span>
-                </div>
-                <div class="upload-title">
-                    <span>数据上传任务列表</span>
-                    <a href="">新建任务</a>
-                </div>
-                <div class="upload-search">
-                    <input type="text" class="form-control" style="width: 200px;display: inline-block" placeholder="名称">
-                    <input type="text" class="form-control" style="width: 200px;display: inline-block" placeholder="数据类型">
-                    <input type="text" class="form-control" style="width: 200px;display: inline-block" placeholder="状态">
-                    <button type="button" class="btn btn-success" style="margin-left: 166px">查询</button>
-                    <button type="button" class="btn btn-success">全部上传</button>
-                </div>
-                <div class="upload-table">
-                    <div class="table-message">列表加载中......</div>
-                    <table class="table table-bordered data-table" id="upload-list" >
-                        <thead>
-                        <tr>
-                            <th>任务编号</th>
-                            <th>名称</th>
-                            <th>数据来源</th>
-                            <th>上传位置</th>
-                            <th>创建时间</th>
-                            <th>状态</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody id="bd-data">
-                        <%--<tr>
-                            <td>1</td>
-                            <td>aaaa</td>
-                            <td>aaaaaa</td>
-                            <td>aaaaaa</td>
-                            <td>aaaaaa</td>
-                            <td>aaaaaa</td>
-                            <td><button type="button" class="btn btn-success upload">上传</button></td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>高能物理主题数据库</td>
-                            <td>关系数据库</td>
-                            <td>dataOneDB</td>
-                            <td>2018-04-12 09:12</td>
-                            <td>成功</td>
-                            <td><button type="button" class="btn btn-success">重新上传</button></td>
-                        </tr>--%>
-                        </tbody>
-                    </table>
-                    <div class="page-message">
+        <sitemesh:write property="body"/>
 
-                    </div>
-                    <div class="page-list"></div>
-                </div>
-            </div>
-            <script type="text/html" id="resourceTmp1">
-                {{each list as value i}}
-                <tr keyIdTr="{{value.id}}">
-                    <td>{{i + 1}}</td>
-                    <td>{{value.name}}</td>
-                    <td>{{value.data}}</td>
-                    <td>{{value.source}}</td>
-                    <td>{{value.time}}</td>
-                    <td class="upload-percent">--</td>
-                    <td><button type="button" class="btn btn-success" keyIdTd="{{value.id}}" >{{btnName(value.num)}}</button></td>
-                </tr>
-                {{/each}}
-            </script>
     </div>
     <!-- END CONTENT -->
 </div>
@@ -309,10 +262,8 @@
 <script src="${ctx}/resources/bundles/metronic/scripts/layout.js" type="text/javascript"></script>
 <script src="${ctx}/resources/bundles/bootbox/bootbox.min.js"></script>
 <script src="${ctx}/resources/bundles/artTemplate/template.js"></script>
-<script src="${ctx}/resources/bundles/uploadify/jquery.uploadify.min.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
-    console.log(new Date().getTime() + "122s2dasd")
     jQuery(document).ready(function () {
         $.ajaxSetup({ cache: false });
         Metronic.init('${ctx}'); // init metronic core componets
@@ -339,95 +290,7 @@
             });
         });
     });
-    var uploadList=[];
-    template.helper("btnName",function (num) {
-        var name=""
-        if(num ==0){
-            name="上传"
-        }else if(num == 1){
-            name ="正在上传"
-        }else {
-            name="重新上传"
-        }
-        return name
-    })
-    $("#upload-list").delegate("button","click",function () {
-        /*send request*/
-        var souceID = $(this).attr("keyIdTd");
-        var keyID = souceID + new Date().getTime()
-        $.ajax({
-            url:"${ctx}/sendSouce",
-            type:"POST",
-            data:{souceID:souceID},
-            success:function (data) {
-                console.log(data)
 
-            },
-            error:function () {
-                console.log("请求失败")
-            }
-        })
-        /*send upload request*/
-        getProcess();
-
-    })
-    var List ={
-        list:[
-            {
-                id:"111111111",
-                name:"aaa",
-                data:"关系数据库",
-                source:"a数据库",
-                time:"2018-04-12 09:12",
-                num:0
-            },
-            {
-                id:"222222",
-                name:"aaa",
-                data:"关系数据库",
-                source:"a数据库",
-                time:"2018-04-12 09:12",
-                num:1
-            },
-            {
-                id:"3333333",
-                name:"aaa",
-                data:"关系数据库",
-                source:"a数据库",
-                time:"2018-04-12 09:12",
-                num:2
-            },
-            {
-                id:"4444444",
-                name:"aaa",
-                data:"关系数据库",
-                source:"a数据库",
-                time:"2018-04-12 09:12",
-                num:1
-            }
-        ]
-    }
-
-    var aaa = template("resourceTmp1", List);
-    $("#bd-data").append(aaa);
-    function getProcess() {
-        $.ajax({
-            url:"${ctx}/getProcess",
-            type:"POST",
-            data:{
-                souceID:souceID,
-                keyID:keyID
-            },
-            success:function (data) {
-                getProcess();
-            }
-        })
-    }
-    function getPrecent(id) {
-        setInterval(function () {
-            console.log(id)
-        },1100)
-    }
 
 </script>
 <!-- END JAVASCRIPTS -->
