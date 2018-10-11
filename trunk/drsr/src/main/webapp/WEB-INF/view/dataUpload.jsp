@@ -231,7 +231,7 @@
         var aaa = template("resourceTmp1", List);
         $("#bd-data").append(aaa);
         function getProcess(keyID) {
-            setInterval(function () {
+           var setout= setInterval(function () {
                 $.ajax({
                     url:"${ctx}/ftpUploadProcess",
                     type:"POST",
@@ -239,10 +239,13 @@
                         processId:keyID
                     },
                     success:function (data) {
+                        if(data == "100"){
+                            clearInterval(setout)
+                        }
                         console.log(data);
                     }
                 })
-            },50)
+            },500)
 
         }
         function getPrecent(id) {
