@@ -29,8 +29,8 @@ public class DataTaskDao {
     //更新
     public boolean update(DataTask dataTask){
         boolean result = false;
-        String sql="update T_dataTask set DataSourceId=?,TableName=?,SqlString=?,SqlTableNameEn=?,SqlFilePath=?,FilePath=?,creator=?,status=? where DataTaskId=? ";
-        int i= jdbcTemplate.update(sql,new Object[]{dataTask.getDataSourceId(),dataTask.getTableName(),dataTask.getSqlString(),
+        String sql="update T_dataTask set DataSourceId=?,DataTaskType=?,TableName=?,SqlString=?,SqlTableNameEn=?,SqlFilePath=?,FilePath=?,creator=?,status=? where DataTaskId=? ";
+        int i= jdbcTemplate.update(sql,new Object[]{dataTask.getDataSourceId(),dataTask.getDataTaskType(),dataTask.getTableName(),dataTask.getSqlString(),
                 dataTask.getSqlTableNameEn(),dataTask.getSqlFilePath(),dataTask.getFilePath(),dataTask.getCreator(),dataTask.getStatus(),dataTask.getDataTaskId()});
         if (i >= 0 ){
             result = true;
