@@ -262,6 +262,8 @@
 <script src="${ctx}/resources/bundles/metronic/scripts/layout.js" type="text/javascript"></script>
 <script src="${ctx}/resources/bundles/bootbox/bootbox.min.js"></script>
 <script src="${ctx}/resources/bundles/artTemplate/template.js"></script>
+<script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
+
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
     jQuery(document).ready(function () {

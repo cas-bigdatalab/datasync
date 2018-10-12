@@ -34,7 +34,7 @@
 .upload-search,.upload-table{
     padding: 3px 33px;
 }
-th{
+#upload-list th{
     background-color: #1ca04c !important;
     text-align: center;
     font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
@@ -43,7 +43,7 @@ th{
     font-size: 18px;
     color: #FFFFFF;
 }
-td{
+#upload-list td{
     text-align: center;
-    vertical-align: initial!important;
+    vertical-align: middle!important;
 }

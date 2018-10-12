@@ -23,7 +23,7 @@
     </div>
     <div class="task-table">
         <div class="table-message">列表加载中......</div>
-        <table class="table table-bordered data-table" >
+        <table class="table table-bordered data-table" id="projectList" >
             <thead>
             <tr>
                 <th>编号</th>

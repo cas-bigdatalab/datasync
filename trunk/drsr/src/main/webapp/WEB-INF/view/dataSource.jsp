@@ -20,17 +20,18 @@
     </div>
     <div class="source-title">
         <span>数据源信息管理</span>
-        <a href="javascript:void(0)" id="addDB">添加</a>
+        <a href="javascript:void(0)" id="addSqlSource">添加SQL数据源</a>
+        <a href="javascript:void(0)" id="addFileSource">添加文件型数据源</a>
     </div>
     <div class="source-table">
         <div class="table-message">列表加载中......</div>
-        <table class="table table-bordered data-table" >
+        <table class="table table-bordered data-table" id="dataSourceList">
             <thead>
             <tr>
-                <th>任务编号</th>
-                <th>名称</th>
-                <th>数据来源</th>
-                <th>上传位置</th>
+                <th>编号</th>
+                <th>数据源名称</th>
+                <th>数据库名称</th>
+                <th>数据源类型</th>
                 <th>创建时间</th>
                 <th>状态</th>
                 <th>操作</th>
@@ -39,22 +40,53 @@
             <tbody>
             <tr>
                 <td>1</td>
-                <td class="source-name">高能物理主题数据库</td>
-                <td class="source-DB">关系数据库</td>
-                <td class="source-local">dataOneDB</td>
+                <td class="source-name">关系型数据源DB2</td>
+                <td class="source-DB">DB2Data</td>
+                <td class="source-local">DB2</td>
                 <td>2018-04-12 09:12</td>
-                <td>成功</td>
-                <td><button type="button" class="btn btn-success btn-sm" keyID="aaa">编辑</button></td>
+                <td>正常</td>
+                <td>
+                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
+                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+                </td>
             </tr>
             <tr>
                 <td>2</td>
-                <td class="source-name">高能物理主题数据库</td>
-                <td class="source-DB">关系数据库</td>
-                <td class="source-local">dataOneDB</td>
+                <td class="source-name">文件路径2Data</td>
+                <td class="source-DB">paht1Data</td>
+                <td class="source-local">文件型</td>
                 <td>2018-04-12 09:12</td>
-                <td>成功</td>
-                <td><button type="button" class="btn btn-success btn-sm" keyID="bbb">编辑</button></td>
-            </tr>
+                <td>正常</td>
+                <td>
+                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
+                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+                </td>            </tr>
+            <tr>
+                <td>2</td>
+                <td class="source-name">数据源Oracle</td>
+                <td class="source-DB">OracleData</td>
+                <td class="source-local">Oracle</td>
+                <td>2018-04-12 09:12</td>
+                <td>正常</td>
+                <td>
+                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
+                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+                </td>            </tr>
+            <tr>
+                <td>2</td>
+                <td class="source-name">关系型数据源DB2</td>
+                <td class="source-DB">SqlServerData</td>
+                <td class="source-local">SqlServer</td>
+                <td>2018-04-12 09:12</td>
+                <td>正常</td>
+                <td>
+                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
+                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+                </td>            </tr>
             </tbody>
         </table>
         <div class="page-message">
@@ -63,12 +95,12 @@
         <div class="page-list"></div>
     </div>
 </div>
-<div id="addModal" class="modal fade" tabindex="-1" data-width="400">
+<div id="addSqlSourcetable" class="modal fade" tabindex="-1" data-width="400">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">添加数据源信息</h4>
+                <h4 class="modal-title">添加SQL数据源信息</h4>
             </div>
             <div class="modal-body" style="min-height: 100px">
                 <form class="form-horizontal">
@@ -88,10 +120,17 @@
                         <label  class="col-sm-3 control-label">类型</label>
                         <div class="col-sm-8">
                             <select name="" id="" class="form-control">
-                                <option value="">------------</option>
-                                <option value="">------------</option>
-                                <option value="">------------</option>
+                                <option value="">DB2</option>
+                                <option value="">Oracle</option>
+                                <option value="">SqlServer</option>
+                                <option value="">MySql</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="HostNum" class="col-sm-3 control-label">主机</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="HostNum">
                         </div>
                     </div>
                     <div class="form-group">
@@ -110,6 +149,44 @@
                         <label for="possword" class="col-sm-3 control-label">密码</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="possword">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn green" data-dismiss="modal" onclick="confirmAddNode();" ><i
+                        class="glyphicon glyphicon-ok"></i>添加
+                </button>
+                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="addFileSourcetable" class="modal fade" tabindex="-1" data-width="400">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加SQL数据源信息</h4>
+            </div>
+            <div class="modal-body" style="min-height: 100px">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="chinaName3" class="col-sm-3 control-label">数据源名称</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="chinaName3" required="required" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="englishName3" class="col-sm-3 control-label">英文名称</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="englishName3" required="required">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">本地路径</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" required="required">
                         </div>
                     </div>
                 </form>
@@ -286,8 +363,11 @@
 
             })
         }
-        $("#addDB").click(function () {
-            $("#addModal").modal('show');
+        $("#addSqlSource").click(function () {
+            $("#addSqlSourcetable").modal('show');
+        })
+        $("#addFileSource").click(function () {
+            $("#addFileSourcetable").modal('show');
         })
     </script>
 </div>

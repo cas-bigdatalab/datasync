@@ -21,7 +21,7 @@
         </div>
         <div class="upload-title">
             <span>数据上传任务列表</span>
-            <a href="">新建任务</a>
+            <a href="${ctx}/createTask">新建任务</a>
         </div>
         <div class="upload-search">
             <input type="text" class="form-control" style="width: 200px;display: inline-block" placeholder="名称">
@@ -66,10 +66,10 @@
                 </tr>--%>
                 </tbody>
             </table>
-            <div class="page-message">
+            <div class="page-message" style="background-color: silver;height: 40px">
 
             </div>
-            <div class="page-list"></div>
+            <div class="page-list" style="background-color: yellow;height: 20px"></div>
         </div>
     </div>
     <script type="text/html" id="resourceTmp1">
@@ -80,11 +80,11 @@
             <td>{{value.data}}</td>
             <td>{{value.source}}</td>
             <td>{{value.time}}</td>
-            <td class="upload-percent" id="{{value.id}}">--</td>
+            <td  id="{{value.id}}">--</td>
             <td  class="{{value.id}}">--</td>
-            <td><button type="button" class="btn btn-success upload-data" keyIdTd="{{value.id}}" >{{btnName(value.num)}}</button>
+            <td><button type="button" class="btn btn-success upload-data btn-sm" keyIdTd="{{value.id}}"  {{value.isdis}}>{{btnName(value.num)}}</button>
                 &nbsp;&nbsp;
-                <button type="button" class="btn btn-success edit-data" keyIdTd="{{value.id}}" >查看</button>
+                <button type="button" class="btn btn-success edit-data btn-sm" keyIdTd="{{value.id}}" >查看</button>
             </td>
         </tr>
         {{/each}}
@@ -95,32 +95,49 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">添加数据源信息</h4>
+                <h4 class="modal-title">任务详情查看</h4>
             </div>
             <div class="modal-body" style="min-height: 100px">
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label for="chinaName" class="col-sm-3 control-label">数据源名称</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="chinaName" >
-                        </div>
+                        <label  class="col-sm-3 control-label">任务标识:</label>
+                        <div class="col-sm-8"></div>
                     </div>
                     <div class="form-group">
-                        <label for="englishName" class="col-sm-3 control-label">数据来源</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="englishName">
-                        </div>
+                        <label  class="col-sm-3 control-label">数据源ID:</label>
+                        <div class="col-sm-8"></div>
                     </div>
                     <div class="form-group">
-                        <label  class="col-sm-3 control-label">上传位置</label>
-                        <div class="col-sm-8">
-                            <select name="" id="selDB" class="form-control">
-                                <option value="" selected="selected">------------</option>
-                                <option value="">dataOneDB</option>
-                                <option value="">dataTwoDB</option>
-                                <option value="">dataThreeDB</option>
-                            </select>
-                        </div>
+                        <label  class="col-sm-3 control-label">表名:</label>
+                        <div class="col-sm-8"></div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">SQL语句:</label>
+                        <div class="col-sm-8"></div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">逻辑表名:</label>
+                        <div class="col-sm-8"></div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">文件路径:</label>
+                        <div class="col-sm-8"></div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">创建时间:</label>
+                        <div class="col-sm-8"></div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">创建者:</label>
+                        <div class="col-sm-8"></div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">上传进度:</label>
+                        <div class="col-sm-8"></div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">任务状态:</label>
+                        <div class="col-sm-8"></div>
                     </div>
                 </form>
             </div>
@@ -153,7 +170,11 @@
             return name
         })
         $("#upload-list").delegate(".upload-data","click",function () {
+            /*init();*/
             /*send request*/
+            $(this).css("background-color","dimgrey");
+            $(this).attr("disabled","disabled");
+
             var souceID = $(this).attr("keyIdTd");
             var keyID = souceID + new Date().getTime();
             $.ajax({
@@ -161,7 +182,7 @@
                 type:"POST",
                 data:{dataTaskId:souceID,processId:keyID},
                 success:function (data) {
-                    $("."+souceID).text("正在上传")
+
                     /*send request get Process */
 
                 },
@@ -169,6 +190,7 @@
                     console.log("请求失败")
                 }
             })
+            $("."+souceID).text("正在导入")
             getProcess(keyID,souceID);
         })
         $("#upload-list").delegate(".edit-data","click",function () {
@@ -197,7 +219,8 @@
                     data:"关系数据库",
                     source:"a数据库",
                     time:"2018-04-12 09:12",
-                    num:0
+                    num:0,
+                    isdis:""
                 },
                 {
                     id:"222222",
@@ -205,7 +228,8 @@
                     data:"关系数据库",
                     source:"a数据库",
                     time:"2018-04-12 09:12",
-                    num:1
+                    num:1,
+                    isdis:""
                 },
                 {
                     id:"3333333",
@@ -213,7 +237,8 @@
                     data:"关系数据库",
                     source:"a数据库",
                     time:"2018-04-12 09:12",
-                    num:2
+                    num:2,
+                    isdis:true
                 },
                 {
                     id:"4444444",
@@ -225,12 +250,16 @@
                 }
             ]
         }
-
         var aaa = template("resourceTmp1", List);
-        $("#bd-data").append(aaa);
+        init();
+        function init() {
+            $("#bd-data").empty();
+            $("#bd-data").append(aaa);
+        }
+
+
         function getProcess(keyID,souceID) {
            var setout= setInterval(function () {
-               console.log(keyID)
                 $.ajax({
                     url:"${ctx}/ftpUploadProcess",
                     type:"POST",
@@ -239,18 +268,68 @@
                     },
                     success:function (data) {
                         if(data == "100"){
+                            $("."+souceID).text("导入完成")
                             clearInterval(setout)
                         }
-                        $("#"+souceID).text(data);
+                        $("#"+souceID).text(data+"%");
                     }
                 })
-            },500)
+            },1000)
 
         }
         function getPrecent(id) {
             setInterval(function () {
                 console.log(id)
             },1100)
+        }
+        function tableConfiguration(num,data) {
+            data.pageNum=num;
+            var conData = data;
+            $.ajax({
+                url:"",
+                type:"GET",
+                data:conData,
+                success:function (data) {
+                    $(".data-table").html("");
+                    var DataList = JSON.parse(data);
+                    if(DataList=="{}"){
+                        $(".table-message").html("暂时没有数据");
+                        $(".page-message").html("");
+                        $(".page-list").html("");
+                        return
+                    }
+                    $(".table-message").hide();
+                    /*
+                    * 创建table
+                    * */
+                    if ($(".page-list .bootpag").length != 0) {
+                        $(".page-list").off();
+                        $('.page-list').empty();
+                    }
+                    $(".page-message").html("当前第"+dataFile.pageNum +"页,共"+dataFile.totalPage +"页,共"+dataFile.totalNum+"条数据");
+                    $('#page-list').bootpag({
+                        total: DataList.totalPage,
+                        page: DataList.pageNum,
+                        maxVisible: 6,
+                        leaps: true,
+                        firstLastUse: true,
+                        first: '首页',
+                        last: '尾页',
+                        wrapClass: 'pagination',
+                        activeClass: 'active',
+                        disabledClass: 'disabled',
+                        nextClass: 'next',
+                        prevClass: 'prev',
+                        lastClass: 'last',
+                        firstClass: 'first'
+                    }).on('page', function (event, num) {
+                        tableConfiguration(num,conData);
+                    });
+                },
+                error:function () {
+                    $(".table-message").html("请求失败");
+                }
+            })
         }
     </script>
 </div>
