@@ -232,7 +232,8 @@
         $("#bd-data").append(aaa);
         function getProcess(keyID) {
            var setout= setInterval(function () {
-                $.ajax({
+               console.log(keyID)
+                /*$.ajax({
                     url:"${ctx}/ftpUploadProcess",
                     type:"POST",
                     data:{
@@ -244,7 +245,7 @@
                         }
                         console.log(data);
                     }
-                })
+                })*/
             },500)
 
         }

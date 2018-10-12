@@ -24,8 +24,10 @@
     </div>
     <div class="select-way">
         <span>数据源:</span>
-        <input name="ways" type="radio" checked="checked" value="DB"/>数据库
-        <input name="ways" type="radio" value="LH"/>本地上传
+        <label for="aaa">数据库</label>
+        <input name="ways" type="radio" checked="checked" value="DB" id="aaa"/>
+        <label for="bbb">本地上传</label>
+        <input name="ways" type="radio" value="LH" id="bbb"/>
     </div>
     <div class="select-ways">
         <div class="select-database">

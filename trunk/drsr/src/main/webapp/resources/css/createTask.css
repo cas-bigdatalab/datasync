@@ -25,6 +25,9 @@
     padding: 0 33px;
     color: #1CA04C;
 }
+.select-way label{
+    font-weight: 800;
+}
 .select-way span{
     color: #000000;
     margin-right: 30px;
