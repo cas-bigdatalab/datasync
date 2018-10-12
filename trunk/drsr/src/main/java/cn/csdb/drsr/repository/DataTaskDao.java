@@ -37,4 +37,10 @@ public class DataTaskDao {
         }
         return result;
     }
+
+    //获取所有的任务信息
+    public List<DataTask> getAll(){
+        String sql="Select * from T_dataTask";
+        return jdbcTemplate.query(sql,new DataTaskMapper());
+    }
 }
