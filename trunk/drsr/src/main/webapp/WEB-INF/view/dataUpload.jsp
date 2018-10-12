@@ -80,7 +80,7 @@
             <td>{{value.data}}</td>
             <td>{{value.source}}</td>
             <td>{{value.time}}</td>
-            <td class="upload-percent">--</td>
+            <td class="upload-percent" id="{{value.id}}">--</td>
             <td  class="{{value.id}}">--</td>
             <td><button type="button" class="btn btn-success upload-data" keyIdTd="{{value.id}}" >{{btnName(value.num)}}</button>
                 &nbsp;&nbsp;
@@ -156,14 +156,12 @@
             /*send request*/
             var souceID = $(this).attr("keyIdTd");
             var keyID = souceID + new Date().getTime();
-            $("."+souceID).text("正在上传")
             $.ajax({
                 url:"${ctx}/ftpUpload",
                 type:"POST",
                 data:{dataTaskId:souceID,processId:keyID},
                 success:function (data) {
                     $("."+souceID).text("正在上传")
-                    console.log(data)
                     /*send request get Process */
 
                 },
@@ -171,7 +169,7 @@
                     console.log("请求失败")
                 }
             })
-            getProcess(keyID);
+            getProcess(keyID,souceID);
         })
         $("#upload-list").delegate(".edit-data","click",function () {
             /*send request*/
@@ -230,10 +228,10 @@
 
         var aaa = template("resourceTmp1", List);
         $("#bd-data").append(aaa);
-        function getProcess(keyID) {
+        function getProcess(keyID,souceID) {
            var setout= setInterval(function () {
                console.log(keyID)
-                /*$.ajax({
+                $.ajax({
                     url:"${ctx}/ftpUploadProcess",
                     type:"POST",
                     data:{
@@ -243,9 +241,9 @@
                         if(data == "100"){
                             clearInterval(setout)
                         }
-                        console.log(data);
+                        $("#"+souceID).text(data);
                     }
-                })*/
+                })
             },500)
 
         }
