@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.io.File;
 import java.sql.Connection;
+import java.util.List;
 
 /**
  * @program: DataSync
@@ -105,5 +106,10 @@ public class DataTaskService {
     @Transactional
     public boolean update(DataTask dataTask){
         return dataTaskDao.update(dataTask);
+    }
+
+    @Transactional(readOnly = true)
+    public List<DataTask> getAllData(){
+        return dataTaskDao.getAll();
     }
 }
