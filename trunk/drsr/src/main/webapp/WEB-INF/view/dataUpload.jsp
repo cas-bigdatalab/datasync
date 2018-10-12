@@ -171,7 +171,7 @@
                     console.log("请求失败")
                 }
             })
-            // getProcess(keyID);
+            getProcess(keyID);
         })
         $("#upload-list").delegate(".edit-data","click",function () {
             /*send request*/

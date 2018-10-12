@@ -51,6 +51,7 @@ public class DataSyncController {
         return "100";
     }
 
+    @ResponseBody
     @RequestMapping("ftpUploadProcess")
     public String ftpUploadProcess(String processId){
         FtpUtil ftpUtil =new FtpUtil();
