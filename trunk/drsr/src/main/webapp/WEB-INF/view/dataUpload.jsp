@@ -82,7 +82,10 @@
             <td>{{value.time}}</td>
             <td  id="{{value.id}}">--</td>
             <td  class="{{value.id}}">--</td>
-            <td><button type="button" class="btn btn-success upload-data btn-sm" keyIdTd="{{value.id}}"  {{value.isdis}}>{{btnName(value.num)}}</button>
+            <td>
+                <button type="button" class="btn btn-success btn-sm exportSql" keyIdTd="{{value.id}}"  value="{{value.id}}" >导出SQL文件</button>
+                &nbsp;&nbsp;
+                <button type="button" class="btn btn-success upload-data btn-sm" keyIdTd="{{value.id}}"  {{value.isdis}}>{{btnName(value.num)}}</button>
                 &nbsp;&nbsp;
                 <button type="button" class="btn btn-success edit-data btn-sm" keyIdTd="{{value.id}}" >查看</button>
             </td>
@@ -334,6 +337,7 @@
                 }
             })
         }
+
         function tableConfiguration2() {
             $.ajax({
                 url:"${ctx}/task/getAll",
@@ -383,6 +387,28 @@
                 }
             })
         }
+
+
+
+        //导出SQL文件
+        $("#upload-list").delegate(".exportSql","click",function () {
+            var souceID = $(this).attr("keyIdTd");
+            //var keyID = souceID + new Date().getTime();
+            $.ajax({
+                url:"${ctx}/task/" + souceID,
+                type:"POST",
+                dataType:"JSON",
+                success:function (data) {
+                    console.log(data.result);
+                    if (data.result == 'true') {
+                        alert("导出SQL文件成功!");
+                    }
+                },
+                error:function () {
+                    console.log("请求失败")
+                }
+            })
+        });
     </script>
 </div>
 
