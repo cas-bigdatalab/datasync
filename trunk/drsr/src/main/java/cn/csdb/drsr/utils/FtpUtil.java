@@ -254,11 +254,16 @@ public class FtpUtil {
         OutputStream out = ftpClient.appendFileStream(new String(remoteFile.getBytes("GBK"), "iso-8859-1"));
         //断点续传
         if (remoteSize > 0) {
-            ftpClient.setRestartOffset(remoteSize);
-//            process = process+remoteSize / step;
+            /*ftpClient.setRestartOffset(remoteSize);
             process = process+remoteSize / step;
             raf.seek(remoteSize);
+            localreadbytes = remoteSize;*/
+
+            finishedSize += remoteSize;
+            process = finishedSize / step;
+            raf.seek(remoteSize);
             localreadbytes = remoteSize;
+            progressMap.put(processId, process);
         }
         byte[] bytes = new byte[1024];
         int c;
