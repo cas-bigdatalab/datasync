@@ -4,9 +4,8 @@ import java.util.Date;
 
 /**
  * @program: DataSync
- * @description: data task
- * @author: xiajl
- * @create: 2018-09-30 15:37
+ * @author: huangwei
+ * @create: 2018-10-12 15:37
  **/
 public class DataTask {
     private int dataTaskId;

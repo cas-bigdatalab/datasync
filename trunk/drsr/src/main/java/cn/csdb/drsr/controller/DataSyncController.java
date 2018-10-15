@@ -57,6 +57,7 @@ public class DataSyncController {
         String port = configPropertyService.getProperty("FrpPort");
         String remoteFilepath = configPropertyService.getProperty("FtpRootPath");
         String portalUrl = configPropertyService.getProperty("PortalUrl");
+        String siteMarker = configPropertyService.getProperty("SiteMarker");
         DataTask dataTask = dataTaskService.get(dataTaskId);
         String[] localFileList = dataTask.getSqlFilePath().split(";");
         try {
@@ -65,6 +66,10 @@ public class DataSyncController {
             ftpUtil.disconnect();
             if(result.equals("Upload_New_File_Success")||result.equals("Upload_From_Break_Succes")){
                 String dataTaskString = JSONObject.toJSONString(dataTask);
+                JSONObject requestJSON = new JSONObject();
+                requestJSON.put("dataTask",dataTaskString);
+                requestJSON.put("siteMarker",siteMarker);
+                String requestString = JSONObject.toJSONString(requestJSON);
                 HttpClient httpClient = null;
                 HttpPost postMethod = null;
                 HttpResponse response = null;
@@ -85,7 +90,7 @@ public class DataSyncController {
 //                    postMethod = new HttpPost(portalUrl);
                     postMethod.addHeader("Content-type", "application/json; charset=utf-8");
 //                    postMethod.addHeader("X-Authorization", "AAAA");//设置请求头
-                    postMethod.setEntity(new StringEntity(dataTaskString, Charset.forName("UTF-8")));
+                    postMethod.setEntity(new StringEntity(requestString, Charset.forName("UTF-8")));
                     response = httpClient.execute(postMethod);//获取响应
                     int statusCode = response.getStatusLine().getStatusCode();
                     System.out.println("HTTP Status Code:" + statusCode);
