@@ -73,21 +73,21 @@
         </div>
     </div>
     <script type="text/html" id="resourceTmp1">
-        {{each list as value i}}
-        <tr keyIdTr="{{value.id}}">
+        {{each data as value i}}
+        <tr keyIdTr="{{value.dataTaskId}}">
             <td>{{i + 1}}</td>
-            <td>{{value.name}}</td>
-            <td>{{value.data}}</td>
+            <td>{{value.sqlTableNameEn}}</td>
+            <td>{{value.dataTaskType}}</td>
             <td>{{value.source}}</td>
-            <td>{{value.time}}</td>
-            <td  id="{{value.id}}">--</td>
-            <td  class="{{value.id}}">--</td>
+            <td>{{value.createTime}}</td>
+            <td  id="{{value.dataTaskId}}">--</td>
+            <td  class="{{value.dataTaskId}}">{{upStatusName(value.status)}}</td>
             <td>
-                <button type="button" class="btn btn-success btn-sm exportSql" keyIdTd="{{value.id}}"  value="{{value.id}}" >导出SQL文件</button>
+                <button type="button" class="btn btn-success btn-sm exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" >导出SQL文件</button>
                 &nbsp;&nbsp;
-                <button type="button" class="btn btn-success upload-data btn-sm" keyIdTd="{{value.id}}"  {{value.isdis}}>{{btnName(value.num)}}</button>
+                <button type="button" class="btn btn-success upload-data btn-sm" keyIdTd="{{value.dataTaskId}}"  {{value.isdis}}>{{btnName(value.status)}}</button>
                 &nbsp;&nbsp;
-                <button type="button" class="btn btn-success edit-data btn-sm" keyIdTd="{{value.id}}" >查看</button>
+                <button type="button" class="btn btn-success edit-data btn-sm" keyIdTd="{{value.dataTaskId}}" >查看</button>
             </td>
         </tr>
         {{/each}}
@@ -162,13 +162,23 @@
         $(function(){
 
         });
-        var uploadList=[];
         template.helper("btnName",function (num) {
             var name=""
             if(num ==0){
                 name="&nbsp;&nbsp;&nbsp;上传&nbsp;&nbsp;&nbsp;"
             }else {
                 name="重新上传"
+            }
+            return name
+        })
+        template.helper("upStatusName",function (num) {
+            var name=""
+            if(num ==0){
+                name="--"
+            }else if(num == 1 ) {
+                name="正在导入"
+            }else {
+                name ="导入完成"
             }
             return name
         })
@@ -343,9 +353,11 @@
                 url:"${ctx}/task/getAll",
                 type:"GET",
                 success:function (data) {
-                   var List =JSON.parse(data).data
-                    var aaa = template("resourceTmp1", List);
-                    $("#bd-data").append(aaa);
+                    $(".table-message").hide();
+                   var List =JSON.parse(data)
+                    console.log(List)
+                    var tabCon = template("resourceTmp1", List);
+                    $("#bd-data").append(tabCon);
                     /*$(".data-table").html("");
                     var DataList = JSON.parse(data);
                     if(DataList=="{}"){
