@@ -16,15 +16,13 @@ import java.util.List;
  **/
 @Repository
 public class SiteDao {
+
     @Resource
     private JdbcTemplate jdbcTemplate;
 
     public Site getSiteByMarker(String siteMarker){
-        String sql = "select * from site where SiteMarker=?";
-        List<Site> list = jdbcTemplate.query(sql,new SiteMapper());
-        if(list.size() == 0){
-            return null;
-        }
-        return list.get(0);
+        String sql = "select * from t_site where SiteMarker=?";
+        Site site = jdbcTemplate.queryForObject(sql,new Object[]{siteMarker},new SiteMapper());
+        return site;
     }
 }
