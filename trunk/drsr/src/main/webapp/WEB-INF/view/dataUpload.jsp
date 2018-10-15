@@ -10,7 +10,7 @@
 <c:set value="${pageContext.request.contextPath}" var="ctx"/>
 <html>
 <head>
-    <title>系统</title>
+    <title>DataSync</title>
     <link href="${ctx}/resources/css/dataUpload.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
