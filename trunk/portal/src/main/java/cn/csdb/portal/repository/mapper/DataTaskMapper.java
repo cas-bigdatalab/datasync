@@ -7,8 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by xiajl on 2018/9/30 .
- */
+ * @program: DataSync
+ * @author: huangwei
+ * @create: 2018-10-12 16:18
+ **/
 public class DataTaskMapper implements RowMapper {
 
     @Override

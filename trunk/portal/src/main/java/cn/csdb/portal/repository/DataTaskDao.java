@@ -10,9 +10,8 @@ import java.util.List;
 
 /**
  * @program: DataSync
- * @description: dataTask dao
- * @author: xiajl
- * @create: 2018-09-30 16:18
+ * @author: huangwei
+ * @create: 2018-10-12 16:18
  **/
 
 @Repository
