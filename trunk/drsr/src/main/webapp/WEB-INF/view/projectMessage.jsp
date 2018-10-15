@@ -21,7 +21,7 @@
     <div class="task-title">
         <span>专题库信息认证管理</span>
     </div>
-    <div class="task-table">
+    <%--<div class="task-table">
         <div class="table-message">列表加载中......</div>
         <table class="table table-bordered data-table" id="projectList" >
             <thead>
@@ -121,6 +121,55 @@
 
         </div>
         <div class="page-list"></div>
+    </div>--%>
+    <div class="messageCon" >
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">专题库名称:</label>
+                <div class="col-sm-8">烟草库</div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">专题库代码 :</label>
+                <div class="col-sm-8">tobacco</div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">管理员账号:</label>
+                <div class="col-sm-8">XXXXXXXXX</div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">密码:</label>
+                <div class="col-sm-8">XXXXXXXXX</div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">联系人:</label>
+                <div class="col-sm-8">XXXXXXXXX</div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">电话:</label>
+                <div class="col-sm-8">XXXXXXXXXX</div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">邮箱:</label>
+                <div class="col-sm-8">hanfang@cnic.cn
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">FTP用户名:</label>
+                <div class="col-sm-8">toftpadmin</div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">FTP密码:</label>
+                <div class="col-sm-8">
+                    ftp123
+                </div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">描述:</label>
+                <div class="col-sm-8">
+                    烟草质量控制数据库烟草质量控制数据库烟草质量控制数据库烟草质量控制数据库烟草质量控制数据库
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 </body>

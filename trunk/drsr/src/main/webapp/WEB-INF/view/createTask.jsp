@@ -88,7 +88,7 @@
                                 <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>sql查询</button>
                             </div>
                             <div class="col-md-3">
-                                <button type="button" class="btn btn-success">提交</button>
+                                <button type="button" class="btn btn-success" onclick="sendTask()">提交</button>
                             </div>
                         </div>
                     </div>
@@ -121,7 +121,10 @@
         $(function(){
 
         });
-        var treeData = {'core' : {
+        var treeData = {
+            'core' : {
+                "animation": 0,
+                "check_callback":false,
                 'data' : [
                     {
                         "text" : "Root node",
@@ -132,11 +135,13 @@
                                 "state" : { "selected" : true },
                                 "icon" : "jstree-file"
                             },
-                            { "text" : "Child node 2", "state" : { "disabled" : true } }
+                            { "text" : "Child node 2",  }
                         ]
                     }
                 ]
-            }}
+            },
+            "plugins" : ["dnd","state","types","wholerow"]
+        }
         $("#jstree_show").jstree(treeData);
         var jsdata;
         var deleteNodeArray;
@@ -220,6 +225,10 @@
                 }
             })*/
         })
+        function sendTask() {
+
+            window.location.href="${ctx}/dataUpload"
+        }
         function editTree() {
             if($("#editRegon").html().trim() != ""){
                 return false;
@@ -235,7 +244,7 @@
                 '<button type="button" class="btn btn-primary btn-sm" onclick="jstree_submit();" style="margin-left:5px"><i class="glyphicon glyphicon-ok"></i> 提交</button>'
             $("#editRegon").append(html);
             //这有一点需要补充
-            /* var to = false;
+             var to = false;
              $('#demo_q').keyup(function () {
                  if (to) {
                      clearTimeout(to);
@@ -244,12 +253,16 @@
                      var v = $('#demo_q').val();
                      $('#jstree_edit').jstree(true).search(v);
                  }, 250);
-             });*/
+             });
+            treeData.core.check_callback= true;
+            treeData.plugins=["contextmenu", "dnd", "state", "types", "wholerow"]
             $('#jstree_edit').jstree(treeData);
         }
 
         function jstree_cancel(){
             $("#editRegon").html("");
+            treeData.core.check_callback= false;
+            treeData.plugins=["dnd","state","types","wholerow"]
         }
         function jstree_create() {
             var ref = $('#jstree_edit').jstree(true),
@@ -275,7 +288,6 @@
             sel = sel[0];
             ref.edit(sel);
         }
-
         function jstree_delete() {
 
             /* var ref = $('#jstree_edit').jstree(true);

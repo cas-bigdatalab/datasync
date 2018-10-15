@@ -187,11 +187,8 @@
             return name
         })
         $("#upload-list").delegate(".upload-data","click",function () {
-            /*init();*/
-            /*send request*/
             $(this).css("background-color","dimgrey");
             $(this).attr("disabled","disabled");
-
             var souceID = $(this).attr("keyIdTd");
             var keyID = souceID + new Date().getTime();
             $.ajax({
@@ -228,9 +225,26 @@
             })*/
             $("#EModal").modal('show');
         })
-
-        tableConfiguration2()
-
+        //导出SQL文件
+        $("#upload-list").delegate(".exportSql","click",function () {
+            var souceID = $(this).attr("keyIdTd");
+            //var keyID = souceID + new Date().getTime();
+            $.ajax({
+                url:"${ctx}/task/" + souceID,
+                type:"POST",
+                dataType:"JSON",
+                success:function (data) {
+                    console.log(data.result);
+                    if (data.result == 'true') {
+                        console.log("aaaaaaa")
+                        alert("导出SQL文件成功!");
+                    }
+                },
+                error:function () {
+                    console.log("请求失败")
+                }
+            })
+        });
         function getProcess(keyID,souceID) {
            var setout= setInterval(function () {
                 $.ajax({
@@ -251,11 +265,6 @@
                 })
             },1000)
 
-        }
-        function getPrecent(id) {
-            setInterval(function () {
-                console.log(id)
-            },1100)
         }
         function tableConfiguration(num,data) {
             data.pageNum=num;
@@ -306,7 +315,6 @@
                 }
             })
         }
-
         function tableConfiguration2() {
             $.ajax({
                 url:"${ctx}/task/getAll",
@@ -359,27 +367,8 @@
             })
         }
 
+        tableConfiguration2()
 
-
-        //导出SQL文件
-        $("#upload-list").delegate(".exportSql","click",function () {
-            var souceID = $(this).attr("keyIdTd");
-            //var keyID = souceID + new Date().getTime();
-            $.ajax({
-                url:"${ctx}/task/" + souceID,
-                type:"POST",
-                dataType:"JSON",
-                success:function (data) {
-                    console.log(data.result);
-                    if (data.result == 'true') {
-                        alert("导出SQL文件成功!");
-                    }
-                },
-                error:function () {
-                    console.log("请求失败")
-                }
-            })
-        });
     </script>
 </div>
 
