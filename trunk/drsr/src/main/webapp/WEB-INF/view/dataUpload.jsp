@@ -66,10 +66,10 @@
                 </tr>--%>
                 </tbody>
             </table>
-            <div class="page-message" style="background-color: silver;height: 40px">
+            <div class="page-message" >
 
             </div>
-            <div class="page-list" style="background-color: yellow;height: 20px"></div>
+            <div class="page-list" ></div>
         </div>
     </div>
     <script type="text/html" id="resourceTmp1">
@@ -85,7 +85,11 @@
             <td>
                 <button type="button" class="btn btn-success btn-sm exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" >导出SQL文件</button>
                 &nbsp;&nbsp;
-                <button type="button" class="btn btn-success upload-data btn-sm" keyIdTd="{{value.dataTaskId}}"  {{value.isdis}}>{{btnName(value.status)}}</button>
+                {{if value.status  == 1}}
+                <button type="button" class="btn btn-success upload-data btn-sm" keyIdTd="{{value.dataTaskId}}" disabled style="background-color: dimgrey">{{btnName(value.status)}}</button>
+                {{else if value.status  == 0}}
+                <button type="button" class="btn btn-success upload-data btn-sm" keyIdTd="{{value.dataTaskId}}">{{btnName(value.status)}}</button>
+                {{/if}}
                 &nbsp;&nbsp;
                 <button type="button" class="btn btn-success edit-data btn-sm" keyIdTd="{{value.dataTaskId}}" >查看</button>
             </td>
@@ -203,7 +207,7 @@
                     console.log("请求失败")
                 }
             })
-            $("."+souceID).text("正在导入")
+            $("."+souceID).text("正在上传");
             getProcess(keyID,souceID);
         })
         $("#upload-list").delegate(".edit-data","click",function () {
@@ -224,51 +228,6 @@
             })*/
             $("#EModal").modal('show');
         })
-       /* var List ={
-            list:[
-                {
-                    id:"1",
-                    name:"aaa",
-                    data:"关系数据库",
-                    source:"a数据库",
-                    time:"2018-04-12 09:12",
-                    num:0,
-                    isdis:""
-                },
-                {
-                    id:"222222",
-                    name:"aaa",
-                    data:"关系数据库",
-                    source:"a数据库",
-                    time:"2018-04-12 09:12",
-                    num:1,
-                    isdis:""
-                },
-                {
-                    id:"3333333",
-                    name:"aaa",
-                    data:"关系数据库",
-                    source:"a数据库",
-                    time:"2018-04-12 09:12",
-                    num:2,
-                    isdis:true
-                },
-                {
-                    id:"4444444",
-                    name:"aaa",
-                    data:"关系数据库",
-                    source:"a数据库",
-                    time:"2018-04-12 09:12",
-                    num:1
-                }
-            ]
-        }
-        var aaa = template("resourceTmp1", List);
-        init();
-        function init() {
-            $("#bd-data").empty();
-            $("#bd-data").append(aaa);
-        }*/
 
         tableConfiguration2()
 
@@ -284,7 +243,7 @@
                         console.log(data)
                         if(data == "100"){
                             $("#"+souceID).text(data+"%");
-                            $("."+souceID).text("导入完成")
+                            $("."+souceID).text("上传完成")
                             clearInterval(setout)
                         }
                         $("#"+souceID).text(data+"%");
