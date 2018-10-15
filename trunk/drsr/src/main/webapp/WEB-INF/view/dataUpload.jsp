@@ -211,7 +211,7 @@
             })*/
             $("#EModal").modal('show');
         })
-        var List ={
+       /* var List ={
             list:[
                 {
                     id:"1",
@@ -255,8 +255,9 @@
         function init() {
             $("#bd-data").empty();
             $("#bd-data").append(aaa);
-        }
+        }*/
 
+        tableConfiguration2()
 
         function getProcess(keyID,souceID) {
            var setout= setInterval(function () {
@@ -267,7 +268,9 @@
                         processId:keyID
                     },
                     success:function (data) {
+                        console.log(data)
                         if(data == "100"){
+                            $("#"+souceID).text(data+"%");
                             $("."+souceID).text("导入完成")
                             clearInterval(setout)
                         }
@@ -286,7 +289,7 @@
             data.pageNum=num;
             var conData = data;
             $.ajax({
-                url:"",
+                url:"${ctx}/drsr/task/getAll",
                 type:"GET",
                 data:conData,
                 success:function (data) {
@@ -325,6 +328,55 @@
                     }).on('page', function (event, num) {
                         tableConfiguration(num,conData);
                     });
+                },
+                error:function () {
+                    $(".table-message").html("请求失败");
+                }
+            })
+        }
+        function tableConfiguration2() {
+            $.ajax({
+                url:"${ctx}/task/getAll",
+                type:"GET",
+                success:function (data) {
+                   var List =JSON.parse(data).data
+                    var aaa = template("resourceTmp1", List);
+                    $("#bd-data").append(aaa);
+                    /*$(".data-table").html("");
+                    var DataList = JSON.parse(data);
+                    if(DataList=="{}"){
+                        $(".table-message").html("暂时没有数据");
+                        $(".page-message").html("");
+                        $(".page-list").html("");
+                        return
+                    }
+                    $(".table-message").hide();
+                    /!*
+                    * 创建table
+                    * *!/
+                    if ($(".page-list .bootpag").length != 0) {
+                        $(".page-list").off();
+                        $('.page-list').empty();
+                    }
+                    $(".page-message").html("当前第"+dataFile.pageNum +"页,共"+dataFile.totalPage +"页,共"+dataFile.totalNum+"条数据");
+                    $('#page-list').bootpag({
+                        total: DataList.totalPage,
+                        page: DataList.pageNum,
+                        maxVisible: 6,
+                        leaps: true,
+                        firstLastUse: true,
+                        first: '首页',
+                        last: '尾页',
+                        wrapClass: 'pagination',
+                        activeClass: 'active',
+                        disabledClass: 'disabled',
+                        nextClass: 'next',
+                        prevClass: 'prev',
+                        lastClass: 'last',
+                        firstClass: 'first'
+                    }).on('page', function (event, num) {
+                        tableConfiguration(num,conData);
+                    });*/
                 },
                 error:function () {
                     $(".table-message").html("请求失败");
