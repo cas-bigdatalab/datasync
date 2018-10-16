@@ -39,8 +39,8 @@ public class DataTaskService {
         return dataTaskDao.update(dataTask);
     }
 
-    public boolean insert(DataTask dataTask){
-        return dataTaskDao.insert(dataTask);
+    public int insertDataTask(final DataTask dataTask){
+        return dataTaskDao.insertDataTask(dataTask);
     }
 
 }

@@ -13,14 +13,15 @@ import java.sql.SQLException;
  * @author: huangwei
  * @create: 2018-10-15 14:38
  **/
-public class SiteMapper implements RowMapper {
+public class SiteMapper implements RowMapper<Site> {
 
     @Override
-    public Object mapRow(ResultSet resultSet, int i) throws SQLException {
+    public Site mapRow(ResultSet resultSet, int i) throws SQLException {
         Site site = new Site();
         site.setId(resultSet.getInt("Id"));
         site.setSiteMarker(resultSet.getString("SiteMarker"));
         site.setFilePath(resultSet.getString("FilePath"));
+        site.setDbName(resultSet.getString("DbName"));
         return site;
     }
 

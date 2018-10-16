@@ -10,6 +10,7 @@ public class Site {
     private int id;
     private String siteMarker;
     private String filePath;
+    private String dbName;
 
     public int getId() {
         return id;
@@ -33,5 +34,13 @@ public class Site {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
     }
 }

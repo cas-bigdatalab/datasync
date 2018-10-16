@@ -86,7 +86,8 @@ public class DataSyncController {
 //                        httpResult = IOUtils.toString(inputStream, "UTF-8");
 //                    }
                     httpClient = HttpClients.createDefault();
-                    postMethod = new HttpPost("http://159.226.193.142:8080/portal/service/getDataTask");
+//                    postMethod = new HttpPost("http://localhost:8080/portal/service/getDataTask");
+                    postMethod = new HttpPost("http://"+portalUrl+"/service/getDataTask");
 //                    postMethod = new HttpPost(portalUrl);
                     postMethod.addHeader("Content-type", "application/json; charset=utf-8");
 //                    postMethod.addHeader("X-Authorization", "AAAA");//设置请求头
@@ -101,6 +102,11 @@ public class DataSyncController {
                     String reponseContent = EntityUtils.toString(httpEntity);
                     EntityUtils.consume(httpEntity);//释放资源
                     System.out.println("响应内容：" + reponseContent);
+                    if(reponseContent.equals("1")){
+                        return "100";
+                    }else{
+                        return "400";
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -83,9 +83,9 @@
                 <td>2018-04-12 09:12</td>
                 <td>正常</td>
                 <td>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+                    <button type="button" class="btn btn-success btn-sm btnSeeOpen" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                    <button type="button" class="btn btn-success btn-sm btnEdit" keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
+                    <button type="button" class="btn btn-success btn-sm btnTrash" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 </td>            </tr>
             </tbody>
         </table>

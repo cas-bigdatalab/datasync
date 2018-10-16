@@ -4,6 +4,7 @@ import cn.csdb.portal.model.Site;
 import cn.csdb.portal.repository.SiteDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @program: DataSync

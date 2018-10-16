@@ -90,6 +90,7 @@ public class SubjectMgmtController {
     public JSONObject querySubjectById(HttpServletRequest request, @RequestParam(required=true) int id)
     {
         System.out.println("enterring SubjectMgmtController-querySubjectById");
+        System.out.println("id = " + id);
         Subject subject = subjectService.findSubjectById(id);
         System.out.println("querySubjectById - " + subject);
 

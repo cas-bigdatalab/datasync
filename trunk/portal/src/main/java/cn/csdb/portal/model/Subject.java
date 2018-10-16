@@ -1,16 +1,21 @@
 package cn.csdb.portal.model;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class Subject {
     private String id;
     private String subjectName;
     private String subjectCode;
+    private MultipartFile imagePath;
     private String brief;
+    private String admin;
+    private String adminPasswd;
     private String contact;
     private String phone;
-    private String address;
-    private String admin;
+    private String email;
     private String ftpUser;
     private String ftpPassword;
+    private String serialNo;
 
     public String getId() {
         return id;
@@ -36,12 +41,36 @@ public class Subject {
         this.subjectCode = subjectCode;
     }
 
+    public MultipartFile getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(MultipartFile imagePath) {
+        this.imagePath = imagePath;
+    }
+
     public String getBrief() {
         return brief;
     }
 
     public void setBrief(String brief) {
         this.brief = brief;
+    }
+
+    public String getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(String admin) {
+        this.admin = admin;
+    }
+
+    public String getAdminPasswd() {
+        return adminPasswd;
+    }
+
+    public void setAdminPasswd(String adminPasswd) {
+        this.adminPasswd = adminPasswd;
     }
 
     public String getContact() {
@@ -60,20 +89,12 @@ public class Subject {
         this.phone = phone;
     }
 
-    public String getAddress() {
-        return address;
+    public String getEmail() {
+        return email;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(String admin) {
-        this.admin = admin;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getFtpUser() {
@@ -92,19 +113,30 @@ public class Subject {
         this.ftpPassword = ftpPassword;
     }
 
+    public String getSerialNo() {
+        return serialNo;
+    }
+
+    public void setSerialNo(String serialNo) {
+        this.serialNo = serialNo;
+    }
+
     @Override
     public String toString() {
         return "Subject{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", subjectName='" + subjectName + '\'' +
                 ", subjectCode='" + subjectCode + '\'' +
+                ", imagePath='" + imagePath + '\'' +
                 ", brief='" + brief + '\'' +
+                ", admin='" + admin + '\'' +
+                ", adminPasswd='" + adminPasswd + '\'' +
                 ", contact='" + contact + '\'' +
                 ", phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", admin='" + admin + '\'' +
+                ", email='" + email + '\'' +
                 ", ftpUser='" + ftpUser + '\'' +
                 ", ftpPassword='" + ftpPassword + '\'' +
+                ", serialNo='" + serialNo + '\'' +
                 '}';
     }
 }

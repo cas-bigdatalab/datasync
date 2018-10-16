@@ -8,7 +8,6 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <c:set value="${pageContext.request.contextPath}" var="ctx"/>
 <c:set value="1" var="currentPage" />
 
@@ -49,13 +48,16 @@
                     <th>编号</th>
                     <th>专题库名称</th>
                     <th>专题库代码</th>
+                    <th>图片</th>
                     <th>专题库简介</th>
+                    <th>管理员账号</th>
+                    <th>管理员密码</th>
                     <th>专题库负责人</th>
                     <th>负责人电话</th>
-                    <th>负责人地址</th>
-                    <th>管理员账号</th>
+                    <th>负责人Email</th>
                     <th>FTP账号</th>
                     <th>FTP密码</th>
+                    <th>序号</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -66,13 +68,16 @@
                         <td>${vs.count}</td>
                         <td>${subject.subjectName}</td>
                         <td>${subject.subjectCode}</td>
+                        <td>${subject.imagePath.originalFilename}</td>
                         <td>${subject.brief}</td>
+                        <td>${subject.admin}</td>
+                        <td>${subject.adminPasswd}</td>
                         <td>${subject.contact}</td>
                         <td>${subject.phone}</td>
-                        <td>${subject.address}</td>
-                        <td>${subject.admin}</td>
+                        <td>${subject.email}</td>
                         <td>${subject.ftpUser}</td>
                         <td>${subject.ftpPassword}</td>
+                        <td>${subject.serialNo}</td>
                         <td id="${subject.id}">
                             <a title="修改" class="updateSubjectBtn" data-target="#addSubjectDialog" data-toggle="modal">
                                 <span class="glyphicon glyphicon-pencil"></span>
@@ -122,14 +127,17 @@
                     <h4 id="titleForAddSubjectDialog" class="modal-title" >添加专题库</h4>
                 </div>
 
-                <form id="addSubjectForm" class="form-horizontal" role="form" method="post" accept-charset="utf-8"  action="${ctx}/subjectMgmt/addSubject">
+                <form id="addSubjectForm" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" accept-charset="utf-8"  action="${ctx}/subjectMgmt/addSubject">
 
                 <!--subject info input form-->
                 <div class="modal-body">
                     <div class="col-md-12">
                         <div class="form-body">
-                            <!--SubjectName-->
+
                             <div class="form-group">
+                                <label class="col-md-3 control-label" for="subjectName" style="display:none;">
+                                    专题库id（不显示）
+                                </label>
                                 <div style="display:none;">
                                     <input type="text" class="form-control" id="id" name="id" />
                                 </div>
@@ -144,7 +152,6 @@
                                 </div>
                             </div>
 
-                            <!--SubjectCode-->
                             <div class="form-group">
                                 <label class="col-md-3 control-label">
                                     专题库代码<span style="color: red;">*</span>
@@ -154,7 +161,15 @@
                                 </div>
                             </div>
 
-                            <!--Brief-->
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">
+                                    图片<span style="color: red;">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <input type="file" id="imagePath" name="imagePath" class="form-control file" placeholder="请选择一个本地图片" accept="image/gif, image/jpeg, image/png, image/jpg" required="required">
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <label class="col-md-3 control-label">
                                     专题库简介
@@ -164,7 +179,24 @@
                                 </div>
                             </div>
 
-                            <!--Contact-->
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">
+                                    管理员账号<span style="color: red;">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="请输入管理员账号" id="admin" name="admin"  required="required" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">
+                                    管理员密码<span style="color: red;">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="请输入管理员密码" id="adminPasswd" name="adminPasswd"  required="required" />
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <label class="col-md-3 control-label">
                                     联系人<span style="color: red;">*</span>
@@ -174,7 +206,6 @@
                                 </div>
                             </div>
 
-                            <!--phone-->
                             <div class="form-group">
                                 <label class="col-md-3 control-label">
                                     联系电话<span style="color: red;">*</span>
@@ -184,27 +215,15 @@
                                 </div>
                             </div>
 
-                            <!--Address-->
                             <div class="form-group">
                                 <label class="col-md-3 control-label">
-                                    地址
+                                    Email
                                 </label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" placeholder="请输入专联系人地址" id="address" name="address"/>
+                                    <input type="text" class="form-control" placeholder="请输入联系人Email" id="email" name="email"/>
                                 </div>
                             </div>
 
-                            <!--admin-->
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">
-                                    管理员账号<span style="color: red;">*</span>
-                                </label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" placeholder="Password" id="admin" name="admin"  required="required" />
-                                </div>
-                            </div>
-
-                            <!--FtpUser-->
                             <div class="form-group">
                                 <label class="col-md-3 control-label">
                                     FTP账号<span style="color: red;">*</span>
@@ -214,13 +233,22 @@
                                 </div>
                             </div>
 
-                            <!--FtpPassword-->
+
                             <div class="form-group">
                                 <label class="col-md-3 control-label">
                                     FTP密码<span style="color: red;">*</span>
                                 </label>
                                 <div class="col-md-9">
                                     <input type="text" class="form-control" placeholder="请输入FTP密码" id="ftpPassword" name="ftpPassword" required="required" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">
+                                    序号<span style="color: red;">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="请输入序号" id="serialNo" name="serialNo" required="required" />
                                 </div>
                             </div>
                         </div>
@@ -308,14 +336,20 @@
                         $("#id").val(data.id);
                         $("#subjectName").val(data.subjectName);
                         $("#subjectCode").val(data.subjectCode);
+                        var imageFilePath = data.imagePath.originalFilename;
+                        //$("#imagePath").val(imageFilePath);
+                        $("#imagePath").attr("src", imageFilePath);
                         $("#brief").val(data.brief);
+                        $("#admin").val(data.admin);
+                        $("#adminPasswd").val(data.adminPasswd);
                         $("#contact").val(data.contact);
                         $("#phone").val(data.phone);
-                        $("#address").val(data.address);
-                        $("#admin").val(data.admin);
+                        $("#email").val(data.email);
                         $("#ftpUser").val(data.ftpUser);
                         $("#ftpPassword").val(data.ftpPassword);
+                        $("#serialNo").val(data.serialNo);
                         $("#addSubjectForm").attr("action", "${ctx}/subjectMgmt/updateSubject");
+                        $("#imagePath").removeAttr("required");
                         $("#titleForAddSubjectDialog").html("修改专题库");
                     },
                     error: function(data) {
