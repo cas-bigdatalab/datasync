@@ -10,7 +10,9 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -134,6 +136,19 @@ public class RelationDao{
         });
 
         return relationDataOfThisPage;
+    }
+
+    public List<DataSrc> findAll() {
+        List<DataSrc> dataSrcs = new ArrayList<DataSrc>();
+        String sql = "select * from t_datasource";
+        List<DataSrc> list = jdbcTemplate.queryForList(sql,DataSrc.class);
+        return list;
+    }
+
+    public DataSrc findById(int id) {
+        String sql = "select * from t_datasource where DataSourceId=?";
+        DataSrc dataSrc = jdbcTemplate.queryForObject(sql, new Object[]{id}, new int[]{Types.INTEGER}, new DataSrcMapper());
+        return dataSrc;
     }
 
 }

@@ -113,4 +113,24 @@ public class RelationShipService {
             return "false";
         }
     }
+
+
+
+
+
+    public List<DataSrc> findAll() {
+       return relationDao.findAll();
+    }
+
+    public List<String> relationalDatabaseTableList(DataSrc dataSrc) {
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        if (connection == null)
+            return null;
+        return dataSource.getTableList(connection);
+    }
+
+    public DataSrc findById(int id) {
+       return relationDao.findById(id);
+    }
 }

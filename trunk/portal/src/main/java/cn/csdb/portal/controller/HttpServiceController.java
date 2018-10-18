@@ -77,8 +77,8 @@ public class HttpServiceController {
 
         SqlUtil sqlUtil = new SqlUtil();
         try {
-            sqlUtil.importSql(username,password,dbName,structDBFile,dataDBFile);
-        } catch (IOException e) {
+            sqlUtil.importSql("localhost",username,password,dbName,structDBFile,dataDBFile);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         int insertSuccess = dataTaskService.insertDataTask(dataTask);

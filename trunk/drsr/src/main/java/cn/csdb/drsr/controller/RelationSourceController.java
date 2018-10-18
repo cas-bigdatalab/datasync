@@ -131,4 +131,32 @@ public class RelationSourceController {
         mv.addObject("currentPage", currentPage);
         return mv;
     }
+
+
+
+    /**
+     * @return:
+     * @auther: hw
+     * @date: 2018/10/18 16:54
+     */
+    @RequestMapping(value="findAll")
+    public @ResponseBody List<DataSrc> findAll(){
+        return relationShipService.findAll();
+    }
+
+    /**
+     * @return:
+     * @auther: hw
+     * @date: 2018/10/18 16:54
+     */
+    @ResponseBody
+    @RequestMapping(value="relationalDatabaseTableList")
+    public JSONObject relationalDatabaseTableList(int dataSourceId){
+        JSONObject jsonObject = new JSONObject();
+        DataSrc dataSrc = relationShipService.findById(dataSourceId);
+        List<String> list = relationShipService.relationalDatabaseTableList(dataSrc);
+        jsonObject.put("list",list);
+        jsonObject.put("dataSourceName",dataSrc.getDataSourceName());
+        return jsonObject;
+    }
 }
