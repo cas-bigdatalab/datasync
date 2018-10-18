@@ -68,7 +68,7 @@ public class RelationSourceController {
         datasrc.setPassword(password);
         logger.info("测试新增或编辑的数据能否连通数据库");
 
-        String flag = relationShipService.testCon(host,port,userName,"",dataBaseName);
+        String flag = relationShipService.testCon(host,port,userName,password,dataBaseName);
 
         if(flag=="success"){
             return relationShipService.addData(datasrc);
@@ -96,7 +96,7 @@ public class RelationSourceController {
         datasrc.setDataSourceId(dataSourceId1);
         logger.info("测试新增或编辑的数据能否连通数据库");
 
-        String flag = relationShipService.testCon(host,port,userName,"",dataBaseName);
+        String flag = relationShipService.testCon(host,port,userName,password,dataBaseName);
 
         if(flag=="success"){
             return relationShipService.editData(datasrc);
