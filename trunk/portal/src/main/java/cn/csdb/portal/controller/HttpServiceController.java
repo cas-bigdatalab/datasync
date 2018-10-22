@@ -2,9 +2,11 @@ package cn.csdb.portal.controller;
 
 import cn.csdb.portal.model.DataTask;
 import cn.csdb.portal.model.Site;
+import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.service.ConfigPropertyService;
 import cn.csdb.portal.service.DataTaskService;
 import cn.csdb.portal.service.SiteService;
+import cn.csdb.portal.service.SubjectMgmtService;
 import cn.csdb.portal.utils.SqlUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -31,7 +33,7 @@ public class HttpServiceController {
     private DataTaskService dataTaskService;
 
     @Autowired
-    private SiteService siteService;
+    private SubjectMgmtService subjectMgmtService;
 
     @Autowired
     private ConfigPropertyService configPropertyService;
@@ -40,13 +42,14 @@ public class HttpServiceController {
     @RequestMapping(value = "getDataTask", method = {RequestMethod.POST,RequestMethod.GET})
     public int getDataTask(@RequestBody String requestString){
         JSONObject requestJson = JSON.parseObject(requestString);
-        String siteMarker = requestJson.get("siteMarker").toString();
+        String subjectCode = requestJson.get("subjectCode").toString();
         String dataTaskString = requestJson.get("dataTask").toString();
         DataTask dataTask = JSON.parseObject(dataTaskString,DataTask.class);
         dataTask.setDataTaskId(0);
-        Site site = siteService.getSiteByMarker(siteMarker);
-        String siteFilePath = site.getFilePath();
-        dataTask.setSiteId(site.getId());
+//        Site site = siteService.getSiteByMarker(siteMarker);
+        Subject subject = subjectMgmtService.findByCode(subjectCode);
+        String siteFtpPath = subject.getFtpPath();
+        dataTask.setSubjectCode(subject.getSubjectCode());
         String sqlFilePath = dataTask.getSqlFilePath();
         String[] filePathList = sqlFilePath.split(";");
         StringBuffer filePathBuffer = new StringBuffer();
@@ -62,18 +65,18 @@ public class HttpServiceController {
             }else if(filePath.indexOf("\\")>0){
                 fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
             }
-            filePathBuffer.append(siteFilePath+fileName+";");
+            filePathBuffer.append(siteFtpPath+fileName+";");
             if(fileName.contains("data")){
-                dataDBFile = site.getFilePath()+fileName;
+                dataDBFile = siteFtpPath+fileName;
             }else if(fileName.contains("struct")){
-                structDBFile = site.getFilePath()+fileName;
+                structDBFile = siteFtpPath+fileName;
             }
         }
         dataTask.setSqlFilePath(filePathBuffer.toString());
 
         String username = configPropertyService.getProperty("db.username");
         String password = configPropertyService.getProperty("db.password");
-        String dbName = site.getDbName();
+        String dbName = subject.getDbName();
 
         SqlUtil sqlUtil = new SqlUtil();
         try {
