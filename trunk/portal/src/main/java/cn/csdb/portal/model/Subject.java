@@ -1,22 +1,43 @@
 package cn.csdb.portal.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.web.multipart.MultipartFile;
 
+@Document(collection = "t_subject")
 public class Subject {
+    @Id
     private String id;
+    @Field("subjectName")
     private String subjectName;
+    @Field("subjectCode")
     private String subjectCode;
+    @Field("imagePathxx")
     private MultipartFile imagePath;
+
+    @Field("brief")
     private String brief;
+
+    @Field("admin")
     private String admin;
+    @Field("adminPasswd")
     private String adminPasswd;
+    @Field("contact")
     private String contact;
+    @Field("phone")
     private String phone;
+    @Field("email")
     private String email;
+    @Field("ftpUser")
     private String ftpUser;
+    @Field("ftpPassword")
     private String ftpPassword;
+    @Field("serialNo")
     private String serialNo;
+    @Field("ftpPath")
     private String ftpPath;
+    @Field("dbName")
     private String dbName;
     private String dbUsername;
     private String dbPassword;
@@ -54,6 +75,18 @@ public class Subject {
     public void setDbPassword(String dbPassword) {
         this.dbPassword = dbPassword;
     }
+
+    public String getImagePathNew() {
+        return imagePathNew;
+    }
+
+    public void setImagePathNew(String imagePathNew) {
+        this.imagePathNew = imagePathNew;
+    }
+
+    @Field("imagePath")
+    private String imagePathNew;
+
 
     public String getDbName() {
         return dbName;

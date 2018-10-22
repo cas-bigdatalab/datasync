@@ -29,7 +29,7 @@
 
     <Loggers>
         <!--这里写自定义日志输出级别，只输出到控制台-->
-        <logger name="cn.csdb.resreg" level="DEBUG">
+        <logger name="cn.csdb.portal" level="debug">
             <appender-ref ref="STDOUT"/>
         </logger>
         <!--spring日志只输出WARN级别以上到控制台-->
