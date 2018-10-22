@@ -22,6 +22,7 @@ public class DataSrc {
     private String fileType;
     private String filePath;
     private Date createTime;
+    private int totalPage;
     private int stat;
 
 
@@ -135,5 +136,13 @@ public class DataSrc {
 
     public void setStat(int stat) {
         this.stat = stat;
+    }
+
+    public int getTotalPage() {
+        return totalPage;
+    }
+
+    public void setTotalPage(int totalPage) {
+        this.totalPage = totalPage;
     }
 }
