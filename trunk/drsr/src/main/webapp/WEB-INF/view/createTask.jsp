@@ -32,7 +32,7 @@
     <div class="select-ways">
         <div class="select-database">
             <span>选择数据源</span>
-            <select name="" id="DBchange">
+            <select  id="DBchange">
                 <option value="">-----------</option>
                 <option value="">关系数据源DB2</option>
                 <option value="">数据源OracleData</option>
@@ -112,14 +112,34 @@
         </div>
     </div>
 </div>
+<script type="text/html" id="dataSouceList">
+    <option value="">-----------</option>
+    {{each list as value i}}
+    <option value="{{name}}">value.name</option>
+    {{/each}}
+</script>
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.min.js"></script>
 
     <script>
-        $(function(){
 
+
+
+
+
+        $(function(){
+            $.ajax({
+                url:"${ctx}/relationship/findAll",
+                type:"GET",
+                success:function (data) {
+                    console.log(data)
+                },
+                error:function () {
+                    console.log("请求失败")
+                }
+            })
         });
         var treeData = {
             'core' : {
@@ -226,7 +246,10 @@
             })*/
         })
         function sendTask() {
-
+            $.ajax({
+                url:"",
+                type:"POST",
+            })
             window.location.href="${ctx}/dataUpload"
         }
         function editTree() {
@@ -376,55 +399,6 @@
             /*tableConfiguration();*/
         })
 
-        function tableConfiguration(num,data) {
-            data.pageNum=num;
-            var conData = data;
-            $.ajax({
-                url:"",
-                type:"GET",
-                data:conData,
-                success:function (data) {
-                    $(".data-table").html("");
-                    var DataList = JSON.parse(data);
-                    if(DataList=="{}"){
-                        $(".table-message").html("暂时没有数据");
-                        $(".page-message").html("");
-                        $(".page-list").html("");
-                        return
-                    }
-                    $(".table-message").hide();
-                    /*
-                    * 创建table
-                    * */
-                    if ($(".page-list .bootpag").length != 0) {
-                        $(".page-list").off();
-                        $('.page-list').empty();
-                    }
-                    $(".page-message").html("当前第"+dataFile.pageNum +"页,共"+dataFile.totalPage +"页,共"+dataFile.totalNum+"条数据");
-                    $('#page-list').bootpag({
-                        total: DataList.totalPage,
-                        page: DataList.pageNum,
-                        maxVisible: 6,
-                        leaps: true,
-                        firstLastUse: true,
-                        first: '首页',
-                        last: '尾页',
-                        wrapClass: 'pagination',
-                        activeClass: 'active',
-                        disabledClass: 'disabled',
-                        nextClass: 'next',
-                        prevClass: 'prev',
-                        lastClass: 'last',
-                        firstClass: 'first'
-                    }).on('page', function (event, num) {
-                        tableConfiguration(num,conData);
-                    });
-                },
-                error:function () {
-                    $(".table-message").html("请求失败");
-                }
-            })
-        }
     </script>
 </div>
 

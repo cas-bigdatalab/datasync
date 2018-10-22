@@ -152,11 +152,11 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <a href="${ctx}/relationalDatabase?currentPage=1">
+                            <a href="${ctx}/relationship/indexTest">
                                 关系数据库</a>
                         </li>
                         <li>
-                            <a href="${ctx}/fileSource?currentPage=1">
+                            <a href="${ctx}/fileResource/index">
                                 文件数据源</a>
                         </li>
                     </ul>
@@ -262,7 +262,9 @@
 <script src="${ctx}/resources/bundles/metronic/scripts/layout.js" type="text/javascript"></script>
 <script src="${ctx}/resources/bundles/bootbox/bootbox.min.js"></script>
 <script src="${ctx}/resources/bundles/artTemplate/template.js"></script>
-<script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
+<script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.min.js"></script>
+<script src="${ctx}/resources/bundles/jquery-validation/js/additional-methods.min.js"></script>
+
 
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
@@ -291,6 +293,17 @@
                 }
             });
         });
+        function getSubStr(val, maxLength) {
+            if (maxLength <= 0) {
+                return val;
+            }
+            var valLength = strLength(val);
+            if (valLength > maxLength) {
+                val = subStr(val, maxLength);
+                val = val + "...";
+            }
+            return val;
+        }
     });
 
 
