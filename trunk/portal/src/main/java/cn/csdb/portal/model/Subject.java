@@ -20,6 +20,24 @@ public class Subject {
     private String dbName;
     private String dbUsername;
     private String dbPassword;
+    private String dbHost;
+    private String dbPort;
+
+    public String getDbPort() {
+        return dbPort;
+    }
+
+    public void setDbPort(String dbPort) {
+        this.dbPort = dbPort;
+    }
+
+    public String getDbHost() {
+        return dbHost;
+    }
+
+    public void setDbHost(String dbHost) {
+        this.dbHost = dbHost;
+    }
 
     public String getDbUsername() {
         return dbUsername;
