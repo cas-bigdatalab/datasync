@@ -18,6 +18,24 @@ public class Subject {
     private String serialNo;
     private String ftpPath;
     private String dbName;
+    private String dbUsername;
+    private String dbPassword;
+
+    public String getDbUsername() {
+        return dbUsername;
+    }
+
+    public void setDbUsername(String dbUsername) {
+        this.dbUsername = dbUsername;
+    }
+
+    public String getDbPassword() {
+        return dbPassword;
+    }
+
+    public void setDbPassword(String dbPassword) {
+        this.dbPassword = dbPassword;
+    }
 
     public String getDbName() {
         return dbName;
