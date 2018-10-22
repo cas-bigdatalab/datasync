@@ -13,6 +13,8 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="${ctx}/resources/css/bootstrap.min.css">
+    <link href="${ctx}/resources/bundles/rateit/src/rateit.css" rel="stylesheet" type="text/css">
+    <link href="${ctx}/resources/bundles/jstree/dist/themes/default/style.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="${ctx}/resources/css/relationalSource.css">
 <%--
     <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
@@ -82,6 +84,10 @@
                 <div class="modal-body">
                     <form class="form-horizontal" id="commentForm" method="get" action="">
                         <fieldset>
+                            <div class="modal-footer">
+                                <input class="btn btn-primary" id="addSubmit" type="submit" value="确定">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            </div>
                             <div class="form-group">
                             <label  for="dataSourceName" class="col-sm-3 control-label"><font color='red'>*</font>数据源名称</label>
                             <div class="col-sm-9">
@@ -101,7 +107,7 @@
                                            name="fileType"  value="本地文件" disabled>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <%--<div class="form-group">
                                 <label  for="filePath" class="col-sm-3 control-label"><font color='red'>*</font>文件地址</label>
                                 <div class="col-sm-9">
                                     <input type="file" class="form-control" style="width:50%;float: left " id="filePath" name="dataSourceType" placeholder="请输入文件地址" required aria-required="true" checkFileFormat="true">
@@ -114,11 +120,14 @@
                                         <font color='red'>文件为空，请检查您选取的文件地址是否正确</font>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
+                            </div>--%>
+                            <div class="form-group">
+                            <div id="jstree_show" style="height:300px"></div>
+                                </div>
+                            <%--<div class="modal-footer">
                                 <input class="btn btn-primary" id="addSubmit" type="submit" value="确定">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                            </div>
+                            </div>--%>
                         </fieldset>
                     </form>
                 </div>
@@ -137,6 +146,10 @@
                 <div class="modal-body">
                     <form class="form-horizontal" id="commentEditForm" method="get" action="">
                         <fieldset>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">确定</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            </div>
                             <div class="form-group">
                                 <label  for="dataSourceName" class="col-sm-3 control-label"><font color='red'>*</font>数据源名称</label>
                                 <div class="col-sm-9">
@@ -159,22 +172,11 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label  for="filePathE" class="col-sm-3 control-label"><font color='red'>*</font>文件地址</label>
+                                <label  class="col-sm-3 control-label"><font color='red'>*</font>文件地址</label>
                                 <div class="col-sm-9">
-                                    <input type="file" class="form-control" style="width:50%;float: left " id="filePathE" name="dataSourceType" placeholder="请输入文件地址" required aria-required="true" checkFileFormat="true">
+                                        <div id="tags_tagsinput" class="tagsinput" style="border: 1px solid black" ></div>
+                                        <div id="jstree_show_edit" style="height:300px"></div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label"></label>
-                                <div class="col-sm-9">
-                                    <div class="form-horizontal" id="fileErrorE" style="width:50%;float: left " hidden>
-                                        <font color='red'>文件为空，请检查您选取的文件地址是否正确</font>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">确定</button>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                             </div>
                         </fieldset>
                     </form>
@@ -372,17 +374,19 @@
 <div id="siteMeshJavaScript">
     <script src="${ctx}/resources/bundles/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="${ctx}/resources/bundles/jquery/jquery.form.min.js" type="text/javascript"></script>
+    <script src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.min.js"></script>
     <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.js"></script>
     <script src="${ctx}/resources/bundles/relationModule/messages_zh.js"></script>
-    <script src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.min.js"></script>
+    <script src="${ctx}/resources/bundles/rateit/src/jquery.rateit.js" type="text/javascript"></script>
+    <script src="${ctx}/resources/bundles/artTemplate/template.js"></script>
+    <script src="${ctx}/resources/js/subStrLength.js"></script>
+    <script src="${ctx}/resources/bundles/jstree/dist/jstree.js" type="text/javascript"></script>
     <script src="${ctx}/resources/bundles/relationModule/vue.min.js"></script>
     <script src="${ctx}/resources/bundles/relationModule/fileResource.js"></script>
-    <script>
-        //自定义验证
-        $.validator.addMethod("isPositive",function(value,element){
-            var score = /^[0-9]*$/;
-            return this.optional(element) || (score.test(value));
-        },"<font color='#E47068'>请输入大于0的数字</font>");
+    <script type="text/javascript">
+        var ctx = '${ctx}';
+        var deleteNodeArray;
     </script>
+
 </div>
 </html>

@@ -10,7 +10,7 @@ import java.util.Date;
 public class DataTask {
     private int dataTaskId;
     private int dataSourceId;
-    private int siteId;
+    private String subjectCode;
     private String dataTaskType;
     private String tableName;
     private String sqlString;
@@ -21,12 +21,12 @@ public class DataTask {
     private String creator;
     private String status;
 
-    public int getSiteId() {
-        return siteId;
+    public String getSubjectCode() {
+        return subjectCode;
     }
 
-    public void setSiteId(int siteId) {
-        this.siteId = siteId;
+    public void setSubjectCode(String subjectCode) {
+        this.subjectCode = subjectCode;
     }
 
     public String getDataTaskType() {

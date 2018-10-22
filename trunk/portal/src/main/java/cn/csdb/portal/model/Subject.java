@@ -16,6 +16,34 @@ public class Subject {
     private String ftpUser;
     private String ftpPassword;
     private String serialNo;
+    private String ftpPath;
+    private String dbName;
+    private String dbUsername;
+    private String dbPassword;
+
+    public String getDbUsername() {
+        return dbUsername;
+    }
+
+    public void setDbUsername(String dbUsername) {
+        this.dbUsername = dbUsername;
+    }
+
+    public String getDbPassword() {
+        return dbPassword;
+    }
+
+    public void setDbPassword(String dbPassword) {
+        this.dbPassword = dbPassword;
+    }
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+    }
 
     public String getId() {
         return id;
@@ -119,6 +147,14 @@ public class Subject {
 
     public void setSerialNo(String serialNo) {
         this.serialNo = serialNo;
+    }
+
+    public String getFtpPath() {
+        return ftpPath;
+    }
+
+    public void setFtpPath(String ftpPath) {
+        this.ftpPath = ftpPath;
     }
 
     @Override
