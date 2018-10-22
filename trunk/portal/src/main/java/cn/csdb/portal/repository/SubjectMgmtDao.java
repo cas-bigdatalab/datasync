@@ -1,14 +1,19 @@
 package cn.csdb.portal.repository;
 
 import cn.csdb.portal.model.Subject;
+import com.mongodb.DBObject;
+import com.mongodb.QueryBuilder;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.ResultSet;
@@ -20,6 +25,9 @@ import java.util.List;
 public class SubjectMgmtDao {
     private static int rowsPerPage = 10;
     private JdbcTemplate jdbcTemplate;
+
+    @Resource
+    private MongoTemplate mongoTemplate;
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbcTemplate)
@@ -183,6 +191,8 @@ public class SubjectMgmtDao {
                     subject.setFtpUser(resultSet.getString("FtpUser"));
                     subject.setFtpPassword(resultSet.getString("FtpPassword"));
                     subject.setSerialNo(resultSet.getString("SerialNo"));
+                    subject.setFtpPath(resultSet.getString("FtpPath"));
+                    subject.setDbName(resultSet.getString("DbName"));
 
                     System.out.println(subject);
                 }
@@ -280,5 +290,24 @@ public class SubjectMgmtDao {
         }
 
         return multipartFile;
+    }
+
+    /**
+     *
+     * Function Description:
+     *
+     * @param: [code]
+     * @return: cn.csdb.portal.model.Subject
+     * @auther: hw
+     * @date: 2018/10/22 15:03
+     */
+    public Subject findByCode(String code){
+        DBObject query = QueryBuilder.start().and("subjectCode").is(code).get();
+        BasicQuery basicQuery = new BasicQuery(query);
+        List<Subject> subjects = mongoTemplate.find(basicQuery, Subject.class);
+        if (subjects.size() > 0){
+            return subjects.get(0);
+        }else
+            return null;
     }
 }

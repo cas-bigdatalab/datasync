@@ -57,7 +57,7 @@ public class DataSyncController {
         String port = configPropertyService.getProperty("FrpPort");
         String remoteFilepath = configPropertyService.getProperty("FtpRootPath");
         String portalUrl = configPropertyService.getProperty("PortalUrl");
-        String siteMarker = configPropertyService.getProperty("SiteMarker");
+        String subjectCode = configPropertyService.getProperty("SubjectCode");
         DataTask dataTask = dataTaskService.get(dataTaskId);
         String[] localFileList = dataTask.getSqlFilePath().split(";");
         try {
@@ -68,7 +68,7 @@ public class DataSyncController {
                 String dataTaskString = JSONObject.toJSONString(dataTask);
                 JSONObject requestJSON = new JSONObject();
                 requestJSON.put("dataTask",dataTaskString);
-                requestJSON.put("siteMarker",siteMarker);
+                requestJSON.put("subjectCode",subjectCode);
                 String requestString = JSONObject.toJSONString(requestJSON);
                 HttpClient httpClient = null;
                 HttpPost postMethod = null;
