@@ -166,6 +166,34 @@
         $(function(){
 
         });
+
+        var arr = []
+       /* var json = {
+                        name:"caocao",
+                         sex:"男"
+                    }
+        arr.push(json)
+        json.name="aaa";
+        json.sex="aaa"*/
+       function ObjStory(keyid,souceid){
+           this.keyID=keyid;
+           this.souceID=souceid
+       }
+        arr.push(new ObjStory("1","2"))
+        arr.push(new ObjStory("3","4"))
+        console.log(JSON.stringify(arr))
+
+
+
+        if(localStorage.getItem("uploadList") == null){
+            var uploadTasks = [];
+        }else {
+            var uploadTasks=JSON.parse(localStorage.getItem("uploadList"));
+            console.log(uploadTasks)
+        }
+
+
+       /* localStorage.setItem("uploadTask",uploadTasks)*/
         template.helper("btnName",function (num) {
             var name=""
             if(num ==0){
@@ -191,6 +219,9 @@
             $(this).attr("disabled","disabled");
             var souceID = $(this).attr("keyIdTd");
             var keyID = souceID + new Date().getTime();
+
+            uploadTasks.push(new ObjStory(keyID,souceID));
+            localStorage.setItem("uploadList",JSON.stringify(uploadTasks));
             $.ajax({
                 url:"${ctx}/ftpUpload",
                 type:"POST",
@@ -205,6 +236,7 @@
                 }
             })
             $("."+souceID).text("正在上传");
+
             getProcess(keyID,souceID);
         })
         $("#upload-list").delegate(".edit-data","click",function () {

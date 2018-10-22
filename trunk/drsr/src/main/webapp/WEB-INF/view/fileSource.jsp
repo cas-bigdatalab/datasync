@@ -183,6 +183,73 @@
         </div>
     </div>
 
+    <div id="addSqlSourcetable" class="modal fade" tabindex="-1" data-width="400">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">添加SQL数据源信息</h4>
+                </div>
+                <div class="modal-body" style="min-height: 100px">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="chinaName" class="col-sm-3 control-label">数据源名称</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="chinaName" required="required" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="englishName" class="col-sm-3 control-label">英文名称</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="englishName" required="required">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">类型</label>
+                            <div class="col-sm-8">
+                                <select name="" id="" class="form-control">
+                                    <option value="">DB2</option>
+                                    <option value="">Oracle</option>
+                                    <option value="">SqlServer</option>
+                                    <option value="">MySql</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="HostNum" class="col-sm-3 control-label">主机</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="HostNum">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="portNum" class="col-sm-3 control-label">端口</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="portNum">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="userName" class="col-sm-3 control-label">用户名</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="userName">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="possword" class="col-sm-3 control-label">密码</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="possword">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn green" data-dismiss="modal" onclick="confirmAddNode();" ><i
+                            class="glyphicon glyphicon-ok"></i>添加
+                    </button>
+                    <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!--paging-->
     <div align="center">
