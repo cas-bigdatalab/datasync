@@ -33,8 +33,8 @@ public class DataTaskDao {
     //更新
     public boolean update(DataTask dataTask) {
         boolean result = false;
-        String sql = "update T_dataTask set DataSourceId=?,SiteId=?,DataTaskType=?,TableName=?,SqlString=?,SqlTableNameEn=?,SqlFilePath=?,FilePath=?,creator=?,status=? where DataTaskId=? ";
-        int i = jdbcTemplate.update(sql, new Object[]{dataTask.getDataSourceId(), dataTask.getSiteId(), dataTask.getDataTaskType(), dataTask.getTableName(), dataTask.getSqlString(),
+        String sql = "update T_dataTask set DataSourceId=?,SubjectCode=?,DataTaskType=?,TableName=?,SqlString=?,SqlTableNameEn=?,SqlFilePath=?,FilePath=?,creator=?,status=? where DataTaskId=? ";
+        int i = jdbcTemplate.update(sql, new Object[]{dataTask.getDataSourceId(), dataTask.getSubjectCode(), dataTask.getDataTaskType(), dataTask.getTableName(), dataTask.getSqlString(),
                 dataTask.getSqlTableNameEn(), dataTask.getSqlFilePath(), dataTask.getFilePath(), dataTask.getCreator(), dataTask.getStatus(), dataTask.getDataTaskId()});
         if (i >= 0) {
             result = true;
@@ -46,7 +46,7 @@ public class DataTaskDao {
         String sql = "insert into t_datatask(" +
                 "dataSourceId,dataTaskType,tableName," +
                 "SqlString,SqlTableNameEn,SqlFilePath," +
-                "FilePath,creator,status,SiteId,CreateTime) values " +
+                "FilePath,creator,status,SubjectCode,CreateTime) values " +
                 "(?,?,?,?,?,?,?,?,?,?,?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int i = jdbcTemplate.update(new PreparedStatementCreator() {
@@ -62,7 +62,7 @@ public class DataTaskDao {
                 ps.setString(7, dataTask.getFilePath());
                 ps.setString(8, dataTask.getCreator());
                 ps.setString(9, dataTask.getStatus());
-                ps.setInt(10, dataTask.getSiteId());
+                ps.setString(10, dataTask.getSubjectCode());
                 ps.setTimestamp(11, new Timestamp(new Date().getTime()));
                 return ps;
             }

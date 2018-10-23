@@ -10,8 +10,9 @@
 <c:set value="${pageContext.request.contextPath}" var="ctx"/>
 <html>
 <head>
-    <title>系统</title>
+    <title>DataSync</title>
     <link href="${ctx}/resources/css/dataUpload.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div class="page-content">
@@ -160,12 +161,52 @@
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
-    <%--<script src="${ctx}/resources/bundles/amcharts/amcharts/amcharts.js"></script>--%>
-
+        <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.js"></script>
     <script>
         $(function(){
-
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
         });
+
+        var arr = []
+       /* var json = {
+                        name:"caocao",
+                         sex:"男"
+                    }
+        arr.push(json)
+        json.name="aaa";
+        json.sex="aaa"*/
+       function ObjStory(keyid,souceid){
+           this.keyID=keyid;
+           this.souceID=souceid
+       }
+        arr.push(new ObjStory("1","2"))
+        arr.push(new ObjStory("3","4"))
+        console.log(JSON.stringify(arr))
+
+
+
+        if(localStorage.getItem("uploadList") == null){
+            var uploadTasks = [];
+        }else {
+            var uploadTasks=JSON.parse(localStorage.getItem("uploadList"));
+            console.log(uploadTasks)
+        }
+
+
+       /* localStorage.setItem("uploadTask",uploadTasks)*/
         template.helper("btnName",function (num) {
             var name=""
             if(num ==0){
@@ -191,6 +232,9 @@
             $(this).attr("disabled","disabled");
             var souceID = $(this).attr("keyIdTd");
             var keyID = souceID + new Date().getTime();
+
+            uploadTasks.push(new ObjStory(keyID,souceID));
+            localStorage.setItem("uploadList",JSON.stringify(uploadTasks));
             $.ajax({
                 url:"${ctx}/ftpUpload",
                 type:"POST",
@@ -205,6 +249,7 @@
                 }
             })
             $("."+souceID).text("正在上传");
+
             getProcess(keyID,souceID);
         })
         $("#upload-list").delegate(".edit-data","click",function () {
@@ -225,7 +270,7 @@
             })*/
             $("#EModal").modal('show');
         })
-        //导出SQL文件
+        /*//导出SQL文件
         $("#upload-list").delegate(".exportSql","click",function () {
             var souceID = $(this).attr("keyIdTd");
             //var keyID = souceID + new Date().getTime();
@@ -244,7 +289,7 @@
                     console.log("请求失败")
                 }
             })
-        });
+        });*/
         function getProcess(keyID,souceID) {
            var setout= setInterval(function () {
                 $.ajax({
@@ -369,6 +414,26 @@
 
         tableConfiguration2()
 
+
+        //导出SQL文件
+        $("#upload-list").delegate(".exportSql","click",function () {
+            var souceID = $(this).attr("keyIdTd");
+            //var keyID = souceID + new Date().getTime();
+            $.ajax({
+                url:"${ctx}/task/" + souceID,
+                type:"POST",
+                dataType:"JSON",
+                success:function (data) {
+                    console.log(data.result);
+                    if (data.result == 'true') {
+                        toastr.success("导出SQL文件成功!");
+                    }
+                },
+                error:function () {
+                    console.log("请求失败")
+                }
+            })
+        });
     </script>
 </div>
 

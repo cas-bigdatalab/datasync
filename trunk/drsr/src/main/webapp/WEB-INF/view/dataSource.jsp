@@ -20,8 +20,17 @@
     </div>
     <div class="source-title">
         <span>数据源信息管理</span>
-        <a href="javascript:void(0)" id="addSqlSource">添加SQL数据源</a>
-        <a href="javascript:void(0)" id="addFileSource">添加文件型数据源</a>
+    </div>
+    <div class="alert alert-info" role="alert" style="margin:0  33px">
+        <!--查询条件 -->
+        <div class="row">
+            <div class="col-md-9">
+                <button type="button" class="btn  btn-sm green pull-right" id="addSqlSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;添加SQL数据源</button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn  btn-sm green pull-right" id="addFileSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;添加文件型数据源</button>
+            </div>
+        </div>
     </div>
     <div class="source-table">
         <div class="table-message">列表加载中......</div>
@@ -46,53 +55,17 @@
                 <td>2018-04-12 09:12</td>
                 <td>正常</td>
                 <td>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+                    <button type="button" class="btn btn-success btn-xs blue" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                    <button type="button" class="btn btn-success btn-xs purple " keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
+                    <button type="button" class="btn btn-success btn-xs red" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 </td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td class="source-name">文件路径2Data</td>
-                <td class="source-DB">paht1Data</td>
-                <td class="source-local">文件型</td>
-                <td>2018-04-12 09:12</td>
-                <td>正常</td>
-                <td>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
-                </td>            </tr>
-            <tr>
-                <td>2</td>
-                <td class="source-name">数据源Oracle</td>
-                <td class="source-DB">OracleData</td>
-                <td class="source-local">Oracle</td>
-                <td>2018-04-12 09:12</td>
-                <td>正常</td>
-                <td>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
-                </td>            </tr>
-            <tr>
-                <td>2</td>
-                <td class="source-name">关系型数据源DB2</td>
-                <td class="source-DB">SqlServerData</td>
-                <td class="source-local">SqlServer</td>
-                <td>2018-04-12 09:12</td>
-                <td>正常</td>
-                <td>
-                    <button type="button" class="btn btn-success btn-sm btnSeeOpen" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-                    <button type="button" class="btn btn-success btn-sm btnEdit" keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
-                    <button type="button" class="btn btn-success btn-sm btnTrash" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
-                </td>            </tr>
             </tbody>
         </table>
-        <div class="page-message">
+        <div class="page-message" style="float: left">
 
         </div>
-        <div class="page-list"></div>
+        <div class="page-list" style="float: right"></div>
     </div>
 </div>
 <div id="addSqlSourcetable" class="modal fade" tabindex="-1" data-width="400">
@@ -186,17 +159,19 @@
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">本地路径</label>
                         <div class="col-sm-8">
+                            <input type="file" style="margin-bottom: 15px">
                             <input type="text" class="form-control" required="required">
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn green" data-dismiss="modal" onclick="confirmAddNode();" ><i
+                                class="glyphicon glyphicon-ok"></i>添加
+                        </button>
+                        <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+                    </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn green" data-dismiss="modal" onclick="confirmAddNode();" ><i
-                        class="glyphicon glyphicon-ok"></i>添加
-                </button>
-                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
-            </div>
+
         </div>
     </div>
 </div>
@@ -243,6 +218,70 @@
         </div>
     </div>
 </div>
+<!-- validation Mode -->
+<div id="fileSourceModal" class="modal fade" tabindex="-1" data-width="400">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title" id="fileSourceModalTitle">添加文件数据源</h4>
+            </div>
+            <div class="form">
+                <form class="form-horizontal" role="form" action="addFileSource1" method="post"
+                      accept-charset="utf-8" id="fileSourceForm">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-body">
+                                    <div class="form-group">
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control" placeholder="请输入数据源ID"
+                                                   id="dataSourceId" name="dataSourceId" style="display: none"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">数据源名称<span class="required">
+													* </span></label>
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control" placeholder="请输入数据源名称"
+                                                   id="dataSourceName"
+                                                   name="dataSourceName"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">文件类型<span class="required">
+													* </span></label>
+
+                                        <div class="col-md-9">
+                                            <select class="form-control" id="fileType" name="fileType">
+                                                <option value="本地文件">本地文件</option>
+                                                <option value="其他">其他</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">文件地址<span class="required">
+													* </span></label>
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control" placeholder="请输入文件地址"
+                                                   id="filePath"
+                                                   name="filePath"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn green"><i class="glyphicon glyphicon-ok"></i>保存</button>
+                        <button type="button" data-dismiss="modal" class="btn btn-danger" id="cancelButton">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/html" id="resourceTmp1">
     {{each list as value i}}
     <tr keyIdTr="{{value.id}}">
@@ -260,8 +299,15 @@
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
     <%--<script src="${ctx}/resources/bundles/amcharts/amcharts/amcharts.js"></script>--%>
-
+        <script src="${ctx}/resources/bundles/jquery-validation/js/localization/messages_zh.min.js"></script>
     <script>
+
+
+
+
+
+
+
         $(function(){
 
         });
@@ -364,11 +410,72 @@
             })
         }
         $("#addSqlSource").click(function () {
-            $("#addSqlSourcetable").modal('show');
+            $("#fileSourceModal").modal('show');
+            var $fileFrom =$('#fileSourceForm')
+            handleValidation($fileFrom);
+
         })
         $("#addFileSource").click(function () {
             $("#addFileSourcetable").modal('show');
         })
+
+
+        function handleValidation(element) {
+            // for more info visit the official plugin documentation:
+            // http://docs.jquery.com/Plugins/Validation
+            var formValid;
+            formValid = element.validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block help-block-error', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "", // validate all fields including form hidden input
+                rules: {
+                    dataSourceName: {
+                        required: true
+                    },
+                    fileType: {
+                        required: true
+                    },
+                    filePath: {
+                        required: true,
+                        isFilePath: true
+                    }
+                },
+
+                highlight: function (element) { // hightlight error inputs
+                    $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                unhighlight: function (element) { // revert the change done by hightlight
+                    $(element)
+                        .closest('.form-group').removeClass('has-error'); // set error class to the control group
+                },
+
+                success: function (label) {
+                    label
+                        .closest('.form-group').removeClass('has-error'); // set success class to the control group
+                },
+
+                submitHandler: function (form) {
+
+                    <!--ajax  request-->
+                }
+
+            });
+
+            $("#cancelButton").click(function () {
+                console.log(123);
+                formValid.resetForm();
+            })
+
+
+        };
+        jQuery.validator.addMethod("isFilePath", function (value, element) {
+            var winPath = /^[a-zA-Z]:(((\/(?! )[^/:*?<>\""|\/]+)+\/?)|(\/)?)\s*$/g;
+            var lnxPath = /^([\/][\w-]+)*$/;
+            return this.optional(element) || winPath.test(value) || lnxPath.test(value);
+        }, "请正确填写路径");
     </script>
 </div>
 

@@ -1,12 +1,12 @@
-package cn.csdb.drsr.model;
+package cn.csdb.portal.model;
 
 import java.util.Date;
 
 /**
  * @program: DataSync
  * @description:
- * @author: Mr.Wang
- * @create: 2018-09-27 14:42
+ * @author: hw
+ * @create: 2018-10-22 16:42
  **/
 public class DataSrc {
     private int dataSourceId;

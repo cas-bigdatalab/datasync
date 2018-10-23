@@ -85,4 +85,17 @@ public class SubjectMgmtService {
     {
         return subjectMgmtDao.findSubjectById(id);
     }
+
+    /**
+     *
+     * Function Description: 
+     *
+     * @param: [code]
+     * @return: cn.csdb.portal.model.Subject
+     * @auther: hw
+     * @date: 2018/10/22 15:13
+     */
+    public Subject findByCode(String code){
+        return subjectMgmtDao.findByCode(code);
+    }
 }

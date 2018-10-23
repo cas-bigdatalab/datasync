@@ -19,6 +19,7 @@
             <list>
                 <value>classpath:jdbc.properties</value>
                 <value>classpath:cas_urls.properties</value>
+                <value>classpath:mongodb.properties</value>
             </list>
         </property>
     </bean>
@@ -93,6 +94,9 @@
     </bean>
 
     <import resource="system-config.xml"/>
+    <!-- 导入mongodb的配置文件 -->
+    <import resource="spring-mongodb.xml"/>
+
     <!-- 缓存配置文件 -->
    <!-- <import resource="spring-cache.xml"/>
     &lt;!&ndash; 权限控制配置文件  &ndash;&gt;

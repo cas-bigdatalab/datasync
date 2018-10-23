@@ -1,21 +1,49 @@
 package cn.csdb.portal.model;
 
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
+@Document(collection = "t_subject")
 public class Subject {
+    @Id
     private String id;
+    @Field("subjectName")
     private String subjectName;
+    @Field("subjectCode")
     private String subjectCode;
+    @Field("imagePath")
     private String imagePath;
+    @Field("brief")
     private String brief;
+    @Field("admin")
     private String admin;
+    @Field("adminPasswd")
     private String adminPasswd;
+    @Field("contact")
     private String contact;
+    @Field("phone")
     private String phone;
+    @Field("email")
     private String email;
+    @Field("ftpUser")
     private String ftpUser;
+    @Field("ftpPassword")
     private String ftpPassword;
+    @Field("serialNo")
     private String serialNo;
+    @Field("ftpPath")
+    private String ftpPath;
+    @Field("dbName")
+    private String dbName;
+    @Field("dbUsername")
+    private String dbUsername;
+    @Field("dbPassword")
+    private String dbPassword;
+    @Field("dbHost")
+    private String dbHost;
+    @Field("dbHost")
+    private String dbPort;
 
     public String getId() {
         return id;
@@ -121,6 +149,54 @@ public class Subject {
         this.serialNo = serialNo;
     }
 
+    public String getFtpPath() {
+        return ftpPath;
+    }
+
+    public void setFtpPath(String ftpPath) {
+        this.ftpPath = ftpPath;
+    }
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+    }
+
+    public String getDbUsername() {
+        return dbUsername;
+    }
+
+    public void setDbUsername(String dbUsername) {
+        this.dbUsername = dbUsername;
+    }
+
+    public String getDbPassword() {
+        return dbPassword;
+    }
+
+    public void setDbPassword(String dbPassword) {
+        this.dbPassword = dbPassword;
+    }
+
+    public String getDbHost() {
+        return dbHost;
+    }
+
+    public void setDbHost(String dbHost) {
+        this.dbHost = dbHost;
+    }
+
+    public String getDbPort() {
+        return dbPort;
+    }
+
+    public void setDbPort(String dbPort) {
+        this.dbPort = dbPort;
+    }
+
     @Override
     public String toString() {
         return "Subject{" +
@@ -137,6 +213,12 @@ public class Subject {
                 ", ftpUser='" + ftpUser + '\'' +
                 ", ftpPassword='" + ftpPassword + '\'' +
                 ", serialNo='" + serialNo + '\'' +
+                ", ftpPath='" + ftpPath + '\'' +
+                ", dbName='" + dbName + '\'' +
+                ", dbUsername='" + dbUsername + '\'' +
+                ", dbPassword='" + dbPassword + '\'' +
+                ", dbHost='" + dbHost + '\'' +
+                ", dbPort='" + dbPort + '\'' +
                 '}';
     }
 }

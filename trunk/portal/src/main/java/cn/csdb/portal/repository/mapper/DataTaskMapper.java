@@ -18,7 +18,7 @@ public class DataTaskMapper implements RowMapper {
         DataTask dataTask = new DataTask();
         dataTask.setDataTaskId(resultSet.getInt("DataTaskId"));
         dataTask.setDataSourceId(resultSet.getInt("DataSourceId"));
-        dataTask.setSiteId(resultSet.getInt("SiteId"));
+        dataTask.setSubjectCode(resultSet.getString("SubjectCode"));
         dataTask.setDataTaskType(resultSet.getString("DataTaskType"));
         dataTask.setTableName(resultSet.getString("TableName"));
         dataTask.setSqlString(resultSet.getString("SqlString"));
