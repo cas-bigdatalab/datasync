@@ -45,19 +45,15 @@
             <thead>
                 <tr>
                     <th style="display:none;">专题库ID</th>
-                    <th>编号</th>
+                    <th>序号</th>
                     <th>专题库名称</th>
                     <th>专题库代码</th>
-                    <th>图片</th>
-                    <th>专题库简介</th>
                     <th>管理员账号</th>
                     <th>管理员密码</th>
                     <th>专题库负责人</th>
                     <th>负责人电话</th>
-                    <th>负责人Email</th>
                     <th>FTP账号</th>
                     <th>FTP密码</th>
-                    <th>序号</th>
                     <th>操作</th>
                 </tr>
             </thead>
@@ -65,21 +61,17 @@
                 <c:forEach items="${subjectsOfThisPage}" var="subject" varStatus="vs">
                     <tr>
                         <td style="display:none;">${subject.id}</td>
-                        <td>${vs.count}</td>
+                        <td>${subject.serialNo}</td>
                         <td>${subject.subjectName}</td>
                         <td>${subject.subjectCode}</td>
-                        <td>${subject.imagePath.originalFilename}</td>
-                        <td>${subject.brief}</td>
                         <td>${subject.admin}</td>
                         <td>${subject.adminPasswd}</td>
                         <td>${subject.contact}</td>
                         <td>${subject.phone}</td>
-                        <td>${subject.email}</td>
                         <td>${subject.ftpUser}</td>
                         <td>${subject.ftpPassword}</td>
-                        <td>${subject.serialNo}</td>
                         <td id="${subject.id}">
-                            <a title="修改" class="updateSubjectBtn" data-target="#addSubjectDialog" data-toggle="modal">
+                            <a title="修改" class="updateSubjectBtn" data-target="#modifySubjectDialog" data-toggle="modal">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
                             &nbsp;&nbsp;
@@ -118,7 +110,6 @@
         </ul>
     </div>
 
-    <!--the dialog for adding subject-->
     <div id="addSubjectDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -166,7 +157,7 @@
                                     图片<span style="color: red;">*</span>
                                 </label>
                                 <div class="col-md-9">
-                                    <input type="file" id="imagePath" name="imagePath" class="form-control file" placeholder="请选择一个本地图片" accept="image/gif, image/jpeg, image/png, image/jpg" required="required">
+                                    <input type="file" id="image" name="image" class="form-control file" placeholder="请选择一个本地图片" accept="image/gif, image/jpeg, image/png, image/jpg" required="required">
                                 </div>
                             </div>
 
@@ -270,6 +261,155 @@
         </div>
     </div>
 
+    <div id="modifySubjectDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button>
+                    <h4 id="titleForModifySubjectDialog" class="modal-title" >添加专题库</h4>
+                </div>
+
+                <form id="modifySubjectForm" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" accept-charset="utf-8"  action="${ctx}/subjectMgmt/addSubject">
+
+                    <div class="modal-body">
+                        <div class="col-md-12">
+                            <div class="form-body">
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="subjectName" style="display:none;">
+                                        专题库id（不显示）
+                                    </label>
+                                    <div style="display:none;">
+                                        <input type="text" class="form-control" id="idM" name="id" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label" for="subjectName">
+                                        专题库名称<span style="color: red;">*</span>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" placeholder="请输入专题库名称" id="subjectNameM" name="subjectName" required="required"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        专题库代码<span style="color: red;">*</span>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" placeholder="请输入专题库代码" id="subjectCodeM" name="subjectCode"  required="required" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        图片<span>*</span>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input type="file" id="imagePathM" name="image" class="form-control file" placeholder="请选择一个本地图片" accept="image/gif, image/jpeg, image/png, image/jpg">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        专题库简介
+                                    </label>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control" placeholder="请输入专题库简介" id="briefM" name="brief"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        管理员账号<span style="color: red;">*</span>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" placeholder="请输入管理员账号" id="adminM" name="admin"  required="required" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        管理员密码<span style="color: red;">*</span>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" placeholder="请输入管理员密码" id="adminPasswdM" name="adminPasswd"  required="required" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        联系人<span style="color: red;">*</span>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" placeholder="请输入联系人姓名" id="contactM" name="contact"  required="required" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        联系电话<span style="color: red;">*</span>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" placeholder="请输入联系人电话" id="phoneM" name="phone"   required="required" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        Email
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" placeholder="请输入联系人Email" id="emailM" name="email"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        FTP账号<span style="color: red;">*</span>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" placeholder="请输入FTP账号" id="ftpUserM" name="ftpUser"  required="required" />
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        FTP密码<span style="color: red;">*</span>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" placeholder="请输入FTP密码" id="ftpPasswordM" name="ftpPassword" required="required" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">
+                                        序号<span style="color: red;">*</span>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" placeholder="请输入序号" id="serialNoM" name="serialNo" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button id="saveSubjectModifyBtn" class="btn green" type="submit">
+                            保存
+                        </button>
+                        <button id="cancelSubjectModifyBtn" class="btn default"  data-dismiss="modal">
+                            取消
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div id="deleteSubjectDialog" class="modal fade" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -325,7 +465,6 @@
 
         $(".updateSubjectBtn").click(
             function () {
-                console.log("updateSubjectBtn的click里边")
                 $.ajax({
                     type: "GET",
                     async: false,
@@ -333,24 +472,20 @@
                     data: {id: $(this).parent().attr("id")},
                     dataType: "json",
                     success: function (data){
-                        $("#id").val(data.id);
-                        $("#subjectName").val(data.subjectName);
-                        $("#subjectCode").val(data.subjectCode);
+                        $("#idM").val(data.id);
+                        $("#subjectNameM").val(data.subjectName);
+                        $("#subjectCodeM").val(data.subjectCode);
                         var imageFilePath = data.imagePath.originalFilename;
-                        //$("#imagePath").val(imageFilePath);
-                        $("#imagePath").attr("src", imageFilePath);
-                        $("#brief").val(data.brief);
-                        $("#admin").val(data.admin);
-                        $("#adminPasswd").val(data.adminPasswd);
-                        $("#contact").val(data.contact);
-                        $("#phone").val(data.phone);
-                        $("#email").val(data.email);
-                        $("#ftpUser").val(data.ftpUser);
-                        $("#ftpPassword").val(data.ftpPassword);
-                        $("#serialNo").val(data.serialNo);
-                        $("#addSubjectForm").attr("action", "${ctx}/subjectMgmt/updateSubject");
-                        $("#imagePath").removeAttr("required");
-                        $("#titleForAddSubjectDialog").html("修改专题库");
+                        $("#imagePathM").attr("src", imageFilePath);
+                        $("#briefM").val(data.brief);
+                        $("#adminM").val(data.admin);
+                        $("#adminPasswdM").val(data.adminPasswd);
+                        $("#contactM").val(data.contact);
+                        $("#phoneM").val(data.phone);
+                        $("#emailM").val(data.email);
+                        $("#ftpUserM").val(data.ftpUser);
+                        $("#ftpPasswordM").val(data.ftpPassword);
+                        $("#serialNoM").val(data.serialNo);
                     },
                     error: function(data) {
                         console.log(data);

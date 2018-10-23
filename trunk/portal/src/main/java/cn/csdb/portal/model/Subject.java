@@ -6,7 +6,7 @@ public class Subject {
     private String id;
     private String subjectName;
     private String subjectCode;
-    private MultipartFile imagePath;
+    private String imagePath;
     private String brief;
     private String admin;
     private String adminPasswd;
@@ -41,11 +41,11 @@ public class Subject {
         this.subjectCode = subjectCode;
     }
 
-    public MultipartFile getImagePath() {
+    public String getImagePath() {
         return imagePath;
     }
 
-    public void setImagePath(MultipartFile imagePath) {
+    public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
     }
 

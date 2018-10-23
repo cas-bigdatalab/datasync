@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -29,16 +30,16 @@ public class SubjectMgmtController {
     }
 
     @RequestMapping(value = "/addSubject", method = RequestMethod.POST)
-    public String addSubject(HttpServletRequest request, Subject subject)
+    public String addSubject(HttpServletRequest request, Subject subject, @RequestParam("image") MultipartFile image)
     {
-        System.out.println("enterring subjectMgmt-addSubject.");
-        System.out.println(subject);
+        logger.info("enterring subjectMgmt-addSubject.");
+        logger.info(subject);
+        logger.info(image);
 
         String addSubjectNotice = subjectService.addSubject(subject);
 
         int totalPages = subjectService.getTotalPages();
         String redirectStr = "redirect:/subjectMgmt/querySubject?currentPage=" + totalPages;
-
         return redirectStr;
     }
 
@@ -56,10 +57,11 @@ public class SubjectMgmtController {
     }
 
     @RequestMapping(value = "/updateSubject")
-    public String updateSubject(HttpServletRequest request, Subject subject)
+    public String updateSubject(HttpServletRequest request, Subject subject, MultipartFile image)
     {
         System.out.println("SubjectMgmtController-updateSubject");
         System.out.println("SubjectMgmtController-updateSubject -" + subject);
+        System.out.println("SubjectMgmtController-updateSubject - MultiparFile = " + image.getOriginalFilename());
         String modifySubjectNotice = subjectService.modifySubject(subject);
 
         String redirectUrl = "redirect:/subjectMgmt/querySubject?currentPage=1";
@@ -76,11 +78,10 @@ public class SubjectMgmtController {
         totalPages = subjectService.getTotalPages();
 
         List<Subject> subjectsOfThisPage = subjectService.querySubject(currentPage);
-
+        System.out.println("querySubject - " + subjectsOfThisPage);
         ModelAndView mv = new ModelAndView("subjectMgmt");
         mv.addObject("totalPages", totalPages);
         mv.addObject("subjectsOfThisPage", subjectsOfThisPage);
-
 
         return mv;
     }

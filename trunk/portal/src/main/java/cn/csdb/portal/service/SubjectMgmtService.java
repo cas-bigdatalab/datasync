@@ -32,25 +32,9 @@ public class SubjectMgmtService {
             addSubjectNotice = "添加专题库：失败！";
         }
 
-        createFtp(subject.getFtpUser(), subject.getFtpPassword());
-        createDb(subject.getSubjectCode());
-
         return addSubjectNotice;
     }
 
-    private boolean createFtp(String ftpUser, String ftpPassword)
-    {
-        boolean isCreated = subjectMgmtDao.createFtp(ftpUser, ftpPassword);
-
-        return isCreated;
-    }
-
-    private boolean createDb(String dbName)
-    {
-        System.out.println("database name : " + dbName);
-
-        return subjectMgmtDao.createDb(dbName);
-    }
 
 
     @Transactional

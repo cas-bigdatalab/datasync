@@ -3,6 +3,8 @@ package cn.csdb.portal.repository;
 import cn.csdb.portal.model.Subject;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.mock.web.MockMultipartFile;
@@ -29,13 +31,21 @@ public class SubjectMgmtDao {
 
     public int addSubject(Subject subject)
     {
-        String imagePath = saveImageFile(subject.getImagePath());
+        //存图片
+        String imagePath = "";
+        //imagePath = saveImageFile(subject.getImagePath());
 
-        String insertSql = "insert into Subject(SubjectName, SubjectCode, ImagePath, Brief, Admin, AdminPasswd, Contact, Phone, Email, FtpUser, FtpPassword, SerialNo) " +
+        //创建数据库和ftp的信息
+        createDb(subject.getSubjectCode());
+        createFtp(subject.getFtpUser(), subject.getFtpPassword());
+
+        //插入数据库记录
+        String insertSql = "insert into subject(SubjectName, SubjectCode, ImagePath, Brief, Admin, AdminPasswd, Contact, Phone, Email, FtpUser, FtpPassword, SerialNo) " +
                 " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Object[] args = new Object[] {subject.getSubjectName(), subject.getSubjectCode(), imagePath, subject.getBrief(), subject.getAdmin(), subject.getAdminPasswd(), subject.getContact(), subject.getPhone(), subject.getEmail(), subject.getFtpUser(), subject.getFtpPassword(), Integer.parseInt(subject.getSerialNo())};
 
         int addedRowCnt = 0;
+
         try
         {
             addedRowCnt = jdbcTemplate.update(insertSql, args);
@@ -48,8 +58,88 @@ public class SubjectMgmtDao {
         return addedRowCnt;
     }
 
+    private String saveImageFile(MultipartFile image)
+    {
+        String imagesPath = (new File(this.getClass().getResource("").getPath())).getParentFile().getAbsolutePath() + "/SubjectImages/";
+        String fileName = image.getOriginalFilename();
+
+        String imageFilePath = "";
+        if (!(fileName==null || fileName.equals("")))
+        {
+            imageFilePath = imagesPath + fileName;
+        }
+
+        File imageFilePathObj = new File(imageFilePath);
+        if(!imageFilePathObj.getParentFile().exists())
+        {
+            imageFilePathObj.getParentFile().mkdirs();
+        }
+
+        try {
+            image.transferTo(new File(imageFilePath));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        System.out.println("save image file completed!");
+
+        return imageFilePathObj.getAbsolutePath();
+    }
+
+    private boolean createDb(String dbName)
+    {
+        String createDB = " create database "  + " if not exists " + dbName;
+
+        System.out.println("createDB = " + createDB);
+
+        try
+        {
+            jdbcTemplate.execute(createDB);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        System.out.println("createDB completed!");
+        return true;
+    }
+
+    private boolean createFtp(String ftpUser, String ftpPassword)
+    {
+        String insertSql = "insert into vu_list.vuser(name, password) values(?, ?)";
+        Object[] args = new Object[]{ftpUser, ftpPassword};
+        int insertedRows = 0;
+
+        try {
+            insertedRows = jdbcTemplate.update(insertSql, args);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        boolean retValue = false;
+        if (insertedRows == 1)
+        {
+            retValue = true;
+        }
+
+        System.out.println("createFtp completed!");
+
+        return retValue;
+    }
+
     public int deleteSubject(int id)
     {
+        //删除数据库和ftp相关信息
+        Subject subject = findSubjectById(id);
+        deleteDb(subject.getSubjectCode());
+        deleteFtp(subject.getFtpUser(), subject.getFtpPassword());
+        //deleteImage(subject.getImagePath().getOriginalFilename());
+
         String deleteSql = "delete from Subject where id = ?";
         Object[] args = new Object[]{id};
 
@@ -66,22 +156,65 @@ public class SubjectMgmtDao {
         return deletedRowCnt;
     }
 
+    private void deleteDb(String dbName)
+    {
+        String deleteDbSql = "drop database " + dbName;
+        /*Object[] args = new Object[]{dbName};*/
+        try {
+            jdbcTemplate.update(deleteDbSql);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        System.out.println("delete db completed!");
+    }
+
+    private void deleteFtp(String ftpUser, String ftpPassword)
+    {
+        String deleteFtpInfo = "delete from vu_list.vuser where name = ? and password=?";
+        Object[] objs = new Object[]{ftpUser, ftpPassword};
+        try {
+            jdbcTemplate.update(deleteFtpInfo, objs);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        System.out.println("delete ftp completed!");
+
+    }
+
+    private void deleteImage(String imagePath)
+    {
+        try {
+            File imagePathFile = new File(imagePath);
+            imagePathFile.delete();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        System.out.println("delete image completed!");
+    }
+
     public int modifySubject(Subject subject)
     {
-        int id = Integer.parseInt(subject.getId());
-
-        String imagePath = saveImageFile(subject.getImagePath());
-
+        String imagePath = updateImage(subject);
         String updateSql = "update subject set SubjectName=?, SubjectCode=?, ImagePath=?, Brief=?, Admin=?, AdminPasswd=?, Contact=?, Phone=?, Email=?, FtpUser=?, FtpPassword=?, SerialNo=? where ID=?";
         Object[] args = new Object[]{
                 subject.getSubjectName(), subject.getSubjectCode(), imagePath,
                 subject.getBrief(), subject.getAdmin(), subject.getAdminPasswd(),
                 subject.getContact(), subject.getPhone(), subject.getEmail(),
-                subject.getFtpUser(), subject.getFtpPassword(), subject.getSerialNo(), id };
+                subject.getFtpUser(), subject.getFtpPassword(), subject.getSerialNo(), Integer.parseInt(subject.getId())};
 
         int updatedRowCnt = 0;
         try
         {
+            updateDb(subject.getSubjectCode());
+            updateFtp(subject.getFtpUser(), subject.getFtpPassword());
+
             updatedRowCnt = jdbcTemplate.update(updateSql, args);
         }
         catch(Exception e)
@@ -91,6 +224,35 @@ public class SubjectMgmtDao {
 
 
         return  updatedRowCnt;
+    }
+
+    private String updateImage(Subject subject)
+    {
+        //处理修改图片的情况
+        int id = Integer.parseInt(subject.getId());
+        String imagePath = "";
+        Subject tmpSubject = findSubjectById(Integer.parseInt(subject.getId()));
+        /*if (subject.getImagePath().getOriginalFilename() != "")
+        {
+            deleteImage(tmpSubject.getImagePath().getOriginalFilename());
+            imagePath = saveImageFile(subject.getImagePath());
+        }
+        else
+        {
+            imagePath = tmpSubject.getImagePath().getOriginalFilename();
+        }*/
+
+        return imagePath;
+    }
+
+    private void updateDb(String newDbName)
+    {
+
+    }
+
+    private void updateFtp(String newFtpUser, String newFtpPasswd)
+    {
+
     }
 
     public List<Subject> querySubject(int pageNumber)
@@ -126,7 +288,7 @@ public class SubjectMgmtDao {
                         subject.setId(resultSet.getString("ID"));
                         subject.setSubjectName(resultSet.getString("SubjectName"));
                         subject.setSubjectCode(resultSet.getString("SubjectCode"));
-                        subject.setImagePath(getImageFile(resultSet.getString("ImagePath")));
+                       // subject.setImagePath(getImageFile(resultSet.getString("ImagePath")));
                         subject.setBrief(resultSet.getString("Brief"));
                         subject.setAdmin(resultSet.getString("Admin"));
                         subject.setAdminPasswd(resultSet.getString("AdminPasswd"));
@@ -173,7 +335,7 @@ public class SubjectMgmtDao {
                     subject.setId(resultSet.getString("ID"));
                     subject.setSubjectName(resultSet.getString("SubjectName"));
                     subject.setSubjectCode(resultSet.getString("SubjectCode"));
-                    subject.setImagePath(getImageFile(resultSet.getString("ImagePath")));
+                   //subject.setImagePath(getImageFile(resultSet.getString("ImagePath")));
                     subject.setBrief(resultSet.getString("Brief"));
                     subject.setAdmin(resultSet.getString("Admin"));
                     subject.setAdminPasswd(resultSet.getString("AdminPasswd"));
@@ -184,7 +346,8 @@ public class SubjectMgmtDao {
                     subject.setFtpPassword(resultSet.getString("FtpPassword"));
                     subject.setSerialNo(resultSet.getString("SerialNo"));
 
-                    System.out.println(subject);
+                    System.out.println("findSubjectById - " + subject);
+
                 }
             });
         }
@@ -196,72 +359,10 @@ public class SubjectMgmtDao {
         return subject;
     }
 
-    public boolean createDb(String dbName)
-    {
-        String createDB = "create database " + dbName;
-
-        System.out.println("createDB = " + createDB);
-
-        try
-        {
-            jdbcTemplate.execute(createDB);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        System.out.println("createDB completed!");
-        return true;
-    }
-
-    public boolean createFtp(String ftpUser, String ftpPassword)
-    {
-        String insertSql = "insert into vu_list.vuser(name, password) values(?, ?)";
-        Object[] args = new Object[]{ftpUser, ftpPassword};
-        int insertedRows = 0;
-
-        try {
-            insertedRows = jdbcTemplate.update(insertSql, args);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        boolean retValue = false;
-        if (insertedRows == 1)
-        {
-            retValue = true;
-        }
-        return retValue;
-    }
-
-    private String saveImageFile(MultipartFile image)
-    {
-        String imagesPath = (new File(this.getClass().getResource("").getPath())).getParentFile().getAbsolutePath() + "/SubjectImages";
-        System.out.println("imagePath = " + imagesPath);
-        String fileName = image.getOriginalFilename();
-
-        File imageFilePath = new File(imagesPath, fileName);
-        if(!imageFilePath.getParentFile().exists())
-        {
-            imageFilePath.getParentFile().mkdirs();
-        }
-
-        try {
-            image.transferTo(new File(imagesPath + File.separator + fileName));
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        return imageFilePath.getAbsolutePath();
-    }
-
     private MultipartFile getImageFile(String imageServerPath)
     {
+        System.out.println("getImageFile-" + imageServerPath);
+
         MultipartFile multipartFile = null;
         try
         {
@@ -271,8 +372,7 @@ public class SubjectMgmtDao {
             }
 
             FileInputStream input = new FileInputStream(imageServerPath);
-            String originalFilename = new File(imageServerPath).getName();
-            multipartFile = new MockMultipartFile("file", originalFilename, "text/plain", input);
+            multipartFile = new MockMultipartFile("file", imageServerPath, "text/plain", input);
         }
         catch (Exception e)
         {
