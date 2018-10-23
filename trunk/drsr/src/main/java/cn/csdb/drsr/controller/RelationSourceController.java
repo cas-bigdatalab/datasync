@@ -1,7 +1,11 @@
 package cn.csdb.drsr.controller;
 
+import cn.csdb.drsr.model.TableInfo;
+import cn.csdb.drsr.model.TableInfoR;
 import cn.csdb.drsr.service.RelationShipService;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cn.csdb.drsr.model.DataSrc;
@@ -169,10 +173,84 @@ public class RelationSourceController {
         return jsonObject;
     }
 
+    /**
+     *
+     * Function Description:
+     *
+     * @param: []
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/10/23 10:29
+     */
     @ResponseBody
     @RequestMapping(value="saveDatatask",method = RequestMethod.POST)
     public JSONObject saveDatatask() {
         JSONObject jsonObject = new JSONObject();
+        return jsonObject;
+    }
+
+    /**
+     *
+     * Function Description: preview RelationalDatabase By TableName
+     *
+     * @param: [dataSourceId, tableInfosListStr, pageSize]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/10/23 10:29
+     */
+    @ResponseBody
+    @RequestMapping(value = "/previewRelationalDatabaseByTableName")
+    public JSONObject previewRelationalDatabaseByTableName(
+            @RequestParam(required = false) String dataSourceId,
+            @RequestParam(required = false, name = "tableInfosList") String tableInfosListStr,
+            @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        logger.info("预览表数据");
+        JSONObject jsonObject = new JSONObject();
+        List<TableInfoR> tableInfosList = JSON.parseArray(tableInfosListStr, TableInfoR.class);
+        HashMap<String, List<TableInfo>> maps = Maps.newHashMap();
+        String tableName = null;
+        if (tableInfosList != null && tableInfosList.size() == 1) {
+            tableName = tableInfosList.get(0).getTableName();
+            maps.put(tableName, tableInfosList.get(0).getTableInfos());
+        } else {
+            return jsonObject;
+        }
+        List<List<Object>> datas = relationShipService.getDataByTable(tableName, maps, Integer.valueOf(dataSourceId), 0, pageSize);
+        jsonObject.put("datas", datas);
+        return jsonObject;
+    }
+
+    /**
+     *
+     * Function Description: preview RelationalDatabase By SQL
+     *
+     * @param: [dataSourceId, sqlStr, tableInfosListStr, pageSize]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/10/23 10:29
+     */
+    @ResponseBody
+    @RequestMapping(value = "/previewRelationalDatabaseBySQL")
+    public JSONObject previewRelationalDatabaseBySQL(
+            @RequestParam(required = false) String dataSourceId,
+            @RequestParam() String sqlStr,
+            @RequestParam(required = false, name = "tableInfosList") String tableInfosListStr,
+            @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        logger.info("预览表数据");
+        JSONObject jsonObject = new JSONObject();
+        List<TableInfoR> tableInfosList = JSON.parseArray(tableInfosListStr, TableInfoR.class);
+        HashMap<String, List<TableInfo>> maps = Maps.newHashMap();
+        if (tableInfosList != null && tableInfosList.size() >= 1) {
+            String tableName = null;
+            for (TableInfoR tableInfoR : tableInfosList) {
+                tableName = tableInfoR.getTableName();
+                maps.put(tableName, tableInfoR.getTableInfos());
+            }
+        } else {
+            return jsonObject;
+        }
+        List<List<Object>> datas = relationShipService.getDataBySql(sqlStr, maps, Integer.valueOf(dataSourceId), 0, pageSize);
+        jsonObject.put("datas", datas);
         return jsonObject;
     }
 }

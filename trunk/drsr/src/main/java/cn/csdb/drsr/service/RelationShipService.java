@@ -2,24 +2,40 @@ package cn.csdb.drsr.service;
 
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
+import cn.csdb.drsr.model.TableInfo;
+import cn.csdb.drsr.model.TableInfoR;
 import cn.csdb.drsr.repository.DataSrcDao;
 import cn.csdb.drsr.repository.DataTaskDao;
 import cn.csdb.drsr.repository.RelationDao;
 import cn.csdb.drsr.utils.dataSrc.DDL2SQLUtils;
 import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
 import cn.csdb.drsr.utils.dataSrc.IDataSource;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
+import java.io.File;
+import java.sql.*;
+import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @program: DataSync
@@ -30,6 +46,9 @@ import java.util.Map;
 
 @Service
 public class RelationShipService {
+
+    private Logger logger = LoggerFactory.getLogger(RelationShipService.class);
+
     @Resource
     private RelationDao relationDao;
 
@@ -133,4 +152,48 @@ public class RelationShipService {
     public DataSrc findById(int id) {
        return relationDao.findById(id);
     }
+
+    public List<List<Object>> getDataBySql(String sql, Map<String, List<TableInfo>> tableComsMap,
+                                           int dataSourceId, int start, int limit) {
+        DataSrc dataSrc = relationDao.findById(dataSourceId);
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(),
+                dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        PreparedStatement paginationSql = dataSource.getPaginationSql(connection, sql, null, start, limit);
+        List<List<Object>> datas = Lists.newArrayList();
+        try {
+            ResultSet resultSet = paginationSql.executeQuery();
+            while (resultSet.next()) {
+                ArrayList<Object> objects = Lists.newArrayList();
+                Set<String> keySet = tableComsMap.keySet();
+                for (String key : keySet) {
+                    List<TableInfo> tableInfos = tableComsMap.get(key);
+                    for (TableInfo tableInfo : tableInfos) {
+                        if (StringUtils.isNoneBlank(tableInfo.getColumnNameLabel())) {
+                            Object object1 = resultSet.getObject(tableInfo.getColumnNameLabel());
+                            objects.add(object1);
+                        } else {
+                            Object object1 = resultSet.getObject(tableInfo.getColumnName());
+                            objects.add(object1);
+                        }
+                    }
+                }
+                datas.add(objects);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+            }
+        }
+        return datas;
+    }
+
+    public List<List<Object>> getDataByTable(String tableName, HashMap<String, List<TableInfo>> tableComsMap,
+                                             int dataSourceId, int start, int limit) {
+        return getDataBySql("select * from " + tableName, tableComsMap, dataSourceId, start, limit);
+    }
+
 }
