@@ -142,4 +142,38 @@ public class FileSourceController {
         }
         return "success";
     }
+
+
+    /**
+     *
+     * Function Description: 
+     *
+     * @param: []
+     * @return: java.util.List<cn.csdb.drsr.model.DataSrc>
+     * @auther: hw
+     * @date: 2018/10/23 10:09
+     */
+    @RequestMapping(value="findAllFileSrc")
+    public @ResponseBody List<DataSrc> findAllFileSrc(){
+        return fileResourceService.findAll();
+    }
+
+
+    /**
+     *
+     * Function Description: 
+     *
+     * @param: [dataSourceId]
+     * @return: java.util.List<com.alibaba.fastjson.JSONObject>
+     * @auther: hw
+     * @date: 2018/10/23 10:06
+     */
+    @ResponseBody
+    @RequestMapping(value="fileSourceFileList")
+    public List<JSONObject> fileSourceFileList(int dataSourceId) {
+
+        DataSrc dataSrc = fileResourceService.findById(dataSourceId);
+        List<JSONObject> jsonObjects = fileResourceService.fileSourceFileList(dataSrc.getFilePath());
+        return jsonObjects;
+    }
 }
