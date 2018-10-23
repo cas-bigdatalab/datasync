@@ -1,20 +1,20 @@
 package cn.csdb.portal.repository;
 
+import cn.csdb.portal.controller.SubjectMgmtController;
 import cn.csdb.portal.model.Subject;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.io.FileInputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,267 +24,271 @@ import java.util.List;
 public class SubjectMgmtDao {
     private static int rowsPerPage = 10;
     private JdbcTemplate jdbcTemplate;
+    private static final Logger logger = LogManager.getLogger(SubjectMgmtController.class);
 
     @Resource
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate)
-    {
+    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public int addSubject(Subject subject)
-    {
-        //存图片
-        String imagePath = "";
-        //imagePath = saveImageFile(subject.getImagePath());
-
-        //创建数据库和ftp的信息
+    /**
+     * Function Description:
+     *
+     * @param subject, the wrapped object which contains information of the subject ot be added
+     * @return  retValue, retValue inform user if create db info success or not
+     * @author zzl
+     * @date 2018/10/23
+     */
+    public int addSubject(Subject subject) {
+        //create db and ftp
         createDb(subject.getSubjectCode());
         createFtp(subject.getFtpUser(), subject.getFtpPassword());
 
-        //插入数据库记录
+        //insert subject into db
         String insertSql = "insert into subject(SubjectName, SubjectCode, ImagePath, Brief, Admin, AdminPasswd, Contact, Phone, Email, FtpUser, FtpPassword, SerialNo) " +
                 " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        Object[] args = new Object[] {subject.getSubjectName(), subject.getSubjectCode(), imagePath, subject.getBrief(), subject.getAdmin(), subject.getAdminPasswd(), subject.getContact(), subject.getPhone(), subject.getEmail(), subject.getFtpUser(), subject.getFtpPassword(), Integer.parseInt(subject.getSerialNo())};
-
+        Object[] args = new Object[]{subject.getSubjectName(), subject.getSubjectCode(), subject.getImagePath(), subject.getBrief(), subject.getAdmin(), subject.getAdminPasswd(), subject.getContact(), subject.getPhone(), subject.getEmail(), subject.getFtpUser(), subject.getFtpPassword(), Integer.parseInt(subject.getSerialNo())};
         int addedRowCnt = 0;
-
-        try
-        {
+        try {
             addedRowCnt = jdbcTemplate.update(insertSql, args);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return addedRowCnt;
     }
 
-    private String saveImageFile(MultipartFile image)
-    {
-        String imagesPath = (new File(this.getClass().getResource("").getPath())).getParentFile().getAbsolutePath() + "/SubjectImages/";
-        String fileName = image.getOriginalFilename();
-
-        String imageFilePath = "";
-        if (!(fileName==null || fileName.equals("")))
-        {
-            imageFilePath = imagesPath + fileName;
-        }
-
-        File imageFilePathObj = new File(imageFilePath);
-        if(!imageFilePathObj.getParentFile().exists())
-        {
-            imageFilePathObj.getParentFile().mkdirs();
-        }
-
-        try {
-            image.transferTo(new File(imageFilePath));
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        System.out.println("save image file completed!");
-
-        return imageFilePathObj.getAbsolutePath();
-    }
-
-    private boolean createDb(String dbName)
-    {
-        String createDB = " create database "  + " if not exists " + dbName;
-
-        System.out.println("createDB = " + createDB);
-
-        try
-        {
-            jdbcTemplate.execute(createDB);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        System.out.println("createDB completed!");
-        return true;
-    }
-
-    private boolean createFtp(String ftpUser, String ftpPassword)
-    {
-        String insertSql = "insert into vu_list.vuser(name, password) values(?, ?)";
-        Object[] args = new Object[]{ftpUser, ftpPassword};
-        int insertedRows = 0;
-
-        try {
-            insertedRows = jdbcTemplate.update(insertSql, args);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+    /**
+     * Function Description:
+     *
+     * @param dbName, the db'name to be created
+     * @return  retValue, retValue inform user if create db info success or not
+     * @author zzl
+     * @date 2018/10/23
+     */
+    private boolean createDb(String dbName) {
+        logger.info("createDB = " + dbName);
 
         boolean retValue = false;
-        if (insertedRows == 1)
-        {
+        String createDB = " create database " + " if not exists " + dbName;
+        try {
+            jdbcTemplate.execute(createDB);
             retValue = true;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        System.out.println("createFtp completed!");
+        logger.info("createDB completed!");
 
         return retValue;
     }
 
-    public int deleteSubject(int id)
-    {
-        //删除数据库和ftp相关信息
+    /**
+     * Function Description:
+     *
+     * @param ftpUser
+     * @param ftpPassword
+     * @return retValue, retValue inform user if create ftp info success or not
+     * @author zzl
+     * @date 2018/10/23
+     */
+    private boolean createFtp(String ftpUser, String ftpPassword) {
+        logger.info("create ftp user and password.");
+        String insertSql = "insert into vu_list.vuser(name, password) values(?, ?)";
+        Object[] args = new Object[]{ftpUser, ftpPassword};
+        int insertedRows = 0;
+        try {
+            insertedRows = jdbcTemplate.update(insertSql, args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        boolean retValue = false;
+        if (insertedRows == 1) {
+            retValue = true;
+        }
+
+        logger.info("createFtp completed!");
+
+        return retValue;
+    }
+
+    /**
+     *Function Description:
+     *
+     * @param id, the id of Subject to be deleted
+     * @return  deletedRowCnt, the count of rows deleted
+     * @author zzl
+     * @date 2018/10/23
+     */
+    public int deleteSubject(int id) {
+        logger.info("subject id to be deleted : " + id);
+
+        //delete db and ftp info
+        logger.info("delete db and ftp info.");
         Subject subject = findSubjectById(id);
         deleteDb(subject.getSubjectCode());
         deleteFtp(subject.getFtpUser(), subject.getFtpPassword());
-        //deleteImage(subject.getImagePath().getOriginalFilename());
+        logger.info("db and ftp info deleted.");
+        logger.info("deleting subject'image");
+        deleteImage(subject.getImagePath());
+        logger.info("subject'image deleted.");
 
+        logger.info("deleting subject");
         String deleteSql = "delete from Subject where id = ?";
         Object[] args = new Object[]{id};
 
         int deletedRowCnt = 0;
-        try
-        {
+        try {
             deletedRowCnt = jdbcTemplate.update(deleteSql, args);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        logger.info("delete subject completed.");
 
         return deletedRowCnt;
     }
 
-    private void deleteDb(String dbName)
-    {
+    /**
+     * Function Description:
+     *
+     * @param dbName, the name of database to be deleted
+     * @author zzl
+     * @date 2018/10/23
+     */
+    private void deleteDb(String dbName) {
+        logger.info("deleting db info, dbName = " + dbName);
         String deleteDbSql = "drop database " + dbName;
         /*Object[] args = new Object[]{dbName};*/
         try {
             jdbcTemplate.update(deleteDbSql);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("delete db completed!");
+        logger.info("delete db info completed!");
     }
 
-    private void deleteFtp(String ftpUser, String ftpPassword)
-    {
+    /**
+     * Function Description:
+     *
+     * @param ftpUser, ftp user name
+     * @param ftpPassword, ftp password
+     * @author zzl
+     * @date 2018/10/23
+     */
+    private void deleteFtp(String ftpUser, String ftpPassword) {
+        logger.info("deleting ftp info, ftpUser = " + ftpUser + ", ftpPassword = " + ftpPassword);
         String deleteFtpInfo = "delete from vu_list.vuser where name = ? and password=?";
         Object[] objs = new Object[]{ftpUser, ftpPassword};
         try {
             jdbcTemplate.update(deleteFtpInfo, objs);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("delete ftp completed!");
-
+        logger.info("delete ftp info completed!");
     }
 
-    private void deleteImage(String imagePath)
-    {
+    /**
+     * Function Description:
+     *
+     * @param imagePath, the image' path which is about to be deleted
+     * @author zzl
+     * @date 2018/10/23
+     */
+    private void deleteImage(String imagePath) {
+        logger.info("image path to be deleted : " + imagePath);
         try {
-            File imagePathFile = new File(imagePath);
-            imagePathFile.delete();
-        }
-        catch (Exception e)
-        {
+            File imagePathFileObj = new File(imagePath);
+            imagePathFileObj.delete();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        System.out.println("delete image completed!");
+        logger.info("delete image completed!");
     }
 
-    public int modifySubject(Subject subject)
-    {
-        String imagePath = updateImage(subject);
+    /**
+     * Function Description:
+     *
+     * @param subject the subject to be updated
+     * @return updatedRowCnt the count of rows updated
+     * @author zzl
+     * @date 2018/10/23
+     */
+    public int updateSubject(Subject subject) {
+        logger.info("subject to be updated : " + subject);
         String updateSql = "update subject set SubjectName=?, SubjectCode=?, ImagePath=?, Brief=?, Admin=?, AdminPasswd=?, Contact=?, Phone=?, Email=?, FtpUser=?, FtpPassword=?, SerialNo=? where ID=?";
-        Object[] args = new Object[]{
-                subject.getSubjectName(), subject.getSubjectCode(), imagePath,
+        Object[] args = new Object[]{subject.getSubjectName(), subject.getSubjectCode(), subject.getImagePath(),
                 subject.getBrief(), subject.getAdmin(), subject.getAdminPasswd(),
                 subject.getContact(), subject.getPhone(), subject.getEmail(),
                 subject.getFtpUser(), subject.getFtpPassword(), subject.getSerialNo(), Integer.parseInt(subject.getId())};
 
         int updatedRowCnt = 0;
-        try
-        {
+
+        try {
             updateDb(subject.getSubjectCode());
             updateFtp(subject.getFtpUser(), subject.getFtpPassword());
 
             updatedRowCnt = jdbcTemplate.update(updateSql, args);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
+        logger.info("update subject completed!");
 
-        return  updatedRowCnt;
+        return updatedRowCnt;
     }
 
-    private String updateImage(Subject subject)
-    {
-        //处理修改图片的情况
-        int id = Integer.parseInt(subject.getId());
-        String imagePath = "";
-        Subject tmpSubject = findSubjectById(Integer.parseInt(subject.getId()));
-        /*if (subject.getImagePath().getOriginalFilename() != "")
-        {
-            deleteImage(tmpSubject.getImagePath().getOriginalFilename());
-            imagePath = saveImageFile(subject.getImagePath());
-        }
-        else
-        {
-            imagePath = tmpSubject.getImagePath().getOriginalFilename();
-        }*/
-
-        return imagePath;
+    /**
+     * Function Description: reserved, now not used
+     *
+     * @param newDbName
+     * @author zzl
+     * @date 2018/10/23
+     */
+    private void updateDb(String newDbName) {
     }
 
-    private void updateDb(String newDbName)
-    {
-
+    /**
+     * Function Description: reserved, now not used
+     *
+     * @param newFtpUser, newFtpPasswd
+     * @author zzl
+     * @date 2018/10/23
+     */
+    private void updateFtp(String newFtpUser, String newFtpPasswd) {
     }
 
-    private void updateFtp(String newFtpUser, String newFtpPasswd)
-    {
-
-    }
-
-    public List<Subject> querySubject(int pageNumber)
-    {
-        if (pageNumber < 1)
-        {
+    /**
+     * Function Description:
+     *
+     * @param pageNumber
+     * @return List<Subject>
+     * @author zzl
+     * @date 2018/10/23
+     */
+    public List<Subject> querySubject(int pageNumber) {
+        //input parameter check， including lower bound and upper bound
+        if (pageNumber < 1) {
             return null;
         }
-
-        //int rowsPerPage = 2;
-
         int totalPages = 1;
         totalPages = getTotalPages();
-
-        if (pageNumber > totalPages)
-        {
+        if (pageNumber > totalPages) {
             return null;
         }
 
+        //query intended page
         int startRowNum = 0;
         startRowNum = (pageNumber - 1) * rowsPerPage;
 
         final List<Subject> subjectsOfThisPage = new ArrayList<Subject>();
         String querySql = "select * from Subject limit " + startRowNum + ", " + rowsPerPage;
 
-        try
-        {
+        try {
             jdbcTemplate.query(querySql, new RowCallbackHandler() {
                 @Override
                 public void processRow(ResultSet resultSet) throws SQLException {
@@ -293,7 +297,7 @@ public class SubjectMgmtDao {
                         subject.setId(resultSet.getString("ID"));
                         subject.setSubjectName(resultSet.getString("SubjectName"));
                         subject.setSubjectCode(resultSet.getString("SubjectCode"));
-                       // subject.setImagePath(getImageFile(resultSet.getString("ImagePath")));
+                        subject.setImagePath(resultSet.getString("ImagePath"));
                         subject.setBrief(resultSet.getString("Brief"));
                         subject.setAdmin(resultSet.getString("Admin"));
                         subject.setAdminPasswd(resultSet.getString("AdminPasswd"));
@@ -308,17 +312,21 @@ public class SubjectMgmtDao {
                     } while (resultSet.next());
                 }
             });
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return subjectsOfThisPage;
     }
 
-    public int getTotalPages()
-    {
+    /**
+     * Function Description:
+     *
+     * @return totalPages
+     * @author zzl
+     * @date 2018/10/23
+     */
+    public int getTotalPages() {
         //int rowsPerPage = 2;
         String rowSql = "select count(*) from Subject";
         int totalRows = (Integer) jdbcTemplate.queryForObject(rowSql, Integer.class);
@@ -328,8 +336,15 @@ public class SubjectMgmtDao {
         return totalPages;
     }
 
-    public Subject findSubjectById(int id)
-    {
+    /**
+     * Function Description:
+     *
+     * @param id
+     * @return Subject
+     * @author zzl
+     * @date 2018/10/23
+     */
+    public Subject findSubjectById(int id) {
         final Subject subject = new Subject();
         String querySql = "select * from Subject where id = " + id;
 
@@ -340,7 +355,7 @@ public class SubjectMgmtDao {
                     subject.setId(resultSet.getString("ID"));
                     subject.setSubjectName(resultSet.getString("SubjectName"));
                     subject.setSubjectCode(resultSet.getString("SubjectCode"));
-                   //subject.setImagePath(getImageFile(resultSet.getString("ImagePath")));
+                    //subject.setImagePath(getImageFile(resultSet.getString("ImagePath")));
                     subject.setBrief(resultSet.getString("Brief"));
                     subject.setAdmin(resultSet.getString("Admin"));
                     subject.setAdminPasswd(resultSet.getString("AdminPasswd"));
@@ -357,40 +372,14 @@ public class SubjectMgmtDao {
 
                 }
             });
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return subject;
     }
 
-    private MultipartFile getImageFile(String imageServerPath)
-    {
-        System.out.println("getImageFile-" + imageServerPath);
-
-        MultipartFile multipartFile = null;
-        try
-        {
-            if (imageServerPath==null || imageServerPath.trim().equals(""))
-            {
-                imageServerPath = "";
-            }
-
-            FileInputStream input = new FileInputStream(imageServerPath);
-            multipartFile = new MockMultipartFile("file", imageServerPath, "text/plain", input);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        return multipartFile;
-    }
-
     /**
-     *
      * Function Description:
      *
      * @param: [code]
@@ -398,13 +387,13 @@ public class SubjectMgmtDao {
      * @auther: hw
      * @date: 2018/10/22 15:03
      */
-    public Subject findByCode(String code){
+    public Subject findByCode(String code) {
         DBObject query = QueryBuilder.start().and("subjectCode").is(code).get();
         BasicQuery basicQuery = new BasicQuery(query);
         List<Subject> subjects = mongoTemplate.find(basicQuery, Subject.class);
-        if (subjects.size() > 0){
+        if (subjects.size() > 0) {
             return subjects.get(0);
-        }else
+        } else
             return null;
     }
 }

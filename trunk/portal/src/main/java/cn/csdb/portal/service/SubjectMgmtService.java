@@ -18,6 +18,14 @@ public class SubjectMgmtService {
         this.subjectMgmtDao = subjectMgmtDao;
     }
 
+    /**
+     * Function Description:
+     *
+     * @param subject, the wrapped object which contains information of the subject ot be added
+     * @return  addSubjectNotice, a notice inform user if create subject success or not
+     * @author zzl
+     * @date 2018/10/23
+     */
     @Transactional
     public String addSubject(Subject subject)
     {
@@ -36,7 +44,14 @@ public class SubjectMgmtService {
     }
 
 
-
+    /**
+     * Function Description:
+     *
+     * @param id, the id of Subject to be deleted
+     * @return  deleteSubjectNotice, a notice inform user the deletion result
+     * @author zzl
+     * @date 2018/10/23
+     */
     @Transactional
     public String deleteSubject(int id)
     {
@@ -54,33 +69,64 @@ public class SubjectMgmtService {
         return deleteSubjectNotice;
     }
 
+    /**
+     * Function Description:
+     *
+     * @param subject the subject to be updated
+     * @return  updatedSubjectNotice a notice which inform user update result.
+     * @author zzl
+     * @date 2018/10/23
+     */
     @Transactional
-    public String modifySubject(Subject subject)
+    public String updateSubject(Subject subject)
     {
-        String modifySubjectNotice = "";
-        int modifiedRowCnt = subjectMgmtDao.modifySubject(subject);
+        String updatedSubjectNotice = "";
+        int modifiedRowCnt = subjectMgmtDao.updateSubject(subject);
         if (modifiedRowCnt == 1)
         {
-            modifySubjectNotice = "修改专题库：成功！";
+            updatedSubjectNotice = "修改专题库：成功！";
         }
         else
         {
-            modifySubjectNotice = "修改专题库：失败！";
+            updatedSubjectNotice = "修改专题库：失败！";
         }
 
-        return modifySubjectNotice;
+        return updatedSubjectNotice;
     }
 
+    /**
+     * Function Description:
+     *
+     * @param requestedPage
+     * @return List<Subject>
+     * @author zzl
+     * @date 2018/10/23
+     */
     public List<Subject> querySubject(int requestedPage)
     {
         return subjectMgmtDao.querySubject(requestedPage);
     }
 
+    /**
+     * Function Description:
+     *
+     * @return totalPages
+     * @author zzl
+     * @date 2018/10/23
+     */
     public int getTotalPages()
     {
         return subjectMgmtDao.getTotalPages();
     }
 
+    /**
+     * Function Description:
+     *
+     * @param id
+     * @return Subject
+     * @author zzl
+     * @date 2018/10/23
+     */
     public Subject findSubjectById(int id)
     {
         return subjectMgmtDao.findSubjectById(id);
