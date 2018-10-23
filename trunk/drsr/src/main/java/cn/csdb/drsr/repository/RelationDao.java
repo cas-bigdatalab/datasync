@@ -141,7 +141,7 @@ public class RelationDao{
     public List<DataSrc> findAll() {
         List<DataSrc> dataSrcs = new ArrayList<DataSrc>();
         String sql = "select * from t_datasource where DataSourceType='db'";
-        List<DataSrc> list = jdbcTemplate.queryForList(sql,DataSrc.class);
+        List<DataSrc> list = jdbcTemplate.query(sql,new DataSrcMapper());
         return list;
     }
 
