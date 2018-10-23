@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class drsrPages {
     @RequestMapping("/dataUpload")
     public ModelAndView index() {
-        ModelAndView modelAndView = new ModelAndView("dataUpload");
+        ModelAndView modelAndView = new ModelAndView("datatask");
         return modelAndView;
     }
     @RequestMapping("/dataSource")
