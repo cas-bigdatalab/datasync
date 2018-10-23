@@ -3,6 +3,8 @@ package cn.csdb.drsr.service;
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.repository.FileResourceDao;
 import cn.csdb.drsr.repository.RelationDao;
+import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
+import cn.csdb.drsr.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -253,6 +255,27 @@ public class FileResourceService {
             return set.toArray(result);
     }
 
+
+    /**
+     *
+     * Function Description:
+     *
+     * @param: []
+     * @return: java.util.List<cn.csdb.drsr.model.DataSrc>
+     * @auther: hw
+     * @date: 2018/10/23 10:01
+     */
+    public List<DataSrc> findAll() {
+        return fileResourceDao.findAll();
+    }
+
+    public List<JSONObject> fileSourceFileList(String filePath) {
+        return fileResourceDao.fileSourceFileList(filePath);
+    }
+
+    public DataSrc findById(int id) {
+        return fileResourceDao.findById(id);
+    }
 
 }
 

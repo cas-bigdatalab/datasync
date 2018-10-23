@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cn.csdb.drsr.model.DataSrc;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -135,19 +136,27 @@ public class RelationSourceController {
 
 
     /**
-     * @return:
+     *
+     * Function Description: 
+     *
+     * @param: []
+     * @return: java.util.List<cn.csdb.drsr.model.DataSrc>
      * @auther: hw
-     * @date: 2018/10/18 16:54
+     * @date: 2018/10/22 17:59
      */
-    @RequestMapping(value="findAll")
-    public @ResponseBody List<DataSrc> findAll(){
+    @RequestMapping(value="findAllDBSrc")
+    public @ResponseBody List<DataSrc> findAllDBSrc(){
         return relationShipService.findAll();
     }
 
     /**
-     * @return:
+     *
+     * Function Description: 
+     *
+     * @param: [dataSourceId]
+     * @return: com.alibaba.fastjson.JSONObject
      * @auther: hw
-     * @date: 2018/10/18 16:54
+     * @date: 2018/10/22 17:59
      */
     @ResponseBody
     @RequestMapping(value="relationalDatabaseTableList")
@@ -157,6 +166,13 @@ public class RelationSourceController {
         List<String> list = relationShipService.relationalDatabaseTableList(dataSrc);
         jsonObject.put("list",list);
         jsonObject.put("dataSourceName",dataSrc.getDataSourceName());
+        return jsonObject;
+    }
+
+    @ResponseBody
+    @RequestMapping(value="saveDatatask",method = RequestMethod.POST)
+    public JSONObject saveDatatask() {
+        JSONObject jsonObject = new JSONObject();
         return jsonObject;
     }
 }
