@@ -34,8 +34,8 @@
             <span>选择数据源</span>
             <select  id="DBchange">
                 <option value="">-----------</option>
-                <option value="">关系数据源DB2</option>
-                <option value="">数据源OracleData</option>
+                <option value="aaa">关系数据源DB2</option>
+                <option value="bbb">数据源OracleData</option>
                 <option value="">关系数据源DB2</option>
                 <option value="">数据源OracleData</option>
                 <option value="">关系数据源DB2</option>
@@ -79,16 +79,20 @@
                     <div class="col-md-9">
                         <div class="row">
                             <div class="col-md-5">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" id="sqlStatements">
                             </div>
                             <div class="col-md-2">
+<%--
                                 <button type="button" class="btn btn-success">编辑预览</button>
+--%>
                             </div>
                             <div class="col-md-2">
+<%--
                                 <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>sql查询</button>
-                            </div>
+--%>
+                        </div>
                             <div class="col-md-3">
-                                <button type="button" class="btn btn-success" onclick="sendTask()">提交</button>
+                                <button type="button" class="btn btn-success" onclick="sendRelationTask()">提交</button>
                             </div>
                         </div>
                     </div>
@@ -112,10 +116,19 @@
         </div>
     </div>
 </div>
-<script type="text/html" id="dataSouceList">
-    <option value="">-----------</option>
+<script type="text/html" id="dataRelationshipList">
+    <option value="selNone" id="selNone" selected="selected">-----------</option>
     {{each list as value i}}
-    <option value="{{name}}">value.name</option>
+    <option value="{{name}}" id="{{value.id}}">value.name</option>
+    {{/each}}
+</script>
+<script type="text/html" id="dataRelationshipList2">
+    {{each list as value i}}
+    <div class="col-md-4">
+        <label>
+            <input type="checkbox" name="relationCheck"> {{value.name}}
+        </label>
+    </div>
     {{/each}}
 </script>
 </body>
@@ -124,23 +137,93 @@
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.min.js"></script>
 
     <script>
+        $("[name='ways']").on("change",function () {
+            if(this.value =="DB"){
+                $(".select-database").show();
+                $(".select-local").hide();
+
+            }else {
+                $(".select-database").hide();
+                $(".select-local").show();
+
+            }
+        })
+        $("#DBchange").on("change",function () {
+            var id = $(this).attr("id")
+            var name = $(this).val();
+            if(name == ""){
+                $(".database-con").hide();
+                return
+            }
+            $(".dataHead2").html(name);
+            $.ajax({
+                url:"${ctx}/relationship/relationalDatabaseTableList",
+                type:"POST",
+                data:{
+                    dataSourceId:id
+                },
+                success:function (data) {
+                    var List =JSON.parse(data)
+                    var tabCon = template("dataRelationshipList2", List);
+                    $("#db-table").append(tabCon);
+                    $(".database-con").show();
+                }
+            })
 
 
+        })
 
+        <!--create relation task -->
+        function sendRelationTask() {
+            var $eleChecked = $("[name='relationCheck']:checked")
+            var numChecked = $eleChecked.size();
+            if (numChecked == 0) {
+                toastr["warning"]("最少选择一个表资源");
+                return
+            }
+            var list = new Array();
+            $eleChecked.each(function () {
+                list.push($(this).val())
+            });
 
+            $.ajax({
+                url:"",
+                type:"POST",
+                data:{
+                    souceName:$(".dataHead2").html(),
+                    souceCheck:list.toString(),
+                    sqlStatements:$("#sqlStatements").val()
+                },
+                success:function (data) {
+
+                    window.location.href="${ctx}/dataUpload"
+                },
+                error:function () {
+
+                }
+            })
+
+        }
 
         $(function(){
-            $.ajax({
+            /*$.ajax({
                 url:"${ctx}/relationship/findAll",
                 type:"GET",
                 success:function (data) {
                     console.log(data)
+                    var List =JSON.parse(data)
+                    var tabCon = template("dataRelationshipList", List);
+                    $("#DBchange").append(tabCon);
                 },
                 error:function () {
                     console.log("请求失败")
                 }
-            })
+            })*/
         });
+
+
+
+
         var treeData = {
             'core' : {
                 "animation": 0,
@@ -245,13 +328,7 @@
                 }
             })*/
         })
-        function sendTask() {
-            $.ajax({
-                url:"",
-                type:"POST",
-            })
-            window.location.href="${ctx}/dataUpload"
-        }
+
         function editTree() {
             if($("#editRegon").html().trim() != ""){
                 return false;
@@ -368,15 +445,7 @@
                 }
             })
         }
-        $("[name='ways']").on("change",function () {
-            if(this.value =="DB"){
-                $(".select-database").show();
-                $(".select-local").hide();
-            }else {
-                $(".select-database").hide();
-                $(".select-local").show();
-            }
-        })
+
 
         $("#DBchange").change(function () {
             var selectName = $("#DBchange option:selected").text();

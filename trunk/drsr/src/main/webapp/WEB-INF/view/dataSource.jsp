@@ -20,8 +20,17 @@
     </div>
     <div class="source-title">
         <span>数据源信息管理</span>
-        <a href="javascript:void(0)" id="addSqlSource">添加SQL数据源</a>
-        <a href="javascript:void(0)" id="addFileSource">添加文件型数据源</a>
+    </div>
+    <div class="alert alert-info" role="alert" style="margin:0  33px">
+        <!--查询条件 -->
+        <div class="row">
+            <div class="col-md-9">
+                <button type="button" class="btn  btn-sm green pull-right" id="addSqlSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;添加SQL数据源</button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn  btn-sm green pull-right" id="addFileSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;添加文件型数据源</button>
+            </div>
+        </div>
     </div>
     <div class="source-table">
         <div class="table-message">列表加载中......</div>
@@ -46,53 +55,17 @@
                 <td>2018-04-12 09:12</td>
                 <td>正常</td>
                 <td>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+                    <button type="button" class="btn btn-success btn-xs blue" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                    <button type="button" class="btn btn-success btn-xs purple " keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
+                    <button type="button" class="btn btn-success btn-xs red" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 </td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td class="source-name">文件路径2Data</td>
-                <td class="source-DB">paht1Data</td>
-                <td class="source-local">文件型</td>
-                <td>2018-04-12 09:12</td>
-                <td>正常</td>
-                <td>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
-                </td>            </tr>
-            <tr>
-                <td>2</td>
-                <td class="source-name">数据源Oracle</td>
-                <td class="source-DB">OracleData</td>
-                <td class="source-local">Oracle</td>
-                <td>2018-04-12 09:12</td>
-                <td>正常</td>
-                <td>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
-                    <button type="button" class="btn btn-success btn-sm" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
-                </td>            </tr>
-            <tr>
-                <td>2</td>
-                <td class="source-name">关系型数据源DB2</td>
-                <td class="source-DB">SqlServerData</td>
-                <td class="source-local">SqlServer</td>
-                <td>2018-04-12 09:12</td>
-                <td>正常</td>
-                <td>
-                    <button type="button" class="btn btn-success btn-sm btnSeeOpen" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-                    <button type="button" class="btn btn-success btn-sm btnEdit" keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
-                    <button type="button" class="btn btn-success btn-sm btnTrash" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
-                </td>            </tr>
             </tbody>
         </table>
-        <div class="page-message">
+        <div class="page-message" style="float: left">
 
         </div>
-        <div class="page-list"></div>
+        <div class="page-list" style="float: right"></div>
     </div>
 </div>
 <div id="addSqlSourcetable" class="modal fade" tabindex="-1" data-width="400">
@@ -245,6 +218,7 @@
         </div>
     </div>
 </div>
+<!-- validation Mode -->
 <div id="fileSourceModal" class="modal fade" tabindex="-1" data-width="400">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -284,8 +258,6 @@
                                                 <option value="其他">其他</option>
                                             </select>
                                         </div>
-
-
                                     </div>
                                     <div class="form-group">
                                         <label class="col-md-3 control-label">文件地址<span class="required">
@@ -309,6 +281,7 @@
         </div>
     </div>
 </div>
+
 <script type="text/html" id="resourceTmp1">
     {{each list as value i}}
     <tr keyIdTr="{{value.id}}">
@@ -438,87 +411,71 @@
         }
         $("#addSqlSource").click(function () {
             $("#fileSourceModal").modal('show');
-            FormValidation.init();
+            var $fileFrom =$('#fileSourceForm')
+            handleValidation($fileFrom);
 
         })
         $("#addFileSource").click(function () {
             $("#addFileSourcetable").modal('show');
         })
-        var FormValidation = function () {
 
+
+        function handleValidation(element) {
+            // for more info visit the official plugin documentation:
+            // http://docs.jquery.com/Plugins/Validation
             var formValid;
-            var handleValidation3 = function () {
-                // for more info visit the official plugin documentation:
-                // http://docs.jquery.com/Plugins/Validation
-
-                var form3 = $('#fileSourceForm');
-
-
-                formValid = form3.validate({
-                    errorElement: 'span', //default input error message container
-                    errorClass: 'help-block help-block-error', // default input error message class
-                    focusInvalid: false, // do not focus the last invalid input
-                    ignore: "", // validate all fields including form hidden input
-                    rules: {
-                        dataSourceName: {
-                            required: true
-                        },
-                        fileType: {
-                            required: true
-                        },
-                        filePath: {
-                            required: true,
-                            isFilePath: true
-                        }
+            formValid = element.validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block help-block-error', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "", // validate all fields including form hidden input
+                rules: {
+                    dataSourceName: {
+                        required: true
                     },
-
-                    highlight: function (element) { // hightlight error inputs
-                        $(element)
-                            .closest('.form-group').addClass('has-error'); // set error class to the control group
+                    fileType: {
+                        required: true
                     },
+                    filePath: {
+                        required: true,
+                        isFilePath: true
+                    }
+                },
 
-                    unhighlight: function (element) { // revert the change done by hightlight
-                        $(element)
-                            .closest('.form-group').removeClass('has-error'); // set error class to the control group
-                    },
+                highlight: function (element) { // hightlight error inputs
+                    $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
 
-                    success: function (label) {
-                        label
-                            .closest('.form-group').removeClass('has-error'); // set success class to the control group
-                    },
+                unhighlight: function (element) { // revert the change done by hightlight
+                    $(element)
+                        .closest('.form-group').removeClass('has-error'); // set error class to the control group
+                },
 
-                   /* submitHandler: function (form) {
+                success: function (label) {
+                    label
+                        .closest('.form-group').removeClass('has-error'); // set success class to the control group
+                },
 
-                        console.log("aaa")
-                        /!*form.submit();*!/ // submit the form
-                        console.log("bbb")
-                    }*/
+                submitHandler: function (form) {
 
-                });
-
-                $("#cancelButton").click(function () {
-                    console.log(123);
-                    formValid.resetForm();
-                })
-
-
-            };
-            jQuery.validator.addMethod("isFilePath", function (value, element) {
-                var winPath = /^[a-zA-Z]:(((\/(?! )[^/:*?<>\""|\/]+)+\/?)|(\/)?)\s*$/g;
-                var lnxPath = /^([\/][\w-]+)*$/;
-                return this.optional(element) || winPath.test(value) || lnxPath.test(value);
-            }, "请正确填写路径");
-
-            return {
-                //main function to initiate the module
-                init: function () {
-                    handleValidation3();
-
+                    <!--ajax  request-->
                 }
 
-            };
+            });
 
-        }();
+            $("#cancelButton").click(function () {
+                console.log(123);
+                formValid.resetForm();
+            })
+
+
+        };
+        jQuery.validator.addMethod("isFilePath", function (value, element) {
+            var winPath = /^[a-zA-Z]:(((\/(?! )[^/:*?<>\""|\/]+)+\/?)|(\/)?)\s*$/g;
+            var lnxPath = /^([\/][\w-]+)*$/;
+            return this.optional(element) || winPath.test(value) || lnxPath.test(value);
+        }, "请正确填写路径");
     </script>
 </div>
 
