@@ -164,7 +164,7 @@
                 </li>
 
                 <li>
-                    <a href="${ctx}/dataUpload">
+                    <a href="${ctx}/datatask/">
                         <i class="icon-wrench"></i>
                         <span class="title">数据任务</span>
                         <span class="arrow "></span>
