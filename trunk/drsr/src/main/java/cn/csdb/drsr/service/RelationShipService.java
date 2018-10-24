@@ -1,9 +1,6 @@
 package cn.csdb.drsr.service;
 
-import cn.csdb.drsr.model.DataSrc;
-import cn.csdb.drsr.model.DataTask;
-import cn.csdb.drsr.model.TableInfo;
-import cn.csdb.drsr.model.TableInfoR;
+import cn.csdb.drsr.model.*;
 import cn.csdb.drsr.repository.DataSrcDao;
 import cn.csdb.drsr.repository.DataTaskDao;
 import cn.csdb.drsr.repository.RelationDao;
@@ -12,8 +9,11 @@ import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
 import cn.csdb.drsr.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.hash.Hashing;
+import org.apache.commons.collections.ListUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -51,6 +51,8 @@ public class RelationShipService {
 
     @Resource
     private RelationDao relationDao;
+
+    private final static String URISPLIT = "#";
 
    @Transactional
     public String addData(DataSrc datasrc)
@@ -195,5 +197,108 @@ public class RelationShipService {
                                              int dataSourceId, int start, int limit) {
         return getDataBySql("select * from " + tableName, tableComsMap, dataSourceId, start, limit);
     }
+
+
+    @Transactional(readOnly = true)
+    public Map<String, List<TableInfo>> getDefaultFieldComsBySql(int dataSourceId, String sqlStr) {
+        if (StringUtils.isBlank(sqlStr) || !StringUtils.startsWithIgnoreCase(sqlStr.trim(), "select ")) {
+            return null;
+        }
+        DataSrc dataSrc = relationDao.findById(dataSourceId);
+        if (dataSrc == null) {
+            return null;
+        }
+        Map<String, List<TableInfo>> fieldComsByTableNames = Maps.newHashMap();
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        PreparedStatement preparedStatement = dataSource.getPaginationSql(connection, sqlStr, null, 0, 1);
+
+        try {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            String tableNameCur = null;
+            List<TableInfo> tableInfos = null;
+            List<TableInfo> tableInfosCur = null;
+            for (int index = 1; index <= columnCount; index++) {
+                String columnLabel = metaData.getColumnLabel(index);
+                String columnName = metaData.getColumnName(index);
+                String tableName = metaData.getTableName(index);
+                if (tableNameCur == null || !StringUtils.equals(tableNameCur, tableName)) {
+                    tableNameCur = tableName;
+                    tableInfosCur = Lists.newArrayList();
+                    Map<String, List<TableInfo>> fieldComsByTableName = getDefaultFieldComsByTableName(dataSourceId, tableName);
+                    tableInfos = fieldComsByTableName.get(tableName);
+                    if (fieldComsByTableNames.get(tableName) == null) {
+                        fieldComsByTableNames.put(tableName, tableInfosCur);
+                    }
+                }
+                for (TableInfo tableInfo : tableInfos) {
+                    if (StringUtils.equals(columnName, tableInfo.getColumnName())) {
+                        tableInfo.setColumnNameLabel(columnLabel);
+                        tableInfosCur.add(tableInfo);
+                        continue;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            logger.error("数据库操作失败", e);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+
+            }
+        }
+        return fieldComsByTableNames;
+
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, List<TableInfo>> getDefaultFieldComsByTableName(int dataSourceId, String tableName) {
+
+
+        if (StringUtils.isBlank(tableName)) {
+            return null;
+        }
+        tableName = tableName.trim();
+
+        DataSrc dataSrc = relationDao.findById(dataSourceId);
+        if (dataSrc == null) {
+            return null;
+        }
+        Map<String, List<TableInfo>> maps = Maps.newHashMap();
+//        TableFieldComs tableFieldComs = getTableFieldComsByUriEx(dataSrc, tableName);
+        TableFieldComs tableFieldComs = null;
+        List<TableInfo> tableInfosCur = null;
+        if (tableFieldComs != null) {
+            String fieldComs = tableFieldComs.getFieldComs();
+            tableInfosCur = JSON.parseArray(fieldComs, TableInfo.class);
+        }
+
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        List<TableInfo> tableInfos = null;
+        try {
+            tableInfos = dataSource.getTableFieldComs(connection, dataSrc.getDatabaseName(), tableName);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+
+            }
+        }
+        if (tableInfos != null && tableInfosCur != null) {
+            List intersectionList = ListUtils.intersection(tableInfos, tableInfosCur);//1 获取交集，取tableInfosCur中元素
+            tableInfos.removeAll(tableInfosCur);//2 去除重复元素
+            tableInfos.addAll(intersectionList);//3 然后取并集
+            maps.put(tableName, tableInfos);
+        } else if (tableInfos != null) {
+            maps.put(tableName, tableInfos);
+        }
+        return maps;
+
+    }
+
 
 }

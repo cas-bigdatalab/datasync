@@ -57,9 +57,12 @@ public class DataTaskDao {
      */
     public List<DataTask> getDatataskByPage(int start, int pageSize,String datataskType,String status){
         StringBuilder sb = new StringBuilder();
-        sb.append("select * from t_datatask where ");
+        sb.append("select * from t_datatask ");
+        if(StringUtils.isNoneBlank(datataskType)||StringUtils.isNoneBlank(status)){
+            sb.append("where ");
+        }
         List<Object> params = getSql(datataskType, status, sb);
-        sb.append(" order by resourceId desc limit ?,? ");
+        sb.append(" order by datataskId desc limit ?,? ");
         params.add(start);
         params.add(pageSize);
         return jdbcTemplate.query(sb.toString(), params.toArray(), new DataTaskMapper());
@@ -77,13 +80,21 @@ public class DataTaskDao {
     List<Object> getSql(String datataskType,String status, StringBuilder sb) {
         List<Object> params = Lists.newArrayList();
         if (StringUtils.isNoneBlank(datataskType)) {
-            sb.append(" and datataskType=? ");
+            sb.append("datataskType=? ");
             params.add(datataskType);
         }
         if (StringUtils.isNoneBlank(status)) {
-            sb.append(" and status=? ");
+            if (StringUtils.isNoneBlank(datataskType)) {
+                sb.append("and ");
+            }
+            sb.append("status=? ");
             params.add(status);
         }
         return params;
+    }
+
+    public int deleteDatataskById(int datataskId) {
+        String sql = "delete from t_datatask where datataskId=?";
+        return jdbcTemplate.update(sql, datataskId);
     }
 }

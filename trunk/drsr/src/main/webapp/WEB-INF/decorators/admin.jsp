@@ -164,7 +164,7 @@
                 </li>
 
                 <li>
-                    <a href="${ctx}/datatask/">
+                    <a href="${ctx}/dataUpload">
                         <i class="icon-wrench"></i>
                         <span class="title">数据任务</span>
                         <span class="arrow "></span>
@@ -266,7 +266,7 @@
 <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.min.js"></script>
 <script src="${ctx}/resources/bundles/jquery-validation/js/additional-methods.min.js"></script>
 <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
-
+<script src="${ctx}/resources/bundles/bootbox/bootbox.min.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
     jQuery(document).ready(function () {
@@ -320,6 +320,7 @@
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     };
+    bootbox.setLocale("zh_CN");
 
 </script>
 <!-- END JAVASCRIPTS -->

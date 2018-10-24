@@ -83,6 +83,15 @@ public class DataTaskController {
         return modelAndView;
     }
 
+    /**
+     *
+     * Function Description: 数据任务展示、查询列表
+     *
+     * @param: [pageNo, pageSize, datataskType, status]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/10/24 10:37
+     */
     @RequestMapping(value="/list")
     @ResponseBody
     public JSONObject datataskList(@RequestParam(name = "pageNo", defaultValue = "1", required = false) int pageNo,
@@ -90,7 +99,43 @@ public class DataTaskController {
                                    @RequestParam(name = "datataskType", required = false) String datataskType,
                                    @RequestParam(name = "status", required = false) String status){
         JSONObject jsonObject = new JSONObject();
+        List<DataTask> dataTasks = dataTaskService.getDatataskByPage((pageNo-1)*pageSize,pageSize,datataskType,status);
+        jsonObject.put("dataTasks",dataTasks);
+        return jsonObject;
+    }
 
+    /**
+     *
+     * Function Description:
+     *
+     * @param: [id]
+     * @return: int >0 删除成功 否则失败
+     * @auther: hw
+     * @date: 2018/10/24 10:47
+     */
+    @RequestMapping(value="/delete")
+    @ResponseBody
+    public int deleteDatatask(String datataskId){
+        return dataTaskService.deleteDatataskById(Integer.parseInt(datataskId));
+    }
+
+    /**
+     *
+     * Function Description: 查看数据任务信息
+     *
+     * @param: [id]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/10/24 10:54
+     */
+    @RequestMapping(value="detail")
+    @ResponseBody
+    public JSONObject datataskDetail(String datataskId){
+        JSONObject jsonObject = new JSONObject();
+        DataTask datatask = dataTaskService.get(Integer.parseInt(datataskId));
+        DataSrc dataSrc = dataSrcService.findById(datatask.getDataSourceId());
+        jsonObject.put("datatask",datatask);
+        jsonObject.put("dataSrc",dataSrc);
         return jsonObject;
     }
 }
