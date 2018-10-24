@@ -21,8 +21,7 @@ public class DataSrc {
     private String isValid;
     private String fileType;
     private String filePath;
-    private Date createTime;
-    private int totalPage;
+    private String createTime;
     private int stat;
 
 
@@ -122,11 +121,11 @@ public class DataSrc {
         this.fileType = fileType;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -138,11 +137,4 @@ public class DataSrc {
         this.stat = stat;
     }
 
-    public int getTotalPage() {
-        return totalPage;
-    }
-
-    public void setTotalPage(int totalPage) {
-        this.totalPage = totalPage;
-    }
 }
