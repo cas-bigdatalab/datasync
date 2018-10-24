@@ -90,7 +90,7 @@
                         <div class="col-md-12" style="margin-bottom: 10px" >
                             <div class="col-md-2" style="text-align: right">sql查询</div>
                             <div class="col-md-5">
-                                <input type="text" class="form-control sqlStatements" >
+                                <input type="text" class="form-control sqlStatements" id="asdf">
                             </div>
                             <div class="col-md-2">
                                 <button type="button" class="btn blue preview">编辑预览</button>
@@ -178,6 +178,38 @@
         </div>
     </div>
 </div>
+<script type="text/html" id="previewTableDataAndComsTmpl">
+    <div class="skin skin-minimal">
+        <table class="table table-hover table-bordered">
+            {{each datas as itemList i}}
+            {{if i == 0}}
+            <thead>
+            <tr style="word-break: keep-all">
+                <th>#</th>
+                {{each itemList as item j}}
+                <th>{{item.columnName}}
+                    {{if item.columnComment}}
+                    <br/>({{item.columnComment}})
+                    {{/if}}
+                </th>
+                {{/each}}
+            </tr>
+            </thead>
+            {{/if}}
+            <tbody>
+            {{if i != 0}}
+            <tr>
+                <td>{{i}}</td>
+                {{each itemList as item j}}
+                <td>{{item}}</td>
+                {{/each}}
+            </tr>
+            {{/if}}
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</script>
 <script type="text/html" id="dataRelationshipList">
     <option value="" id="selNone" selected="selected">-----------</option>
     {{each data as value i}}
@@ -216,10 +248,12 @@
         </div>
     </div>
 </script>
+
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.min.js"></script>
+    <%--<script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>--%>
 
     <script>
         var dataRelSrcId;
@@ -312,7 +346,7 @@
 
                 $('#editTableDataAndComsButtonId').parent().addClass("active");
                 $('#editTableFieldComsId').addClass("active");
-                var tableInfosList = null;
+                /*var tableInfosList = null;
                 if (editIsChoiceTableOrSql == 1) {
                     var tableInfos = getTableFieldComs(dataSourceId, tableNameOrSql);
                     tableInfosList = [];
@@ -324,16 +358,16 @@
                     for (var key in tableInfosMap) {
                         tableInfosList [i++] = {tableName: key, tableInfos: tableInfosMap[key]};
                     }
-                }
-                if (!tableInfosList || tableInfosList.length == 0) {
+                }*/
+                /*if (!tableInfosList || tableInfosList.length == 0) {
                     if (editIsChoiceTableOrSql == 2) {
                         toastr["warning"]("提示！", "请先检查填写sql语句");
                     }
                     return;
-                }
+                }*/
                 $("#staticSourceTableChoiceModal").modal("show");
-                var html = template("editTableFieldComsTmpl", {"tableInfosList": tableInfosList});
-                $('#editTableFieldComsId').html(html);
+                // var html = template("editTableFieldComsTmpl", {"tableInfosList": tableInfosList});
+                // $('#editTableFieldComsId').html(html);
                 curSourceTableChoice = obj;
                 curDataSourceId = dataSourceId;
                 curEditIsChoiceTableOrSql = editIsChoiceTableOrSql;
@@ -343,7 +377,7 @@
                 } else if (editIsChoiceTableOrSql == 2) {
                     curSQL = tableNameOrSql;
                 }
-                preSaveEditTableFieldComs();// 页面与保存coms信息
+                // preSaveEditTableFieldComs();// 页面与保存coms信息
             } else {
                 $(obj).removeAttr("coms");
             }
@@ -678,6 +712,57 @@
         }
 */
 
+        $("#previewTableDataAndComsButtonId").bind("click", function () {
+            if (curEditIsChoiceTableOrSql == 1) {
+                var tableInfos = getEditTableOrSqlFieldComs();
+                previewTableDataAndComs(curDataSourceId, tableInfos);
+            } else if (curEditIsChoiceTableOrSql == 2) {
+                // var tableInfos = getEditTableOrSqlFieldComs();
+                previewSqlDataAndComs(curDataSourceId);
+            }
+        });
+
+        function previewSqlDataAndComs(dataSourceId) {
+            /*var sqlStr;
+            if (curRefer == "dataService") {
+                sqlStr = $("#publicSql").val();
+            } else {
+                var sqlStrId = "sqlStr";
+                if (curSQLStrIndex < 0) {
+                    return;
+                }
+                if (curSQLStrIndex != 0) {
+                    sqlStrId += curSQLStrIndex;
+                }
+                sqlStr = $("#" + sqlStrId).val();
+            }*/
+            var $Str =$("#asdf").val();
+            $.ajax({
+                type: "GET",
+                url:  '${ctx}/relationship/previewRelationalDatabaseBySQL',
+                data: {
+                    "dataSourceId": dataSourceId,
+                    "sqlStr": $Str
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (!data || !data.datas) {
+                        return;
+                    }
+                    var columnTitleList = [];
+                    // tableInfosList.forEach(function (tableInfos, index1, array1) {
+                    //     tableInfos.tableInfos.forEach(function (value, index2, array2) {
+                    //         // var columnTitle = value.columnNameLabel + "<br>(" + value.columnComment + ")";
+                    //         // columnTitleList.push(columnTitle);
+                    //         columnTitleList.push({columnName:value.columnName,columnComment:value.columnComment});
+                    //     });
+                    // });
+                    data.datas.unshift(columnTitleList);
+                    var html = template("previewTableDataAndComsTmpl", {"datas": data.datas});
+                    $('#previewTableDataAndComsId').html(html);
+                }
+            });
+        }
 
         $(function () {
             /*tableConfiguration();*/

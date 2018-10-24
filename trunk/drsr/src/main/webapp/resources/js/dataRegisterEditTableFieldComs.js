@@ -49,8 +49,8 @@ function staticSourceTableChoice(editIsChoiceTableOrSql, obj, dataSourceId, tabl
             return;
         }
         $("#staticSourceTableChoiceModal").modal("show");
-        var html = template("editTableFieldComsTmpl", {"tableInfosList": tableInfosList});
-        $('#editTableFieldComsId').html(html);
+        // var html = template("editTableFieldComsTmpl", {"tableInfosList": tableInfosList});
+        // $('#editTableFieldComsId').html(html);
         curSourceTableChoice = obj;
         curDataSourceId = dataSourceId;
         curEditIsChoiceTableOrSql = editIsChoiceTableOrSql;
@@ -164,8 +164,8 @@ $(function () {
             var tableInfos = getEditTableOrSqlFieldComs();
             previewTableDataAndComs(curDataSourceId, tableInfos);
         } else if (curEditIsChoiceTableOrSql == 2) {
-            var tableInfos = getEditTableOrSqlFieldComs();
-            previewSqlDataAndComs(curDataSourceId, tableInfos);
+            // var tableInfos = getEditTableOrSqlFieldComs();
+            previewSqlDataAndComs(curDataSourceId);
         }
     });
 
@@ -282,7 +282,7 @@ function previewTableDataAndComs(dataSourceId, tableInfosList) {
     });
 }
 
-function previewSqlDataAndComs(dataSourceId, tableInfosList) {
+function previewSqlDataAndComs(dataSourceId) {
     var sqlStr;
     if (curRefer == "dataService") {
         sqlStr = $("#publicSql").val();
@@ -302,7 +302,6 @@ function previewSqlDataAndComs(dataSourceId, tableInfosList) {
         data: {
             "dataSourceId": dataSourceId,
             "sqlStr": sqlStr,
-            "tableInfosList": $.toJSON(tableInfosList)
         },
         dataType: "json",
         success: function (data) {
@@ -310,13 +309,13 @@ function previewSqlDataAndComs(dataSourceId, tableInfosList) {
                 return;
             }
             var columnTitleList = [];
-            tableInfosList.forEach(function (tableInfos, index1, array1) {
-                tableInfos.tableInfos.forEach(function (value, index2, array2) {
-                    // var columnTitle = value.columnNameLabel + "<br>(" + value.columnComment + ")";
-                    // columnTitleList.push(columnTitle);
-                    columnTitleList.push({columnName:value.columnName,columnComment:value.columnComment});
-                });
-            });
+            // tableInfosList.forEach(function (tableInfos, index1, array1) {
+            //     tableInfos.tableInfos.forEach(function (value, index2, array2) {
+            //         // var columnTitle = value.columnNameLabel + "<br>(" + value.columnComment + ")";
+            //         // columnTitleList.push(columnTitle);
+            //         columnTitleList.push({columnName:value.columnName,columnComment:value.columnComment});
+            //     });
+            // });
             data.datas.unshift(columnTitleList);
             var html = template("previewTableDataAndComsTmpl", {"datas": data.datas});
             $('#previewTableDataAndComsId').html(html);
