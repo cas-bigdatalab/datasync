@@ -234,23 +234,45 @@ public class RelationSourceController {
     public JSONObject previewRelationalDatabaseBySQL(
             @RequestParam(required = false) String dataSourceId,
             @RequestParam() String sqlStr,
+//            @RequestParam(required = false, name = "tableInfosList") String tableInfosListStr,
+            @RequestParam(required = false, defaultValue = "10") int pageSize) {
+        logger.info("预览表数据");
+        JSONObject jsonObject = new JSONObject();
+//        List<TableInfoR> tableInfosList = JSON.parseArray(tableInfosListStr, TableInfoR.class);
+        Map<String, List<TableInfo>> maps = relationShipService.getDefaultFieldComsBySql(Integer.parseInt(dataSourceId),sqlStr);
+//        if (tableInfosList != null && tableInfosList.size() >= 1) {
+//            String tableName = null;
+//            for (TableInfoR tableInfoR : tableInfosList) {
+//                tableName = tableInfoR.getTableName();
+//                maps.put(tableName, tableInfoR.getTableInfos());
+//            }
+//        } else {
+//            return jsonObject;
+//        }
+        List<List<Object>> datas = relationShipService.getDataBySql(sqlStr, maps, Integer.valueOf(dataSourceId), 0, pageSize);
+        jsonObject.put("datas", datas);
+        return jsonObject;
+    }
+
+    /*@ResponseBody
+    @RequestMapping(value = "/previewRelationalDatabaseByTableName")
+    public JSONObject previewRelationalDatabaseByTableName(
+            @RequestParam(required = false) String dataSourceId,
             @RequestParam(required = false, name = "tableInfosList") String tableInfosListStr,
             @RequestParam(required = false, defaultValue = "10") int pageSize) {
         logger.info("预览表数据");
         JSONObject jsonObject = new JSONObject();
         List<TableInfoR> tableInfosList = JSON.parseArray(tableInfosListStr, TableInfoR.class);
         HashMap<String, List<TableInfo>> maps = Maps.newHashMap();
-        if (tableInfosList != null && tableInfosList.size() >= 1) {
-            String tableName = null;
-            for (TableInfoR tableInfoR : tableInfosList) {
-                tableName = tableInfoR.getTableName();
-                maps.put(tableName, tableInfoR.getTableInfos());
-            }
+        String tableName = null;
+        if (tableInfosList != null && tableInfosList.size() == 1) {
+            tableName = tableInfosList.get(0).getTableName();
+            maps.put(tableName, tableInfosList.get(0).getTableInfos());
         } else {
             return jsonObject;
         }
-        List<List<Object>> datas = relationShipService.getDataBySql(sqlStr, maps, Integer.valueOf(dataSourceId), 0, pageSize);
+        List<List<Object>> datas = dataRMDBservice.getDataByTable(tableName, maps, Integer.valueOf(dataSourceId), 0, pageSize);
         jsonObject.put("datas", datas);
         return jsonObject;
-    }
+    }*/
 }
