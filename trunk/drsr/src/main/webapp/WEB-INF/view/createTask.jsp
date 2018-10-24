@@ -108,8 +108,8 @@
                 </div>
             </div>
         </div>
-        <div class="select-local" style="display: none">
-            <button type="button" class="btn btn-success" id="upload-directory">上传目录</button>
+        <div class="select-local" style="display: none;max-height: 500px;background-color: red;overflow: auto">
+            <%--<button type="button" class="btn btn-success" id="upload-directory">上传目录</button>
             <button type="button" class="btn btn-success" id="upload-file">上传文件</button>
             <div style="min-height: 400px;margin-top: 50px">
                 <div class="left">
@@ -121,7 +121,21 @@
                 <div class="right" id="editRegon">
 
                 </div>
-            </div>
+            </div>--%>
+            <%--<div style="height: 1000px;background-color: #7ad588"></div>
+            <div class="col-md-12 ">
+                <button type="button" class="btn green pull-right" onclick="sendFileTask()">提交</button>
+            </div>--%>
+                <span>选择数据源</span>
+                <select  id="DBFilechange">
+                    <%--<option value="">-----------</option>
+                    <option value="aaa">关系数据源DB2</option>
+                    <option value="bbb">数据源OracleData</option>
+                    <option value="">关系数据源DB2</option>
+                    <option value="">数据源OracleData</option>
+                    <option value="">关系数据源DB2</option>
+                    <option value="">数据源OracleData</option>--%>
+                </select>
         </div>
     </div>
     <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
@@ -247,6 +261,13 @@
             <button type="button" class="btn red removeSql"><span class="glyphicon glyphicon-trash"></span>删除</button>
         </div>
     </div>
+</script>
+
+<script type="text/html" id="dataFileshipList">
+    <option value="" id="selFileNone" selected="selected">-----------</option>
+    {{each data as value i}}
+    <option value="{{value.databaseName}}" Keyid="{{value.dataSourceId}}">{{value.databaseName}}</option>
+    {{/each}}
 </script>
 
 </body>

@@ -27,7 +27,7 @@ public class Resource {
     @Field("resState")
     private String resState; //资源填写状态
     @Field("publicType")
-    private String publicType; //发布状态(关系数据库/文件类型)
+    private String publicType; //发布类型(关系数据库/文件类型)
     @Field("publicContent")
     private String publicContent; //发布内容
     @Field("filePath")

@@ -86,4 +86,21 @@ public class ResourceDao {
         return mongoTemplate.find(basicQuery, cn.csdb.portal.model.Resource.class);
     }
 
+
+    public long countByPage(String subjectCode, String title, String status){
+        QueryBuilder queryBuilder = QueryBuilder.start();
+        if(StringUtils.isNotEmpty(subjectCode)){
+            queryBuilder = queryBuilder.and("subjectCode").is(subjectCode);
+        }
+        if (StringUtils.isNotEmpty(title)){
+            queryBuilder = queryBuilder.and("title").regex(Pattern.compile("^.*"+title+".*$"));
+        }
+        if (StringUtils.isNotEmpty(status)){
+            queryBuilder =queryBuilder.and("status").is(status);
+        }
+
+        DBObject dbObject = queryBuilder.get();
+        BasicQuery basicQuery = new BasicQuery(dbObject);
+        return mongoTemplate.count(basicQuery,cn.csdb.portal.model.Resource.class);
+    }
 }
