@@ -2,6 +2,7 @@ package cn.csdb.portal.service;
 
 import cn.csdb.portal.repository.ResourceDao;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -26,6 +27,7 @@ public class ResourceService {
      * @auther: Administrator
      * @date: 2018/10/23 16:22
      */
+    @Transactional
     public void save(cn.csdb.portal.model.Resource resource) {
         resourceDao.save(resource);
     }
@@ -38,11 +40,12 @@ public class ResourceService {
      * @auther: Administrator
      * @date: 2018/10/23 16:25
      */
+    @Transactional
     public void delete(String id) {
         resourceDao.delete(id);
     }
 
-
+    @Transactional
     public void delete(cn.csdb.portal.model.Resource resource) {
         resourceDao.delete(resource);
     }
@@ -55,8 +58,14 @@ public class ResourceService {
      * @auther: Administrator
      * @date:   2018/10/23 16:28
      */
-
+    @Transactional(readOnly = true)
     public List<cn.csdb.portal.model.Resource> getListByPage(String subjectCode, String title, String status, int pageNo, int pageSize) {
         return resourceDao.getListByPage(subjectCode, title, status, pageNo, pageSize);
+    }
+
+
+    @Transactional(readOnly = true)
+    public long countByPage(String subjectCode, String title, String status){
+        return resourceDao.countByPage(subjectCode,title,status);
     }
 }

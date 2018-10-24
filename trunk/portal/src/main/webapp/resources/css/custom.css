@@ -107,3 +107,84 @@
     -o-border-radius: 4px 4px 0 0;
     border-radius: 4px 4px 0 0;
 }
+
+
+/* Button */
+.blue.btn {
+    color: white;
+    background-color: #4b8df8;
+}
+
+.blue.btn:hover, .blue.btn:focus, .blue.btn:active, .blue.btn.active {
+    color: white;
+    background-color: #2977f7;
+}
+
+.open .blue.btn.dropdown-toggle {
+    color: white;
+    background-color: #2977f7;
+}
+
+.blue.btn:active, .blue.btn.active {
+    background-image: none;
+    background-color: #1068f6;
+}
+
+.blue.btn:active:hover, .blue.btn.active:hover {
+    background-color: #1a6ef6;
+}
+
+.open .blue.btn.dropdown-toggle {
+    background-image: none;
+}
+
+.blue.btn.disabled, .blue.btn.disabled:hover, .blue.btn.disabled:focus, .blue.btn.disabled:active, .blue.btn.disabled.active, .blue.btn[disabled], .blue.btn[disabled]:hover, .blue.btn[disabled]:focus, .blue.btn[disabled]:active, .blue.btn[disabled].active, fieldset[disabled] .blue.btn, fieldset[disabled] .blue.btn:hover, fieldset[disabled] .blue.btn:focus, fieldset[disabled] .blue.btn:active, fieldset[disabled] .blue.btn.active {
+    background-color: #4b8df8;
+}
+
+.blue.btn .badge {
+    color: #4b8df8;
+    background-color: white;
+}
+
+/* Button Strip */
+.btn.blue-stripe {
+    border-left: 3px solid #4b8df8;
+}
+.green.btn {
+    color: white;
+    background-color: #35aa47;
+    border-color: "";
+}
+
+.green.btn:hover, .green.btn:focus, .green.btn:active, .green.btn.active {
+    color: white;
+    background-color: #2d8f3c;
+}
+
+.open .green.btn.dropdown-toggle {
+    color: white;
+    background-color: #2d8f3c;
+}
+
+.green.btn:active, .green.btn.active {
+    background-image: none;
+    background-color: #267b34;
+}
+
+.green.btn:active:hover, .green.btn.active:hover {
+    background-color: #298337;
+}
+
+.open .green.btn.dropdown-toggle {
+    background-image: none;
+}
+
+.green.btn.disabled, .green.btn.disabled:hover, .green.btn.disabled:focus, .green.btn.disabled:active, .green.btn.disabled.active, .green.btn[disabled], .green.btn[disabled]:hover, .green.btn[disabled]:focus, .green.btn[disabled]:active, .green.btn[disabled].active, fieldset[disabled] .green.btn, fieldset[disabled] .green.btn:hover, fieldset[disabled] .green.btn:focus, fieldset[disabled] .green.btn:active, fieldset[disabled] .green.btn.active {
+    background-color: #35aa47;
+}
+
+.green.btn .badge {
+    color: #35aa47;
+    background-color: white;
+}

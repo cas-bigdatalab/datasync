@@ -46,8 +46,13 @@ public class ResourceController {
     {
 
         List<cn.csdb.portal.model.Resource> list = resourceService.getListByPage(subjectCode,title,status,pageNo,pageSize);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("data",list);
-        return jsonObject;
+        long count = resourceService.countByPage(subjectCode,title,status);
+        JSONObject json = new JSONObject();
+        json.put("list",list);
+        json.put("totalCount",count);
+        json.put("currentPage",pageNo);
+        json.put("pageSize",pageSize);
+        json.put("totalPages",count % pageSize == 0 ? count / pageSize : count / pageSize + 1);
+        return json;
     }
 }
