@@ -33,68 +33,77 @@
         <div class="select-database">
             <span>选择数据源</span>
             <select  id="DBchange">
-                <option value="">-----------</option>
+                <%--<option value="">-----------</option>
                 <option value="aaa">关系数据源DB2</option>
                 <option value="bbb">数据源OracleData</option>
                 <option value="">关系数据源DB2</option>
                 <option value="">数据源OracleData</option>
                 <option value="">关系数据源DB2</option>
-                <option value="">数据源OracleData</option>
+                <option value="">数据源OracleData</option>--%>
             </select>
             <div class="database-con container-fluid" style="display: none">
                 <div class="row">
                     <div class="col-md-3 dataHead1">数据源名称：</div>
                     <div class="col-md-9 dataHead2">关系数据源DB2</div>
-                    <div class="col-md-2">选择表资源</div>
-                    <div class="col-md-9" >
-                        <div class="row" id="db-table">
-                            <div class="col-md-4">
-                                <label>
-                                    <input type="checkbox"> Remember me
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <label>
-                                    <input type="checkbox"> Remember me
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <label>
-                                    <input type="checkbox"> Remember me
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <label>
-                                    <input type="checkbox"> Remember me
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <label>
-                                    <input type="checkbox"> Remember me
-                                </label>
+                    <div class="col-md-12">
+                        <div class="col-md-2">选择表资源</div>
+                        <div class="col-md-9" >
+                            <div class="row" id="db-table">
+                                <%--<div class="col-md-4">
+                                    <label>
+                                        <input type="checkbox" name="relationCheck" value="aaa"> Remember me
+                                    </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>
+                                        <input type="checkbox" name="relationCheck" value="bbb"> Remember me
+                                    </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>
+                                        <input type="checkbox" name="relationCheck" value="ccc"> Remember me
+                                    </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>
+                                        <input type="checkbox" name="relationCheck" value="sss"> Remember me
+                                    </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>
+                                        <input type="checkbox" name="relationCheck" value="fff"> Remember me
+                                    </label>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>
+                                        <div class="checker">
+                                            <span>
+                                                <input type="checkbox" name="relationCheck" value="aaa">
+                                            </span>
+                                        </div> Remember me
+                                    </label>
+                                </div>--%>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-2">sql查询</div>
-                    <div class="col-md-9">
-                        <div class="row">
+                    <div >
+                        <div class="col-md-12" style="margin-bottom: 10px" >
+                            <div class="col-md-2" style="text-align: right">sql查询</div>
                             <div class="col-md-5">
-                                <input type="text" class="form-control" id="sqlStatements">
+                                <input type="text" class="form-control sqlStatements" >
                             </div>
-                            <div class="col-md-2">
-<%--
-                                <button type="button" class="btn btn-success">编辑预览</button>
---%>
+                            <div class="col-md-1">
+                                <button type="button" class="btn blue ">预览</button>
                             </div>
-                            <div class="col-md-2">
-<%--
-                                <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>sql查询</button>
---%>
-                        </div>
-                            <div class="col-md-3">
-                                <button type="button" class="btn btn-success" onclick="sendRelationTask()">提交</button>
+                            <div class="col-md-2" style="text-align: left">
+                                <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>sql查询</button>
                             </div>
                         </div>
+                        <div id="sqlList"></div>
+                    </div>
+
+                    <div class="col-md-12 ">
+                        <button type="button" class="btn green pull-right" onclick="sendRelationTask()">提交</button>
                     </div>
                 </div>
             </div>
@@ -117,19 +126,42 @@
     </div>
 </div>
 <script type="text/html" id="dataRelationshipList">
-    <option value="selNone" id="selNone" selected="selected">-----------</option>
-    {{each list as value i}}
-    <option value="{{name}}" id="{{value.id}}">value.name</option>
+    <option value="" id="selNone" selected="selected">-----------</option>
+    {{each data as value i}}
+    <option value="{{value.databaseName}}" id="{{value.dataSourceId}}">{{value.databaseName}}</option>
     {{/each}}
 </script>
 <script type="text/html" id="dataRelationshipList2">
     {{each list as value i}}
-    <div class="col-md-4">
+    <div class="col-md-6">
         <label>
-            <input type="checkbox" name="relationCheck"> {{value.name}}
+            <input type="checkbox" name="relationBox" value="{{value}}"> {{value}}
         </label>
     </div>
+    <%--<div class="col-md-4">
+        <label>
+            <div class="checker">
+                <span>
+                    <input type="checkbox" name="relationCheck" value="{{value}}">
+                </span>
+            </div> {{value}}
+        </label>
+    </div>--%>
     {{/each}}
+</script>
+<script type="text/html" id="addSql">
+    <div class="col-md-12" style="margin-bottom: 10px" name="aaaa">
+        <div class="col-md-2" style="text-align: right">sql查询</div>
+        <div class="col-md-5">
+            <input type="text" class="form-control sqlStatements" >
+        </div>
+        <div class="col-md-1">
+            <button type="button" class="btn blue ">预览</button>
+        </div>
+        <div class="col-md-2" style="text-align: left">
+            <button type="button" class="btn red removeSql"><span class="glyphicon glyphicon-trash"></span>删除</button>
+        </div>
+    </div>
 </script>
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
@@ -145,16 +177,23 @@
             }else {
                 $(".select-database").hide();
                 $(".select-local").show();
-
+                $.ajax({
+                    url:"${ctx}/fileResource/findAllFileSrc",
+                    type:"GET",
+                    success:function (data) {
+                        console.log(data)
+                    }
+                })
             }
         })
         $("#DBchange").on("change",function () {
-            var id = $(this).attr("id")
+            var id = $("select option:selected").attr("id")
             var name = $(this).val();
             if(name == ""){
                 $(".database-con").hide();
                 return
             }
+            $(".database-con").show();
             $(".dataHead2").html(name);
             $.ajax({
                 url:"${ctx}/relationship/relationalDatabaseTableList",
@@ -163,29 +202,42 @@
                     dataSourceId:id
                 },
                 success:function (data) {
+                    $("#db-table").empty();
                     var List =JSON.parse(data)
+                    console.log(List)
                     var tabCon = template("dataRelationshipList2", List);
                     $("#db-table").append(tabCon);
-                    $(".database-con").show();
+
+                },
+                error:function () {
+                    console.log("请求失败")
                 }
             })
 
 
         })
+        $("#sqlList").delegate(".removeSql","click",function () {
+            alert($(".removeSql").index($(this)))
+        })
+
+        function addSql() {
+            var tabCon = template("addSql");
+            $("#sqlList").append(tabCon);
+        }
 
         <!--create relation task -->
         function sendRelationTask() {
-            var $eleChecked = $("[name='relationCheck']:checked")
+            var $eleChecked = $("[name='relationBox']:checked")
             var numChecked = $eleChecked.size();
             if (numChecked == 0) {
-                toastr["warning"]("最少选择一个表资源");
+                toastr["success"]("最少选择一个表资源");
                 return
             }
             var list = new Array();
             $eleChecked.each(function () {
                 list.push($(this).val())
             });
-
+            console.log(list.toString())
             $.ajax({
                 url:"",
                 type:"POST",
@@ -196,7 +248,7 @@
                 },
                 success:function (data) {
 
-                    window.location.href="${ctx}/dataUpload"
+                    /*window.location.href="${ctx}/dataUpload"*/
                 },
                 error:function () {
 
@@ -206,19 +258,22 @@
         }
 
         $(function(){
-            /*$.ajax({
-                url:"${ctx}/relationship/findAll",
+            $.ajax({
+                url:"${ctx}/relationship/findAllDBSrc",
                 type:"GET",
                 success:function (data) {
                     console.log(data)
-                    var List =JSON.parse(data)
-                    var tabCon = template("dataRelationshipList", List);
+                    var list =JSON.parse(data)
+                    var data={
+                        data:list
+                    }
+                    var tabCon = template("dataRelationshipList", data);
                     $("#DBchange").append(tabCon);
                 },
                 error:function () {
                     console.log("请求失败")
                 }
-            })*/
+            })
         });
 
 
@@ -447,22 +502,6 @@
         }
 
 
-        $("#DBchange").change(function () {
-            var selectName = $("#DBchange option:selected").text();
-            $(".dataHead2").html(selectName);
-
-            /*$.ajax({
-                url:"",
-                type:"GET",
-                data:selectName,
-                success:function (data) {
-                    var html = template("resourceTmp1",data)
-                    $("#db-table").empty();
-                    $("#db-table").append(html)
-                }
-            })*/
-            $(".database-con").show();
-        })
 
         $(function () {
             /*tableConfiguration();*/

@@ -368,6 +368,7 @@
                     $(".table-message").hide();
                    var List =JSON.parse(data)
                     console.log(List)
+                    console.log(List)
                     var tabCon = template("resourceTmp1", List);
                     $("#bd-data").append(tabCon);
                     /*$(".data-table").html("");

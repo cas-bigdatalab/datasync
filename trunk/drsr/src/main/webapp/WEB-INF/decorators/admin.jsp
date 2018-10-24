@@ -32,6 +32,7 @@
     <!-- DOC: To use 'rounded corners' style just load 'components-rounded.css' stylesheet instead of 'components.css' in the below style tag -->
     <link href="${ctx}/resources/bundles/metronic/global/css/components.css" id="style_components" rel="stylesheet"
           type="text/css"/>
+    <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/metronic/global/css/plugins.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/metronic/css/layout.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/metronic/css/themes/light.css" rel="stylesheet" type="text/css"
@@ -229,7 +230,7 @@
     <!-- END CONTENT -->
 </div>
 <!-- BEGIN FOOTER -->
-<div class="page-footer" style="text-align: center;background-color: #454241">
+<div class="page-footer" style="text-align: center;background-color: #454241;margin-top: 50px">
     <div class="page-footer-inner" style="color: #FFF;float: none">
         2018-2020 &copy; 中国科学院计算机网络信息中心大数据部.版权所有.
     </div>
@@ -264,7 +265,7 @@
 <script src="${ctx}/resources/bundles/artTemplate/template.js"></script>
 <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.min.js"></script>
 <script src="${ctx}/resources/bundles/jquery-validation/js/additional-methods.min.js"></script>
-
+<script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
 
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
@@ -305,7 +306,20 @@
             return val;
         }
     });
-
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "positionClass": "toast-top-right",
+        "onclick": null,
+        "showDuration": "1000",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
 
 </script>
 <!-- END JAVASCRIPTS -->
