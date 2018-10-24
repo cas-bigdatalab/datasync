@@ -91,7 +91,7 @@ public class DataSrcDao {
             dataSrc.setIsValid((String) map4DataSrc.get("IsValid"));
             dataSrc.setFileType((String) map4DataSrc.get("FileType"));
             dataSrc.setFilePath((String) map4DataSrc.get("FilePath"));
-            dataSrc.setCreateTime((Date)map4DataSrc.get("CreateTime"));
+            dataSrc.setCreateTime((String) map4DataSrc.get("CreateTime"));
             dataSrc.setStat((Integer)map4DataSrc.get("Stat"));
             dataSrcs.add(dataSrc);
         }
@@ -139,7 +139,7 @@ public class DataSrcDao {
             dataSrc.setIsValid((String) map4DataSrc.get("IsValid"));
             dataSrc.setFileType((String) map4DataSrc.get("FileType"));
             dataSrc.setFilePath((String) map4DataSrc.get("FilePath"));
-            dataSrc.setCreateTime((Date)map4DataSrc.get("CreateTime"));
+            dataSrc.setCreateTime((String) map4DataSrc.get("CreateTime"));
             dataSrc.setStat((Integer)map4DataSrc.get("Stat"));
             dataSrcs.add(dataSrc);
         }
@@ -187,7 +187,7 @@ public class DataSrcDao {
             dataSrc.setIsValid((String) map4DataSrc.get("IsValid"));
             dataSrc.setFileType((String) map4DataSrc.get("FileType"));
             dataSrc.setFilePath((String) map4DataSrc.get("FilePath"));
-            dataSrc.setCreateTime((Date)map4DataSrc.get("CreateTime"));
+            dataSrc.setCreateTime((String) map4DataSrc.get("CreateTime"));
             dataSrc.setStat((Integer)map4DataSrc.get("Stat"));
             dataSrcs.add(dataSrc);
         }
