@@ -16,9 +16,9 @@
     <link href="${ctx}/resources/bundles/rateit/src/rateit.css" rel="stylesheet" type="text/css">
     <link href="${ctx}/resources/bundles/jstree/dist/themes/default/style.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="${ctx}/resources/css/relationalSource.css">
-<%--
-    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
---%>
+    <%--
+        <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+    --%>
     <style>
         .error {
             color:red;
@@ -31,7 +31,7 @@
 <div class="page-content" style="min-height:342px">
     <br/>
     <div>
-    <h3 id="forms-inline" class="relationTitle"<%--class="modal-title"--%>>文件数据源模块</h3>
+        <h3 id="forms-inline" class="relationTitle"<%--class="modal-title"--%>>文件数据源模块</h3>
     </div>
     <form class="form-inline">
         <button type="button" class="btn btn-primary" onclick="add();">新增</button>
@@ -44,31 +44,31 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-<%--
-            <th>数据源编号</th>
---%>
+            <%--
+                        <th>数据源编号</th>
+            --%>
             <th>数据源名称</th>
             <th>数据源类型</th>
             <th>文件类型</th>
-            <th>文件地址</th>
+            <th width="70%">文件地址</th>
             <th>操作</th>
         </tr>
         </thead>
         <tbody>
         <c:forEach items="${fileDataOfThisPage}" var="item" varStatus="status">
-        <tr>
-<%--
-            <td>${item.dataSourceId}</td>
---%>
-            <td>${item.dataSourceName}</td>
-            <td>文件数据源</td>
-            <td>${item.fileType}</td>
-            <td>${item.filePath}</td>
-            <td>
-                <button type="button" class="btn btn-default"  onclick="editData(${item.dataSourceId});">编辑</button>
-                <button type="button" class="btn btn-danger"  id="delete"  onclick="deleteD(${item.dataSourceId});">删除</button>
-            </td>
-        </tr>
+            <tr>
+                    <%--
+                                <td>${item.dataSourceId}</td>
+                    --%>
+                <td>${item.dataSourceName}</td>
+                <td>文件数据源</td>
+                <td>${item.fileType}</td>
+                <td>${item.filePath}</td>
+                <td>
+                    <button type="button" class="btn btn-default"  onclick="editData(${item.dataSourceId});">编辑</button>
+                    <button type="button" class="btn btn-danger"  id="delete"  onclick="deleteD(${item.dataSourceId});">删除</button>
+                </td>
+            </tr>
         </c:forEach>
         </tbody>
     </table>
@@ -89,10 +89,10 @@
                                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                             </div>
                             <div class="form-group">
-                            <label  for="dataSourceName" class="col-sm-3 control-label"><font color='red'>*</font>数据源名称</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" style="width:50%;float: left " id="dataSourceName" name="dataSourceName" placeholder="请输入数据源名称" required aria-required="true">
-                            </div>
+                                <label  for="dataSourceName" class="col-sm-3 control-label"><font color='red'>*</font>数据源名称</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" style="width:50%;float: left " id="dataSourceName" name="dataSourceName" placeholder="请输入数据源名称" required aria-required="true">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label  for="dataSourceName" class="col-sm-3 control-label"><font color='red'>*</font>数据源类型</label>
@@ -122,8 +122,8 @@
                                 </div>
                             </div>--%>
                             <div class="form-group">
-                            <div id="jstree_show" style="height:300px"></div>
-                                </div>
+                                <div id="jstree_show"></div>
+                            </div>
                             <%--<div class="modal-footer">
                                 <input class="btn btn-primary" id="addSubmit" type="submit" value="确定">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -168,14 +168,14 @@
                                 <label class="col-sm-3 control-label"><font color='red'>*</font>文件类型</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" style="width:50%;float: left "
-                                            name="fileType"  value="本地文件" disabled>
+                                           name="fileType"  value="本地文件" disabled>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label  class="col-sm-3 control-label"><font color='red'>*</font>文件地址</label>
                                 <div class="col-sm-9">
-                                        <div id="tags_tagsinput" class="tagsinput" style="border: 1px solid black" ></div>
-                                        <div id="jstree_show_edit" style="height:300px"></div>
+                                    <div id="tags_tagsinput" class="tagsinput" style="border: 1px solid black" ></div>
+                                    <div id="jstree_show_edit"></div>
                                 </div>
                             </div>
                         </fieldset>

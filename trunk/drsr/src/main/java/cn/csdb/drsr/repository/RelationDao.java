@@ -4,17 +4,17 @@ import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.repository.mapper.DataSrcMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 
 /**
  * @program: DataSync
@@ -29,11 +29,11 @@ public class RelationDao{
     @Resource
     private JdbcTemplate jdbcTemplate;
 
-    public int addRelationData(DataSrc DataSrc)
-    {
-        String insertSql = "insert into t_datasource(DataSourceName, DataSourceType, DatabaseName, DatabaseType ,Host, Port, UserName, Password)" +
-                "values (?, ?, ?, ?, ?, ?, ?, ?)";
-        Object[] arg = new Object[] {DataSrc.getDataSourceName(), DataSrc.getDataSourceType(), DataSrc.getDatabaseName(), DataSrc.getDatabaseType(), DataSrc.getHost(), DataSrc.getPort(), DataSrc.getUserName(), DataSrc.getPassword()};
+    public int addRelationData(DataSrc DataSrc) {
+        String insertSql = "insert into t_datasource(DataSourceName, DataSourceType, DatabaseName, DatabaseType ,Host, Port, UserName, Password, createTime, stat)" +
+                "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Object[] arg = new Object[] {DataSrc.getDataSourceName(), DataSrc.getDataSourceType(), DataSrc.getDatabaseName(),
+                DataSrc.getDatabaseType(), DataSrc.getHost(), DataSrc.getPort(), DataSrc.getUserName(), DataSrc.getPassword(),DataSrc.getCreateTime() , "1"};
 
         int addedRowCnt = jdbcTemplate.update(insertSql,arg);
 
@@ -41,7 +41,7 @@ public class RelationDao{
     }
 
     public List<DataSrc> queryRelationData(){
-        String querySql = "select * from t_datasource WHERE DataSourceType = '关系数据源'";
+        String querySql = "select * from t_datasource WHERE DataSourceType = 'db'";
         List<DataSrc>queryData = jdbcTemplate.query(querySql,new DataSrcMapper());
         return queryData;
     }
@@ -54,9 +54,11 @@ public class RelationDao{
                 "Host = ?," +
                 "Port = ?," +
                 "UserName = ?," +
-                "Password = ?" +
+                "Password = ?," +
+                "createTime = ?" +
                 "WHERE DataSourceId = ?";
-        Object[] arg = new Object[] {dataSrc.getDataSourceName(), dataSrc.getDataSourceType(), dataSrc.getDatabaseName(),dataSrc.getDatabaseType(), dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDataSourceId()};
+        Object[] arg = new Object[] {dataSrc.getDataSourceName(), dataSrc.getDataSourceType(), dataSrc.getDatabaseName(),
+                dataSrc.getDatabaseType(), dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getCreateTime(), dataSrc.getDataSourceId()};
         int addedRowCnt = jdbcTemplate.update(updateSql,arg);
         return addedRowCnt;
     }
@@ -80,13 +82,16 @@ public class RelationDao{
         return queryData;
     }
 
-    public Integer queryTotalPage(){
-            int rowsPerPage = 10;
-            String rowSql="select count(*) from t_datasource WHERE DataSourceType = '关系数据源'";
-            int totalRows=(Integer)jdbcTemplate.queryForObject(rowSql, Integer.class);
-            int totalPages = 0;
-            totalPages = totalRows / rowsPerPage + (totalRows % rowsPerPage == 0 ? 0 : 1);
-        return totalPages;
+    public Map queryTotalPage(){
+        int rowsPerPage = 10;
+        String rowSql="select count(*) from t_datasource WHERE DataSourceType = 'db'";
+        int totalRows=(Integer)jdbcTemplate.queryForObject(rowSql, Integer.class);
+        int totalPages = 0;
+        totalPages = totalRows / rowsPerPage + (totalRows % rowsPerPage == 0 ? 0 : 1);
+        Map map = new HashMap();
+        map.put("totalPages",totalPages);
+        map.put("totalRows",totalRows);
+        return map;
     }
 
     public List<DataSrc> queryPage(int pageNumber)
@@ -97,7 +102,7 @@ public class RelationDao{
         }
 
         int rowsPerPage = 10;
-        String rowSql="select count(*) from t_datasource WHERE DataSourceType = '关系数据源'";
+        String rowSql="select count(*) from t_datasource WHERE DataSourceType = 'db'";
         int totalRows=(Integer)jdbcTemplate.queryForObject(rowSql, Integer.class);
         int totalPages = 0;
         totalPages = totalRows / rowsPerPage + (totalRows % rowsPerPage == 0 ? 0 : 1);
@@ -111,7 +116,8 @@ public class RelationDao{
         startRowNum = (pageNumber - 1) * rowsPerPage;
 
         final List<DataSrc> relationDataOfThisPage = new ArrayList<DataSrc>();
-        String querySql = "select * from t_datasource WHERE DataSourceType = '关系数据源' limit " + startRowNum + ", " + rowsPerPage;
+        String querySql = "select * from t_datasource WHERE  DataSourceType = 'db' order by createTime Desc limit " +
+                startRowNum + ", " + rowsPerPage;
         jdbcTemplate.query(querySql, new RowCallbackHandler() {
             @Override
             public void processRow(ResultSet rs) throws SQLException {
@@ -130,6 +136,8 @@ public class RelationDao{
                     dataSrc.setIsValid(rs.getString("IsValid"));
                     dataSrc.setUserName(rs.getString("UserName"));
                     dataSrc.setPassword(rs.getString("Password"));
+                    dataSrc.setCreateTime(rs.getString("createTime"));
+                    dataSrc.setStat(rs.getInt("stat"));
                     relationDataOfThisPage.add(dataSrc);
                 }while(rs.next());
             }
@@ -137,7 +145,7 @@ public class RelationDao{
 
         return relationDataOfThisPage;
     }
-    
+
     public List<DataSrc> findAll() {
         List<DataSrc> dataSrcs = new ArrayList<DataSrc>();
         String sql = "select * from t_datasource where DataSourceType='db'";

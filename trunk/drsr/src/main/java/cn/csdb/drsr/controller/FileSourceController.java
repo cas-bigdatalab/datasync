@@ -2,7 +2,6 @@ package cn.csdb.drsr.controller;
 
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.service.FileResourceService;
-import cn.csdb.drsr.service.RelationShipService;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,9 +12,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by shiba on 2018/10/8.
@@ -42,10 +42,16 @@ public class FileSourceController {
     @ResponseBody
     String add(String dataSourceName, String dataSourceType, String fileType, String[] data) {
         logger.debug("新增功能开始");
+        Date current_date = new Date();
+        //设置日期格式化样式为：yyyy-MM-dd
+        SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        //格式化当前日期
+        String currentTime = SimpleDateFormat.format(current_date.getTime());
         DataSrc datasrc = new DataSrc();
         datasrc.setDataSourceName(dataSourceName);
         datasrc.setDataSourceType(dataSourceType);
         datasrc.setFileType(fileType);
+        datasrc.setCreateTime(currentTime);
         StringBuffer filePath = new StringBuffer("");
         for (String nodeId : data){
             String str = nodeId.replaceAll("%_%","\\\\");
@@ -57,7 +63,7 @@ public class FileSourceController {
 /*
         String flag = fileResourceService.testFileIsExist(filePath.toString());
 */
-            return fileResourceService.addData(datasrc);
+        return fileResourceService.addData(datasrc);
 
     }
 
@@ -67,9 +73,15 @@ public class FileSourceController {
     String edit(String dataSourceId, String dataSourceName, String dataSourceType,
                 String fileType, String[] attr,String[] nodes) {
         logger.debug("编辑功能开始,开始插入");
+        Date current_date = new Date();
+        //设置日期格式化样式为：yyyy-MM-dd
+        SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        //格式化当前日期
+        String currentTime = SimpleDateFormat.format(current_date.getTime());
         DataSrc datasrc = new DataSrc();
         datasrc.setDataSourceName(dataSourceName);
         datasrc.setDataSourceType(dataSourceType);
+        datasrc.setCreateTime(currentTime);
         datasrc.setFileType(fileType);
         if(nodes!=null) {
             String nodePath = "";
@@ -107,20 +119,40 @@ public class FileSourceController {
     @RequestMapping(value = "/index")
     public ModelAndView index(HttpServletRequest request, Integer currentPage) {
         logger.info("进入文件数据源模块列表页");
-        if (currentPage == null) {
+        ModelAndView mv = new ModelAndView("fileResource");
+        return mv;
+       /* if (currentPage == null) {
             currentPage = 1;
         }
         Integer totalPage = fileResourceService.queryTotalPage();
         String totalPageS = String.valueOf(totalPage);
         List<DataSrc> fileDataOfThisPage = fileResourceService.queryPage(currentPage);
         String osName = fileResourceService.testOsName();
-        ModelAndView mv = new ModelAndView("fileSource");
+        ModelAndView mv = new ModelAndView("fileResource");
         mv.addObject("fileDataOfThisPage", fileDataOfThisPage);
         mv.addObject("totalPage", totalPageS);
         mv.addObject("currentPage", currentPage);
         mv.addObject("osName", osName);
-        return mv;
+        return mv;*/
     }
+
+    @RequestMapping(value = "/indexPages")
+    public
+    @ResponseBody
+    JSONObject indexPages(Integer num){
+        if(num==null){
+            num = 1;
+        }
+        Map map = fileResourceService.queryTotalPage();
+        List<DataSrc> fileDataOfThisPage = fileResourceService.queryPage(num);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("fileDataOfThisPage", fileDataOfThisPage);
+        jsonObject.put("totalPage", map.get("totalPages"));
+        jsonObject.put("totalNum", map.get("totalRows"));
+        jsonObject.put("currentPage", num);
+        return jsonObject;
+    }
+
 
     @RequestMapping("/resCatalogTest")
     public
@@ -131,7 +163,7 @@ public class FileSourceController {
         return jsonObjects;
     }
 
-    @RequestMapping("/fileSourceabc")
+    /*@RequestMapping("/fileSourceabc")
     public
     @ResponseBody
     String fileSource(String[] data){
@@ -141,7 +173,7 @@ public class FileSourceController {
             fileResourceService.traversingFiles(str);
         }
         return "success";
-    }
+    }*/
 
 
     /**

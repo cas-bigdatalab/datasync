@@ -94,7 +94,7 @@ public class FileResourceService {
         return fileResourceDao.editQueryData(id);
     }
 
-    public Integer queryTotalPage() {
+    public Map queryTotalPage() {
         return fileResourceDao.queryTotalPage();
     }
 
@@ -143,7 +143,7 @@ public class FileResourceService {
             jsonObjects.add(jsonObject);
             //初始化D盘
             JSONObject jsonObjectD = new JSONObject();
-            jsonObjectD.put("id", "D:\\");/*D:\*/
+            jsonObjectD.put("id", "D:\\".replaceAll("\\\\", "%_%"));/*D:\*/
             jsonObjectD.put("name", "D:");
             jsonObjectD.put("type", "directory");
             jsonObjectD.put("children", true);

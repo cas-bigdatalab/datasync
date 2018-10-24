@@ -12,10 +12,7 @@ import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @program: DataSync
@@ -32,9 +29,10 @@ public class FileResourceDao {
 
     public int addRelationData(DataSrc DataSrc)
     {
-        String insertSql = "insert into t_datasource(DataSourceName, DataSourceType, FileType, FilePath)" +
-                "values (?, ?, ?, ?)";
-        Object[] arg = new Object[] {DataSrc.getDataSourceName(), DataSrc.getDataSourceType(), DataSrc.getFileType() ,DataSrc.getFilePath()};
+        String insertSql = "insert into t_datasource(DataSourceName, DataSourceType, FileType, FilePath, createTime, stat)" +
+                "values (?, ?, ?, ?, ?, ?)";
+        Object[] arg = new Object[] {DataSrc.getDataSourceName(), DataSrc.getDataSourceType(), DataSrc.getFileType() ,DataSrc.getFilePath(),
+        DataSrc.getCreateTime(), "1"};
 
         int addedRowCnt = jdbcTemplate.update(insertSql,arg);
 
@@ -51,10 +49,11 @@ public class FileResourceDao {
         String updateSql = "UPDATE t_datasource set DataSourceName = ?," +
                 "DataSourceType = ?," +
                 "FileType = ?," +
-                "FilePath = ?" +
-                "WHERE DataSourceId = ?";
+                "FilePath = ?," +
+                "createTime = ?" +
+                "WHERE DatcreateTimeSourceId = ?";
         Object[] arg = new Object[] {dataSrc.getDataSourceName(), dataSrc.getDataSourceType(), dataSrc.getFileType(),
-                dataSrc.getFilePath(), dataSrc.getDataSourceId()};
+                dataSrc.getFilePath(), dataSrc.getCreateTime(), dataSrc.getDataSourceId()};
         int addedRowCnt = jdbcTemplate.update(updateSql,arg);
         return addedRowCnt;
     }
@@ -78,13 +77,16 @@ public class FileResourceDao {
         return queryData;
     }
 
-    public Integer queryTotalPage(){
-            int rowsPerPage = 10;
-            String rowSql="select count(*) from t_datasource WHERE DataSourceType = '文件数据源'";
-            int totalRows=(Integer)jdbcTemplate.queryForObject(rowSql, Integer.class);
-            int totalPages = 0;
-            totalPages = totalRows / rowsPerPage + (totalRows % rowsPerPage == 0 ? 0 : 1);
-        return totalPages;
+    public Map queryTotalPage(){
+        int rowsPerPage = 10;
+        String rowSql="select count(*) from t_datasource WHERE DataSourceType = 'file'";
+        int totalRows=(Integer)jdbcTemplate.queryForObject(rowSql, Integer.class);
+        int totalPages = 0;
+        totalPages = totalRows / rowsPerPage + (totalRows % rowsPerPage == 0 ? 0 : 1);
+        Map map = new HashMap();
+        map.put("totalPages",totalPages);
+        map.put("totalRows",totalRows);
+        return map;
     }
 
     public List<DataSrc> queryPage(int pageNumber)
@@ -95,7 +97,7 @@ public class FileResourceDao {
         }
 
         int rowsPerPage = 10;
-        String rowSql="select count(*) from t_datasource WHERE  DataSourceType = '文件数据源'";
+        String rowSql="select count(*) from t_datasource WHERE  DataSourceType = 'file'";
         int totalRows=(Integer)jdbcTemplate.queryForObject(rowSql, Integer.class);
         int totalPages = 0;
         totalPages = totalRows / rowsPerPage + (totalRows % rowsPerPage == 0 ? 0 : 1);
@@ -109,7 +111,7 @@ public class FileResourceDao {
         startRowNum = (pageNumber - 1) * rowsPerPage;
 
         final List<DataSrc> fileDataOfThisPage = new ArrayList<DataSrc>();
-        String querySql = "select * from t_datasource WHERE  DataSourceType = '文件数据源' limit " +
+        String querySql = "select * from t_datasource WHERE  DataSourceType = 'file' order by createTime Desc limit " +
                 startRowNum + ", " + rowsPerPage;
         jdbcTemplate.query(querySql, new RowCallbackHandler() {
             @Override
@@ -129,6 +131,8 @@ public class FileResourceDao {
                     dataSrc.setIsValid(rs.getString("IsValid"));
                     dataSrc.setUserName(rs.getString("UserName"));
                     dataSrc.setPassword(rs.getString("Password"));
+                    dataSrc.setCreateTime(rs.getString("createTime"));
+                    dataSrc.setStat(rs.getInt("stat"));
                     fileDataOfThisPage.add(dataSrc);
                 }while(rs.next());
             }
