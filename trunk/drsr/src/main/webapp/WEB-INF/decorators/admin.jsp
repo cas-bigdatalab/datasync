@@ -321,7 +321,6 @@
         "hideMethod": "fadeOut"
     };
     bootbox.setLocale("zh_CN");
-
 </script>
 <!-- END JAVASCRIPTS -->
 <sitemesh:write property="div.siteMeshJavaScript"/>
