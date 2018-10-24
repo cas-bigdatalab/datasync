@@ -1,6 +1,7 @@
 package cn.csdb.portal.service;
 
 import cn.csdb.portal.repository.ResourceDao;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * @author: xiajl
  * @create: 2018-10-23 16:19
  **/
-@Resource
+@Service
 public class ResourceService {
 
     @Resource
