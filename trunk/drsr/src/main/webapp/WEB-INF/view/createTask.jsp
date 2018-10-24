@@ -86,14 +86,14 @@
                             </div>
                         </div>
                     </div>
-                    <div >
+                    <div id="totalList">
                         <div class="col-md-12" style="margin-bottom: 10px" >
                             <div class="col-md-2" style="text-align: right">sql查询</div>
                             <div class="col-md-5">
                                 <input type="text" class="form-control sqlStatements" >
                             </div>
-                            <div class="col-md-1">
-                                <button type="button" class="btn blue ">预览</button>
+                            <div class="col-md-2">
+                                <button type="button" class="btn blue preview">编辑预览</button>
                             </div>
                             <div class="col-md-2" style="text-align: left">
                                 <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>sql查询</button>
@@ -121,6 +121,59 @@
                 <div class="right" id="editRegon">
 
                 </div>
+            </div>
+        </div>
+    </div>
+    <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
+        <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                            id="editTableFieldComsCloseId"></button>
+                    <h4 class="modal-title" id="relationalDatabaseModalTitle">编辑表字段注释</h4>
+                </div>
+                <%--<div class="form">--%>
+                <%--<form class="form-horizontal" role="form" action="addRelationalDatabase" method="post"--%>
+                <%--accept-charset="utf-8" id="relationalDatabaseForm">--%>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <div class="portlet box green-haze" style="border:0;">
+                                <div class="portlet-title">
+                                    <ul class="nav nav-tabs" style="float:left;">
+                                        <li class="active">
+                                            <a href="#editTableFieldComsId" data-toggle="tab"
+                                               id="editTableDataAndComsButtonId" aria-expanded="true">
+                                                编辑 </a>
+                                        </li>
+                                        <li class="">
+                                            <a href="#previewTableDataAndComsId" id="previewTableDataAndComsButtonId"
+                                               data-toggle="tab" aria-expanded="false">
+                                                预览 </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="tab-content"
+                                     style="background-color: white;min-height:300px;max-height:70%;padding-top: 20px ; overflow: scroll;">
+                                    <div class="tab-pane active" id="editTableFieldComsId">
+                                    </div>
+                                    <div class="tab-pane" id="previewTableDataAndComsId">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="editTableFieldComsSaveId" data-dismiss="modal" class="btn green">保存
+                    </button>
+                    <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
+                </div>
+                <%--</form>--%>
+                <%--</div>--%>
             </div>
         </div>
     </div>
@@ -155,8 +208,8 @@
         <div class="col-md-5">
             <input type="text" class="form-control sqlStatements" >
         </div>
-        <div class="col-md-1">
-            <button type="button" class="btn blue ">预览</button>
+        <div class="col-md-2">
+            <button type="button" class="btn blue preview">编辑预览</button>
         </div>
         <div class="col-md-2" style="text-align: left">
             <button type="button" class="btn red removeSql"><span class="glyphicon glyphicon-trash"></span>删除</button>
@@ -169,6 +222,12 @@
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.min.js"></script>
 
     <script>
+        var dataRelSrcId;
+        var dataRelTableList;
+        var dataRelSqlList;
+        var dataFileSrcId;
+        var dataFilePathList;
+        var curSQLStrIndex = 0;
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
                 $(".select-database").show();
@@ -187,7 +246,8 @@
             }
         })
         $("#DBchange").on("change",function () {
-            var id = $("select option:selected").attr("id")
+            var id = $("select option:selected").attr("id");
+            dataRelSrcId =id;
             var name = $(this).val();
             if(name == ""){
                 $(".database-con").hide();
@@ -217,8 +277,116 @@
 
         })
         $("#sqlList").delegate(".removeSql","click",function () {
-            alert($(".removeSql").index($(this)))
+            $(this).parent().parent().remove();
         })
+        $("#totalList").delegate(".preview","click",function () {
+            var $Str =$(this).parent().parent().find(".sqlStatements").val();
+            console.log($Str)
+            staticSourceTableChoice(2, null, dataRelSrcId, $Str, "dataResource");
+
+           /* $.ajax({
+                url:"${ctx}/relationship/previewRelationalDatabaseBySQL",
+                type:"POST",
+                data:{
+                    dataSourceId:dataRelSrcId,
+                    sqlStr:$Str
+                },
+                success:function (data) {
+                    console.log(data);
+                },
+                error:function () {
+                    console.log("请求失败")
+                }
+            })*/
+        })
+        function staticSourceTableChoice(editIsChoiceTableOrSql, obj, dataSourceId, tableNameOrSql, refer) {
+            if (refer == "dataService" || !obj || obj.checked) {
+                $('#editTableFieldComsId').html("");
+                $('#previewTableDataAndComsId').html("");
+
+                $('#editTableDataAndComsButtonId').parent().removeClass("active");
+                $('#previewTableDataAndComsButtonId').parent().removeClass("active");
+
+                $('#editTableFieldComsId').removeClass("active");
+                $('#previewTableDataAndComsId').removeClass("active");
+
+                $('#editTableDataAndComsButtonId').parent().addClass("active");
+                $('#editTableFieldComsId').addClass("active");
+                var tableInfosList = null;
+                if (editIsChoiceTableOrSql == 1) {
+                    var tableInfos = getTableFieldComs(dataSourceId, tableNameOrSql);
+                    tableInfosList = [];
+                    tableInfosList[0] = {tableName: tableNameOrSql, tableInfos: tableInfos};
+                } else if (editIsChoiceTableOrSql == 2) {
+                    var tableInfosMap = getSqlFieldComs(dataSourceId, tableNameOrSql);
+                    var i = 0;
+                    tableInfosList = [];
+                    for (var key in tableInfosMap) {
+                        tableInfosList [i++] = {tableName: key, tableInfos: tableInfosMap[key]};
+                    }
+                }
+                if (!tableInfosList || tableInfosList.length == 0) {
+                    if (editIsChoiceTableOrSql == 2) {
+                        toastr["warning"]("提示！", "请先检查填写sql语句");
+                    }
+                    return;
+                }
+                $("#staticSourceTableChoiceModal").modal("show");
+                var html = template("editTableFieldComsTmpl", {"tableInfosList": tableInfosList});
+                $('#editTableFieldComsId').html(html);
+                curSourceTableChoice = obj;
+                curDataSourceId = dataSourceId;
+                curEditIsChoiceTableOrSql = editIsChoiceTableOrSql;
+                curRefer = refer;
+                if (editIsChoiceTableOrSql == 1) {
+                    curTableName = tableNameOrSql;
+                } else if (editIsChoiceTableOrSql == 2) {
+                    curSQL = tableNameOrSql;
+                }
+                preSaveEditTableFieldComs();// 页面与保存coms信息
+            } else {
+                $(obj).removeAttr("coms");
+            }
+            $("#form_wizard_1").find(".button-save").removeAttr("disabled");
+
+        }
+        function getTableFieldComs(dataSourceId, tableName) {
+            var dataResult = null;
+            $.ajax({
+                type: "GET",
+                url: '${ctx}/getTableFieldComs',
+                data: {"dataSourceId": dataSourceId, "tableName": tableName, "timestamp": Date.parse(new Date())},
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    if (!data || !data.tableInfos) {
+                        return;
+                    }
+                    dataResult = data.tableInfos;
+                }
+            });
+            return dataResult;
+        }
+        function getSqlFieldComs(dataSourceId, sqlStr) {
+            var dataResult = null;
+            $.ajax({
+                type: "GET",
+                url: '${ctx}/relationship/previewRelationalDatabaseBySQL',
+                data: {"dataSourceId": dataSourceId, "sqlStr": sqlStr},
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    console.log(data)
+                    if (!data || !data.tableInfos) {
+                        return;
+                    }
+                    dataResult = data.tableInfos;
+                }
+            });
+            return dataResult;
+        }
+
+
 
         function addSql() {
             var tabCon = template("addSql");
@@ -237,14 +405,22 @@
             $eleChecked.each(function () {
                 list.push($(this).val())
             });
-            console.log(list.toString())
+            var $sqlList= new Array();
+            $(".sqlStatements").each(function () {
+                $sqlList.push($(this).val())
+            })
+
+            dataRelTableList= list.toString()
+            dataRelSqlList =$sqlList.toString()
+            console.log(dataRelSqlList)
+
             $.ajax({
-                url:"",
+                url:"${ctx}/relationship/saveDatatask",
                 type:"POST",
                 data:{
                     souceName:$(".dataHead2").html(),
-                    souceCheck:list.toString(),
-                    sqlStatements:$("#sqlStatements").val()
+                    souceCheck:dataRelTableList,
+                    sqlStatements:dataRelSqlList
                 },
                 success:function (data) {
 
@@ -279,7 +455,7 @@
 
 
 
-        var treeData = {
+       /* var treeData = {
             'core' : {
                 "animation": 0,
                 "check_callback":false,
@@ -372,7 +548,7 @@
             });
             $("#editRegon").empty();
             var url = this.id == "upload-directory"? "upload-directory":"upload-file";
-            /*$.ajax({
+            /!*$.ajax({
                 url: ctx + url,
                 type: "get",
                 dataType: "json",
@@ -381,7 +557,7 @@
                     jsdata =data
                     $('#jstree_show').jstree(data);
                 }
-            })*/
+            })*!/
         })
 
         function editTree() {
@@ -445,18 +621,18 @@
         }
         function jstree_delete() {
 
-            /* var ref = $('#jstree_edit').jstree(true);
+            /!* var ref = $('#jstree_edit').jstree(true);
              sel = ref.get_selected();
              if (!sel.length) {
                  return false;
-             }*/
-            /*ref.delete_node(sel);
+             }*!/
+            /!*ref.delete_node(sel);
             if(sel[0].indexOf("_")<0){
                 deleteNodeArray.push(sel[0]);
-            }*/
-            /*$("#deleteContent").attr("nodeid",sel[0]);*/
+            }*!/
+            /!*$("#deleteContent").attr("nodeid",sel[0]);*!/
             $("#deleteNodeModal").modal('show');
-            /*$("#deleteContent").html('<div align="center">确认删除'+ref.get_node(sel).text+'节点？</div>')*/
+            /!*$("#deleteContent").html('<div align="center">确认删除'+ref.get_node(sel).text+'节点？</div>')*!/
             $("#deleteContent").html('<div align="center">确认删除节点？</div>')
         };
         function confirmDeleteNode(){
@@ -500,7 +676,7 @@
                 }
             })
         }
-
+*/
 
 
         $(function () {
