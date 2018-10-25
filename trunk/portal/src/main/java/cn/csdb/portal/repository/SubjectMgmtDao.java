@@ -166,7 +166,7 @@ public class SubjectMgmtDao {
      * @author zzl
      * @date 2018/10/23
      */
-    public int deleteSubject(int id) {
+    public int deleteSubject(String id) {
         logger.info("subject id to be deleted : " + id);
 
         //delete db and ftp info
@@ -331,7 +331,7 @@ public class SubjectMgmtDao {
         Query query = new BasicQuery(dbObject).skip(startRowNum).limit(rowsPerPage);
         List<Subject> subjectsOfThisPage = mongoTemplate.find(query, Subject.class);
         logger.info(subjectsOfThisPage);
-        
+
         return subjectsOfThisPage;
     }
 
@@ -360,37 +360,14 @@ public class SubjectMgmtDao {
      * @author zzl
      * @date 2018/10/23
      */
-    public Subject findSubjectById(int id) {
-        final Subject subject = new Subject();
-        String querySql = "select * from Subject where id = " + id;
+    public Subject findSubjectById(String id) {
 
-        try {
-            jdbcTemplate.query(querySql, new RowCallbackHandler() {
-                @Override
-                public void processRow(ResultSet resultSet) throws SQLException {
-                    subject.setId(resultSet.getString("ID"));
-                    subject.setSubjectName(resultSet.getString("SubjectName"));
-                    subject.setSubjectCode(resultSet.getString("SubjectCode"));
-                    subject.setBrief(resultSet.getString("Brief"));
-                    subject.setAdmin(resultSet.getString("Admin"));
-                    subject.setAdminPasswd(resultSet.getString("AdminPasswd"));
-                    subject.setContact(resultSet.getString("Contact"));
-                    subject.setPhone(resultSet.getString("Phone"));
-                    subject.setEmail(resultSet.getString("Email"));
-                    subject.setFtpUser(resultSet.getString("FtpUser"));
-                    subject.setFtpPassword(resultSet.getString("FtpPassword"));
-                    subject.setSerialNo(resultSet.getString("SerialNo"));
-                    subject.setFtpFilePath(resultSet.getString("FtpPath"));
-                    subject.setDbName(resultSet.getString("DbName"));
+        DBObject dbObject = QueryBuilder.start().and("id").is(id).get();
+        Query query = new BasicQuery(dbObject);
+        List<Subject> subjects = mongoTemplate.find(query, Subject.class);
+        logger.info(subjects);
 
-                    System.out.println("findSubjectById - " + subject);
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return subject;
+        return subjects.get(0);
     }
 
     /**

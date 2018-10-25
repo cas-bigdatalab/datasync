@@ -109,7 +109,7 @@ public class SubjectMgmtController {
      * @date 2018/10/23
      */
     @RequestMapping(value = "/deleteSubject")
-    public String deleteSubject(HttpServletRequest request, @RequestParam(required = true) int id, @RequestParam(required = true) int currentPage) {
+    public String deleteSubject(HttpServletRequest request, @RequestParam(required = true) String id, @RequestParam(required = true) int currentPage) {
         logger.info("SubjectMgmtController-deleteSubject, id = " + id + ", currentPage = " + currentPage);
 
         String deleteSubjectNotice = subjectService.deleteSubject(id);
@@ -161,7 +161,7 @@ public class SubjectMgmtController {
 
         String imagePath = "";
 
-        Subject tmpSubject = subjectService.findSubjectById(Integer.parseInt(subject.getId()));
+        Subject tmpSubject = subjectService.findSubjectById(subject.getId());
         if ((image != null) && (image.getOriginalFilename() != "")) {
             deleteImage(tmpSubject.getImagePath());
             imagePath = saveImage(image);
@@ -228,7 +228,7 @@ public class SubjectMgmtController {
      */
     @RequestMapping(value = "/querySubjectById")
     @ResponseBody
-    public JSONObject querySubjectById(HttpServletRequest request, @RequestParam(required = true) int id) {
+    public JSONObject querySubjectById(HttpServletRequest request, @RequestParam(required = true) String id) {
         logger.info("enterring SubjectMgmtController-querySubjectById");
         logger.info("id = " + id);
         Subject subject = subjectService.findSubjectById(id);

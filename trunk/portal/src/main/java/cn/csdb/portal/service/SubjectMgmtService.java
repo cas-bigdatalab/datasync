@@ -53,7 +53,7 @@ public class SubjectMgmtService {
      * @date 2018/10/23
      */
     @Transactional
-    public String deleteSubject(int id)
+    public String deleteSubject(String id)
     {
         String deleteSubjectNotice = "";
         int deletedRowCnt = subjectMgmtDao.deleteSubject(id);
@@ -127,7 +127,7 @@ public class SubjectMgmtService {
      * @author zzl
      * @date 2018/10/23
      */
-    public Subject findSubjectById(int id)
+    public Subject findSubjectById(String id)
     {
         return subjectMgmtDao.findSubjectById(id);
     }

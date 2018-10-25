@@ -71,7 +71,7 @@
                         <td>${subject.ftpUser}</td>
                         <td>${subject.ftpPassword}</td>
                         <td id="${subject.id}">
-                            <a title="修改" class="updateSubjectBtn" data-target="#modifySubjectDialog" data-toggle="modal">
+                            <a title="修改" class="updateSubjectBtn" data-target="#updateSubjectDialog" data-toggle="modal">
                                 <span class="glyphicon glyphicon-pencil"></span>
                             </a>
                             &nbsp;&nbsp;
@@ -262,12 +262,12 @@
         </div>
     </div>
 
-    <div id="modifySubjectDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
+    <div id="updateSubjectDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button>
-                    <h4 id="titleForModifySubjectDialog" class="modal-title" >添加专题库</h4>
+                    <h4 id="titleForModifySubjectDialog" class="modal-title" >修改专题库</h4>
                 </div>
 
                 <form id="modifySubjectForm" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" accept-charset="utf-8"  action="${ctx}/subjectMgmt/addSubject">
@@ -365,25 +365,6 @@
                                         <input type="text" class="form-control" placeholder="请输入联系人Email" id="emailM" name="email"/>
                                     </div>
                                 </div>
-
-                                <%--<div class="form-group">
-                                    <label class="col-md-3 control-label">
-                                        FTP账号<span style="color: red;">*</span>
-                                    </label>
-                                    <div class="col-md-9">
-                                        <input type="text" class="form-control" placeholder="请输入FTP账号" id="ftpUserM" name="ftpUser"  required="required" />
-                                    </div>
-                                </div>
-
-
-                                <div class="form-group">
-                                    <label class="col-md-3 control-label">
-                                        FTP密码<span style="color: red;">*</span>
-                                    </label>
-                                    <div class="col-md-9">
-                                        <input type="text" class="form-control" placeholder="请输入FTP密码" id="ftpPasswordM" name="ftpPassword" required="required" />
-                                    </div>
-                                </div>--%>
 
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">
