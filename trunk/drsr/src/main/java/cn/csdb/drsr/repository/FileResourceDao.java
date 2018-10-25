@@ -51,7 +51,7 @@ public class FileResourceDao {
                 "FileType = ?," +
                 "FilePath = ?," +
                 "createTime = ?" +
-                "WHERE DatcreateTimeSourceId = ?";
+                "WHERE DataSourceId = ?";
         Object[] arg = new Object[] {dataSrc.getDataSourceName(), dataSrc.getDataSourceType(), dataSrc.getFileType(),
                 dataSrc.getFilePath(), dataSrc.getCreateTime(), dataSrc.getDataSourceId()};
         int addedRowCnt = jdbcTemplate.update(updateSql,arg);
