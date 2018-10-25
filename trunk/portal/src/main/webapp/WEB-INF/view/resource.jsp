@@ -15,12 +15,12 @@
 <head>
     <title>DataSync专题库门户管理系统</title>
     <link href="${ctx}/resources/bundles/rateit/src/rateit.css" rel="stylesheet" type="text/css">
-    <link href="${ctx}/resources/css/custom.css" rel="stylesheet" type="text/css">
+    <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
 
-<div class="page-content" style="min-height: 700px;">
+<div class="page-content" style="min-height: 650px;">
     <h3><b>资源列表页面</b></h3>
 
     <div class="row">
@@ -34,10 +34,15 @@
                     <input type="text" id="title" class="input-medium search-text">
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <label class="control-label">资源类型:</label>
-                    <input type="text" id="publicType" class="input-medium search-text">
+                    <%--<input type="text" id="publicType" class="input-small search-text">--%>
+                    <select name="publicType" id="publicType" class="input-small search-text">
+                        <option value="" selected="selected">全部</option>
+                        <option value="关系数据库">关系数据库</option>
+                        <option value="文件">文件</option>
+                    </select>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <label class="control-label">状态:</label>
-                    <input type="text" id="status" class="input-medium search-text">
+                    <input type="text" id="status" class="input-small search-text">
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <button id="btnSearch" name="btnSearch" onclick="search();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查询</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -64,7 +69,7 @@
             </table>
         </div>
         <div class="row margin-top-20">
-            <div class="col-md-6 margin-top-20">
+            <div class="col-md-6 margin-top-10">
                 当前第<span style="color:blue;" id="currentPageNo"></span>页,共<span style="color:blue;" id="totalPages"></span>页,<span style="color:blue;" id="totalCount"></span>条数据
             </div>
             <div class="col-md-6">
@@ -83,7 +88,7 @@
         </td>
         <td style="text-align: center">{{$value.publicType}}</td>
         <td style="text-align: center">{{dateFormat($value.creationDate)}}</td>
-        <td style="text-align: center">{{$value.regorg}}</td>
+        <td style="text-align: center">{{$value.status}}</td>
         <td id="{{$value.id}}" style="text-align: center">
             <%--<button class="btn default btn-xs green-stripe" onclick="viewData()">查看</button>&nbsp;&nbsp;--%>
             <button class="btn default btn-xs purple updateButton" onclick="editData('{{$value.id}}')"><i class="fa fa-edit"></i>&nbsp;&nbsp;修改</button>&nbsp;&nbsp;
@@ -100,6 +105,7 @@
     <script src="${ctx}/resources/bundles/rateit/src/jquery.rateit.js" type="text/javascript"></script>
     <script src="${ctx}/resources/bundles/artTemplate/template.js"></script>
     <script src="${ctx}/resources/js/subStrLength.js"></script>
+    <script src="${ctx}/resources/js/regex.js"></script>
     <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
     <script type="text/javascript">
@@ -183,6 +189,30 @@
             });
         }
 
+
+        function deleteData(id) {
+            bootbox.confirm("确定要删除此条记录吗？", function (r) {
+                if (r) {
+                    $.ajax({
+                        url: ctx + "/resource/delete/" + id,
+                        type: "post",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.result == 'ok') {
+                                toastr["success"]("删除成功！", "数据删除");
+                                getData(currentPageNo);
+                            }
+                            else {
+                                toastr["error"]("删除失败！", "数据删除");
+                            }
+                        },
+                        error: function () {
+                            toastr["error"]("删除失败！", "数据删除");
+                        }
+                    });
+                }
+            });
+        }
     </script>
 </div>
 

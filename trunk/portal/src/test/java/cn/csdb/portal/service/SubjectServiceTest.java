@@ -34,4 +34,21 @@ public class SubjectServiceTest {
         Subject subject = subjectDao.findBySubjectCode(subjectCode);
         logger.info("\n\n"+ subject.getSubjectName() + ":" + subject.getBrief());
     }
+
+    /**
+     * Function Description: 
+     *
+     * @param:  测试保存subject对像
+     * @return: 
+     * @auther: Administrator
+     * @date:   2018/10/25 16:27
+     */
+    
+    @Test
+    public void save(){
+        Subject subject = new Subject();
+        subject.setSubjectName("bbbxxx");
+        subject.setSubjectCode("AB002");
+        subjectDao.save(subject);
+    }
 }

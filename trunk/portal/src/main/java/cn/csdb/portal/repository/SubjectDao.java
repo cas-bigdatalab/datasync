@@ -39,4 +39,9 @@ public class SubjectDao {
             return list.get(0);
         }
     }
+
+
+    public void save(Subject subject){
+        mongoTemplate.save(subject);
+    }
 }

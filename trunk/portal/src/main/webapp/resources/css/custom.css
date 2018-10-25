@@ -154,7 +154,6 @@
 .green.btn {
     color: white;
     background-color: #35aa47;
-    border-color: "";
 }
 
 .green.btn:hover, .green.btn:focus, .green.btn:active, .green.btn.active {
@@ -188,3 +187,100 @@
     color: #35aa47;
     background-color: white;
 }
+
+/***********
+Purple Colors
+************/
+/***
+Purple Default
+***/
+/* Button */
+.purple.btn {
+    color: white;
+    background-color: #8e44ad;
+}
+
+.purple.btn:hover, .purple.btn:focus, .purple.btn:active, .purple.btn.active {
+    color: white;
+    background-color: #793a93;
+}
+
+.open .purple.btn.dropdown-toggle {
+    color: white;
+    background-color: #793a93;
+}
+
+.purple.btn:active, .purple.btn.active {
+    background-image: none;
+    background-color: #6a3381;
+}
+
+.purple.btn:active:hover, .purple.btn.active:hover {
+    background-color: #703688;
+}
+
+.open .purple.btn.dropdown-toggle {
+    background-image: none;
+}
+
+.purple.btn.disabled, .purple.btn.disabled:hover, .purple.btn.disabled:focus, .purple.btn.disabled:active, .purple.btn.disabled.active, .purple.btn[disabled], .purple.btn[disabled]:hover, .purple.btn[disabled]:focus, .purple.btn[disabled]:active, .purple.btn[disabled].active, fieldset[disabled] .purple.btn, fieldset[disabled] .purple.btn:hover, fieldset[disabled] .purple.btn:focus, fieldset[disabled] .purple.btn:active, fieldset[disabled] .purple.btn.active {
+    background-color: #8e44ad;
+}
+
+.purple.btn .badge {
+    color: #8e44ad;
+    background-color: white;
+}
+
+/* Button Strip */
+.btn.purple-stripe {
+    border-left: 3px solid #8e44ad;
+}
+
+
+/***
+Red Default
+***/
+/* Button */
+.red.btn {
+    color: white;
+    background-color: #d84a38;
+}
+
+.red.btn:hover, .red.btn:focus, .red.btn:active, .red.btn.active {
+    color: white;
+    background-color: #c63927;
+}
+
+.open .red.btn.dropdown-toggle {
+    color: white;
+    background-color: #c63927;
+}
+
+.red.btn:active, .red.btn.active {
+    background-image: none;
+    background-color: #b03223;
+}
+
+.red.btn:active:hover, .red.btn.active:hover {
+    background-color: #b93524;
+}
+
+.open .red.btn.dropdown-toggle {
+    background-image: none;
+}
+
+.red.btn.disabled, .red.btn.disabled:hover, .red.btn.disabled:focus, .red.btn.disabled:active, .red.btn.disabled.active, .red.btn[disabled], .red.btn[disabled]:hover, .red.btn[disabled]:focus, .red.btn[disabled]:active, .red.btn[disabled].active, fieldset[disabled] .red.btn, fieldset[disabled] .red.btn:hover, fieldset[disabled] .red.btn:focus, fieldset[disabled] .red.btn:active, fieldset[disabled] .red.btn.active {
+    background-color: #d84a38;
+}
+
+.red.btn .badge {
+    color: #d84a38;
+    background-color: white;
+}
+
+/* Button Strip */
+.btn.red-stripe {
+    border-left: 3px solid #d84a38;
+}
+

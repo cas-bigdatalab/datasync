@@ -22,17 +22,18 @@
     <link href="${ctx}/resources/bundles/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/bootstrapv3.3/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/metronic/global/css/components.css" rel="stylesheet" type="text/css"/>
 
     <!--BEGIN PAGE STYLES-->
     <sitemesh:write property="head"/>
     <!--END PAGE STYLES-->
 
     <!-- BEGIN THEME STYLES -->
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/style.css">
+    <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/style.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/pages/css/style-shop.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/style-responsive.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/themes/blue.css">
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/custom.css">--%>
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/style.css">
     <!-- END THEME STYLES -->
 
@@ -76,7 +77,7 @@
     </div>
 </div>
 
-<div class="foot_div">2018-2020 &copy; 中国科学院计算机网络信息中心大数据部.版权所有.</div>
+<div class="foot_div">2018-2020 &copy; 中国科学院计算机网络信息中心.版权所有.</div>
 
 
 <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
