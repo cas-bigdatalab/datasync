@@ -102,7 +102,7 @@ public class FileResourceService {
         return fileResourceDao.queryPage(requestedPage);
     }
 
-    public String testFileIsExist(String filePath) {
+    /*public String testFileIsExist(String filePath) {
         File rfile = new File(filePath);
         if (!rfile.exists()) {
 
@@ -125,43 +125,43 @@ public class FileResourceService {
             return "windows";
 
         }
-    }
+    }*/
 
     public List<JSONObject> fileTreeLoading(String data) {
         File file;
         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
         if ("#".equals(data)) {
-            //初始化C盘
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", "C:\\".replaceAll("\\\\", "%_%"));/*C:\*/
-            jsonObject.put("name", "C:");
-            jsonObject.put("type", "directory");
-            jsonObject.put("children", true);
-            JSONObject jo = new JSONObject();
-            jo.put("disabled", "true");
-            jsonObject.put("state", jo);
-            jsonObjects.add(jsonObject);
-            //初始化D盘
-            JSONObject jsonObjectD = new JSONObject();
-            jsonObjectD.put("id", "D:\\".replaceAll("\\\\", "%_%"));/*D:\*/
-            jsonObjectD.put("name", "D:");
-            jsonObjectD.put("type", "directory");
-            jsonObjectD.put("children", true);
-            JSONObject joD = new JSONObject();
-            joD.put("disabled", "true");
-            jsonObjectD.put("state", joD);
-            jsonObjects.add(jsonObjectD);
-            //初始化E盘
-            JSONObject jsonObjectE = new JSONObject();
-            jsonObjectE.put("id", "E:\\".replaceAll("\\\\", "%_%"));/*E:\*/
-            jsonObjectE.put("name", "E:");
-            jsonObjectE.put("type", "directory");
-            jsonObjectE.put("children", true);
-            JSONObject joE = new JSONObject();
-            joE.put("disabled", "true");
-            jsonObjectD.put("state", joE);
-            jsonObjects.add(jsonObjectE);
-
+            //获取服务器盘符
+            File[] roots = File.listRoots();
+            for (int i =0; i < roots.length; i++) {
+                String root = roots[i].toString();
+                String rootName= root.substring(0, root.indexOf("\\"));
+                JSONObject jsonObject = new JSONObject();
+                if (roots[i].isDirectory()) {
+                    File file1 = roots[i];
+                    File[] rootNode = file1.listFiles();
+                    if (rootNode != null) {
+                        if (rootNode.length == 0) {
+                            jsonObject.put("children", false);
+                        } else {
+                            jsonObject.put("children", true);
+                        }
+                    } else {
+                        jsonObject.put("children", false);
+                    }
+                    jsonObject.put("type", "directory");
+                    JSONObject jo = new JSONObject();
+                    jo.put("disabled", "true");
+                    jsonObject.put("state", jo);
+                    jsonObject.put("id", root.replaceAll("\\\\", "%_%"));
+                    jsonObject.put("name", rootName);
+                } else {
+                    jsonObject.put("type", "file");
+                    jsonObject.put("id", root.replaceAll("\\\\", "%_%"));
+                    jsonObject.put("name", rootName);
+                }
+                jsonObjects.add(jsonObject);
+            }
             return jsonObjects;
         } else {
             file = new File(data);
@@ -213,9 +213,6 @@ public class FileResourceService {
                 if (fileNode.length == 0) {
                     String str1 = file.getPath() + ";";
                     Sb.append(str1);
-/*
-                    System.out.println(file.getPath().replaceAll("\\\\", "%_%")+"文件夹已入库");
-*/
                 } else {
                     for (int i = 0; i < fileNode.length; i++) {
                         Sb.append(traversingFiles(fileNode[i].getPath()));
@@ -224,35 +221,15 @@ public class FileResourceService {
             } else {
                 String str2 = file.getPath() + ";";
                 Sb.append(str2);
-/*
-                System.out.println(file.getPath().replaceAll("\\\\", "%_%")+"文件夹已入库");
-*/
             }
         } else {
             String str3 = file.getPath() + ";";
             Sb.append(str3);
-/*
-            System.out.println(file.getPath().replaceAll("\\\\", "%_%")+"文件已入库");
-*/
         }
 
         System.out.print("Service层中记录的文件路径为：" + Sb.toString());
         return Sb.toString();
     }
-
-    /* public static void main(String[] arg){
-     *//*String[] attr = {"123","5435","6456"};
-        boolean flag = Arrays.asList(attr).contains("543");
-        System.out.println(flag);*//*
-
-        String[] arr1 = {"abc", "df", "abc"};
-        String[] arr2 = {"abc", "cc", "df", "d", "abc"};
-        String[] result_union = union(arr1, arr2);
-        System.out.println("求并集的结果如下：");
-        for (String str : result_union) {
-             System.out.println(str);
-        }
-    }*/
 
     //求两个字符串数组的并集，利用set的元素唯一性
     public static String[] union(String[] arr1, String[] arr2) {

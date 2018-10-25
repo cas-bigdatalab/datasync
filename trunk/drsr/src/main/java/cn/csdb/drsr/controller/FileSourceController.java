@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -59,9 +58,6 @@ public class FileSourceController {
         }
         datasrc.setFilePath(filePath.toString());
         logger.info("最终拼接的filePath为{}"+filePath.toString());
-/*
-        String flag = fileResourceService.testFileIsExist(filePath.toString());
-*/
         return fileResourceService.addData(datasrc);
 
     }
@@ -116,7 +112,7 @@ public class FileSourceController {
     }
 
     @RequestMapping(value = "/index")
-    public ModelAndView index(HttpServletRequest request, Integer currentPage) {
+    public ModelAndView index() {
         logger.info("进入文件数据源模块列表页");
         ModelAndView mv = new ModelAndView("fileResource");
         return mv;
@@ -139,7 +135,6 @@ public class FileSourceController {
         return jsonObject;
     }
 
-
     @RequestMapping("/resCatalogTest")
     public
     @ResponseBody
@@ -148,19 +143,6 @@ public class FileSourceController {
         List<JSONObject> jsonObjects = fileResourceService.fileTreeLoading(data);
         return jsonObjects;
     }
-
-    /*@RequestMapping("/fileSourceabc")
-    public
-    @ResponseBody
-    String fileSource(String[] data){
-        for (String nodeId : data){
-            nodeId.replace("%_%", "\\\\");
-            String str = nodeId.replaceAll("%_%","\\\\");
-            fileResourceService.traversingFiles(str);
-        }
-        return "success";
-    }*/
-
 
     /**
      *

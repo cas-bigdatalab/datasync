@@ -41,7 +41,7 @@
                 <option value="">关系数据源DB2</option>
                 <option value="">数据源OracleData</option>--%>
             </select>
-            <div class="database-con container-fluid" style="display: none">
+            <div class="database-con-rel container-fluid" style="display: none">
                 <div class="row">
                     <div class="col-md-3 dataHead1">数据源名称：</div>
                     <div class="col-md-9 dataHead2">关系数据源DB2</div>
@@ -108,7 +108,7 @@
                 </div>
             </div>
         </div>
-        <div class="select-local" style="display: none;max-height: 500px;background-color: red;overflow: auto">
+        <div class="select-local" style="display: none;max-height: 500px;overflow: auto">
             <%--<button type="button" class="btn btn-success" id="upload-directory">上传目录</button>
             <button type="button" class="btn btn-success" id="upload-file">上传文件</button>
             <div style="min-height: 400px;margin-top: 50px">
@@ -136,6 +136,54 @@
                     <option value="">关系数据源DB2</option>
                     <option value="">数据源OracleData</option>--%>
                 </select>
+                <div class="database-con-file container-fluid" style="display: none">
+                    <div class="row">
+                        <div class="col-md-12 dataHead3">
+                            <div class="col-md-2">选择文件</div>
+                            <div class="col-md-9" >
+                                <div class="row" id="file-table">
+                                    <%--<div class="col-md-4">
+                                        <label>
+                                            <input type="checkbox" name="relationCheck" value="aaa"> Remember me
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>
+                                            <input type="checkbox" name="relationCheck" value="bbb"> Remember me
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>
+                                            <input type="checkbox" name="relationCheck" value="ccc"> Remember me
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>
+                                            <input type="checkbox" name="relationCheck" value="sss"> Remember me
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>
+                                            <input type="checkbox" name="relationCheck" value="fff"> Remember me
+                                        </label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>
+                                            <div class="checker">
+                                                <span>
+                                                    <input type="checkbox" name="relationCheck" value="aaa">
+                                                </span>
+                                            </div> Remember me
+                                        </label>
+                                    </div>--%>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 ">
+                            <button type="button" class="btn green pull-right" onclick="sendRelationTask()">提交</button>
+                        </div>
+                    </div>
+                </div>
         </div>
     </div>
     <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
@@ -269,7 +317,24 @@
     <option value="{{value.databaseName}}" Keyid="{{value.dataSourceId}}">{{value.databaseName}}</option>
     {{/each}}
 </script>
-
+<script type="text/html" id="dataFileshipList2">
+    {{each list as value i}}
+    <div class="col-md-6">
+        <label>
+            <input type="checkbox" name="fileTable" value="{{value}}"> {{value}}
+        </label>
+    </div>
+    <%--<div class="col-md-4">
+        <label>
+            <div class="checker">
+                <span>
+                    <input type="checkbox" name="relationCheck" value="{{value}}">
+                </span>
+            </div> {{value}}
+        </label>
+    </div>--%>
+    {{/each}}
+</script>
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
@@ -291,24 +356,17 @@
             }else {
                 $(".select-database").hide();
                 $(".select-local").show();
-                $.ajax({
-                    url:"${ctx}/fileResource/findAllFileSrc",
-                    type:"GET",
-                    success:function (data) {
-                        console.log(data)
-                    }
-                })
             }
         })
         $("#DBchange").on("change",function () {
-            var id = $("select option:selected").attr("id");
+            var id = $("#DBchange option:selected").attr("id");
             dataRelSrcId =id;
             var name = $(this).val();
             if(name == ""){
-                $(".database-con").hide();
+                $(".database-con-rel").hide();
                 return
             }
-            $(".database-con").show();
+            $(".database-con-rel").show();
             $(".dataHead2").html(name);
             $.ajax({
                 url:"${ctx}/relationship/relationalDatabaseTableList",
@@ -328,8 +386,37 @@
                     console.log("请求失败")
                 }
             })
+        })
+        $("#DBFilechange").on("change",function () {
+            var id = $("#DBFilechange option:selected").attr("Keyid");
+            console.log(id)
+            dataFileSrcId =id;
+            var name = $(this).val();
+            if(name == ""){
+                $(".database-con-file").hide();
+                return
+            }
+            $(".database-con-file").show();
 
+            $.ajax({
+                url:"${ctx}/fileResource/fileSourceFileList",
+                type:"POST",
+                data:{
+                    dataSourceId:id
+                },
+                success:function (data) {
+                    $("#file-table").empty();
+                    console.log(data)
+                    var List =JSON.parse(data)
+                    console.log(List)
+                    var tabCon = template("dataFileshipList2", List);
+                    $("#file-table").append(tabCon);
 
+                },
+                error:function () {
+                    console.log("请求失败")
+                }
+            })
         })
         $("#sqlList").delegate(".removeSql","click",function () {
             $(this).parent().parent().remove();
@@ -500,6 +587,22 @@
                     }
                     var tabCon = template("dataRelationshipList", data);
                     $("#DBchange").append(tabCon);
+                },
+                error:function () {
+                    console.log("请求失败")
+                }
+            })
+            $.ajax({
+                url:"${ctx}/fileResource/findAllFileSrc",
+                type:"GET",
+                success:function (data) {
+                    console.log(data)
+                    var list =JSON.parse(data)
+                    var data={
+                        data:list
+                    }
+                    var tabCon = template("dataFileshipList", data);
+                    $("#DBFilechange").append(tabCon);
                 },
                 error:function () {
                     console.log("请求失败")

@@ -22,14 +22,28 @@
         </div>
         <div class="upload-title">
             <span>数据上传任务列表</span>
-            <a href="${ctx}/createTask">新建任务</a>
+            <%--<a href="${ctx}/createTask">新建任务</a>--%>
         </div>
-        <div class="upload-search">
-            <input type="text" class="form-control" style="width: 200px;display: inline-block" placeholder="名称">
-            <input type="text" class="form-control" style="width: 200px;display: inline-block" placeholder="数据类型">
-            <input type="text" class="form-control" style="width: 200px;display: inline-block" placeholder="状态">
-            <button type="button" class="btn btn-success" style="margin-left: 166px">查询</button>
-            <button type="button" class="btn btn-success">全部上传</button>
+        <div class="alert alert-info" role="alert" style="margin:0  33px">
+            <!--查询条件 -->
+            <div class="row">
+                <form class="form-inline">
+                    <div class="form-group" >
+                        <label >数据类型</label>
+                        <select  id="dataSourceList" class="form-control" style="width: 150px">
+                            <option value="">----------</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label  >状态</label>
+                        <select  id="dataStatusList" class="form-control" style="width: 150px">
+                            <option value="">----------</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn blue" style="margin-left: 49px">查询</button>
+                    <button type="button" class="btn green" style="margin-left: 49px" onclick="relCreateTask()">新建任务</button>
+                </form>
+            </div>
         </div>
         <div class="upload-table">
             <div class="table-message">列表加载中......</div>
@@ -46,31 +60,10 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-                <tbody id="bd-data">
-                <%--<tr>
-                    <td>1</td>
-                    <td>aaaa</td>
-                    <td>aaaaaa</td>
-                    <td>aaaaaa</td>
-                    <td>aaaaaa</td>
-                    <td>aaaaaa</td>
-                    <td><button type="button" class="btn btn-success upload">上传</button></td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>高能物理主题数据库</td>
-                    <td>关系数据库</td>
-                    <td>dataOneDB</td>
-                    <td>2018-04-12 09:12</td>
-                    <td>成功</td>
-                    <td><button type="button" class="btn btn-success">重新上传</button></td>
-                </tr>--%>
-                </tbody>
+                <tbody id="bd-data"></tbody>
             </table>
-            <div class="page-message" >
-
-            </div>
-            <div class="page-list" ></div>
+            <div class="page-message" style="float: left;line-height: 56px" ></div>
+            <div class="page-list" style="float: right"></div>
         </div>
     </div>
     <script type="text/html" id="resourceTmp1">
@@ -84,17 +77,29 @@
             <td  id="{{value.dataTaskId}}">--</td>
             <td  class="{{value.dataTaskId}}">{{upStatusName(value.status)}}</td>
             <td>
-                <button type="button" class="btn btn-success btn-sm exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" >导出SQL文件</button>
-                &nbsp;&nbsp;
+                <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" >导出SQL文件</button>
                 {{if value.status  == 1}}
-                <button type="button" class="btn btn-success upload-data btn-sm" keyIdTd="{{value.dataTaskId}}" disabled style="background-color: dimgrey">{{btnName(value.status)}}</button>
+                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" disabled style="background-color: dimgrey">{{btnName(value.status)}}</button>
                 {{else if value.status  == 0}}
-                <button type="button" class="btn btn-success upload-data btn-sm" keyIdTd="{{value.dataTaskId}}">{{btnName(value.status)}}</button>
+                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}">{{btnName(value.status)}}</button>
                 {{/if}}
-                &nbsp;&nbsp;
-                <button type="button" class="btn btn-success edit-data btn-sm" keyIdTd="{{value.dataTaskId}}" >查看</button>
+                <button type="button" class="btn  edit-data btn-xs blue" keyIdTd="{{value.dataTaskId}}" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                <button type="button" class="btn  btn-xs red remove-data" keyIdTd="{{value.dataTaskId}}"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+
             </td>
         </tr>
+        {{/each}}
+    </script>
+    <script type="text/html" id="dataSourceListTmp">
+        <option value="" id="dataSelOne" selected="selected">-----------</option>
+        {{each data as value i}}
+        <option value="{{value.databaseName}}" Keyid="{{value.dataSourceId}}">{{value.databaseName}}</option>
+        {{/each}}
+    </script>
+    <script type="text/html" id="dataStatusListTmp">
+        <option value="" id="dataSelTwo" selected="selected">-----------</option>
+        {{each data as value i}}
+        <option value="{{value.databaseName}}" Keyid="{{value.dataSourceId}}">{{value.databaseName}}</option>
         {{/each}}
     </script>
 </div>
@@ -105,11 +110,11 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">任务详情查看</h4>
             </div>
-            <div class="modal-body" style="min-height: 100px">
+            <div class="modal-body">
                 <form class="form-horizontal">
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务标识:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8" name="tast-"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">数据源ID:</label>
@@ -150,7 +155,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn green" data-dismiss="modal" onclick="confirmEditNode();" ><i
+                <button type="button" class="btn green" data-dismiss="modal" ><i
                         class="glyphicon glyphicon-ok"></i>完成
                 </button>
                 <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
@@ -161,25 +166,71 @@
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
-        <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.js"></script>
     <script>
+        function relCreateTask(){
+            window.location.href="${ctx}/createTask";
+        }
         $(function(){
-            toastr.options = {
-                "closeButton": true,
-                "debug": false,
-                "positionClass": "toast-top-right",
-                "onclick": null,
-                "showDuration": "1000",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
+            tableConfiguration2(1)
         });
+        $("#dataSourceList").on("change",function () {
+            var id = $("#dataSourceList option:selected").attr("id");
+            dataRelSrcId =id;
+            var name = $(this).val();
+            if(name == ""){
+                $(".database-con-rel").hide();
+                return
+            }
+            $(".database-con-rel").show();
+            $(".dataHead2").html(name);
+            $.ajax({
+                url:"${ctx}/relationship/relationalDatabaseTableList",
+                type:"POST",
+                data:{
+                    dataSourceId:id
+                },
+                success:function (data) {
+                    $("#db-table").empty();
+                    var List =JSON.parse(data)
+                    console.log(List)
+                    var tabCon = template("dataRelationshipList2", List);
+                    $("#db-table").append(tabCon);
 
+                },
+                error:function () {
+                    console.log("请求失败")
+                }
+            })
+        })
+        $("#dataStatusList").on("change",function () {
+            var id = $("#dataStatusList option:selected").attr("id");
+            dataRelSrcId =id;
+            var name = $(this).val();
+            if(name == ""){
+                $(".database-con-rel").hide();
+                return
+            }
+            $(".database-con-rel").show();
+            $(".dataHead2").html(name);
+            $.ajax({
+                url:"${ctx}/relationship/relationalDatabaseTableList",
+                type:"POST",
+                data:{
+                    dataSourceId:id
+                },
+                success:function (data) {
+                    $("#db-table").empty();
+                    var List =JSON.parse(data)
+                    console.log(List)
+                    var tabCon = template("dataRelationshipList2", List);
+                    $("#db-table").append(tabCon);
+
+                },
+                error:function () {
+                    console.log("请求失败")
+                }
+            })
+        })
         var arr = []
        /* var json = {
                         name:"caocao",
@@ -256,18 +307,18 @@
             /*send request*/
             var souceID = $(this).attr("keyIdTd");
 
-            /*$.ajax({
-                url:"${ctx}/getDataContent",
+            $.ajax({
+                url:"${ctx}/datatask/detail",
                 type:"POST",
-                data:{processId:souceID},
+                data:{datataskId:souceID},
                 success:function (data) {
-                    console.log(data)
+                    console.log(JSON.parse(data))
 
                 },
                 error:function () {
                     console.log("请求失败")
                 }
-            })*/
+            })
             $("#EModal").modal('show');
         })
         /*//导出SQL文件
@@ -360,19 +411,18 @@
                 }
             })
         }
-        function tableConfiguration2() {
+        function tableConfiguration2(num) {
             $.ajax({
                 url:"${ctx}/datatask/getAll",
                 type:"GET",
                 success:function (data) {
                     $(".table-message").hide();
-                   var List =JSON.parse(data)
-                    console.log(List)
-                    console.log(List)
-                    var tabCon = template("resourceTmp1", List);
-                    $("#bd-data").append(tabCon);
-                    /*$(".data-table").html("");
+                    $("#bd-data").html("");
                     var DataList = JSON.parse(data);
+                    console.log(DataList)
+                    var tabCon = template("resourceTmp1", DataList);
+                    $("#bd-data").append(tabCon);
+
                     if(DataList=="{}"){
                         $(".table-message").html("暂时没有数据");
                         $(".page-message").html("");
@@ -380,17 +430,17 @@
                         return
                     }
                     $(".table-message").hide();
-                    /!*
+                    /*
                     * 创建table
-                    * *!/
+                    * */
                     if ($(".page-list .bootpag").length != 0) {
                         $(".page-list").off();
                         $('.page-list').empty();
                     }
-                    $(".page-message").html("当前第"+dataFile.pageNum +"页,共"+dataFile.totalPage +"页,共"+dataFile.totalNum+"条数据");
-                    $('#page-list').bootpag({
-                        total: DataList.totalPage,
-                        page: DataList.pageNum,
+                    $(".page-message").html("当前第"+1 +"页,共"+5 +"页,共"+10+"条数据");
+                    $('.page-list').bootpag({
+                        total: 5,
+                        page:num,
                         maxVisible: 6,
                         leaps: true,
                         firstLastUse: true,
@@ -404,8 +454,8 @@
                         lastClass: 'last',
                         firstClass: 'first'
                     }).on('page', function (event, num) {
-                        tableConfiguration(num,conData);
-                    });*/
+                        tableConfiguration2(num);
+                    });
                 },
                 error:function () {
                     $(".table-message").html("请求失败");
@@ -413,7 +463,7 @@
             })
         }
 
-        tableConfiguration2()
+
 
 
         //导出SQL文件

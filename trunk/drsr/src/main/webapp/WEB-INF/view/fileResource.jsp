@@ -189,7 +189,7 @@
         /*get data table*/
         function tableConfiguration(num) {
             $.ajax({
-                url:"/fileResource/indexPages",
+                url:"${ctx}/fileResource/indexPages",
                 type:"GET",
                 data:{"num":num},
                 success:function (data) {
@@ -260,7 +260,7 @@
                         }
                         $.ajax({
                             type: "GET",
-                            url: "/fileResource/resCatalogTest",
+                            url: "${ctx}/fileResource/resCatalogTest",
                             dataType: "json",
                             data: {"data": str1},
                             async: false,
@@ -335,7 +335,7 @@
                    }
                    $.ajax({
                        type: "GET",
-                       url: "/fileResource/resCatalogTest",
+                       url: "${ctx}/fileResource/resCatalogTest",
                        dataType: "json",
                        data: {"data": str1},
                        async: false,
@@ -375,7 +375,7 @@
        })
            $.ajax({
                type: 'post',
-               url: "/fileResource/queryData",
+               url: "${ctx}/fileResource/queryData",
                data: {"dataId": dataId},
                success: function (result) {
                    var jsonData = JSON.parse(result);
@@ -425,7 +425,7 @@
                 if(r){
                     $.ajax({
                         type: 'post',
-                        url: "/fileResource/deleteData",
+                        url: "${ctx}/fileResource/deleteData",
                         data: {"dataId": dataId},
                         success: function (result) {
                             var res = JSON.parse(result);
@@ -497,7 +497,7 @@
                         })
                         $.ajax({
                             type: 'post',
-                            url: "/fileResource/edit",
+                            url: "${ctx}/fileResource/edit",
                             async: true,
                             traditional: true,
                             data: {
@@ -527,7 +527,7 @@
                         var fileType = "本地文件";
                         $.ajax({
                             type: 'post',
-                            url: "/fileResource/add",
+                            url: "${ctx}/fileResource/add",
                             async: true,
                             traditional: true,
                             data: {

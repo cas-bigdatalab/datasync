@@ -34,16 +34,6 @@ public class RelationSourceController {
     private Logger logger= LoggerFactory.getLogger(RelationSourceController.class);
     @Resource
     private RelationShipService relationShipService;
-    /*@RequestMapping("/index")
-    public ModelAndView index() {
-       *//* logger.debug("进入关系数据库模块");
-        List<DataSrc> queryData = relationShipService.queryData();
-        ModelAndView modelAndView = new ModelAndView("relationSource");
-        modelAndView.addObject("queryData",queryData);*//*
-        logger.debug("进入关系数据库模块");
-        ModelAndView modelAndView = new ModelAndView("dataResourceRegister");
-        return modelAndView;
-    }*/
 
     @RequestMapping("/deleteData")
     public
@@ -76,9 +66,7 @@ public class RelationSourceController {
         datasrc.setPassword(password);
         datasrc.setCreateTime(currentTime);
         logger.info("测试新增或编辑的数据能否连通数据库");
-
         String flag = relationShipService.testCon(host,port,userName,"",dataBaseName);
-
         if(flag=="success"){
             return relationShipService.addData(datasrc);
         }else{

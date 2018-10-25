@@ -267,6 +267,7 @@
 <script src="${ctx}/resources/bundles/jquery-validation/js/additional-methods.min.js"></script>
 <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
 <script src="${ctx}/resources/bundles/bootbox/bootbox.min.js"></script>
+<script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
     jQuery(document).ready(function () {

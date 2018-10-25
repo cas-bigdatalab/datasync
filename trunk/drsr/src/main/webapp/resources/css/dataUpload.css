@@ -16,7 +16,7 @@
     font-size: 28px;
     color: #000000;
 }
-.upload-title a{
+/*.upload-title a{
     display: inline-block;
     width: 140px;
     height: 37px;
@@ -30,12 +30,13 @@
     font-style: normal;
     font-size: 18px;
     color: #FFFFFF;
-}
+}*/
 .upload-search,.upload-table{
     padding: 3px 33px;
+    margin-top: 20px;
 }
 #upload-list th{
-    background-color: #1ca04c !important;
+    background-color: #64aed9;
     text-align: center;
     font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
     font-weight: 700;
