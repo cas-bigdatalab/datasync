@@ -271,7 +271,7 @@
 */
         /*    var conData = data;*/
             $.ajax({
-                url:"/relationship/indexPages",
+                url:"${ctx}/relationship/indexPages",
                 type:"GET",
                 data:{"num":num},
                 success:function (data) {
@@ -339,7 +339,7 @@
        function editData(dataId) {
             $.ajax({
                 type:'post',
-                url: "/relationship/queryData",
+                url: "${ctx}/relationship/queryData",
                 data:{"dataId":dataId},
                 success: function(result) {
                     var jsonData = JSON.parse(result);
@@ -389,7 +389,7 @@
                 if(r){
                     $.ajax({
                         type:'post',
-                        url: "/relationship/deleteData",
+                        url: "${ctx}/relationship/deleteData",
                         data:{"dataId":dataId},
                         success: function(result){
                             var res = JSON.parse(result);
@@ -491,7 +491,7 @@
                         $.ajax({
                             type: 'post',
                             async: false,
-                            url: "/relationship/edit",
+                            url: "${ctx}/relationship/edit",
                             data: {
                                 "dataSourceName": dataSourceName,
                                 "dataSourceType" : 'db',
@@ -528,7 +528,7 @@
                         var password = $("#password").val();
                         $.ajax({
                             type: 'post',
-                            url: "/relationship/add",
+                            url: "${ctx}/relationship/add",
                             async: false,
                             data: {
                                 "dataSourceName": dataSourceName,
