@@ -13,13 +13,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.io.File;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -66,17 +62,9 @@ public class SubjectMgmtDao {
         }
         logger.info("create db, ftp user, ftp path completed!");
 
-        //insert subject into db
-        String insertSql = "insert into subject(SubjectName, SubjectCode, ImagePath, Brief, Admin, AdminPasswd, Contact, Phone, Email, FtpUser, FtpPassword, SerialNo) " +
-                " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        Object[] args = new Object[]{subject.getSubjectName(), subject.getSubjectCode(), subject.getImagePath(), subject.getBrief(), subject.getAdmin(), subject.getAdminPasswd(), subject.getContact(), subject.getPhone(), subject.getEmail(), subject.getFtpUser(), subject.getFtpPassword(), Integer.parseInt(subject.getSerialNo())};
-        int addedRowCnt = 0;
-        try {
-            addedRowCnt = jdbcTemplate.update(insertSql, args);
-            logger.info("insert subject success! inserted rows : " + addedRowCnt);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        //insert subject into mongodb
+        int addedRowCnt = 1;
+        mongoTemplate.save(subject);
 
         return addedRowCnt;
     }
@@ -317,7 +305,7 @@ public class SubjectMgmtDao {
         if (pageNumber < 1) {
             return null;
         }
-        int totalPages = 1;
+        long totalPages = 1;
         totalPages = getTotalPages();
         if (pageNumber > totalPages) {
             return null;
@@ -342,11 +330,12 @@ public class SubjectMgmtDao {
      * @author zzl
      * @date 2018/10/23
      */
-    public int getTotalPages() {
-        //int rowsPerPage = 2;
-        String rowSql = "select count(*) from Subject";
-        int totalRows = (Integer) jdbcTemplate.queryForObject(rowSql, Integer.class);
-        int totalPages = 0;
+    public long getTotalPages() {
+        //query the count of all documents in t_subject collection
+        DBObject dbObject = QueryBuilder.start().get();
+        Query query = new BasicQuery(dbObject);
+        long totalRows = mongoTemplate.count(query, "t_subject");
+        long totalPages = 0;
         totalPages = totalRows / rowsPerPage + (totalRows % rowsPerPage == 0 ? 0 : 1);
 
         return totalPages;
@@ -361,7 +350,6 @@ public class SubjectMgmtDao {
      * @date 2018/10/23
      */
     public Subject findSubjectById(String id) {
-
         DBObject dbObject = QueryBuilder.start().and("id").is(id).get();
         Query query = new BasicQuery(dbObject);
         List<Subject> subjects = mongoTemplate.find(query, Subject.class);
@@ -369,6 +357,19 @@ public class SubjectMgmtDao {
 
         return subjects.get(0);
     }
+
+    /**
+     *
+     */
+    public long querySubjectCode(String subjectCode)
+    {
+        DBObject dbObject = QueryBuilder.start().and("subjectCode").is(subjectCode).get();
+        Query query = new BasicQuery(dbObject);
+        long cntOfTheCode = mongoTemplate.count(query, "t_subject");
+
+        return cntOfTheCode;
+    }
+
 
     /**
      * Function Description:

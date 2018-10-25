@@ -114,7 +114,7 @@ public class SubjectMgmtService {
      * @author zzl
      * @date 2018/10/23
      */
-    public int getTotalPages()
+    public long getTotalPages()
     {
         return subjectMgmtDao.getTotalPages();
     }
@@ -143,5 +143,15 @@ public class SubjectMgmtService {
      */
     public Subject findByCode(String code){
         return subjectMgmtDao.findByCode(code);
+    }
+
+
+    /**
+     * Function Description:
+     *
+     */
+    public long querySubjectCode(String subjectCode)
+    {
+        return subjectMgmtDao.querySubjectCode(subjectCode);
     }
 }
