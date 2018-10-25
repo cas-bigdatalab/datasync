@@ -4,15 +4,16 @@ import cn.csdb.portal.controller.SubjectMgmtController;
 import cn.csdb.portal.model.Subject;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
-
 import javax.annotation.Resource;
 import java.io.File;
 import java.sql.ResultSet;
@@ -23,8 +24,14 @@ import java.util.List;
 @Repository
 public class SubjectMgmtDao {
     private static int rowsPerPage = 10;
-    private JdbcTemplate jdbcTemplate;
     private static final Logger logger = LogManager.getLogger(SubjectMgmtController.class);
+    private JdbcTemplate jdbcTemplate;
+
+    // create ftp directory
+    @Value("#{systemPro['ftpServerAddr']}")
+    private String ftpServerAddr;
+    @Value("#{systemPro['ftpServerPort']}")
+    private int ftpServerPort;
 
     @Resource
     private MongoTemplate mongoTemplate;
@@ -43,9 +50,20 @@ public class SubjectMgmtDao {
      * @date 2018/10/23
      */
     public int addSubject(Subject subject) {
+        logger.info("enterring SubjectMgmtDao-addSubject");
         //create db and ftp
         createDb(subject.getSubjectCode());
         createFtp(subject.getFtpUser(), subject.getFtpPassword());
+        boolean ftpPathCreated = createFtpPath(subject.getFtpUser(), subject.getFtpPassword());
+        if (ftpPathCreated)
+        {
+            subject.setFtpFilePath(subject.getFtpUser());
+        }
+        else
+        {
+            subject.setFtpFilePath("");
+        }
+        logger.info("create db, ftp user, ftp path completed!");
 
         //insert subject into db
         String insertSql = "insert into subject(SubjectName, SubjectCode, ImagePath, Brief, Admin, AdminPasswd, Contact, Phone, Email, FtpUser, FtpPassword, SerialNo) " +
@@ -54,6 +72,7 @@ public class SubjectMgmtDao {
         int addedRowCnt = 0;
         try {
             addedRowCnt = jdbcTemplate.update(insertSql, args);
+            logger.info("insert subject success! inserted rows : " + addedRowCnt);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -70,7 +89,7 @@ public class SubjectMgmtDao {
      * @date 2018/10/23
      */
     private boolean createDb(String dbName) {
-        logger.info("createDB = " + dbName);
+        logger.info("enterring SubjectMgmtDao-createDb, createDB = " + dbName);
 
         boolean retValue = false;
         String createDB = " create database " + " if not exists " + dbName;
@@ -112,6 +131,28 @@ public class SubjectMgmtDao {
         }
 
         logger.info("createFtp completed!");
+
+        return retValue;
+    }
+
+    private boolean createFtpPath(String ftpUser, String ftpPassword)
+    {
+        logger.info("enterring SubjectMgmtDao-createFtpPath");
+        boolean retValue = false;
+
+        try {
+            FTPClient ftpClient = new FTPClient();
+            ftpClient.connect(ftpServerAddr, ftpServerPort);
+            ftpClient.login(ftpUser, ftpPassword);
+            ftpClient.mkd(ftpUser);
+            retValue = true;
+            logger.info("create ftp path success!");
+        }
+        catch (Exception e)
+        {
+            logger.info("failed to create ftp path!");
+            e.printStackTrace();
+        }
 
         return retValue;
     }
@@ -355,7 +396,6 @@ public class SubjectMgmtDao {
                     subject.setId(resultSet.getString("ID"));
                     subject.setSubjectName(resultSet.getString("SubjectName"));
                     subject.setSubjectCode(resultSet.getString("SubjectCode"));
-                    //subject.setImagePath(getImageFile(resultSet.getString("ImagePath")));
                     subject.setBrief(resultSet.getString("Brief"));
                     subject.setAdmin(resultSet.getString("Admin"));
                     subject.setAdminPasswd(resultSet.getString("AdminPasswd"));
@@ -365,11 +405,10 @@ public class SubjectMgmtDao {
                     subject.setFtpUser(resultSet.getString("FtpUser"));
                     subject.setFtpPassword(resultSet.getString("FtpPassword"));
                     subject.setSerialNo(resultSet.getString("SerialNo"));
-                    subject.setFtpPath(resultSet.getString("FtpPath"));
+                    subject.setFtpFilePath(resultSet.getString("FtpPath"));
                     subject.setDbName(resultSet.getString("DbName"));
 
                     System.out.println("findSubjectById - " + subject);
-
                 }
             });
         } catch (Exception e) {

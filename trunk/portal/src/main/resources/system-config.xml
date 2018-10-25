@@ -15,5 +15,9 @@
     <util:properties id="systemPro" location="classpath:cas_urls.properties">
         <!-- xsd文件相关-->
         <!--<beans:prop key="xsdPath">/usr/local/sdc/xsd</beans:prop>-->
+        <beans:prop key="ftpServerAddr">10.0.86.77</beans:prop>
+        <beans:prop key="ftpServerPort">21</beans:prop>
     </util:properties>
+
+
 </beans:beans>

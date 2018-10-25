@@ -143,6 +143,7 @@
                                 </div>
                             </div>
 
+                            <!--SubjectCode需要保证唯一性，为了保证唯一，需要通过后端数据库交互验证是否已经存在-->
                             <div class="form-group">
                                 <label class="col-md-3 control-label">
                                     专题库代码<span style="color: red;">*</span>
@@ -215,7 +216,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
+                            <%--<div class="form-group">
                                 <label class="col-md-3 control-label">
                                     FTP账号<span style="color: red;">*</span>
                                 </label>
@@ -232,7 +233,7 @@
                                 <div class="col-md-9">
                                     <input type="text" class="form-control" placeholder="请输入FTP密码" id="ftpPassword" name="ftpPassword" required="required" />
                                 </div>
-                            </div>
+                            </div>--%>
 
                             <div class="form-group">
                                 <label class="col-md-3 control-label">
@@ -365,7 +366,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <%--<div class="form-group">
                                     <label class="col-md-3 control-label">
                                         FTP账号<span style="color: red;">*</span>
                                     </label>
@@ -382,7 +383,7 @@
                                     <div class="col-md-9">
                                         <input type="text" class="form-control" placeholder="请输入FTP密码" id="ftpPasswordM" name="ftpPassword" required="required" />
                                     </div>
-                                </div>
+                                </div>--%>
 
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">

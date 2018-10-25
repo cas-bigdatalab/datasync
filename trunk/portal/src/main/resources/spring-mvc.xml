@@ -29,14 +29,17 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
+
     <context:component-scan base-package="cn.csdb.portal">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
+
     <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <property name="prefix" value="/WEB-INF/view/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+
     <mvc:resources mapping="/resources/**" location="/resources/"/>
     <mvc:resources mapping="/upload/**" location="/upload/"/>
     <mvc:view-controller path="/403" view-name="403"/>
@@ -50,6 +53,7 @@
             </props>
         </property>
     </bean>
+
     <bean class="org.springframework.web.context.support.ServletContextAttributeExporter">
         <property name="attributes">
             <map>
@@ -59,4 +63,5 @@
             </map>
         </property>
     </bean>
+
 </beans>

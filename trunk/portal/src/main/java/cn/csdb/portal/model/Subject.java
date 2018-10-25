@@ -32,17 +32,12 @@ public class Subject {
     private String ftpPassword;
     @Field("serialNo")
     private String serialNo;
-    @Field("ftpPath")
-    private String ftpPath;
-    @Field("dbName")
+    @Field("ftpFilePath")
+    private String ftpFilePath;
     private String dbName;
-    @Field("dbUsername")
     private String dbUsername;
-    @Field("dbPassword")
     private String dbPassword;
-    @Field("dbHost")
     private String dbHost;
-    @Field("dbHost")
     private String dbPort;
 
     public String getId() {
@@ -149,12 +144,12 @@ public class Subject {
         this.serialNo = serialNo;
     }
 
-    public String getFtpPath() {
-        return ftpPath;
+    public String getFtpFilePath() {
+        return ftpFilePath;
     }
 
-    public void setFtpPath(String ftpPath) {
-        this.ftpPath = ftpPath;
+    public void setFtpFilePath(String ftpFilePath) {
+        this.ftpFilePath = ftpFilePath;
     }
 
     public String getDbName() {
@@ -213,7 +208,7 @@ public class Subject {
                 ", ftpUser='" + ftpUser + '\'' +
                 ", ftpPassword='" + ftpPassword + '\'' +
                 ", serialNo='" + serialNo + '\'' +
-                ", ftpPath='" + ftpPath + '\'' +
+                ", ftpFilePath='" + ftpFilePath + '\'' +
                 ", dbName='" + dbName + '\'' +
                 ", dbUsername='" + dbUsername + '\'' +
                 ", dbPassword='" + dbPassword + '\'' +
