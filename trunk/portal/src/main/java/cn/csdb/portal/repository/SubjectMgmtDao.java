@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
@@ -326,37 +327,11 @@ public class SubjectMgmtDao {
         int startRowNum = 0;
         startRowNum = (pageNumber - 1) * rowsPerPage;
 
-        final List<Subject> subjectsOfThisPage = new ArrayList<Subject>();
-        String querySql = "select * from Subject limit " + startRowNum + ", " + rowsPerPage;
-
-        try {
-            jdbcTemplate.query(querySql, new RowCallbackHandler() {
-                @Override
-                public void processRow(ResultSet resultSet) throws SQLException {
-                    do {
-                        Subject subject = new Subject();
-                        subject.setId(resultSet.getString("ID"));
-                        subject.setSubjectName(resultSet.getString("SubjectName"));
-                        subject.setSubjectCode(resultSet.getString("SubjectCode"));
-                        subject.setImagePath(resultSet.getString("ImagePath"));
-                        subject.setBrief(resultSet.getString("Brief"));
-                        subject.setAdmin(resultSet.getString("Admin"));
-                        subject.setAdminPasswd(resultSet.getString("AdminPasswd"));
-                        subject.setContact(resultSet.getString("Contact"));
-                        subject.setPhone(resultSet.getString("Phone"));
-                        subject.setEmail(resultSet.getString("Email"));
-                        subject.setFtpUser(resultSet.getString("FtpUser"));
-                        subject.setFtpPassword(resultSet.getString("FtpPassword"));
-                        subject.setSerialNo(resultSet.getString("SerialNo"));
-                        System.out.println(subject);
-                        subjectsOfThisPage.add(subject);
-                    } while (resultSet.next());
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        DBObject dbObject = QueryBuilder.start().get();
+        Query query = new BasicQuery(dbObject).skip(startRowNum).limit(rowsPerPage);
+        List<Subject> subjectsOfThisPage = mongoTemplate.find(query, Subject.class);
+        logger.info(subjectsOfThisPage);
+        
         return subjectsOfThisPage;
     }
 

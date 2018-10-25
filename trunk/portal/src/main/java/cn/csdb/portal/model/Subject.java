@@ -30,7 +30,7 @@ public class Subject {
     private String ftpUser;
     @Field("ftpPassword")
     private String ftpPassword;
-    @Field("serialNo")
+    @Field("SerialNo")
     private String serialNo;
     @Field("ftpFilePath")
     private String ftpFilePath;

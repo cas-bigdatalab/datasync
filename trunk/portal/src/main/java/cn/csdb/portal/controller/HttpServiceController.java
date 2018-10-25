@@ -48,7 +48,7 @@ public class HttpServiceController {
         dataTask.setDataTaskId(0);
 //        Site site = siteService.getSiteByMarker(siteMarker);
         Subject subject = subjectMgmtService.findByCode(subjectCode);
-        String siteFtpPath = subject.getFtpPath();
+        String siteFtpPath = subject.getFtpFilePath();
         dataTask.setSubjectCode(subject.getSubjectCode());
         String sqlFilePath = dataTask.getSqlFilePath();
         String[] filePathList = sqlFilePath.split(";");
