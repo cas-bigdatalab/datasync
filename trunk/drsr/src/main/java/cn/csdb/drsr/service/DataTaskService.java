@@ -112,4 +112,13 @@ public class DataTaskService {
     public List<DataTask> getAllData(){
         return dataTaskDao.getAll();
     }
+
+    public List<DataTask> getDatataskByPage(int start, int pageSize,String datataskType,String status){
+        return dataTaskDao.getDatataskByPage(start,pageSize,datataskType,status);
+    }
+
+    public int deleteDatataskById(int datataskId) {
+        return dataTaskDao.deleteDatataskById(datataskId);
+    }
+
 }

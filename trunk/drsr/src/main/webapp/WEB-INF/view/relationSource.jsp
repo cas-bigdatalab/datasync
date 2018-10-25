@@ -14,9 +14,9 @@
     <title>Title</title>
     <link rel="stylesheet" href="${ctx}/resources/css/bootstrap.min.css">
     <link rel="stylesheet" href="${ctx}/resources/css/relationalSource.css">
-<%--
-    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
---%>
+    <%--
+        <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+    --%>
     <style>
         .error {
             color:red;
@@ -29,7 +29,7 @@
 <div class="page-content" style="min-height:342px">
     <br/>
     <div>
-    <h3 id="forms-inline" class="relationTitle"<%--class="modal-title"--%>>关系数据源模块</h3>
+        <h3 id="forms-inline" class="relationTitle"<%--class="modal-title"--%>>关系数据源模块</h3>
     </div>
     <form class="form-inline">
         <button type="button" class="btn btn-primary" onclick="add();">新增</button>
@@ -42,9 +42,9 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-<%--
-            <th>数据源编号</th>
---%>
+            <%--
+                        <th>数据源编号</th>
+            --%>
             <th>数据源名称</th>
             <th>数据源类型</th>
             <th>数据库类型</th>
@@ -56,21 +56,21 @@
         </thead>
         <tbody>
         <c:forEach items="${relationDataOfThisPage}" var="item" varStatus="status">
-        <tr>
-<%--
-            <td>${item.dataSourceId}</td>
---%>
-            <td>${item.dataSourceName}</td>
-            <td>关系数据源</td>
-            <td>${item.databaseType}</td>
-            <td>${item.databaseName}</td>
-            <td>${item.host}</td>
-            <td>${item.port}</td>
-            <td>
-                <button type="button" class="btn btn-default"  onclick="editData(${item.dataSourceId});">编辑</button>
-                <button type="button" class="btn btn-danger"  id="delete"  onclick="deleteD(${item.dataSourceId});">删除</button>
-            </td>
-        </tr>
+            <tr>
+                    <%--
+                                <td>${item.dataSourceId}</td>
+                    --%>
+                <td>${item.dataSourceName}</td>
+                <td>关系数据源</td>
+                <td>${item.databaseType}</td>
+                <td>${item.databaseName}</td>
+                <td>${item.host}</td>
+                <td>${item.port}</td>
+                <td>
+                    <button type="button" class="btn btn-default"  onclick="editData(${item.dataSourceId});">编辑</button>
+                    <button type="button" class="btn btn-danger"  id="delete"  onclick="deleteD(${item.dataSourceId});">删除</button>
+                </td>
+            </tr>
         </c:forEach>
         </tbody>
     </table>
@@ -86,54 +86,54 @@
                 <div class="modal-body">
                     <form class="form-horizontal" id="commentForm" method="get" action="" onfocusout="true">
                         <fieldset>
-                        <div class="form-group">
-                            <label  for="dataSourceName" class="col-sm-3 control-label"><font color='red'>*</font>数据源名称</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" style="width:50%;float: left " id="dataSourceName" name="dataSourceName" placeholder="请输入数据源名称" required aria-required="true">
+                            <div class="form-group">
+                                <label  for="dataSourceName" class="col-sm-3 control-label"><font color='red'>*</font>数据源名称</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" style="width:50%;float: left " id="dataSourceName" name="dataSourceName" placeholder="请输入数据源名称" required aria-required="true">
+                                </div>
                             </div>
-                        </div>
                             <div class="form-group">
                                 <label  for="dataSourceType" class="col-sm-3 control-label"><font color='red'>*</font>数据源类型</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" style="width:50%;float: left " id="dataSourceType" name="dataSourceType" value="关系数据源" disabled>
                                 </div>
                             </div>
-                        <div class="form-group">
-                            <label  for="dataBaseType" class="col-sm-3 control-label"><font color='red'>*</font>数据库类型</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control"  style="width:50%;float: left " id="dataBaseType" name="dataBaseType" placeholder="请输入数据库类型" required aria-required="true">
+                            <div class="form-group">
+                                <label  for="dataBaseType" class="col-sm-3 control-label"><font color='red'>*</font>数据库类型</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control"  style="width:50%;float: left " id="dataBaseType" name="dataBaseType" placeholder="请输入数据库类型" required aria-required="true">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label  for="databaseName" class="col-sm-3 control-label"><font color='red'>*</font>数据库名称</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" style="width:50%;float: left " id="databaseName" name="databaseName" placeholder="请输入数据库名称" required aria-required="true">
+                            <div class="form-group">
+                                <label  for="databaseName" class="col-sm-3 control-label"><font color='red'>*</font>数据库名称</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" style="width:50%;float: left " id="databaseName" name="databaseName" placeholder="请输入数据库名称" required aria-required="true">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="host" class="col-sm-3 control-label"><font color='red'>*</font>主机地址</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" style="width:50%;float: left " id="host" name="host" placeholder="请输入主机地址" required aria-required="true">
+                            <div class="form-group">
+                                <label for="host" class="col-sm-3 control-label"><font color='red'>*</font>主机地址</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" style="width:50%;float: left " id="host" name="host" placeholder="请输入主机地址" required aria-required="true">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="port" class="col-sm-3 control-label"><font color='red'>*</font>端口</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" style="width:50%;float: left " id="port" name="port" placeholder="请输入端口" required aria-required="true">
+                            <div class="form-group">
+                                <label for="port" class="col-sm-3 control-label"><font color='red'>*</font>端口</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" style="width:50%;float: left " id="port" name="port" placeholder="请输入端口" required aria-required="true">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="userName" class="col-sm-3 control-label"><font color='red'>*</font>用户名</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" style="width:50%;float: left " id="userName" name="userName" placeholder="请输入用户名" required aria-required="true" onfocusout="true">
+                            <div class="form-group">
+                                <label for="userName" class="col-sm-3 control-label"><font color='red'>*</font>用户名</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" style="width:50%;float: left " id="userName" name="userName" placeholder="请输入用户名" required aria-required="true" onfocusout="true">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="col-sm-3 control-label"><font color='red'>*</font>密码</label>
-                            <div class="col-sm-9">
-                                <input type="password" class="form-control" style="width:50%;float: left " id="password" name="password" placeholder="请输入密码" required aria-required="true">
+                            <div class="form-group">
+                                <label for="password" class="col-sm-3 control-label"><font color='red'>*</font>密码</label>
+                                <div class="col-sm-9">
+                                    <input type="password" class="form-control" style="width:50%;float: left " id="password" name="password" placeholder="请输入密码" required aria-required="true">
+                                </div>
                             </div>
-                        </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"></label>
                                 <div class="col-sm-9">
@@ -164,55 +164,55 @@
                 <div class="modal-body">
                     <form class="form-horizontal" id="commentEditForm" method="get" action="">
                         <fieldset>
-                        <div class="form-group">
-                            <label  for="dataSourceNameE" class="col-sm-3 control-label"><font color='red'>*</font>数据源名称</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" style="width:50%;float: left " id="dataSourceNameE" name="dataSourceNameE" placeholder="请输入数据源名称"
-                                       required aria-required="true" minlength="2">
+                            <div class="form-group">
+                                <label  for="dataSourceNameE" class="col-sm-3 control-label"><font color='red'>*</font>数据源名称</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" style="width:50%;float: left " id="dataSourceNameE" name="dataSourceNameE" placeholder="请输入数据源名称"
+                                           required aria-required="true" minlength="2">
+                                </div>
                             </div>
-                        </div>
                             <div class="form-group">
                                 <label  for="dataSourceTypeE" class="col-sm-3 control-label"><font color='red'>*</font>数据源类型</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control" style="width:50%;float: left " id="dataSourceTypeE" name="dataSourceTypeE" value="关系数据源" disabled>
                                 </div>
                             </div>
-                        <div class="form-group">
-                            <label  for="dataBaseTypeE" class="col-sm-3 control-label"><font color='red'>*</font>数据库类型</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" style="width:50%;float: left " id="dataBaseTypeE" name="dataBaseTypeE" placeholder="请输入数据库类型" required aria-required="true">
+                            <div class="form-group">
+                                <label  for="dataBaseTypeE" class="col-sm-3 control-label"><font color='red'>*</font>数据库类型</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" style="width:50%;float: left " id="dataBaseTypeE" name="dataBaseTypeE" placeholder="请输入数据库类型" required aria-required="true">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label  for="dataBaseNameE" class="col-sm-3 control-label"><font color='red'>*</font>数据库名称</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" style="width:50%;float: left " id="dataBaseNameE" name="dataBaseNameE" placeholder="请输入数据库名称" required aria-required="true">
+                            <div class="form-group">
+                                <label  for="dataBaseNameE" class="col-sm-3 control-label"><font color='red'>*</font>数据库名称</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" style="width:50%;float: left " id="dataBaseNameE" name="dataBaseNameE" placeholder="请输入数据库名称" required aria-required="true">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label  for="hostE" class="col-sm-3 control-label"><font color='red'>*</font>主机地址</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" style="width:50%;float: left " id="hostE" name="hostE" placeholder="请输入主机地址" required aria-required="true">
+                            <div class="form-group">
+                                <label  for="hostE" class="col-sm-3 control-label"><font color='red'>*</font>主机地址</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" style="width:50%;float: left " id="hostE" name="hostE" placeholder="请输入主机地址" required aria-required="true">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label  for="portE" class="col-sm-3 control-label"><font color='red'>*</font>端口</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" style="width:50%;float: left " id="portE" name="portE" placeholder="请输入端口" required aria-required="true">
+                            <div class="form-group">
+                                <label  for="portE" class="col-sm-3 control-label"><font color='red'>*</font>端口</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" style="width:50%;float: left " id="portE" name="portE" placeholder="请输入端口" required aria-required="true">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label  for="userNameE" class="col-sm-3 control-label"><font color='red'>*</font>用户名</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" style="width:50%;float: left " id="userNameE" name="userNameE" placeholder="请输入用户名" required aria-required="true">
+                            <div class="form-group">
+                                <label  for="userNameE" class="col-sm-3 control-label"><font color='red'>*</font>用户名</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" style="width:50%;float: left " id="userNameE" name="userNameE" placeholder="请输入用户名" required aria-required="true">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label  for="passwordE" class="col-sm-3 control-label"><font color='red'>*</font>密码</label>
-                            <div class="col-sm-9">
-                                <input type="password" class="form-control" style="width:50%;float: left " id="passwordE" name="passwordE" placeholder="请输入密码" required aria-required="true">
+                            <div class="form-group">
+                                <label  for="passwordE" class="col-sm-3 control-label"><font color='red'>*</font>密码</label>
+                                <div class="col-sm-9">
+                                    <input type="password" class="form-control" style="width:50%;float: left " id="passwordE" name="passwordE" placeholder="请输入密码" required aria-required="true">
+                                </div>
                             </div>
-                        </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"></label>
                                 <div class="col-sm-9">
@@ -221,9 +221,9 @@
                                     </div>
                                 </div>
                             </div>
-<%--
-                            <input class="submit" type="submit" value="Submit">
---%>                    <div class="modal-footer">
+                            <%--
+                                                        <input class="submit" type="submit" value="Submit">
+                            --%>                    <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">确定</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                         </div>
@@ -345,10 +345,9 @@
 <div id="siteMeshJavaScript">
     <script src="${ctx}/resources/bundles/jquery/jquery.min.js" type="text/javascript"></script>
     <script src="${ctx}/resources/bundles/jquery/jquery.form.min.js" type="text/javascript"></script>
-    <script src="${ctx}/resources/bundles/relationModule/messages_zh.js"></script>
     <script src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.min.js"></script>
-    <script src="${ctx}/resources/bundles/relationModule/vue.min.js"></script>
     <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.js"></script>
-    <script src="${ctx}/resources/bundles/relationModule/relation.js"></script>
+    <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
+    E:\CNIC Project\datasync\trunk\drsr\src\main\webapp\resources\bundles\jquery-bootpag\jquery.bootpag.js
 </div>
 </html>

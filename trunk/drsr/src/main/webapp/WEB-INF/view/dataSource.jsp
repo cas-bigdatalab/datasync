@@ -46,20 +46,8 @@
                 <th>操作</th>
             </tr>
             </thead>
-            <tbody>
-            <tr>
-                <td>1</td>
-                <td class="source-name">关系型数据源DB2</td>
-                <td class="source-DB">DB2Data</td>
-                <td class="source-local">DB2</td>
-                <td>2018-04-12 09:12</td>
-                <td>正常</td>
-                <td>
-                    <button type="button" class="btn btn-success btn-xs blue" keyID="aaa"><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-                    <button type="button" class="btn btn-success btn-xs purple " keyID="aaa"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
-                    <button type="button" class="btn btn-success btn-xs red" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
-                </td>
-            </tr>
+            <tbody id="aaa">
+
             </tbody>
         </table>
         <div class="page-message" style="float: left">
@@ -268,6 +256,15 @@
                                                    name="filePath"/>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">sss<span class="required">
+													* </span></label>
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control" placeholder="请输入文件地址"
+                                                   id="ss"
+                                                   name="ss"/>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -343,6 +340,8 @@
                 success:function (data) {
                     $(".data-table").html("");
                     var DataList = JSON.parse(data);
+                    var tabCon = template("resourceTmp1", DataList);
+                    $("#aaa").append(tabCon);
                     if(DataList=="{}"){
                         $(".table-message").html("暂时没有数据");
                         $(".page-message").html("");
@@ -458,7 +457,6 @@
                 },
 
                 submitHandler: function (form) {
-
                     <!--ajax  request-->
                 }
 

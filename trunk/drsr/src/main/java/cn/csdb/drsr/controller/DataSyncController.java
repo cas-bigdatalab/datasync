@@ -60,6 +60,9 @@ public class DataSyncController {
         String subjectCode = configPropertyService.getProperty("SubjectCode");
         DataTask dataTask = dataTaskService.get(dataTaskId);
         String[] localFileList = dataTask.getSqlFilePath().split(";");
+//        if(dataTask.getDataTaskType().equals("file")){
+//            localFileList =
+//        }
         try {
             ftpUtil.connect(host, Integer.parseInt(port), userName, password);
             String result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath).toString();
@@ -73,18 +76,7 @@ public class DataSyncController {
                 HttpClient httpClient = null;
                 HttpPost postMethod = null;
                 HttpResponse response = null;
-//                RequestConfig requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD_STRICT).build();
-//                CloseableHttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(requestConfig).build();
-//                HttpGet httpGet = new HttpGet(portalUrl);
-//                CloseableHttpResponse response = null;
-//                String httpResult = "";
                 try {
-//                    response = httpClient.execute(httpGet);
-//                    HttpEntity entity = response.getEntity();
-//                    if (entity != null) {
-//                        InputStream inputStream = entity.getContent();
-//                        httpResult = IOUtils.toString(inputStream, "UTF-8");
-//                    }
                     httpClient = HttpClients.createDefault();
 //                    postMethod = new HttpPost("http://localhost:8080/portal/service/getDataTask");
                     postMethod = new HttpPost("http://"+portalUrl+"/service/getDataTask");

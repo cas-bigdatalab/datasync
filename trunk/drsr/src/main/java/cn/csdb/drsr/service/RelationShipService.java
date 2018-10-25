@@ -32,7 +32,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.io.File;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -52,7 +55,7 @@ public class RelationShipService {
     @Resource
     private RelationDao relationDao;
 
-   @Transactional
+    @Transactional
     public String addData(DataSrc datasrc)
     {
         try {
@@ -105,7 +108,7 @@ public class RelationShipService {
         return relationDao.editQueryData(id);
     }
 
-    public Integer queryTotalPage(){
+    public Map queryTotalPage(){
         return relationDao.queryTotalPage();
     }
 
@@ -138,7 +141,7 @@ public class RelationShipService {
 
 
     public List<DataSrc> findAll() {
-       return relationDao.findAll();
+        return relationDao.findAll();
     }
 
     public List<String> relationalDatabaseTableList(DataSrc dataSrc) {
@@ -150,7 +153,7 @@ public class RelationShipService {
     }
 
     public DataSrc findById(int id) {
-       return relationDao.findById(id);
+        return relationDao.findById(id);
     }
 
     public List<List<Object>> getDataBySql(String sql, Map<String, List<TableInfo>> tableComsMap,
@@ -194,6 +197,17 @@ public class RelationShipService {
     public List<List<Object>> getDataByTable(String tableName, HashMap<String, List<TableInfo>> tableComsMap,
                                              int dataSourceId, int start, int limit) {
         return getDataBySql("select * from " + tableName, tableComsMap, dataSourceId, start, limit);
+    }
+
+    public static void main(String[] args){
+        Date current_date = new Date();
+        //设置日期格式化样式为：yyyy-MM-dd
+        SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        //格式化当前日期
+        SimpleDateFormat.format(current_date.getTime());
+        //输出测试一下
+        System.out.println("当前的系统日期为：" + SimpleDateFormat.format(current_date.getTime()));
+        System.out.println(new Date());
     }
 
 }

@@ -11,10 +11,8 @@ import com.alibaba.fastjson.JSONObject;
 import org.omg.CORBA.DATA_CONVERSION;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -27,6 +25,7 @@ import java.util.List;
  * @create: 2018-10-10 10:12
  **/
 @Controller
+@RequestMapping("/datatask")
 public class DataTaskController {
     @Resource
     private DataTaskService dataTaskService;
@@ -42,7 +41,7 @@ public class DataTaskController {
      * @date:   2018/10/18 13:36
      */
     @ResponseBody
-    @RequestMapping(value="/task/{id}")
+    @RequestMapping(value="/{id}")
     public JSONObject executeTask(@PathVariable("id") String id){
         JSONObject jsonObject = new JSONObject();
         DataTask dataTask = dataTaskService.get(Integer.parseInt(id));
@@ -60,7 +59,7 @@ public class DataTaskController {
      * @date:   2018/10/18 13:45
      */
     @ResponseBody
-    @RequestMapping(value="/task/getAll")
+    @RequestMapping(value="/getAll")
     public JSONObject getAll(){
         JSONObject jsonObject = new JSONObject();
         List<DataTask> list = dataTaskService.getAllData();
@@ -68,4 +67,75 @@ public class DataTaskController {
         return jsonObject;
     }
 
+
+    /**
+     *
+     * Function Description: 数据任务页面跳转
+     *
+     * @param: []
+     * @return: org.springframework.web.servlet.ModelAndView
+     * @auther: hw
+     * @date: 2018/10/23 14:56
+     */
+    @RequestMapping("/")
+    public ModelAndView datatask() {
+        ModelAndView modelAndView = new ModelAndView("datatask");
+        return modelAndView;
+    }
+
+    /**
+     *
+     * Function Description: 数据任务展示、查询列表
+     *
+     * @param: [pageNo, pageSize, datataskType, status]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/10/24 10:37
+     */
+    @RequestMapping(value="/list")
+    @ResponseBody
+    public JSONObject datataskList(@RequestParam(name = "pageNo", defaultValue = "1", required = false) int pageNo,
+                                   @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
+                                   @RequestParam(name = "datataskType", required = false) String datataskType,
+                                   @RequestParam(name = "status", required = false) String status){
+        JSONObject jsonObject = new JSONObject();
+        List<DataTask> dataTasks = dataTaskService.getDatataskByPage((pageNo-1)*pageSize,pageSize,datataskType,status);
+        jsonObject.put("dataTasks",dataTasks);
+        return jsonObject;
+    }
+
+    /**
+     *
+     * Function Description:
+     *
+     * @param: [id]
+     * @return: int >0 删除成功 否则失败
+     * @auther: hw
+     * @date: 2018/10/24 10:47
+     */
+    @RequestMapping(value="/delete")
+    @ResponseBody
+    public int deleteDatatask(String datataskId){
+        return dataTaskService.deleteDatataskById(Integer.parseInt(datataskId));
+    }
+
+    /**
+     *
+     * Function Description: 查看数据任务信息
+     *
+     * @param: [id]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/10/24 10:54
+     */
+    @RequestMapping(value="detail")
+    @ResponseBody
+    public JSONObject datataskDetail(String datataskId){
+        JSONObject jsonObject = new JSONObject();
+        DataTask datatask = dataTaskService.get(Integer.parseInt(datataskId));
+        DataSrc dataSrc = dataSrcService.findById(datatask.getDataSourceId());
+        jsonObject.put("datatask",datatask);
+        jsonObject.put("dataSrc",dataSrc);
+        return jsonObject;
+    }
 }

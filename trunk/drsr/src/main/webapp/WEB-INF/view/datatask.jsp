@@ -315,7 +315,7 @@
             data.pageNum=num;
             var conData = data;
             $.ajax({
-                url:"${ctx}/drsr/task/getAll",
+                url:"${ctx}/datatask/getAll",
                 type:"GET",
                 data:conData,
                 success:function (data) {
@@ -362,11 +362,12 @@
         }
         function tableConfiguration2() {
             $.ajax({
-                url:"${ctx}/task/getAll",
+                url:"${ctx}/datatask/getAll",
                 type:"GET",
                 success:function (data) {
                     $(".table-message").hide();
                    var List =JSON.parse(data)
+                    console.log(List)
                     console.log(List)
                     var tabCon = template("resourceTmp1", List);
                     $("#bd-data").append(tabCon);
@@ -420,7 +421,7 @@
             var souceID = $(this).attr("keyIdTd");
             //var keyID = souceID + new Date().getTime();
             $.ajax({
-                url:"${ctx}/task/" + souceID,
+                url:"${ctx}/datatask/" + souceID,
                 type:"POST",
                 dataType:"JSON",
                 success:function (data) {
