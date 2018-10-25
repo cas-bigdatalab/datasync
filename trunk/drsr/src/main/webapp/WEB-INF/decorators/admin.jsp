@@ -153,7 +153,7 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <a href="${ctx}/relationship/indexTest">
+                            <a href="${ctx}/relationship/index">
                                 关系数据库</a>
                         </li>
                         <li>
