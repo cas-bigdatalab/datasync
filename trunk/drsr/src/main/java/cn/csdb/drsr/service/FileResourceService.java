@@ -137,13 +137,29 @@ public class FileResourceService {
                 String root = roots[i].toString();
                 String rootName= root.substring(0, root.indexOf("\\"));
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("id", root.replaceAll("\\\\", "%_%"));/*C:\*/
-                jsonObject.put("name", rootName);
-                jsonObject.put("type", "directory");
-                jsonObject.put("children", true);
-                JSONObject jo = new JSONObject();
-                jo.put("disabled", "true");
-                jsonObject.put("state", jo);
+                if (roots[i].isDirectory()) {
+                    File file1 = roots[i];
+                    File[] rootNode = file1.listFiles();
+                    if (rootNode != null) {
+                        if (rootNode.length == 0) {
+                            jsonObject.put("children", false);
+                        } else {
+                            jsonObject.put("children", true);
+                        }
+                    } else {
+                        jsonObject.put("children", false);
+                    }
+                    jsonObject.put("type", "directory");
+                    JSONObject jo = new JSONObject();
+                    jo.put("disabled", "true");
+                    jsonObject.put("state", jo);
+                    jsonObject.put("id", root.replaceAll("\\\\", "%_%"));
+                    jsonObject.put("name", rootName);
+                } else {
+                    jsonObject.put("type", "file");
+                    jsonObject.put("id", root.replaceAll("\\\\", "%_%"));
+                    jsonObject.put("name", rootName);
+                }
                 jsonObjects.add(jsonObject);
             }
             return jsonObjects;
