@@ -32,9 +32,8 @@ public class FileSourceController {
     @ResponseBody
     String delete(String dataId) {
         logger.debug("进入删除功能");
-        String tag = fileResourceService.deleteRelation(Integer.valueOf(dataId));
-        ModelAndView modelAndView = new ModelAndView("relationSource");
-        return tag;
+        String flag = fileResourceService.deleteRelation(Integer.valueOf(dataId));
+        return flag;
     }
 
     @RequestMapping("/add")
@@ -121,19 +120,6 @@ public class FileSourceController {
         logger.info("进入文件数据源模块列表页");
         ModelAndView mv = new ModelAndView("fileResource");
         return mv;
-       /* if (currentPage == null) {
-            currentPage = 1;
-        }
-        Integer totalPage = fileResourceService.queryTotalPage();
-        String totalPageS = String.valueOf(totalPage);
-        List<DataSrc> fileDataOfThisPage = fileResourceService.queryPage(currentPage);
-        String osName = fileResourceService.testOsName();
-        ModelAndView mv = new ModelAndView("fileResource");
-        mv.addObject("fileDataOfThisPage", fileDataOfThisPage);
-        mv.addObject("totalPage", totalPageS);
-        mv.addObject("currentPage", currentPage);
-        mv.addObject("osName", osName);
-        return mv;*/
     }
 
     @RequestMapping(value = "/indexPages")

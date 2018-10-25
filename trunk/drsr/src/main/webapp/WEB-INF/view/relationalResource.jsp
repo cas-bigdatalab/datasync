@@ -19,17 +19,17 @@
         <span>DataSync / 数据源</span>
     </div>
     <div class="source-title">
-        <span>数据源信息管理</span>
+        <span>关系数据源信息管理</span>
     </div>
     <div class="alert alert-info" role="alert" style="margin:0  33px">
         <!--查询条件 -->
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-12">
                 <button type="button" class="btn  btn-sm green pull-right" id="addSqlSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;添加SQL数据源</button>
             </div>
-            <div class="col-md-2">
+            <%--<div class="col-md-2">
                 <button type="button" class="btn  btn-sm green pull-right" id="addFileSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;添加文件型数据源</button>
-            </div>
+            </div>--%>
         </div>
     </div>
     <div class="source-table">
@@ -244,7 +244,7 @@
     <%--<td class="upload-percent">--</td>--%>
         <td>
             <button type="button" class="btn btn-success btn-xs purple " onclick="editData('{{value.dataSourceId}}');"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
-            <button type="button" class="btn btn-success btn-xs red" ><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+            <button type="button" class="btn btn-success btn-xs red" onclick="deleteData('{{value.dataSourceId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
         </td>
     </tr>
     {{/each}}
@@ -260,24 +260,9 @@
         <script src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.min.js"></script>
         <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.js"></script>
         <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
-       <%-- <td>编号</td>
-        <td>${item.dataSourceName}</td>
-        <td>关系数据源</td>
-        <td>${item.databaseName}</td>
-        <td>${item.databaseType}</td>
-        <td>${item.host}</td>
-        <td>${item.port}</td>
-        <td>
-            <button type="button" class="btn btn-success btn-xs purple " onclick="editData(${item.dataSourceId});"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
-            <button type="button" class="btn btn-success btn-xs red" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
-        </td>--%>
-
     <script>
         $(function(){
             tableConfiguration();
-/*
-            toastr["success"]("最少选择一个表资源");
-*/
         });
         /*get data table*/
         function tableConfiguration(num) {
@@ -298,7 +283,7 @@
                     var tabCon = template("resourceTmp1", relationData);
                     $("#relationBody").html("");
                     $("#relationBody").append(tabCon);
-                    if(DataList=="{}"){
+                    if(DataList.relationDataOfThisPage=="{}"||DataList.relationDataOfThisPage==null){
                         $(".table-message").html("暂时没有数据");
                         $(".page-message").html("");
                         $(".page-list").html("");
@@ -350,6 +335,7 @@
             handleValidation($sqlFrom);
         })
 
+        //编辑关系数据源
        function editData(dataId) {
             $.ajax({
                 type:'post',
@@ -395,6 +381,30 @@
             $("#relationalSourceEditModal").modal('show');
             var $fileFrom =$('#relationalSourceEditForm')
             handleValidation($fileFrom);
+        }
+
+        //删除关系数据源
+        function deleteData(dataId) {
+            bootbox.confirm("确认删除",function (r) {
+                if(r){
+                    $.ajax({
+                        type:'post',
+                        url: "/relationship/deleteData",
+                        data:{"dataId":dataId},
+                        success: function(result){
+                            var res = JSON.parse(result);
+                            if(res=='1'){
+                                toastr["success"]("删除成功");
+                                tableConfiguration();
+                            }else{
+                                toastr["error"]("删除失败");
+                            }
+                        }
+                    })
+                }else{
+
+                }
+            })
         }
 
 
@@ -496,11 +506,14 @@
                             success: function (result) {
                                 var jsonData = JSON.parse(result);
                                 if (jsonData == '1') {
-                                    alert("保存成功");
+                                    toastr["success"]("编辑成功");
+                                    $('#relationalSourceEditModal').modal('hide');
+                                    formValid.resetForm();
+                                    tableConfiguration();
                                 }else if(jsonData == '2') {
-                                    toastr["error"]("最少选择一个表资源");
+                                    toastr["error"]("数据库连接失败");
                                 }else {
-                                    alert("保存失败");
+                                    toastr["error"]("编辑失败");
                                 }
                             }
                         })
@@ -530,11 +543,14 @@
                             success: function (result) {
                                 var jsonData = JSON.parse(result);
                                 if (jsonData == '1') {
-                                    alert("保存成功");
-                                } else if (jsonData == '2') {
-                                    alert("数据库连接失败");
-                                } else {
-                                    alert("保存失败");
+                                    toastr["success"]("新增成功");
+                                    $('#relationalSourceModal').modal('hide');
+                                    formValid.resetForm();
+                                    tableConfiguration();
+                                }else if(jsonData == '2') {
+                                    toastr["error"]("数据库连接失败");
+                                }else {
+                                    toastr["error"]("新增失败");
                                 }
                             }
                         })
@@ -544,7 +560,6 @@
             });
 
             function cancelButton() {
-                console.log(123);
                 formValid.resetForm();
             }
 

@@ -154,7 +154,7 @@
                     <ul class="sub-menu">
                         <li>
                             <a href="${ctx}/relationship/index">
-                                关系数据库</a>
+                                关系数据源</a>
                         </li>
                         <li>
                             <a href="${ctx}/fileResource/index">

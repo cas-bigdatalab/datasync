@@ -21,15 +21,15 @@
         <span>DataSync / 数据源</span>
     </div>
     <div class="source-title">
-        <span>数据源信息管理</span>
+        <span>文件数据源信息管理</span>
     </div>
     <div class="alert alert-info" role="alert" style="margin:0  33px">
         <!--查询条件 -->
         <div class="row">
-            <div class="col-md-9">
+            <%--<div class="col-md-9">
                 <button type="button" class="btn  btn-sm green pull-right" id="addSqlSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;添加SQL数据源</button>
-            </div>
-            <div class="col-md-2">
+            </div>--%>
+            <div class="col-md-12">
                 <button type="button" class="btn  btn-sm green pull-right" id="addFileSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;添加文件型数据源</button>
             </div>
         </div>
@@ -42,8 +42,8 @@
                 <th>编号</th>
                 <th>数据源名称</th>
                 <th>文件类型</th>
-                <th width="50%">文件地址</th>
-                <th>状态</th>
+                <th width="30%">文件地址</th>
+                <th>创建时间</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -72,8 +72,8 @@
                             <div class="col-md-12">
                                 <div class="form-body">
                                     <div class="form-group">
-                                        <label for="dataSourceName" class="col-md-3 control-label">数据源名称<span class="required">
-													* </span></label>
+                                        <label for="dataSourceName" class="col-md-3 control-label"><span class="required">
+													* </span>数据源名称</label>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control" placeholder="请输入数据源名称"
                                                    id="dataSourceName"
@@ -81,12 +81,9 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="EnglishName" class="col-sm-3 control-label">英文名称<span class="required">
-													* </span></label></label>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control" placeholder="请输入数据源英文名称"
-                                                   id="EnglishName"
-                                                   name="EnglishName"/>
+                                        <label class="col-sm-3 control-label">文件类型</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="fileType"  value="本地文件" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -122,12 +119,18 @@
                             <div class="col-md-12">
                                 <div class="form-body">
                                     <div class="form-group">
-                                        <label for = "dataSourceNameE" class="col-md-3 control-label">数据源名称<span class="required">
-													* </span></label>
+                                        <label for = "dataSourceNameE" class="col-md-3 control-label"><span class="required">
+													* </span>数据源名称</label>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control"
                                                    id="dataSourceNameE"
                                                    name="dataSourceNameE"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">文件类型</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" name="fileType"  value="本地文件" disabled>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -159,17 +162,10 @@
         <td>{{value.dataSourceName}}</td>
         <td>{{value.fileType}}</td>
         <td>{{value.filePath}}</td>
-        {{if value.stat == 1}}
-        <td>正常</td>
-        {{else if value.stat == 2}}
-        <td>异常</td>
-        {{else}}
-        <td>异常</td>
-        {{/if}}
-    <%--<td class="upload-percent">--</td>--%>
+        <td>{{value.createTime}}</td>
         <td>
             <button type="button" class="btn btn-success btn-xs purple " onclick="editData('{{value.dataSourceId}}');"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
-            <button type="button" class="btn btn-success btn-xs red" ><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+            <button type="button" class="btn btn-success btn-xs red" onclick="deleteData('{{value.dataSourceId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
         </td>
     </tr>
     {{/each}}
@@ -186,31 +182,12 @@
         <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.js"></script>
         <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
         <script src="${ctx}/resources/bundles/jstree/dist/jstree.js" type="text/javascript"></script>
-    <%-- <td>编号</td>
-        <td>${item.dataSourceName}</td>
-        <td>关系数据源</td>
-        <td>${item.databaseName}</td>
-        <td>${item.databaseType}</td>
-        <td>${item.host}</td>
-        <td>${item.port}</td>
-        <td>
-            <button type="button" class="btn btn-success btn-xs purple " onclick="editData(${item.dataSourceId});"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
-            <button type="button" class="btn btn-success btn-xs red" keyID="aaa"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
-        </td>--%>
-
     <script>
         $(function(){
             tableConfiguration();
-/*
-            toastr["success"]("最少选择一个表资源");
-*/
         });
         /*get data table*/
         function tableConfiguration(num) {
-/*
-            data.pageNum=num;
-*/
-        /*    var conData = data;*/
             $.ajax({
                 url:"/fileResource/indexPages",
                 type:"GET",
@@ -224,7 +201,7 @@
                     var tabCon = template("resourceTmp1", fileData);
                     $("#fileBody").html("");
                     $("#fileBody").append(tabCon);
-                    if(DataList=="{}"){
+                    if(DataList.fileDataOfThisPage=="{}"||DataList.fileDataOfThisPage==null){
                         $(".table-message").html("暂时没有数据");
                         $(".page-message").html("");
                         $(".page-list").html("");
@@ -263,13 +240,7 @@
                 }
             })
         }
-        function confirmDeleteNode(){
-            $(".form-horizontal [type='text']").val("")
-            alert("ok")
-        }
-        function confirmAddNode(){
 
-        }
         $("#addFileSource").click(function () {
             $("#fileSourceModal").modal('show');
             $('#jstree_show').jstree({
@@ -345,6 +316,7 @@
             }
         }
 
+        //编辑文件数据源
        function editData(dataId) {
            $('#jstree_show_edit').jstree({
            "core": {
@@ -447,6 +419,30 @@
             handleValidation($fileFrom);
         }
 
+        //删除文件数据源
+        function deleteData(dataId) {
+            bootbox.confirm("确认删除",function (r) {
+                if(r){
+                    $.ajax({
+                        type: 'post',
+                        url: "/fileResource/deleteData",
+                        data: {"dataId": dataId},
+                        success: function (result) {
+                            var res = JSON.parse(result);
+                            if (res == '1') {
+                                toastr["success"]("删除成功");
+                                tableConfiguration();
+                            } else {
+                                toastr["error"]("删除失败");
+                            }
+                        }
+                    })
+                }else{
+
+                }
+            })
+        }
+
         function tagClick(obj){
             $(obj).parent().hide();
             $(obj).parent().text("");
@@ -515,16 +511,12 @@
                             success: function (result) {
                                 var jsonData = JSON.parse(result);
                                 if (jsonData == '1') {
-                                    $("#markEditHidden").val("1");
-                                    $("#editModal").hide();
-                                    $(".addSuccess").show();
-                                    $(".mask").show();
-                                } else if (jsonData == '2') {
-                                    $("#fileErrorE").show();
+                                    toastr["success"]("编辑成功");
+                                    $('#fileSourceEditModal').modal('hide');
+                                    formValid.resetForm();
+                                    tableConfiguration();
                                 } else {
-                                    $("#editModal").hide();
-                                    $(".addFail").show();
-                                    $(".mask").show();
+                                    toastr["error"]("编辑失败");
                                 }
                             }
                         })
@@ -547,11 +539,12 @@
                             success: function (result) {
                                 var jsonData = JSON.parse(result);
                                 if (jsonData == '1') {
-
-                                } else if (jsonData == '2') {
-
+                                    toastr["success"]("新增成功");
+                                    $('#fileSourceModal').modal('hide');
+                                    formValid.resetForm();
+                                    tableConfiguration();
                                 } else {
-
+                                    toastr["error"]("新增失败");
                                 }
                             }
                         })
@@ -561,7 +554,6 @@
             });
 
             function cancelButton() {
-                console.log(123);
                 formValid.resetForm();
             }
 
