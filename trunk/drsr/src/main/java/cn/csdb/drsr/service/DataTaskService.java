@@ -121,4 +121,7 @@ public class DataTaskService {
         return dataTaskDao.deleteDatataskById(datataskId);
     }
 
+    public boolean insertDatatask(DataTask datatask) {
+        return dataTaskDao.insertDatatask(datatask);
+    }
 }

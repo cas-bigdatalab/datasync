@@ -11,6 +11,7 @@ import java.util.Date;
 public class DataTask {
     private int dataTaskId;
     private int dataSourceId;
+    private String dataTaskName;
     private String dataTaskType;
     private String tableName;
     private String sqlString;
@@ -20,6 +21,14 @@ public class DataTask {
     private Date createTime;
     private String creator;
     private String status;
+
+    public String getDataTaskName() {
+        return dataTaskName;
+    }
+
+    public void setDataTaskName(String dataTaskName) {
+        this.dataTaskName = dataTaskName;
+    }
 
     public String getDataTaskType() {
         return dataTaskType;

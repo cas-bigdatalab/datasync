@@ -546,12 +546,12 @@
             dataRelSqlList =$sqlList.toString()
 
             $.ajax({
-                url:"${ctx}/relationship/saveDatatask",
+                url:"${ctx}/datatask/saveDatatask",
                 type:"POST",
                 data:{
                     dataSourceId:dataRelSrcId,
-                    souceCheck:dataRelTableList,
-                    sqlStatements:dataRelSqlList
+                    dataRelTableList:dataRelTableList,
+                    dataRelSqlList:dataRelSqlList
                 },
                 success:function (data) {
 
