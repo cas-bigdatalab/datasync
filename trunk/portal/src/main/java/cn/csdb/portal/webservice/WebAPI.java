@@ -62,8 +62,9 @@ public class WebAPI {
 
         logger.info("loginStatus = " + loginStatus + ", loginNotice = " + loginNotice);
 
-        loginObject.put("status", loginStatus);
+        loginObject.put("loginStatus", loginStatus);
         loginObject.put("loginNotice", loginNotice);
         return loginObject;
     }
+
 }
