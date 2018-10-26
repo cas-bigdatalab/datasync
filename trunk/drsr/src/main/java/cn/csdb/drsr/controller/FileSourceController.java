@@ -42,7 +42,7 @@ public class FileSourceController {
         logger.debug("新增功能开始");
         Date current_date = new Date();
         //设置日期格式化样式为：yyyy-MM-dd
-        SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //格式化当前日期
         String currentTime = SimpleDateFormat.format(current_date.getTime());
         DataSrc datasrc = new DataSrc();
@@ -70,7 +70,7 @@ public class FileSourceController {
         logger.debug("编辑功能开始,开始插入");
         Date current_date = new Date();
         //设置日期格式化样式为：yyyy-MM-dd
-        SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //格式化当前日期
         String currentTime = SimpleDateFormat.format(current_date.getTime());
         DataSrc datasrc = new DataSrc();
