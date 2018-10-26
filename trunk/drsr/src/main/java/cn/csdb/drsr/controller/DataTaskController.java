@@ -142,24 +142,30 @@ public class DataTaskController {
 
     /**
      *
-     * Function Description:数据任务保存
+     * Function Description:关系型数据任务保存
      *
      * @param: []
      * @return: com.alibaba.fastjson.JSONObject
      * @auther: hw
      * @date: 2018/10/23 10:29
      */
-    @ResponseBody
-    @RequestMapping(value="saveDatatask",method = RequestMethod.POST)
-    public JSONObject saveDatatask(int dataSrcId,
+//    @ResponseBody
+    @RequestMapping(value="saveRelationDatatask",method = RequestMethod.POST)
+    public JSONObject saveRelationDatatask(int dataSourceId,
                                    String dataRelTableList,
                                    @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList) {
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = new DataTask();
+        datatask.setDataSourceId(dataSourceId);
         datatask.setTableName(dataRelTableList);
         datatask.setSqlString(dataRelSqlList);
         datatask.setCreateTime(new Date());
         datatask.setStatus("0");
+        boolean flag = dataTaskService.insertDatatask(datatask);
+        jsonObject.put("result",flag);
+        if(flag == false){
+            return  jsonObject;
+        }
         return jsonObject;
     }
 }
