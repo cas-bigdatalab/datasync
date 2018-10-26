@@ -34,19 +34,133 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/themes/blue.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/custom.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/style.css">
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/main.css">
     <!-- END THEME STYLES -->
 
     <link rel="shortcut icon" href="${ctx}/resources/img/favicon.ico"/>
 
     <style>
-
+        .myactive{
+            background-color: #b7ecfe!important;
+        }
     </style>
 
 </head>
 
 <body>
+<div class="main-wrap">
+    <div class="page-head">
+        <div class="head-left">
+            <img src="${ctx}/resources/img/u7.png" >
+        </div>
+        <div class="head-right-center">
+            <div class="head-banner-center">
+                <span style="font-weight:700;font-family: '新細明體-ExtB Bold', '新細明體-ExtB Regular', '新細明體-ExtB'">DataSync</span>
+                <span style="font-weight:400;">&nbsp;&nbsp;&nbsp;中国烟草质量中心平台</span>
+            </div>
+            <div class="login-btn">
+                请登录
+            </div>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="body-left">
+            <ul class="list-ul center1" style="display: none">
+                <li><a href="${ctx}/ccc">专题库管理</a></li>
+                <li><a href="${ctx}/subjectMgmt/sdgsdfs?currentPage=1">用户组管理</a></li>
+                <li><a href="${ctx}/subjectMgmt/sdgsdfs?currentPage=1">资源分类管理</a></li>
+                <li><a href="${ctx}/subjectMgmt/zasda?currentPage=1">数据发布管理</a></li>
+                <li><a href="${ctx}/subjectMgmt/querySubject?currentPage=1">统计管理</a></li>
+                <li><a href="${ctx}/subjectMgmt/querySubject?currentPage=1">all数据发布管理</a></li>
+            </ul>
+            <ul class="list-ul center2"  style="display: none">
+                <li><a href="${ctx}/aaa">数据配置</a></li>
+                <li><a href="${ctx}/subjectMgmt/sdgsdfs?currentPage=1">数据发布管理</a></li>
+            </ul>
 
-<div class="top_div">
+        </div>
+        <div class="body-right">
+            <sitemesh:write property="body"/>
+            <%--<div class="setting-head">
+                <span>DataSync / 数据配置</span>
+            </div>
+            <div class="setting-title">
+                <span>数据配置</span>
+            </div>
+            <div class="container-fluid setting-table" >
+                <div class="row">
+                    <div class="col-md-2" style="font-size: 20px">选择表资源</div>
+                    <div class="col-md-9" >
+                        <div class="row" >
+                            <!--<div class="col-md-4">
+                                <label>
+                                    <input type="radio" name="data-table"> aw_day
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="radio" name="data-table"> Remember mesadad
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="radio" name="data-table"> Remember me
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="radio" name="data-table"> Remember me
+                                </label>
+                            </div>
+                            <div class="col-md-4">
+                                <label>
+                                    <input type="radio" name="data-table"> Remember me
+                                </label>
+                            </div>-->
+                            <table class="table">
+                                <tr>
+                                    <td><label>
+                                        <input type="radio" name="data-table"> aw_dadsadaday
+                                    </label></td>
+                                    <td><label>
+                                        <input type="radio" name="data-table"> aw_day
+                                    </label></td>
+                                    <td><label>
+                                        <input type="radio" name="data-table"> aw_day
+                                    </label></td>
+                                </tr>
+                                <tr>
+                                    <td><label>
+                                        <input type="radio" name="data-table"> aw_dadsadaday
+                                    </label></td>
+                                    <td><label>
+                                        <input type="radio" name="data-table"> aw_day
+                                    </label></td>
+                                    <td><label>
+                                        <input type="radio" name="data-table"> aw_day
+                                    </label></td>
+                                </tr>
+                                <tr>
+                                    <td><label>
+                                        <input type="radio" name="data-table"> aw_day
+                                    </label></td>
+                                    <td><label>
+                                        <input type="radio" name="data-table"> aw_day
+                                    </label></td>
+                                    <td><label>
+                                        <input type="radio" name="data-table"> aw_day
+                                    </label></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>--%>
+        </div>
+    </div>
+</div>
+<%--<div class="top_div">
     <div class="container">
 
     </div>
@@ -74,7 +188,7 @@
     <div class="container neirong_div">
         <sitemesh:write property="body"/>
     </div>
-</div>
+</div>--%>
 
 <div class="foot_div">2018-2020 &copy; 中国科学院计算机网络信息中心大数据部.版权所有.</div>
 
@@ -90,6 +204,31 @@
         scrolltotop.init('${ctx}');
         Layout.init();
         bootbox.setLocale("zh_CN");
+        var path = window.location.pathname;
+        if (path.indexOf('?') > -1)
+            path = path.substring(0, path.indexOf('?'));
+
+        if(path === "/"){
+            $(".center1").show()
+        }else if(path === "/aaa"){
+            $(".center2").show()
+        }
+        $(".list-ul a").each(function () {
+            var href = $(this).attr("href");
+            if (href.indexOf('?') > -1)
+                href = href.substring(0, href.indexOf('?'));
+            if (href === path) {
+                console.log("aaaaaaa")
+                $(this).addClass("myactive");
+                /*if ($(this).parent().parent().hasClass("sub-menu")) {
+                    $(this).parent().parent().parent().children("a").trigger("click");
+                    $(this).parent().parent().parent().children("a").append('<span class="selected"></span>');
+                    $(this).parent().parent().parent().addClass("active");
+                } else {
+                    $(this).parent().children("a").append('<span class="selected"></span>');
+                }*/
+            }
+        });
     });
 </script>
 <sitemesh:write property="div.siteMeshJavaScript"/>
