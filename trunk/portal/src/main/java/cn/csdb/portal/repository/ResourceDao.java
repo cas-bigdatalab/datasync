@@ -48,7 +48,7 @@ public class ResourceDao {
     public void delete(String id){
         DBObject query = QueryBuilder.start().and("_id").is(id).get();
         BasicQuery basicQuery = new BasicQuery(query);
-        mongoTemplate.remove(basicQuery, Resource.class);
+        mongoTemplate.remove(basicQuery, cn.csdb.portal.model.Resource.class);
     }
 
     public void delete(cn.csdb.portal.model.Resource resource){
@@ -63,13 +63,16 @@ public class ResourceDao {
      * @auther: Administrator
      * @date:   2018/10/23 16:11
      */
-    public List<cn.csdb.portal.model.Resource> getListByPage(String subjectCode, String title, String status, int pageNo, int pageSize){
+    public List<cn.csdb.portal.model.Resource> getListByPage(String subjectCode, String title, String publicType, String status, int pageNo, int pageSize){
         QueryBuilder queryBuilder = QueryBuilder.start();
         if(StringUtils.isNotEmpty(subjectCode)){
             queryBuilder = queryBuilder.and("subjectCode").is(subjectCode);
         }
         if (StringUtils.isNotEmpty(title)){
             queryBuilder = queryBuilder.and("title").regex(Pattern.compile("^.*"+title+".*$"));
+        }
+        if (StringUtils.isNotEmpty(publicType)){
+            queryBuilder =queryBuilder.and("publicType").is(publicType);
         }
         if (StringUtils.isNotEmpty(status)){
             queryBuilder =queryBuilder.and("status").is(status);
@@ -87,13 +90,16 @@ public class ResourceDao {
     }
 
 
-    public long countByPage(String subjectCode, String title, String status){
+    public long countByPage(String subjectCode, String title, String publicType, String status){
         QueryBuilder queryBuilder = QueryBuilder.start();
         if(StringUtils.isNotEmpty(subjectCode)){
             queryBuilder = queryBuilder.and("subjectCode").is(subjectCode);
         }
         if (StringUtils.isNotEmpty(title)){
             queryBuilder = queryBuilder.and("title").regex(Pattern.compile("^.*"+title+".*$"));
+        }
+        if (StringUtils.isNotEmpty(publicType)){
+            queryBuilder =queryBuilder.and("publicType").is(publicType);
         }
         if (StringUtils.isNotEmpty(status)){
             queryBuilder =queryBuilder.and("status").is(status);

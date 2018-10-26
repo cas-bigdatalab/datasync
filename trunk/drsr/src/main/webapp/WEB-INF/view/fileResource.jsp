@@ -161,7 +161,11 @@
         <td>{{i + 1}}</td>
         <td>{{value.dataSourceName}}</td>
         <td>{{value.fileType}}</td>
-        <td>{{value.filePath}}</td>
+        <td style="text-align: left">
+            <div style="white-space:pre-line;">
+                {{splStr(value.filePath)}}
+            </div>
+        </td>
         <td>{{value.createTime}}</td>
         <td>
             <button type="button" class="btn btn-success btn-xs purple " onclick="editData('{{value.dataSourceId}}');"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
@@ -240,6 +244,29 @@
                 }
             })
         }
+
+        template.helper("splStr",function (str) {
+            var str1 = str.replace(/;/g,"\n");
+
+
+            /*var str1=str.split(";")
+            console.log(str1)
+            var str="";
+            for(var i=0;i<str1.length;i++){
+                str+=str1[i]+"\n"
+            }
+            console.log(str)*/
+            /*var str2 =escapeHTMLString(str1)
+            console.log(str1)
+            console.log(str2)*/
+            return str1;
+        })/*
+        function escapeHTMLString(str) {
+            str = str.replace(/</g,'&lt;');
+            str = str.replace(/>/g,'&gt;');
+            return str;
+        }*/
+
 
         $("#addFileSource").click(function () {
             $("#fileSourceModal").modal('show');
@@ -403,9 +430,6 @@
                                            '<span class="filePathClass">'+filepath[i]+'</span>'+'&nbsp;&nbsp;<a href="#" title="Removing tag" onclick="tagClick(this)">x</a> </span>'
                                }
                                $("#tags_tagsinput").html(path);
-                               /*
-                                $("#filePathE").val(jsonData[index][key]);
-                                */
                            }
                            if (key == 'dataSourceId') {
                                $("#idHidden").val(jsonData[index][key]);

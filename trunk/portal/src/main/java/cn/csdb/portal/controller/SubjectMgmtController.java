@@ -31,7 +31,7 @@ public class SubjectMgmtController {
     }
 
     /**
-     * Function Description:
+     * Function Description: add subject to db
      *
      * @param subject, the wrapped object which contains information of the subject ot be added
      * @param image,   the image field of input form
@@ -52,13 +52,33 @@ public class SubjectMgmtController {
         subject.setImagePath(imagePath);
         logger.info("image saved");
 
+        logger.info("generate ftp user and password for the subject");
+        generateFtpInfo(subject);
+        logger.info("generate ftp user and password completed!");
+
         String addSubjectNotice = subjectService.addSubject(subject);
         logger.info("subject added, addSubjectNotice : " + addSubjectNotice);
 
-        int totalPages = subjectService.getTotalPages();
+        long totalPages = subjectService.getTotalPages();
         String redirectStr = "redirect:/subjectMgmt/querySubject?currentPage=" + totalPages;
         logger.info("redirect request to querySubject : " + redirectStr);
         return redirectStr;
+    }
+
+    /**
+     * Function Description: generate ftp user and password for subject to be added
+     *
+     * @param subject, the subject to be added
+     * @author zzl
+     * @date 2018/10/25
+     */
+    private void generateFtpInfo(Subject subject)
+    {
+        String ftpUser = "ftpUser" + subject.getSubjectCode();
+        String ftpPassword = "ftpPassword" + subject.getSubjectCode();
+
+        subject.setFtpUser(ftpUser);
+        subject.setFtpPassword(ftpPassword);
     }
 
     /**
@@ -66,6 +86,8 @@ public class SubjectMgmtController {
      *
      * @param image， the image to be stored
      * @return imageFilePath, the absolute local filesystem path of the image, may be a path like {portalRoot}/SubjectImages/img1.jpg, here {portalRoot} represent the root of the web app
+     * @author zzl
+     * @date 2018/10/25
      */
     private String saveImage(MultipartFile image) {
         logger.info("save image file, image = " + image);
@@ -203,7 +225,7 @@ public class SubjectMgmtController {
     public ModelAndView querySubject(HttpServletRequest request, @RequestParam(required = true) int currentPage) {
         logger.info("enterring SubjectMgmtController-querySubject");
 
-        int totalPages = 0;
+        long totalPages = 0;
         totalPages = subjectService.getTotalPages();
         List<Subject> subjectsOfThisPage = subjectService.querySubject(currentPage);
 
@@ -235,5 +257,23 @@ public class SubjectMgmtController {
         logger.info("queried subject - " + subject);
 
         return (JSONObject) JSON.toJSON(subject);
+    }
+
+    /**
+     * Function Description: check if the subject code has been used
+     * @param subjectCode, the subject code user give
+     * @return 1/0, 1 exists, 0 no
+     * @author  zzl
+     * @date 2018/10/25
+     */
+    @RequestMapping(value = "/querySubjectCode")
+    @ResponseBody
+    public long querySubjectCode(HttpServletRequest request, @RequestParam(name="code", required = true) String subjectCode) {
+        logger.info("enterring SubjectMgmtController-querySubjectCode");
+        logger.info("subjectCode = " + subjectCode);
+        long cntOfTheCode = subjectService.querySubjectCode(subjectCode);
+        logger.info("queried subjectCodeCnt - cntOfTheCode = " + cntOfTheCode);
+
+        return cntOfTheCode;
     }
 }

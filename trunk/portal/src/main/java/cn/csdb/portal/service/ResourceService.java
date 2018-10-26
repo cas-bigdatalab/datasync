@@ -59,13 +59,13 @@ public class ResourceService {
      * @date:   2018/10/23 16:28
      */
     @Transactional(readOnly = true)
-    public List<cn.csdb.portal.model.Resource> getListByPage(String subjectCode, String title, String status, int pageNo, int pageSize) {
-        return resourceDao.getListByPage(subjectCode, title, status, pageNo, pageSize);
+    public List<cn.csdb.portal.model.Resource> getListByPage(String subjectCode, String title, String publicType, String status, int pageNo, int pageSize) {
+        return resourceDao.getListByPage(subjectCode, title, publicType, status, pageNo, pageSize);
     }
 
 
     @Transactional(readOnly = true)
-    public long countByPage(String subjectCode, String title, String status){
-        return resourceDao.countByPage(subjectCode,title,status);
+    public long countByPage(String subjectCode, String title,String publicType, String status){
+        return resourceDao.countByPage(subjectCode,title,publicType, status);
     }
 }

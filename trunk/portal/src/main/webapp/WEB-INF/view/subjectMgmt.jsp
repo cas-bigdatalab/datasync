@@ -126,15 +126,6 @@
                         <div class="form-body">
 
                             <div class="form-group">
-                                <label class="col-md-3 control-label" for="subjectName" style="display:none;">
-                                    专题库id（不显示）
-                                </label>
-                                <div style="display:none;">
-                                    <input type="text" class="form-control" id="id" name="id" />
-                                </div>
-                            </div>
-
-                            <div class="form-group">
                                 <label class="col-md-3 control-label" for="subjectName">
                                     专题库名称<span style="color: red;">*</span>
                                 </label>
@@ -216,25 +207,6 @@
                                 </div>
                             </div>
 
-                            <%--<div class="form-group">
-                                <label class="col-md-3 control-label">
-                                    FTP账号<span style="color: red;">*</span>
-                                </label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" placeholder="请输入FTP账号" id="ftpUser" name="ftpUser"  required="required" />
-                                </div>
-                            </div>
-
-
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">
-                                    FTP密码<span style="color: red;">*</span>
-                                </label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" placeholder="请输入FTP密码" id="ftpPassword" name="ftpPassword" required="required" />
-                                </div>
-                            </div>--%>
-
                             <div class="form-group">
                                 <label class="col-md-3 control-label">
                                     序号<span style="color: red;">*</span>
@@ -267,10 +239,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button>
-                    <h4 id="titleForModifySubjectDialog" class="modal-title" >修改专题库</h4>
+                    <h4 id="titleForUpdateSubjectDialog" class="modal-title" >修改专题库</h4>
                 </div>
 
-                <form id="modifySubjectForm" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" accept-charset="utf-8"  action="${ctx}/subjectMgmt/addSubject">
+                <form id="updateSubjectForm" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" accept-charset="utf-8"  action="${ctx}/subjectMgmt/updateSubject">
 
                     <div class="modal-body">
                         <div class="col-md-12">
@@ -299,7 +271,7 @@
                                         专题库代码<span style="color: red;">*</span>
                                     </label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control" placeholder="请输入专题库代码" id="subjectCodeM" name="subjectCode"  required="required" />
+                                        <input type="text" class="form-control" placeholder="请输入专题库代码" id="subjectCodeM" name="subjectCode"  required="required" readonly="readonly"/>
                                     </div>
                                 </div>
 
@@ -457,16 +429,12 @@
                         $("#idM").val(data.id);
                         $("#subjectNameM").val(data.subjectName);
                         $("#subjectCodeM").val(data.subjectCode);
-                        var imageFilePath = data.imagePath.originalFilename;
-                        $("#imagePathM").attr("src", imageFilePath);
                         $("#briefM").val(data.brief);
                         $("#adminM").val(data.admin);
                         $("#adminPasswdM").val(data.adminPasswd);
                         $("#contactM").val(data.contact);
                         $("#phoneM").val(data.phone);
                         $("#emailM").val(data.email);
-                        $("#ftpUserM").val(data.ftpUser);
-                        $("#ftpPasswordM").val(data.ftpPassword);
                         $("#serialNoM").val(data.serialNo);
                     },
                     error: function(data) {
@@ -475,6 +443,25 @@
                 });
             }
         );
+
+        $("#subjectCode").blur(function() {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: '${ctx}/subjectMgmt/querySubjectCode',
+                data: {code: $(this).val()},
+                dataType: "json",
+                success: function (data){
+                    if (data > 0)
+                    {
+                        alert("subjectCode必须已经存在，请另外选择一个！")
+                    }
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        });
     </script>
 
 </body>
