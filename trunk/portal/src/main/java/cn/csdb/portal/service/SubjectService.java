@@ -28,4 +28,18 @@ public class SubjectService {
     public Subject findBySubjectCode(String subjectCode){
         return subjectDao.findBySubjectCode(subjectCode);
     }
+
+
+    /**
+     * Function Description: validate subject code login
+     * @param userName
+     * @param password
+     * @return loginStatus
+     */
+    public int validateLogin(String userName, String password) {
+        int loginStatus = 0;
+        loginStatus = subjectDao.validateLogin(userName, password);
+
+        return loginStatus;
+    }
 }

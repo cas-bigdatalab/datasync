@@ -1,14 +1,15 @@
 package cn.csdb.portal.webservice;
 
+import cn.csdb.portal.controller.SubjectMgmtController;
 import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.service.SubjectService;
 import com.alibaba.fastjson.JSONObject;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @program: DataSync
@@ -19,6 +20,8 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/api")
 public class WebAPI {
+    private static final Logger logger = LogManager.getLogger(WebAPI.class);
+
     @Resource
     private SubjectService subjectService;
 
@@ -28,5 +31,39 @@ public class WebAPI {
         Subject subject = subjectService.findBySubjectCode(subjectCode);
         jsonObject.put("data",subject);
         return jsonObject;
+    }
+
+    /**
+     * Function Description: subject user login
+     * @param request
+     * @param userName
+     * @param password
+     * @return
+     */
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject validateLogin(HttpServletRequest request, @RequestParam(name="userName", required = true) String userName, @RequestParam(name="password", required = true) String password) {
+        logger.info("enterring validateLogin");
+        logger.info("userName = " + userName + ", password = " + password);
+
+        JSONObject loginObject = new JSONObject();
+        String loginNotice = "";
+        int loginStatus = 0; // log success or not， 0 ：success, 1: failed, notice : username or password is wrong
+        loginStatus = subjectService.validateLogin(userName, password);
+
+        if (loginStatus == 0)
+        {
+            loginNotice = "登录失败：用户名或者密码错误";
+        }
+        else
+        {
+            loginNotice = "登录成功！";
+        }
+
+        logger.info("loginStatus = " + loginStatus + ", loginNotice = " + loginNotice);
+
+        loginObject.put("status", loginStatus);
+        loginObject.put("loginNotice", loginNotice);
+        return loginObject;
     }
 }
