@@ -25,7 +25,7 @@ public class SubjectAdminLoginController {
         logger.info("enterring validateLogin");
         logger.info("userName = " + userName + ", password = " + password);
 
-        JSONObject loginObject = new JSONObject();
+
         String loginNotice = "";
         int loginStatus = 0; // log success or not， 0 ：success, 1: failed, notice : username or password is wrong
         loginStatus = subjectAdminLoginService.validateLogin(userName, password);
@@ -41,8 +41,10 @@ public class SubjectAdminLoginController {
 
         logger.info("loginStatus = " + loginStatus + ", loginNotice = " + loginNotice);
 
-        loginObject.put("status", loginStatus);
+        JSONObject loginObject = new JSONObject();
+        loginObject.put("loginStatus", loginStatus);
         loginObject.put("loginNotice", loginNotice);
+
         return loginObject;
     }
 }

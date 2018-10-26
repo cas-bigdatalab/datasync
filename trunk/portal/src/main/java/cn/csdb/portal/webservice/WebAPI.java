@@ -40,7 +40,7 @@ public class WebAPI {
      * @param password
      * @return
      */
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @RequestMapping(value = "/clientLogin", method = RequestMethod.GET)
     @ResponseBody
     public JSONObject validateLogin(HttpServletRequest request, @RequestParam(name="userName", required = true) String userName, @RequestParam(name="password", required = true) String password) {
         logger.info("enterring validateLogin");
@@ -63,7 +63,6 @@ public class WebAPI {
         logger.info("loginStatus = " + loginStatus + ", loginNotice = " + loginNotice);
 
         loginObject.put("loginStatus", loginStatus);
-        loginObject.put("loginNotice", loginNotice);
         return loginObject;
     }
 
