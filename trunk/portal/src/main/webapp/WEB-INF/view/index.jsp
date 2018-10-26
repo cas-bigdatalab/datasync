@@ -20,7 +20,7 @@
 <body>
 
 <div class="page-content" style="min-height: 700px;">
-    <h3><b>欢迎使用DataSync专题库门户管理系统</b></h3>
+    <%--<h3><b>欢迎使用DataSync专题库门户管理系统</b></h3>--%>
 </div>
 
 </body>

@@ -20,4 +20,10 @@ public class IndexController {
         logger.info("进入portal的首页");
         return "index";
     }
+    @RequestMapping("/aaa")
+    public String sindex(HttpServletRequest request)
+    {
+        logger.info("进入portal的首页");
+        return "aaa";
+    }
 }

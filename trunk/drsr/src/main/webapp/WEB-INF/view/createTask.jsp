@@ -324,15 +324,6 @@
             <input type="checkbox" name="fileTable" value="{{value}}"> {{value}}
         </label>
     </div>
-    <%--<div class="col-md-4">
-        <label>
-            <div class="checker">
-                <span>
-                    <input type="checkbox" name="relationCheck" value="{{value}}">
-                </span>
-            </div> {{value}}
-        </label>
-    </div>--%>
     {{/each}}
 </script>
 </body>
@@ -377,7 +368,6 @@
                 success:function (data) {
                     $("#db-table").empty();
                     var List =JSON.parse(data)
-                    console.log(List)
                     var tabCon = template("dataRelationshipList2", List);
                     $("#db-table").append(tabCon);
 
@@ -406,12 +396,10 @@
                 },
                 success:function (data) {
                     $("#file-table").empty();
-                    console.log(data)
                     var List =JSON.parse(data)
-                    console.log(List)
+                    console.log(data)
                     var tabCon = template("dataFileshipList2", List);
                     $("#file-table").append(tabCon);
-
                 },
                 error:function () {
                     console.log("请求失败")
@@ -423,7 +411,6 @@
         })
         $("#totalList").delegate(".preview","click",function () {
             var $Str =$(this).parent().parent().find(".sqlStatements").val();
-            console.log($Str)
             staticSourceTableChoice(2, null, dataRelSrcId, $Str, "dataResource");
 
            /* $.ajax({
@@ -518,7 +505,6 @@
                 dataType: "json",
                 async: false,
                 success: function (data) {
-                    console.log(data)
                     if (!data || !data.tableInfos) {
                         return;
                     }
@@ -554,7 +540,6 @@
 
             dataRelTableList= list.toString()
             dataRelSqlList =$sqlList.toString()
-            console.log(dataRelSqlList)
 
             $.ajax({
                 url:"${ctx}/relationship/saveDatatask",
@@ -580,7 +565,6 @@
                 url:"${ctx}/relationship/findAllDBSrc",
                 type:"GET",
                 success:function (data) {
-                    console.log(data)
                     var list =JSON.parse(data)
                     var data={
                         data:list
@@ -596,7 +580,6 @@
                 url:"${ctx}/fileResource/findAllFileSrc",
                 type:"GET",
                 success:function (data) {
-                    console.log(data)
                     var list =JSON.parse(data)
                     var data={
                         data:list
