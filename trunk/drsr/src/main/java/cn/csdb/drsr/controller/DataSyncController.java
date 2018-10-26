@@ -47,10 +47,20 @@ public class DataSyncController {
     @Autowired
     private ConfigPropertyService configPropertyService;
 
+
+
+    /**
+     *
+     * Function Description: 数据任务文件上传到中心端
+     *
+     * @param: [dataTaskId, processId]
+     * @return: java.lang.String
+     * @auther: hw
+     * @date: 2018/10/26 10:12
+     */
     @ResponseBody
     @RequestMapping("/ftpUpload")
     public String ftpUpload(int dataTaskId,String processId){
-        FtpUtil ftpUtil = new FtpUtil();
         String host = configPropertyService.getProperty("FtpHost");
         String userName = configPropertyService.getProperty("FtpUser");
         String password = configPropertyService.getProperty("FtpPassword");
@@ -58,11 +68,17 @@ public class DataSyncController {
         String remoteFilepath = configPropertyService.getProperty("FtpRootPath");
         String portalUrl = configPropertyService.getProperty("PortalUrl");
         String subjectCode = configPropertyService.getProperty("SubjectCode");
+        FtpUtil ftpUtil = new FtpUtil();
         DataTask dataTask = dataTaskService.get(dataTaskId);
-        String[] localFileList = dataTask.getSqlFilePath().split(";");
-//        if(dataTask.getDataTaskType().equals("file")){
-//            localFileList =
-//        }
+        String[] localFileList = null;
+        if(dataTask.getDataTaskType().equals("file")){
+            localFileList[0] = dataTask.getFilePath();
+        }else if(dataTask.getDataTaskType().equals("mysql")){
+            localFileList = dataTask.getSqlFilePath().split(";");
+        }
+        if(localFileList.length == 0){
+            return "500";
+        }
         try {
             ftpUtil.connect(host, Integer.parseInt(port), userName, password);
             String result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath).toString();

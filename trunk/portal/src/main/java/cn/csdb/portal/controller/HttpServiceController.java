@@ -51,29 +51,36 @@ public class HttpServiceController {
         String siteFtpPath = subject.getFtpFilePath();
         dataTask.setSubjectCode(subject.getSubjectCode());
         String sqlFilePath = dataTask.getSqlFilePath();
-        String[] filePathList = sqlFilePath.split(";");
+        String[] sqlfilePathList = sqlFilePath.split(";");
+        String filepath = dataTask.getFilePath();
+        StringBuffer sqlfilePathBuffer = new StringBuffer();
         StringBuffer filePathBuffer = new StringBuffer();
         String structDBFile = "";
         String dataDBFile = "";
-        for(String filePath : filePathList){
-            if(filePath.equals("")){
+        for(String fp : sqlfilePathList){
+            if(fp.equals("")){
                 continue;
             }
             String fileName = "";
-            if (filePath.indexOf("/")>0){
-                fileName = filePath.substring(filePath.lastIndexOf("/")+1);
-            }else if(filePath.indexOf("\\")>0){
-                fileName = filePath.substring(filePath.lastIndexOf("\\")+1);
+            if (fp.indexOf("/")>0){
+                fileName = fp.substring(fp.lastIndexOf("/")+1);
+            }else if(fp.indexOf("\\")>0){
+                fileName = fp.substring(fp.lastIndexOf("\\")+1);
             }
-            filePathBuffer.append(siteFtpPath+fileName+";");
+            sqlfilePathBuffer.append(siteFtpPath+fileName+";");
             if(fileName.contains("data")){
                 dataDBFile = siteFtpPath+fileName;
             }else if(fileName.contains("struct")){
                 structDBFile = siteFtpPath+fileName;
             }
         }
-        dataTask.setSqlFilePath(filePathBuffer.toString());
-
+        dataTask.setSqlFilePath(sqlfilePathBuffer.toString());
+        if (filepath.indexOf("/")>0){
+            filepath = filepath.substring(filepath.lastIndexOf("/")+1);
+        }else if(filepath.indexOf("\\")>0){
+            filepath = filepath.substring(filepath.lastIndexOf("\\")+1);
+        }
+        dataTask.setFilePath(siteFtpPath+filepath);
         String username = configPropertyService.getProperty("db.username");
         String password = configPropertyService.getProperty("db.password");
         String dbName = subject.getDbName();

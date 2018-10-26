@@ -3,6 +3,7 @@ package cn.csdb.drsr.repository;
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.repository.mapper.DataSrcMapper;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
@@ -165,15 +166,22 @@ public class FileResourceDao {
 
     public List<JSONObject> fileSourceFileList(String filePath) {
         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
-        File file = new File(filePath);
-        if (!file.exists() || !file.isDirectory())
-            return jsonObjects;
-        File[] fileList = file.listFiles();
-        for (int i = 0; i < fileList.length; i++) {
+//        File file = new File(filePath);
+//        if (!file.exists() || !file.isDirectory())
+//            return jsonObjects;
+        String[] fp = filePath.split(";");
+        for (int i = 0; i < fp.length; i++) {
+            if(StringUtils.isBlank(fp[i])){
+                continue;
+            }
+            File file = new File(fp[i]);
+            if(!file.exists()){
+                continue;
+            }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", fileList[i].getPath().replaceAll("\\\\","%_%"));
-            jsonObject.put("text", fileList[i].getName().replaceAll("\\\\","%_%"));
-            if (fileList[i].isDirectory()) {
+            jsonObject.put("id", file.getPath().replaceAll("\\\\","%_%"));
+            jsonObject.put("text", file.getName().replaceAll("\\\\","%_%"));
+            if (file.isDirectory()) {
                 jsonObject.put("type", "directory");
                 JSONObject jo = new JSONObject();
                 jo.put("disabled","true");
