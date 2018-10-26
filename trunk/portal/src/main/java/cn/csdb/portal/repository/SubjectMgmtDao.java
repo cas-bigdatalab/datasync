@@ -4,6 +4,9 @@ import cn.csdb.portal.controller.SubjectMgmtController;
 import cn.csdb.portal.model.Subject;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
+import com.mongodb.WriteResult;
+import com.mongodb.bulk.DeleteRequest;
+import com.mongodb.client.result.DeleteResult;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -64,7 +67,7 @@ public class SubjectMgmtDao {
 
         //insert subject into mongodb
         int addedRowCnt = 1;
-        mongoTemplate.save(subject);
+        mongoTemplate.insert(subject);
 
         return addedRowCnt;
     }
@@ -157,26 +160,22 @@ public class SubjectMgmtDao {
     public int deleteSubject(String id) {
         logger.info("subject id to be deleted : " + id);
 
-        //delete db and ftp info
-        logger.info("delete db and ftp info.");
+        //delete db and ftp info， and image
         Subject subject = findSubjectById(id);
+        logger.info("delete db info.");
         deleteDb(subject.getSubjectCode());
+        logger.info("db info completed.");
+        logger.info("delete ftp info.");
         deleteFtp(subject.getFtpUser(), subject.getFtpPassword());
-        logger.info("db and ftp info deleted.");
-        logger.info("deleting subject'image");
+        logger.info("ftp info completed.");
+        logger.info("delete subject'image");
         deleteImage(subject.getImagePath());
-        logger.info("subject'image deleted.");
+        logger.info("delete subject'image completed.");
 
         logger.info("deleting subject");
-        String deleteSql = "delete from Subject where id = ?";
-        Object[] args = new Object[]{id};
-
         int deletedRowCnt = 0;
-        try {
-            deletedRowCnt = jdbcTemplate.update(deleteSql, args);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        WriteResult wr = mongoTemplate.remove(subject, "t_subject");
+        deletedRowCnt = wr.getN();
         logger.info("delete subject completed.");
 
         return deletedRowCnt;
@@ -195,8 +194,10 @@ public class SubjectMgmtDao {
         /*Object[] args = new Object[]{dbName};*/
         try {
             jdbcTemplate.update(deleteDbSql);
+            logger.info("delete db success!");
         } catch (Exception e) {
             e.printStackTrace();
+            logger.info("delete db failed!");
         }
         logger.info("delete db info completed!");
     }
@@ -215,8 +216,10 @@ public class SubjectMgmtDao {
         Object[] objs = new Object[]{ftpUser, ftpPassword};
         try {
             jdbcTemplate.update(deleteFtpInfo, objs);
+            logger.info("delete ftp info success!");
         } catch (Exception e) {
             e.printStackTrace();
+            logger.info("delete ftp info failed!");
         }
         logger.info("delete ftp info completed!");
     }
@@ -249,20 +252,17 @@ public class SubjectMgmtDao {
      * @date 2018/10/23
      */
     public int updateSubject(Subject subject) {
+        logger.info("update subject");
         logger.info("subject to be updated : " + subject);
-        String updateSql = "update subject set SubjectName=?, SubjectCode=?, ImagePath=?, Brief=?, Admin=?, AdminPasswd=?, Contact=?, Phone=?, Email=?, FtpUser=?, FtpPassword=?, SerialNo=? where ID=?";
-        Object[] args = new Object[]{subject.getSubjectName(), subject.getSubjectCode(), subject.getImagePath(),
-                subject.getBrief(), subject.getAdmin(), subject.getAdminPasswd(),
-                subject.getContact(), subject.getPhone(), subject.getEmail(),
-                subject.getFtpUser(), subject.getFtpPassword(), subject.getSerialNo(), Integer.parseInt(subject.getId())};
+
 
         int updatedRowCnt = 0;
 
         try {
+            //reserverd, not userd.
             updateDb(subject.getSubjectCode());
             updateFtp(subject.getFtpUser(), subject.getFtpPassword());
-
-            updatedRowCnt = jdbcTemplate.update(updateSql, args);
+            mongoTemplate.save(subject);
         } catch (Exception e) {
             e.printStackTrace();
         }

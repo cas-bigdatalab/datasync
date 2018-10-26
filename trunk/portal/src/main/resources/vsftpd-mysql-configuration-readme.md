@@ -20,6 +20,7 @@ vsftpd的用户分为三种。
 
 useradd vftpuser
 chmod 700 /home/vftpuser
+usermod -g root vftpuser
 
 2、在mysql中创建存放虚拟用户的数据库和表
 -----------------------------------------
