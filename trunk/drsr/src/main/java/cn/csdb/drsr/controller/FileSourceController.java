@@ -79,19 +79,34 @@ public class FileSourceController {
         datasrc.setCreateTime(currentTime);
         datasrc.setFileType(fileType);
         if(nodes!=null) {
-            String nodePath = "";
-            for (String nodeId : nodes) {
-                String str = nodeId.replaceAll("%_%", "/");
-                String str1 = fileResourceService.traversingFiles(str);
-                nodePath += str1;
+            if(attr!=null) {
+                String nodePath = "";
+                for (String nodeId : nodes) {
+                    String str = nodeId.replaceAll("%_%", "/");
+                    String str1 = fileResourceService.traversingFiles(str);
+                    nodePath += str1;
+                }
+                String[] traversingNodes = nodePath.split(";");
+                String[] unionNodes = FileResourceService.union(attr, traversingNodes);
+                String filePath = "";
+                for (String unionNode : unionNodes) {
+                    filePath += unionNode.replaceAll("/", "\\\\") + ";";
+                }
+                datasrc.setFilePath(filePath);
+            }else{
+                String nodePath = "";
+                for (String nodeId : nodes) {
+                    String str = nodeId.replaceAll("%_%", "/");
+                    String str1 = fileResourceService.traversingFiles(str);
+                    nodePath += str1;
+                }
+                String[] traversingNodes = nodePath.split(";");
+                String filePath = "";
+                for (String traversingNode : traversingNodes) {
+                    filePath += traversingNode.replaceAll("/", "\\\\") + ";";
+                }
+                datasrc.setFilePath(filePath);
             }
-            String[] traversingNodes = nodePath.split(";");
-            String[] unionNodes = FileResourceService.union(attr, traversingNodes);
-            String filePath = "";
-            for (String unionNode : unionNodes) {
-                filePath += unionNode.replaceAll("/", "\\\\") + ";";
-            }
-            datasrc.setFilePath(filePath);
         }else{
             String filePath = "";
             for (String unionNode : attr) {

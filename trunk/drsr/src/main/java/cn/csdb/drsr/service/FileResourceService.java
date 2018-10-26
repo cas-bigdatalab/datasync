@@ -102,31 +102,6 @@ public class FileResourceService {
         return fileResourceDao.queryPage(requestedPage);
     }
 
-    /*public String testFileIsExist(String filePath) {
-        File rfile = new File(filePath);
-        if (!rfile.exists()) {
-
-            return "fileIsNull";
-
-        } else {
-            return "fileIsNotNull";
-        }
-    }
-
-    public String testOsName() {
-        Properties prop = System.getProperties();
-        String os = prop.getProperty("os.name");
-        if (os != null && os.toLowerCase().indexOf("linux") > -1) {
-
-            return "linux";
-
-        } else {
-
-            return "windows";
-
-        }
-    }*/
-
     public List<JSONObject> fileTreeLoading(String data) {
         File file;
         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
