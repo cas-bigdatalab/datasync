@@ -554,14 +554,8 @@
                 type:"POST",
                 data:{
                     dataSourceId:dataRelSrcId,
-<<<<<<< HEAD
-                    souceCheck:dataRelTableList,
-                    sqlStatements:dataRelSqlList,
-                    DataTaskName:dataRelTaskName
-=======
                     dataRelTableList:dataRelTableList,
                     dataRelSqlList:dataRelSqlList
->>>>>>> bb05bb9606371b3bb122e69779f6592d83a41ba8
                 },
                 success:function (data) {
                     /*window.location.href="${ctx}/dataUpload"*/
