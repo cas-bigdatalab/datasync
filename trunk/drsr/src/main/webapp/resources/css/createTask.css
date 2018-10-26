@@ -70,6 +70,10 @@
     line-height: 65px;
     text-align: left;
 }
+.dataHead4{
+    font-size: 15px;
+    line-height: 28px;
+}
 .select-local .left,.select-local .right{
     float: left;
     width: 50%;

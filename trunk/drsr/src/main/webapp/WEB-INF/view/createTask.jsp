@@ -108,7 +108,7 @@
                 </div>
             </div>
         </div>
-        <div class="select-local" style="display: none;max-height: 500px;overflow: auto">
+        <div class="select-local" style="display: none;">
             <%--<button type="button" class="btn btn-success" id="upload-directory">上传目录</button>
             <button type="button" class="btn btn-success" id="upload-file">上传文件</button>
             <div style="min-height: 400px;margin-top: 50px">
@@ -136,11 +136,11 @@
                     <option value="">关系数据源DB2</option>
                     <option value="">数据源OracleData</option>--%>
                 </select>
-                <div class="database-con-file container-fluid" style="display: none">
+                <div class="database-con-file container-fluid" style="display: none;">
                     <div class="row">
-                        <div class="col-md-12 dataHead3">
+                        <div class="col-md-12 dataHead3" style="max-height: 500px;overflow: auto;padding-top: 10px">
                             <div class="col-md-2">选择文件</div>
-                            <div class="col-md-9" >
+                            <div class="col-md-9 dataHead4" >
                                 <div class="row" id="file-table">
                                     <%--<div class="col-md-4">
                                         <label>
@@ -180,7 +180,7 @@
                             </div>
                         </div>
                         <div class="col-md-12 ">
-                            <button type="button" class="btn green pull-right" onclick="sendRelationTask()">提交</button>
+                            <button type="button" class="btn green pull-right" onclick="sendFileTask()">提交</button>
                         </div>
                     </div>
                 </div>
@@ -275,7 +275,7 @@
 <script type="text/html" id="dataRelationshipList">
     <option value="" id="selNone" selected="selected">-----------</option>
     {{each data as value i}}
-    <option value="{{value.dataSourceName}}" id="{{value.dataSourceId}}">{{value.dataSourceName}}</option>
+    <option value="{{value.dataSourceName}}" id="{{value.dataSourceId}}" task-name="value.DataTaskName">{{value.dataSourceName}}</option>
     {{/each}}
 </script>
 <script type="text/html" id="dataRelationshipList2">
@@ -314,7 +314,7 @@
 <script type="text/html" id="dataFileshipList">
     <option value="" id="selFileNone" selected="selected">-----------</option>
     {{each data as value i}}
-    <option value="{{value.dataSourceName}}" Keyid="{{value.dataSourceId}}">{{value.dataSourceName}}</option>
+    <option value="{{value.dataSourceName}}" Keyid="{{value.dataSourceId}}" task-name="value.DataTaskName">{{value.dataSourceName}}</option>
     {{/each}}
 </script>
 <script type="text/html" id="dataFileshipList2">
@@ -322,7 +322,7 @@
     <div class="col-md-6">
         <label>
             <input type="checkbox" name="fileTable" value="{{value.id}}">
-            <div style="word-break: break-all">{{value.text}}</div>
+            <span style="word-break: break-all">{{value.text}}</span>
         </label>
     </div>
     {{/each}}
@@ -335,10 +335,12 @@
 
     <script>
         var dataRelSrcId;
+        var dataRelTaskName;
         var dataRelTableList;
         var dataRelSqlList;
         var dataFileSrcId;
         var dataFilePathList;
+        var dataFileTaskName;
         var curSQLStrIndex = 0;
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
@@ -352,7 +354,9 @@
         })
         $("#DBchange").on("change",function () {
             var id = $("#DBchange option:selected").attr("id");
+            var taskNname = $("#DBchange option:selected").attr("task-name");
             dataRelSrcId =id;
+            dataRelTaskName = taskNname;
             var name = $(this).val();
             if(name == ""){
                 $(".database-con-rel").hide();
@@ -381,7 +385,9 @@
         })
         $("#DBFilechange").on("change",function () {
             var id = $("#DBFilechange option:selected").attr("Keyid");
+            var taskname = $("#DBFilechange option:selected").attr("task-name");
             dataFileSrcId =id;
+            dataFileTaskName=taskname;
             var name = $(this).val();
             if(name == ""){
                 $(".database-con-file").hide();
@@ -533,35 +539,59 @@
                 toastr["success"]("最少选择一个表资源");
                 return
             }
-            var list = new Array();
+            var relTabStr = "";
             $eleChecked.each(function () {
-                list.push($(this).val())
+                relTabStr+=$(this).val()+";"
             });
-            var $sqlList= new Array();
+            var relSqlStr= "";
             $(".sqlStatements").each(function () {
-                $sqlList.push($(this).val())
+                relSqlStr+=$(this).val()+";"
             })
-
-            dataRelTableList= list.toString()
-            dataRelSqlList =$sqlList.toString()
-
+            dataRelTableList= relTabStr;
+            dataRelSqlList =relSqlStr;
             $.ajax({
                 url:"${ctx}/relationship/saveDatatask",
                 type:"POST",
                 data:{
                     dataSourceId:dataRelSrcId,
                     souceCheck:dataRelTableList,
-                    sqlStatements:dataRelSqlList
+                    sqlStatements:dataRelSqlList,
+                    DataTaskName:dataRelTaskName
                 },
                 success:function (data) {
-
                     /*window.location.href="${ctx}/dataUpload"*/
                 },
                 error:function () {
-
                 }
             })
 
+        }
+        function sendFileTask(){
+            var $eleChecked = $("[name='fileTable']:checked")
+            var numChecked = $eleChecked.size();
+            if (numChecked == 0) {
+                toastr["success"]("最少选择一个表资源");
+                return
+            }
+            var fileTabStr = "";
+            $eleChecked.each(function () {
+                fileTabStr+=$(this).val()+";"
+            });
+            dataFilePathList=fileTabStr;
+            $.ajax({
+                url:"${ctx}/relationship/saveDatatask",
+                type:"POST",
+                data:{
+                    dataSourceId:dataFileSrcId,
+                    souceCheck:dataFileTaskName,
+                    sqlStatements:dataFilePathList,
+                },
+                success:function (data) {
+                    /*window.location.href="${ctx}/dataUpload"*/
+                },
+                error:function () {
+                }
+            })
         }
 
         $(function(){
