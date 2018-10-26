@@ -255,7 +255,6 @@ public class SubjectMgmtDao {
         logger.info("update subject");
         logger.info("subject to be updated : " + subject);
 
-
         int updatedRowCnt = 0;
 
         try {
