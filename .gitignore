@@ -25,7 +25,10 @@ hs_err_pid*
 #idea related files
 .idea
 *.iml
+trunk/drsr/drsr.iml
+trunk/portal/portal.iml
 
 #classes directory and target directory
 trunk/classes
 trunk/portal/target
+trunk/drsr/target
