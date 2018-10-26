@@ -196,7 +196,7 @@
                         <div style="height: 70px"></div>
                     </li>
                     <li class="start">
-                        <a href="${ctx}/">
+                        <a href="${ctx}/subjectMgmt/querySubject?currentPage=1">
                             <i class="icon-user"></i>
                             <span class="title">专题库</span>
                             <span class="arrow"></span>

@@ -13,7 +13,7 @@
 
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/default.css"/>
+    <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/default.css"/>--%>
     <style type="text/css">
         td {
             text-align: center;
@@ -25,6 +25,7 @@
     </style>
 </head>
 <body>
+<div class="page-content">
     <h3>欢迎来到专题库注册页面</h3>
 
     <hr />
@@ -43,44 +44,44 @@
     <div class="portlet-body">
         <table class="table table-hover table-bordered">
             <thead>
-                <tr>
-                    <th style="display:none;">专题库ID</th>
-                    <th>序号</th>
-                    <th>专题库名称</th>
-                    <th>专题库代码</th>
-                    <th>管理员账号</th>
-                    <th>管理员密码</th>
-                    <th>专题库负责人</th>
-                    <th>负责人电话</th>
-                    <th>FTP账号</th>
-                    <th>FTP密码</th>
-                    <th>操作</th>
-                </tr>
+            <tr>
+                <th style="display:none;">专题库ID</th>
+                <th>序号</th>
+                <th>专题库名称</th>
+                <th>专题库代码</th>
+                <th>管理员账号</th>
+                <th>管理员密码</th>
+                <th>专题库负责人</th>
+                <th>负责人电话</th>
+                <th>FTP账号</th>
+                <th>FTP密码</th>
+                <th>操作</th>
+            </tr>
             </thead>
             <tbody
-                <c:forEach items="${subjectsOfThisPage}" var="subject" varStatus="vs">
-                    <tr>
-                        <td style="display:none;">${subject.id}</td>
-                        <td>${subject.serialNo}</td>
-                        <td>${subject.subjectName}</td>
-                        <td>${subject.subjectCode}</td>
-                        <td>${subject.admin}</td>
-                        <td>${subject.adminPasswd}</td>
-                        <td>${subject.contact}</td>
-                        <td>${subject.phone}</td>
-                        <td>${subject.ftpUser}</td>
-                        <td>${subject.ftpPassword}</td>
-                        <td id="${subject.id}">
-                            <a title="修改" class="updateSubjectBtn" data-target="#updateSubjectDialog" data-toggle="modal">
-                                <span class="btn default btn-xs purple updateButton">修改</span>
-                            </a>
-                            &nbsp;&nbsp;
-                            <a title="删除"  class="deleteSubjectBtn" data-target="#deleteSubjectDialog" data-toggle="modal">
-                                <span class="btn default btn-xs red">删除</span>
-                            </a>
-                        </td>
-                    </tr>
-                </c:forEach>
+            <c:forEach items="${subjectsOfThisPage}" var="subject" varStatus="vs">
+                <tr>
+                    <td style="display:none;">${subject.id}</td>
+                    <td>${subject.serialNo}</td>
+                    <td>${subject.subjectName}</td>
+                    <td>${subject.subjectCode}</td>
+                    <td>${subject.admin}</td>
+                    <td>${subject.adminPasswd}</td>
+                    <td>${subject.contact}</td>
+                    <td>${subject.phone}</td>
+                    <td>${subject.ftpUser}</td>
+                    <td>${subject.ftpPassword}</td>
+                    <td id="${subject.id}">
+                        <a title="修改" class="updateSubjectBtn" data-target="#updateSubjectDialog" data-toggle="modal">
+                            <span class="btn default btn-xs purple updateButton">修改</span>
+                        </a>
+                        &nbsp;&nbsp;
+                        <a title="删除"  class="deleteSubjectBtn" data-target="#deleteSubjectDialog" data-toggle="modal">
+                            <span class="btn default btn-xs red">删除</span>
+                        </a>
+                    </td>
+                </tr>
+            </c:forEach>
             </tbody>
         </table>
     </div>
@@ -95,10 +96,10 @@
             </li>
 
             <c:forEach begin="1" end="${totalPages}" step="1" varStatus="vs">
-            <li>
-                <a href="${ctx}/subjectMgmt/querySubject?currentPage=${vs.count}">${vs.count}</a>
-                <c:set value="${vs.count}" var="currentPage" />
-            </li>
+                <li>
+                    <a href="${ctx}/subjectMgmt/querySubject?currentPage=${vs.count}">${vs.count}</a>
+                    <c:set value="${vs.count}" var="currentPage" />
+                </li>
             </c:forEach>
 
             <li>
@@ -109,6 +110,8 @@
             </li>
         </ul>
     </div>
+</div>
+
 
     <div id="addSubjectDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
         <div class="modal-dialog">
