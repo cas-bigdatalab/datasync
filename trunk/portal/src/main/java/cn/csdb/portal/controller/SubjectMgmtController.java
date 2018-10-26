@@ -158,7 +158,8 @@ public class SubjectMgmtController {
         logger.info("SubjectMgmtController-updateSubject -" + subject);
         logger.info("SubjectMgmtController-updateSubject - MultiparFile = " + image + ", fileName = " + image.getOriginalFilename());
         logger.info("updating image");
-        updateImage(subject, image);
+        String newImagePath  = updateImage(subject, image);
+        subject.setImagePath(newImagePath);
         logger.info("updated image");
         String updateSubjectNotice = subjectService.updateSubject(subject);
         logger.info("update subject completed. updateSubjectNotice = " + updateSubjectNotice);
@@ -187,7 +188,11 @@ public class SubjectMgmtController {
         if ((image != null) && (image.getOriginalFilename() != "")) {
             deleteImage(tmpSubject.getImagePath());
             imagePath = saveImage(image);
-        } else {
+        }
+        else if ((image != null) && (image.getOriginalFilename() == null)){
+            imagePath = saveImage(image);
+        }
+        else {
             imagePath = tmpSubject.getImagePath();
         }
 
