@@ -23,34 +23,40 @@
     <link href="${ctx}/resources/bundles/bootstrapv3.3/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/metronic/global/css/components.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/metronic/global/css/plugins.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/metronic/css/layout.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/metronic/css/themes/light.css" rel="stylesheet" type="text/css"
+          id="style_color"/>
+    <link href="${ctx}/resources/bundles/metronic/css/custom.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
 
     <!--BEGIN PAGE STYLES-->
     <sitemesh:write property="head"/>
     <!--END PAGE STYLES-->
 
     <!-- BEGIN THEME STYLES -->
-    <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/style.css">
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/style.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/pages/css/style-shop.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/style-responsive.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/themes/blue.css">
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/custom.css">--%>
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/custom.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/style.css">
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/reset.css">
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/main.css">
+    <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/main.css">--%>
     <!-- END THEME STYLES -->
 
     <link rel="shortcut icon" href="${ctx}/resources/img/favicon.ico"/>
 
     <style>
-        .myactive{
+        /*.myactive{
             background-color: #b7ecfe!important;
-        }
+        }*/
     </style>
 
 </head>
 
 <body>
-<div class="main-wrap">
+<%--<div class="main-wrap">
     <div class="page-head">
         <div class="head-left">
             <img src="${ctx}/resources/img/u7.png" >
@@ -83,7 +89,7 @@
         </div>
         <div class="body-right" style="min-height: 500px">
             <sitemesh:write property="body"/>
-            <%--<div class="setting-head">
+            &lt;%&ndash;<div class="setting-head">
                 <span>DataSync / 数据配置</span>
             </div>
             <div class="setting-title">
@@ -157,11 +163,11 @@
                         </div>
                     </div>
                 </div>
-            </div>--%>
+            </div>&ndash;%&gt;
         </div>
     </div>
-</div>
-<%--<div class="top_div">
+</div>--%>
+<div class="top_div">
     <div class="container">
 
     </div>
@@ -171,7 +177,121 @@
 
     <div class=" container tatle_div">DataSync专题库门户管理系统</div>
 
-    <div class="container daohang_div">
+    <div class="page-container" style="min-height: 550px;width: 90%;margin: 0 auto">
+        <!-- BEGIN SIDEBAR -->
+        <div class="page-sidebar-wrapper">
+            <div class="page-sidebar navbar-collapse">
+                <!-- BEGIN SIDEBAR MENU -->
+                <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
+                <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
+                <!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
+                <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+                <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
+                <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+                <ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+                    <li>
+                        <div style="height: 70px"></div>
+                    </li>
+                    <li class="start">
+                        <a href="${ctx}/">
+                            <i class="icon-home"></i>
+                            <span class="title">专题库</span>
+                            <span class="arrow"></span>
+                        </a>
+                    </li>
+                    <%-- <shiro:hasRole name="Register">--%>
+                    <li>
+                        <a href="${ctx}/dataUpload">
+                            <i class="icon-wrench"></i>
+                            <span class="title">数据类型注册</span>
+                            <span class="arrow "></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${ctx}/createTask">
+                            <i class="icon-wrench"></i>
+                            <span class="title">元素结构管理</span>
+                            <span class="arrow "></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${ctx}/dataSource">
+                            <i class="icon-wrench"></i>
+                            <span class="title">用户管理</span>
+                            <span class="arrow "></span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;">
+                            <i class=" icon-drawer"></i>
+                            <span class="title">统计管理</span>
+                            <span class="arrow "></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="${ctx}/relationship/index">
+                                    专题detail</a>
+                            </li>
+                            <li>
+                                <a href="${ctx}/fileResource/index">
+                                    专题total</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <%-- </shiro:hasRole>
+                     <shiro:hasRole name="管理员">--%>
+                    <%--<li>
+                        <a href="${ctx}/resource/audit/localAudit">
+                            <i class="icon-lock"></i>
+                            <span class="title">注册资源审核</span>
+                            <span class="arrow "></span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="${ctx}/resCatalog">
+                            <i class="icon-list"></i>
+                            <span class="title">本地资源目录管理</span>
+                            <span class="arrow "></span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="${ctx}/metaTemplate/">
+                            <i class="icon-layers"></i>
+                            <span class="title">元数据模板管理</span>
+                            <span class="arrow "></span>
+                        </a>
+                    </li>--%>
+                    <li>
+                        <a href="${ctx}/projectMessage">
+                            <i class="icon-wrench"></i>
+                            <span class="title">数据配置</span>
+                            <span class="arrow "></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="${ctx}/projectMessage">
+                            <i class="icon-wrench"></i>
+                            <span class="title">数据发布</span>
+                            <span class="arrow "></span>
+                        </a>
+                    </li>
+
+                </ul>
+                <!-- END SIDEBAR MENU -->
+            </div>
+        </div>
+        <!-- END SIDEBAR -->
+        <!-- BEGIN CONTENT -->
+        <div class="page-content-wrapper">
+            <sitemesh:write property="body"/>
+
+        </div>
+        <!-- END CONTENT -->
+    </div>
+ <%--   <div class="container daohang_div">
         <div class="col-xs-6 nav_div">
             <table cellpadding="0" cellspacing="0" width="100%">
                 <tr>
@@ -188,8 +308,8 @@
 
     <div class="container neirong_div">
         <sitemesh:write property="body"/>
-    </div>
-</div>--%>
+    </div>--%>
+</div>
 
 <div class="foot_div">2018-2020 &copy; 中国科学院计算机网络信息中心.版权所有.</div>
 
@@ -200,6 +320,8 @@
 <script src="${ctx}/resources/bundles/frontend/layout/scripts/back-to-top.js"></script>
 <script src="${ctx}/resources/bundles/frontend/layout/scripts/layout.js"></script>
 <script src="${ctx}/resources/bundles/bootbox/bootbox.min.js"></script>
+<script src="${ctx}/resources/bundles/metronic/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="${ctx}/resources/bundles/metronic/scripts/layout.js" type="text/javascript"></script>
 <script type="text/javascript">
     jQuery(document).ready(function () {
         scrolltotop.init('${ctx}');
@@ -208,28 +330,19 @@
         var path = window.location.pathname;
         if (path.indexOf('?') > -1)
             path = path.substring(0, path.indexOf('?'));
-
-        if(path === "/"){
-            $(".center1").show()
-        }else if(path === "/aaa"){
-            $(".center2").show()
-        }
-        $(".list-ul a").each(function () {
+        $("ul.page-sidebar-menu a").each(function () {
             var href = $(this).attr("href");
-
             if (href.indexOf('?') > -1)
                 href = href.substring(0, href.indexOf('?'));
             if (href === path) {
-                $(this).parent().parent().show()
-                console.log("aaaaaaa")
-                $(this).addClass("myactive");
-                /*if ($(this).parent().parent().hasClass("sub-menu")) {
+                $(this).parent().addClass("active");
+                if ($(this).parent().parent().hasClass("sub-menu")) {
                     $(this).parent().parent().parent().children("a").trigger("click");
                     $(this).parent().parent().parent().children("a").append('<span class="selected"></span>');
                     $(this).parent().parent().parent().addClass("active");
                 } else {
                     $(this).parent().children("a").append('<span class="selected"></span>');
-                }*/
+                }
             }
         });
     });

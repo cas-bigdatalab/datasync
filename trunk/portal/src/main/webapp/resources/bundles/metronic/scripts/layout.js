@@ -147,7 +147,7 @@ var Layout = function () {
                 parent.children('li.open').removeClass('open');
             }
 
-            var slideOffeset = -200;
+            var slideOffeset = -400;
 
             if (sub.is(":visible")) {
                 jQuery('.arrow', jQuery(this)).removeClass("open");
