@@ -21,15 +21,10 @@ public class SubjectAdminLoginService
 
     private boolean getSubjectConfig()
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
+
         //JSONObject subjectObject = RestTemplate.
-=======
-        JSONObject subjectObject = RestTemplate.
->>>>>>> 4a6d188de5820c0e7a52a54f729881a3a1daf816
-=======
-        JSONObject subjectObject = RestTemplate.
->>>>>>> 4a6d188de5820c0e7a52a54f729881a3a1daf816
+
+        //JSONObject subjectObject = RestTemplate.
         return true;
     }
 }
