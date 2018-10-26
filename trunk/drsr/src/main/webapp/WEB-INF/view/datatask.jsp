@@ -327,7 +327,7 @@
                     tableConfiguration2(1);
                 },
                 error:function () {
-                    console.log("请求失败")；
+                    console.log("请求失败");
                 }
             })
         }

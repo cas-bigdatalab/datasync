@@ -305,11 +305,13 @@ ul {
 }
 
 .foot_div {
+    width: 1182px;
     background: #454241;
     color: #d7d7d7;
     padding-top: 20px;
     height: 55px;
     text-align: center;
+    margin:0 auto ;
 }
 
 @media (max-width: 1199px) {

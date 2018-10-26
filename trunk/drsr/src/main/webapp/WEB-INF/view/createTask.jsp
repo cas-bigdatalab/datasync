@@ -367,6 +367,7 @@
                 },
                 success:function (data) {
                     $("#db-table").empty();
+                    console.log(data)
                     var List =JSON.parse(data)
                     var tabCon = template("dataRelationshipList2", List);
                     $("#db-table").append(tabCon);

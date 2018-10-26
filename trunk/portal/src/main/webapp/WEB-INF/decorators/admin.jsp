@@ -72,7 +72,7 @@
                 <li><a href="${ctx}/subjectMgmt/sdgsdfs?currentPage=1">用户组管理</a></li>
                 <li><a href="${ctx}/subjectMgmt/sdgsdfs?currentPage=1">资源分类管理</a></li>
                 <li><a href="${ctx}/subjectMgmt/zasda?currentPage=1">数据发布管理</a></li>
-                <li><a href="${ctx}/subjectMgmt/querySubject?currentPage=1">统计管理</a></li>
+                <li><a href="${ctx}/subjectMgmt/dsa?currentPage=1">统计管理</a></li>
                 <li><a href="${ctx}/subjectMgmt/querySubject?currentPage=1">all数据发布管理</a></li>
             </ul>
             <ul class="list-ul center2"  style="display: none">
@@ -81,7 +81,7 @@
             </ul>
 
         </div>
-        <div class="body-right">
+        <div class="body-right" style="min-height: 500px">
             <sitemesh:write property="body"/>
             <%--<div class="setting-head">
                 <span>DataSync / 数据配置</span>
@@ -216,9 +216,11 @@
         }
         $(".list-ul a").each(function () {
             var href = $(this).attr("href");
+
             if (href.indexOf('?') > -1)
                 href = href.substring(0, href.indexOf('?'));
             if (href === path) {
+                $(this).parent().parent().show()
                 console.log("aaaaaaa")
                 $(this).addClass("myactive");
                 /*if ($(this).parent().parent().hasClass("sub-menu")) {
