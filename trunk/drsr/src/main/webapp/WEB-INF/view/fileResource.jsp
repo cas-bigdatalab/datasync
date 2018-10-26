@@ -179,13 +179,13 @@
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
     <%--<script src="${ctx}/resources/bundles/amcharts/amcharts/amcharts.js"></script>--%>
-        <script src="${ctx}/resources/bundles/jquery-validation/js/localization/messages_zh.min.js"></script>
         <script src="${ctx}/resources/bundles/jquery/jquery.min.js" type="text/javascript"></script>
         <script src="${ctx}/resources/bundles/jquery/jquery.form.min.js" type="text/javascript"></script>
         <script src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.min.js"></script>
         <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.js"></script>
-        <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
         <script src="${ctx}/resources/bundles/jstree/dist/jstree.js" type="text/javascript"></script>
+        <script src="${ctx}/resources/bundles/jquery-validation/js/localization/messages_zh.min.js"></script>
+        <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
     <script>
         $(function(){
             tableConfiguration();

@@ -241,7 +241,6 @@
         {{else}}
         <td>异常</td>
         {{/if}}
-    <%--<td class="upload-percent">--</td>--%>
         <td>
             <button type="button" class="btn btn-success btn-xs purple " onclick="editData('{{value.dataSourceId}}');"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
             <button type="button" class="btn btn-success btn-xs red" onclick="deleteData('{{value.dataSourceId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
@@ -254,11 +253,11 @@
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
     <%--<script src="${ctx}/resources/bundles/amcharts/amcharts/amcharts.js"></script>--%>
-        <script src="${ctx}/resources/bundles/jquery-validation/js/localization/messages_zh.min.js"></script>
         <script src="${ctx}/resources/bundles/jquery/jquery.min.js" type="text/javascript"></script>
         <script src="${ctx}/resources/bundles/jquery/jquery.form.min.js" type="text/javascript"></script>
         <script src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.min.js"></script>
         <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.js"></script>
+        <script src="${ctx}/resources/bundles/jquery-validation/js/localization/messages_zh.min.js"></script>
         <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
     <script>
         $(function(){
