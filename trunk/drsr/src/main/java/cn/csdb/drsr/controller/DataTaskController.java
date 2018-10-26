@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 
@@ -136,6 +137,29 @@ public class DataTaskController {
         DataSrc dataSrc = dataSrcService.findById(datatask.getDataSourceId());
         jsonObject.put("datatask",datatask);
         jsonObject.put("dataSrc",dataSrc);
+        return jsonObject;
+    }
+
+    /**
+     *
+     * Function Description:数据任务保存
+     *
+     * @param: []
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/10/23 10:29
+     */
+    @ResponseBody
+    @RequestMapping(value="saveDatatask",method = RequestMethod.POST)
+    public JSONObject saveDatatask(int dataSrcId,
+                                   String dataRelTableList,
+                                   @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList) {
+        JSONObject jsonObject = new JSONObject();
+        DataTask datatask = new DataTask();
+        datatask.setTableName(dataRelTableList);
+        datatask.setSqlString(dataRelSqlList);
+        datatask.setCreateTime(new Date());
+        datatask.setStatus("0");
         return jsonObject;
     }
 }

@@ -183,22 +183,6 @@ public class RelationSourceController {
 
     /**
      *
-     * Function Description:
-     *
-     * @param: []
-     * @return: com.alibaba.fastjson.JSONObject
-     * @auther: hw
-     * @date: 2018/10/23 10:29
-     */
-    @ResponseBody
-    @RequestMapping(value="saveDatatask",method = RequestMethod.POST)
-    public JSONObject saveDatatask() {
-        JSONObject jsonObject = new JSONObject();
-        return jsonObject;
-    }
-
-    /**
-     *
      * Function Description: preview RelationalDatabase By TableName
      *
      * @param: [dataSourceId, tableInfosListStr, pageSize]

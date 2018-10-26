@@ -15,6 +15,7 @@ public class DataTaskMapper implements RowMapper {
     public Object mapRow(ResultSet resultSet, int i) throws SQLException {
         DataTask dataTask = new DataTask();
         dataTask.setDataTaskId(resultSet.getInt("DataTaskId"));
+        dataTask.setDataTaskName(resultSet.getString("DataTaskName"));
         dataTask.setDataSourceId(resultSet.getInt("DataSourceId"));
         dataTask.setDataTaskType(resultSet.getString("DataTaskType"));
         dataTask.setTableName(resultSet.getString("TableName"));

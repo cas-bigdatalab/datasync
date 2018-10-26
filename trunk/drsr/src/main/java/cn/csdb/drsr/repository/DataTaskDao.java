@@ -22,32 +22,35 @@ public class DataTaskDao {
     @Resource
     private JdbcTemplate jdbcTemplate;
 
-    public DataTask get(int id){
-        String sql="select * from t_datatask where dataTaskId = ?" ;
-        List<DataTask> list = jdbcTemplate.query(sql,new Object[]{id}, new DataTaskMapper()) ;
-        return  list.size() > 0 ? list.get(0) : null;
+    public DataTask get(int id) {
+        String sql = "select * from t_datatask where dataTaskId = ?";
+        List<DataTask> list = jdbcTemplate.query(sql, new Object[]{id}, new DataTaskMapper());
+        return list.size() > 0 ? list.get(0) : null;
     }
 
     //更新
-    public boolean update(DataTask dataTask){
+    public boolean update(DataTask dataTask) {
         boolean result = false;
-        String sql="update T_dataTask set DataSourceId=?,DataTaskType=?,TableName=?,SqlString=?,SqlTableNameEn=?,SqlFilePath=?,FilePath=?,creator=?,status=? where DataTaskId=? ";
-        int i= jdbcTemplate.update(sql,new Object[]{dataTask.getDataSourceId(),dataTask.getDataTaskType(),dataTask.getTableName(),dataTask.getSqlString(),
-                dataTask.getSqlTableNameEn(),dataTask.getSqlFilePath(),dataTask.getFilePath(),dataTask.getCreator(),dataTask.getStatus(),dataTask.getDataTaskId()});
-        if (i >= 0 ){
+        String sql = "update T_dataTask set DataSourceId=?,DataTaskName=?,DataTaskType=?,TableName=?," +
+                "SqlString=?,SqlTableNameEn=?,SqlFilePath=?,FilePath=?,creator=?,status=? " +
+                "where DataTaskId=? ";
+        int i = jdbcTemplate.update(sql, new Object[]{dataTask.getDataSourceId(), dataTask.getDataTaskName(),
+                dataTask.getDataTaskType(), dataTask.getTableName(), dataTask.getSqlString(),
+                dataTask.getSqlTableNameEn(), dataTask.getSqlFilePath(), dataTask.getFilePath(),
+                dataTask.getCreator(), dataTask.getStatus(), dataTask.getDataTaskId()});
+        if (i >= 0) {
             result = true;
         }
         return result;
     }
 
     //获取所有的任务信息
-    public List<DataTask> getAll(){
-        String sql="Select * from T_dataTask";
-        return jdbcTemplate.query(sql,new DataTaskMapper());
+    public List<DataTask> getAll() {
+        String sql = "Select * from T_dataTask";
+        return jdbcTemplate.query(sql, new DataTaskMapper());
     }
 
     /**
-     *
      * Function Description: 数据任务展示、查找列表
      *
      * @param: [start, pageSize, datataskType, status]
@@ -55,10 +58,10 @@ public class DataTaskDao {
      * @auther: hw
      * @date: 2018/10/23 15:46
      */
-    public List<DataTask> getDatataskByPage(int start, int pageSize,String datataskType,String status){
+    public List<DataTask> getDatataskByPage(int start, int pageSize, String datataskType, String status) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from t_datatask ");
-        if(StringUtils.isNoneBlank(datataskType)||StringUtils.isNoneBlank(status)){
+        if (StringUtils.isNoneBlank(datataskType) || StringUtils.isNoneBlank(status)) {
             sb.append("where ");
         }
         List<Object> params = getSql(datataskType, status, sb);
@@ -69,7 +72,6 @@ public class DataTaskDao {
     }
 
     /**
-     *
      * Function Description: sql语句组织
      *
      * @param: [datataskType, status, sb]
@@ -77,7 +79,7 @@ public class DataTaskDao {
      * @auther: hw
      * @date: 2018/10/23 15:46
      */
-    List<Object> getSql(String datataskType,String status, StringBuilder sb) {
+    List<Object> getSql(String datataskType, String status, StringBuilder sb) {
         List<Object> params = Lists.newArrayList();
         if (StringUtils.isNoneBlank(datataskType)) {
             sb.append("datataskType=? ");
@@ -97,4 +99,21 @@ public class DataTaskDao {
         String sql = "delete from t_datatask where datataskId=?";
         return jdbcTemplate.update(sql, datataskId);
     }
+
+    public boolean insertDatatask(DataTask datatask) {
+        boolean flag = false;
+        String sql = "insert into t_datatask(dataSourceId,dataTaskName,dataTaskType,tableName,sqlString," +
+                "sqlTableNameEn,sqlFilePath,filePath,createTime,creator,status) " +
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        int i = jdbcTemplate.update(sql, new Object[]{datatask.getDataSourceId(),datatask.getDataTaskName(),
+                datatask.getDataTaskType(), datatask.getTableName(), datatask.getSqlString(),
+                datatask.getSqlTableNameEn(), datatask.getSqlFilePath(), datatask.getFilePath(),
+                datatask.getCreateTime(), datatask.getCreator(), datatask.getStatus()});
+        if (i > 0) {
+            flag = true;
+        }
+        return flag;
+    }
+
+
 }
