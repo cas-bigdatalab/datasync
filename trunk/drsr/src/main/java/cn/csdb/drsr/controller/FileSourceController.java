@@ -81,7 +81,7 @@ public class FileSourceController {
         if(nodes!=null) {
             String nodePath = "";
             for (String nodeId : nodes) {
-                String str = nodeId.replaceAll("%_%", "\\\\");
+                String str = nodeId.replaceAll("%_%", "/");
                 String str1 = fileResourceService.traversingFiles(str);
                 nodePath += str1;
             }
@@ -89,13 +89,13 @@ public class FileSourceController {
             String[] unionNodes = FileResourceService.union(attr, traversingNodes);
             String filePath = "";
             for (String unionNode : unionNodes) {
-                filePath += unionNode.replaceAll("/", "\\\\").replaceAll("\\\\", "%_%") + ";";
+                filePath += unionNode.replaceAll("/", "\\\\") + ";";
             }
             datasrc.setFilePath(filePath);
         }else{
             String filePath = "";
             for (String unionNode : attr) {
-                filePath += unionNode.replaceAll("/", "\\\\").replaceAll("\\\\", "%_%") + ";";
+                filePath += unionNode.replaceAll("/", "\\\\") + ";";
             }
             datasrc.setFilePath(filePath);
         }

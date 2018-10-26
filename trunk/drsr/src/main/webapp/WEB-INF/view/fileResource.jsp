@@ -247,26 +247,8 @@
 
         template.helper("splStr",function (str) {
             var str1 = str.replace(/;/g,"\n");
-
-
-            /*var str1=str.split(";")
-            console.log(str1)
-            var str="";
-            for(var i=0;i<str1.length;i++){
-                str+=str1[i]+"\n"
-            }
-            console.log(str)*/
-            /*var str2 =escapeHTMLString(str1)
-            console.log(str1)
-            console.log(str2)*/
             return str1;
-        })/*
-        function escapeHTMLString(str) {
-            str = str.replace(/</g,'&lt;');
-            str = str.replace(/>/g,'&gt;');
-            return str;
-        }*/
-
+        })
 
         $("#addFileSource").click(function () {
             $("#fileSourceModal").modal('show');
