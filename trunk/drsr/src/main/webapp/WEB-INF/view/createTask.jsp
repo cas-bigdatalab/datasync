@@ -89,7 +89,7 @@
                     <div id="totalList">
                         <div class="col-md-12" style="margin-bottom: 10px" >
                             <div class="col-md-2" style="text-align: right">sql查询</div>
-                            <div class="col-md-5">
+                            <div class="col-md-4">
                                 <input type="text" class="form-control sqlStatements" id="asdf">
                             </div>
                             <div class="col-md-2">
@@ -204,12 +204,12 @@
                             <div class="portlet box green-haze" style="border:0;">
                                 <div class="portlet-title">
                                     <ul class="nav nav-tabs" style="float:left;">
-                                        <li class="active">
+                                        <%--<li class="active">
                                             <a href="#editTableFieldComsId" data-toggle="tab"
                                                id="editTableDataAndComsButtonId" aria-expanded="true">
                                                 编辑 </a>
-                                        </li>
-                                        <li class="">
+                                        </li>--%>
+                                        <li class="active">
                                             <a href="#previewTableDataAndComsId" id="previewTableDataAndComsButtonId"
                                                data-toggle="tab" aria-expanded="false">
                                                 预览 </a>
@@ -299,7 +299,7 @@
 <script type="text/html" id="addSql">
     <div class="col-md-12" style="margin-bottom: 10px" name="aaaa">
         <div class="col-md-2" style="text-align: right">sql查询</div>
-        <div class="col-md-5">
+        <div class="col-md-4">
             <input type="text" class="form-control sqlStatements" >
         </div>
         <div class="col-md-2">
@@ -421,8 +421,9 @@
         })
         $("#totalList").delegate(".preview","click",function () {
             var $Str =$(this).parent().parent().find(".sqlStatements").val();
-            staticSourceTableChoice(2, null, dataRelSrcId, $Str, "dataResource");
-
+            /*staticSourceTableChoice(2, null, dataRelSrcId, $Str, "dataResource");*/
+            $("#staticSourceTableChoiceModal").modal("show");
+            previewSqlDataAndComs(dataRelSrcId,$Str);
            /* $.ajax({
                 url:"${ctx}/relationship/previewRelationalDatabaseBySQL",
                 type:"POST",
@@ -853,7 +854,7 @@
         }
 */
 
-        $("#previewTableDataAndComsButtonId").bind("click", function () {
+        /*$("#previewTableDataAndComsButtonId").bind("click", function () {
             if (curEditIsChoiceTableOrSql == 1) {
                 var tableInfos = getEditTableOrSqlFieldComs();
                 previewTableDataAndComs(curDataSourceId, tableInfos);
@@ -861,9 +862,9 @@
                 // var tableInfos = getEditTableOrSqlFieldComs();
                 previewSqlDataAndComs(curDataSourceId);
             }
-        });
+        });*/
 
-        function previewSqlDataAndComs(dataSourceId) {
+        function previewSqlDataAndComs(dataSourceId,str) {
             /*var sqlStr;
             if (curRefer == "dataService") {
                 sqlStr = $("#publicSql").val();
@@ -877,13 +878,12 @@
                 }
                 sqlStr = $("#" + sqlStrId).val();
             }*/
-            var $Str =$("#asdf").val();
             $.ajax({
                 type: "GET",
                 url:  '${ctx}/relationship/previewRelationalDatabaseBySQL',
                 data: {
                     "dataSourceId": dataSourceId,
-                    "sqlStr": $Str
+                    "sqlStr": str
                 },
                 dataType: "json",
                 success: function (data) {
