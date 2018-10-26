@@ -179,13 +179,13 @@
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
     <%--<script src="${ctx}/resources/bundles/amcharts/amcharts/amcharts.js"></script>--%>
-        <script src="${ctx}/resources/bundles/jquery-validation/js/localization/messages_zh.min.js"></script>
         <script src="${ctx}/resources/bundles/jquery/jquery.min.js" type="text/javascript"></script>
         <script src="${ctx}/resources/bundles/jquery/jquery.form.min.js" type="text/javascript"></script>
         <script src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.min.js"></script>
         <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.js"></script>
-        <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
         <script src="${ctx}/resources/bundles/jstree/dist/jstree.js" type="text/javascript"></script>
+        <script src="${ctx}/resources/bundles/jquery-validation/js/localization/messages_zh.min.js"></script>
+        <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
     <script>
         $(function(){
             tableConfiguration();
@@ -247,26 +247,8 @@
 
         template.helper("splStr",function (str) {
             var str1 = str.replace(/;/g,"\n");
-
-
-            /*var str1=str.split(";")
-            console.log(str1)
-            var str="";
-            for(var i=0;i<str1.length;i++){
-                str+=str1[i]+"\n"
-            }
-            console.log(str)*/
-            /*var str2 =escapeHTMLString(str1)
-            console.log(str1)
-            console.log(str2)*/
             return str1;
-        })/*
-        function escapeHTMLString(str) {
-            str = str.replace(/</g,'&lt;');
-            str = str.replace(/>/g,'&gt;');
-            return str;
-        }*/
-
+        })
 
         $("#addFileSource").click(function () {
             $("#fileSourceModal").modal('show');
@@ -513,6 +495,10 @@
                         var dataSourceType = 'file';
                         var fileType = '本地文件';
                         var nodes = $('#jstree_show_edit').jstree("get_checked");
+                        var tags_tagsinput = $("#tags_tagsinput").text();
+                        if((nodes.length==0)&&(tags_tagsinput.length==0)){
+                            toastr["error"]("您尚未选取文件");
+                        }else{
                         var attr = [];
                         $("#tags_tagsinput span").each(function (i) {
                             if($(this).attr('class')=='filePathClass'){
@@ -544,11 +530,15 @@
                                 }
                             }
                         })
+                        }
                     } else {
                         var nodes = $('#jstree_show').jstree("get_checked");
                         var dataSourceName = $("#dataSourceName").val();
                         var dataSourceType = 'file';
                         var fileType = "本地文件";
+                        if(nodes.length==0){
+                            toastr["error"]("您尚未选取文件");
+                        }else{
                         $.ajax({
                             type: 'post',
                             url: "${ctx}/fileResource/add",
@@ -572,6 +562,7 @@
                                 }
                             }
                         })
+                        }
                     }
                 }
 
