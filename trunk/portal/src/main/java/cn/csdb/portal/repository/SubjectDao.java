@@ -40,8 +40,29 @@ public class SubjectDao {
         }
     }
 
-
     public void save(Subject subject){
         mongoTemplate.save(subject);
     }
+
+
+    /**
+     * Function Description: validate subject code login
+     * @param userName
+     * @param password
+     * @return loginStatus
+     */
+    public int validateLogin(String userName, String password)
+    {
+        int loginStatus = 0;
+        DBObject query = QueryBuilder.start().and("admin").is(userName).and("adminPasswd").is(password).get();
+        BasicQuery basicQuery = new BasicQuery(query);
+        List<Subject> list = mongoTemplate.find(basicQuery,Subject.class);
+        if(list.size() != 0)
+        {
+            loginStatus = 1;
+        }
+
+        return loginStatus;
+    }
+
 }
