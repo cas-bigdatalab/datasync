@@ -202,21 +202,21 @@
                     <%-- <shiro:hasRole name="Register">--%>
                     <li>
                         <a href="${ctx}/dataUpload">
-                            <i class="icon-wrench"></i>
+                            <i class="icon-settings"></i>
                             <span class="title">数据类型注册</span>
                             <span class="arrow "></span>
                         </a>
                     </li>
                     <li>
                         <a href="${ctx}/createTask">
-                            <i class="icon-wrench"></i>
+                            <i class="icon-list"></i>
                             <span class="title">元素结构管理</span>
                             <span class="arrow "></span>
                         </a>
                     </li>
                     <li>
                         <a href="${ctx}/dataSource">
-                            <i class="icon-wrench"></i>
+                            <i class="icon-user"></i>
                             <span class="title">用户管理</span>
                             <span class="arrow "></span>
                         </a>
@@ -273,7 +273,7 @@
                     </li>
                     <li>
                         <a href="${ctx}/projectMessage">
-                            <i class="icon-wrench"></i>
+                            <i class="icon-layers"></i>
                             <span class="title">数据发布</span>
                             <span class="arrow "></span>
                         </a>

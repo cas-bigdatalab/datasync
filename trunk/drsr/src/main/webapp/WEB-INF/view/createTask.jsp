@@ -275,7 +275,7 @@
 <script type="text/html" id="dataRelationshipList">
     <option value="" id="selNone" selected="selected">-----------</option>
     {{each data as value i}}
-    <option value="{{value.databaseName}}" id="{{value.dataSourceId}}">{{value.databaseName}}</option>
+    <option value="{{value.dataSourceName}}" id="{{value.dataSourceId}}">{{value.dataSourceName}}</option>
     {{/each}}
 </script>
 <script type="text/html" id="dataRelationshipList2">
@@ -314,14 +314,15 @@
 <script type="text/html" id="dataFileshipList">
     <option value="" id="selFileNone" selected="selected">-----------</option>
     {{each data as value i}}
-    <option value="{{value.databaseName}}" Keyid="{{value.dataSourceId}}">{{value.databaseName}}</option>
+    <option value="{{value.dataSourceName}}" Keyid="{{value.dataSourceId}}">{{value.dataSourceName}}</option>
     {{/each}}
 </script>
 <script type="text/html" id="dataFileshipList2">
-    {{each list as value i}}
+    {{each data as value i}}
     <div class="col-md-6">
         <label>
-            <input type="checkbox" name="fileTable" value="{{value}}"> {{value}}
+            <input type="checkbox" name="fileTable" value="{{value.id}}">
+            <div style="word-break: break-all">{{value.text}}</div>
         </label>
     </div>
     {{/each}}
@@ -367,8 +368,8 @@
                 },
                 success:function (data) {
                     $("#db-table").empty();
-                    console.log(data)
-                    var List =JSON.parse(data)
+                    var List =JSON.parse(data);
+                    console.log(List)
                     var tabCon = template("dataRelationshipList2", List);
                     $("#db-table").append(tabCon);
 
@@ -380,7 +381,6 @@
         })
         $("#DBFilechange").on("change",function () {
             var id = $("#DBFilechange option:selected").attr("Keyid");
-            console.log(id)
             dataFileSrcId =id;
             var name = $(this).val();
             if(name == ""){
@@ -398,8 +398,11 @@
                 success:function (data) {
                     $("#file-table").empty();
                     var List =JSON.parse(data)
-                    console.log(data)
-                    var tabCon = template("dataFileshipList2", List);
+                    console.log(List)
+                    var data={
+                        data:List
+                    }
+                    var tabCon = template("dataFileshipList2", data);
                     $("#file-table").append(tabCon);
                 },
                 error:function () {
@@ -546,7 +549,7 @@
                 url:"${ctx}/relationship/saveDatatask",
                 type:"POST",
                 data:{
-                    souceName:$(".dataHead2").html(),
+                    dataSourceId:dataRelSrcId,
                     souceCheck:dataRelTableList,
                     sqlStatements:dataRelSqlList
                 },
@@ -567,6 +570,7 @@
                 type:"GET",
                 success:function (data) {
                     var list =JSON.parse(data)
+                    console.log(list)
                     var data={
                         data:list
                     }
