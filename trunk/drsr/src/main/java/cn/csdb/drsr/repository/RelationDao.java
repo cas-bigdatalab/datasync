@@ -9,10 +9,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.sql.Types;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 

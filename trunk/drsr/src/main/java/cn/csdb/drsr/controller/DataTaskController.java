@@ -153,12 +153,14 @@ public class DataTaskController {
     @RequestMapping(value="saveRelationDatatask",method = RequestMethod.POST)
     public JSONObject saveRelationDatatask(int dataSourceId,
                                    String dataRelTableList,
+                                   String sqlTableNameEnList,
                                    @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList) {
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);
         datatask.setTableName(dataRelTableList);
         datatask.setSqlString(dataRelSqlList);
+        datatask.setSqlTableNameEn(sqlTableNameEnList);
         datatask.setCreateTime(new Date());
         datatask.setStatus("0");
         boolean flag = dataTaskService.insertDatatask(datatask);
