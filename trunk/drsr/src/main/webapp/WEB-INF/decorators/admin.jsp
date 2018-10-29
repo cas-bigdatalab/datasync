@@ -92,15 +92,19 @@
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-default">
-
-                       <%-- <shiro:guest>
+                        <li>
+                            <a href="${applicationScope.systemPro['cas.url.prefix']}/login?service=${applicationScope.systemPro['drsr.url']}/shiro-cas">
+                                <i class="icon-rocket"></i>用户登录
+                            </a>
+                        </li>
+                        <%--<shiro:guest>
                             <li>
                                 <a href="${applicationScope.systemPro['cas.url.prefix']}/login?service=${applicationScope.systemPro['drsr.url']}/shiro-cas">
                                     <i class="icon-rocket"></i>用户登录
                                 </a>
                             </li>
-                        </shiro:guest>--%>
-                        <%--<shiro:user>
+                        </shiro:guest>
+                        <shiro:user>
                             <li>
                                 <a target='_blank'
                                    href="${applicationScope.systemPro['cas.url.prefix']}/reg01004Action.do?userID=<%=CasURLCode.encode(session.getAttribute("loginId").toString())%>">
