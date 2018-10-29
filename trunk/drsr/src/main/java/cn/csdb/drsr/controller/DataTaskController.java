@@ -111,10 +111,10 @@ public class DataTaskController {
                                    @RequestParam(name = "status", required = false) String status){
         JSONObject jsonObject = new JSONObject();
         List<DataTask> dataTasks = dataTaskService.getDatataskByPage((pageNo-1)*pageSize,pageSize,datataskType,status);
-        int totaoCount = dataTaskService.getCount(datataskType,status);
+        int totalCount = dataTaskService.getCount(datataskType,status);
         jsonObject.put("dataTasks",dataTasks);
-        jsonObject.put("totalCount",totaoCount);
-        jsonObject.put("pageNo",pageNo);
+        jsonObject.put("totalCount",totalCount);
+        jsonObject.put("pageNum",totalCount/pageSize==0?totalCount/pageSize:totalCount/pageSize+1);
         jsonObject.put("pageSize",pageSize);
         return jsonObject;
     }
