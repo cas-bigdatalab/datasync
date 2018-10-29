@@ -21,6 +21,15 @@ public class DataTask {
     private Date createTime;
     private String creator;
     private String status;
+    private DataSrc dataSrc;
+
+    public DataSrc getDataSrc() {
+        return dataSrc;
+    }
+
+    public void setDataSrc(DataSrc dataSrc) {
+        this.dataSrc = dataSrc;
+    }
 
     public String getDataTaskName() {
         return dataTaskName;

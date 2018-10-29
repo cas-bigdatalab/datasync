@@ -83,7 +83,7 @@
                                         <label  class="col-sm-3 control-label">数据库类型<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
-                                            <select name="dataBaseType" id="dataBaseType" class="form-control">
+                                            <select name="dataBaseType" id="dataBaseType" class="form-control" onchange="dbSelect();">
                                                 <option value="DB2">DB2</option>
                                                 <option value="Oracle">Oracle</option>
                                                 <option value="SqlServer">SqlServer</option>
@@ -109,7 +109,7 @@
                                         <label for="port" class="col-sm-3 control-label">端口<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" id="port" name="port">
+                                            <input type="text" class="form-control" id="port" name="port" value="5000">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -168,7 +168,7 @@
                                         <label  class="col-sm-3 control-label">数据库类型<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
-                                            <select name="dataBaseTypeE" id="dataBaseTypeE" class="form-control">
+                                            <select name="dataBaseTypeE" id="dataBaseTypeE" class="form-control" onchange="dbSelectE();">
                                                 <option value="DB2">DB2</option>
                                                 <option value="Oracle">Oracle</option>
                                                 <option value="SqlServer">SqlServer</option>
@@ -564,6 +564,30 @@
 
 
         };
+        function dbSelect(){
+            var db = $("#dataBaseType option:selected").val();
+            if(db=='DB2'){
+                $("#port").val("5000");
+            }else if(db=='Oracle'){
+                $("#port").val("1521");
+            }else if(db=='SqlServer'){
+                $("#port").val("1433");
+            }else{
+                $("#port").val("3306");
+            }
+        }
+        function dbSelectE(){
+            var db = $("#dataBaseTypeE option:selected").val();
+            if(db=='DB2'){
+                $("#portE").val("5000");
+            }else if(db=='Oracle'){
+                $("#portE").val("1521");
+            }else if(db=='SqlServer'){
+                $("#portE").val("1433");
+            }else{
+                $("#portE").val("3306");
+            }
+        }
         /*jQuery.validator.addMethod("isFilePath", function (value, element) {
          var winPath = /^[a-zA-Z]:(((\/(?! )[^/:*?<>\""|\/]+)+\/?)|(\/)?)\s*$/g;
          var lnxPath = /^([\/][\w-]+)*$/;

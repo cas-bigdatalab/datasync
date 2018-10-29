@@ -251,14 +251,13 @@ public class FileResourceService {
      * @auther: hw
      * @date: 2018/10/23 16:11
      */
-    public void packDataResource(final String datasrcId, final List<String> filePaths, final CountDownLatch dbFlag) {
+    public void packDataResource(final String fileName ,final List<String> filePaths, final CountDownLatch dbFlag) {
         executor.submit(new Callable<String>() {
             @Override
             public String call() throws InterruptedException {
                 dbFlag.await();
                 String zipFilePath = "/upload/zipFile";
-                String zipFile = System.getProperty("drsr.framework.root") + zipFilePath + File.separator + datasrcId + ".zip";
-                logger.info("准备打包id为" + datasrcId + "的静态数据,打包格式为zip...");
+                String zipFile = System.getProperty("drsr.framework.root") + zipFilePath + File.separator + fileName + ".zip";
                 ZipArchiveOutputStream outputStream = null;
                 try {
                     if (new File(zipFile).exists()) {
@@ -269,7 +268,7 @@ public class FileResourceService {
                     outputStream.setEncoding("utf-8"); //23412
                     outputStream.setCreateUnicodeExtraFields(ZipArchiveOutputStream.UnicodeExtraFieldPolicy.ALWAYS);
                     outputStream.setFallbackToUTF8(true);
-                    logger.info(datasrcId + ".zip:文件数据源,开始打包文件...");
+                    logger.info(".zip:文件数据源,开始打包文件...");
                     for (String filePath : filePaths) {
                         File file = new File(filePath);
                         if (!file.exists()) {

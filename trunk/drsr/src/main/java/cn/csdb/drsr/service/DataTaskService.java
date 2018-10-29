@@ -114,14 +114,20 @@ public class DataTaskService {
     }
 
     public List<DataTask> getDatataskByPage(int start, int pageSize,String datataskType,String status){
-        return dataTaskDao.getDatataskByPage(start,pageSize,datataskType,status);
+
+        List<DataTask> dataTasks = dataTaskDao.getDatataskByPage(start,pageSize,datataskType,status);
+        for(DataTask dataTask:dataTasks){
+            DataSrc dataSrc = dataSrcDao.findById(dataTask.getDataSourceId());
+            dataTask.setDataSrc(dataSrc);
+        }
+        return dataTasks;
     }
 
     public int deleteDatataskById(int datataskId) {
         return dataTaskDao.deleteDatataskById(datataskId);
     }
 
-    public boolean insertDatatask(DataTask datatask) {
+    public int insertDatatask(DataTask datatask) {
         return dataTaskDao.insertDatatask(datatask);
     }
 }
