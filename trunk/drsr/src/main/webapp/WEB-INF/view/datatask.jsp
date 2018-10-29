@@ -144,12 +144,12 @@
         <td>
             <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" >导出SQL文件</button>
             {{if value.status  == 1}}
-            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" disabled style="background-color: dimgrey">{{btnName(value.status)}}</button>
+            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" disabled style="background-color: dimgrey">重新上传</button>
             {{else if value.status  == 0}}
-            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}">{{btnName(value.status)}}</button>
+            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}">&nbsp;&nbsp;&nbsp;上传&nbsp;&nbsp;&nbsp;</button>
             {{/if}}
             <button type="button" class="btn  edit-data btn-xs blue" keyIdTd="{{value.dataTaskId}}" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-            <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataSourceId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+            <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
 
         </td>
     </tr>
@@ -159,7 +159,6 @@
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
     <script>
-        var searchObj={}
         var dataSourceName=""
         var dataSourceStatus=""
         function relCreateTask(){
@@ -206,7 +205,7 @@
             })
         });
         /* localStorage.setItem("uploadTask",uploadTasks)*/
-        template.helper("btnName",function (num) {
+       /* template.helper("btnName",function (num) {
             var name=""
             if(num ==0){
                 name="&nbsp;&nbsp;&nbsp;上传&nbsp;&nbsp;&nbsp;"
@@ -214,15 +213,13 @@
                 name="重新上传"
             }
             return name
-        })
+        })*/
         template.helper("upStatusName",function (num) {
             var name=""
             if(num ==0){
                 name="--"
             }else if(num == 1 ) {
-                name="正在导入"
-            }else {
-                name ="导入完成"
+                name="导入完成"
             }
             return name
         })
@@ -239,6 +236,11 @@
                 type:"POST",
                 data:{dataTaskId:souceID,processId:keyID},
                 success:function (data) {
+                    if(data == 1){
+                        $("."+souceID).text("导入完成")
+                    }else {
+                        $("."+souceID).text("导入失败")
+                    }
 
                     /*send request get Process */
 
@@ -410,7 +412,6 @@
                     status:status
                 },
                 success:function (data) {
-                    console.log(data);
                     $(".table-message").hide();
                     $("#bd-data").html("");
                     var DataList = JSON.parse(data);
@@ -432,10 +433,10 @@
                         $(".page-list").off();
                         $('.page-list').empty();
                     }
-                    $(".page-message").html("当前第"+1 +"页,共"+5 +"页,共"+10+"条数据");
+                    $(".page-message").html("当前第"+DataList.pageNo +"页,共"+DataList.pageSize +"页,共"+DataList.totalCount+"条数据");
                     $('.page-list').bootpag({
-                        total: 5,
-                        page:num,
+                        total: DataList.pageSize,
+                        page:DataList.pageNo,
                         maxVisible: 6,
                         leaps: true,
                         firstLastUse: true,
