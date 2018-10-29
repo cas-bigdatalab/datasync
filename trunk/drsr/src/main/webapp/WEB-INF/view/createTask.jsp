@@ -89,14 +89,17 @@
                     <div id="totalList">
                         <div class="col-md-12" style="margin-bottom: 10px" >
                             <div class="col-md-2" style="text-align: right">sql查询</div>
-                            <div class="col-md-5">
+                            <div class="col-md-4">
                                 <input type="text" class="form-control sqlStatements" id="asdf">
                             </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn blue preview">编辑预览</button>
+                            <div class="col-md-2" style="margin: 0 -15px">
+                                <input type="text" class="form-control" placeholder="请输入一个表名" name="sqlTableName">
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" class="btn blue preview">预览</button>
+                                <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>sql查询</button>
                             </div>
                             <div class="col-md-2" style="text-align: left">
-                                <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>sql查询</button>
                             </div>
                         </div>
                         <div id="sqlList"></div>
@@ -200,16 +203,15 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
-
                             <div class="portlet box green-haze" style="border:0;">
                                 <div class="portlet-title">
                                     <ul class="nav nav-tabs" style="float:left;">
-                                        <li class="active">
+                                        <%--<li class="active">
                                             <a href="#editTableFieldComsId" data-toggle="tab"
                                                id="editTableDataAndComsButtonId" aria-expanded="true">
                                                 编辑 </a>
-                                        </li>
-                                        <li class="">
+                                        </li>--%>
+                                        <li class="active">
                                             <a href="#previewTableDataAndComsId" id="previewTableDataAndComsButtonId"
                                                data-toggle="tab" aria-expanded="false">
                                                 预览 </a>
@@ -223,10 +225,8 @@
                                     <div class="tab-pane" id="previewTableDataAndComsId">
                                     </div>
                                 </div>
-
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -281,9 +281,11 @@
 <script type="text/html" id="dataRelationshipList2">
     {{each list as value i}}
     <div class="col-md-6">
-        <label>
+        <%--<label>
             <input type="checkbox" name="relationBox" value="{{value}}"> {{value}}
-        </label>
+        </label>--%>
+        <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="relationBox" value="{{value}}" style="line-height: normal"></div>
+        <div style="padding-left: 20px"> {{value}}</div>
     </div>
     <%--<div class="col-md-4">
         <label>
@@ -299,15 +301,17 @@
 <script type="text/html" id="addSql">
     <div class="col-md-12" style="margin-bottom: 10px" name="aaaa">
         <div class="col-md-2" style="text-align: right">sql查询</div>
-        <div class="col-md-5">
+        <div class="col-md-4">
             <input type="text" class="form-control sqlStatements" >
         </div>
-        <div class="col-md-2">
-            <button type="button" class="btn blue preview">编辑预览</button>
+        <div class="col-md-2" style="margin: 0 -15px">
+            <input type="text" class="form-control" placeholder="请输入一个表名" name="sqlTableName">
         </div>
-        <div class="col-md-2" style="text-align: left">
+        <div class="col-md-4">
+            <button type="button" class="btn blue preview">预览</button>
             <button type="button" class="btn red removeSql"><span class="glyphicon glyphicon-trash"></span>删除</button>
         </div>
+        
     </div>
 </script>
 
@@ -338,6 +342,7 @@
         var dataRelTaskName;
         var dataRelTableList;
         var dataRelSqlList;
+        var dataRelSqlTableList;
         var dataFileSrcId;
         var dataFilePathList;
         var dataFileTaskName;
@@ -421,8 +426,9 @@
         })
         $("#totalList").delegate(".preview","click",function () {
             var $Str =$(this).parent().parent().find(".sqlStatements").val();
-            staticSourceTableChoice(2, null, dataRelSrcId, $Str, "dataResource");
-
+            /*staticSourceTableChoice(2, null, dataRelSrcId, $Str, "dataResource");*/
+            $("#staticSourceTableChoiceModal").modal("show");
+            previewSqlDataAndComs(dataRelSrcId,$Str);
            /* $.ajax({
                 url:"${ctx}/relationship/previewRelationalDatabaseBySQL",
                 type:"POST",
@@ -534,7 +540,15 @@
         <!--create relation task -->
         function sendRelationTask() {
             var $eleChecked = $("[name='relationBox']:checked")
+            $("[name='sqlTableName']").each(function () {
+                if($(this).val() == ""){
+                    toastr["warning"]("提示！", "请为预览sql编辑一个表名");
+                    return
+                }
+                dataRelSqlTableList+=$(this).val()+";"
+            })
             var numChecked = $eleChecked.size();
+
             if (numChecked == 0) {
                 toastr["success"]("最少选择一个表资源");
                 return
@@ -550,7 +564,7 @@
             dataRelTableList= relTabStr;
             dataRelSqlList =relSqlStr;
             $.ajax({
-                url:"${ctx}/datatask/saveDatatask",
+                url:"${ctx}/datatask/saveRelationDatatask",
                 type:"POST",
                 data:{
                     dataSourceId:dataRelSrcId,
@@ -569,7 +583,7 @@
             var $eleChecked = $("[name='fileTable']:checked")
             var numChecked = $eleChecked.size();
             if (numChecked == 0) {
-                toastr["success"]("最少选择一个表资源");
+                toastr["success"]("最少选择一个文件资源");
                 return
             }
             var fileTabStr = "";
@@ -578,12 +592,12 @@
             });
             dataFilePathList=fileTabStr;
             $.ajax({
-                url:"${ctx}/relationship/saveDatatask",
+                url:"${ctx}/datatask/saveFileDatatask",
                 type:"POST",
                 data:{
                     dataSourceId:dataFileSrcId,
-                    souceCheck:dataFileTaskName,
-                    sqlStatements:dataFilePathList,
+                    datataskName:dataFileTaskName,
+                    filePathList:dataFilePathList,
                 },
                 success:function (data) {
                     /*window.location.href="${ctx}/dataUpload"*/
@@ -853,7 +867,7 @@
         }
 */
 
-        $("#previewTableDataAndComsButtonId").bind("click", function () {
+        /*$("#previewTableDataAndComsButtonId").bind("click", function () {
             if (curEditIsChoiceTableOrSql == 1) {
                 var tableInfos = getEditTableOrSqlFieldComs();
                 previewTableDataAndComs(curDataSourceId, tableInfos);
@@ -861,9 +875,9 @@
                 // var tableInfos = getEditTableOrSqlFieldComs();
                 previewSqlDataAndComs(curDataSourceId);
             }
-        });
+        });*/
 
-        function previewSqlDataAndComs(dataSourceId) {
+        function previewSqlDataAndComs(dataSourceId,str) {
             /*var sqlStr;
             if (curRefer == "dataService") {
                 sqlStr = $("#publicSql").val();
@@ -877,16 +891,18 @@
                 }
                 sqlStr = $("#" + sqlStrId).val();
             }*/
-            var $Str =$("#asdf").val();
+            console.log(dataSourceId);
+            console.log(str);
             $.ajax({
                 type: "GET",
                 url:  '${ctx}/relationship/previewRelationalDatabaseBySQL',
                 data: {
                     "dataSourceId": dataSourceId,
-                    "sqlStr": $Str
+                    "sqlStr": str
                 },
                 dataType: "json",
                 success: function (data) {
+                    console.log(data)
                     if (!data || !data.datas) {
                         return;
                     }

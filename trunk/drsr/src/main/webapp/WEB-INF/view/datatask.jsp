@@ -32,12 +32,16 @@
                         <label >数据类型</label>
                         <select  id="dataSourceList" class="form-control" style="width: 150px">
                             <option value="">----------</option>
+                            <option value="db">关系数据库</option>
+                            <option value="file">文件数据库</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label  >状态</label>
                         <select  id="dataStatusList" class="form-control" style="width: 150px">
                             <option value="">----------</option>
+                            <option value="1">上传完成</option>
+                            <option value="0">未上传</option>
                         </select>
                     </div>
                     <button type="button" class="btn blue" style="margin-left: 49px">查询</button>
@@ -66,42 +70,6 @@
             <div class="page-list" style="float: right"></div>
         </div>
     </div>
-    <script type="text/html" id="resourceTmp1">
-        {{each data as value i}}
-        <tr keyIdTr="{{value.dataTaskId}}">
-            <td>{{i + 1}}</td>
-            <td>{{value.sqlTableNameEn}}</td>
-            <td>{{value.dataTaskType}}</td>
-            <td>{{value.source}}</td>
-            <td>{{value.createTime}}</td>
-            <td  id="{{value.dataTaskId}}">--</td>
-            <td  class="{{value.dataTaskId}}">{{upStatusName(value.status)}}</td>
-            <td>
-                <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" >导出SQL文件</button>
-                {{if value.status  == 1}}
-                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" disabled style="background-color: dimgrey">{{btnName(value.status)}}</button>
-                {{else if value.status  == 0}}
-                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}">{{btnName(value.status)}}</button>
-                {{/if}}
-                <button type="button" class="btn  edit-data btn-xs blue" keyIdTd="{{value.dataTaskId}}" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-                <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataSourceId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
-
-            </td>
-        </tr>
-        {{/each}}
-    </script>
-    <script type="text/html" id="dataSourceListTmp">
-        <option value="" id="dataSelOne" selected="selected">-----------</option>
-        {{each data as value i}}
-        <option value="{{value.databaseName}}" Keyid="{{value.dataSourceId}}">{{value.databaseName}}</option>
-        {{/each}}
-    </script>
-    <script type="text/html" id="dataStatusListTmp">
-        <option value="" id="dataSelTwo" selected="selected">-----------</option>
-        {{each data as value i}}
-        <option value="{{value.databaseName}}" Keyid="{{value.dataSourceId}}">{{value.databaseName}}</option>
-        {{/each}}
-    </script>
 </div>
 <div id="EModal" class="modal fade" tabindex="-1" data-width="400">
     <div class="modal-dialog">
@@ -163,73 +131,55 @@
         </div>
     </div>
 </div>
+<script type="text/html" id="resourceTmp1">
+    {{each data as value i}}
+    <tr keyIdTr="{{value.dataTaskId}}">
+        <td>{{i + 1}}</td>
+        <td>{{value.sqlTableNameEn}}</td>
+        <td>{{value.dataTaskType}}</td>
+        <td>{{value.source}}</td>
+        <td>{{value.createTime}}</td>
+        <td  id="{{value.dataTaskId}}">--</td>
+        <td  class="{{value.dataTaskId}}">{{upStatusName(value.status)}}</td>
+        <td>
+            <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" >导出SQL文件</button>
+            {{if value.status  == 1}}
+            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" disabled style="background-color: dimgrey">{{btnName(value.status)}}</button>
+            {{else if value.status  == 0}}
+            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}">{{btnName(value.status)}}</button>
+            {{/if}}
+            <button type="button" class="btn  edit-data btn-xs blue" keyIdTd="{{value.dataTaskId}}" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+            <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataSourceId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+
+        </td>
+    </tr>
+    {{/each}}
+</script>
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
     <script>
+        var searchObj={}
         function relCreateTask(){
             window.location.href="${ctx}/createTask";
         }
         $(function(){
             tableConfiguration2(1)
+            /*$.ajax({
+                url:
+            })*/
         });
         $("#dataSourceList").on("change",function () {
             var id = $("#dataSourceList option:selected").attr("id");
             dataRelSrcId =id;
             var name = $(this).val();
-            if(name == ""){
-                $(".database-con-rel").hide();
-                return
-            }
-            $(".database-con-rel").show();
-            $(".dataHead2").html(name);
-            $.ajax({
-                url:"${ctx}/relationship/relationalDatabaseTableList",
-                type:"POST",
-                data:{
-                    dataSourceId:id
-                },
-                success:function (data) {
-                    $("#db-table").empty();
-                    var List =JSON.parse(data)
-                    console.log(List)
-                    var tabCon = template("dataRelationshipList2", List);
-                    $("#db-table").append(tabCon);
-
-                },
-                error:function () {
-                    console.log("请求失败")
-                }
-            })
         });
         $("#dataStatusList").on("change",function () {
             var id = $("#dataStatusList option:selected").attr("id");
             dataRelSrcId =id;
             var name = $(this).val();
-            if(name == ""){
-                $(".database-con-rel").hide();
-                return
-            }
-            $(".database-con-rel").show();
-            $(".dataHead2").html(name);
-            $.ajax({
-                url:"${ctx}/relationship/relationalDatabaseTableList",
-                type:"POST",
-                data:{
-                    dataSourceId:id
-                },
-                success:function (data) {
-                    $("#db-table").empty();
-                    var List =JSON.parse(data)
-                    console.log(List)
-                    var tabCon = template("dataRelationshipList2", List);
-                    $("#db-table").append(tabCon);
 
-                },
-                error:function () {
-                    console.log("请求失败")
-                }
-            })
+
         });
         //导出SQL文件
         $("#upload-list").delegate(".exportSql","click",function () {
@@ -449,9 +399,15 @@
         }
         function tableConfiguration2(num) {
             $.ajax({
-                url:"${ctx}/datatask/getAll",
+                url:"${ctx}/datatask/list",
                 type:"GET",
+                data:{
+                    pageNo:num,
+                    datataskType:"",
+                    status:""
+                },
                 success:function (data) {
+                    console.log(data);
                     $(".table-message").hide();
                     $("#bd-data").html("");
                     var DataList = JSON.parse(data);
@@ -499,7 +455,28 @@
             })
         }
 
-
+        function formatDate(date) {
+            dates = date.split("/");
+            if(dates.length == 3) {
+                if(dates[1].length == 1) {
+                    dates[1] = "0" + dates[1];
+                }
+                if (dates[2].length == 1) {
+                    dates[2] = "0" + dates[2];
+                }
+                date = dates.join("-");
+                return date;
+            } else {
+                return null;
+            }
+        }
+        function parseTime(timestamp) {
+            var date = new Date(parseInt(timestamp)).toLocaleDateString();
+            //输出结果为2016/8/9
+            date = formatDate(date);
+            //输出结果为2016-08-09，满足YYYY-MM-DD格式要求
+            return date;
+        }
 
 
 
