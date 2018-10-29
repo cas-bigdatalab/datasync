@@ -92,11 +92,14 @@
                             <div class="col-md-4">
                                 <input type="text" class="form-control sqlStatements" id="asdf">
                             </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn blue preview">编辑预览</button>
+                            <div class="col-md-2" style="margin: 0 -15px">
+                                <input type="text" class="form-control" placeholder="请输入一个表名" name="sqlTableName">
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" class="btn blue preview">预览</button>
+                                <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>sql查询</button>
                             </div>
                             <div class="col-md-2" style="text-align: left">
-                                <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>sql查询</button>
                             </div>
                         </div>
                         <div id="sqlList"></div>
@@ -200,7 +203,6 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
-
                             <div class="portlet box green-haze" style="border:0;">
                                 <div class="portlet-title">
                                     <ul class="nav nav-tabs" style="float:left;">
@@ -223,10 +225,8 @@
                                     <div class="tab-pane" id="previewTableDataAndComsId">
                                     </div>
                                 </div>
-
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -302,12 +302,14 @@
         <div class="col-md-4">
             <input type="text" class="form-control sqlStatements" >
         </div>
-        <div class="col-md-2">
-            <button type="button" class="btn blue preview">编辑预览</button>
+        <div class="col-md-2" style="margin: 0 -15px">
+            <input type="text" class="form-control" placeholder="请输入一个表名" name="sqlTableName">
         </div>
-        <div class="col-md-2" style="text-align: left">
+        <div class="col-md-4">
+            <button type="button" class="btn blue preview">预览</button>
             <button type="button" class="btn red removeSql"><span class="glyphicon glyphicon-trash"></span>删除</button>
         </div>
+        
     </div>
 </script>
 
@@ -338,6 +340,7 @@
         var dataRelTaskName;
         var dataRelTableList;
         var dataRelSqlList;
+        var dataRelSqlTableList;
         var dataFileSrcId;
         var dataFilePathList;
         var dataFileTaskName;
@@ -535,7 +538,15 @@
         <!--create relation task -->
         function sendRelationTask() {
             var $eleChecked = $("[name='relationBox']:checked")
+            $("[name='sqlTableName']").each(function () {
+                if($(this).val() == ""){
+                    toastr["warning"]("提示！", "请为预览sql编辑一个表名");
+                    return
+                }
+                dataRelSqlTableList+=$(this).val()+";"
+            })
             var numChecked = $eleChecked.size();
+
             if (numChecked == 0) {
                 toastr["success"]("最少选择一个表资源");
                 return
@@ -570,7 +581,7 @@
             var $eleChecked = $("[name='fileTable']:checked")
             var numChecked = $eleChecked.size();
             if (numChecked == 0) {
-                toastr["success"]("最少选择一个表资源");
+                toastr["success"]("最少选择一个文件资源");
                 return
             }
             var fileTabStr = "";
@@ -878,6 +889,8 @@
                 }
                 sqlStr = $("#" + sqlStrId).val();
             }*/
+            console.log(dataSourceId);
+            console.log(str);
             $.ajax({
                 type: "GET",
                 url:  '${ctx}/relationship/previewRelationalDatabaseBySQL',
@@ -887,6 +900,7 @@
                 },
                 dataType: "json",
                 success: function (data) {
+                    console.log(data)
                     if (!data || !data.datas) {
                         return;
                     }

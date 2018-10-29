@@ -31,7 +31,7 @@
                 <div class="col-md-12">
 
                     <label class="control-label">资源名称:</label>
-                    <input type="text" id="title" class="input-medium search-text">
+                    <input type="text" id="title" class="input-small search-text">
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <label class="control-label">资源类型:</label>
                     <%--<input type="text" id="publicType" class="input-small search-text">--%>
@@ -43,9 +43,9 @@
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <label class="control-label">状态:</label>
                     <input type="text" id="status" class="input-small search-text">
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;
                     <button id="btnSearch" name="btnSearch" onclick="search();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查询</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;
                     <button id="btnAdd" name="btnAdd" onclick="" class="btn info green btn-sm"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建发布</button>
                 </div>
             </div>
@@ -55,13 +55,13 @@
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
                 <tr>
-                    <th style="text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编号</th>
-                    <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">
+                    <th style="width: 5%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编号</th>
+                    <th style="width: 30%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">
                         资源名称
                     </th>
                     <th style="width: 15%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">资源类型</th>
-                    <th style="width: 15%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">发布时间</th>
-                    <th style="width: 15%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">状态</th>
+                    <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">发布时间</th>
+                    <th style="width: 10%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">状态</th>
                     <th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">操作</th>
                 </tr>
                 </thead>
