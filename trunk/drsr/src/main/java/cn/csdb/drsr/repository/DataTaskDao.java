@@ -75,6 +75,16 @@ public class DataTaskDao {
         return jdbcTemplate.query(sb.toString(), params.toArray(), new DataTaskMapper());
     }
 
+    public int getCount(String datataskType,String status){
+        StringBuilder sb = new StringBuilder();
+        sb.append("select count(*) from t_datatask ");
+        if (StringUtils.isNoneBlank(datataskType) || StringUtils.isNoneBlank(status)) {
+            sb.append("where ");
+        }
+        List<Object> params = getSql(datataskType, status, sb);
+        return jdbcTemplate.queryForObject(sb.toString(),params.toArray(),Integer.class);
+    }
+
     /**
      * Function Description: sql语句组织
      *

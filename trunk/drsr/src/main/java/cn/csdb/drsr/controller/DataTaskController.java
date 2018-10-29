@@ -111,7 +111,11 @@ public class DataTaskController {
                                    @RequestParam(name = "status", required = false) String status){
         JSONObject jsonObject = new JSONObject();
         List<DataTask> dataTasks = dataTaskService.getDatataskByPage((pageNo-1)*pageSize,pageSize,datataskType,status);
+        int totaoCount = dataTaskService.getCount(datataskType,status);
         jsonObject.put("dataTasks",dataTasks);
+        jsonObject.put("totalCount",totaoCount);
+        jsonObject.put("pageNo",pageNo);
+        jsonObject.put("pageSize",pageSize);
         return jsonObject;
     }
 
@@ -208,7 +212,7 @@ public class DataTaskController {
         String subjectCode = configPropertyService.getProperty("SubjectCode");
         String fileName = subjectCode+datataskId;
         fileResourceService.packDataResource(fileName,filepaths, dbFlag);
-        String zipFile = System.getProperty("drsr.framework.root") + "/upload/zipFile" + File.separator + fileName + ".zip";
+        String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
         DataTask dt = dataTaskService.get(datataskId);
         dt.setSqlFilePath(zipFile);
         dataTaskService.update(datatask);
