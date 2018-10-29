@@ -35,13 +35,16 @@ public class DataTaskDao {
     //更新
     public boolean update(DataTask dataTask) {
         boolean result = false;
-        String sql = "update T_dataTask set DataSourceId=?,DataTaskName=?,DataTaskType=?,TableName=?," +
-                "SqlString=?,SqlTableNameEn=?,SqlFilePath=?,FilePath=?,creator=?,status=? " +
+        String sql = "update T_dataTask set " +
+                "DataSourceId=?,DataTaskName=?,DataTaskType=?," +
+                "TableName=?,SqlString=?,SqlTableNameEn=?," +
+                "SqlFilePath=?,FilePath=?,creator=?,status=? " +
                 "where DataTaskId=? ";
-        int i = jdbcTemplate.update(sql, new Object[]{dataTask.getDataSourceId(), dataTask.getDataTaskName(),
-                dataTask.getDataTaskType(), dataTask.getTableName(), dataTask.getSqlString(),
-                dataTask.getSqlTableNameEn(), dataTask.getSqlFilePath(), dataTask.getFilePath(),
-                dataTask.getCreator(), dataTask.getStatus(), dataTask.getDataTaskId()});
+        int i = jdbcTemplate.update(sql, new Object[]{
+                dataTask.getDataSourceId(), dataTask.getDataTaskName(), dataTask.getDataTaskType(),
+                dataTask.getTableName(), dataTask.getSqlString(), dataTask.getSqlTableNameEn(),
+                dataTask.getSqlFilePath(), dataTask.getFilePath(), dataTask.getCreator(),
+                dataTask.getStatus(), dataTask.getDataTaskId()});
         if (i >= 0) {
             result = true;
         }

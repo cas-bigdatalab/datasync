@@ -207,15 +207,14 @@ public class DataTaskController {
             jsonObject.put("result",false);
             return  jsonObject;
         }
-        CountDownLatch dbFlag = new CountDownLatch(1);
         List<String> filepaths = Arrays.asList(filePathList.split(";"));
         String subjectCode = configPropertyService.getProperty("SubjectCode");
         String fileName = subjectCode+datataskId;
-        fileResourceService.packDataResource(fileName,filepaths, dbFlag);
+        fileResourceService.packDataResource(fileName,filepaths);
         String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
         DataTask dt = dataTaskService.get(datataskId);
-        dt.setSqlFilePath(zipFile);
-        dataTaskService.update(datatask);
+        dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
+        boolean upresult = dataTaskService.update(dt);
         jsonObject.put("result",true);
         return  jsonObject;
     }
