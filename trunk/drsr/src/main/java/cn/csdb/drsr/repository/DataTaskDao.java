@@ -133,7 +133,7 @@ public class DataTaskDao {
                 ps.setTimestamp(9,new Timestamp(datatask.getCreateTime().getTime()));
                 ps.setString(10,datatask.getCreator());
                 ps.setString(11,datatask.getStatus());
-                return null;
+                return ps;
 
             }
         },keyHolder);
