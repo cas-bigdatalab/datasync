@@ -9,7 +9,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<%@ page import="cn.csdb.commons.utils.*" %>
 
 <html>
 <head>
@@ -22,8 +21,7 @@
     <link href="${ctx}/resources/bundles/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/bootstrapv3.3/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx}/resources/bundles/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet"
-          type="text/css"/>
+    <link href="${ctx}/resources/bundles/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
     <!-- END GLOBAL MANDATORY STYLES -->
     <!--BEGIN PAGE STYLES-->
     <sitemesh:write property="head"/>
@@ -63,18 +61,8 @@
             <a href="${ctx}/">
                 <h4 style="margin-top:14px ">DataSync烟草专题库客户端</h4>
             </a>
-
-            <div class="menu-toggler sidebar-toggler hide">
-                <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
-            </div>
         </div>
-        <!-- END LOGO -->
-        <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-        <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse"
-           data-target=".navbar-collapse">
-        </a>
-        <!-- END RESPONSIVE MENU TOGGLER -->
-        <!-- BEGIN TOP NAVIGATION MENU -->
+
         <div class="top-menu">
             <ul class="nav navbar-nav pull-right">
                 <!-- BEGIN USER LOGIN DROPDOWN -->
@@ -83,34 +71,14 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                        data-close-others="true">
                         <i class="glyphicon glyphicon-user"></i>
-                        <span class="username username-hide-on-mobile">
-                           <%--<shiro:user>
-                               欢迎您！${sessionScope.loginId} &nbsp;&nbsp;
-                               &lt;%&ndash;<span>角色:${sessionScope.roleNames} </span>&ndash;%&gt;
-                           </shiro:user>--%>
-                        </span>
+
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-default">
-
-                       <%-- <shiro:guest>
-                            <li>
-                                <a href="${applicationScope.systemPro['cas.url.prefix']}/login?service=${applicationScope.systemPro['drsr.url']}/shiro-cas">
-                                    <i class="icon-rocket"></i>用户登录
-                                </a>
-                            </li>
-                        </shiro:guest>--%>
-                        <%--<shiro:user>
-                            <li>
-                                <a target='_blank'
-                                   href="${applicationScope.systemPro['cas.url.prefix']}/reg01004Action.do?userID=<%=CasURLCode.encode(session.getAttribute("loginId").toString())%>">
-                                    <i class="icon-calendar"></i>用户信息</a>
-                            </li>
-                            <li>
-                                <a href="${applicationScope.systemPro['cas.url.prefix']}/logout?service=${applicationScope.systemPro['drsr.url']}/logout">
-                                    <i class="icon-key"></i>退出</a>
-                            </li>
-                        </shiro:user>--%>
+                        <a title="login" id="loginMenuItem" data-target="#loginDialog" data-toggle="modal" >
+                            <i class="icon-rocket"></i>
+                            用户登录
+                        </a>
                     </ul>
                 </li>
                 <!-- END USER LOGIN DROPDOWN -->
@@ -120,6 +88,8 @@
     </div>
     <!-- END HEADER INNER -->
 </div>
+
+
 <!-- END HEADER -->
 <div class="clearfix"></div>
 <div class="page-container" style="min-height: 750px">
@@ -239,6 +209,11 @@
     </div>
 </div>
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
+
+
+
+
+
 <!-- BEGIN CORE PLUGINS -->
 <!--[if lt IE 9]>
 <script src="${ctx}/resources/bundles/metronic/global/plugins/respond.min.js"></script>
