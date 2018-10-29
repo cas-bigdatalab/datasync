@@ -2719,7 +2719,8 @@ Forms
 }
 
 .input-small {
-    width: 145px !important;
+    width: 135px !important;
+    height: 25px; !important;
 }
 
 .input-medium {

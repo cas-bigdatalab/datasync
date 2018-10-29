@@ -31,7 +31,7 @@ import java.util.*;
 @Controller
 @RequestMapping("/relationship")
 public class RelationSourceController {
-    private Logger logger= LoggerFactory.getLogger(RelationSourceController.class);
+    private Logger logger = LoggerFactory.getLogger(RelationSourceController.class);
     @Resource
     private RelationShipService relationShipService;
 
@@ -40,14 +40,14 @@ public class RelationSourceController {
     @ResponseBody
     String delete(String dataId) {
         logger.debug("进入删除功能");
-        String tag= relationShipService.deleteRelation(Integer.valueOf(dataId));
+        String tag = relationShipService.deleteRelation(Integer.valueOf(dataId));
         return tag;
     }
 
     @RequestMapping("/add")
     public
     @ResponseBody
-    String add(String dataSourceName,String dataSourceType,String dataBaseName,String dataBaseType, String host,
+    String add(String dataSourceName, String dataSourceType, String dataBaseName, String dataBaseType, String host,
                String port, String userName, String password) {
         logger.debug("新增功能开始");
         Date current_date = new Date();
@@ -66,10 +66,10 @@ public class RelationSourceController {
         datasrc.setPassword(password);
         datasrc.setCreateTime(currentTime);
         logger.info("测试新增或编辑的数据能否连通数据库");
-        String flag = relationShipService.testCon(host,port,userName,"",dataBaseName);
-        if(flag=="success"){
+        String flag = relationShipService.testCon(host, port, userName, "", dataBaseName);
+        if (flag == "success") {
             return relationShipService.addData(datasrc);
-        }else{
+        } else {
             return "2";
         }
     }
@@ -77,8 +77,8 @@ public class RelationSourceController {
     @RequestMapping("/edit")
     public
     @ResponseBody
-    String edit(String dataSourceName,String dataSourceType,String dataBaseName,String dataBaseType, String host,
-                String port, String userName, String password,String dataSourceId) {
+    String edit(String dataSourceName, String dataSourceType, String dataBaseName, String dataBaseType, String host,
+                String port, String userName, String password, String dataSourceId) {
         logger.debug("编辑功能开始,开始插入");
         Date current_date = new Date();
         //设置日期格式化样式为：yyyy-MM-dd
@@ -86,7 +86,7 @@ public class RelationSourceController {
         //格式化当前日期
         String currentTime = SimpleDateFormat.format(current_date.getTime());
         DataSrc datasrc = new DataSrc();
-        int dataSourceId1 =Integer.valueOf(dataSourceId);
+        int dataSourceId1 = Integer.valueOf(dataSourceId);
         datasrc.setDataSourceName(dataSourceName);
         datasrc.setDataSourceType(dataSourceType);
         datasrc.setDatabaseName(dataBaseName);
@@ -99,11 +99,11 @@ public class RelationSourceController {
         datasrc.setDataSourceId(dataSourceId1);
         logger.info("测试新增或编辑的数据能否连通数据库");
 
-        String flag = relationShipService.testCon(host,port,userName,password,dataBaseName);
+        String flag = relationShipService.testCon(host, port, userName, password, dataBaseName);
 
-        if(flag=="success"){
+        if (flag == "success") {
             return relationShipService.editData(datasrc);
-        }else{
+        } else {
             return "2";
         }
 
@@ -119,8 +119,7 @@ public class RelationSourceController {
     }
 
     @RequestMapping(value = "/index")
-    public ModelAndView index(HttpServletRequest request,Integer currentPage)
-    {
+    public ModelAndView index(HttpServletRequest request, Integer currentPage) {
         logger.info("进入关系数据源模块列表页");
         ModelAndView mv = new ModelAndView("relationalResource");
         return mv;
@@ -130,9 +129,8 @@ public class RelationSourceController {
     @RequestMapping(value = "/indexPages")
     public
     @ResponseBody
-    JSONObject indexPages(Integer num)
-    {
-        if(num==null){
+    JSONObject indexPages(Integer num) {
+        if (num == null) {
             num = 1;
         }
         Map map = relationShipService.queryTotalPage();
@@ -146,9 +144,7 @@ public class RelationSourceController {
     }
 
 
-
     /**
-     *
      * Function Description:
      *
      * @param: []
@@ -156,13 +152,13 @@ public class RelationSourceController {
      * @auther: hw
      * @date: 2018/10/22 17:59
      */
-    @RequestMapping(value="findAllDBSrc")
-    public @ResponseBody List<DataSrc> findAllDBSrc(){
+    @RequestMapping(value = "findAllDBSrc")
+    public @ResponseBody
+    List<DataSrc> findAllDBSrc() {
         return relationShipService.findAll();
     }
 
     /**
-     *
      * Function Description:
      *
      * @param: [dataSourceId]
@@ -171,18 +167,17 @@ public class RelationSourceController {
      * @date: 2018/10/22 17:59
      */
     @ResponseBody
-    @RequestMapping(value="relationalDatabaseTableList")
-    public JSONObject relationalDatabaseTableList(int dataSourceId){
+    @RequestMapping(value = "relationalDatabaseTableList")
+    public JSONObject relationalDatabaseTableList(int dataSourceId) {
         JSONObject jsonObject = new JSONObject();
         DataSrc dataSrc = relationShipService.findById(dataSourceId);
         List<String> list = relationShipService.relationalDatabaseTableList(dataSrc);
-        jsonObject.put("list",list);
-        jsonObject.put("dataSourceName",dataSrc.getDataSourceName());
+        jsonObject.put("list", list);
+        jsonObject.put("dataSourceName", dataSrc.getDataSourceName());
         return jsonObject;
     }
 
     /**
-     *
      * Function Description: preview RelationalDatabase By TableName
      *
      * @param: [dataSourceId, tableInfosListStr, pageSize]
@@ -213,7 +208,6 @@ public class RelationSourceController {
     }
 
     /**
-     *
      * Function Description: preview RelationalDatabase By SQL
      *
      * @param: [dataSourceId, sqlStr, tableInfosListStr, pageSize]
@@ -226,23 +220,24 @@ public class RelationSourceController {
     public JSONObject previewRelationalDatabaseBySQL(
             @RequestParam(required = false) String dataSourceId,
             @RequestParam() String sqlStr,
-            @RequestParam(required = false, name = "tableInfosList") String tableInfosListStr,
+//            @RequestParam(required = false, name = "tableInfosList") String tableInfosListStr,
             @RequestParam(required = false, defaultValue = "10") int pageSize) {
         logger.info("预览表数据");
         JSONObject jsonObject = new JSONObject();
-        List<TableInfoR> tableInfosList = JSON.parseArray(tableInfosListStr, TableInfoR.class);
-        HashMap<String, List<TableInfo>> maps = Maps.newHashMap();
-        if (tableInfosList != null && tableInfosList.size() >= 1) {
-            String tableName = null;
-            for (TableInfoR tableInfoR : tableInfosList) {
-                tableName = tableInfoR.getTableName();
-                maps.put(tableName, tableInfoR.getTableInfos());
-            }
-        } else {
-            return jsonObject;
-        }
+//        List<TableInfoR> tableInfosList = JSON.parseArray(tableInfosListStr, TableInfoR.class);
+        Map<String, List<TableInfo>> maps = relationShipService.getDefaultFieldComsBySql(Integer.parseInt(dataSourceId), sqlStr);
+//        if (tableInfosList != null && tableInfosList.size() >= 1) {
+//            String tableName = null;
+//            for (TableInfoR tableInfoR : tableInfosList) {
+//                tableName = tableInfoR.getTableName();
+//                maps.put(tableName, tableInfoR.getTableInfos());
+//            }
+//        } else {
+//            return jsonObject;
+//        }
         List<List<Object>> datas = relationShipService.getDataBySql(sqlStr, maps, Integer.valueOf(dataSourceId), 0, pageSize);
         jsonObject.put("datas", datas);
         return jsonObject;
     }
+
 }

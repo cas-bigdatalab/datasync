@@ -564,7 +564,7 @@
             dataRelTableList= relTabStr;
             dataRelSqlList =relSqlStr;
             $.ajax({
-                url:"${ctx}/datatask/saveDatatask",
+                url:"${ctx}/datatask/saveRelationDatatask",
                 type:"POST",
                 data:{
                     dataSourceId:dataRelSrcId,

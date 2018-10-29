@@ -35,11 +35,6 @@
     <!--END PAGE STYLES-->
 
     <!-- BEGIN THEME STYLES -->
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/style.css">
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/pages/css/style-shop.css">
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/style-responsive.css">
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/themes/blue.css">
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/frontend/layout/css/custom.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/style.css">
     <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/reset.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/main.css">--%>
@@ -275,7 +270,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="${ctx}/projectMessage">
+                        <a href="${ctx}/resource/list">
                             <i class="icon-layers"></i>
                             <span class="title">数据发布</span>
                             <span class="arrow "></span>
