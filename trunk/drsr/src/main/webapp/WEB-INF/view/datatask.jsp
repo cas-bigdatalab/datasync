@@ -82,7 +82,7 @@
                 <form class="form-horizontal">
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务标识:</label>
-                        <div class="col-sm-8" name="tast-"></div>
+                        <div class="col-sm-8" name=""></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">数据源ID:</label>

@@ -174,24 +174,24 @@
                         <div class="col-md-12">
                             <div class="portlet box green-haze" style="border:0;">
                                 <div class="portlet-title">
-                                    <ul class="nav nav-tabs" style="float:left;">
-                                        <li class="active">
+                                   <%-- <ul class="nav nav-tabs" style="float:left;">
+                                       &lt;%&ndash; <li class="active">
                                             <a href="#editTableFieldComsId" data-toggle="tab"
                                                id="editTableDataAndComsButtonId" aria-expanded="true">
                                                 编辑 </a>
-                                        </li>
+                                        </li>&ndash;%&gt;
                                         <li class="active">
                                             <a href="#previewTableDataAndComsId" id="previewTableDataAndComsButtonId"
-                                               data-toggle="tab" aria-expanded="false">
+                                               data-toggle="tab" aria-expanded="true">
                                                 预览 </a>
                                         </li>
-                                    </ul>
+                                    </ul>--%>
                                 </div>
                                 <div class="tab-content"
                                      style="background-color: white;min-height:300px;max-height:70%;padding-top: 20px ; overflow: scroll;">
-                                    <div class="tab-pane active" id="editTableFieldComsId">
-                                    </div>
-                                    <div class="tab-pane" id="previewTableDataAndComsId">
+                                   <%-- <div class="tab-pane active" id="editTableFieldComsId">
+                                    </div>--%>
+                                    <div id="previewTableDataAndComsId">
                                     </div>
                                 </div>
                             </div>
@@ -310,10 +310,9 @@
         var dataRelSrcId;
         var dataRelTableList;
         var dataRelSqlList;
-        var dataRelSqlTableList;
+
         var dataFileSrcId;
         var dataFilePathList;
-        var testSql =""
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
                 $(".select-database").show();
@@ -388,128 +387,17 @@
             $(this).parent().parent().remove();
         })
         $("#totalList").delegate(".preview","click",function () {
-            var $Str =$(this).parent().parent().find(".sqlStatements").val();
-            testSql=$Str
-            staticSourceTableChoice(2, null, dataRelSrcId, $Str, "dataResource");
-            /*$("#staticSourceTableChoiceModal").modal("show");
-            previewSqlDataAndComs(dataRelSrcId,$Str);*/
-           /* $.ajax({
-                url:"${ctx}/relationship/previewRelationalDatabaseBySQL",
-                type:"POST",
-                data:{
-                    dataSourceId:dataRelSrcId,
-                    sqlStr:$Str
-                },
-                success:function (data) {
-                    console.log(data);
-                },
-                error:function () {
-                    console.log("请求失败")
-                }
-            })*/
+            var $Str =$(this).parent().parent().find(".sqlStatements").val();;
+            $("#staticSourceTableChoiceModal").modal("show");
+            previewSqlDataAndComs(dataRelSrcId,$Str)
         })
-        function staticSourceTableChoice(editIsChoiceTableOrSql, obj, dataSourceId, tableNameOrSql, refer) {
-            if (refer == "dataService" || !obj || obj.checked) {
-                $('#editTableFieldComsId').html("");
-                $('#previewTableDataAndComsId').html("");
-
-                $('#editTableDataAndComsButtonId').parent().removeClass("active");
-                $('#previewTableDataAndComsButtonId').parent().removeClass("active");
-
-                $('#editTableFieldComsId').removeClass("active");
-                $('#previewTableDataAndComsId').removeClass("active");
-
-                $('#editTableDataAndComsButtonId').parent().addClass("active");
-                $('#editTableFieldComsId').addClass("active");
-                var tableInfosList = null;
-                var tableInfosMap = getSqlFieldComs(dataSourceId, tableNameOrSql);
-                var i = 0;
-                tableInfosList = [];
-                for (var key in tableInfosMap) {
-                    tableInfosList [i++] = {tableName: key, tableInfos: tableInfosMap[key]};
-                }
-                /*var tableInfosList = null;
-                if (editIsChoiceTableOrSql == 1) {
-                    var tableInfos = getTableFieldComs(dataSourceId, tableNameOrSql);
-                    tableInfosList = [];
-                    tableInfosList[0] = {tableName: tableNameOrSql, tableInfos: tableInfos};
-                } else if (editIsChoiceTableOrSql == 2) {
-                    var tableInfosMap = getSqlFieldComs(dataSourceId, tableNameOrSql);
-                    var i = 0;
-                    tableInfosList = [];
-                    for (var key in tableInfosMap) {
-                        tableInfosList [i++] = {tableName: key, tableInfos: tableInfosMap[key]};
-                    }
-                }*/
-                /*if (!tableInfosList || tableInfosList.length == 0) {
-                    if (editIsChoiceTableOrSql == 2) {
-                        toastr["warning"]("提示！", "请先检查填写sql语句");
-                    }
-                    return;
-                }*/
-                $("#staticSourceTableChoiceModal").modal("show");
-                /* var html = template("editTableFieldComsTmpl", {"tableInfosList": tableInfosList});*/
-                /* $('#editTableFieldComsId').html(html);*/
-                curSourceTableChoice = obj;
-                curDataSourceId = dataSourceId;
-                curEditIsChoiceTableOrSql = editIsChoiceTableOrSql;
-                curRefer = refer;
-                if (editIsChoiceTableOrSql == 1) {
-                    curTableName = tableNameOrSql;
-                } else if (editIsChoiceTableOrSql == 2) {
-                    curSQL = tableNameOrSql;
-                }
-                // preSaveEditTableFieldComs();// 页面与保存coms信息
-            } else {
-                $(obj).removeAttr("coms");
-            }
-            $("#form_wizard_1").find(".button-save").removeAttr("disabled");
-
-        }
-        function getTableFieldComs(dataSourceId, tableName) {
-            var dataResult = null;
-            $.ajax({
-                type: "GET",
-                url: '${ctx}/getTableFieldComs',
-                data: {"dataSourceId": dataSourceId, "tableName": tableName, "timestamp": Date.parse(new Date())},
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    if (!data || !data.tableInfos) {
-                        return;
-                    }
-                    dataResult = data.tableInfos;
-                }
-            });
-            return dataResult;
-        }
-        function getSqlFieldComs(dataSourceId, sqlStr) {
-            var dataResult = null;
-            $.ajax({
-                type: "GET",
-                url: '${ctx}/relationship/previewRelationalDatabaseBySQL',
-                data: {"dataSourceId": dataSourceId, "sqlStr": sqlStr},
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    if (!data || !data.tableInfos) {
-                        return;
-                    }
-                    dataResult = data.tableInfos;
-                }
-            });
-            return dataResult;
-        }
-
-
-
         function addSql() {
             var tabCon = template("addSql");
             $("#sqlList").append(tabCon);
         }
-
         <!--create relation task -->
         function sendRelationTask() {
+            var dataRelSqlTableList="";
             var $eleChecked = $("[name='relationBox']:checked")
             $("[name='sqlTableName']").each(function () {
                 if($(this).val() == ""){
@@ -616,248 +504,13 @@
         });
 
 
-
-
-       /* var treeData = {
-            'core' : {
-                "animation": 0,
-                "check_callback":false,
-                'data' : [
-                    {
-                        "text" : "Root node",
-                        "state" : { "opened" : true },
-                        "children" : [
-                            {
-                                "text" : "Child node 1",
-                                "state" : { "selected" : true },
-                                "icon" : "jstree-file"
-                            },
-                            { "text" : "Child node 2",  }
-                        ]
-                    }
-                ]
-            },
-            "plugins" : ["dnd","state","types","wholerow"]
-        }
-        $("#jstree_show").jstree(treeData);
-        var jsdata;
-        var deleteNodeArray;
-        $(".select-local>button").on("click",function () {
-            jsdata=null;
-            $("#jstree_show").jstree({
-                'core' : {
-                    'data' :{
-                        'url':$.hr_contextUrl()+"menu/list",
-                        'data':function(node){
-                            return node;
-                        }
-                    }
-                },
-                'plugins':['contextmenu','sort'],
-                "contextmenu":{
-                    "items":{
-                        "create":null,
-                        "rename":null,
-                        "remove":null,
-                        "ccp":null,
-                        "新建菜单":{
-                            "label":"新建菜单",
-                            "action":function(data){
-                                var node = _menu.data.jsTree.jstree('get_node',data.reference[0])
-                                var pid = node.parent;
-                                _menu.operation.addMenu(pid,node);
-                            }
-                        },
-                        "删除菜单":{
-                            "label":"删除菜单",
-                            "action":function(data){
-                                var node = _menu.data.jsTree.jstree('get_node',data.reference[0]);
-                                _menu.operation.delMenu(node);
-                            }
-                        },
-                        "修改菜单":{
-                            "label":"修改菜单",
-                            "action":function(data){
-                                var node = _menu.data.jsTree.jstree('get_node',data.reference[0]).original;
-                                _menu.operation.editMenu(node);
-                            }
-                        },
-                        "上移菜单":{
-                            "label":"上移菜单",
-                            "action":function(data){
-                                var node = _menu.data.jsTree.jstree('get_node',data.reference[0]);
-                                var prev_dom = $(data.reference[0]).closest("li").prev();
-                                _menu.operation.sortMenu(node,prev_dom);
-                            }
-                        },
-                        "下移菜单":{
-                            "label":"下移菜单",
-                            "action":function(data){
-                                var node = _menu.data.jsTree.jstree('get_node',data.reference[0]);
-                                var next_dom = $(data.reference[0]).closest("li").next();
-                                _menu.operation.sortMenu(node,next_dom);
-                            }
-                        },
-                        "新建子菜单":{
-                            "label":"新建子菜单",
-                            "action":function(data){
-                                var node = _menu.data.jsTree.jstree('get_node',data.reference[0]);
-                                var pid = node.id;
-                                _menu.operation.addMenu(pid,node);
-                            }
-                        }
-                    }
-                }
-            });
-            $("#editRegon").empty();
-            var url = this.id == "upload-directory"? "upload-directory":"upload-file";
-            /!*$.ajax({
-                url: ctx + url,
-                type: "get",
-                dataType: "json",
-                data: {editable: false},
-                success: function (data) {
-                    jsdata =data
-                    $('#jstree_show').jstree(data);
-                }
-            })*!/
-        })
-
-        function editTree() {
-            if($("#editRegon").html().trim() != ""){
-                return false;
-            }
-            deleteNodeArray = new Array();
-            var html = '<div class="row" style="margin-bottom:12px"> ' +
-                '<button type="button" class="btn btn-default btn-sm" onclick="jstree_create();"><i class="glyphicon glyphicon-asterisk"></i> 添加</button> ' +
-                '<button type="button" class="btn btn-default btn-sm" onclick="jstree_rename();"><i class="glyphicon glyphicon-pencil"></i> 重命名</button> ' +
-                '<button type="button" class="btn btn-default btn-sm" onclick="jstree_delete();"><i class="glyphicon glyphicon-remove"></i> 删除</button> ' +
-                '</div> ' +
-                '<div id="jstree_edit" style="height:300px"></div> ' +
-                '<button type="button" class="btn btn-default btn-sm" onclick="jstree_cancel();" style="margin-left:5px"><i class="glyphicon glyphicon-remove"></i> 取消</button>' +
-                '<button type="button" class="btn btn-primary btn-sm" onclick="jstree_submit();" style="margin-left:5px"><i class="glyphicon glyphicon-ok"></i> 提交</button>'
-            $("#editRegon").append(html);
-            //这有一点需要补充
-             var to = false;
-             $('#demo_q').keyup(function () {
-                 if (to) {
-                     clearTimeout(to);
-                 }
-                 to = setTimeout(function () {
-                     var v = $('#demo_q').val();
-                     $('#jstree_edit').jstree(true).search(v);
-                 }, 250);
-             });
-            treeData.core.check_callback= true;
-            treeData.plugins=["contextmenu", "dnd", "state", "types", "wholerow"]
-            $('#jstree_edit').jstree(treeData);
-        }
-
-        function jstree_cancel(){
-            $("#editRegon").html("");
-            treeData.core.check_callback= false;
-            treeData.plugins=["dnd","state","types","wholerow"]
-        }
-        function jstree_create() {
-            var ref = $('#jstree_edit').jstree(true),
-                sel = ref.get_selected();
-            if (!sel.length) {
-                return false;
-            }
-            sel = sel[0];
-
-            sel = ref.create_node(sel);
-            ref.set_icon(sel, "glyphicon glyphicon-th-list");
-
-            if (sel) {
-                ref.edit(sel);
-            }
-        }
-        function jstree_rename() {
-            var ref = $('#jstree_edit').jstree(true),
-                sel = ref.get_selected();
-            if (!sel.length) {
-                return false;
-            }
-            sel = sel[0];
-            ref.edit(sel);
-        }
-        function jstree_delete() {
-
-            /!* var ref = $('#jstree_edit').jstree(true);
-             sel = ref.get_selected();
-             if (!sel.length) {
-                 return false;
-             }*!/
-            /!*ref.delete_node(sel);
-            if(sel[0].indexOf("_")<0){
-                deleteNodeArray.push(sel[0]);
-            }*!/
-            /!*$("#deleteContent").attr("nodeid",sel[0]);*!/
-            $("#deleteNodeModal").modal('show');
-            /!*$("#deleteContent").html('<div align="center">确认删除'+ref.get_node(sel).text+'节点？</div>')*!/
-            $("#deleteContent").html('<div align="center">确认删除节点？</div>')
-        };
-        function confirmDeleteNode(){
-            if(syncSwitch = "deny"){
-                toastr["warning"]("己经开始同步数据，不能再删除记录！", "数据删除");
-            }else{
-                var ref = $('#jstree_edit').jstree(true);
-                sel =$('#jstree_edit').jstree("get_node", $("#deleteContent").attr("nodeid"));
-                ref.delete_node(sel);
-                if (sel.id.indexOf("_") < 0) {
-                    deleteNodeArray.push(sel.id);
-                }
-            }
-
-        }
-
-        function jstree_submit() {
-            var treeData = $.jstree.reference('jstree_edit')._model.data;
-            var packageTreeData = new Array();
-            $.each(treeData, function (n, value) {
-                if (value.parent != null) {
-                    var nodeData = {
-                        id: value.id,
-                        text: value.text,
-                        parent: value.parent,
-                        level: value.parents.length,
-                        order: n
-                    };
-                    packageTreeData.push(nodeData);
-                }
-            });
-            $.ajax({
-                url: ctx + "/resCatalogSubmit",
-                type: "get",
-                dataType: "json",
-                data: {packageTreeData: JSON.stringify(packageTreeData),
-                    deleteNodeArray:JSON.stringify(deleteNodeArray)},
-                success: function (data) {
-                    window.location.href = ctx + "/resCatalog";
-//                    toastr["success"]("资源目录添加成功！", "success！");
-                }
-            })
-        }
-*/
-
-        $("#previewTableDataAndComsButtonId").bind("click", function () {
-            if (curEditIsChoiceTableOrSql == 1) {
-                var tableInfos = getEditTableOrSqlFieldComs();
-                previewTableDataAndComs(curDataSourceId, tableInfos);
-            } else if (curEditIsChoiceTableOrSql == 2) {
-                // var tableInfos = getEditTableOrSqlFieldComs();
-                previewSqlDataAndComs(curDataSourceId);
-            }
-        });
-
-        function previewSqlDataAndComs(dataSourceId) {
+        function previewSqlDataAndComs(dataSourceId,str) {
             $.ajax({
                 type: "GET",
                 url:  '${ctx}/relationship/previewRelationalDatabaseBySQL',
                 data: {
                     "dataSourceId": dataSourceId,
-                    "sqlStr": testSql
+                    "sqlStr": str
                 },
                 dataType: "json",
                 success: function (data) {
@@ -867,15 +520,13 @@
                     }
                     var columnTitleList = [];
                     data.datas.unshift(columnTitleList);
+
                     var html = template("previewTableDataAndComsTmpl", {"datas": data.datas});
                     $('#previewTableDataAndComsId').html(html);
                 }
             });
         }
 
-        $(function () {
-            /*tableConfiguration();*/
-        })
 
     </script>
 </div>
