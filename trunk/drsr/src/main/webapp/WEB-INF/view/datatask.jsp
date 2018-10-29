@@ -82,7 +82,7 @@
                 <form class="form-horizontal">
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务标识:</label>
-                        <div class="col-sm-8" name=""></div>
+                        <div class="col-sm-8" id="pre"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">数据源ID:</label>
@@ -112,10 +112,10 @@
                         <label  class="col-sm-3 control-label">创建者:</label>
                         <div class="col-sm-8"></div>
                     </div>
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label  class="col-sm-3 control-label">上传进度:</label>
                         <div class="col-sm-8"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务状态:</label>
                         <div class="col-sm-8"></div>
@@ -138,11 +138,11 @@
         <td>{{value.dataTaskName}}</td>
         <td>{{value.dataTaskType}}</td>
         <td>{{value.dataSrc.dataSourceName}}</td>
-        <td>{{dateTimeFormat(value.createTime)}}</td>
+        <td>{{dateFormat(value.createTime)}}</td>
         <td  id="{{value.dataTaskId}}">--</td>
         <td  class="{{value.dataTaskId}}">{{upStatusName(value.status)}}</td>
         <td>
-            <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" >导出SQL文件</button>
+            <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" >&nbsp;&nbsp;&nbsp;导出&nbsp;&nbsp;&nbsp;</button>
             {{if value.status  == 1}}
             <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" disabled style="background-color: dimgrey">重新上传</button>
             {{else if value.status  == 0}}
@@ -205,19 +205,19 @@
             })
         });
         /* localStorage.setItem("uploadTask",uploadTasks)*/
-       /* template.helper("btnName",function (num) {
+        /*template.helper("uploadName",function (num) {
             var name=""
             if(num ==0){
-                name="&nbsp;&nbsp;&nbsp;上传&nbsp;&nbsp;&nbsp;"
+                name="未上传"
             }else {
-                name="重新上传"
+                name="上传成功"
             }
             return name
         })*/
         template.helper("upStatusName",function (num) {
             var name=""
             if(num ==0){
-                name="--"
+                name="未上传"
             }else if(num == 1 ) {
                 name="导入完成"
             }
@@ -273,20 +273,29 @@
         })
         <!-- remove dataTask-->
         function removeData(id){
-            console.log(id)
-            $.ajax({
-                url:"${ctx}/datatask/delete",
-                type:"POST",
-                data:{
-                    datataskId:id
-                },
-                success:function (data) {
-                    tableConfiguration2(1,"","");
-                },
-                error:function () {
-                    console.log("请求失败");
+            bootbox.confirm("确认删除",function (r) {
+                if(r){
+                    $.ajax({
+                        url:"${ctx}/datatask/delete",
+                        type:"POST",
+                        data:{
+                            datataskId:id
+                        },
+                        success:function (data) {
+                            toastr["success"]("删除成功");
+                            tableConfiguration2(1,"","");
+                        },
+                        error:function () {
+                            toastr["error"]("删除失败");
+                            console.log("请求失败");
+                        }
+                    })
+                }else {
+
                 }
             })
+
+
         }
         var arr = []
        /* var json = {
