@@ -29,22 +29,22 @@
         <label for="bbb">本地上传</label>
         <input name="ways" type="radio" value="LH" id="bbb"/>
     </div>
-    <div class="select-ways">
-        <div class="select-database">
-            <span>选择数据源</span>
-            <select  id="DBchange">
-                <%--<option value="">-----------</option>
-                <option value="aaa">关系数据源DB2</option>
-                <option value="bbb">数据源OracleData</option>
-                <option value="">关系数据源DB2</option>
-                <option value="">数据源OracleData</option>
-                <option value="">关系数据源DB2</option>
-                <option value="">数据源OracleData</option>--%>
-            </select>
+    <div class="select-ways" >
+        <div class="select-database ">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label>选择数据源</label>
+                    <select  id="DBchange" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="dataTaskName">创建任务名</label>
+                    <input type="email" class="form-control" id="dataTaskName" >
+                </div>
+            </form>
             <div class="database-con-rel container-fluid" style="display: none">
                 <div class="row">
                     <div class="col-md-3 dataHead1">数据源名称：</div>
-                    <div class="col-md-9 dataHead2">关系数据源DB2</div>
+                    <div class="col-md-9 dataHead2"></div>
                     <div class="col-md-12">
                         <div class="col-md-2">选择表资源</div>
                         <div class="col-md-9" >
@@ -86,11 +86,10 @@
                             </div>
                         </div>
                     </div>
-                    <div id="totalList">
                         <div class="col-md-12" style="margin-bottom: 10px" >
                             <div class="col-md-2" style="text-align: right">sql查询</div>
                             <div class="col-md-4">
-                                <input type="text" class="form-control sqlStatements" id="asdf">
+                                <input type="text" class="form-control sqlStatements">
                             </div>
                             <div class="col-md-2" style="margin: 0 -15px">
                                 <input type="text" class="form-control" placeholder="请输入一个表名" name="sqlTableName">
@@ -110,7 +109,6 @@
                     </div>
                 </div>
             </div>
-        </div>
         <div class="select-local" style="display: none;">
             <%--<button type="button" class="btn btn-success" id="upload-directory">上传目录</button>
             <button type="button" class="btn btn-success" id="upload-file">上传文件</button>
@@ -129,16 +127,18 @@
             <div class="col-md-12 ">
                 <button type="button" class="btn green pull-right" onclick="sendFileTask()">提交</button>
             </div>--%>
-                <span>选择数据源</span>
-                <select  id="DBFilechange">
-                    <%--<option value="">-----------</option>
-                    <option value="aaa">关系数据源DB2</option>
-                    <option value="bbb">数据源OracleData</option>
-                    <option value="">关系数据源DB2</option>
-                    <option value="">数据源OracleData</option>
-                    <option value="">关系数据源DB2</option>
-                    <option value="">数据源OracleData</option>--%>
-                </select>
+
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label>选择数据源</label>
+                        <select  id="DBFilechange" class="form-control"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="TaskFileName">创建任务名</label>
+                        <input type="email" class="form-control" id="TaskFileName" >
+                    </div>
+                </form>
+
                 <div class="database-con-file container-fluid" style="display: none;">
                     <div class="row">
                         <div class="col-md-12 dataHead3" style="max-height: 500px;overflow: auto;padding-top: 10px">
@@ -275,7 +275,7 @@
 <script type="text/html" id="dataRelationshipList">
     <option value="" id="selNone" selected="selected">-----------</option>
     {{each data as value i}}
-    <option value="{{value.dataSourceName}}" id="{{value.dataSourceId}}" task-name="value.DataTaskName">{{value.dataSourceName}}</option>
+    <option value="{{value.dataSourceName}}" id="{{value.dataSourceId}}">{{value.dataSourceName}}</option>
     {{/each}}
 </script>
 <script type="text/html" id="dataRelationshipList2">
@@ -318,7 +318,7 @@
 <script type="text/html" id="dataFileshipList">
     <option value="" id="selFileNone" selected="selected">-----------</option>
     {{each data as value i}}
-    <option value="{{value.dataSourceName}}" Keyid="{{value.dataSourceId}}" task-name="value.DataTaskName">{{value.dataSourceName}}</option>
+    <option value="{{value.dataSourceName}}" Keyid="{{value.dataSourceId}}">{{value.dataSourceName}}</option>
     {{/each}}
 </script>
 <script type="text/html" id="dataFileshipList2">
@@ -339,14 +339,11 @@
 
     <script>
         var dataRelSrcId;
-        var dataRelTaskName;
         var dataRelTableList;
         var dataRelSqlList;
         var dataRelSqlTableList;
         var dataFileSrcId;
         var dataFilePathList;
-        var dataFileTaskName;
-        var curSQLStrIndex = 0;
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
                 $(".select-database").show();
@@ -359,9 +356,7 @@
         })
         $("#DBchange").on("change",function () {
             var id = $("#DBchange option:selected").attr("id");
-            var taskNname = $("#DBchange option:selected").attr("task-name");
             dataRelSrcId =id;
-            dataRelTaskName = taskNname;
             var name = $(this).val();
             if(name == ""){
                 $(".database-con-rel").hide();
@@ -390,9 +385,7 @@
         })
         $("#DBFilechange").on("change",function () {
             var id = $("#DBFilechange option:selected").attr("Keyid");
-            var taskname = $("#DBFilechange option:selected").attr("task-name");
             dataFileSrcId =id;
-            dataFileTaskName=taskname;
             var name = $(this).val();
             if(name == ""){
                 $(".database-con-file").hide();
@@ -569,10 +562,12 @@
                 data:{
                     dataSourceId:dataRelSrcId,
                     dataRelTableList:dataRelTableList,
-                    dataRelSqlList:dataRelSqlList
+                    dataRelSqlList:dataRelSqlList,
+                    datataskName:$("#dataTaskName").val(),
+                    sqlTableNameEnList:dataRelSqlTableList
                 },
                 success:function (data) {
-                    /*window.location.href="${ctx}/dataUpload"*/
+                    window.location.href="${ctx}/dataUpload"
                 },
                 error:function () {
                 }
@@ -596,11 +591,11 @@
                 type:"POST",
                 data:{
                     dataSourceId:dataFileSrcId,
-                    datataskName:dataFileTaskName,
+                    datataskName:$("#TaskFileName").val(),
                     filePathList:dataFilePathList,
                 },
                 success:function (data) {
-                    /*window.location.href="${ctx}/dataUpload"*/
+                    window.location.href="${ctx}/dataUpload"
                 },
                 error:function () {
                 }
@@ -629,6 +624,7 @@
                 type:"GET",
                 success:function (data) {
                     var list =JSON.parse(data)
+                    console.log(list)
                     var data={
                         data:list
                     }

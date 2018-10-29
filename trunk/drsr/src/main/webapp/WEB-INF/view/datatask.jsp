@@ -132,13 +132,13 @@
     </div>
 </div>
 <script type="text/html" id="resourceTmp1">
-    {{each data as value i}}
+    {{each dataTasks as value i}}
     <tr keyIdTr="{{value.dataTaskId}}">
         <td>{{i + 1}}</td>
-        <td>{{value.sqlTableNameEn}}</td>
+        <td>{{value.dataTaskName}}</td>
         <td>{{value.dataTaskType}}</td>
         <td>{{value.source}}</td>
-        <td>{{value.createTime}}</td>
+        <td>{{dateTimeFormat(value.createTime)}}</td>
         <td  id="{{value.dataTaskId}}">--</td>
         <td  class="{{value.dataTaskId}}">{{upStatusName(value.status)}}</td>
         <td>
@@ -193,7 +193,10 @@
                     console.log(data.result);
                     if (data.result == 'true') {
                         toastr.success("导出SQL文件成功!");
+                    }else {
+                        toastr.error("导出SQL文件失败!");
                     }
+
                 },
                 error:function () {
                     console.log("请求失败")
@@ -305,8 +308,6 @@
             var uploadTasks=JSON.parse(localStorage.getItem("uploadList"));
         }
 
-
-
         /*//导出SQL文件
         $("#upload-list").delegate(".exportSql","click",function () {
             var souceID = $(this).attr("keyIdTd");
@@ -407,7 +408,6 @@
                     status:""
                 },
                 success:function (data) {
-                    console.log(data);
                     $(".table-message").hide();
                     $("#bd-data").html("");
                     var DataList = JSON.parse(data);
@@ -453,29 +453,6 @@
                     $(".table-message").html("请求失败");
                 }
             })
-        }
-
-        function formatDate(date) {
-            dates = date.split("/");
-            if(dates.length == 3) {
-                if(dates[1].length == 1) {
-                    dates[1] = "0" + dates[1];
-                }
-                if (dates[2].length == 1) {
-                    dates[2] = "0" + dates[2];
-                }
-                date = dates.join("-");
-                return date;
-            } else {
-                return null;
-            }
-        }
-        function parseTime(timestamp) {
-            var date = new Date(parseInt(timestamp)).toLocaleDateString();
-            //输出结果为2016/8/9
-            date = formatDate(date);
-            //输出结果为2016-08-09，满足YYYY-MM-DD格式要求
-            return date;
         }
 
 

@@ -262,6 +262,7 @@
 <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
 <script src="${ctx}/resources/bundles/bootbox/bootbox.min.js"></script>
 <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
+<script src="${ctx}/resources/js/regex.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
     jQuery(document).ready(function () {
@@ -316,6 +317,16 @@
         "hideMethod": "fadeOut"
     };
     bootbox.setLocale("zh_CN");
+    template.helper("dateFormat", convertMilsToDateString);
+    template.helper("dateTimeFormat", convertMilsToDateTimeString);
+    function convertMilsToDateTimeString(mil) {
+        var date = new Date(mil);
+        return date.Format("yyyy-MM-dd hh:mm:ss");
+    }
+    function convertMilsToDateString(mil) {
+        var date = new Date(mil);
+        return date.Format("yyyy-MM-dd");
+    }
 </script>
 <!-- END JAVASCRIPTS -->
 <sitemesh:write property="div.siteMeshJavaScript"/>
