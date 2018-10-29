@@ -32,12 +32,16 @@
                         <label >数据类型</label>
                         <select  id="dataSourceList" class="form-control" style="width: 150px">
                             <option value="">----------</option>
+                            <option value="db">关系数据库</option>
+                            <option value="file">文件数据库</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label  >状态</label>
                         <select  id="dataStatusList" class="form-control" style="width: 150px">
                             <option value="">----------</option>
+                            <option value="1">上传完成</option>
+                            <option value="0">未上传</option>
                         </select>
                     </div>
                     <button type="button" class="btn blue" style="margin-left: 49px">查询</button>
@@ -149,18 +153,6 @@
 
         </td>
     </tr>
-    {{/each}}
-</script>
-<script type="text/html" id="dataSourceListTmp">
-    <option value="" id="dataSelOne" selected="selected">-----------</option>
-    {{each data as value i}}
-    <option value="{{value.databaseName}}" Keyid="{{value.dataSourceId}}">{{value.databaseName}}</option>
-    {{/each}}
-</script>
-<script type="text/html" id="dataStatusListTmp">
-    <option value="" id="dataSelTwo" selected="selected">-----------</option>
-    {{each data as value i}}
-    <option value="{{value.databaseName}}" Keyid="{{value.dataSourceId}}">{{value.databaseName}}</option>
     {{/each}}
 </script>
 </body>

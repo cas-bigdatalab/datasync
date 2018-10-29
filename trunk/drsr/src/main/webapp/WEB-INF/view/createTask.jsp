@@ -281,9 +281,11 @@
 <script type="text/html" id="dataRelationshipList2">
     {{each list as value i}}
     <div class="col-md-6">
-        <label>
+        <%--<label>
             <input type="checkbox" name="relationBox" value="{{value}}"> {{value}}
-        </label>
+        </label>--%>
+        <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="relationBox" value="{{value}}" style="line-height: normal"></div>
+        <div style="padding-left: 20px"> {{value}}</div>
     </div>
     <%--<div class="col-md-4">
         <label>
