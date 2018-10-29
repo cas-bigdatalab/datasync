@@ -114,7 +114,7 @@ public class DataTaskController {
         int totalCount = dataTaskService.getCount(datataskType,status);
         jsonObject.put("dataTasks",dataTasks);
         jsonObject.put("totalCount",totalCount);
-        jsonObject.put("pageNum",totalCount/pageSize==0?totalCount/pageSize:totalCount/pageSize+1);
+        jsonObject.put("pageNum",totalCount%pageSize==0?totalCount/pageSize:totalCount/pageSize+1);
         jsonObject.put("pageSize",pageSize);
         return jsonObject;
     }
