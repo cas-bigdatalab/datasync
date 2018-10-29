@@ -123,6 +123,10 @@ public class DataTaskService {
         return dataTasks;
     }
 
+    public int getCount(String datataskType,String status){
+        return dataTaskDao.getCount(datataskType,status);
+    }
+
     public int deleteDatataskById(int datataskId) {
         return dataTaskDao.deleteDatataskById(datataskId);
     }

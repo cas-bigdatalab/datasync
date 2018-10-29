@@ -256,7 +256,7 @@ public class FileResourceService {
             @Override
             public String call() throws InterruptedException {
                 dbFlag.await();
-                String zipFilePath = "/upload/zipFile";
+                String zipFilePath = "zipFile";
                 String zipFile = System.getProperty("drsr.framework.root") + zipFilePath + File.separator + fileName + ".zip";
                 ZipArchiveOutputStream outputStream = null;
                 try {
