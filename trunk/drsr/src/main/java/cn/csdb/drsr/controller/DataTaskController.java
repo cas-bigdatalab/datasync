@@ -2,21 +2,27 @@ package cn.csdb.drsr.controller;
 
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
+import cn.csdb.drsr.service.ConfigPropertyService;
 import cn.csdb.drsr.service.DataSrcService;
 import cn.csdb.drsr.service.DataTaskService;
+import cn.csdb.drsr.service.FileResourceService;
 import cn.csdb.drsr.utils.PropertiesUtil;
 import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
 import cn.csdb.drsr.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
 import org.omg.CORBA.DATA_CONVERSION;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 
 /**
@@ -31,7 +37,11 @@ public class DataTaskController {
     @Resource
     private DataTaskService dataTaskService;
     @Resource
+    private FileResourceService fileResourceService;
+    @Resource
     private DataSrcService dataSrcService;
+    @Autowired
+    private ConfigPropertyService configPropertyService;
 
     /**
      * Function Description:执行一个数据任务，导出SQL文件后返回执行状态
@@ -166,9 +176,9 @@ public class DataTaskController {
         datatask.setCreateTime(new Date());
         datatask.setDataTaskType("mysql");
         datatask.setStatus("0");
-        boolean flag = dataTaskService.insertDatatask(datatask);
+        int flag = dataTaskService.insertDatatask(datatask);
         jsonObject.put("result",flag);
-        if(flag == false){
+        if(flag < 0){
             return  jsonObject;
         }
         return jsonObject;
@@ -179,6 +189,7 @@ public class DataTaskController {
     public JSONObject saveFileDatatask(int dataSourceId,
                                        String datataskName,
                                        String filePathList){
+
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);
@@ -187,6 +198,21 @@ public class DataTaskController {
         datatask.setCreateTime(new Date());
         datatask.setDataTaskType("file");
         datatask.setStatus("0");
+        int datataskId = dataTaskService.insertDatatask(datatask);
+        if(dataSourceId <0 ){
+            jsonObject.put("result",false);
+            return  jsonObject;
+        }
+        CountDownLatch dbFlag = new CountDownLatch(1);
+        List<String> filepaths = Arrays.asList(filePathList.split(";"));
+        String subjectCode = configPropertyService.getProperty("SubjectCode");
+        String fileName = subjectCode+datataskId;
+        fileResourceService.packDataResource(fileName,filepaths, dbFlag);
+        String zipFile = System.getProperty("drsr.framework.root") + "/upload/zipFile" + File.separator + fileName + ".zip";
+        DataTask dt = dataTaskService.get(datataskId);
+        dt.setSqlFilePath(zipFile);
+        dataTaskService.update(datatask);
+        jsonObject.put("result",true);
         return  jsonObject;
     }
 }
