@@ -44,7 +44,7 @@
                             <option value="0">未上传</option>
                         </select>
                     </div>
-                    <button type="button" class="btn blue" style="margin-left: 49px">查询</button>
+                    <button type="button" class="btn blue" style="margin-left: 49px" id="seachTaskSource">查询</button>
                     <button type="button" class="btn green" style="margin-left: 49px" onclick="relCreateTask()">新建任务</button>
                 </form>
             </div>
@@ -61,7 +61,7 @@
                     <th>创建时间</th>
                     <th>上传进度</th>
                     <th>状态</th>
-                    <th>操作</th>
+                    <th width="29%">操作</th>
                 </tr>
                 </thead>
                 <tbody id="bd-data"></tbody>
@@ -137,7 +137,7 @@
         <td>{{i + 1}}</td>
         <td>{{value.dataTaskName}}</td>
         <td>{{value.dataTaskType}}</td>
-        <td>{{value.source}}</td>
+        <td>{{value.dataSrc.dataSourceName}}</td>
         <td>{{dateTimeFormat(value.createTime)}}</td>
         <td  id="{{value.dataTaskId}}">--</td>
         <td  class="{{value.dataTaskId}}">{{upStatusName(value.status)}}</td>
@@ -160,27 +160,29 @@
 <div id="siteMeshJavaScript">
     <script>
         var searchObj={}
+        var dataSourceName=""
+        var dataSourceStatus=""
         function relCreateTask(){
             window.location.href="${ctx}/createTask";
         }
         $(function(){
-            tableConfiguration2(1)
+            tableConfiguration2(1,"","")
             /*$.ajax({
                 url:
             })*/
         });
         $("#dataSourceList").on("change",function () {
-            var id = $("#dataSourceList option:selected").attr("id");
-            dataRelSrcId =id;
-            var name = $(this).val();
+            dataSourceName= $("#dataSourceList option:selected").val();
+
         });
         $("#dataStatusList").on("change",function () {
-            var id = $("#dataStatusList option:selected").attr("id");
-            dataRelSrcId =id;
-            var name = $(this).val();
+            dataSourceStatus = $("#dataStatusList option:selected").val();
 
 
         });
+        $("#seachTaskSource").click(function () {
+            tableConfiguration2(1,dataSourceName,dataSourceStatus)
+        })
         //导出SQL文件
         $("#upload-list").delegate(".exportSql","click",function () {
             var souceID = $(this).attr("keyIdTd");
@@ -269,6 +271,7 @@
         })
         <!-- remove dataTask-->
         function removeData(id){
+            console.log(id)
             $.ajax({
                 url:"${ctx}/datatask/delete",
                 type:"POST",
@@ -276,8 +279,7 @@
                     datataskId:id
                 },
                 success:function (data) {
-                    console.log(data);
-                    tableConfiguration2(1);
+                    tableConfiguration2(1,"","");
                 },
                 error:function () {
                     console.log("请求失败");
@@ -398,16 +400,17 @@
                 }
             })
         }
-        function tableConfiguration2(num) {
+        function tableConfiguration2(num,datataskType,status) {
             $.ajax({
                 url:"${ctx}/datatask/list",
                 type:"GET",
                 data:{
                     pageNo:num,
-                    datataskType:"",
-                    status:""
+                    datataskType:datataskType,
+                    status:status
                 },
                 success:function (data) {
+                    console.log(data);
                     $(".table-message").hide();
                     $("#bd-data").html("");
                     var DataList = JSON.parse(data);
@@ -446,7 +449,7 @@
                         lastClass: 'last',
                         firstClass: 'first'
                     }).on('page', function (event, num) {
-                        tableConfiguration2(num);
+                        tableConfiguration2(num,datataskType,status);
                     });
                 },
                 error:function () {

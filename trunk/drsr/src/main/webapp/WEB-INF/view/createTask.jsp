@@ -48,44 +48,10 @@
                     <div class="col-md-12">
                         <div class="col-md-2">选择表资源</div>
                         <div class="col-md-9" >
-                            <div class="row" id="db-table">
-                                <%--<div class="col-md-4">
-                                    <label>
-                                        <input type="checkbox" name="relationCheck" value="aaa"> Remember me
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label>
-                                        <input type="checkbox" name="relationCheck" value="bbb"> Remember me
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label>
-                                        <input type="checkbox" name="relationCheck" value="ccc"> Remember me
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label>
-                                        <input type="checkbox" name="relationCheck" value="sss"> Remember me
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label>
-                                        <input type="checkbox" name="relationCheck" value="fff"> Remember me
-                                    </label>
-                                </div>
-                                <div class="col-md-4">
-                                    <label>
-                                        <div class="checker">
-                                            <span>
-                                                <input type="checkbox" name="relationCheck" value="aaa">
-                                            </span>
-                                        </div> Remember me
-                                    </label>
-                                </div>--%>
-                            </div>
+                            <div class="row" id="db-table"></div>
                         </div>
                     </div>
+                    <div id="totalList">
                         <div class="col-md-12" style="margin-bottom: 10px" >
                             <div class="col-md-2" style="text-align: right">sql查询</div>
                             <div class="col-md-4">
@@ -107,8 +73,11 @@
                     <div class="col-md-12 ">
                         <button type="button" class="btn green pull-right" onclick="sendRelationTask()">提交</button>
                     </div>
-                </div>
             </div>
+
+            </div>
+        </div>
+
         <div class="select-local" style="display: none;">
             <%--<button type="button" class="btn btn-success" id="upload-directory">上传目录</button>
             <button type="button" class="btn btn-success" id="upload-file">上传文件</button>
@@ -206,11 +175,11 @@
                             <div class="portlet box green-haze" style="border:0;">
                                 <div class="portlet-title">
                                     <ul class="nav nav-tabs" style="float:left;">
-                                        <%--<li class="active">
+                                        <li class="active">
                                             <a href="#editTableFieldComsId" data-toggle="tab"
                                                id="editTableDataAndComsButtonId" aria-expanded="true">
                                                 编辑 </a>
-                                        </li>--%>
+                                        </li>
                                         <li class="active">
                                             <a href="#previewTableDataAndComsId" id="previewTableDataAndComsButtonId"
                                                data-toggle="tab" aria-expanded="false">
@@ -344,6 +313,7 @@
         var dataRelSqlTableList;
         var dataFileSrcId;
         var dataFilePathList;
+        var testSql =""
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
                 $(".select-database").show();
@@ -419,9 +389,10 @@
         })
         $("#totalList").delegate(".preview","click",function () {
             var $Str =$(this).parent().parent().find(".sqlStatements").val();
-            /*staticSourceTableChoice(2, null, dataRelSrcId, $Str, "dataResource");*/
-            $("#staticSourceTableChoiceModal").modal("show");
-            previewSqlDataAndComs(dataRelSrcId,$Str);
+            testSql=$Str
+            staticSourceTableChoice(2, null, dataRelSrcId, $Str, "dataResource");
+            /*$("#staticSourceTableChoiceModal").modal("show");
+            previewSqlDataAndComs(dataRelSrcId,$Str);*/
            /* $.ajax({
                 url:"${ctx}/relationship/previewRelationalDatabaseBySQL",
                 type:"POST",
@@ -450,6 +421,13 @@
 
                 $('#editTableDataAndComsButtonId').parent().addClass("active");
                 $('#editTableFieldComsId').addClass("active");
+                var tableInfosList = null;
+                var tableInfosMap = getSqlFieldComs(dataSourceId, tableNameOrSql);
+                var i = 0;
+                tableInfosList = [];
+                for (var key in tableInfosMap) {
+                    tableInfosList [i++] = {tableName: key, tableInfos: tableInfosMap[key]};
+                }
                 /*var tableInfosList = null;
                 if (editIsChoiceTableOrSql == 1) {
                     var tableInfos = getTableFieldComs(dataSourceId, tableNameOrSql);
@@ -470,8 +448,8 @@
                     return;
                 }*/
                 $("#staticSourceTableChoiceModal").modal("show");
-                // var html = template("editTableFieldComsTmpl", {"tableInfosList": tableInfosList});
-                // $('#editTableFieldComsId').html(html);
+                /* var html = template("editTableFieldComsTmpl", {"tableInfosList": tableInfosList});*/
+                /* $('#editTableFieldComsId').html(html);*/
                 curSourceTableChoice = obj;
                 curDataSourceId = dataSourceId;
                 curEditIsChoiceTableOrSql = editIsChoiceTableOrSql;
@@ -863,7 +841,7 @@
         }
 */
 
-        /*$("#previewTableDataAndComsButtonId").bind("click", function () {
+        $("#previewTableDataAndComsButtonId").bind("click", function () {
             if (curEditIsChoiceTableOrSql == 1) {
                 var tableInfos = getEditTableOrSqlFieldComs();
                 previewTableDataAndComs(curDataSourceId, tableInfos);
@@ -871,30 +849,15 @@
                 // var tableInfos = getEditTableOrSqlFieldComs();
                 previewSqlDataAndComs(curDataSourceId);
             }
-        });*/
+        });
 
-        function previewSqlDataAndComs(dataSourceId,str) {
-            /*var sqlStr;
-            if (curRefer == "dataService") {
-                sqlStr = $("#publicSql").val();
-            } else {
-                var sqlStrId = "sqlStr";
-                if (curSQLStrIndex < 0) {
-                    return;
-                }
-                if (curSQLStrIndex != 0) {
-                    sqlStrId += curSQLStrIndex;
-                }
-                sqlStr = $("#" + sqlStrId).val();
-            }*/
-            console.log(dataSourceId);
-            console.log(str);
+        function previewSqlDataAndComs(dataSourceId) {
             $.ajax({
                 type: "GET",
                 url:  '${ctx}/relationship/previewRelationalDatabaseBySQL',
                 data: {
                     "dataSourceId": dataSourceId,
-                    "sqlStr": str
+                    "sqlStr": testSql
                 },
                 dataType: "json",
                 success: function (data) {
@@ -903,13 +866,6 @@
                         return;
                     }
                     var columnTitleList = [];
-                    // tableInfosList.forEach(function (tableInfos, index1, array1) {
-                    //     tableInfos.tableInfos.forEach(function (value, index2, array2) {
-                    //         // var columnTitle = value.columnNameLabel + "<br>(" + value.columnComment + ")";
-                    //         // columnTitleList.push(columnTitle);
-                    //         columnTitleList.push({columnName:value.columnName,columnComment:value.columnComment});
-                    //     });
-                    // });
                     data.datas.unshift(columnTitleList);
                     var html = template("previewTableDataAndComsTmpl", {"datas": data.datas});
                     $('#previewTableDataAndComsId').html(html);
