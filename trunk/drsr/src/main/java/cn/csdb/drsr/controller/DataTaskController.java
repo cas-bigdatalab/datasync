@@ -149,19 +149,22 @@ public class DataTaskController {
      * @auther: hw
      * @date: 2018/10/23 10:29
      */
-//    @ResponseBody
+    @ResponseBody
     @RequestMapping(value="saveRelationDatatask",method = RequestMethod.POST)
     public JSONObject saveRelationDatatask(int dataSourceId,
+                                           String datataskName,
                                    String dataRelTableList,
                                    String sqlTableNameEnList,
                                    @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList) {
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);
+        datatask.setDataTaskName(datataskName);
         datatask.setTableName(dataRelTableList);
         datatask.setSqlString(dataRelSqlList);
         datatask.setSqlTableNameEn(sqlTableNameEnList);
         datatask.setCreateTime(new Date());
+        datatask.setDataTaskType("mysql");
         datatask.setStatus("0");
         boolean flag = dataTaskService.insertDatatask(datatask);
         jsonObject.put("result",flag);
@@ -169,5 +172,21 @@ public class DataTaskController {
             return  jsonObject;
         }
         return jsonObject;
+    }
+
+    @ResponseBody
+    @RequestMapping(value="saveFileDatatask",method = RequestMethod.POST)
+    public JSONObject saveFileDatatask(int dataSourceId,
+                                       String datataskName,
+                                       String filePathList){
+        JSONObject jsonObject = new JSONObject();
+        DataTask datatask = new DataTask();
+        datatask.setDataSourceId(dataSourceId);
+        datatask.setFilePath(filePathList);
+        datatask.setDataTaskName(datataskName);
+        datatask.setCreateTime(new Date());
+        datatask.setDataTaskType("file");
+        datatask.setStatus("0");
+        return  jsonObject;
     }
 }

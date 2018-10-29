@@ -592,12 +592,12 @@
             });
             dataFilePathList=fileTabStr;
             $.ajax({
-                url:"${ctx}/relationship/saveDatatask",
+                url:"${ctx}/datatask/saveFileDatatask",
                 type:"POST",
                 data:{
                     dataSourceId:dataFileSrcId,
-                    souceCheck:dataFileTaskName,
-                    sqlStatements:dataFilePathList,
+                    datataskName:dataFileTaskName,
+                    filePathList:dataFilePathList,
                 },
                 success:function (data) {
                     /*window.location.href="${ctx}/dataUpload"*/
