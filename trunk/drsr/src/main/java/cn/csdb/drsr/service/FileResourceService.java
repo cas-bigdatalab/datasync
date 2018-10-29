@@ -251,45 +251,45 @@ public class FileResourceService {
      * @auther: hw
      * @date: 2018/10/23 16:11
      */
-    public void packDataResource(final String fileName ,final List<String> filePaths, final CountDownLatch dbFlag) {
-        executor.submit(new Callable<String>() {
-            @Override
-            public String call() throws InterruptedException {
-                dbFlag.await();
-                String zipFilePath = "zipFile";
-                String zipFile = System.getProperty("drsr.framework.root") + zipFilePath + File.separator + fileName + ".zip";
-                ZipArchiveOutputStream outputStream = null;
-                try {
-                    if (new File(zipFile).exists()) {
-                        new File(zipFile).delete();
-                    }
-                    Files.createParentDirs(new File(zipFile));
-                    outputStream = new ZipArchiveOutputStream(new File(zipFile));
-                    outputStream.setEncoding("utf-8"); //23412
-                    outputStream.setCreateUnicodeExtraFields(ZipArchiveOutputStream.UnicodeExtraFieldPolicy.ALWAYS);
-                    outputStream.setFallbackToUTF8(true);
-                    logger.info(".zip:文件数据源,开始打包文件...");
-                    for (String filePath : filePaths) {
-                        File file = new File(filePath);
-                        if (!file.exists()) {
-                            continue;
-                        }
-                        ZipUtils.zipDirectory(file, "", outputStream);
-                    }
-                } catch (Exception e) {
-                    logger.error("打包失败", e);
-                    return "error";
-                } finally {
-                    try {
-                        outputStream.finish();
-                        outputStream.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                return "ok";
+    public String packDataResource(final String fileName ,final List<String> filePaths) {
+//        dbFlag.await();
+        String zipFilePath = "zipFile";
+        File dir  = new File(System.getProperty("drsr.framework.root") + zipFilePath );
+        if(!dir.exists()){
+            dir.mkdirs();
+        }
+        String zipFile = System.getProperty("drsr.framework.root") + zipFilePath + File.separator + fileName + ".zip";
+        ZipArchiveOutputStream outputStream = null;
+        try {
+            if (new File(zipFile).exists()) {
+                new File(zipFile).delete();
             }
-        });
+            Files.createParentDirs(new File(zipFile));
+            outputStream = new ZipArchiveOutputStream(new File(zipFile));
+            outputStream.setEncoding("utf-8"); //23412
+            outputStream.setCreateUnicodeExtraFields(ZipArchiveOutputStream.UnicodeExtraFieldPolicy.ALWAYS);
+            outputStream.setFallbackToUTF8(true);
+            logger.info(".zip:文件数据源,开始打包文件...");
+            for (String filePath : filePaths) {
+                filePath = filePath.replace("%_%",File.separator);
+                File file = new File(filePath);
+                if (!file.exists()) {
+                    continue;
+                }
+                ZipUtils.zipDirectory(file, "", outputStream);
+            }
+        } catch (Exception e) {
+            logger.error("打包失败", e);
+            return "error";
+        } finally {
+            try {
+                outputStream.finish();
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "ok";
     }
 
 }

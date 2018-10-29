@@ -70,18 +70,23 @@ public class DataSyncController {
         String subjectCode = configPropertyService.getProperty("SubjectCode");
         FtpUtil ftpUtil = new FtpUtil();
         DataTask dataTask = dataTaskService.get(dataTaskId);
-        String[] localFileList = null;
-        if(dataTask.getDataTaskType().equals("file")){
-            localFileList[0] = dataTask.getFilePath();
-        }else if(dataTask.getDataTaskType().equals("mysql")){
-            localFileList = dataTask.getSqlFilePath().split(";");
-        }
-        if(localFileList.length == 0){
-            return "500";
-        }
+
         try {
             ftpUtil.connect(host, Integer.parseInt(port), userName, password);
-            String result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath).toString();
+            String result = "";
+            if(dataTask.getDataTaskType().equals("file")){
+                String[] localFileList = {dataTask.getSqlFilePath()};
+                result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath).toString();
+                if(localFileList.length == 0){
+                    return "500";
+                }
+            }else if(dataTask.getDataTaskType().equals("mysql")){
+                String[] localFileList = dataTask.getSqlFilePath().split(";");
+                result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath).toString();
+                if(localFileList.length == 0){
+                    return "500";
+                }
+            }
             ftpUtil.disconnect();
             if(result.equals("Upload_New_File_Success")||result.equals("Upload_From_Break_Succes")){
                 String dataTaskString = JSONObject.toJSONString(dataTask);

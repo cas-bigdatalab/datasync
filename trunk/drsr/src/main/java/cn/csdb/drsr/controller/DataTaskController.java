@@ -111,10 +111,10 @@ public class DataTaskController {
                                    @RequestParam(name = "status", required = false) String status){
         JSONObject jsonObject = new JSONObject();
         List<DataTask> dataTasks = dataTaskService.getDatataskByPage((pageNo-1)*pageSize,pageSize,datataskType,status);
-        int totaoCount = dataTaskService.getCount(datataskType,status);
+        int totalCount = dataTaskService.getCount(datataskType,status);
         jsonObject.put("dataTasks",dataTasks);
-        jsonObject.put("totalCount",totaoCount);
-        jsonObject.put("pageNo",pageNo);
+        jsonObject.put("totalCount",totalCount);
+        jsonObject.put("pageNum",totalCount/pageSize==0?totalCount/pageSize:totalCount/pageSize+1);
         jsonObject.put("pageSize",pageSize);
         return jsonObject;
     }
@@ -207,15 +207,14 @@ public class DataTaskController {
             jsonObject.put("result",false);
             return  jsonObject;
         }
-        CountDownLatch dbFlag = new CountDownLatch(1);
         List<String> filepaths = Arrays.asList(filePathList.split(";"));
         String subjectCode = configPropertyService.getProperty("SubjectCode");
         String fileName = subjectCode+datataskId;
-        fileResourceService.packDataResource(fileName,filepaths, dbFlag);
+        fileResourceService.packDataResource(fileName,filepaths);
         String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
         DataTask dt = dataTaskService.get(datataskId);
-        dt.setSqlFilePath(zipFile);
-        dataTaskService.update(datatask);
+        dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
+        boolean upresult = dataTaskService.update(dt);
         jsonObject.put("result",true);
         return  jsonObject;
     }
