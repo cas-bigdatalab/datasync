@@ -82,35 +82,35 @@
                 <form class="form-horizontal">
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务标识:</label>
-                        <div class="col-sm-8" id="pre"></div>
+                        <div class="col-sm-8" id="pre-dataTaskName"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">数据源ID:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8" id="pre-dataSourceId"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">表名:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8" id="pre-tableName"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">SQL语句:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8" id="pre-sqlString"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">逻辑表名:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8" ></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">文件路径:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8" id="pre-filePath"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">创建时间:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8" id="pre-createTime"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">创建者:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8" id="pre-creator"></div>
                     </div>
                     <%--<div class="form-group">
                         <label  class="col-sm-3 control-label">上传进度:</label>
@@ -118,7 +118,7 @@
                     </div>--%>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务状态:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8" id="pre-status"></div>
                     </div>
                 </form>
             </div>
@@ -350,11 +350,17 @@
                         processId:keyID
                     },
                     success:function (data) {
-                        console.log(data)
                         if(data == "100"){
                             $("#"+souceID).text(data+"%");
                             $("."+souceID).text("上传完成")
                             clearInterval(setout)
+                            return
+                        }
+                        if($("."+souceID).text() == "导入失败"){
+                            console.log("bbb"+$("#"+souceID).text())
+                            $("#"+souceID).text("--")
+                            clearInterval(setout)
+                            return
                         }
                         $("#"+souceID).text(data+"%");
                     }
@@ -442,7 +448,7 @@
                         $(".page-list").off();
                         $('.page-list').empty();
                     }
-                    $(".page-message").html("当前第"+DataList.pageNo +"页,共"+DataList.pageSize +"页,共"+DataList.totalCount+"条数据");
+                    $(".page-message").html("当前第"+DataList.pageSize +"页,共"+DataList.pageNum +"页,共"+DataList.totalCount+"条数据");
                     $('.page-list').bootpag({
                         total: DataList.pageSize,
                         page:DataList.pageNo,

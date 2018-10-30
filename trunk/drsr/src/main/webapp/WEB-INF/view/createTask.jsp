@@ -192,6 +192,20 @@
                                    <%-- <div class="tab-pane active" id="editTableFieldComsId">
                                     </div>--%>
                                     <div id="previewTableDataAndComsId">
+                                        <div class="skin skin-minimal">
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr style="word-break: keep-all" id="pre-head">
+                                                        <th>#</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="pre-body">
+                                                    <tr>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -514,10 +528,26 @@
                 },
                 dataType: "json",
                 success: function (data) {
-                    console.log(data)
+                    var tabHead=data
+                    $("#pre-head").empty();
+                    $("#pre-body").empty();
+                    var preHeadStr="";
+                    var preBodyStr="";
                     if (!data || !data.datas) {
                         return;
                     }
+                    for(var i=0;i<data){
+
+                    }
+
+
+
+
+
+
+
+
+
                     var columnTitleList = [];
                     data.datas.unshift(columnTitleList);
 
