@@ -8,6 +8,7 @@ import cn.csdb.portal.service.DataTaskService;
 import cn.csdb.portal.service.SiteService;
 import cn.csdb.portal.service.SubjectMgmtService;
 import cn.csdb.portal.utils.SqlUtil;
+import cn.csdb.portal.utils.ZipUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -45,18 +47,21 @@ public class HttpServiceController {
         String subjectCode = requestJson.get("subjectCode").toString();
         String dataTaskString = requestJson.get("dataTask").toString();
         DataTask dataTask = JSON.parseObject(dataTaskString,DataTask.class);
-        dataTask.setDataTaskId(0);
+        dataTask.setDataTaskId(null);
 //        Site site = siteService.getSiteByMarker(siteMarker);
         Subject subject = subjectMgmtService.findByCode(subjectCode);
         String siteFtpPath = subject.getFtpFilePath();
         dataTask.setSubjectCode(subject.getSubjectCode());
         String sqlFilePath = dataTask.getSqlFilePath();
+        sqlFilePath = sqlFilePath.replaceAll("%_%",File.separator);
         String[] sqlfilePathList = sqlFilePath.split(";");
         String filepath = dataTask.getFilePath();
         StringBuffer sqlfilePathBuffer = new StringBuffer();
         StringBuffer filePathBuffer = new StringBuffer();
         String structDBFile = "";
         String dataDBFile = "";
+        String zipFile="";
+        String unZipPath = "";
         for(String fp : sqlfilePathList){
             if(fp.equals("")){
                 continue;
@@ -68,35 +73,53 @@ public class HttpServiceController {
                 fileName = fp.substring(fp.lastIndexOf("\\")+1);
             }
             sqlfilePathBuffer.append(siteFtpPath+fileName+";");
-            if(fileName.contains("data")){
-                dataDBFile = siteFtpPath+fileName;
-            }else if(fileName.contains("struct")){
-                structDBFile = siteFtpPath+fileName;
+            if(dataTask.getDataTaskType().equals("mysql")){
+                if(fileName.contains("data")){
+                    dataDBFile = siteFtpPath+fileName;
+                }else if(fileName.contains("struct")){
+                    structDBFile = siteFtpPath+fileName;
+                }
+            }else if(dataTask.getDataTaskType().equals("file")){
+                zipFile = siteFtpPath+fileName;
+                System.out.println("+++++++++"+zipFile);
+                System.out.println("=========="+fileName);
+                unZipPath = siteFtpPath+fileName.substring(0,fileName.lastIndexOf("."));
+
             }
+
         }
         dataTask.setSqlFilePath(sqlfilePathBuffer.toString());
-        if (filepath.indexOf("/")>0){
-            filepath = filepath.substring(filepath.lastIndexOf("/")+1);
-        }else if(filepath.indexOf("\\")>0){
-            filepath = filepath.substring(filepath.lastIndexOf("\\")+1);
-        }
-        dataTask.setFilePath(siteFtpPath+filepath);
-        String username = configPropertyService.getProperty("db.username");
-        String password = configPropertyService.getProperty("db.password");
-        String dbName = subject.getDbName();
+//        if (filepath.indexOf("/")>0){
+//            filepath = filepath.substring(filepath.lastIndexOf("/")+1);
+//        }else if(filepath.indexOf("\\")>0){
+//            filepath = filepath.substring(filepath.lastIndexOf("\\")+1);
+//        }
+//        dataTask.setFilePath(siteFtpPath+filepath);
 
-        SqlUtil sqlUtil = new SqlUtil();
-        try {
-            sqlUtil.importSql("localhost",username,password,dbName,structDBFile,dataDBFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        int insertSuccess = dataTaskService.insertDataTask(dataTask);
-        if(insertSuccess>0){
-            return 1;
+        if(dataTask.getDataTaskType().equals("mysql")){
+            String username = configPropertyService.getProperty("db.username");
+            String password = configPropertyService.getProperty("db.password");
+            String dbName = subject.getDbName();
+
+            SqlUtil sqlUtil = new SqlUtil();
+            try {
+                sqlUtil.importSql("localhost",username,password,dbName,structDBFile,dataDBFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }else{
-            return 0;
+            File file = new File(zipFile);
+            ZipUtil zipUtil = new ZipUtil();
+            try {
+                zipUtil.unZip(file,unZipPath);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+        dataTaskService.insertDataTask(dataTask);
+        return 1;
+
 
     }
 }

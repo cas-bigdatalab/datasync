@@ -116,9 +116,11 @@ public class DataSyncController {
                     EntityUtils.consume(httpEntity);//释放资源
                     System.out.println("响应内容：" + reponseContent);
                     if(reponseContent.equals("1")){
-                        return "100";
+                        dataTask.setStatus("1");
+                        dataTaskService.update(dataTask);
+                        return "1";
                     }else{
-                        return "400";
+                        return "4";
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
