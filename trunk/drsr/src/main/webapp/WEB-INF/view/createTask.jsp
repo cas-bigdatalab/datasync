@@ -38,7 +38,7 @@
                 </div>
                 <div class="form-group">
                     <label for="dataTaskName">创建任务名</label>
-                    <input type="email" class="form-control" id="dataTaskName" >
+                    <input type="text" class="form-control" id="dataTaskName" >
                 </div>
             </form>
             <div class="database-con-rel container-fluid" style="display: none">
@@ -104,7 +104,7 @@
                     </div>
                     <div class="form-group">
                         <label for="TaskFileName">创建任务名</label>
-                        <input type="email" class="form-control" id="TaskFileName" >
+                        <input type="text" class="form-control" id="TaskFileName" >
                     </div>
                 </form>
 
@@ -200,9 +200,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="pre-body">
-                                                    <tr>
-                                                        <td></td>
-                                                    </tr>
+
                                                 </tbody>
                                             </table>
                                         </div>
@@ -227,21 +225,6 @@
     <div class="skin skin-minimal">
         <table class="table table-hover table-bordered">
             {{each datas as itemList i}}
-            {{if i == 0}}
-            <thead>
-            <tr style="word-break: keep-all">
-                <th>#</th>
-                {{each itemList as item j}}
-                <th>{{item.columnName}}
-                    {{if item.columnComment}}
-                    <br/>({{item.columnComment}})
-                    {{/if}}
-                </th>
-                {{/each}}
-            </tr>
-            </thead>
-            {{/if}}
-            <tbody>
             {{if i != 0}}
             <tr>
                 <td>{{i}}</td>
@@ -251,7 +234,6 @@
             </tr>
             {{/if}}
             {{/each}}
-            </tbody>
         </table>
     </div>
 </script>
@@ -413,6 +395,10 @@
         function sendRelationTask() {
             var dataRelSqlTableList="";
             var $eleChecked = $("[name='relationBox']:checked")
+            if($("#dataTaskName").val() ==""){
+                toastr["warning"]("提示！", "请创建任务名");
+                return
+            }
             $("[name='sqlTableName']").each(function () {
                 if($(this).val() == ""){
                     toastr["warning"]("提示！", "请为预览sql编辑一个表名");
@@ -457,6 +443,10 @@
         function sendFileTask(){
             var $eleChecked = $("[name='fileTable']:checked")
             var numChecked = $eleChecked.size();
+            if($("#TaskFileName").val() ==""){
+                toastr["warning"]("提示！", "请创建任务名");
+                return
+            }
             if (numChecked == 0) {
                 toastr["success"]("最少选择一个文件资源");
                 return
@@ -519,6 +509,10 @@
 
 
         function previewSqlDataAndComs(dataSourceId,str) {
+
+
+
+            var sqlName = splistLastStr(str);
             $.ajax({
                 type: "GET",
                 url:  '${ctx}/relationship/previewRelationalDatabaseBySQL',
@@ -528,35 +522,33 @@
                 },
                 dataType: "json",
                 success: function (data) {
-                    var tabHead=data
+                    console.log(data)
+                    var tabHead=data.maps[sqlName];
+                    var tabBody=data.datas;
                     $("#pre-head").empty();
                     $("#pre-body").empty();
-                    var preHeadStr="";
+                    var preHeadStr="<th>#</th>";
                     var preBodyStr="";
                     if (!data || !data.datas) {
                         return;
                     }
-                    for(var i=0;i<data){
-
+                    for(var i=0;i<tabHead.length;i++){
+                        preHeadStr+="<th>"+tabHead[i].columnName +"</th>"
                     }
-
-
-
-
-
-
-
-
-
+                    $("#pre-head").append(preHeadStr);
                     var columnTitleList = [];
                     data.datas.unshift(columnTitleList);
 
                     var html = template("previewTableDataAndComsTmpl", {"datas": data.datas});
-                    $('#previewTableDataAndComsId').html(html);
+                    $('#pre-body').html(html);
                 }
             });
         }
-
+        function splistLastStr(str) {
+            var arr =str.split(" ");
+            var lastStr = arr[arr.length - 1];
+            return lastStr;
+        }
 
     </script>
 </div>

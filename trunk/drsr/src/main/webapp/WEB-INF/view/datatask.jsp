@@ -82,35 +82,35 @@
                 <form class="form-horizontal">
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务标识:</label>
-                        <div class="col-sm-8" id="pre-dataTaskName"></div>
+                        <div class="col-sm-8 modediv" id="pre-dataTaskName"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">数据源ID:</label>
-                        <div class="col-sm-8" id="pre-dataSourceId"></div>
+                        <div class="col-sm-8 modediv" id="pre-dataSourceId" ></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">表名:</label>
-                        <div class="col-sm-8" id="pre-tableName"></div>
+                        <div class="col-sm-8 modediv" id="pre-tableName" ></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">SQL语句:</label>
-                        <div class="col-sm-8" id="pre-sqlString"></div>
+                        <div class="col-sm-8 modediv" id="pre-sqlString" ></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">逻辑表名:</label>
-                        <div class="col-sm-8" ></div>
+                        <div class="col-sm-8 modediv" id="pre-sqlTableNameEn" ></div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="word-break: break-all">
                         <label  class="col-sm-3 control-label">文件路径:</label>
-                        <div class="col-sm-8" id="pre-filePath"></div>
+                        <div class="col-sm-8 modediv" id="pre-filePath" ></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">创建时间:</label>
-                        <div class="col-sm-8" id="pre-createTime"></div>
+                        <div class="col-sm-8 modediv" id="pre-createTime" ></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">创建者:</label>
-                        <div class="col-sm-8" id="pre-creator"></div>
+                        <div class="col-sm-8 modediv" id="pre-creator" ></div>
                     </div>
                     <%--<div class="form-group">
                         <label  class="col-sm-3 control-label">上传进度:</label>
@@ -118,13 +118,13 @@
                     </div>--%>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务状态:</label>
-                        <div class="col-sm-8" id="pre-status"></div>
+                        <div class="col-sm-8 modediv" id="pre-status"></div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn green" data-dismiss="modal" ><i
-                        class="glyphicon glyphicon-ok"></i>完成
+                        class="glyphicon glyphicon-ok"></i>确认
                 </button>
                 <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
             </div>
@@ -256,13 +256,26 @@
         $("#upload-list").delegate(".edit-data","click",function () {
             /*send request*/
             var souceID = $(this).attr("keyIdTd");
-
             $.ajax({
                 url:"${ctx}/datatask/detail",
                 type:"POST",
                 data:{datataskId:souceID},
                 success:function (data) {
-                    console.log(JSON.parse(data))
+                   var datatask = JSON.parse(data).datatask
+                    console.log(datatask)
+                    $("#pre-dataTaskName").html(datatask.dataTaskName)
+                    $("#pre-dataSourceId").html(datatask.dataSourceId)
+                    $("#pre-tableName").html(datatask.tableName)
+                    $("#pre-sqlString").html(datatask.sqlString)
+                    $("#pre-sqlTableNameEn").html(datatask.sqlTableNameEn)
+                    $("#pre-filePath").html(datatask.filePath)
+                    $("#pre-createTime").html(datatask.createTime)
+                    $("#pre-creator").html(datatask.creator)
+                    if(datatask.status == 1){
+                        $("#pre-").html("导入完成")
+                    }else {
+                        $("#pre-").html("未导入完成")
+                    }
 
                 },
                 error:function () {
@@ -392,9 +405,9 @@
                         $(".page-list").off();
                         $('.page-list').empty();
                     }
-                    $(".page-message").html("当前第"+dataFile.pageNum +"页,共"+dataFile.totalPage +"页,共"+dataFile.totalNum+"条数据");
+                    $(".page-message").html("当前第"+DataList.pageNum +"页,共"+DataList.pageSize +"页,共"+DataList.totalCount+"条数据");
                     $('#page-list').bootpag({
-                        total: DataList.totalPage,
+                        total: DataList.pageSize,
                         page: DataList.pageNum,
                         maxVisible: 6,
                         leaps: true,
@@ -448,7 +461,7 @@
                         $(".page-list").off();
                         $('.page-list').empty();
                     }
-                    $(".page-message").html("当前第"+DataList.pageSize +"页,共"+DataList.pageNum +"页,共"+DataList.totalCount+"条数据");
+                    $(".page-message").html("当前第"+DataList.pageNum +"页,共"+DataList.pageSize +"页,共"+DataList.totalCount+"条数据");
                     $('.page-list').bootpag({
                         total: DataList.pageSize,
                         page:DataList.pageNo,
