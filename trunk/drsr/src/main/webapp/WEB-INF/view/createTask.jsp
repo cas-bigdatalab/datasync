@@ -512,7 +512,7 @@
 
 
 
-            var sqlName = splistLastStr(str);
+           /* var sqlName = splistLastStr(str);*/
             $.ajax({
                 type: "GET",
                 url:  '${ctx}/relationship/previewRelationalDatabaseBySQL',
@@ -523,6 +523,9 @@
                 dataType: "json",
                 success: function (data) {
                     console.log(data)
+                    for(var key in data.maps){
+                        var sqlName = key
+                    }
                     var tabHead=data.maps[sqlName];
                     var tabBody=data.datas;
                     $("#pre-head").empty();
@@ -545,6 +548,7 @@
             });
         }
         function splistLastStr(str) {
+
             var arr =str.split(" ");
             var lastStr = arr[arr.length - 1];
             return lastStr;
