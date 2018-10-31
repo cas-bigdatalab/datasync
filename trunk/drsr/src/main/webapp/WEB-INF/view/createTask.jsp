@@ -47,7 +47,7 @@
                     <div class="col-md-9 dataHead2"></div>
                     <div class="col-md-12">
                         <div class="col-md-2">选择表资源</div>
-                        <div class="col-md-9" >
+                        <div class="col-md-10" >
                             <div class="row" id="db-table"></div>
                         </div>
                     </div>
@@ -112,7 +112,7 @@
                     <div class="row">
                         <div class="col-md-12 dataHead3" style="max-height: 500px;overflow: auto;padding-top: 10px">
                             <div class="col-md-2">选择文件</div>
-                            <div class="col-md-9 dataHead4" >
+                            <div class="col-md-10 dataHead4" >
                                 <div class="row" id="file-table">
                                     <%--<div class="col-md-4">
                                         <label>
@@ -238,19 +238,19 @@
     </div>
 </script>
 <script type="text/html" id="dataRelationshipList">
-    <option value="" id="selNone" selected="selected">-----------</option>
+    <option value="" id="selNone" selected="selected">全部</option>
     {{each data as value i}}
     <option value="{{value.dataSourceName}}" id="{{value.dataSourceId}}">{{value.dataSourceName}}</option>
     {{/each}}
 </script>
 <script type="text/html" id="dataRelationshipList2">
     {{each list as value i}}
-    <div class="col-md-6">
+    <div class="col-md-4">
         <%--<label>
             <input type="checkbox" name="relationBox" value="{{value}}"> {{value}}
         </label>--%>
         <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="relationBox" value="{{value}}" style="line-height: normal"></div>
-        <div style="padding-left: 20px"> {{value}}</div>
+        <div style="padding-left: 20px;word-break: break-all"> {{value}}</div>
     </div>
     <%--<div class="col-md-4">
         <label>
@@ -281,14 +281,14 @@
 </script>
 
 <script type="text/html" id="dataFileshipList">
-    <option value="" id="selFileNone" selected="selected">-----------</option>
+    <option value="" id="selFileNone" selected="selected">全部</option>
     {{each data as value i}}
     <option value="{{value.dataSourceName}}" Keyid="{{value.dataSourceId}}">{{value.dataSourceName}}</option>
     {{/each}}
 </script>
 <script type="text/html" id="dataFileshipList2">
     {{each data as value i}}
-    <div class="col-md-6">
+    <div class="col-md-4">
         <label>
             <input type="checkbox" name="fileTable" value="{{value.id}}">
             <span style="word-break: break-all">{{value.text}}</span>

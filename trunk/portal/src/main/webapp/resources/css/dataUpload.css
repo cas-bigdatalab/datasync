@@ -1,7 +1,6 @@
 .modediv{
     padding-top: 7px;
     margin-top: 1px;
-    word-break: break-all;
 }
 .uplod-head{
     height: 50px;
@@ -12,7 +11,6 @@
 .upload-title{
     height: 50px;
     line-height: 50px;
-    padding: 0 33px;
 }
 .upload-title span{
     font-family: 'Arial Normal', 'Arial';
@@ -37,7 +35,6 @@
     color: #FFFFFF;
 }*/
 .upload-search,.upload-table{
-    padding: 3px 33px;
     margin-top: 20px;
 }
 #upload-list th{

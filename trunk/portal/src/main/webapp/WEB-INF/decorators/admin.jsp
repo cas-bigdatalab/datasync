@@ -29,6 +29,8 @@
           id="style_color"/>
     <link href="${ctx}/resources/bundles/metronic/css/custom.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css"/>
+
 
     <!--BEGIN PAGE STYLES-->
     <sitemesh:write property="head"/>
@@ -270,9 +272,9 @@
                         </a>
                     </li>
                     <li>
-                        <a href="${ctx}/resource/list">
+                        <a href="${ctx}/dataRelease">
                             <i class="icon-layers"></i>
-                            <span class="title">数据发布</span>
+                            <span class="title">数据发布管理</span>
                             <span class="arrow "></span>
                         </a>
                     </li>
@@ -320,7 +322,38 @@
 <script src="${ctx}/resources/bundles/bootbox/bootbox.min.js"></script>
 <script src="${ctx}/resources/bundles/metronic/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="${ctx}/resources/bundles/metronic/scripts/layout.js" type="text/javascript"></script>
+<script src="${ctx}/resources/bundles/artTemplate/template.js"></script>
+<script src="${ctx}/resources/js/regex.js"></script>
+<script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.min.js"></script>
+<script src="${ctx}/resources/bundles/jquery-validation/js/additional-methods.min.js"></script>
+<script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
+<script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
+
 <script type="text/javascript">
+    template.helper("dateFormat", convertMilsToDateString);
+    template.helper("dateTimeFormat", convertMilsToDateTimeString);
+    function convertMilsToDateTimeString(mil) {
+        var date = new Date(mil);
+        return date.Format("yyyy-MM-dd hh:mm:ss");
+    }
+    function convertMilsToDateString(mil) {
+        var date = new Date(mil);
+        return date.Format("yyyy-MM-dd");
+    }
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "positionClass": "toast-top-right",
+        "onclick": null,
+        "showDuration": "1000",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
     jQuery(document).ready(function () {
         scrolltotop.init('${ctx}');
         Layout.init();

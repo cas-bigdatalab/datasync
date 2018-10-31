@@ -1,8 +1,9 @@
 <%--
   Created by IntelliJ IDEA.
-  User: xiajl
-  Date: 2017/9/19
-  Time: 15:28
+  User: Administrator
+  Date: 2018/10/30
+  Time: 13:35
+  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -19,7 +20,7 @@
 <body>
 
 <div class="page-content">
-    <h3><b>欢迎使用DataSync专题库门户管理系统</b></h3>
+    <h3><b>数据发布-元数据描述edit</b></h3>
 </div>
 
 </body>
@@ -33,3 +34,4 @@
 </div>
 
 </html>
+

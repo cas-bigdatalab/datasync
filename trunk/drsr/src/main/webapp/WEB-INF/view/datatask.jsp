@@ -31,7 +31,7 @@
                     <div class="form-group" >
                         <label >数据类型</label>
                         <select  id="dataSourceList" class="form-control" style="width: 150px">
-                            <option value="">----------</option>
+                            <option value="">全部</option>
                             <option value="db">关系数据库</option>
                             <option value="file">文件数据库</option>
                         </select>
@@ -39,7 +39,7 @@
                     <div class="form-group">
                         <label  >状态</label>
                         <select  id="dataStatusList" class="form-control" style="width: 150px">
-                            <option value="">----------</option>
+                            <option value="">全部</option>
                             <option value="1">上传完成</option>
                             <option value="0">未上传</option>
                         </select>
@@ -86,31 +86,31 @@
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">数据源ID:</label>
-                        <div class="col-sm-8 modediv" id="pre-dataSourceId" ></div>
+                        <div class="col-sm-8 modediv" id="pre-dataSourceId"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">表名:</label>
-                        <div class="col-sm-8 modediv" id="pre-tableName" ></div>
+                        <div class="col-sm-8 modediv" id="pre-tableName"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">SQL语句:</label>
-                        <div class="col-sm-8 modediv" id="pre-sqlString" ></div>
+                        <div class="col-sm-8 modediv" id="pre-sqlString"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">逻辑表名:</label>
-                        <div class="col-sm-8 modediv" id="pre-sqlTableNameEn" ></div>
+                        <div class="col-sm-8 modediv" id="pre-sqlTableNameEn"></div>
                     </div>
-                    <div class="form-group" style="word-break: break-all">
+                    <div class="form-group">
                         <label  class="col-sm-3 control-label">文件路径:</label>
-                        <div class="col-sm-8 modediv" id="pre-filePath" ></div>
+                        <div class="col-sm-8 modediv" id="pre-filePath"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">创建时间:</label>
-                        <div class="col-sm-8 modediv" id="pre-createTime" ></div>
+                        <div class="col-sm-8 modediv" id="pre-createTime"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">创建者:</label>
-                        <div class="col-sm-8 modediv" id="pre-creator" ></div>
+                        <div class="col-sm-8 modediv" id="pre-creator"></div>
                     </div>
                     <%--<div class="form-group">
                         <label  class="col-sm-3 control-label">上传进度:</label>
@@ -118,7 +118,7 @@
                     </div>--%>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务状态:</label>
-                        <div class="col-sm-8 modediv" id="pre-status"></div>
+                        <div class="col-sm-8" id="pre-status"></div>
                     </div>
                 </form>
             </div>
@@ -262,7 +262,7 @@
                 data:{datataskId:souceID},
                 success:function (data) {
                    var datatask = JSON.parse(data).datatask
-                    console.log(datatask)
+
                     $("#pre-dataTaskName").html(datatask.dataTaskName)
                     $("#pre-dataSourceId").html(datatask.dataSourceId)
                     $("#pre-tableName").html(datatask.tableName)
