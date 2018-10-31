@@ -33,6 +33,15 @@ public class WebAPI {
         return jsonObject;
     }
 
+
+    @RequestMapping(value = "/getSubjectByUser/{userName}", method = RequestMethod.GET)
+    public JSONObject getSubjectByUser(@PathVariable("userName") String userName){
+        JSONObject jsonObject = new JSONObject();
+        Subject subject = subjectService.findByUser(userName);
+        jsonObject.put("data",subject);
+        return jsonObject;
+    }
+
     /**
      * Function Description: subject user login
      * @param request
