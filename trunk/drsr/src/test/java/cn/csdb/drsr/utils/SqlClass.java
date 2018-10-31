@@ -19,8 +19,8 @@ public class SqlClass {
     String username = "root";
     String password = "";
     String importDatabaseName = "sdc";
-    String dataImportPath = "c:\\data\\5\\data.sql";
-    String structImportPath = "c:\\data\\5\\struct.sql";
+    String dataImportPath = "c:\\data\\25\\data.sql";
+    String structImportPath = "c:\\data\\25\\struct.sql";
 
 
     /*public void importSql() throws IOException {
@@ -84,7 +84,9 @@ public class SqlClass {
     public void importSql(/*String host,String username,String password,String importDatabaseName, String structImportPath,String dataImportPath*/)  throws Exception {
         String driver = "com.mysql.jdbc.Driver";
         String url = "jdbc:mysql://"+host+"/"+importDatabaseName;
-
+        String sqlTableNameEn = "asdifuaosdfuasdf;";
+        sqlTableNameEn = sqlTableNameEn.substring(0, sqlTableNameEn.length() - 1);
+        System.out.println(sqlTableNameEn);
         Exception error = null;
         Connection conn = null;
         try {

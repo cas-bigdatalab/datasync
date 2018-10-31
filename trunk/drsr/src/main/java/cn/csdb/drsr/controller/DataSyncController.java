@@ -81,6 +81,7 @@ public class DataSyncController {
                     return "500";
                 }
             }else if(dataTask.getDataTaskType().equals("mysql")){
+                remoteFilepath = remoteFilepath+subjectCode+"_"+dataTask.getDataTaskId()+"/";
                 String[] localFileList = dataTask.getSqlFilePath().split(";");
                 result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath).toString();
                 if(localFileList.length == 0){
@@ -129,7 +130,7 @@ public class DataSyncController {
         } catch (IOException e) {
             System.out.println("连接FTP出错：" + e.getMessage());
         }
-        return "100";
+        return "1";
     }
 
     @ResponseBody
