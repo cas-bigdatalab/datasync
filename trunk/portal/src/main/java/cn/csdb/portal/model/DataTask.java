@@ -1,5 +1,9 @@
 package cn.csdb.portal.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
 import java.util.Date;
 
 /**
@@ -7,19 +11,33 @@ import java.util.Date;
  * @author: huangwei
  * @create: 2018-10-12 15:37
  **/
+@Document(collection = "t_datatask")
 public class DataTask {
-    private int dataTaskId;
+    @Id
+    private String dataTaskId;
+    @Field("dataSourceId")
     private int dataSourceId;
+    @Field("subjectCode")
     private String subjectCode;
+    @Field("dataTaskType")
     private String dataTaskType;
+    @Field("tableName")
     private String tableName;
+    @Field("sqlString")
     private String sqlString;
+    @Field("sqlTableNameEn")
     private String sqlTableNameEn;
+    @Field("sqlFilePath")
     private String sqlFilePath;
+    @Field("filePath")
     private String filePath;
+    @Field("createTime")
     private Date createTime;
+    @Field("creator")
     private String creator;
+    @Field("status")
     private String status;
+
 
     public String getSubjectCode() {
         return subjectCode;
@@ -37,11 +55,11 @@ public class DataTask {
         this.dataTaskType = dataTaskType;
     }
 
-    public int getDataTaskId() {
+    public String getDataTaskId() {
         return dataTaskId;
     }
 
-    public void setDataTaskId(int dataTaskId) {
+    public void setDataTaskId(String dataTaskId) {
         this.dataTaskId = dataTaskId;
     }
 
