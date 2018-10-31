@@ -47,7 +47,6 @@ public class HttpServiceController {
         String subjectCode = requestJson.get("subjectCode").toString();
         String dataTaskString = requestJson.get("dataTask").toString();
         DataTask dataTask = JSON.parseObject(dataTaskString,DataTask.class);
-        dataTask.setDataTaskId(null);
 //        Site site = siteService.getSiteByMarker(siteMarker);
         Subject subject = subjectMgmtService.findByCode(subjectCode);
         String siteFtpPath = subject.getFtpFilePath();
@@ -75,9 +74,10 @@ public class HttpServiceController {
             sqlfilePathBuffer.append(siteFtpPath+fileName+";");
             if(dataTask.getDataTaskType().equals("mysql")){
                 if(fileName.contains("data")){
-                    dataDBFile = siteFtpPath+fileName;
+                    dataDBFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+fileName;
+                    System.out.println("dataDBFile---------"+dataDBFile);
                 }else if(fileName.contains("struct")){
-                    structDBFile = siteFtpPath+fileName;
+                    structDBFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+fileName;
                 }
             }else if(dataTask.getDataTaskType().equals("file")){
                 zipFile = siteFtpPath+fileName;
@@ -117,6 +117,7 @@ public class HttpServiceController {
                 e.printStackTrace();
             }
         }
+        dataTask.setDataTaskId(null);
         dataTaskService.insertDataTask(dataTask);
         return 1;
 

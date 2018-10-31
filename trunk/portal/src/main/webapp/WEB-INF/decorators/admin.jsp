@@ -265,7 +265,7 @@
                         </a>
                     </li>--%>
                     <li>
-                        <a href="${ctx}/projectMessage">
+                        <a href="${ctx}/dataConfiguration">
                             <i class="icon-wrench"></i>
                             <span class="title">数据配置</span>
                             <span class="arrow "></span>
