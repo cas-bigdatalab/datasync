@@ -40,6 +40,25 @@ public class SubjectDao {
         }
     }
 
+    /**
+     * Function Description: 根据用户获取专题库信息
+     *
+     * @param:
+     * @return:
+     * @auther: xiajl
+     * @date:   2018/10/31 9:36
+     */
+    public Subject findByUser(String userName){
+        DBObject query = QueryBuilder.start().and("admin").is(userName).get();
+        BasicQuery basicQuery = new BasicQuery(query);
+        List<Subject> list = mongoTemplate.find(basicQuery,Subject.class);
+        if(list.size() == 0){
+            return null;
+        }else{
+            return list.get(0);
+        }
+    }
+
     public void save(Subject subject){
         mongoTemplate.save(subject);
     }
