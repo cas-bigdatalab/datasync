@@ -215,7 +215,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="${ctx}/dataSource">
+                        <a href="${ctx}/group/list">
                             <i class="icon-user"></i>
                             <span class="title">用户管理</span>
                             <span class="arrow "></span>
