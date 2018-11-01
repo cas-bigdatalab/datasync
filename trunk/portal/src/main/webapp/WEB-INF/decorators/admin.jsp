@@ -329,6 +329,7 @@
 <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
 <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
 
+
 <script type="text/javascript">
     template.helper("dateFormat", convertMilsToDateString);
     template.helper("dateTimeFormat", convertMilsToDateTimeString);

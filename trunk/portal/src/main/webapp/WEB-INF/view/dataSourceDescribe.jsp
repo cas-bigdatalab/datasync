@@ -16,7 +16,8 @@
 <head>
     <title>DataSync专题库门户管理系统</title>
 
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jqeury-file-upload/css/jquery.fileupload.css">
+    <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jqeury-file-upload/css/jquery.fileupload.css">--%>
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jstree/dist/themes/default/style.min.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.css">
     <style>
         .undeslist label{
@@ -34,7 +35,7 @@
                 <div class="portlet-title" style="background-color:#3fd5c0">
                     <div class="caption">
                         <i class="fa fa-gift"></i> 数据发布 - <span class="step-title">
-								第&nbsp;<span id="staNum"></span>&nbsp;步,共&nbsp;3&nbsp;步</span>
+								第&nbsp;<span id="staNum">1</span>&nbsp;步,共&nbsp;3&nbsp;步</span>
                     </div>
                 </div>
                 <div class="portlet-body form">
@@ -42,7 +43,7 @@
                         <div class="form-body">
                             <ul class="nav nav-pills nav-justified steps">
                                 <li class="active">
-                                    <a href="#tab1" data-toggle="tab" class="step">
+                                    <a href="#tab1"  class="step">
 												<span class="number">
 												1 </span>
                                         <span class="desc">
@@ -50,7 +51,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#tab2" data-toggle="tab" class="step">
+                                    <a href="#tab2"  class="step">
 												<span class="number">
 												2 </span>
                                         <span class="desc">
@@ -58,7 +59,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#tab3" data-toggle="tab" class="step">
+                                    <a href="#tab3"  class="step">
 												<span class="number">
 												3 </span>
                                         <span class="desc">
@@ -72,19 +73,9 @@
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab1">
-                                    <form class="form-horizontal" id="submit_form" enctype="multipart/form-data"
-                                          method="POST">
-                                        <div class="alert alert-danger display-hide">
-                                            <button class="close" data-close="alert"></button>
-                                            表单填写有误，请检查
-                                        </div>
-                                        <div class="alert alert-success display-hide">
-                                            <button class="close" data-close="alert"></button>
-                                            表单保存成功!
-                                        </div>
 
-                                        <input type="hidden" name="resourceId" id="resourceId">
-                                        <input type="hidden" name="resState" id="resState" value="未完成">
+                                    <form class="form-horizontal" id="submit_form"
+                                          method="POST">
                                         <h3 class="block">元数据信息描述</h3>
                                         <div class="form-group">
                                             <label class="control-label col-md-3">数据集名称 <span class="required">
@@ -149,7 +140,7 @@
                                             <div class="checkbox-list col-md-6">
                                                 <div style="margin-bottom: 3px;line-height: 34px">
                                                     <input type="text" style="font-size: 16px">
-                                                    <button class="btn green">添加关键词</button>
+                                                    <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
                                                 </div>
                                                 <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px">
 
@@ -171,6 +162,7 @@
                                     </form>
                                 </div>
                                 <div class="tab-pane" id="tab2">
+
                                     <h3 class="block">确定数据对象范围，发布数据</h3>
                                     <h3>
                                         <span>数据源:</span>
@@ -255,6 +247,7 @@
                                 </div>
                             </div>
                         </div>
+                        <button></button>
                     </div>
 
                 </div>
@@ -268,7 +261,7 @@
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.js"></script>
-
+    <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
     <script type="text/javascript">
         var ctx = '${ctx}';
         var initNum =1
@@ -320,73 +313,31 @@
                 }
             }
         }
-        function initCenterResourceCatalogTree(container, classId) {
+        function initCenterResourceCatalogTree(container) {
             $.ajax({
-                url: ctx + "/getLocalResCatalogList",
+                url: ctx + "/getLocalResCatalog",
                 type: "get",
                 dataType: "json",
-                async:false,
+                data: {editable: false},
                 success: function (data) {
-                    if (data.length == 0) {
-                        bootbox.alert("注册员还没有编辑分类信息，暂时不能注册数据");
-                        window.location.href = ctx;
-                    } else {
-                        var jstreeData = parseDataToJstreeData(data);
-                        $(container).jstree({
-                            "core": {
-                                'multiple': false,
-                                'force_text': true,
-                                "expand_selected_onload": true,
-                                'dblclick_toggle': false,
-                                'check_callback': false,
-                                'data': jstreeData
-                            }
-                        }).bind("select_node.jstree", function (event, selected) {
-                            $(".button-save").removeAttr("disabled");
-                            $("#centerCatalogId").val(selected.node.id);
-                        }).bind("ready.jstree", function () {
-                            if (classId) {
-                                var jstree = $.jstree.reference("#jstree-demo");
-                                var node = jstree.get_node(classId, true);
-                                jstree.select_node(node);
-                            }
-                            $("#jstree-demo").find(".jstree-anchor").each(function(){
-                                $(this).attr("style","width:200px");
-                            });
-                        });
-
-
-                    }
-
+                    $(container).jstree(data).bind("select_node.jstree", function (event, selected) {
+                        /*$(".button-save").removeAttr("disabled");*/
+                        $("#centerCatalogId").val(selected.node.id);
+                    })
                 }
-            });
-
-
+            })
         }
-        function parseDataToJstreeData(data) {
-            var jstreeData = [];
-            for (var i = 0; i < data.length; i++) {
-                var node = {};
-                node.id = data[i].id;
-                node.icon = "jstree-folder";
-                node.text = data[i].name;
-                if (data[i].parentid == 0) {
-                    node.parent = '#';
-                    rootId = node.id;
-                } else {
-                    node.parent = data[i].parentid;
-                }
-                var state = {};
-                state.opened = true;
-                node.state = state;
-                jstreeData.push(node);
-            }
 
-
-            if (data.length == 1)
-                selectedId = data[0].id;
-            return jstreeData;
+        function addKeyWords() {
+            console.log($("#centerCatalogId").val())
         }
+
+
+        var tags_tagsinput = $("#tags_tagsinput").text();
+
+
+
+
     </script>
 </div>
 
