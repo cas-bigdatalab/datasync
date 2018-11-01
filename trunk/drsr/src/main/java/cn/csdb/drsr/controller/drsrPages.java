@@ -20,9 +20,7 @@ public class drsrPages {
         ModelAndView modelAndView = new ModelAndView("createTask");
         return modelAndView;
     }
-    @RequestMapping("/projectMessage")
-    public ModelAndView index4() {
-        ModelAndView modelAndView = new ModelAndView("projectMessage");
-        return modelAndView;
-    }
+
+
+
 }

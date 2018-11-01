@@ -301,7 +301,7 @@
                                         管理员账号<span style="color: red;">*</span>
                                     </label>
                                     <div class="col-md-9">
-                                        <input type="text" class="form-control" placeholder="请输入管理员账号" id="adminM" name="admin"  required="required" />
+                                        <input type="text" class="form-control" placeholder="请输入管理员账号" id="adminM" name="admin"  required="required" readonly="readonly"/>
                                     </div>
                                 </div>
 
@@ -403,21 +403,26 @@
     <script type="text/javascript">
         $(".deleteSubjectBtn").click(function (){
             idOfSubjectToBeDeleted = $(this).parent().attr("id");
-            console.log("在deleteSubjectBtn的click里, idOfSubjectToBeDeleted = " + idOfSubjectToBeDeleted);
 
-            $("#agreeDeleteBtn").click(function ()
-            {
-                console.log("在agreeDeleteBtn的click里, idOfSubjectToBeDeleted = " + idOfSubjectToBeDeleted);
-
-                var deleteUrl = "${ctx}/subjectMgmt/deleteSubject?id=" + idOfSubjectToBeDeleted + "&currentPage=" + ${currentPage};
-                $.ajax({
-                    type: "GET",
-                    url: deleteUrl,
-                    dataType: "text",
-                    success: function (data) {
-                    }
-                });
-            });
+            $("#agreeDeleteBtn").click(
+                function ()
+                {
+                    var deleteUrl = "${ctx}/subjectMgmt/deleteSubject?id=" + idOfSubjectToBeDeleted + "&currentPage=" + ${currentPage};
+                    $.ajax({
+                        type: "GET",
+                        url: deleteUrl,
+                        dataType: "text",
+                        success: function (data) {
+                            console.log(data);
+                            $("#" + data).parent().remove();
+                        },
+                        error: function(data)
+                        {
+                            console.log(data);
+                        }
+                    });
+                }
+            );
         });
 
         $(".updateSubjectBtn").click(
@@ -453,11 +458,32 @@
                 async: false,
                 url: '${ctx}/subjectMgmt/querySubjectCode',
                 data: {code: $(this).val()},
-                dataType: "json",
+                dataType: "text",
                 success: function (data){
-                    if (data > 0)
+                    var cntOfSubjectCode = parseInt(data);
+                    if (cntOfSubjectCode > 0)
                     {
                         alert("subjectCode必须已经存在，请另外选择一个！")
+                    }
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        });
+
+        $("#admin").blur(function() {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: '${ctx}/subjectMgmt/queryAdmin',
+                data: {admin: $(this).val()},
+                dataType: "text",
+                success: function (data){
+                    var cntOfAdmin = parseInt(data);
+                    if (cntOfAdmin > 0)
+                    {
+                        alert("admin必须已经存在，请另外选择一个！")
                     }
                 },
                 error: function(data) {

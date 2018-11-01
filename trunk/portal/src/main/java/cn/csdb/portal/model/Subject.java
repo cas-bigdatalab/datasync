@@ -36,8 +36,8 @@ public class Subject {
     private String ftpFilePath;
     @Field("dbName")
     private String dbName;
-    @Field("dbUsername")
-    private String dbUsername;
+    @Field("dbUserName")
+    private String dbUserName;
     @Field("dbPassword")
     private String dbPassword;
     @Field("dbHost")
@@ -165,12 +165,12 @@ public class Subject {
         this.dbName = dbName;
     }
 
-    public String getDbUsername() {
-        return dbUsername;
+    public String getDbUserName() {
+        return dbUserName;
     }
 
-    public void setDbUsername(String dbUsername) {
-        this.dbUsername = dbUsername;
+    public void setDbUserName(String dbUserName) {
+        this.dbUserName = dbUserName;
     }
 
     public String getDbPassword() {
@@ -215,7 +215,7 @@ public class Subject {
                 ", serialNo='" + serialNo + '\'' +
                 ", ftpFilePath='" + ftpFilePath + '\'' +
                 ", dbName='" + dbName + '\'' +
-                ", dbUsername='" + dbUsername + '\'' +
+                ", dbUserName='" + dbUserName + '\'' +
                 ", dbPassword='" + dbPassword + '\'' +
                 ", dbHost='" + dbHost + '\'' +
                 ", dbPort='" + dbPort + '\'' +

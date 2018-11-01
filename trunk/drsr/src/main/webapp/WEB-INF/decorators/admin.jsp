@@ -74,31 +74,6 @@
 
                         <i class="fa fa-angle-down"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-default">
-
-                        <a title="login" id="loginMenuItem" data-target="#loginDialog" data-toggle="modal" >
-                            <i class="icon-rocket"></i>
-                            用户登录
-                        </a>
-                        <%--<shiro:guest>
-                            <li>
-                                <a href="${applicationScope.systemPro['cas.url.prefix']}/login?service=${applicationScope.systemPro['drsr.url']}/shiro-cas">
-                                    <i class="icon-rocket"></i>用户登录
-                                </a>
-                            </li>
-                        </shiro:guest>
-                        <shiro:user>
-                            <li>
-                                <a target='_blank'
-                                   href="${applicationScope.systemPro['cas.url.prefix']}/reg01004Action.do?userID=<%=CasURLCode.encode(session.getAttribute("loginId").toString())%>">
-                                    <i class="icon-calendar"></i>用户信息</a>
-                            </li>
-                            <li>
-                                <a href="${applicationScope.systemPro['cas.url.prefix']}/logout?service=${applicationScope.systemPro['drsr.url']}/logout">
-                                    <i class="icon-key"></i>退出</a>
-                            </li>
-                        </shiro:user>--%>
-                    </ul>
                 </li>
                 <!-- END USER LOGIN DROPDOWN -->
             </ul>
@@ -127,7 +102,7 @@
                     <div style="height: 70px"></div>
                 </li>
                 <li class="start">
-                    <a href="${ctx}/">
+                    <a href="${ctx}/index">
                         <i class="icon-home"></i>
                         <span class="title">首页</span>
                         <span class="arrow"></span>
@@ -174,7 +149,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="${ctx}/projectMessage">
+                    <a href="${ctx}/subjectInfo">
                         <i class="icon-wrench"></i>
                         <span class="title">专题信息</span>
                         <span class="arrow "></span>
