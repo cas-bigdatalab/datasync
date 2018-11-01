@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -106,7 +107,6 @@ public class ResourceController {
     }
 
     /**
-     *
      * Function Description: 获得mysql数据库表单
      *
      * @param: []
@@ -131,7 +131,6 @@ public class ResourceController {
 
 
     /**
-     *
      * Function Description: 获取砖题库文件列表
      *
      * @param: []
@@ -140,7 +139,7 @@ public class ResourceController {
      * @date: 2018/11/1 10:43
      */
     @ResponseBody
-    @RequestMapping(value="fileSourceFileList")
+    @RequestMapping(value = "fileSourceFileList")
     public List<JSONObject> fileSourceFileList() {
         Subject subject = subjectService.findBySubjectCode("sdc002");
         List<JSONObject> jsonObjects = resourceService.fileSourceFileList(subject.getFtpFilePath());
@@ -149,7 +148,6 @@ public class ResourceController {
 
 
     /**
-     *
      * Function Description: 获得文件树节点下的文件结构
      *
      * @param: [filePath]
@@ -162,14 +160,62 @@ public class ResourceController {
     public List<JSONObject> treeNode(String filePath) {
         List<JSONObject> jsonObjects = null;
         jsonObjects = resourceService.fileSourceFileList(filePath.replace("%_%", "\\"));
-
-        /*if (fileType.equals("本地文件")) {
-            jsonObjects = dataSrcService.fileSourceFileList(filePath.replace("%_%", "\\"));
-        } else if (fileType.equals("ftp")) {
-            jsonObjects = dataResourceStaticService.fileSourceFtpFileList(filePath.replace("%_%", "\\"), dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword());
-        }*/
-
-
         return jsonObjects;
     }
+
+
+    /**
+     *
+     * Function Description: 添加资源第一步保存
+     *
+     * @param: [title, imagePath, introduction, keyword, catalogId, createdByOrganization]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/1 15:46
+     */
+    @ResponseBody
+    @RequestMapping(value = "addResourceFirstStep")
+    public JSONObject saveResourceFirstStep(@RequestParam(name = "title")String title,
+                                            @RequestParam(name = "imagePath",required = false)String imagePath,
+                                            @RequestParam(name = "introduction")String introduction,
+                                            @RequestParam(name = "keyword")String keyword,
+                                            @RequestParam(name = "catalogId")String catalogId,
+                                            @RequestParam(name = "createdByOrganization")String createdByOrganization) {
+        Subject subject = subjectService.findBySubjectCode("sdc002");
+        JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = new cn.csdb.portal.model.Resource();
+        resource.setTitle(title);
+        resource.setImagePath(imagePath);
+        resource.setIntroduction(introduction);
+        resource.setKeyword(keyword);
+        resource.setCatalogId(catalogId);
+        resource.setCreatedByOrganization(createdByOrganization);
+        resource.setSubjectCode(subject.getSubjectCode());
+        resource.setResState("未完成");
+        resource.setCreationDate(new Date());
+        resource.setUpdateDate(new Date());
+        String resourceId = resourceService.save(resource);
+        jsonObject.put("resourceId",resourceId);
+        return jsonObject;
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "addResourceSecondStep")
+    public JSONObject addResourceSecondStep(@RequestParam(name = "resourceId")String resourceId,
+                                            @RequestParam(name = "publicType")String publicType,
+                                            @RequestParam(name = "dataList")String dataList) {
+        Subject subject = subjectService.findBySubjectCode("sdc002");
+        JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        resource.setPublicType(publicType);
+        if(publicType.equals("mysql")){
+            resource.setPublicContent(dataList);
+        }else if(publicType.equals("file")){
+            resource.setFilePath(dataList);
+        }
+        resourceService.save(resource);
+        return jsonObject;
+    }
+
 }
