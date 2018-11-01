@@ -22,6 +22,13 @@
     <div class="task-title">
         <span>确定数据对象范围，上传数据</span>
     </div>
+    <form class="form-inline">
+
+        <div class="form-group">
+            <label for="dataTaskName">创建任务名</label>
+            <input type="text" class="form-control" id="dataTaskName2" >
+        </div>
+    </form>
     <div class="select-way">
         <span>数据源:</span>
         <label for="aaa">数据库</label>
@@ -238,7 +245,7 @@
     </div>
 </script>
 <script type="text/html" id="dataRelationshipList">
-    <option value="" id="selNone" selected="selected">全部</option>
+    <option value="" id="selNone" selected="selected">请选择数据源</option>
     {{each data as value i}}
     <option value="{{value.dataSourceName}}" id="{{value.dataSourceId}}">{{value.dataSourceName}}</option>
     {{/each}}
@@ -281,7 +288,7 @@
 </script>
 
 <script type="text/html" id="dataFileshipList">
-    <option value="" id="selFileNone" selected="selected">全部</option>
+    <option value="" id="selFileNone" selected="selected">请选择数据源</option>
     {{each data as value i}}
     <option value="{{value.dataSourceName}}" Keyid="{{value.dataSourceId}}">{{value.dataSourceName}}</option>
     {{/each}}
