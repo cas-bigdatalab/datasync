@@ -15,8 +15,9 @@
 
 <head>
     <title>DataSync专题库门户管理系统</title>
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/fileinput.css">
+
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jqeury-file-upload/css/jquery.fileupload.css">
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.css">
     <style>
         .bar {
             height: 18px;
@@ -85,25 +86,25 @@
 
                                         <input type="hidden" name="resourceId" id="resourceId">
                                         <input type="hidden" name="resState" id="resState" value="未完成">
-                                        <h3 class="block">静态数据描述信息</h3>
+                                        <h3 class="block">元数据信息描述</h3>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">静态数据名称 <span class="required">
+                                            <label class="control-label col-md-3">数据集名称 <span class="required">
 													* </span>
                                             </label>
                                             <div class="col-md-4">
                                                 <input type="text" class="form-control" name="resTitle"
-                                                       id="resTitle" onchange="setResTitle(this)">
+                                                       id="resTitle" onchange="setResTitle(this)" style="border: 1px solid rgb(169, 169, 169)">
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">数据图片<span >
+                                            <label class="control-label col-md-3">图片<span class="required">
 													* </span>
                                             </label>
                                             <div class="col-md-9">
                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
                                                     <div class="fileinput-preview thumbnail"
                                                          data-trigger="fileinput"
-                                                         style="width: 200px; height: 150px;">
+                                                         style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
                                                     </div>
                                                     <div>
                                                             <span class="btn default btn-file">
@@ -127,94 +128,71 @@
                                             </div>
                                         </div>
                                         <div class="form-group dataLicenseInputGroup">
-                                            <label class="control-label col-md-3">许可协议 <span class="required">
+                                            <label class="control-label col-md-3">描述 <span class="required">
 													* </span>
                                             </label>
-                                            <div class="col-md-4">
-                                                <select class="form-control dataLicense" name="license" id="dataLicenseID">
-                                                </select>
+                                            <div class="col-md-6">
+                                                <textarea name="dataDescribe" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">发布到<span class="required">
+                                            <label class="control-label col-md-3">关键词<span class="required">
 													* </span></label>
                                             <div class="checkbox-list col-md-6">
-                                                <label class="checkbox-inline">
+                                                <div style="margin-bottom: 3px;line-height: 34px">
+                                                    <input type="text" style="font-size: 16px">
+                                                    <button class="btn green">添加关键词</button>
+                                                </div>
+                                                <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px">
+
+
+                                                </div>
+                                                <%--<label class="checkbox-inline">
                                                     <input type="checkbox" id="centerCheckbox" name="catalogCheckbox" value="center"> 中心门户</label>
                                                 <label class="checkbox-inline">
-                                                    <input type="checkbox" id="localCheckbox" name="catalogCheckbox" value="local"> 本地门户 </label>
+                                                    <input type="checkbox" id="localCheckbox" name="catalogCheckbox" value="local"> 本地门户 </label>--%>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">分类选择
-                                            </label>
-                                            <div class="col-md-4" id="cemterCatalogDiv" style="display:none">
-                                                <input type="hidden" name="centerCatalogId" id="centerCatalogId">
-                                                <div id="jstree-demo"></div>
-                                            </div>
-                                            <div class="col-md-4" id="localCatalogDiv" style="display:none">
-                                                <input type="hidden" name="localCatalogId" id="localCatalogId">
-                                                <div id="localjstree-demo"></div>
+                                            <label class="control-label col-md-3">来源<span span class="required">
+													* </span></label>
+                                            <div class="col-md-6" id="cemterCatalogDiv">
+                                                <textarea name="dataSourceDes" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;"></textarea>
                                             </div>
                                         </div>
-                                        <%--<div class="form-group"  style="display:none">
-                                            <label class="control-label col-md-3">本地分类选择
-                                            </label>
-
-                                        </div>--%>
-                                        <!--       20181102 wzj          <div class="form-group">
-                                                             <label class="control-label col-md-3">下载使用说明 <span class="required">
-                                                                     * </span>
-                                                             </label>
-                                                             <div class="col-md-4">
-                                                                 <textarea type="text" class="form-control" name="description"
-                                                                           rows="3"></textarea>
-                                                             </div>
-                                                         </div>
-                                                         -->
-                                        <div class="form-group" style="display: none">
-                                            <label class="control-label col-md-3">数据源id <span class="required">
-													* </span>
-                                            </label>
-                                            <div class="col-md-4">
-                                                <input type="text" class="form-control" name="dataSourceId"
-                                                       id="dataSourceId">
-                                            </div>
-                                        </div>
-                                        <div id="onlineDiv">
-                                        </div>
-
-                                        <div id="resourceChooseDiv">
-                                        </div>
-
-                                        <div id="generateRelationalDatabase">
-                                        </div>
-
-                                        <div id="showSqlStr">
-                                        </div>
-
-                                        <div id="offlineDiv">
-                                        </div>
-
-
                                     </form>
                                 </div>
                                 <div class="tab-pane" id="tab2">
-                                    <form action="#" id="coreMetaForm">
-                                        <div class="form-body">
-
-                                            <div class="note note-success">
-                                                <h4 class="block">核心元数据</h4>
-                                                <p id="rootDescription"></a>
-                                                </p>
-                                            </div>
-                                            <div id="coreMetaTree" class="tree-demo" style="min-height: 300px">
-
-                                            </div>
-
-
+                                    <h3 class="block">实体据信息描述</h3>
+                                    <div style="overflow: hidden">
+                                        <div class="col-md-3" style="font-size: 18px">
+                                            <span>选择表资源查看/修改描述</span>
                                         </div>
-                                    </form>
+                                        <div class="col-md-9" >
+                                            <div class="row undeslist" >
+                                                <div class="col-md-4">
+                                                    <label>
+                                                        <input type="radio">
+                                                        <span>dictionay</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label>
+                                                        <input type="radio">
+                                                        <span>dictionay</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label>
+                                                        <input type="radio">
+                                                        <span>dictionay</span>
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="tab-pane" id="tab3"></div>
                             </div>
@@ -222,19 +200,14 @@
                         <div class="form-actions">
                             <div class="row">
                                 <div class="col-md-offset-3 col-md-9">
-                                    <a href="javascript:;" class="btn default button-previous">
+                                    <a href="javascript:;" class="btn default button-previous" onclick="fromAction(false)" style="display: none">
                                         <i class="m-icon-swapleft"></i> 上一步 </a>
-                                    <a href="javascript:;" class="btn blue button-next">
-                                        bia <i class="m-icon-swapright m-icon-white"></i>
+                                    <a href="javascript:;" class="btn blue button-next" onclick="fromAction(true)" >
+                                        下一步 <i class="m-icon-swapright m-icon-white"></i>
                                     </a>
-                                    <a href="javascript:;" class="btn green button-submit">
+                                    <a href="javascript:;" class="btn green button-submit" style="display: none">
                                         提交 <i class="m-icon-swapup m-icon-white"></i>
                                     </a>
-                                    <div class="col-md-offset-3 col-md-3 " style="float: right">
-                                        <button class="btn green button-save">
-                                            保存当前页数据
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -250,10 +223,50 @@
 
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
-    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.js"></script>
 
     <script type="text/javascript">
         var ctx = '${ctx}';
+        var initNum =1
+        $(".progress-bar-success").width(initNum*33+"%");
+
+
+
+        function fromAction(flag) {
+            if(flag){
+                ++initNum
+                $(".progress-bar-success").width(initNum*33+"%");
+                if(initNum ==2){
+                    $("#tab1").removeClass("active")
+                    $("#tab2").addClass("active")
+                    $(".steps li:eq(1)").addClass("active")
+                    $(".button-previous").show();
+                }else {
+                    $("#tab2").removeClass("active")
+                    $("#tab3").addClass("active")
+                    $(".steps li:eq(2)").addClass("active")
+                    $(".button-submit").show()
+                    $(".button-next").hide()
+                }
+            }else {
+                --initNum
+                $(".progress-bar-success").width(initNum*33+"%");
+                if(initNum == 1){
+                    $("#tab2").removeClass("active")
+                    $("#tab1").addClass("active")
+                    $(".steps li:eq(1)").removeClass("active")
+                    $(".button-previous").hide();
+                }else {
+                    $("#tab3").removeClass("active")
+                    $("#tab2").addClass("active")
+                    $(".steps li:eq(2)").removeClass("active")
+                    $(".button-next").show()
+                    $(".button-submit").hide()
+                }
+            }
+        }
+
+
     </script>
 </div>
 
