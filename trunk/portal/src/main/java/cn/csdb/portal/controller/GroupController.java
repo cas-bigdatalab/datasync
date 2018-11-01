@@ -61,4 +61,35 @@ public class GroupController {
         jsonObject.put("result","ok");
         return jsonObject;
     }
+
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject addGroup(Group group) {
+        groupService.add(group);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("result", "ok");
+        return jsonObject;
+    }
+
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject updateGroup(Group group) {
+        groupService.update(group);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("result", "ok");
+        return jsonObject;
+    }
+
+
+    @RequestMapping("/info")
+    @ResponseBody
+    public JSONObject getGroupInfo(@RequestParam(name = "id", defaultValue = "") String id) {
+        Group group = groupService.get(id);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("group", group);
+        return jsonObject;
+    }
+
 }
