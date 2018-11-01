@@ -209,7 +209,7 @@ public class DataTaskController {
         }
         List<String> filepaths = Arrays.asList(filePathList.split(";"));
         String subjectCode = configPropertyService.getProperty("SubjectCode");
-        String fileName = subjectCode+datataskId;
+        String fileName = subjectCode+"_"+datataskId;
         fileResourceService.packDataResource(fileName,filepaths);
         String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
         DataTask dt = dataTaskService.get(datataskId);
