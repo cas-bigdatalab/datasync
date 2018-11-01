@@ -36,8 +36,6 @@ public class SubjectMgmtController {
      * @param subject, the wrapped object which contains information of the subject ot be added
      * @param image,   the image field of input form
      * @return redirectStr, the request is redirected to querySubject interface
-     * @author zzl
-     * @date 2018/10/23
      */
     @RequestMapping(value = "/addSubject", method = RequestMethod.POST)
     public String addSubject(HttpServletRequest request, Subject subject, @RequestParam("image") MultipartFile image) {
@@ -69,8 +67,6 @@ public class SubjectMgmtController {
      * Function Description: generate ftp user and password for subject to be added
      *
      * @param subject, the subject to be added
-     * @author zzl
-     * @date 2018/10/25
      */
     private void generateFtpInfo(Subject subject)
     {
@@ -86,8 +82,6 @@ public class SubjectMgmtController {
      *
      * @param image， the image to be stored
      * @return imageFilePath, the absolute local filesystem path of the image, may be a path like {portalRoot}/SubjectImages/img1.jpg, here {portalRoot} represent the root of the web app
-     * @author zzl
-     * @date 2018/10/25
      */
     private String saveImage(MultipartFile image) {
         logger.info("save image file, image = " + image);
@@ -127,20 +121,16 @@ public class SubjectMgmtController {
      * @param id, the id of Subject to be deleted
      * @param currentPage, the page which contains the deleted subject, this parameter is designed for request redirect
      * @return redirectStr, the request is redirected to querySubject interface
-     * @author zzl
-     * @date 2018/10/23
      */
     @RequestMapping(value = "/deleteSubject")
+    @ResponseBody
     public String deleteSubject(HttpServletRequest request, @RequestParam(required = true) String id, @RequestParam(required = true) int currentPage) {
         logger.info("SubjectMgmtController-deleteSubject, id = " + id + ", currentPage = " + currentPage);
 
-        String deleteSubjectNotice = subjectService.deleteSubject(id);
-        logger.info("SubjectMgmtController-deleteSubject，deleteSubjectNotice = " + deleteSubjectNotice);
+        int deletedRowCnt = subjectService.deleteSubject(id);
+        logger.info("SubjectMgmtController-deleteSubject，deletedRowCnt = " + deletedRowCnt);
 
-        String redirectStr = "redirect:/subjectMgmt/querySubject?currentPage=" + currentPage;
-        logger.info("redirect request to querySubject : " + redirectStr);
-
-        return redirectStr;
+        return id;
     }
 
     /**
@@ -149,8 +139,6 @@ public class SubjectMgmtController {
      * @param subject the subject to be updated
      * @param image the image field
      * @return redirectStr, the request is redirected to querySubject interface
-     * @author zzl
-     * @date 2018/10/23
      */
     @RequestMapping(value = "/updateSubject")
     public String updateSubject(HttpServletRequest request, Subject subject, @RequestParam("image") MultipartFile image) {
@@ -176,8 +164,6 @@ public class SubjectMgmtController {
      * @param subject the subject to be updated
      * @param image the image to be saved
      * @return imagePath the absolute local filesystem path of the image
-     * @author zzl
-     * @date 2018/10/23
      */
     private String updateImage(Subject subject, MultipartFile image) {
         logger.info("updating image");
@@ -202,8 +188,6 @@ public class SubjectMgmtController {
     /**
      *  Function Description: when user select a image on UpdateSubjectDialog, we must delete the previous one before store the new image
      * @param imagePath
-     * @author zzl
-     * @date 2018/10/23
      */
     private void deleteImage(String imagePath) {
         logger.info("updateSubject - image path to be deleted : " + imagePath);
@@ -223,8 +207,6 @@ public class SubjectMgmtController {
      *
      * @param currentPage
      * @return ModelAndView mv
-     * @author zzl
-     * @date 2018/10/23
      */
     @RequestMapping(value = "/querySubject")
     public ModelAndView querySubject(HttpServletRequest request, @RequestParam(required = true) int currentPage) {
@@ -250,8 +232,6 @@ public class SubjectMgmtController {
      *
      * @param id
      * @return Subject's json representation
-     * @author zzl
-     * @date 2018/10/23
      */
     @RequestMapping(value = "/querySubjectById")
     @ResponseBody
@@ -268,8 +248,6 @@ public class SubjectMgmtController {
      * Function Description: check if the subject code has been used
      * @param subjectCode, the subject code user give
      * @return 1/0, 1 exists, 0 no
-     * @author  zzl
-     * @date 2018/10/25
      */
     @RequestMapping(value = "/querySubjectCode")
     @ResponseBody
@@ -280,5 +258,21 @@ public class SubjectMgmtController {
         logger.info("queried subjectCodeCnt - cntOfTheCode = " + cntOfTheCode);
 
         return cntOfTheCode;
+    }
+
+    /**
+     * Function Description: check if the subject code has been used
+     * @param admin, admin
+     * @return 1/0, 1 exists, 0 no
+     */
+    @RequestMapping(value = "/queryAdmin")
+    @ResponseBody
+    public long queryAdmin(HttpServletRequest request, @RequestParam(name="admin", required = true) String admin) {
+        logger.info("enterring SubjectMgmtController-queryUserName");
+        logger.info("admin = " + admin);
+        long cntOfAdmin = subjectService.queryAdmin(admin);
+        logger.info("queried userNameCnt - cntOfUserName = " + cntOfAdmin);
+
+        return cntOfAdmin;
     }
 }

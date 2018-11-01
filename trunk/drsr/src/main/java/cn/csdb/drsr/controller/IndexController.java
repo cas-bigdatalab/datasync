@@ -17,11 +17,19 @@ public class IndexController {
 
     private Logger logger= LoggerFactory.getLogger(IndexController.class);
 
-    @RequestMapping("/")
+    @RequestMapping("/index")
     public ModelAndView index() {
         logger.debug("进入客户端首页");
         ModelAndView modelAndView = new ModelAndView("index");
         return modelAndView;
+    }
+
+    @RequestMapping("/")
+    public ModelAndView login()
+    {
+        logger.info("登录认证页面");
+        ModelAndView mv = new ModelAndView("login");
+        return  mv;
     }
 
     @RequestMapping("/testsql")

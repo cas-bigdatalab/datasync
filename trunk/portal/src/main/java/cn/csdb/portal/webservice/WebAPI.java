@@ -42,7 +42,7 @@ public class WebAPI {
      */
     @RequestMapping(value = "/clientLogin", method = RequestMethod.GET)
     @ResponseBody
-    public JSONObject validateLogin(HttpServletRequest request, @RequestParam(name="userName", required = true) String userName, @RequestParam(name="password", required = true) String password) {
+    public JSONObject validateLogin(HttpServletRequest request, @RequestParam(required = true) String userName, @RequestParam(required = true) String password) {
         logger.info("enterring validateLogin");
         logger.info("userName = " + userName + ", password = " + password);
 

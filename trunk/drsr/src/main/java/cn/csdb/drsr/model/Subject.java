@@ -1,8 +1,6 @@
 package cn.csdb.drsr.model;
 
-
 public class Subject {
-
     private String id;
     private String subjectName;
     private String subjectCode;
@@ -22,31 +20,6 @@ public class Subject {
     private String dbPassword;
     private String dbHost;
     private String dbPort;
-
-    @Override
-    public String toString() {
-        return "Subject{" +
-                "id='" + id + '\'' +
-                ", subjectName='" + subjectName + '\'' +
-                ", subjectCode='" + subjectCode + '\'' +
-                ", imagePath='" + imagePath + '\'' +
-                ", brief='" + brief + '\'' +
-                ", admin='" + admin + '\'' +
-                ", adminPasswd='" + adminPasswd + '\'' +
-                ", contact='" + contact + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", ftpUser='" + ftpUser + '\'' +
-                ", ftpPassword='" + ftpPassword + '\'' +
-                ", serialNo='" + serialNo + '\'' +
-                ", ftpFilePath='" + ftpFilePath + '\'' +
-                ", dbName='" + dbName + '\'' +
-                ", dbUsername='" + dbUsername + '\'' +
-                ", dbPassword='" + dbPassword + '\'' +
-                ", dbHost='" + dbHost + '\'' +
-                ", dbPort='" + dbPort + '\'' +
-                '}';
-    }
 
     public String getId() {
         return id;
@@ -198,5 +171,30 @@ public class Subject {
 
     public void setDbPort(String dbPort) {
         this.dbPort = dbPort;
+    }
+
+    @Override
+    public String toString() {
+        return "Subject{" +
+                "id='" + id + '\'' +
+                ", subjectName='" + subjectName + '\'' +
+                ", subjectCode='" + subjectCode + '\'' +
+                ", imagePath='" + imagePath + '\'' +
+                ", brief='" + brief + '\'' +
+                ", admin='" + admin + '\'' +
+                ", adminPasswd='" + adminPasswd + '\'' +
+                ", contact='" + contact + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", ftpUser='" + ftpUser + '\'' +
+                ", ftpPassword='" + ftpPassword + '\'' +
+                ", serialNo='" + serialNo + '\'' +
+                ", ftpFilePath='" + ftpFilePath + '\'' +
+                ", dbName='" + dbName + '\'' +
+                ", dbUsername='" + dbUsername + '\'' +
+                ", dbPassword='" + dbPassword + '\'' +
+                ", dbHost='" + dbHost + '\'' +
+                ", dbPort='" + dbPort + '\'' +
+                '}';
     }
 }

@@ -34,10 +34,15 @@ public class Subject {
     private String serialNo;
     @Field("ftpFilePath")
     private String ftpFilePath;
+    @Field("dbName")
     private String dbName;
+    @Field("dbUserName")
     private String dbUsername;
+    @Field("dbPassword")
     private String dbPassword;
+    @Field("dbHost")
     private String dbHost;
+    @Field("dbPort")
     private String dbPort;
 
     public String getId() {

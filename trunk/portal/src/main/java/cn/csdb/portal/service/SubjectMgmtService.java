@@ -53,20 +53,12 @@ public class SubjectMgmtService {
      * @date 2018/10/23
      */
     @Transactional
-    public String deleteSubject(String id)
+    public int deleteSubject(String id)
     {
         String deleteSubjectNotice = "";
         int deletedRowCnt = subjectMgmtDao.deleteSubject(id);
-        if (deletedRowCnt == 1)
-        {
-            deleteSubjectNotice = "删除专题库：成功！";
-        }
-        else
-        {
-            deleteSubjectNotice = "删除专题库：失败！";
-        }
 
-        return deleteSubjectNotice;
+        return deletedRowCnt;
     }
 
     /**
@@ -153,5 +145,11 @@ public class SubjectMgmtService {
     public long querySubjectCode(String subjectCode)
     {
         return subjectMgmtDao.querySubjectCode(subjectCode);
+    }
+
+
+    public long queryAdmin(String userName)
+    {
+        return subjectMgmtDao.queryAdmin(userName);
     }
 }

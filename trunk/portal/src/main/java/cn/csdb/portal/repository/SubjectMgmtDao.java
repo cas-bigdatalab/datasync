@@ -5,8 +5,6 @@ import cn.csdb.portal.model.Subject;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteResult;
-import com.mongodb.bulk.DeleteRequest;
-import com.mongodb.client.result.DeleteResult;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
@@ -30,8 +30,25 @@ public class SubjectMgmtDao {
     // create ftp directory
     @Value("#{systemPro['ftpServerAddr']}")
     private String ftpServerAddr;
+
     @Value("#{systemPro['ftpServerPort']}")
     private int ftpServerPort;
+
+    @Value("#{systemPro['ftpRootPath']}")
+    private String ftpRootPath;
+
+    @Value("#{systemPro['dbUserName']}")
+    private String dbUserName;
+
+    @Value("#{systemPro['dbPassword']}")
+    private String dbPassword;
+
+    @Value("#{systemPro['dbHost']}")
+    private String dbHost;
+
+    @Value("#{systemPro['dbPort']}")
+    private String dbPort;
+
 
     @Resource
     private MongoTemplate mongoTemplate;
@@ -51,18 +68,21 @@ public class SubjectMgmtDao {
      */
     public int addSubject(Subject subject) {
         logger.info("enterring SubjectMgmtDao-addSubject");
+        logger.info("ftpRootPath = " + ftpRootPath);
+        String ftpFilePath = ftpRootPath + subject.getFtpUser();
+        logger.info("ftpFilePath = " + ftpFilePath);
+        subject.setFtpFilePath(ftpFilePath);
+        subject.setDbName(subject.getSubjectCode());
+        subject.setDbUsername(dbUserName);
+        subject.setDbPassword(dbPassword);
+        subject.setDbHost(dbHost);
+        subject.setDbPort(dbPort);
+
         //create db and ftp
         createDb(subject.getSubjectCode());
         createFtp(subject.getFtpUser(), subject.getFtpPassword());
-        boolean ftpPathCreated = createFtpPath(subject.getFtpUser(), subject.getFtpPassword());
-        if (ftpPathCreated)
-        {
-            subject.setFtpFilePath(subject.getFtpUser());
-        }
-        else
-        {
-            subject.setFtpFilePath("");
-        }
+        createFtpPath(subject.getFtpUser(), subject.getFtpPassword());
+
         logger.info("create db, ftp user, ftp path completed!");
 
         //insert subject into mongodb
@@ -259,9 +279,21 @@ public class SubjectMgmtDao {
 
         try {
             //reserverd, not userd.
-            updateDb(subject.getSubjectCode());
             updateFtp(subject.getFtpUser(), subject.getFtpPassword());
-            mongoTemplate.save(subject);
+
+            Query query = new Query();
+            query.addCriteria(Criteria.where("subjectCode").is(subject.getSubjectCode()));
+
+            Update update = Update.update("subjectName", subject.getSubjectName());
+            update.set("brief", subject.getBrief());
+            update.set("adminPasswd", subject.getAdminPasswd());
+            update.set("contact", subject.getContact());
+            update.set("phone", subject.getPhone());
+            update.set("email", subject.getEmail());
+            update.set("serialNo", subject.getSerialNo());
+
+            mongoTemplate.upsert(query, update, "t_subject");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -369,6 +401,14 @@ public class SubjectMgmtDao {
         return cntOfTheCode;
     }
 
+    public long queryAdmin(String admin)
+    {
+        DBObject dbObject = QueryBuilder.start().and("admin").is(admin).get();
+        Query query = new BasicQuery(dbObject);
+        long cntOfAdmin = mongoTemplate.count(query, "t_subject");
+
+        return cntOfAdmin;
+    }
 
     /**
      * Function Description:
