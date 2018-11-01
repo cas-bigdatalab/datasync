@@ -39,15 +39,15 @@ public class LoginService
             {
                 logger.info("log in success: loginStatus = " + loginStatus);
 
-                String isInitialized = ConfigUtil.getConfigItem(configFilePath, "IsInitialized");
+                //String isInitialized = ConfigUtil.getConfigItem(configFilePath, "IsInitialized");
 
                 //config file not initialized
-                if (isInitialized.trim().equals("false"))
-                {
-                    logger.info("start to get portal subject info");
-                    getSubjectConfig(userName);
-                    logger.info("get portal subject info completed!");
-                }
+                /*if (isInitialized.trim().equals("false"))
+                {*/
+                logger.info("start to get portal subject info");
+                getSubjectConfig(userName);
+                logger.info("get portal subject info completed!");
+                /*}*/
             }
        }
        catch (Exception e)
@@ -81,23 +81,20 @@ public class LoginService
             subjectName = dataMap.get("subjectName").toString();
         }
         String subjectCode = "";
-        if (dataMap.get("subjectName") != null)
+        if (dataMap.get("subjectCode") != null)
         {
-            subjectName = dataMap.get("subjectCode").toString();
+            subjectCode = dataMap.get("subjectCode").toString();
         }
-
         String admin = "";
         if (dataMap.get("admin") != null)
         {
             admin = dataMap.get("admin").toString();
         }
-
         String adminPasswd = "";
         if (dataMap.get("adminPasswd") != null)
         {
             adminPasswd = dataMap.get("adminPasswd").toString();
         }
-
         String contact = "";
         if(dataMap.get("contact") != null)
         {
@@ -106,14 +103,13 @@ public class LoginService
         String phone = "";
         if(dataMap.get("phone") != null)
         {
-            contact = dataMap.get("phone").toString();
+            phone = dataMap.get("phone").toString();
         }
         String email = "";
         if(dataMap.get("email") != null)
         {
-            contact = dataMap.get("email").toString();
+            email = dataMap.get("email").toString();
         }
-
         String ftpUser = "";
         if (dataMap.get("ftpUser") != null)
         {
@@ -124,7 +120,6 @@ public class LoginService
         {
             ftpPassword = dataMap.get("ftpPassword").toString();
         }
-
         String brief = "";
         if (dataMap.get("brief") != null)
         {
@@ -132,20 +127,16 @@ public class LoginService
         }
 
         ConfigUtil.setConfigItem(configFilePath, "IsInitialized", "true");
-
         ConfigUtil.setConfigItem(configFilePath, "SubjectName", subjectName);
         ConfigUtil.setConfigItem(configFilePath, "SubjectCode", subjectCode);
-        ConfigUtil.setConfigItem(configFilePath, "admin", admin);
-        ConfigUtil.setConfigItem(configFilePath, "adminPasswd", adminPasswd);
-
-
+        ConfigUtil.setConfigItem(configFilePath, "Admin", admin);
+        ConfigUtil.setConfigItem(configFilePath, "AdminPasswd", adminPasswd);
         ConfigUtil.setConfigItem(configFilePath, "Contact", contact);
         ConfigUtil.setConfigItem(configFilePath, "Phone", phone);
         ConfigUtil.setConfigItem(configFilePath, "Email", email);
         ConfigUtil.setConfigItem(configFilePath, "FtpUser", ftpUser);
         ConfigUtil.setConfigItem(configFilePath, "FtpPassword", ftpPassword);
         ConfigUtil.setConfigItem(configFilePath, "Brief", brief);
-
 
         return true;
     }

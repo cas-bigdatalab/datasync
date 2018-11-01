@@ -5,9 +5,13 @@ import cn.csdb.drsr.repository.mapper.DataTaskMapper;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.sql.*;
 import java.util.List;
 
 /**
@@ -31,13 +35,16 @@ public class DataTaskDao {
     //更新
     public boolean update(DataTask dataTask) {
         boolean result = false;
-        String sql = "update T_dataTask set DataSourceId=?,DataTaskName=?,DataTaskType=?,TableName=?," +
-                "SqlString=?,SqlTableNameEn=?,SqlFilePath=?,FilePath=?,creator=?,status=? " +
+        String sql = "update T_dataTask set " +
+                "DataSourceId=?,DataTaskName=?,DataTaskType=?," +
+                "TableName=?,SqlString=?,SqlTableNameEn=?," +
+                "SqlFilePath=?,FilePath=?,creator=?,status=? " +
                 "where DataTaskId=? ";
-        int i = jdbcTemplate.update(sql, new Object[]{dataTask.getDataSourceId(), dataTask.getDataTaskName(),
-                dataTask.getDataTaskType(), dataTask.getTableName(), dataTask.getSqlString(),
-                dataTask.getSqlTableNameEn(), dataTask.getSqlFilePath(), dataTask.getFilePath(),
-                dataTask.getCreator(), dataTask.getStatus(), dataTask.getDataTaskId()});
+        int i = jdbcTemplate.update(sql, new Object[]{
+                dataTask.getDataSourceId(), dataTask.getDataTaskName(), dataTask.getDataTaskType(),
+                dataTask.getTableName(), dataTask.getSqlString(), dataTask.getSqlTableNameEn(),
+                dataTask.getSqlFilePath(), dataTask.getFilePath(), dataTask.getCreator(),
+                dataTask.getStatus(), dataTask.getDataTaskId()});
         if (i >= 0) {
             result = true;
         }
@@ -71,6 +78,16 @@ public class DataTaskDao {
         return jdbcTemplate.query(sb.toString(), params.toArray(), new DataTaskMapper());
     }
 
+    public int getCount(String datataskType,String status){
+        StringBuilder sb = new StringBuilder();
+        sb.append("select count(*) from t_datatask ");
+        if (StringUtils.isNoneBlank(datataskType) || StringUtils.isNoneBlank(status)) {
+            sb.append("where ");
+        }
+        List<Object> params = getSql(datataskType, status, sb);
+        return jdbcTemplate.queryForObject(sb.toString(),params.toArray(),Integer.class);
+    }
+
     /**
      * Function Description: sql语句组织
      *
@@ -100,19 +117,43 @@ public class DataTaskDao {
         return jdbcTemplate.update(sql, datataskId);
     }
 
-    public boolean insertDatatask(DataTask datatask) {
+    public int insertDatatask(final DataTask datatask) {
         boolean flag = false;
-        String sql = "insert into t_datatask(dataSourceId,dataTaskName,dataTaskType,tableName,sqlString," +
-                "sqlTableNameEn,sqlFilePath,filePath,createTime,creator,status) " +
+        final String sql = "insert into t_datatask(dataSourceId,dataTaskName,dataTaskType," +
+                "tableName,sqlString,sqlTableNameEn,sqlFilePath,filePath,createTime,creator,status) " +
                 "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-        int i = jdbcTemplate.update(sql, new Object[]{datatask.getDataSourceId(),datatask.getDataTaskName(),
-                datatask.getDataTaskType(), datatask.getTableName(), datatask.getSqlString(),
-                datatask.getSqlTableNameEn(), datatask.getSqlFilePath(), datatask.getFilePath(),
-                datatask.getCreateTime(), datatask.getCreator(), datatask.getStatus()});
-        if (i > 0) {
-            flag = true;
-        }
-        return flag;
+//        int i = jdbcTemplate.update(sql, new Object[]{datatask.getDataSourceId(),datatask.getDataTaskName(),
+//                datatask.getDataTaskType(), datatask.getTableName(), datatask.getSqlString(),
+//                datatask.getSqlTableNameEn(), datatask.getSqlFilePath(), datatask.getFilePath(),
+//                datatask.getCreateTime(), datatask.getCreator(), datatask.getStatus()});
+//        if (i > 0) {
+//            flag = true;
+//        }
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                PreparedStatement ps = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+                ps.setInt(1,datatask.getDataSourceId());
+                ps.setString(2,datatask.getDataTaskName());
+                ps.setString(3,datatask.getDataTaskType());
+                ps.setString(4,datatask.getTableName());
+                ps.setString(5,datatask.getSqlString());
+                ps.setString(6,datatask.getSqlTableNameEn());
+                ps.setString(7,datatask.getSqlFilePath());
+                ps.setString(8,datatask.getFilePath());
+                ps.setTimestamp(9,new Timestamp(datatask.getCreateTime().getTime()));
+                ps.setString(10,datatask.getCreator());
+                ps.setString(11,datatask.getStatus());
+                return ps;
+
+            }
+        },keyHolder);
+
+        int generatedId = keyHolder.getKey().intValue();
+
+        return generatedId;
     }
 
 

@@ -99,7 +99,7 @@ public class RelationSourceController {
         datasrc.setDataSourceId(dataSourceId1);
         logger.info("测试新增或编辑的数据能否连通数据库");
 
-        String flag = relationShipService.testCon(host, port, userName, password, dataBaseName);
+        String flag = relationShipService.testCon(host, port, userName, "", dataBaseName);
 
         if (flag == "success") {
             return relationShipService.editData(datasrc);
@@ -224,19 +224,10 @@ public class RelationSourceController {
             @RequestParam(required = false, defaultValue = "10") int pageSize) {
         logger.info("预览表数据");
         JSONObject jsonObject = new JSONObject();
-//        List<TableInfoR> tableInfosList = JSON.parseArray(tableInfosListStr, TableInfoR.class);
         Map<String, List<TableInfo>> maps = relationShipService.getDefaultFieldComsBySql(Integer.parseInt(dataSourceId), sqlStr);
-//        if (tableInfosList != null && tableInfosList.size() >= 1) {
-//            String tableName = null;
-//            for (TableInfoR tableInfoR : tableInfosList) {
-//                tableName = tableInfoR.getTableName();
-//                maps.put(tableName, tableInfoR.getTableInfos());
-//            }
-//        } else {
-//            return jsonObject;
-//        }
         List<List<Object>> datas = relationShipService.getDataBySql(sqlStr, maps, Integer.valueOf(dataSourceId), 0, pageSize);
         jsonObject.put("datas", datas);
+        jsonObject.put("maps", maps);
         return jsonObject;
     }
 

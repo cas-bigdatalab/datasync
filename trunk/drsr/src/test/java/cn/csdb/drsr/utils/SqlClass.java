@@ -1,6 +1,11 @@
 package cn.csdb.drsr.utils;
 
+import org.apache.ibatis.jdbc.ScriptRunner;
+import org.junit.Test;
+
 import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 /**
  * @program: DataSync
@@ -9,7 +14,16 @@ import java.io.*;
  * @create: 2018-10-08 14:24
  **/
 public class SqlClass {
-    public void importSql() throws IOException {
+
+    String host = "10.0.86.77";
+    String username = "root";
+    String password = "";
+    String importDatabaseName = "sdc";
+    String dataImportPath = "c:\\data\\25\\data.sql";
+    String structImportPath = "c:\\data\\25\\struct.sql";
+
+
+    /*public void importSql() throws IOException {
         Runtime runtime = Runtime.getRuntime();
         //因为在命令窗口进行mysql数据库的导入一般分三步走，所以所执行的命令将以字符串数组的形式出现
         String cmdarray[] = getImportCommand();//根据属性文件的配置获取数据库导入所需的命令，组成一个数组
@@ -24,11 +38,11 @@ public class SqlClass {
             System.out.println(line);
         }
         //进程执行后面的代码
-        /*try {
+        *//*try {
             process.waitFor();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }*/
+        }*//*
         OutputStream os = process.getOutputStream();
         OutputStreamWriter writer = new OutputStreamWriter(os);
         //命令1和命令2要放在一起执行
@@ -36,7 +50,7 @@ public class SqlClass {
         writer.flush();
         writer.close();
         os.close();
-    }
+    }*/
 
     private String[] getImportCommand() {
         String username = "root";//用户名
@@ -62,5 +76,53 @@ public class SqlClass {
         System.out.println(importCommand);
         String[] commands = new String[]{loginCommand.toString(), switchCommand, importCommand};
         return commands;
+    }
+
+
+
+    @Test
+    public void importSql(/*String host,String username,String password,String importDatabaseName, String structImportPath,String dataImportPath*/)  throws Exception {
+        String driver = "com.mysql.jdbc.Driver";
+        String url = "jdbc:mysql://"+host+"/"+importDatabaseName;
+        String sqlTableNameEn = "asdifuaosdfuasdf;";
+        sqlTableNameEn = sqlTableNameEn.substring(0, sqlTableNameEn.length() - 1);
+        System.out.println(sqlTableNameEn);
+        Exception error = null;
+        Connection conn = null;
+        try {
+            Class.forName(driver);
+            conn = DriverManager.getConnection(url, username, password);
+            ScriptRunner runner = new ScriptRunner(conn);
+            //下面配置不要随意更改，否则会出现各种问题
+            runner.setAutoCommit(true);//自动提交
+            runner.setFullLineDelimiter(false);
+            runner.setDelimiter(";");////每条命令间的分隔符
+            runner.setSendFullScript(false);
+            runner.setStopOnError(false);
+            //	runner.setLogWriter(null);//设置是否输出日志
+            //如果又多个sql文件，可以写多个runner.runScript(xxx),
+            runner.runScript(new InputStreamReader(new FileInputStream(structImportPath), "utf-8"));
+            runner.runScript(new InputStreamReader(new FileInputStream(dataImportPath), "utf-8"));
+            close(conn);
+        } catch (Exception e) {
+            error = e;
+        } finally {
+            close(conn);
+        }
+        if (error != null) {
+            throw error;
+        }
+    }
+
+    private static void close(Connection conn){
+        try {
+            if(conn != null){
+                conn.close();
+            }
+        } catch (Exception e) {
+            if(conn != null){
+                conn = null;
+            }
+        }
     }
 }

@@ -182,11 +182,13 @@ public class FtpUtil {
         Long fileTotalSize = 0L;
         Long finishedSize = 0L;
         for (String s : localFileList) {
+            s = s.replace("%_%",File.separator);
             File file = new File(s);
             fileTotalSize += file.length();
         }
 
         for (String localFilepath : localFileList) {
+            localFilepath = localFilepath.replace("%_%",File.separator);
             String fileName = "";
             if(localFilepath.indexOf("/")>0){
                 fileName = localFilepath.substring(localFilepath.lastIndexOf("/")+1);

@@ -2,6 +2,7 @@ package cn.csdb.portal.repository;
 
 import cn.csdb.portal.model.DataTask;
 import cn.csdb.portal.repository.mapper.DataTaskMapper;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -23,11 +24,11 @@ import java.util.List;
 public class DataTaskDao {
     @Resource
     private JdbcTemplate jdbcTemplate;
+    @Resource
+    private MongoTemplate mongoTemplate;
 
     public DataTask get(int id) {
-        String sql = "select * from t_datatask where dataTaskId = ?";
-        List<DataTask> list = jdbcTemplate.query(sql, new Object[]{id}, new DataTaskMapper());
-        return list.size() > 0 ? list.get(0) : null;
+        return  mongoTemplate.findById(id,DataTask.class);
     }
 
     //更新
@@ -42,8 +43,8 @@ public class DataTaskDao {
         return result;
     }
 
-    public int insertDataTask(final DataTask dataTask) {
-        String sql = "insert into t_datatask(" +
+    public void insertDataTask(final DataTask dataTask) {
+        /*String sql = "insert into t_datatask(" +
                 "dataSourceId,dataTaskType,tableName," +
                 "SqlString,SqlTableNameEn,SqlFilePath," +
                 "FilePath,creator,status,SubjectCode,CreateTime) values " +
@@ -70,7 +71,9 @@ public class DataTaskDao {
         if (i > 0) {
             return keyHolder.getKey().intValue();
         }
-        return -1;
+        return -1;*/
+
+         mongoTemplate.save(dataTask);
     }
 
 

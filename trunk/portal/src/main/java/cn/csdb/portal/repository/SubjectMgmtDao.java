@@ -73,7 +73,7 @@ public class SubjectMgmtDao {
         logger.info("ftpFilePath = " + ftpFilePath);
         subject.setFtpFilePath(ftpFilePath);
         subject.setDbName(subject.getSubjectCode());
-        subject.setDbUsername(dbUserName);
+        subject.setDbUserName(dbUserName);
         subject.setDbPassword(dbPassword);
         subject.setDbHost(dbHost);
         subject.setDbPort(dbPort);

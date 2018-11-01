@@ -22,11 +22,23 @@ public class SubjectService {
      *
      * @param:  subjectCode:专题库代码
      * @return: Sujbect对像
-     * @auther: Administrator
+     * @auther: xiajl
      * @date:   2018/10/22 16:02
      */
     public Subject findBySubjectCode(String subjectCode){
         return subjectDao.findBySubjectCode(subjectCode);
+    }
+
+    /**
+     * Function Description: 根据用户名查找对象
+     *
+     * @param:
+     * @return:
+     * @auther: xiajl
+     * @date:   2018/10/31 9:37
+     */
+    public Subject findByUser(String userName){
+        return subjectDao.findByUser(userName);
     }
 
 

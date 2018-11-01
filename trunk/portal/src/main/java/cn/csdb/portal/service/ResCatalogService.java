@@ -55,14 +55,15 @@ public class ResCatalogService {
         themeJson.put("stripes",false);
         coreJson.put("theme",themeJson);
         ResCatalog_Mongo rootNode = resCatalogDao.getLocalRootNode();
-        JSONObject dataJson = treeNodePackage(rootNode.getId(),3,catalogType,rootNode.getObjectId());
+        JSONObject dataJson = treeNodePackage(rootNode.getId(),4,catalogType,rootNode.getObjectId());
         coreJson.put("data",dataJson);
         jsonObject.put("core",coreJson);
 //        type
         JSONObject typeJson = new JSONObject();
         JSONObject weilJson = new JSONObject();
         weilJson.put("max_children",1);
-        weilJson.put("max_depth",3);
+        //设置目录的深度
+        weilJson.put("max_depth",4);
         List valid_children1 = Arrays.asList("root");
         weilJson.put("valid_children",valid_children1);
         typeJson.put("#",weilJson);

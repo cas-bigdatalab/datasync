@@ -31,7 +31,7 @@
                     <div class="form-group" >
                         <label >数据类型</label>
                         <select  id="dataSourceList" class="form-control" style="width: 150px">
-                            <option value="">----------</option>
+                            <option value="">全部</option>
                             <option value="db">关系数据库</option>
                             <option value="file">文件数据库</option>
                         </select>
@@ -39,12 +39,12 @@
                     <div class="form-group">
                         <label  >状态</label>
                         <select  id="dataStatusList" class="form-control" style="width: 150px">
-                            <option value="">----------</option>
+                            <option value="">全部</option>
                             <option value="1">上传完成</option>
                             <option value="0">未上传</option>
                         </select>
                     </div>
-                    <button type="button" class="btn blue" style="margin-left: 49px">查询</button>
+                    <button type="button" class="btn blue" style="margin-left: 49px" id="seachTaskSource">查询</button>
                     <button type="button" class="btn green" style="margin-left: 49px" onclick="relCreateTask()">新建任务</button>
                 </form>
             </div>
@@ -61,7 +61,7 @@
                     <th>创建时间</th>
                     <th>上传进度</th>
                     <th>状态</th>
-                    <th>操作</th>
+                    <th width="29%">操作</th>
                 </tr>
                 </thead>
                 <tbody id="bd-data"></tbody>
@@ -82,49 +82,49 @@
                 <form class="form-horizontal">
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务标识:</label>
-                        <div class="col-sm-8" name="tast-"></div>
+                        <div class="col-sm-8 modediv" id="pre-dataTaskName"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">数据源ID:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8 modediv" id="pre-dataSourceId"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">表名:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8 modediv" id="pre-tableName"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">SQL语句:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8 modediv" id="pre-sqlString"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">逻辑表名:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8 modediv" id="pre-sqlTableNameEn"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">文件路径:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8 modediv" id="pre-filePath"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">创建时间:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8 modediv" id="pre-createTime"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">创建者:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8 modediv" id="pre-creator"></div>
                     </div>
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label  class="col-sm-3 control-label">上传进度:</label>
                         <div class="col-sm-8"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务状态:</label>
-                        <div class="col-sm-8"></div>
+                        <div class="col-sm-8" id="pre-status"></div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn green" data-dismiss="modal" ><i
-                        class="glyphicon glyphicon-ok"></i>完成
+                        class="glyphicon glyphicon-ok"></i>确认
                 </button>
                 <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
             </div>
@@ -132,24 +132,24 @@
     </div>
 </div>
 <script type="text/html" id="resourceTmp1">
-    {{each data as value i}}
+    {{each dataTasks as value i}}
     <tr keyIdTr="{{value.dataTaskId}}">
         <td>{{i + 1}}</td>
-        <td>{{value.sqlTableNameEn}}</td>
+        <td>{{value.dataTaskName}}</td>
         <td>{{value.dataTaskType}}</td>
-        <td>{{value.source}}</td>
-        <td>{{value.createTime}}</td>
+        <td>{{value.dataSrc.dataSourceName}}</td>
+        <td>{{dateFormat(value.createTime)}}</td>
         <td  id="{{value.dataTaskId}}">--</td>
         <td  class="{{value.dataTaskId}}">{{upStatusName(value.status)}}</td>
         <td>
-            <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" >导出SQL文件</button>
+            <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" >&nbsp;&nbsp;&nbsp;导出&nbsp;&nbsp;&nbsp;</button>
             {{if value.status  == 1}}
-            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" disabled style="background-color: dimgrey">{{btnName(value.status)}}</button>
+            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" disabled style="background-color: dimgrey">重新上传</button>
             {{else if value.status  == 0}}
-            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}">{{btnName(value.status)}}</button>
+            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}">&nbsp;&nbsp;&nbsp;上传&nbsp;&nbsp;&nbsp;</button>
             {{/if}}
             <button type="button" class="btn  edit-data btn-xs blue" keyIdTd="{{value.dataTaskId}}" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-            <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataSourceId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+            <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
 
         </td>
     </tr>
@@ -159,28 +159,29 @@
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
     <script>
-        var searchObj={}
+        var dataSourceName=""
+        var dataSourceStatus=""
         function relCreateTask(){
             window.location.href="${ctx}/createTask";
         }
         $(function(){
-            tableConfiguration2(1)
+            tableConfiguration2(1,"","")
             /*$.ajax({
                 url:
             })*/
         });
         $("#dataSourceList").on("change",function () {
-            var id = $("#dataSourceList option:selected").attr("id");
-            dataRelSrcId =id;
-            var name = $(this).val();
+            dataSourceName= $("#dataSourceList option:selected").val();
+
         });
         $("#dataStatusList").on("change",function () {
-            var id = $("#dataStatusList option:selected").attr("id");
-            dataRelSrcId =id;
-            var name = $(this).val();
+            dataSourceStatus = $("#dataStatusList option:selected").val();
 
 
         });
+        $("#seachTaskSource").click(function () {
+            tableConfiguration2(1,dataSourceName,dataSourceStatus)
+        })
         //导出SQL文件
         $("#upload-list").delegate(".exportSql","click",function () {
             var souceID = $(this).attr("keyIdTd");
@@ -193,7 +194,10 @@
                     console.log(data.result);
                     if (data.result == 'true') {
                         toastr.success("导出SQL文件成功!");
+                    }else {
+                        toastr.error("导出SQL文件失败!");
                     }
+
                 },
                 error:function () {
                     console.log("请求失败")
@@ -201,23 +205,21 @@
             })
         });
         /* localStorage.setItem("uploadTask",uploadTasks)*/
-        template.helper("btnName",function (num) {
+        /*template.helper("uploadName",function (num) {
             var name=""
             if(num ==0){
-                name="&nbsp;&nbsp;&nbsp;上传&nbsp;&nbsp;&nbsp;"
+                name="未上传"
             }else {
-                name="重新上传"
+                name="上传成功"
             }
             return name
-        })
+        })*/
         template.helper("upStatusName",function (num) {
             var name=""
             if(num ==0){
-                name="--"
+                name="未上传"
             }else if(num == 1 ) {
-                name="正在导入"
-            }else {
-                name ="导入完成"
+                name="导入完成"
             }
             return name
         })
@@ -234,6 +236,11 @@
                 type:"POST",
                 data:{dataTaskId:souceID,processId:keyID},
                 success:function (data) {
+                    if(data == 1){
+                        $("."+souceID).text("导入完成")
+                    }else {
+                        $("."+souceID).text("导入失败")
+                    }
 
                     /*send request get Process */
 
@@ -249,13 +256,26 @@
         $("#upload-list").delegate(".edit-data","click",function () {
             /*send request*/
             var souceID = $(this).attr("keyIdTd");
-
             $.ajax({
                 url:"${ctx}/datatask/detail",
                 type:"POST",
                 data:{datataskId:souceID},
                 success:function (data) {
-                    console.log(JSON.parse(data))
+                   var datatask = JSON.parse(data).datatask
+
+                    $("#pre-dataTaskName").html(datatask.dataTaskName)
+                    $("#pre-dataSourceId").html(datatask.dataSourceId)
+                    $("#pre-tableName").html(datatask.tableName)
+                    $("#pre-sqlString").html(datatask.sqlString)
+                    $("#pre-sqlTableNameEn").html(datatask.sqlTableNameEn)
+                    $("#pre-filePath").html(datatask.filePath)
+                    $("#pre-createTime").html(datatask.createTime)
+                    $("#pre-creator").html(datatask.creator)
+                    if(datatask.status == 1){
+                        $("#pre-").html("导入完成")
+                    }else {
+                        $("#pre-").html("未导入完成")
+                    }
 
                 },
                 error:function () {
@@ -266,20 +286,29 @@
         })
         <!-- remove dataTask-->
         function removeData(id){
-            $.ajax({
-                url:"${ctx}/datatask/delete",
-                type:"POST",
-                data:{
-                    datataskId:id
-                },
-                success:function (data) {
-                    console.log(data);
-                    tableConfiguration2(1);
-                },
-                error:function () {
-                    console.log("请求失败");
+            bootbox.confirm("确认删除",function (r) {
+                if(r){
+                    $.ajax({
+                        url:"${ctx}/datatask/delete",
+                        type:"POST",
+                        data:{
+                            datataskId:id
+                        },
+                        success:function (data) {
+                            toastr["success"]("删除成功");
+                            tableConfiguration2(1,"","");
+                        },
+                        error:function () {
+                            toastr["error"]("删除失败");
+                            console.log("请求失败");
+                        }
+                    })
+                }else {
+
                 }
             })
+
+
         }
         var arr = []
        /* var json = {
@@ -304,8 +333,6 @@
         }else {
             var uploadTasks=JSON.parse(localStorage.getItem("uploadList"));
         }
-
-
 
         /*//导出SQL文件
         $("#upload-list").delegate(".exportSql","click",function () {
@@ -336,11 +363,17 @@
                         processId:keyID
                     },
                     success:function (data) {
-                        console.log(data)
                         if(data == "100"){
                             $("#"+souceID).text(data+"%");
                             $("."+souceID).text("上传完成")
                             clearInterval(setout)
+                            return
+                        }
+                        if($("."+souceID).text() == "导入失败"){
+                            console.log("bbb"+$("#"+souceID).text())
+                            $("#"+souceID).text("--")
+                            clearInterval(setout)
+                            return
                         }
                         $("#"+souceID).text(data+"%");
                     }
@@ -372,9 +405,9 @@
                         $(".page-list").off();
                         $('.page-list').empty();
                     }
-                    $(".page-message").html("当前第"+dataFile.pageNum +"页,共"+dataFile.totalPage +"页,共"+dataFile.totalNum+"条数据");
+                    $(".page-message").html("当前第"+DataList.pageNum +"页,共"+DataList.pageSize +"页,共"+DataList.totalCount+"条数据");
                     $('#page-list').bootpag({
-                        total: DataList.totalPage,
+                        total: DataList.pageSize,
                         page: DataList.pageNum,
                         maxVisible: 6,
                         leaps: true,
@@ -397,17 +430,16 @@
                 }
             })
         }
-        function tableConfiguration2(num) {
+        function tableConfiguration2(num,datataskType,status) {
             $.ajax({
                 url:"${ctx}/datatask/list",
                 type:"GET",
                 data:{
                     pageNo:num,
-                    datataskType:"",
-                    status:""
+                    datataskType:datataskType,
+                    status:status
                 },
                 success:function (data) {
-                    console.log(data);
                     $(".table-message").hide();
                     $("#bd-data").html("");
                     var DataList = JSON.parse(data);
@@ -429,10 +461,10 @@
                         $(".page-list").off();
                         $('.page-list').empty();
                     }
-                    $(".page-message").html("当前第"+1 +"页,共"+5 +"页,共"+10+"条数据");
+                    $(".page-message").html("当前第"+DataList.pageNum +"页,共"+DataList.pageSize +"页,共"+DataList.totalCount+"条数据");
                     $('.page-list').bootpag({
-                        total: 5,
-                        page:num,
+                        total: DataList.pageSize,
+                        page:DataList.pageNo,
                         maxVisible: 6,
                         leaps: true,
                         firstLastUse: true,
@@ -446,36 +478,13 @@
                         lastClass: 'last',
                         firstClass: 'first'
                     }).on('page', function (event, num) {
-                        tableConfiguration2(num);
+                        tableConfiguration2(num,datataskType,status);
                     });
                 },
                 error:function () {
                     $(".table-message").html("请求失败");
                 }
             })
-        }
-
-        function formatDate(date) {
-            dates = date.split("/");
-            if(dates.length == 3) {
-                if(dates[1].length == 1) {
-                    dates[1] = "0" + dates[1];
-                }
-                if (dates[2].length == 1) {
-                    dates[2] = "0" + dates[2];
-                }
-                date = dates.join("-");
-                return date;
-            } else {
-                return null;
-            }
-        }
-        function parseTime(timestamp) {
-            var date = new Date(parseInt(timestamp)).toLocaleDateString();
-            //输出结果为2016/8/9
-            date = formatDate(date);
-            //输出结果为2016-08-09，满足YYYY-MM-DD格式要求
-            return date;
         }
 
 

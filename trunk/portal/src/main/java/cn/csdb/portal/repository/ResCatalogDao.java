@@ -121,7 +121,8 @@ public class ResCatalogDao {
     public int deleteLocalResCatalog(int id) {
         /*String sql = "delete from t_localcatalog where id=?";
         return jdbcTemplate.update(sql, id);*/
-        mongoTemplate.remove(mongoTemplate.find(new Query(Criteria.where("id").is(id)),ResCatalog_Mongo.class));
+        ResCatalog_Mongo r = mongoTemplate.find(new Query(Criteria.where("id").is(id)),ResCatalog_Mongo.class).get(0);
+        mongoTemplate.remove(r);
         return 1;
     }
 

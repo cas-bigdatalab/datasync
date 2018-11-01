@@ -22,10 +22,13 @@ import java.util.Map;
  * @create: 2018-09-11 09:48
  **/
 public class FtpClass {
-    String filePath = "";
+    String filePath = "/";
+//    String host = "10.0.86.77";
     String host = "159.226.30.10";
     String port = "21";
+//    String userName = "ftpUsercode2";
     String userName = "sdcbackup";
+//    String password = "ftpPasswordcode2";
     String password = "sdcfilecopy03";
 
 
@@ -368,8 +371,8 @@ public class FtpClass {
         try {
             this.connect(host, new java.lang.Integer(port), userName, password);
 
-            this.download("/201803/csdb.cn/csdb20180205.tar.gz", "C:\\ftp\\csdb20180205.tar.gz");
-            //System.out.println(this.upload("C:\\ftp\\csdb20180205.tar.gz", "/ftptest/csdb20180205.tar.gz"));
+//            this.download("/201803/csdb.cn/csdb20180205.tar.gz", "C:\\ftp\\csdb20180205.tar.gz");
+            System.out.println(this.upload("C:\\ftp\\csdb20180205.tar.gz", "/sdc00130.zip"));
             this.disconnect();
         } catch (IOException e) {
             System.out.println("连接FTP出错：" + e.getMessage());
