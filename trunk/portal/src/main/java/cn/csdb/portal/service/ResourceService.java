@@ -1,10 +1,16 @@
 package cn.csdb.portal.service;
 
 import cn.csdb.portal.repository.ResourceDao;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -67,5 +73,52 @@ public class ResourceService {
     @Transactional(readOnly = true)
     public long countByPage(String subjectCode, String title,String publicType, String status){
         return resourceDao.countByPage(subjectCode,title,publicType, status);
+    }
+/*----------------------------------------------------------------------------------------*/
+
+    public List<JSONObject> fileSourceFileList(String filePath) {
+        List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
+//        File file = new File(filePath);
+//        if (!file.exists() || !file.isDirectory())
+//            return jsonObjects;
+        String[] fp = filePath.split(";");
+        for (int i = 0; i < fp.length; i++) {
+            if(StringUtils.isBlank(fp[i])){
+                continue;
+            }
+            File file = new File(fp[i]);
+            if(!file.exists()){
+                continue;
+            }
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", file.getPath().replaceAll("\\\\","%_%"));
+            jsonObject.put("text", file.getName().replaceAll("\\\\","%_%"));
+            if (file.isDirectory()) {
+                jsonObject.put("type", "directory");
+                JSONObject jo = new JSONObject();
+                jo.put("disabled","true");
+                jsonObject.put("state",jo);
+            } else {
+                jsonObject.put("type", "file");
+            }
+            jsonObjects.add(jsonObject);
+        }
+        Collections.sort(jsonObjects, new FileComparator());
+        return jsonObjects;
+    }
+
+    class FileComparator implements Comparator<JSONObject> {
+
+        public int compare(JSONObject o1, JSONObject o2) {
+            if ("directory".equals(o1.getString("type")) && "directory".equals(o2.getString("type"))) {
+                return o1.getString("text").compareTo(o2.getString("text"));
+            } else if ("directory".equals(o1.getString("type")) && !"directory".equals(o2.getString("type"))) {
+                return -1;
+            } else if (!"directory".equals(o1.getString("type")) && "directory".equals(o2.getString("type"))) {
+                return 1;
+            } else {
+                return o1.getString("text").compareTo(o2.getString("text"));
+            }
+        }
     }
 }
