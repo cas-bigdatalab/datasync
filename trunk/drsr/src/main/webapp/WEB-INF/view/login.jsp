@@ -58,7 +58,7 @@
         <span>烟草专题库客户端登录</span>
 
         <div id="u" class="form-group">
-            <input id="userName" spellcheck="false" class="form-control" name="userName" type="text" size="18" alt="userName" required="" />
+            <input id="userName" spellcheck="false" class="form-control" name="userName" type="text" size="18" required="" />
             <span class="form-highlight"></span>
             <span class="form-bar"></span>
             <label for="userName" class="float-label">用户名</label>
@@ -74,7 +74,7 @@
         </div>
 
         <div id="p" class="form-group">
-            <input id="password" class="form-control" spellcheck=false name="password" type="password" size="18" alt="userName" required="">
+            <input id="password" class="form-control" spellcheck=false name="password" type="password" size="18" required="" />
             <span class="form-highlight"></span>
             <span class="form-bar"></span>
             <label for="password" class="float-label">密&nbsp;&nbsp;&nbsp;&nbsp;码</label>
@@ -102,6 +102,7 @@
 </div>
 
 <script src="${ctx}/resources/bundles/jquery/jquery.min.js" type="text/javascript"></script>
+<script src="${ctx}/resources/js/jquery.base64.js" />
 <script type="text/javascript">
     $(document).ready(function () {
         $(function () {
@@ -208,7 +209,8 @@
 
                     if(loginStatus == 1) {
                         console.log("登录成功！");
-                        window.self.location.href="${ctx}/index";
+                        //userName = $.base64.atob(userName);
+                        window.self.location.href="${ctx}/index?userName="+userName;
                     }
                     else {
                         $("#loginNotice").html("用户名或者密码错误，请重新输入!");

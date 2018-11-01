@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
@@ -25,9 +26,9 @@ public class IndexController {
     }
 
     @RequestMapping("/")
-    public ModelAndView login()
+    public ModelAndView login(@RequestParam(name="userName",required = false) String userName)
     {
-        logger.info("登录认证页面");
+        logger.info("登录认证页面 - userName = " + userName);
         ModelAndView mv = new ModelAndView("login");
         return  mv;
     }

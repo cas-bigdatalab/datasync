@@ -34,8 +34,8 @@ public class ResourceService {
      * @date: 2018/10/23 16:22
      */
     @Transactional
-    public void save(cn.csdb.portal.model.Resource resource) {
-        resourceDao.save(resource);
+    public String save(cn.csdb.portal.model.Resource resource) {
+        return resourceDao.save(resource);
     }
 
     /**
@@ -120,5 +120,9 @@ public class ResourceService {
                 return o1.getString("text").compareTo(o2.getString("text"));
             }
         }
+    }
+
+    public cn.csdb.portal.model.Resource getById(String resourceId){
+        return resourceDao.getById(resourceId);
     }
 }

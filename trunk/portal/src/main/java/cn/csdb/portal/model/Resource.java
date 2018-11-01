@@ -59,13 +59,13 @@ public class Resource {
     @Field("createdByOrganization")
     private String createdByOrganization; //创建机构
     @Field("createdBy")
-    private String createdBy ; //创建人员
+    private String createdBy; //创建人员
     @Field("creationDate")
     private Date creationDate; //创建日期
     @Field("organizationName")
     private String organizationName; //机构
     @Field("email")
-    private String email ; //邮件
+    private String email; //邮件
     @Field("phoneNum")
     private String phoneNum; //电话
     @Field("updateDate")
@@ -78,6 +78,8 @@ public class Resource {
     private long toFilesNumber;  //总文件数
     @Field("toRecordNumber")
     private long toRecordNumber; //总记录数
+    @Field("userGroupId")
+    private String userGroupId;
 
     public String getId() {
         return id;
@@ -325,5 +327,13 @@ public class Resource {
 
     public void setToRecordNumber(long toRecordNumber) {
         this.toRecordNumber = toRecordNumber;
+    }
+
+    public String getUserGroupId() {
+        return userGroupId;
+    }
+
+    public void setUserGroupId(String userGroupId) {
+        this.userGroupId = userGroupId;
     }
 }
