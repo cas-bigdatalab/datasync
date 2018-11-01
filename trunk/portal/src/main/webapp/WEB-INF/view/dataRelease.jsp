@@ -73,7 +73,7 @@
                         <td>2018-04-02 10:14</td>
                         <td>成功</td>
                         <td>
-                            <button type="button" class="btn green btn-xs " >重新发布</button>
+                            <button type="button" class="btn green btn-xs " onclick="resSend()">重新发布</button>
                             <button type="button" class="btn blue btn-xs" >查看</button>
                         </td>
                     </tr>
@@ -185,6 +185,9 @@
         $("#seachDataSource").click(function () {
             tableConfiguration2(1,dataSourceName,dataSourceStatus)
         })
+        function resSend() {
+            window.location.href="${ctx}/dataSourceDescribeEdit"
+        }
         function newRelease() {
             window.location.href="${ctx}/dataSourceDescribe"
         }

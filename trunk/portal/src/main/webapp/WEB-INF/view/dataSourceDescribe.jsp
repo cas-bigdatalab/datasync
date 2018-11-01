@@ -19,9 +19,8 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jqeury-file-upload/css/jquery.fileupload.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.css">
     <style>
-        .bar {
-            height: 18px;
-            background: green;
+        .undeslist label{
+            font-size: 18px;
         }
     </style>
 </head>
@@ -35,7 +34,7 @@
                 <div class="portlet-title" style="background-color:#3fd5c0">
                     <div class="caption">
                         <i class="fa fa-gift"></i> 数据发布 - <span class="step-title">
-								第&nbsp;1&nbsp;步,共&nbsp;3&nbsp;步</span>
+								第&nbsp;<span id="staNum"></span>&nbsp;步,共&nbsp;3&nbsp;步</span>
                     </div>
                 </div>
                 <div class="portlet-body form">
@@ -127,6 +126,15 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">资源目录<span  class="required">
+													* </span>
+                                            </label>
+                                            <div class="col-md-4" id="cemterCatalogDiv" >
+                                                <input type="hidden" name="centerCatalogId" id="centerCatalogId">
+                                                <div id="jstree-demo"></div>
+                                            </div>
+                                        </div>
                                         <div class="form-group dataLicenseInputGroup">
                                             <label class="control-label col-md-3">描述 <span class="required">
 													* </span>
@@ -154,37 +162,44 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">来源<span span class="required">
+                                            <label class="control-label col-md-3">来源<span  class="required">
 													* </span></label>
-                                            <div class="col-md-6" id="cemterCatalogDiv">
+                                            <div class="col-md-6" id="dataSourceDes">
                                                 <textarea name="dataSourceDes" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;"></textarea>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="tab-pane" id="tab2">
-                                    <h3 class="block">实体据信息描述</h3>
-                                    <div style="overflow: hidden">
-                                        <div class="col-md-3" style="font-size: 18px">
-                                            <span>选择表资源查看/修改描述</span>
+                                    <h3 class="block">确定数据对象范围，发布数据</h3>
+                                    <h3>
+                                        <span>数据源:</span>
+                                        <label for="aaa" style="font-size: 23px;color: #1CA04C">数据库表</label>
+                                        <input name="ways" type="radio" checked="checked" value="DB" id="aaa"/>
+                                        <label for="bbb" style="font-size: 23px;color: #1CA04C">文件型数据</label>
+                                        <input name="ways" type="radio" value="LH" id="bbb"/>
+                                    </h3>
+                                    <div style="overflow: hidden" class="select-database" >
+                                        <div class="col-md-3" style="font-size: 18px;text-align:right ">
+                                            <span>选择表资源</span>
                                         </div>
                                         <div class="col-md-9" >
                                             <div class="row undeslist" >
                                                 <div class="col-md-4">
                                                     <label>
-                                                        <input type="radio">
+                                                        <input type="checkbox">
                                                         <span>dictionay</span>
                                                     </label>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label>
-                                                        <input type="radio">
+                                                        <input type="checkbox">
                                                         <span>dictionay</span>
                                                     </label>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label>
-                                                        <input type="radio">
+                                                        <input type="checkbox">
                                                         <span>dictionay</span>
                                                     </label>
                                                 </div>
@@ -192,9 +207,38 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div style="overflow: hidden;display: none" class="select-local">
+                                        <div class="col-md-6 col-md-offset-3" style="font-size: 18px">
 
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="tab-pane" id="tab3"></div>
+                                <div class="tab-pane" id="tab3">
+
+                                    <h3>确定数据对象发布的权限分配范围</h3>
+                                    <div class="col-md-6 col-md-offset-3" style="font-size: 18px">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label for="inputEmail3" class="col-sm-2 control-label">可公开范围</label>
+                                                <div class="col-sm-10">
+                                                    <select name="" id="inputEmail3" class="form-control">
+                                                        <option value="">请选择公开范围</option>
+                                                        <option value="">外网公开用户</option>
+                                                        <option value="">内网用户</option>
+                                                        <option value="">质量组用户</option>
+                                                        <option value="">分析组用户</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label  class="col-sm-2 control-label">已选择</label>
+                                                <div class="col-sm-10">
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-actions">
@@ -229,12 +273,22 @@
         var ctx = '${ctx}';
         var initNum =1
         $(".progress-bar-success").width(initNum*33+"%");
+        $("[name='ways']").on("change",function () {
+            if(this.value =="DB"){
+                $(".select-database").show();
+                $(".select-local").hide();
 
-
+            }else {
+                $(".select-database").hide();
+                $(".select-local").show();
+            }
+        })
+        initCenterResourceCatalogTree($("#jstree-demo"));
 
         function fromAction(flag) {
             if(flag){
-                ++initNum
+                ++initNum;
+                $("#staNum").html(initNum)
                 $(".progress-bar-success").width(initNum*33+"%");
                 if(initNum ==2){
                     $("#tab1").removeClass("active")
@@ -250,6 +304,7 @@
                 }
             }else {
                 --initNum
+                $("#staNum").html(initNum)
                 $(".progress-bar-success").width(initNum*33+"%");
                 if(initNum == 1){
                     $("#tab2").removeClass("active")
@@ -265,8 +320,73 @@
                 }
             }
         }
+        function initCenterResourceCatalogTree(container, classId) {
+            $.ajax({
+                url: ctx + "/getLocalResCatalogList",
+                type: "get",
+                dataType: "json",
+                async:false,
+                success: function (data) {
+                    if (data.length == 0) {
+                        bootbox.alert("注册员还没有编辑分类信息，暂时不能注册数据");
+                        window.location.href = ctx;
+                    } else {
+                        var jstreeData = parseDataToJstreeData(data);
+                        $(container).jstree({
+                            "core": {
+                                'multiple': false,
+                                'force_text': true,
+                                "expand_selected_onload": true,
+                                'dblclick_toggle': false,
+                                'check_callback': false,
+                                'data': jstreeData
+                            }
+                        }).bind("select_node.jstree", function (event, selected) {
+                            $(".button-save").removeAttr("disabled");
+                            $("#centerCatalogId").val(selected.node.id);
+                        }).bind("ready.jstree", function () {
+                            if (classId) {
+                                var jstree = $.jstree.reference("#jstree-demo");
+                                var node = jstree.get_node(classId, true);
+                                jstree.select_node(node);
+                            }
+                            $("#jstree-demo").find(".jstree-anchor").each(function(){
+                                $(this).attr("style","width:200px");
+                            });
+                        });
 
 
+                    }
+
+                }
+            });
+
+
+        }
+        function parseDataToJstreeData(data) {
+            var jstreeData = [];
+            for (var i = 0; i < data.length; i++) {
+                var node = {};
+                node.id = data[i].id;
+                node.icon = "jstree-folder";
+                node.text = data[i].name;
+                if (data[i].parentid == 0) {
+                    node.parent = '#';
+                    rootId = node.id;
+                } else {
+                    node.parent = data[i].parentid;
+                }
+                var state = {};
+                state.opened = true;
+                node.state = state;
+                jstreeData.push(node);
+            }
+
+
+            if (data.length == 1)
+                selectedId = data[0].id;
+            return jstreeData;
+        }
     </script>
 </div>
 
