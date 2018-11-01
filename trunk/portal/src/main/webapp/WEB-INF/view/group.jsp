@@ -34,10 +34,73 @@
                         用户组管理</a>
                 </li>
             </ul>
+
             <div class="tab-content">
                 <div class="tab-pane active" id="userContent" style="min-height: 400px">
-                    用户
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12 col-lg-12">
+
+                            <div class="alert alert-info" role="alert">
+                                <!--查询条件 -->
+                                <div class="row">
+                                    <div class="col-md-12">
+
+                                        <label class="control-label">用户账号</label>
+                                        <input type="text" id="account" name="account" placeholder="用户账号" class="input-small search-text">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+
+                                        <label class="control-label">用户名</label>
+                                        <input type="text" id="userName" name="userName" placeholder="用户名" class="input-small search-text">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+
+                                        <label class="control-label">用户组</label>
+                                        <input type="text" id="group" name="group" placeholder="用户组" class="input-small search-text">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+
+                                        <button id="userSearch" name="userSearch" onclick="search();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查询</button>
+                                        &nbsp;&nbsp;
+                                        <button id="userAdd" name="userAdd" onclick="" class="btn info green btn-sm"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建用户</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-scrollable">
+                                <table class="table table-striped table-bordered table-advance table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 5%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编号</th>
+                                        <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户名 </th>
+                                        <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">账号 </th>
+                                        <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">创建时间</th>
+
+                                        <th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">状态</th>
+                                        <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户组</th>
+                                        <th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="userList">
+                                        <td style="width: 5%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编号</td>
+                                        <td style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户名 </td>
+                                        <td style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">账号 </td>
+                                        <td style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">创建时间</td>
+
+                                        <td style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">状态</td>
+                                        <td style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户组</td>
+                                        <td style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">操作</td>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row margin-top-20">
+                                <div class="col-md-6 margin-top-10">
+                                    当前第<span style="color:blue;" id="currentPageNum"></span>页,共<span style="color:blue;" id="pageCnt"></span>页, 共<span style="color:blue;" id="totalCnt"></span>条数据
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="pagination1" style="float: right"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="tab-pane" id="groupContent">
                     <div class="row">
                         <div class="col-xs-12 col-md-12 col-lg-12">
@@ -86,11 +149,33 @@
                 </div>
 
             </div>
+
+
+
         </div>
     </div>
 
 
 </div>
+
+
+<script type="text/html" id="userListTable">
+    {{each list}}
+    <tr>
+        <td style="text-align: center">{{(currentPage-1)*pageSize+$index+1}}</td>
+        <td><a href="javascript:editData('{{$value.id}}');">{{$value.groupName}}</a>
+        </td>
+        <td style="text-align: center">{{$value.desc}}</td>
+        <td style="text-align: center">{{dateFormat($value.createTime)}}</td>
+        <td id="{{$value.id}}" style="text-align: center">
+            <%--<button class="btn default btn-xs green-stripe" onclick="viewData()">查看</button>&nbsp;&nbsp;--%>
+            <button class="btn default btn-xs purple updateButton" onclick="editData('{{$value.id}}')"><i class="fa fa-edit"></i>&nbsp;&nbsp;修改</button>&nbsp;&nbsp;
+            <button class="btn default btn-xs red" onclick="deleteData('{{$value.id}}')"><i class="fa fa-trash"></i>&nbsp;&nbsp;删除</button>
+        </td>
+    </tr>
+    {{/each}}
+</script>
+
 
 <script type="text/html" id="groupTmpl">
     {{each list}}
@@ -112,7 +197,7 @@
 </body>
 
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
-<div id="siteMeshJavaScript">
+<div id="siteMeshJavaScriptForGroup">
     <script src="${ctx}/resources/bundles/rateit/src/jquery.rateit.js" type="text/javascript"></script>
     <script src="${ctx}/resources/bundles/artTemplate/template.js"></script>
     <script src="${ctx}/resources/js/subStrLength.js"></script>

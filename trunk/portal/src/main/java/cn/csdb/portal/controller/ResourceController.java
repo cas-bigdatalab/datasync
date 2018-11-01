@@ -120,7 +120,7 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         IDataSource dataSource = DataSourceFactory.getDataSource("mysql");
         Connection connection = dataSource.getConnection(subject.getDbHost(), subject.getDbPort(),
-                subject.getDbUsername(), subject.getFtpPassword(), subject.getDbName());
+                subject.getDbUserName(), subject.getFtpPassword(), subject.getDbName());
         if (connection == null)
             return null;
         List<String> list = dataSource.getTableList(connection);
