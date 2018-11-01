@@ -222,7 +222,7 @@
         </td>
         <td style="text-align: center">{{$value.desc}}</td>
         <td style="text-align: center">{{dateFormat($value.createTime)}}</td>
-        <td id="{{$value.id}}" style="text-align: center">
+        <td id="a{{$value.id}}" style="text-align: center">
             <%--<button class="btn default btn-xs green-stripe" onclick="viewData()">查看</button>&nbsp;&nbsp;--%>
             <button class="btn default btn-xs purple updateButton" onclick="editData('{{$value.id}}')"><i class="fa fa-edit"></i>&nbsp;&nbsp;修改</button>&nbsp;&nbsp;
             <button class="btn default btn-xs red" onclick="deleteData('{{$value.id}}')"><i class="fa fa-trash"></i>&nbsp;&nbsp;删除</button>
