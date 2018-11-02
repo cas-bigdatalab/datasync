@@ -6,6 +6,8 @@ import cn.csdb.portal.service.SubjectService;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.sql.Connection;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -120,7 +124,7 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         IDataSource dataSource = DataSourceFactory.getDataSource("mysql");
         Connection connection = dataSource.getConnection(subject.getDbHost(), subject.getDbPort(),
-                subject.getDbUserName(), subject.getFtpPassword(), subject.getDbName());
+                subject.getDbUserName(), subject.getDbPassword(), subject.getDbName());
         if (connection == null)
             return null;
         List<String> list = dataSource.getTableList(connection);
@@ -200,6 +204,15 @@ public class ResourceController {
     }
 
 
+    /**
+     *
+     * Function Description: 添加资源第一步保存
+     *
+     * @param: [resourceId, publicType, dataList]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/2 10:45
+     */
     @ResponseBody
     @RequestMapping(value = "addResourceSecondStep")
     public JSONObject addResourceSecondStep(@RequestParam(name = "resourceId")String resourceId,
@@ -211,11 +224,42 @@ public class ResourceController {
         resource.setPublicType(publicType);
         if(publicType.equals("mysql")){
             resource.setPublicContent(dataList);
+            resource.setToFilesNumber(0);
         }else if(publicType.equals("file")){
-            resource.setFilePath(dataList);
+            StringBuffer sb = new StringBuffer();
+            long size = 0L;
+            if(StringUtils.isNoneBlank(dataList)){
+                String[] s = dataList.split(";");
+                for(String str : s){
+                    str = str.replaceAll("%_%", "/");
+                    File file = new File(str);
+                    if (file.isDirectory()) {
+                        Collection<File> files = FileUtils.listFiles(file, null, true);
+                        for (File file1 : files) {
+                            String fp = file1.getPath();
+                            size += file1.length();
+                            if (fp.indexOf("\\") > -1) {
+                                fp = fp.replaceAll("\\\\", "/");
+                            }
+                            sb.append(fp+";");
+                        }
+                    }
+                }
+            }
+            resource.setFilePath(sb.toString().replace("/","%_%"));
+            resource.setToMemorySize(String.valueOf(size));
         }
         resourceService.save(resource);
         return jsonObject;
     }
+
+    /*@ResponseBody
+    @RequestMapping(value = "addResourceSecondStep")
+    public JSONObject addResourceSecondStep(@RequestParam(name = "resourceId")String resourceId,
+                                            @RequestParam(name = "userGroupIdList")String userGroupIdList){
+        JSONObject jsonObject = new JSONObject();
+        return jsonObject;
+    }*/
+
 
 }
