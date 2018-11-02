@@ -58,7 +58,7 @@
     <div class="page-header-inner">
         <!-- BEGIN LOGO -->
         <div class="page-logo" style="width: auto;">
-            <a href="${ctx}/">
+            <a href="${ctx}/index">
                 <h4 style="margin-top:14px ">DataSync烟草专题库客户端</h4>
             </a>
         </div>
@@ -67,12 +67,12 @@
             <ul class="nav navbar-nav pull-right">
                 <!-- BEGIN USER LOGIN DROPDOWN -->
                 <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-                <li class="dropdown dropdown-user">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
-                       data-close-others="true">
-                        <i class="glyphicon glyphicon-user"></i>
 
-                        <i class="fa fa-angle-down"></i>
+                <li>
+                    <a href="${ctx}/">
+                        <span style="color:black;">hi, ${userName} &nbsp</span>
+                        <i class="glyphicon glyphicon-user" style="color: white;"></i>
+                        <i class="fa fa-angle-down" style="color: white;"></i>
                     </a>
                 </li>
                 <!-- END USER LOGIN DROPDOWN -->

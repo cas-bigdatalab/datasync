@@ -33,6 +33,7 @@
     <!--the page to add subject-->
     <a title="添加关系数据库" id="showAddSubjectDialog" data-target="#addSubjectDialog" data-toggle="modal" >
         <span class="btn green btn-sm">
+            <i class="glyphicon glyphicon-plus"></i>
             添加专题库
         </span>
     </a>
@@ -73,11 +74,11 @@
                     <td>${subject.ftpPassword}</td>
                     <td id="${subject.id}">
                         <a title="修改" class="updateSubjectBtn" data-target="#updateSubjectDialog" data-toggle="modal">
-                            <span class="btn default btn-xs purple updateButton">修改</span>
+                            <span class="btn default btn-xs purple updateButton"><i class="fa fa-edit"></i>&nbsp;&nbsp;修改</span>
                         </a>
                         &nbsp;&nbsp;
                         <a title="删除"  class="deleteSubjectBtn" data-target="#deleteSubjectDialog" data-toggle="modal">
-                            <span class="btn default btn-xs red">删除</span>
+                            <span class="btn default btn-xs red"><i class="fa fa-trash"></i>&nbsp;&nbsp;删除</span>
                         </a>
                     </td>
                 </tr>
