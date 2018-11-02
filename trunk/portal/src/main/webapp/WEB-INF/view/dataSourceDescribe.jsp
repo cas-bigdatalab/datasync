@@ -23,6 +23,33 @@
         .undeslist label{
             font-size: 18px;
         }
+        .custom-error{
+            color:#a94442!important;
+            border-color:#a94442!important;
+        }
+        .key-word{
+            padding:0 8px;
+            height: 28px;
+            background:#57add9;
+            color:#fff;
+            font-size: 14px;
+            margin-right:10px;
+            margin-bottom: 5px;
+            float:left;
+        }
+
+        .key-word p{
+            float:left;
+            font-size:14px;
+            line-height:28px;
+        }
+        .key-word span{
+            float:left;
+            cursor:pointer;
+            margin-left:5px;
+            font-size:16px;
+            margin-top:2px;
+        }
     </style>
 </head>
 
@@ -77,12 +104,12 @@
                                     <form class="form-horizontal" id="submit_form"
                                           method="POST">
                                         <h3 class="block">元数据信息描述</h3>
-                                        <div class="form-group">
+                                        <div class="form-group custom-error">
                                             <label class="control-label col-md-3">数据集名称 <span class="required">
 													* </span>
                                             </label>
                                             <div class="col-md-4">
-                                                <input type="text" class="form-control" name="resTitle"
+                                                <input type="text" class="form-control custom-error" name="resTitle"
                                                        id="resTitle" onchange="setResTitle(this)" style="border: 1px solid rgb(169, 169, 169)">
                                             </div>
                                         </div>
@@ -138,12 +165,18 @@
                                             <label class="control-label col-md-3">关键词<span class="required">
 													* </span></label>
                                             <div class="checkbox-list col-md-6">
-                                                <div style="margin-bottom: 3px;line-height: 34px">
-                                                    <input type="text" style="font-size: 16px">
+                                                <div style="margin-bottom: 3px;line-height: 24px">
+                                                    <input type="text" style="font-size: 16px" id="addWorkStr">
                                                     <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
                                                 </div>
-                                                <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px">
-
+                                                <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="key-wrap">
+                                                    <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
+                                                    <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
+                                                    <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
+                                                    <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
+                                                    <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
+                                                    <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
+                                                    <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
 
                                                 </div>
                                                 <%--<label class="checkbox-inline">
@@ -207,28 +240,31 @@
                                 <div class="tab-pane" id="tab3">
 
                                     <h3>确定数据对象发布的权限分配范围</h3>
-                                    <div class="col-md-6 col-md-offset-3" style="font-size: 18px">
-                                        <form class="form-horizontal">
-                                            <div class="form-group">
-                                                <label for="inputEmail3" class="col-sm-2 control-label">可公开范围</label>
-                                                <div class="col-sm-10">
-                                                    <select name="" id="inputEmail3" class="form-control">
-                                                        <option value="">请选择公开范围</option>
-                                                        <option value="">外网公开用户</option>
-                                                        <option value="">内网用户</option>
-                                                        <option value="">质量组用户</option>
-                                                        <option value="">分析组用户</option>
-                                                    </select>
+                                    <div style="overflow: hidden">
+                                        <div class="col-md-6 col-md-offset-3" style="font-size: 18px">
+                                            <form class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label for="inputEmail3" class="col-sm-4 control-label">可公开范围</label>
+                                                    <div class="col-sm-8">
+                                                        <select name="" id="inputEmail3" class="form-control">
+                                                            <option value="">请选择公开范围</option>
+                                                            <option value="">外网公开用户</option>
+                                                            <option value="">内网用户</option>
+                                                            <option value="">质量组用户</option>
+                                                            <option value="">分析组用户</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label  class="col-sm-2 control-label">已选择</label>
-                                                <div class="col-sm-10">
+                                                <div class="form-group">
+                                                    <label  class="col-sm-4 control-label">已选择</label>
+                                                    <div class="col-sm-8">
 
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </form>
+                                            </form>
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -253,7 +289,16 @@
         </div>
     </div>
 </div>
-
+<script type="text/html" id="dataRelationshipList">
+    {{each list as value i}}
+    <div class="col-md-4">
+        <label>
+            <input type="checkbox" name="resTable" value="{{value}}
+            <span style="word-break: break-all">{{value}}</span>
+        </label>
+    </div>
+    {{/each}}
+</script>
 </body>
 
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
@@ -263,6 +308,7 @@
     <script type="text/javascript">
         var ctx = '${ctx}';
         var initNum =1;
+        var tagNames=new Array();
         /*fileSourceFileList();*/
         $(".progress-bar-success").width(initNum*33+"%");
         $("[name='ways']").on("change",function () {
@@ -276,19 +322,23 @@
             }
         })
         initCenterResourceCatalogTree($("#jstree-demo"));
-        /*relationalDatabaseTableList();*/
+        relationalDatabaseTableList();
 
         function fromAction(flag) {
             if(flag){
                 ++initNum;
-                $("#staNum").html(initNum)
-                $(".progress-bar-success").width(initNum*33+"%");
                 if(initNum ==2){
+
+
+                    $("#staNum").html(initNum)
+                    $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab1").removeClass("active")
                     $("#tab2").addClass("active")
                     $(".steps li:eq(1)").addClass("active")
                     $(".button-previous").show();
                 }else {
+                    $("#staNum").html(initNum)
+                    $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab2").removeClass("active")
                     $("#tab3").addClass("active")
                     $(".steps li:eq(2)").addClass("active")
@@ -297,14 +347,16 @@
                 }
             }else {
                 --initNum
-                $("#staNum").html(initNum)
-                $(".progress-bar-success").width(initNum*33+"%");
                 if(initNum == 1){
+                    $("#staNum").html(initNum)
+                    $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab2").removeClass("active")
                     $("#tab1").addClass("active")
                     $(".steps li:eq(1)").removeClass("active")
                     $(".button-previous").hide();
                 }else {
+                    $("#staNum").html(initNum)
+                    $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab3").removeClass("active")
                     $("#tab2").addClass("active")
                     $(".steps li:eq(2)").removeClass("active")
@@ -333,7 +385,12 @@
                 url:ctx+"/resource/relationalDatabaseTableList",
                 type:"GET",
                 success:function (data) {
-                    console.log(JSON.parse(data))
+                    $(".undeslist").empty();
+
+                    var List =JSON.parse(data)
+                    console.log(List)
+                    var tabCon = template("dataRelationshipList", List);
+                    $(".undeslist").append(tabCon);
                 },
                 error:function (data) {
                     console.log("请求失败")
@@ -361,7 +418,13 @@
             })
         }*/
         function addKeyWords() {
-            console.log($("#centerCatalogId").val())
+           var newStr = $("#addWorkStr").val()
+            if(newStr =="" ||newStr.trim() == ""){
+                return
+            }
+            for(var i=0;i<tagNames.length;i++){
+
+            }
         }
 
         function addResourceFirstStep() {
@@ -470,6 +533,9 @@
             }
         }
 
+        function validationFirst() {
+            
+        }
 
     </script>
 </div>
