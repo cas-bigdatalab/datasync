@@ -6,6 +6,8 @@ import cn.csdb.portal.service.SubjectService;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -14,7 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.sql.Connection;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -105,8 +110,12 @@ public class ResourceController {
         return "addResource";
     }
 
+    @RequestMapping(value = "editResource")
+    public String resourceEdit() {
+        return "editResource";
+    }
+
     /**
-     *
      * Function Description: 获得mysql数据库表单
      *
      * @param: []
@@ -114,13 +123,14 @@ public class ResourceController {
      * @auther: hw
      * @date: 2018/11/1 10:36
      */
+    @ResponseBody
     @RequestMapping(value = "relationalDatabaseTableList")
     public JSONObject relationalDatabaseTableList() {
         Subject subject = subjectService.findBySubjectCode("sdc002");
         JSONObject jsonObject = new JSONObject();
         IDataSource dataSource = DataSourceFactory.getDataSource("mysql");
         Connection connection = dataSource.getConnection(subject.getDbHost(), subject.getDbPort(),
-                subject.getDbUserName(), subject.getFtpPassword(), subject.getDbName());
+                subject.getDbUserName(), subject.getDbPassword(), subject.getDbName());
         if (connection == null)
             return null;
         List<String> list = dataSource.getTableList(connection);
@@ -129,9 +139,26 @@ public class ResourceController {
         return jsonObject;
     }
 
+    /**
+     * Function Description: 获得已经选择的数据库表list
+     *
+     * @param: [resourceId]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/2 13:55
+     */
+    @ResponseBody
+    @RequestMapping(value = "getCheckedTables")
+    public JSONObject getCheckedTables(@RequestParam(name = "resourceId") String resourceId) {
+        JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        String tableList = resource.getPublicContent();
+        jsonObject.put("tableList", tableList);
+        return jsonObject;
+    }
+
 
     /**
-     *
      * Function Description: 获取砖题库文件列表
      *
      * @param: []
@@ -140,16 +167,32 @@ public class ResourceController {
      * @date: 2018/11/1 10:43
      */
     @ResponseBody
-    @RequestMapping(value="fileSourceFileList")
+    @RequestMapping(value = "fileSourceFileList")
     public List<JSONObject> fileSourceFileList() {
         Subject subject = subjectService.findBySubjectCode("sdc002");
         List<JSONObject> jsonObjects = resourceService.fileSourceFileList(subject.getFtpFilePath());
         return jsonObjects;
     }
 
+    /**
+     * Function Description: 获得已经选择文件list
+     *
+     * @param: [resourceId]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/2 14:23
+     */
+    @ResponseBody
+    @RequestMapping(value = "getCheckedFiles")
+    public JSONObject getCheckedFiles(@RequestParam(name = "resourceId") String resourceId) {
+        JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        String fileList = resource.getFilePath();
+        jsonObject.put("fileList", fileList);
+        return jsonObject;
+    }
 
     /**
-     *
      * Function Description: 获得文件树节点下的文件结构
      *
      * @param: [filePath]
@@ -162,14 +205,241 @@ public class ResourceController {
     public List<JSONObject> treeNode(String filePath) {
         List<JSONObject> jsonObjects = null;
         jsonObjects = resourceService.fileSourceFileList(filePath.replace("%_%", "\\"));
-
-        /*if (fileType.equals("本地文件")) {
-            jsonObjects = dataSrcService.fileSourceFileList(filePath.replace("%_%", "\\"));
-        } else if (fileType.equals("ftp")) {
-            jsonObjects = dataResourceStaticService.fileSourceFtpFileList(filePath.replace("%_%", "\\"), dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword());
-        }*/
-
-
         return jsonObjects;
     }
+
+
+    /**
+     * Function Description: 添加资源第一步保存
+     *
+     * @param: [title, imagePath, introduction, keyword, catalogId, createdByOrganization]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/1 15:46
+     */
+    @ResponseBody
+    @RequestMapping(value = "addResourceFirstStep")
+    public JSONObject saveResourceFirstStep(@RequestParam(name = "title") String title,
+                                            @RequestParam(name = "imagePath", required = false) String imagePath,
+                                            @RequestParam(name = "introduction") String introduction,
+                                            @RequestParam(name = "keyword") String keyword,
+                                            @RequestParam(name = "catalogId") String catalogId,
+                                            @RequestParam(name = "createdByOrganization") String createdByOrganization) {
+        Subject subject = subjectService.findBySubjectCode("sdc002");
+        JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = new cn.csdb.portal.model.Resource();
+        resource.setTitle(title);
+        resource.setImagePath(imagePath);
+        resource.setIntroduction(introduction);
+        resource.setKeyword(keyword);
+        resource.setCatalogId(catalogId);
+        resource.setCreatedByOrganization(createdByOrganization);
+        resource.setSubjectCode(subject.getSubjectCode());
+        resource.setResState("未完成");
+        resource.setCreationDate(new Date());
+        resource.setUpdateDate(new Date());
+        String resourceId = resourceService.save(resource);
+        jsonObject.put("resourceId", resourceId);
+        return jsonObject;
+    }
+
+
+    /**
+     * Function Description: 添加资源第二步保存
+     *
+     * @param: [resourceId, publicType, dataList]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/2 10:45
+     */
+    @ResponseBody
+    @RequestMapping(value = "addResourceSecondStep")
+    public JSONObject addResourceSecondStep(@RequestParam(name = "resourceId") String resourceId,
+                                            @RequestParam(name = "publicType") String publicType,
+                                            @RequestParam(name = "dataList") String dataList) {
+        Subject subject = subjectService.findBySubjectCode("sdc002");
+        JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        resource.setPublicType(publicType);
+        if (publicType.equals("mysql")) {
+            resource.setPublicContent(dataList);
+            resource.setToFilesNumber(0);
+        } else if (publicType.equals("file")) {
+            StringBuffer sb = new StringBuffer();
+            long size = 0L;
+            if (StringUtils.isNoneBlank(dataList)) {
+                String[] s = dataList.split(";");
+                for (String str : s) {
+                    str = str.replaceAll("%_%", "/");
+                    File file = new File(str);
+                    if (file.isDirectory()) {
+                        Collection<File> files = FileUtils.listFiles(file, null, true);
+                        for (File file1 : files) {
+                            String fp = file1.getPath();
+                            size += file1.length();
+                            if (fp.indexOf("\\") > -1) {
+                                fp = fp.replaceAll("\\\\", "/");
+                            }
+                            sb.append(fp + ";");
+                        }
+                    }
+                }
+            }
+            resource.setFilePath(sb.toString().replace("/", "%_%"));
+            resource.setToMemorySize(String.valueOf(size));
+        }
+        resource.setResState("未发布");
+        String resId = resourceService.save(resource);
+        jsonObject.put("resourceId", resId);
+        return jsonObject;
+    }
+
+
+    /**
+     * Function Description: 添加资源第三步保存
+     *
+     * @param: [resourceId, userGroupIdList]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/2 11:19
+     */
+    @ResponseBody
+    @RequestMapping(value = "addResourceThirdStep")
+    public JSONObject addResourceThirdStep(@RequestParam(name = "resourceId") String resourceId,
+                                           @RequestParam(name = "userGroupIdList") String userGroupIdList) {
+        Subject subject = subjectService.findBySubjectCode("sdc002");
+        JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        resource.setUserGroupId(userGroupIdList);
+        resource.setResState("已发布");
+        String resId = resourceService.save(resource);
+        jsonObject.put("resourceId", resId);
+        return jsonObject;
+    }
+
+    /**
+     * Function Description: 通过id获得resource
+     *
+     * @param: [resourceId]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/2 14:26
+     */
+    @ResponseBody
+    @RequestMapping(value = "getResourceById")
+    public JSONObject getResourceById(@RequestParam(name = "resourceId") String resourceId) {
+        JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        return jsonObject;
+    }
+
+    /**
+     *
+     * Function Description: 编辑资源保存第一步
+     *
+     * @param: [resourceId, title, imagePath, introduction, keyword, catalogId, createdByOrganization]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/2 14:51
+     */
+    @ResponseBody
+    @RequestMapping(value = "editResourceFirstStep")
+    public JSONObject editResourceFirstStep(@RequestParam(name = "resourceId") String resourceId,
+                                            @RequestParam(name = "title") String title,
+                                            @RequestParam(name = "imagePath", required = false) String imagePath,
+                                            @RequestParam(name = "introduction") String introduction,
+                                            @RequestParam(name = "keyword") String keyword,
+                                            @RequestParam(name = "catalogId") String catalogId,
+                                            @RequestParam(name = "createdByOrganization") String createdByOrganization) {
+        Subject subject = subjectService.findBySubjectCode("sdc002");
+        JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        resource.setTitle(title);
+        resource.setImagePath(imagePath);
+        resource.setIntroduction(introduction);
+        resource.setKeyword(keyword);
+        resource.setCatalogId(catalogId);
+        resource.setCreatedByOrganization(createdByOrganization);
+        resource.setSubjectCode(subject.getSubjectCode());
+        resource.setResState("未完成");
+        resource.setUpdateDate(new Date());
+        String resId = resourceService.save(resource);
+        jsonObject.put("resourceId", resId);
+        return jsonObject;
+    }
+
+    /**
+     *
+     * Function Description: 编辑资源保存第二步
+     *
+     * @param: [resourceId, publicType, dataList]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/2 14:52
+     */
+    @ResponseBody
+    @RequestMapping(value = "editResourceSecondStep")
+    public JSONObject editResourceSecondStep(@RequestParam(name = "resourceId") String resourceId,
+                                            @RequestParam(name = "publicType") String publicType,
+                                            @RequestParam(name = "dataList") String dataList) {
+        Subject subject = subjectService.findBySubjectCode("sdc002");
+        JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        resource.setPublicType(publicType);
+        if (publicType.equals("mysql")) {
+            resource.setPublicContent(dataList);
+            resource.setToFilesNumber(0);
+        } else if (publicType.equals("file")) {
+            StringBuffer sb = new StringBuffer();
+            long size = 0L;
+            if (StringUtils.isNoneBlank(dataList)) {
+                String[] s = dataList.split(";");
+                for (String str : s) {
+                    str = str.replaceAll("%_%", "/");
+                    File file = new File(str);
+                    if (file.isDirectory()) {
+                        Collection<File> files = FileUtils.listFiles(file, null, true);
+                        for (File file1 : files) {
+                            String fp = file1.getPath();
+                            size += file1.length();
+                            if (fp.indexOf("\\") > -1) {
+                                fp = fp.replaceAll("\\\\", "/");
+                            }
+                            sb.append(fp + ";");
+                        }
+                    }
+                }
+            }
+            resource.setFilePath(sb.toString().replace("/", "%_%"));
+            resource.setToMemorySize(String.valueOf(size));
+        }
+        resource.setResState("未发布");
+        String resId = resourceService.save(resource);
+        jsonObject.put("resourceId", resId);
+        return jsonObject;
+    }
+
+    /**
+     *
+     * Function Description: 编辑资源保存第三步
+     *
+     * @param: [resourceId, userGroupIdList]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/2 14:53
+     */
+    @ResponseBody
+    @RequestMapping(value = "editResourceThirdStep")
+    public JSONObject editResourceThirdStep(@RequestParam(name = "resourceId") String resourceId,
+                                           @RequestParam(name = "userGroupIdList") String userGroupIdList) {
+        Subject subject = subjectService.findBySubjectCode("sdc002");
+        JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        resource.setUserGroupId(userGroupIdList);
+        resource.setResState("已发布");
+        String resId = resourceService.save(resource);
+        jsonObject.put("resourceId", resId);
+        return jsonObject;
+    }
+
 }

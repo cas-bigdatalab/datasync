@@ -153,6 +153,43 @@
 
 </div>
 
+<!--新增-->
+<div class="modal fade" tabindex="-1" role="dialog" id="addModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">新增用户组</h4>
+            </div>
+            <div class="modal-body" style="min-height: 150px">
+                <form class="form-horizontal" id="addGroupForm" method="post" accept-charset="utf-8" role="form"  onfocusout="true">
+                    <div class="form-group">
+                        <label for="groupNameAdd" class="col-sm-3 control-label">用户组名称<span class="required">
+													*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="groupNameAdd" name="groupName" placeholder="请输入用户组名称"  required="required" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="descAdd" class="col-sm-3 control-label">描述<span class="required">
+													*</span></label>
+                        <div class="col-sm-8">
+                            <textarea  type="text" class="form-control" cols="30" rows="5" id="descAdd" name="desc" placeholder="请输入用户组描述信息" required="required"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn green" onclick="submitAddData();" ><i
+                        class="glyphicon glyphicon-ok"></i>保存
+                </button>
+                <button type="button" data-dismiss="modal" onclick="resetData();" class="btn  btn-danger">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <script type="text/html" id="userListTable">
     {{each list}}
@@ -179,7 +216,7 @@
         </td>
         <td style="text-align: center">{{$value.desc}}</td>
         <td style="text-align: center">{{dateFormat($value.createTime)}}</td>
-        <td id="{{$value.id}}" style="text-align: center">
+        <td id="a{{$value.id}}" style="text-align: center">
             <%--<button class="btn default btn-xs green-stripe" onclick="viewData()">查看</button>&nbsp;&nbsp;--%>
             <button class="btn default btn-xs purple updateButton" onclick="editData('{{$value.id}}')"><i class="fa fa-edit"></i>&nbsp;&nbsp;修改</button>&nbsp;&nbsp;
             <button class="btn default btn-xs red" onclick="deleteData('{{$value.id}}')"><i class="fa fa-trash"></i>&nbsp;&nbsp;删除</button>
@@ -196,15 +233,21 @@
     <script src="${ctx}/resources/bundles/artTemplate/template.js"></script>
     <script src="${ctx}/resources/js/subStrLength.js"></script>
     <script src="${ctx}/resources/js/regex.js"></script>
+    <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
     <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
+    <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.min.js"></script>
+    <script src="${ctx}/resources/bundles/jquery-validation/js/additional-methods.min.js"></script>
+    <script src="${ctx}/resources/bundles/jquery-validation/js/localization/messages_zh.min.js"></script>
 
     <script type="text/javascript">
 
         var ctx = '${ctx}';
         var currentPageNo = 1;
+        //var validatorAdd;
 
         $(function () {
+            alert("aaaabbb");
             template.helper("dateFormat", formatDate);
             getData(1);
 
@@ -228,6 +271,48 @@
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut"
             };
+
+            var validData = {
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block help-block-error', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "", // validate all fields including form hidden input
+                rules: {
+                    groupName: {
+                        required: true
+                    },
+                    desc: {
+                        required: true
+                    }
+                },
+                messages: {
+                    groupName: {
+                        required: "请输入用户组名称"
+                    },
+                    desc: {
+                        required: "请输入用户组描述信息"
+                    }
+                },
+                errorPlacement: function (error, element) { // render error placement for each input type
+                    if (element.parent(".input-group").size() > 0) {
+                        error.insertAfter(element.parent(".input-group"));
+                    } else {
+                        error.insertAfter(element); // for other inputs, just perform default behavior
+                    }
+                },
+                highlight: function (element) { // hightlight error inputs
+                    $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                unhighlight: function (element) { // revert the change done by hightlight
+                    $(element)
+                        .closest('.form-group').removeClass('has-error'); // set error class to the control group
+                }
+            };
+            validatorAdd =  $("#addGroupForm").validate(validData);
+            //$("#editGroupForm").validate(validData);
+
         });
 
         function search() {
@@ -235,6 +320,7 @@
         }
 
         function getData(pageNo) {
+            console.log("pageNo: " + pageNo);
             $.ajax({
                 url: "${ctx}/group/getPageData",
                 type: "get",
@@ -303,6 +389,38 @@
                 }
             });
         }
+
+        $("#btnAdd").click(function () {
+            $("#addModal").modal('show');
+        });
+
+        function resetData() {
+            validatorAdd.resetForm();
+        }
+
+        function submitAddData() {
+            if (!$("#addGroupForm").valid()) {
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: '${ctx}/group/add',
+                data: $("#addGroupForm").serialize(),
+                dataType: "json",
+                success: function (data) {
+                    if (data.result == 'ok') {
+                        toastr["success"]("添加成功！", "添加用户组");
+                        $("#addModal").modal("hide");
+                        $("#groupNameAdd").val("");
+                        $("#descAdd").val("");
+                        getData(currentPageNo);
+                    } else {
+                        toastr["error"]("添加失败！", "添加用户组");
+                    }
+                }
+            });
+        }
+
     </script>
 </div>
 

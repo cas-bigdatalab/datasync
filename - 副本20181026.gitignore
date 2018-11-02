@@ -29,5 +29,3 @@ hs_err_pid*
 #classes directory and target directory
 trunk/classes
 trunk/portal/target
-trunk/out
-trunk/drsr/target

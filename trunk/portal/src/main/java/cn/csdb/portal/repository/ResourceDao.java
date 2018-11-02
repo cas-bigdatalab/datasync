@@ -32,8 +32,9 @@ public class ResourceDao {
      * @auther: Administrator
      * @date:   2018/10/23 14:34
      */
-    public void save(cn.csdb.portal.model.Resource resource){
+    public String save(cn.csdb.portal.model.Resource resource){
         mongoTemplate.save(resource);
+        return resource.getId();
     }
 
 
@@ -109,4 +110,9 @@ public class ResourceDao {
         BasicQuery basicQuery = new BasicQuery(dbObject);
         return mongoTemplate.count(basicQuery,cn.csdb.portal.model.Resource.class);
     }
+
+    public cn.csdb.portal.model.Resource getById(String resourceId){
+        return mongoTemplate.findById(resourceId, cn.csdb.portal.model.Resource.class);
+    }
+
 }
