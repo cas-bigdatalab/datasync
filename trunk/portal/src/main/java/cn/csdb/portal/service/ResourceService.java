@@ -78,22 +78,23 @@ public class ResourceService {
 
     public List<JSONObject> fileSourceFileList(String filePath) {
         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
-//        File file = new File(filePath);
-//        if (!file.exists() || !file.isDirectory())
-//            return jsonObjects;
-        String[] fp = filePath.split(";");
+        File file = new File(filePath);
+        if (!file.exists() || !file.isDirectory())
+            return jsonObjects;
+//        String[] fp = filePath.split(";");
+        File[] fp = file.listFiles();
         for (int i = 0; i < fp.length; i++) {
-            if(StringUtils.isBlank(fp[i])){
-                continue;
-            }
-            File file = new File(fp[i]);
-            if(!file.exists()){
-                continue;
-            }
+//            if(StringUtils.isBlank(fp[i])){
+//                continue;
+//            }
+//            File file = new File(fp[i]);
+//            if(!file.exists()){
+//                continue;
+//            }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", file.getPath().replaceAll("\\\\","%_%"));
-            jsonObject.put("text", file.getName().replaceAll("\\\\","%_%"));
-            if (file.isDirectory()) {
+            jsonObject.put("id", fp[i].getPath().replaceAll("\\\\","%_%"));
+            jsonObject.put("text", fp[i].getName().replaceAll("\\\\","%_%"));
+            if (fp[i].isDirectory()) {
                 jsonObject.put("type", "directory");
                 JSONObject jo = new JSONObject();
                 jo.put("disabled","true");

@@ -123,6 +123,7 @@ public class ResourceController {
      * @auther: hw
      * @date: 2018/11/1 10:36
      */
+    @ResponseBody
     @RequestMapping(value = "relationalDatabaseTableList")
     public JSONObject relationalDatabaseTableList() {
         Subject subject = subjectService.findBySubjectCode("sdc002");
