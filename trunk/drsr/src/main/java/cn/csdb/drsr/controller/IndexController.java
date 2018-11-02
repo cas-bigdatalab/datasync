@@ -19,16 +19,21 @@ public class IndexController {
     private Logger logger= LoggerFactory.getLogger(IndexController.class);
 
     @RequestMapping("/index")
-    public ModelAndView index() {
+    public ModelAndView index(@RequestParam(name = "userName", required = false) String userName) {
         logger.debug("进入客户端首页");
+        logger.info("userName = " + userName);
         ModelAndView modelAndView = new ModelAndView("index");
+        if (userName != null) {
+            modelAndView.addObject("userName", userName);
+        }
+
         return modelAndView;
     }
 
     @RequestMapping("/")
-    public ModelAndView login(@RequestParam(name="userName",required = false) String userName)
+    public ModelAndView login()
     {
-        logger.info("登录认证页面 - userName = " + userName);
+        logger.info("登录认证页面!");
         ModelAndView mv = new ModelAndView("login");
         return  mv;
     }

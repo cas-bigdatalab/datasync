@@ -102,7 +102,8 @@
 </div>
 
 <script src="${ctx}/resources/bundles/jquery/jquery.min.js" type="text/javascript"></script>
-<script src="${ctx}/resources/js/jquery.base64.js" />
+<script src="${ctx}/resources/js/base64.min.js" type="text/javascript"></script>
+<!--login dialog related javascript-->
 <script type="text/javascript">
     $(document).ready(function () {
         $(function () {
@@ -192,13 +193,13 @@
         });
     });
 </script>
-
 <script type="text/javascript">
     jQuery("#loginBtn").click(
         function() {
             var userName = $.trim($("#userName").val());
             var password = $.trim($("#password").val());
             var loginUrl = "${ctx}/validateLogin?userName=" + userName + "&password=" + password;
+
             $.ajax({
                 type: "GET",
                 url: loginUrl,
@@ -209,8 +210,10 @@
 
                     if(loginStatus == 1) {
                         console.log("登录成功！");
-                        //userName = $.base64.atob(userName);
-                        window.self.location.href="${ctx}/index?userName="+userName;
+                        //encodedUserName = Base64.encode(userName);
+                        //alert(encodedUserName);
+
+                        window.self.location.href="${ctx}/index?userName=" + userName;
                     }
                     else {
                         $("#loginNotice").html("用户名或者密码错误，请重新输入!");
