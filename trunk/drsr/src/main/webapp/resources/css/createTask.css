@@ -8,6 +8,7 @@
     height: 50px;
     line-height: 50px;
     padding: 0 33px;
+    margin-bottom: 10px;
 }
 .task-title span{
     font-family: 'Arial Normal', 'Arial';
@@ -17,7 +18,7 @@
     color: #000000;
 }
 .select-way{
-    margin-top: 50px;
+    margin-top: 60px;
     font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
     font-weight: 700;
     font-style: normal;

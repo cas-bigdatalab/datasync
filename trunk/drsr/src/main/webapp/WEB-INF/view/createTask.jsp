@@ -21,15 +21,16 @@
     </div>
     <div class="task-title">
         <span>确定数据对象范围，上传数据</span>
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="dataTaskName" style="font-size: 18px;font-weight: 700" >创建任务名</label>
+                <input type="text" class="form-control" id="dataTaskName" >
+            </div>
+        </form>
     </div>
-    <form class="form-inline">
 
-        <div class="form-group">
-            <label for="dataTaskName">创建任务名</label>
-            <input type="text" class="form-control" id="dataTaskName2" >
-        </div>
-    </form>
     <div class="select-way">
+
         <span>数据源:</span>
         <label for="aaa">数据库</label>
         <input name="ways" type="radio" checked="checked" value="DB" id="aaa"/>
@@ -43,15 +44,11 @@
                     <label>选择数据源</label>
                     <select  id="DBchange" class="form-control"></select>
                 </div>
-                <div class="form-group">
-                    <label for="dataTaskName">创建任务名</label>
-                    <input type="text" class="form-control" id="dataTaskName" >
-                </div>
             </form>
             <div class="database-con-rel container-fluid" style="display: none">
                 <div class="row">
                     <div class="col-md-3 dataHead1">数据源名称：</div>
-                    <div class="col-md-9 dataHead2"></div>
+                    <div class="col-md-9 dataHead2" id="resTitle"></div>
                     <div class="col-md-12">
                         <div class="col-md-2">选择表资源</div>
                         <div class="col-md-10" >
@@ -76,91 +73,46 @@
                         </div>
                         <div id="sqlList"></div>
                     </div>
-
                     <div class="col-md-12 ">
                         <button type="button" class="btn green pull-right" onclick="sendRelationTask()">提交</button>
                     </div>
             </div>
-
             </div>
         </div>
 
         <div class="select-local" style="display: none;">
-            <%--<button type="button" class="btn btn-success" id="upload-directory">上传目录</button>
-            <button type="button" class="btn btn-success" id="upload-file">上传文件</button>
-            <div style="min-height: 400px;margin-top: 50px">
-                <div class="left">
-                    <button type="button" class="btn btn-success btn-sm" style="margin-bottom:5px" onclick="editTree();"><i
-                            class="glyphicon glyphicon-pencil"></i> 修改
-                    </button>
-                    <div id="jstree_show" style="height:300px"></div>
-                </div>
-                <div class="right" id="editRegon">
-
-                </div>
-            </div>--%>
-            <%--<div style="height: 1000px;background-color: #7ad588"></div>
-            <div class="col-md-12 ">
-                <button type="button" class="btn green pull-right" onclick="sendFileTask()">提交</button>
-            </div>--%>
-
                 <form class="form-inline">
                     <div class="form-group">
                         <label>选择数据源</label>
                         <select  id="DBFilechange" class="form-control"></select>
                     </div>
-                    <div class="form-group">
-                        <label for="TaskFileName">创建任务名</label>
-                        <input type="text" class="form-control" id="TaskFileName" >
-                    </div>
                 </form>
 
                 <div class="database-con-file container-fluid" style="display: none;">
                     <div class="row">
-                        <div class="col-md-12 dataHead3" style="max-height: 500px;overflow: auto;padding-top: 10px">
+                        <div class="col-md-3 dataHead1">数据源名称：</div>
+                        <div class="col-md-9 dataHead2" id="fileTitle"></div>
+                        <div class="col-md-12">
                             <div class="col-md-2">选择文件</div>
-                            <div class="col-md-10 dataHead4" >
-                                <div class="row" id="file-table">
-                                    <%--<div class="col-md-4">
-                                        <label>
-                                            <input type="checkbox" name="relationCheck" value="aaa"> Remember me
-                                        </label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label>
-                                            <input type="checkbox" name="relationCheck" value="bbb"> Remember me
-                                        </label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label>
-                                            <input type="checkbox" name="relationCheck" value="ccc"> Remember me
-                                        </label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label>
-                                            <input type="checkbox" name="relationCheck" value="sss"> Remember me
-                                        </label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label>
-                                            <input type="checkbox" name="relationCheck" value="fff"> Remember me
-                                        </label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label>
-                                            <div class="checker">
-                                                <span>
-                                                    <input type="checkbox" name="relationCheck" value="aaa">
-                                                </span>
-                                            </div> Remember me
-                                        </label>
-                                    </div>--%>
-                                </div>
+                            <div class="col-md-10" >
+                                <div class="row" id="file-table"></div>
                             </div>
                         </div>
                         <div class="col-md-12 ">
                             <button type="button" class="btn green pull-right" onclick="sendFileTask()">提交</button>
                         </div>
+
+
+                        <%--<div class="col-md-12 dataHead3" style="max-height: 500px;overflow: auto;padding-top: 10px">
+                            <div class="col-md-2">选择文件</div>
+                            <div class="col-md-10 dataHead4" >
+                                <div class="row" id="file-table">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 ">
+                            <button type="button" class="btn green pull-right" onclick="sendFileTask()">提交</button>
+                        </div>--%>
                     </div>
                 </div>
         </div>
@@ -335,7 +287,7 @@
                 return
             }
             $(".database-con-rel").show();
-            $(".dataHead2").html(name);
+            $("#resTitle").html(name);
             $.ajax({
                 url:"${ctx}/relationship/relationalDatabaseTableList",
                 type:"POST",
@@ -364,7 +316,7 @@
                 return
             }
             $(".database-con-file").show();
-
+            $("#fileTitle").html(name);
             $.ajax({
                 url:"${ctx}/fileResource/fileSourceFileList",
                 type:"POST",
@@ -450,7 +402,7 @@
         function sendFileTask(){
             var $eleChecked = $("[name='fileTable']:checked")
             var numChecked = $eleChecked.size();
-            if($("#TaskFileName").val() ==""){
+            if($("#dataTaskName").val() ==""){
                 toastr["warning"]("提示！", "请创建任务名");
                 return
             }
@@ -468,7 +420,7 @@
                 type:"POST",
                 data:{
                     dataSourceId:dataFileSrcId,
-                    datataskName:$("#TaskFileName").val(),
+                    datataskName:$("#dataTaskName").val(),
                     filePathList:dataFilePathList,
                 },
                 success:function (data) {

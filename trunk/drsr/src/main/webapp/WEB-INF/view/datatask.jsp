@@ -142,9 +142,11 @@
         <td  id="{{value.dataTaskId}}">--</td>
         <td  class="{{value.dataTaskId}}">{{upStatusName(value.status)}}</td>
         <td>
+            {{if value.dataTaskType  == "mysql"}}
             <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" >&nbsp;&nbsp;&nbsp;导出&nbsp;&nbsp;&nbsp;</button>
+            {{/if}}
             {{if value.status  == 1}}
-            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" disabled style="background-color: dimgrey">重新上传</button>
+            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" disabled style="background-color: dimgrey">上传</button>
             {{else if value.status  == 0}}
             <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}">&nbsp;&nbsp;&nbsp;上传&nbsp;&nbsp;&nbsp;</button>
             {{/if}}
