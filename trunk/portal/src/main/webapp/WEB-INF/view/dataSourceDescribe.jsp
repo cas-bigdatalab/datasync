@@ -171,12 +171,7 @@
                                                 </div>
                                                 <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="key-wrap">
                                                     <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
-                                                    <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
-                                                    <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
-                                                    <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
-                                                    <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
-                                                    <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
-                                                    <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
+
 
                                                 </div>
                                                 <%--<label class="checkbox-inline">
@@ -418,15 +413,23 @@
             })
         }*/
         function addKeyWords() {
-           var newStr = $("#addWorkStr").val()
+            var newStr = $("#addWorkStr").val()
             if(newStr =="" ||newStr.trim() == ""){
                 return
             }
             for(var i=0;i<tagNames.length;i++){
-
+                if(newStr ==tagNames[i]){
+                    toastr["error"]("不可添加重复标签");
+                    return
+                }
             }
+            tagNames.push(newStr)
+            $(".key-wrap").append("<div class='key-word'> <p class='tagname'>"+newStr+"</p> <span class='closeWord'>×</span> </div>");
         }
-
+        $(".key-wrap").delegate(".closeWord","click",function () {
+            console.log($(this).index())
+            $(this).parent().remove()
+        })
         function addResourceFirstStep() {
             $.ajax({
                 url:ctx+"/resource/addResourceFirstStep",
@@ -440,7 +443,8 @@
                     createdByOrganization:""
                 },
                 success:function (data) {
-                    
+                    console.log("———————————111111111———————————")
+                    console.log(data)
                 },
                 error:function (data) {
                     console.log("请求失败")
@@ -452,19 +456,40 @@
                 url:ctx+"/resource/addResourceSecondStep",
                 type:"POST",
                 data:{
-                    resourceId:"",
+                    resourceId:"5bdc180e095e0423ec2a2597",
                     publicType:"",
                     dataList:""
                 },
                 success:function (data) {
-
+                    console.log("——————————222222222————————————")
+                    console.log(data)
+                    console.log("——————————222222222————————————")
                 },
                 error:function (data) {
                     console.log("请求失败")
                 }
             })
         }
-
+        function getResourceById() {
+            $.ajax({
+                url:ctx+"/resource/getResourceById",
+                type:"POST",
+                data:{
+                    resourceId:"5bdc180e095e0423ec2a2597",
+                },
+                success:function (data) {
+                    console.log("——————————444444————————————")
+                    console.log(data)
+                    console.log("——————————444444————————————")
+                },
+                error:function (data) {
+                    console.log("请求失败")
+                }
+            })
+        }
+        addResourceFirstStep();
+        addResourceSecondStep();
+        getResourceById();
         $('#fileContainerTree').jstree({
             'core': {
                 'data': function (node, cb) {
