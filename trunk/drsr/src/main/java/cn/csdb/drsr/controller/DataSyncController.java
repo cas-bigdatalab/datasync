@@ -60,7 +60,7 @@ public class DataSyncController {
      */
     @ResponseBody
     @RequestMapping("/ftpUpload")
-    public String ftpUpload(int dataTaskId,String processId){
+    public int ftpUpload(int dataTaskId,String processId){
         String host = configPropertyService.getProperty("FtpHost");
         String userName = configPropertyService.getProperty("FtpUser");
         String password = configPropertyService.getProperty("FtpPassword");
@@ -78,14 +78,14 @@ public class DataSyncController {
                 String[] localFileList = {dataTask.getSqlFilePath()};
                 result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath).toString();
                 if(localFileList.length == 0){
-                    return "500";
+                    return 0;
                 }
             }else if(dataTask.getDataTaskType().equals("mysql")){
                 remoteFilepath = remoteFilepath+subjectCode+"_"+dataTask.getDataTaskId()+"/";
                 String[] localFileList = dataTask.getSqlFilePath().split(";");
                 result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath).toString();
                 if(localFileList.length == 0){
-                    return "500";
+                    return 0;
                 }
             }
             ftpUtil.disconnect();
@@ -119,9 +119,9 @@ public class DataSyncController {
                     if(reponseContent.equals("1")){
                         dataTask.setStatus("1");
                         dataTaskService.update(dataTask);
-                        return "1";
+                        return 1;
                     }else{
-                        return "4";
+                        return 0;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -130,7 +130,7 @@ public class DataSyncController {
         } catch (IOException e) {
             System.out.println("连接FTP出错：" + e.getMessage());
         }
-        return "1";
+        return 1;
     }
 
     @ResponseBody

@@ -234,11 +234,12 @@
 </body>
 
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
-<div id="siteMeshJavaScriptForGroup">
+<div id="siteMeshJavaScript">
     <script src="${ctx}/resources/bundles/rateit/src/jquery.rateit.js" type="text/javascript"></script>
     <script src="${ctx}/resources/bundles/artTemplate/template.js"></script>
     <script src="${ctx}/resources/js/subStrLength.js"></script>
     <script src="${ctx}/resources/js/regex.js"></script>
+    <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
     <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
     <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.min.js"></script>
@@ -249,9 +250,10 @@
     <script type="text/javascript">
         var ctx = '${ctx}';
         var currentPageNo = 1;
-        var validatorAdd;
+        //var validatorAdd;
 
         $(function () {
+            alert("aaaabbb");
             template.helper("dateFormat", formatDate);
             getData(1);
             $(".search-text").keydown(function (event) {
@@ -323,6 +325,7 @@
         }
 
         function getData(pageNo) {
+            console.log("pageNo: " + pageNo);
             $.ajax({
                 url: "${ctx}/group/getPageData",
                 type: "get",

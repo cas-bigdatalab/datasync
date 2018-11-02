@@ -207,13 +207,13 @@
                             <span class="arrow "></span>
                         </a>
                     </li>
-                    <li>
+                    <%--<li>
                         <a href="${ctx}/createTask">
                             <i class="icon-list"></i>
                             <span class="title">元素结构管理</span>
                             <span class="arrow "></span>
                         </a>
-                    </li>
+                    </li>--%>
                     <li>
                         <a href="${ctx}/group/list">
                             <i class="icon-user"></i>
