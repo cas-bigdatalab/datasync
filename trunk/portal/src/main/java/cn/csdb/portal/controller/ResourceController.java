@@ -133,6 +133,14 @@ public class ResourceController {
         return jsonObject;
     }
 
+    @ResponseBody
+    @RequestMapping(value="getCheckedTables")
+    public JSONObject getCheckedTables(@RequestParam(name = "resourceId")String resourceId){
+        JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        return jsonObject;
+    }
+
 
     /**
      * Function Description: 获取砖题库文件列表
@@ -206,7 +214,7 @@ public class ResourceController {
 
     /**
      *
-     * Function Description: 添加资源第一步保存
+     * Function Description: 添加资源第二步保存
      *
      * @param: [resourceId, publicType, dataList]
      * @return: com.alibaba.fastjson.JSONObject
@@ -253,13 +261,28 @@ public class ResourceController {
         return jsonObject;
     }
 
-    /*@ResponseBody
+
+    /**
+     *
+     * Function Description: 添加资源第三步保存
+     *
+     * @param: [resourceId, userGroupIdList]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/2 11:19
+     */
+  /*  @ResponseBody
     @RequestMapping(value = "addResourceSecondStep")
     public JSONObject addResourceSecondStep(@RequestParam(name = "resourceId")String resourceId,
                                             @RequestParam(name = "userGroupIdList")String userGroupIdList){
+        Subject subject = subjectService.findBySubjectCode("sdc002");
         JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        resource.setUserGroupId(userGroupIdList);
         return jsonObject;
     }*/
+
+
 
 
 }
