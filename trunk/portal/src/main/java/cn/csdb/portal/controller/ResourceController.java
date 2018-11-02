@@ -110,6 +110,11 @@ public class ResourceController {
         return "addResource";
     }
 
+    @RequestMapping(value="editResource")
+    public String resourceEdit(){
+        return "editResource";
+    }
+
     /**
      * Function Description: 获得mysql数据库表单
      *
@@ -133,11 +138,21 @@ public class ResourceController {
         return jsonObject;
     }
 
+    /**
+     * Function Description: 获得已经选择的数据库表list
+     *
+     * @param: [resourceId]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/2 13:55
+     */
     @ResponseBody
-    @RequestMapping(value="getCheckedTables")
-    public JSONObject getCheckedTables(@RequestParam(name = "resourceId")String resourceId){
+    @RequestMapping(value = "getCheckedTables")
+    public JSONObject getCheckedTables(@RequestParam(name = "resourceId") String resourceId) {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        String tableList = resource.getPublicContent();
+        jsonObject.put("tableList", tableList);
         return jsonObject;
     }
 
@@ -158,6 +173,24 @@ public class ResourceController {
         return jsonObjects;
     }
 
+    /**
+     *
+     * Function Description: 获得已经选择文件list
+     *
+     * @param: [resourceId]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/2 14:23
+     */
+    @ResponseBody
+    @RequestMapping(value = "getCheckedFiles")
+    public JSONObject getCheckedFiles(@RequestParam(name = "resourceId") String resourceId) {
+        JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        String fileList = resource.getFilePath();
+        jsonObject.put("fileList", fileList);
+        return jsonObject;
+    }
 
     /**
      * Function Description: 获得文件树节点下的文件结构
@@ -177,7 +210,6 @@ public class ResourceController {
 
 
     /**
-     *
      * Function Description: 添加资源第一步保存
      *
      * @param: [title, imagePath, introduction, keyword, catalogId, createdByOrganization]
@@ -187,12 +219,12 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping(value = "addResourceFirstStep")
-    public JSONObject saveResourceFirstStep(@RequestParam(name = "title")String title,
-                                            @RequestParam(name = "imagePath",required = false)String imagePath,
-                                            @RequestParam(name = "introduction")String introduction,
-                                            @RequestParam(name = "keyword")String keyword,
-                                            @RequestParam(name = "catalogId")String catalogId,
-                                            @RequestParam(name = "createdByOrganization")String createdByOrganization) {
+    public JSONObject saveResourceFirstStep(@RequestParam(name = "title") String title,
+                                            @RequestParam(name = "imagePath", required = false) String imagePath,
+                                            @RequestParam(name = "introduction") String introduction,
+                                            @RequestParam(name = "keyword") String keyword,
+                                            @RequestParam(name = "catalogId") String catalogId,
+                                            @RequestParam(name = "createdByOrganization") String createdByOrganization) {
         Subject subject = subjectService.findBySubjectCode("sdc002");
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = new cn.csdb.portal.model.Resource();
@@ -206,14 +238,14 @@ public class ResourceController {
         resource.setResState("未完成");
         resource.setCreationDate(new Date());
         resource.setUpdateDate(new Date());
+        resource.setStatus("未发布");
         String resourceId = resourceService.save(resource);
-        jsonObject.put("resourceId",resourceId);
+        jsonObject.put("resourceId", resourceId);
         return jsonObject;
     }
 
 
     /**
-     *
      * Function Description: 添加资源第二步保存
      *
      * @param: [resourceId, publicType, dataList]
@@ -223,22 +255,22 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping(value = "addResourceSecondStep")
-    public JSONObject addResourceSecondStep(@RequestParam(name = "resourceId")String resourceId,
-                                            @RequestParam(name = "publicType")String publicType,
-                                            @RequestParam(name = "dataList")String dataList) {
+    public JSONObject addResourceSecondStep(@RequestParam(name = "resourceId") String resourceId,
+                                            @RequestParam(name = "publicType") String publicType,
+                                            @RequestParam(name = "dataList") String dataList) {
         Subject subject = subjectService.findBySubjectCode("sdc002");
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setPublicType(publicType);
-        if(publicType.equals("mysql")){
+        if (publicType.equals("mysql")) {
             resource.setPublicContent(dataList);
             resource.setToFilesNumber(0);
-        }else if(publicType.equals("file")){
+        } else if (publicType.equals("file")) {
             StringBuffer sb = new StringBuffer();
             long size = 0L;
-            if(StringUtils.isNoneBlank(dataList)){
+            if (StringUtils.isNoneBlank(dataList)) {
                 String[] s = dataList.split(";");
-                for(String str : s){
+                for (String str : s) {
                     str = str.replaceAll("%_%", "/");
                     File file = new File(str);
                     if (file.isDirectory()) {
@@ -249,21 +281,21 @@ public class ResourceController {
                             if (fp.indexOf("\\") > -1) {
                                 fp = fp.replaceAll("\\\\", "/");
                             }
-                            sb.append(fp+";");
+                            sb.append(fp + ";");
                         }
                     }
                 }
             }
-            resource.setFilePath(sb.toString().replace("/","%_%"));
+            resource.setFilePath(sb.toString().replace("/", "%_%"));
             resource.setToMemorySize(String.valueOf(size));
         }
+        resource.setStatus("未发布");
         resourceService.save(resource);
         return jsonObject;
     }
 
 
     /**
-     *
      * Function Description: 添加资源第三步保存
      *
      * @param: [resourceId, userGroupIdList]
@@ -271,18 +303,35 @@ public class ResourceController {
      * @auther: hw
      * @date: 2018/11/2 11:19
      */
-  /*  @ResponseBody
-    @RequestMapping(value = "addResourceSecondStep")
-    public JSONObject addResourceSecondStep(@RequestParam(name = "resourceId")String resourceId,
-                                            @RequestParam(name = "userGroupIdList")String userGroupIdList){
+    @ResponseBody
+    @RequestMapping(value = "addResourceThirdStep")
+    public JSONObject addResourceThirdStep(@RequestParam(name = "resourceId") String resourceId,
+                                            @RequestParam(name = "userGroupIdList") String userGroupIdList) {
         Subject subject = subjectService.findBySubjectCode("sdc002");
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setUserGroupId(userGroupIdList);
+        resource.setStatus("已发布");
+        String resId = resourceService.save(resource);
+        jsonObject.put("result","success");
         return jsonObject;
-    }*/
+    }
 
-
-
+    /**
+     *
+     * Function Description: 通过id获得resource
+     *
+     * @param: [resourceId]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/2 14:26
+     */
+    @ResponseBody
+    @RequestMapping(value = "getResourceById")
+    public JSONObject getResourceById(@RequestParam(name = "resourceId") String resourceId){
+        JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        return jsonObject;
+    }
 
 }
