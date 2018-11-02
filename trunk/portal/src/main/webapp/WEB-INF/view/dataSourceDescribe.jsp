@@ -200,9 +200,8 @@
                                         </div>
                                     </div>
                                     <div style="overflow: hidden;display: none" class="select-local">
-                                        <div class="col-md-6 col-md-offset-3" style="font-size: 18px">
-
-                                        </div>
+                                        <div class="col-md-6 col-md-offset-3" style="font-size: 18px" id="fileContainerTree"></div>
+                                        <div id="fileDescribeDiv"></div>
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="tab3">
@@ -247,7 +246,6 @@
                                 </div>
                             </div>
                         </div>
-                        <button></button>
                     </div>
 
                 </div>
@@ -264,7 +262,8 @@
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
     <script type="text/javascript">
         var ctx = '${ctx}';
-        var initNum =1
+        var initNum =1;
+        /*fileSourceFileList();*/
         $(".progress-bar-success").width(initNum*33+"%");
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
@@ -277,6 +276,7 @@
             }
         })
         initCenterResourceCatalogTree($("#jstree-demo"));
+        /*relationalDatabaseTableList();*/
 
         function fromAction(flag) {
             if(flag){
@@ -320,6 +320,7 @@
                 dataType: "json",
                 data: {editable: false},
                 success: function (data) {
+                    console.log(data)
                     $(container).jstree(data).bind("select_node.jstree", function (event, selected) {
                         /*$(".button-save").removeAttr("disabled");*/
                         $("#centerCatalogId").val(selected.node.id);
@@ -327,15 +328,147 @@
                 }
             })
         }
-
+        function relationalDatabaseTableList() {
+            $.ajax({
+                url:ctx+"/resource/relationalDatabaseTableList",
+                type:"GET",
+                success:function (data) {
+                    console.log(JSON.parse(data))
+                },
+                error:function (data) {
+                    console.log("请求失败")
+                }
+            })
+        }
+        /*function fileSourceFileList() {
+            $.ajax({
+                url:ctx+"/resource/fileSourceFileList",
+                type:"GET",
+                success:function (data) {
+                    console.log(JSON.parse(data))
+                    $("#fileContainerTree").jstree({
+                        "core":{
+                            'data':[
+                                {id:data[0].id,
+                                }
+                            ]
+                        }
+                    });
+                },
+                error:function (data) {
+                    console.log("请求失败")
+                }
+            })
+        }*/
         function addKeyWords() {
             console.log($("#centerCatalogId").val())
         }
 
+        function addResourceFirstStep() {
+            $.ajax({
+                url:ctx+"/resource/addResourceFirstStep",
+                type:"POST",
+                data:{
+                    title:"",
+                    imagePath:"",
+                    introduction:"",
+                    keyword:"",
+                    catalogId:"",
+                    createdByOrganization:""
+                },
+                success:function (data) {
+                    
+                },
+                error:function (data) {
+                    console.log("请求失败")
+                }
+            })
+        }
+        function addResourceSecondStep() {
+            $.ajax({
+                url:ctx+"/resource/addResourceSecondStep",
+                type:"POST",
+                data:{
+                    resourceId:"",
+                    publicType:"",
+                    dataList:""
+                },
+                success:function (data) {
 
-        var tags_tagsinput = $("#tags_tagsinput").text();
+                },
+                error:function (data) {
+                    console.log("请求失败")
+                }
+            })
+        }
 
-
+        $('#fileContainerTree').jstree({
+            'core': {
+                'data': function (node, cb) {
+                    var children;
+                    if (node.id == '#') {
+                        children = initFileTree();
+                    } else {
+                        children = getFileList(node.id);
+                    }
+                    generateChildJson(children);
+                    cb.call(this, children);
+                }
+            },
+            "plugins": [
+                "checkbox", "wholerow"
+            ]
+        }).bind('select_node.jstree', function (e, data) {
+            var fileId = data.node.id;
+            var fileName = data.node.text;
+            var str = fileId.replace(/%_%/g, "/");
+            var isContain = false;
+            $("#form_wizard_1").find(".button-save").removeAttr("disabled");
+        }).bind("deselect_node.jstree", function (e, data) {
+            var fileId = data.node.id;
+            var fileName = data.node.text;
+            $("div[name='" + fileId + "']").remove();
+            $("#form_wizard_1").find(".button-save").removeAttr("disabled");
+        });
+        function initFileTree() {
+            var root;
+            $.ajax({
+                type: "GET",
+                url: '${ctx}/resource/fileSourceFileList',
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    root = data;
+                }
+            });
+            return root;
+        }
+        function getFileList(folderPath) {
+            var children;
+            $.ajax({
+                url: "${ctx}/resource/treeNode",
+                type: "get",
+                data: {'filePath': folderPath},
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    children = data;
+                }
+            });
+            return children;
+        }
+        function generateChildJson(childArray) {
+            console.log(childArray)
+            for (var i = 0; i < childArray.length; i++) {
+                var child = childArray[i];
+                if (child.type == 'directory') {
+                    child.children = true;
+                    child.icon = "jstree-folder";
+                } else {
+                    child.icon = "jstree-file";
+                }
+            }
+        }
 
 
     </script>
