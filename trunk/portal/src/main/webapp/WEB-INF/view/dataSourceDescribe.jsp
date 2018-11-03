@@ -104,17 +104,19 @@
                                     <form class="form-horizontal" id="submit_form"
                                           method="POST">
                                         <h3 class="block">元数据信息描述</h3>
-                                        <div class="form-group custom-error">
-                                            <label class="control-label col-md-3">数据集名称 <span class="required">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3" >数据集名称 <span class="required">
 													* </span>
                                             </label>
                                             <div class="col-md-4">
-                                                <input type="text" class="form-control custom-error" name="resTitle"
-                                                       id="resTitle" onchange="setResTitle(this)" style="border: 1px solid rgb(169, 169, 169)">
+                                                <input type="text" class="form-control" name="need_checked"
+                                                       id="resTitle" style="border: 1px solid rgb(169, 169, 169)">
+                                                <div class="custom-error" name="need_message" style="display: none">请输入数据集名称</div>
                                             </div>
+
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">图片<span class="required">
+                                            <label class="control-label col-md-3">图片<span >
 													* </span>
                                             </label>
                                             <div class="col-md-9">
@@ -145,12 +147,13 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">资源目录<span  class="required">
+                                            <label class="control-label col-md-3">资源目录<span  >
 													* </span>
                                             </label>
                                             <div class="col-md-4" id="cemterCatalogDiv" >
-                                                <input type="hidden" name="centerCatalogId" id="centerCatalogId">
+                                                <input type="hidden"  id="centerCatalogId">
                                                 <div id="jstree-demo"></div>
+                                                <div class="custom-error" style="display: none" id="file_dir">请选择目录</div>
                                             </div>
                                         </div>
                                         <div class="form-group dataLicenseInputGroup">
@@ -158,34 +161,33 @@
 													* </span>
                                             </label>
                                             <div class="col-md-6">
-                                                <textarea name="dataDescribe" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;"></textarea>
+                                                <textarea name="need_checked" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;"></textarea>
+                                                <div class="custom-error" name="need_message" style="display: none">请输入描述信息</div>
                                             </div>
+
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">关键词<span class="required">
+                                            <label class="control-label col-md-3">关键词<span>
 													* </span></label>
-                                            <div class="checkbox-list col-md-6">
+                                            <div class="checkbox-list col-md-9">
                                                 <div style="margin-bottom: 3px;line-height: 24px">
                                                     <input type="text" style="font-size: 16px" id="addWorkStr">
                                                     <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
                                                 </div>
                                                 <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="key-wrap">
                                                     <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
-
-
                                                 </div>
-                                                <%--<label class="checkbox-inline">
-                                                    <input type="checkbox" id="centerCheckbox" name="catalogCheckbox" value="center"> 中心门户</label>
-                                                <label class="checkbox-inline">
-                                                    <input type="checkbox" id="localCheckbox" name="catalogCheckbox" value="local"> 本地门户 </label>--%>
+                                                <div class="custom-error" id="key_work" style="display: none">请添加至少一个关键词</div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3">来源<span  class="required">
 													* </span></label>
                                             <div class="col-md-6" id="dataSourceDes">
-                                                <textarea name="dataSourceDes" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;"></textarea>
+                                                <textarea name="need_checked" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;"></textarea>
+                                                <div class="custom-error" name="need_message" style="display: none">请输入来源</div>
                                             </div>
+
                                         </div>
                                     </form>
                                 </div>
@@ -229,7 +231,9 @@
                                     </div>
                                     <div style="overflow: hidden;display: none" class="select-local">
                                         <div class="col-md-6 col-md-offset-3" style="font-size: 18px" id="fileContainerTree"></div>
-                                        <div id="fileDescribeDiv"></div>
+                                        <div id="fileDescribeDiv" style="display: none">
+
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="tab3">
@@ -288,7 +292,7 @@
     {{each list as value i}}
     <div class="col-md-4">
         <label>
-            <input type="checkbox" name="resTable" value="{{value}}
+            <input type="checkbox" name="resTable" value="{{value}}">
             <span style="word-break: break-all">{{value}}</span>
         </label>
     </div>
@@ -303,6 +307,8 @@
     <script type="text/javascript">
         var ctx = '${ctx}';
         var initNum =1;
+        var resourceId="";
+        var publicType="0";
         var tagNames=new Array();
         /*fileSourceFileList();*/
         $(".progress-bar-success").width(initNum*33+"%");
@@ -310,10 +316,21 @@
             if(this.value =="DB"){
                 $(".select-database").show();
                 $(".select-local").hide();
-
+                publicType ="0"
             }else {
                 $(".select-database").hide();
                 $(".select-local").show();
+                publicType ="1"
+            }
+        })
+        $("[name='need_checked']").on("change",function () {
+            var $index = $("[name='need_checked']").index($(this))
+            console.log($index)
+            if($(this).val() != "" &&$(this).val().trim()!=""){
+                $("[name='need_checked']:eq("+$index +")").removeClass("custom-error")
+                $("[name='need_message']:eq("+$index +")").removeClass("custom-error")
+                $("[name='need_message']:eq("+$index +")").hide()
+                $(".required:eq("+$index +")").parent().removeClass("custom-error")
             }
         })
         initCenterResourceCatalogTree($("#jstree-demo"));
@@ -324,7 +341,6 @@
                 ++initNum;
                 if(initNum ==2){
 
-
                     $("#staNum").html(initNum)
                     $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab1").removeClass("active")
@@ -332,6 +348,7 @@
                     $(".steps li:eq(1)").addClass("active")
                     $(".button-previous").show();
                 }else {
+                    addResourceSecondStep()
                     $("#staNum").html(initNum)
                     $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab2").removeClass("active")
@@ -371,6 +388,7 @@
                     $(container).jstree(data).bind("select_node.jstree", function (event, selected) {
                         /*$(".button-save").removeAttr("disabled");*/
                         $("#centerCatalogId").val(selected.node.id);
+                        $("#file_dir").hide();
                     })
                 }
             })
@@ -392,26 +410,6 @@
                 }
             })
         }
-        /*function fileSourceFileList() {
-            $.ajax({
-                url:ctx+"/resource/fileSourceFileList",
-                type:"GET",
-                success:function (data) {
-                    console.log(JSON.parse(data))
-                    $("#fileContainerTree").jstree({
-                        "core":{
-                            'data':[
-                                {id:data[0].id,
-                                }
-                            ]
-                        }
-                    });
-                },
-                error:function (data) {
-                    console.log("请求失败")
-                }
-            })
-        }*/
         function addKeyWords() {
             var newStr = $("#addWorkStr").val()
             if(newStr =="" ||newStr.trim() == ""){
@@ -425,12 +423,39 @@
             }
             tagNames.push(newStr)
             $(".key-wrap").append("<div class='key-word'> <p class='tagname'>"+newStr+"</p> <span class='closeWord'>×</span> </div>");
+            $("#addWorkStr").val("")
+            $("#key_work").hide();
         }
         $(".key-wrap").delegate(".closeWord","click",function () {
-            console.log($(this).index())
+            var index = $(".closeWord").index($(this))
             $(this).parent().remove()
+            tagNames.splice(index,1)
+            if(tagNames==0){
+                $("#key_work").show();
+            }
+
         })
         function addResourceFirstStep() {
+            /*$("[name='need_message']").change(function () {
+
+            })*/
+            $("[name='need_checked']").each(function () {
+                var $index = $("[name='need_checked']").index($(this))
+                if($(this).val() == "" ||$(this).val().trim()==""){
+                    $("[name='need_checked']:eq("+$index +")").addClass("custom-error")
+                    $("[name='need_message']:eq("+$index +")").addClass("custom-error")
+                    $("[name='need_message']:eq("+$index +")").show()
+                    $(".required:eq("+$index +")").parent().addClass("custom-error")
+                }
+            })
+            if(tagNames.length ==0){
+                $("#key_work").show()
+                return
+            }
+            if($("#centerCatalogId").val() ==""){
+                $("#file_dir").show();
+                return
+            }
             $.ajax({
                 url:ctx+"/resource/addResourceFirstStep",
                 type:"POST",
@@ -452,13 +477,28 @@
             })
         }
         function addResourceSecondStep() {
+
+            var dataList=""
+            if(publicType =="0"){
+                var $ele = $("[name='resTable']:checked")
+
+                $ele.each(function () {
+                    dataList+=$(this).val()+";"
+                })
+            }else {
+                var $ele = $("#fileDescribeDiv span")
+                $ele.each(function () {
+                    dataList+=$(this).text()+";"
+                })
+            }
+            console.log(dataList)
             $.ajax({
                 url:ctx+"/resource/addResourceSecondStep",
                 type:"POST",
                 data:{
                     resourceId:"5bdc180e095e0423ec2a2597",
-                    publicType:"",
-                    dataList:""
+                    publicType:publicType,
+                    dataList:dataList
                 },
                 success:function (data) {
                     console.log("——————————222222222————————————")
@@ -487,8 +527,8 @@
                 }
             })
         }
-        addResourceFirstStep();
-        addResourceSecondStep();
+        /*addResourceFirstStep();*/
+        /*addResourceSecondStep();*/
         getResourceById();
         $('#fileContainerTree').jstree({
             'core': {
@@ -508,15 +548,15 @@
             ]
         }).bind('select_node.jstree', function (e, data) {
             var fileId = data.node.id;
-            var fileName = data.node.text;
             var str = fileId.replace(/%_%/g, "/");
-            var isContain = false;
-            $("#form_wizard_1").find(".button-save").removeAttr("disabled");
+            /*var isContain = false;*/
+            $("#fileDescribeDiv").append("<div name="+ fileId+"><span>"+str +"</span></div>")
+            /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
         }).bind("deselect_node.jstree", function (e, data) {
             var fileId = data.node.id;
             var fileName = data.node.text;
             $("div[name='" + fileId + "']").remove();
-            $("#form_wizard_1").find(".button-save").removeAttr("disabled");
+            /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
         });
         function initFileTree() {
             var root;
