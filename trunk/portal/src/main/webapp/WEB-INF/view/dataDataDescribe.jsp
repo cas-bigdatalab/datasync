@@ -231,6 +231,20 @@
 
                                         </div>
                                     </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                     </form>
                                 </div>
                                 <div class="tab-pane" id="tab2">
@@ -359,6 +373,16 @@
         var tagNames=new Array();
         //将图片截图并上传
         var api = null;
+        /*  boundx,
+         boundy,
+
+         $preview = $('#preview-pane'),
+         $pcnt = $('#preview-pane .preview-container'),
+         $pimg = $('#preview-pane .preview-container img'),
+
+         xsize = $pcnt.width(),
+         ysize = $pcnt.height();*/
+
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -373,11 +397,21 @@
                     $('#cutimg').attr('src', event.target.result);
                     $("#checkPicture").hide();
                     $("#uploadSpan").show();
+                    /*
+                     $('#cutimg').hide();
+                     */
+
                     console.log(event.target.result)
+                    /*$pimg.removeAttr('src');
+                     $pimg.attr('src', event.target.result);*/
+
                     api = $.Jcrop('#cutimg', {
                         setSelect: [ 10, 10, 100, 100 ],
                         aspectRatio: 1,
                         allowSelect:false,
+                        /*
+                         allowMove:true,
+                         */
                         allowResize:false,
 
                         onSelect: updateCoords,
