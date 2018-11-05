@@ -111,7 +111,7 @@
                                             <label class="control-label col-md-3" >数据集名称 <span class="required">
                                                     * </span>
                                             </label>
-                                            <div class="col-md-4">
+                                            <div class="col-md-4" style="padding-top:14px">
                                                 <input type="text" class="form-control" name="need_checked"
                                                        id="task_title" style="border: 1px solid rgb(169, 169, 169)">
                                                 <div class="custom-error" name="need_message" style="display: none">请输入数据集名称</div>
@@ -193,7 +193,7 @@
                                             <label class="control-label col-md-3">资源目录<span  >
                                                     * </span>
                                             </label>
-                                            <div class="col-md-4" id="cemterCatalogDiv" >
+                                            <div class="col-md-4" id="cemterCatalogDiv" style="padding-top:14px" >
                                                 <input type="hidden"  id="centerCatalogId">
                                                 <div id="jstree-demo"></div>
                                                 <div class="custom-error" style="display: none" id="file_dir">请选择目录</div>
@@ -203,7 +203,7 @@
                                             <label class="control-label col-md-3">描述 <span class="required">
                                                     * </span>
                                             </label>
-                                            <div class="col-md-6">
+                                            <div class="col-md-6" style="padding-top:14px">
                                                 <textarea name="need_checked" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;"></textarea>
                                                 <div class="custom-error" name="need_message" style="display: none">请输入描述信息</div>
                                             </div>
@@ -212,19 +212,19 @@
                                         <div class="form-group">
                                             <label class="control-label col-md-3">关键词<span>
                                                     * </span></label>
-                                            <div class="checkbox-list col-md-9">
+                                            <div class="checkbox-list col-md-9" style="padding-top:14px">
                                                 <div style="margin-bottom: 3px;line-height: 24px">
                                                     <input type="text" style="font-size: 16px" id="addWorkStr">
                                                     <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
                                                 </div>
-                                                <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="key-wrap"></div>
+                                                <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden;padding-left: 3px" class="key-wrap"></div>
                                                 <div class="custom-error" id="key_work" style="display: none">请添加至少一个关键词</div>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3">来源<span  class="required">
                                                     * </span></label>
-                                            <div class="col-md-6" id="dataSourceDes">
+                                            <div class="col-md-6" id="dataSourceDes" style="padding-top:14px">
                                                 <textarea name="need_checked" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;"></textarea>
                                                 <div class="custom-error" name="need_message" style="display: none">请输入来源</div>
                                             </div>
@@ -534,6 +534,7 @@
                 dataType: "json",
                 data: {editable: false},
                 success: function (data) {
+                    console.log(data)
                     $(container).jstree(data).bind("select_node.jstree", function (event, selected) {
                         /*$(".button-save").removeAttr("disabled");*/
                         $("#centerCatalogId").val(selected.node.id);
@@ -549,6 +550,7 @@
                 success:function (data) {
                     $(".undeslist").empty();
                     var List =JSON.parse(data)
+                    console.log(List)
                     var tabCon = template("dataRelationshipList", List);
                     $(".undeslist").append(tabCon);
                 },
@@ -648,7 +650,7 @@
                 type:"POST",
                 data:{
                     resourceId:resourceId,
-                    publicType:publicType,
+                    publicType:publicType=="0"?"mysql":"file",
                     dataList:dataList
                 },
                 success:function (data) {
@@ -731,7 +733,7 @@
             })
         }
 
-        function getResourceById() {
+        /*function getResourceById() {
             $.ajax({
                 url:ctx+"/resource/getResourceById",
                 type:"POST",
@@ -746,7 +748,7 @@
                 }
             })
         }
-        getResourceById();
+        getResourceById();*/
         $('#fileContainerTree').jstree({
             'core': {
                 'data': function (node, cb) {
@@ -783,6 +785,7 @@
                 dataType: "json",
                 async: false,
                 success: function (data) {
+                    console.log(data)
                     root = data;
                 }
             });
