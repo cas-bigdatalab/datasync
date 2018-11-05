@@ -336,7 +336,7 @@
         var ctx = '${ctx}';
         var currentPageNo = 1;
         var validatorAdd;
-
+        var groupUsersSelect2;
         $(function () {
             template.helper("dateFormat", formatDate);
             getData(1);
@@ -403,10 +403,10 @@
             $("#addGroupForm").validate(validData);
             $("#editGroupForm").validate(validData);
 
-            getAllUserList();
-            var groupUsersSelect2 = $('#users').select2({
+            //getAllUserList();
+            groupUsersSelect2 = $('#users').select2({
                 placeholder: "请选择用户",
-                allowClear: true,
+                allowClear: true
             });
         });
 
@@ -556,6 +556,14 @@
                     $("#spanGroupName").html(data.group.groupName);
                     $("#spanDesc").html(data.group.desc);
                     $("#spanGroupId").val(data.group.id);
+                    //编辑显示己增加的用户
+                    console.log(data.group.users);
+
+                    $.each(data.group.users, function(index, item){
+                        console.log(item);
+                        groupUsersSelect2.val(item).trigger("change");
+                        groupUsersSelect2.change();
+                    });
                 }
             });
         }
