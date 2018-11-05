@@ -64,12 +64,12 @@ public class ResourceController {
     public JSONObject getPageData(HttpServletRequest request, @RequestParam(value = "subjectCode", required = false) String subjectCode,
                                   @RequestParam(value = "title", required = false) String title,
                                   @RequestParam(value = "publicType", required = false) String publicType,
-                                  @RequestParam(value = "status", required = false) String status,
+                                  @RequestParam(value = "status", required = false) String resState,
                                   @RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
                                   @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
 
-        List<cn.csdb.portal.model.Resource> list = resourceService.getListByPage(subjectCode, title, publicType, status, pageNo, pageSize);
-        long count = resourceService.countByPage(subjectCode, title, publicType, status);
+        List<cn.csdb.portal.model.Resource> list = resourceService.getListByPage(subjectCode, title, publicType, resState, pageNo, pageSize);
+        long count = resourceService.countByPage(subjectCode, title, publicType, resState);
         JSONObject json = new JSONObject();
         json.put("resourceList", list);
         json.put("totalCount", count);
@@ -266,11 +266,12 @@ public class ResourceController {
         Subject subject = subjectService.findBySubjectCode("sdc002");
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
-        resource.setPublicType(publicType);
         if (publicType.equals("mysql")) {
             resource.setPublicContent(dataList);
             resource.setToFilesNumber(0);
+            resource.setPublicType("mysql");
         } else if (publicType.equals("file")) {
+            resource.setPublicType("file");
             StringBuffer sb = new StringBuffer();
             long size = 0L;
             if (StringUtils.isNoneBlank(dataList)) {
@@ -392,11 +393,12 @@ public class ResourceController {
         Subject subject = subjectService.findBySubjectCode("sdc002");
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
-        resource.setPublicType(publicType);
         if (publicType.equals("mysql")) {
             resource.setPublicContent(dataList);
             resource.setToFilesNumber(0);
+            resource.setPublicType("mysql");
         } else if (publicType.equals("file")) {
+            resource.setPublicType("file");
             StringBuffer sb = new StringBuffer();
             long size = 0L;
             if (StringUtils.isNoneBlank(dataList)) {
