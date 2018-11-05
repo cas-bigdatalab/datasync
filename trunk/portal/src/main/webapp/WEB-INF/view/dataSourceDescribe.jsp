@@ -169,9 +169,11 @@
                                                             <span class="fileinput-new">
                                                             选择一个图片</span>
                                                             <input class="photo-file" id="fcupload" type="file" name="imgFile" onchange="readURL(this);">
-                                                    </span>
-                                                            <span id="uploadSpan" class="fileinput-new" hidden>
-                                                                <button type="button" onclick="doUpload();">上传</button>
+                                                            </span>
+                                                            <span id="uploadSpan" class="btn default btn-file" hidden>
+                                                                <span class="fileinput-new">
+                                                            上传</span>
+                                                                <input type="button" onclick="doUpload();"/>
                                                         </span>
                                                     </form>
                                                     <div class="clearfix margin-top-10">
@@ -456,7 +458,9 @@
                 processData: false,
                 success: function (result) {
                     var resultJson = JSON.parse(result);
+/*
                     alert(resultJson.saveName);
+*/
                     var filePath = 'resources/img/images/'+resultJson.saveName;
                     $('.jcrop-tracker').hide();
                     $("#checkPicture").show();
