@@ -113,7 +113,7 @@
                                             </label>
                                             <div class="col-md-4">
                                                 <input type="text" class="form-control" name="need_checked"
-                                                       id="resTitle" style="border: 1px solid rgb(169, 169, 169)">
+                                                       id="task_title" style="border: 1px solid rgb(169, 169, 169)">
                                                 <div class="custom-error" name="need_message" style="display: none">请输入数据集名称</div>
                                             </div>
 
