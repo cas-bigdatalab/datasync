@@ -411,7 +411,7 @@
                 processData: false,
                 success: function (result) {
                     var resultJson = JSON.parse(result);
-                    var filePath = 'resources/img/images/'+resultJson.saveName;
+                    var filePath = '/img/images/'+resultJson.saveName;
                     $('.jcrop-tracker').hide();
                     $("#checkPicture").show();
                     $("#uploadSpan").hide();

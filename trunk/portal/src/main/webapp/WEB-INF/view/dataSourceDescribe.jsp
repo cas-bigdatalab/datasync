@@ -329,6 +329,7 @@
         </div>
     </div>
 </div>
+<input type="hidden" id="imgPath" val="">
 <script type="text/html" id="dataRelationshipList">
     {{each list as value i}}
     <div class="col-md-4">
@@ -407,6 +408,7 @@
                 success: function (result) {
                     var resultJson = JSON.parse(result);
                     var filePath = 'resources/img/images/'+resultJson.saveName;
+                    $("#imgPath").val('img/images/'+resultJson.saveName);
                     $('.jcrop-tracker').hide();
                     $("#checkPicture").show();
                     $("#uploadSpan").hide();
