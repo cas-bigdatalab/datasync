@@ -106,7 +106,6 @@
 
                                     <form class="form-horizontal" id="submit_form"
                                           method="POST">
-                                        <h3 class="block">元数据信息描述</h3>
                                         <div class="form-group">
                                             <label class="control-label col-md-3" >数据集名称 <span class="required">
                                                     * </span>
@@ -234,7 +233,6 @@
                                 </div>
                                 <div class="tab-pane" id="tab2">
 
-                                    <h3 class="block">确定数据对象范围，发布数据</h3>
                                     <h3>
                                         <span>数据源:</span>
                                         <label for="aaa" style="font-size: 23px;color: #1CA04C">数据库表</label>
@@ -279,7 +277,6 @@
                                 </div>
                                 <div class="tab-pane" id="tab3">
 
-                                    <h3>确定数据对象发布的权限分配范围</h3>
                                     <div style="overflow: hidden">
                                         <div class="col-md-6 col-md-offset-3" style="font-size: 18px">
                                             <form class="form-horizontal">
@@ -593,6 +590,9 @@
                     return
                 }
             })
+            if(firstFlag){
+                return
+            }
             if(tagNames.length ==0){
                 $("#key_work").show()
                 firstFlag=true
@@ -703,6 +703,9 @@
                     return
                 }
             })
+            if(firstFlag){
+                return
+            }
             if(tagNames.length ==0){
                 $("#key_work").show()
                 firstFlag=true
@@ -724,7 +727,7 @@
                 data:{
                     resourceId:resourceId,
                     title:$("#task_title").val(),
-                    imagePath:"",
+                    imagePath:$("#imgPath").val(),
                     introduction:$("#dataDescribeID").val(),
                     keyword:keywordStr,
                     catalogId:$("#centerCatalogId").val(),

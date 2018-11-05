@@ -105,7 +105,6 @@
 
                                     <form class="form-horizontal" id="submit_form"
                                           method="POST">
-                                        <h3 class="block">元数据信息描述</h3>
 
 
 
@@ -219,7 +218,7 @@
                                                         <input type="text" style="font-size: 16px" id="addWorkStr">
                                                         <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
                                                     </div>
-                                                    <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden;padding-left: 3px" class="key-wrap"></div>
+                                                    <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden;padding-left: 5px" class="key-wrap"></div>
                                                     <div class="custom-error" id="key_work" style="display: none">请添加至少一个关键词</div>
                                                 </div>
                                             </div>
@@ -236,8 +235,6 @@
 
                                 </div>
                                 <div class="tab-pane" id="tab2">
-
-                                    <h3 class="block">确定数据对象范围，发布数据</h3>
                                     <h3>
                                         <span>数据源:</span>
                                         <label for="aaa" style="font-size: 23px;color: #1CA04C">数据库表</label>
@@ -283,9 +280,8 @@
                                 </div>
                                 <div class="tab-pane" id="tab3">
 
-                                    <h3>确定数据对象发布的权限分配范围</h3>
                                     <div style="overflow: hidden">
-                                        <div class="col-md-6 col-md-offset-3" style="font-size: 18px">
+                                        <div class="col-md-6 col-md-offset-1" style="font-size: 18px">
                                             <form class="form-horizontal">
                                                 <div class="form-group">
                                                     <label  class="col-sm-4 control-label">可公开范围</label>
@@ -302,7 +298,7 @@
                                                 <div class="form-group">
                                                     <label  class="col-sm-4 control-label">已选择</label>
                                                     <div class="col-sm-8">
-                                                        <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="permissions-wrap"></div>
+                                                        <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden;padding-left: 5px" class="permissions-wrap"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -360,7 +356,7 @@
         var firstFlag=false;
         var secondFlag=false;
         var resourceId=sdoId;
-        var publicType="0";
+        var publicType="";
         var tagNames=new Array();
         var dataRelationsList ;
         //将图片截图并上传功能
@@ -409,6 +405,7 @@
                 processData: false,
                 success: function (result) {
                     var resultJson = JSON.parse(result);
+                    console.log(resultJson)
                     var filePath = '${ctx}/resources/img/images/'+resultJson.saveName;
                     $("#imgPath").val('resources/img/images/'+resultJson.saveName);
                     $('.jcrop-tracker').hide();
@@ -422,17 +419,16 @@
                 }
             });
         }
-        getResourceById();
         $(".progress-bar-success").width(initNum*33+"%");
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
                 $(".select-database").show();
                 $(".select-local").hide();
-                publicType ="0"
+                publicType ="mysql"
             }else {
                 $(".select-database").hide();
                 $(".select-local").show();
-                publicType ="1"
+                publicType ="file"
             }
         })
         $("[name='need_checked']").on("change",function () {
@@ -632,16 +628,16 @@
         function addResourceSecondStep() {
 
             var dataList=""
-            if(publicType =="0"){
+            if(publicType =="mysql"){
                 var $ele = $("[name='resTable']:checked")
 
                 $ele.each(function () {
                     dataList+=$(this).val()+";"
                 })
             }else {
-                var $ele = $("#fileDescribeDiv span")
+                var $ele = $(".fileTag")
                 $ele.each(function () {
-                    dataList+=$(this).text()+";"
+                    dataList+=$(this).attr("name")+";"
                 })
             }
             if($ele.size() ==0 ){
@@ -654,7 +650,7 @@
                 type:"POST",
                 data:{
                     resourceId:resourceId,
-                    publicType:publicType=="0"?"mysql":"file",
+                    publicType:publicType,
                     dataList:dataList
                 },
                 success:function (data) {
@@ -751,6 +747,8 @@
                     $("#dataDescribeID").val(totalList.introduction)
                     var path = "${ctx}/"+totalList.imagePath+"_cut.jpg";
                     $('#cutimg').attr('src',path);
+
+                    publicType =  totalList.publicType
                     var keyList  = totalList.keyword.split(";")
 
                     tagNames=keyList.slice(0,keyList.length-1)
@@ -768,6 +766,13 @@
                             $("[valName='"+publicContentList[i] +"']").prop("checked",true)
                         }
                     }else {
+                        var fileId=totalList.filePath
+                        var str = fileId.replace(/%_%/g, "/");
+                        var filePathList = str.split(";")
+                        console.log(filePathList)
+                        for (var i=0;i<filePathList.length-1;i++){
+                            $("#fileDescribeDiv").append("<span class='tag fileTag' style='display: inline-block;margin-right: 5px' name="+ filePathList[i]+"><span class='filePathClass'>"+filePathList[i] +"</span> &nbsp;&nbsp; <a href='javascript:void(0)' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
+                        }
                         $(".select-database").hide();
                         $(".select-local").show();
 
@@ -810,13 +815,13 @@
             var fileId = data.node.id;
             var str = fileId.replace(/%_%/g, "/");
             /*var isContain = false;*/
-            $("#fileDescribeDiv").append("<span class='tag' style='display: inline-block' name="+ fileId+"><span class='filePathClass'>"+str +"</span> &nbsp;&nbsp; <a href='#' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
+            $("#fileDescribeDiv").append("<span class='tag fileTag' style='display: inline-block;margin-right: 5px' name="+ fileId+"><span class='filePathClass'>"+str +"</span> &nbsp;&nbsp; <a href='javascript:void(0)' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
             /*$("#fileDescribeDiv").append("<div name="+ fileId+"><span>"+str +"</span></div>")*/
             /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
         }).bind("deselect_node.jstree", function (e, data) {
             var fileId = data.node.id;
             var fileName = data.node.text;
-            $("div[name='" + fileId + "']").remove();
+            $("span[name='" + fileId + "']").remove();
             /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
         });
 
@@ -859,7 +864,9 @@
                 }
             }
         }
-
+        function tagClick(obj){
+            $(obj).parent().remove();
+        }
 
     </script>
 </div>
