@@ -231,8 +231,6 @@
 
                                         </div>
                                     </form>
-
-                                    </form>
                                 </div>
                                 <div class="tab-pane" id="tab2">
 
