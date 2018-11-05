@@ -115,7 +115,7 @@
                                             </label>
                                             <div class="col-md-4">
                                                 <input type="text" class="form-control" name="need_checked"
-                                                       id="resTitle" style="border: 1px solid rgb(169, 169, 169)">
+                                                       id="task_title" style="border: 1px solid rgb(169, 169, 169)">
                                                 <div class="custom-error" name="need_message" style="display: none">请输入数据集名称</div>
                                             </div>
 
@@ -361,11 +361,9 @@
         var initNum =1;
         var firstFlag=false;
         var secondFlag=false;
-        var thirdFlag=false;
         var resourceId="";
         var publicType="0";
         var tagNames=new Array();
-        /*fileSourceFileList();*/
         $(".progress-bar-success").width(initNum*33+"%");
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
@@ -380,7 +378,6 @@
         })
         $("[name='need_checked']").on("change",function () {
             var $index = $("[name='need_checked']").index($(this))
-            console.log($index)
             if($(this).val() != "" &&$(this).val().trim()!=""){
                 $("[name='need_checked']:eq("+$index +")").removeClass("custom-error")
                 $("[name='need_message']:eq("+$index +")").removeClass("custom-error")
@@ -401,6 +398,21 @@
         $(".button-submit").click(function () {
             addResourceThirdStep()
         })
+        $(".key-wrap").delegate(".closeWord","click",function () {
+            var index = $(".closeWord").index($(this))
+            $(this).parent().remove()
+            tagNames.splice(index,1)
+            if(tagNames==0){
+                $("#key_work").show();
+            }
+
+        })
+        $(".permissions-wrap").delegate(".closeWord","click",function () {
+            $(this).parent().remove()
+            var str =$(this).parent().find(".tagname").text()
+            $("#permissions").append("<option value="+str +">"+ str+"</option>")
+
+        })
         initCenterResourceCatalogTree($("#jstree-demo"));
         relationalDatabaseTableList();
 
@@ -408,7 +420,11 @@
             if(flag){
                 ++initNum;
                 if(initNum ==2 ){
-                    addResourceFirstStep()
+                    if(resourceId == ""){
+                        addResourceFirstStep()
+                    }else {
+                        editResourceFirstStep
+                    }
                     if(firstFlag){
                         initNum--
                         toastr["error"]("请填写必须项目");
@@ -462,7 +478,6 @@
                 dataType: "json",
                 data: {editable: false},
                 success: function (data) {
-                    console.log(data)
                     $(container).jstree(data).bind("select_node.jstree", function (event, selected) {
                         /*$(".button-save").removeAttr("disabled");*/
                         $("#centerCatalogId").val(selected.node.id);
@@ -477,9 +492,7 @@
                 type:"GET",
                 success:function (data) {
                     $(".undeslist").empty();
-
                     var List =JSON.parse(data)
-                    console.log(List)
                     var tabCon = template("dataRelationshipList", List);
                     $(".undeslist").append(tabCon);
                 },
@@ -504,21 +517,7 @@
             $("#addWorkStr").val("")
             $("#key_work").hide();
         }
-        $(".key-wrap").delegate(".closeWord","click",function () {
-            var index = $(".closeWord").index($(this))
-            $(this).parent().remove()
-            tagNames.splice(index,1)
-            if(tagNames==0){
-                $("#key_work").show();
-            }
 
-        })
-        $(".permissions-wrap").delegate(".closeWord","click",function () {
-            $(this).parent().remove()
-            var str =$(this).parent().find(".tagname").text()
-            $("#permissions").append("<option value="+str +">"+ str+"</option>")
-
-        })
         function addResourceFirstStep() {
             $("[name='need_checked']").each(function () {
                 var $index = $("[name='need_checked']").index($(this))
@@ -542,20 +541,24 @@
                 return
             }
             firstFlag=false
+            var keywordStr = ""
+            for(var i=0;i<tagNames.length;i++){
+                keywordStr+=tagNames[i]+";"
+            }
             $.ajax({
                 url:ctx+"/resource/addResourceFirstStep",
                 type:"POST",
                 data:{
-                    title:"",
+                    title:$("#task_title").val(),
                     imagePath:"",
-                    introduction:"",
-                    keyword:"",
-                    catalogId:"",
-                    createdByOrganization:""
+                    introduction:$("#dataDescribeID").val(),
+                    keyword:keywordStr,
+                    catalogId:$("#centerCatalogId").val(),
+                    createdByOrganization:$("#dataSourceDesID").val()
                 },
                 success:function (data) {
-                    console.log("———————————111111111———————————")
-                    console.log(data)
+                    var data = JSON.parse(data)
+                    resourceId = data.resourceId
                 },
                 error:function (data) {
                     console.log("请求失败")
@@ -582,23 +585,21 @@
             }else {
                 secondFlag = false
             }
-            /*$.ajax({
+            $.ajax({
                 url:ctx+"/resource/addResourceSecondStep",
                 type:"POST",
                 data:{
-                    resourceId:"5bdc180e095e0423ec2a2597",
+                    resourceId:resourceId,
                     publicType:publicType,
                     dataList:dataList
                 },
                 success:function (data) {
-                    console.log("——————————222222222————————————")
                     console.log(data)
-                    console.log("——————————222222222————————————")
                 },
                 error:function (data) {
                     console.log("请求失败")
                 }
-            })*/
+            })
         }
         function addResourceThirdStep() {
            var $preEle= $(".permissions-word .tagname")
@@ -614,36 +615,79 @@
                 url:ctx+"/resource/addResourceThirdStep",
                 type:"POST",
                 data:{
-                    resourceId:"5bdc180e095e0423ec2a2597",
+                    resourceId:resourceId,
                     userGroupIdList:userStr
                 },
                 success:function (data) {
-                    console.log(data)
+                    window.location.href = "${ctx}/dataRelease"
                 },
                 error:function (data) {
                     console.log("请求失败")
                 }
             })
         }
+        function editResourceFirstStep() {
+            $("[name='need_checked']").each(function () {
+                var $index = $("[name='need_checked']").index($(this))
+                if($(this).val() == "" ||$(this).val().trim()==""){
+                    $("[name='need_checked']:eq("+$index +")").addClass("custom-error")
+                    $("[name='need_message']:eq("+$index +")").addClass("custom-error")
+                    $("[name='need_message']:eq("+$index +")").show()
+                    $(".required:eq("+$index +")").parent().addClass("custom-error")
+                    firstFlag=true
+                    return
+                }
+            })
+            if(tagNames.length ==0){
+                $("#key_work").show()
+                firstFlag=true
+                return
+            }
+            if($("#centerCatalogId").val() ==""){
+                $("#file_dir").show();
+                firstFlag=true
+                return
+            }
+            firstFlag=false;
+            var keywordStr = ""
+            for(var i=0;i<tagNames.length;i++){
+                keywordStr+=tagNames[i]+";"
+            }
+            $.ajax({
+                url:ctx+"/resource/editResourceFirstStep",
+                type:"POST",
+                data:{
+                    resourceId:resourceId,
+                    title:$("#task_title").val(),
+                    imagePath:"",
+                    introduction:$("#dataDescribeID").val(),
+                    keyword:keywordStr,
+                    catalogId:$("#centerCatalogId").val(),
+                    createdByOrganization:$("#dataSourceDesID").val()
+                },
+                success:function (data) {
+                },
+                error:function (data) {
+                    console.log("请求失败")
+                }
+            })
+        }
+
         function getResourceById() {
             $.ajax({
                 url:ctx+"/resource/getResourceById",
                 type:"POST",
                 data:{
-                    resourceId:"5bdc180e095e0423ec2a2597",
+                    resourceId:"5bdfd44981b55a207c7bd5df",
                 },
                 success:function (data) {
-                    console.log("——————————444444————————————")
                     console.log(data)
-                    console.log("——————————444444————————————")
                 },
                 error:function (data) {
                     console.log("请求失败")
                 }
             })
         }
-        /*addResourceFirstStep();*/
-        /*addResourceSecondStep();*/
         getResourceById();
         $('#fileContainerTree').jstree({
             'core': {
@@ -713,9 +757,6 @@
             }
         }
 
-        function validationFirst() {
-            
-        }
 
     </script>
 </div>

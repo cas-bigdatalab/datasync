@@ -16,13 +16,41 @@
 <head>
     <title>DataSync专题库门户管理系统</title>
 
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jqeury-file-upload/css/jquery.fileupload.css">
+    <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jqeury-file-upload/css/jquery.fileupload.css">--%>
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jstree/dist/themes/default/style.min.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.css">
     <style>
-        .bar {
-            height: 18px;
-            background: green;
+        .undeslist label{
+            font-size: 18px;
         }
+        .custom-error{
+            color:#a94442!important;
+            border-color:#a94442!important;
+        }
+        .key-word ,.permissions-word{
+            padding:0 8px;
+            height: 28px;
+            background:#57add9;
+            color:#fff;
+            font-size: 14px;
+            margin-right:10px;
+            margin-bottom: 5px;
+            float:left;
+        }
+
+        .key-word p , .permissions-word p{
+            float:left;
+            font-size:14px;
+            line-height:28px;
+        }
+        .key-word span , .permissions-word span{
+            float:left;
+            cursor:pointer;
+            margin-left:5px;
+            font-size:16px;
+            margin-top:2px;
+        }
+
     </style>
 </head>
 
@@ -35,7 +63,7 @@
                 <div class="portlet-title" style="background-color:#3fd5c0">
                     <div class="caption">
                         <i class="fa fa-gift"></i> 数据发布 - <span class="step-title">
-								第&nbsp;1&nbsp;步,共&nbsp;3&nbsp;步</span>
+								第&nbsp;<span id="staNum">1</span>&nbsp;步,共&nbsp;3&nbsp;步</span>
                     </div>
                 </div>
                 <div class="portlet-body form">
@@ -43,7 +71,7 @@
                         <div class="form-body">
                             <ul class="nav nav-pills nav-justified steps">
                                 <li class="active">
-                                    <a href="#tab1" data-toggle="tab" class="step">
+                                    <a href="#tab1"  class="step">
 												<span class="number">
 												1 </span>
                                         <span class="desc">
@@ -51,7 +79,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#tab2" data-toggle="tab" class="step">
+                                    <a href="#tab2"  class="step">
 												<span class="number">
 												2 </span>
                                         <span class="desc">
@@ -59,7 +87,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#tab3" data-toggle="tab" class="step">
+                                    <a href="#tab3"  class="step">
 												<span class="number">
 												3 </span>
                                         <span class="desc">
@@ -73,31 +101,27 @@
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab1">
-                                    <form class="form-horizontal" id="submit_form" enctype="multipart/form-data"
-                                          method="POST">
-                                        <div class="alert alert-danger display-hide">
-                                            <button class="close" data-close="alert"></button>
-                                            表单填写有误，请检查
-                                        </div>
-                                        <div class="alert alert-success display-hide">
-                                            <button class="close" data-close="alert"></button>
-                                            表单保存成功!
-                                        </div>
 
-                                        <input type="hidden" name="resourceId" id="resourceId">
-                                        <input type="hidden" name="resState" id="resState" value="未完成">
+                                    <form class="form-horizontal" id="submit_form"
+                                          method="POST">
                                         <h3 class="block">元数据信息描述</h3>
+
+
+
+
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">数据集名称 <span class="required">
+                                            <label class="control-label col-md-3" >数据集名称 <span class="required">
 													* </span>
                                             </label>
                                             <div class="col-md-4">
-                                                <input type="text" class="form-control" name="resTitle"
-                                                       id="resTitle" onchange="setResTitle(this)" style="border: 1px solid rgb(169, 169, 169)">
+                                                <input type="text" class="form-control" name="need_checked"
+                                                       id="task_title" style="border: 1px solid rgb(169, 169, 169)">
+                                                <div class="custom-error" name="need_message" style="display: none">请输入数据集名称</div>
                                             </div>
+
                                         </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3">图片<span class="required">
+                                        <%--<div class="form-group">
+                                            <label class="control-label col-md-3">图片<span >
 													* </span>
                                             </label>
                                             <div class="col-md-9">
@@ -126,65 +150,130 @@
                                                     Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group dataLicenseInputGroup">
-                                            <label class="control-label col-md-3">描述 <span class="required">
+                                        </div>--%>
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">图片<span class="required">
 													* </span>
                                             </label>
-                                            <div class="col-md-6">
-                                                <textarea name="dataDescribe" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;"></textarea>
+                                            <div class="col-md-9">
+                                                <div class=" margin-top-10">
+                                                    <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
+                                                        <div style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
+                                                            <%--<img alt="" src="" id="cutimg" style="height: 150px; width: 200px;"/>--%>
+                                                            <input type="hidden" id="x" name="x" />
+                                                            <input type="hidden" id="y" name="y" />
+                                                            <input type="hidden" id="w" name="w" />
+                                                            <input type="hidden" id="h" name="h" />
+                                                        </div>
+                                                        <span class="btn default btn-file" id="checkPicture">
+                                                            <span class="fileinput-new">
+                                                            选择一个图片</span>
+                                                            <input id="fcupload" type="file" name="imgFile" onchange="readURL(this);">
+                                                    </span>
+                                                        <span id="uploadSpan" class="fileinput-new" hidden>
+                                                                <button type="button" onclick="doUpload();">上传</button>
+                                                        </span>
+                                                    </form>
+                                                    <div class="clearfix margin-top-10">
+                                                    <span class="label label-danger">
+												注意! </span>
+                                                        图片只能在 IE10+, FF3.6+, Safari6.0+, Chrome6.0+ 和
+                                                        Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3">关键词<span class="required">
-													* </span></label>
-                                            <div class="checkbox-list col-md-6">
-                                                <div style="margin-bottom: 3px;line-height: 34px">
-                                                    <input type="text" style="font-size: 16px">
-                                                    <button class="btn green">添加关键词</button>
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">资源目录<span  >
+													* </span>
+                                                </label>
+                                                <div class="col-md-4" id="cemterCatalogDiv" >
+                                                    <input type="hidden"  id="centerCatalogId">
+                                                    <div id="jstree-demo"></div>
+                                                    <div class="custom-error" style="display: none" id="file_dir">请选择目录</div>
                                                 </div>
-                                                <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px">
+                                            </div>
+                                            <div class="form-group dataLicenseInputGroup">
+                                                <label class="control-label col-md-3">描述 <span class="required">
+													* </span>
+                                                </label>
+                                                <div class="col-md-6">
+                                                    <textarea name="need_checked" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;"></textarea>
+                                                    <div class="custom-error" name="need_message" style="display: none">请输入描述信息</div>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">关键词<span>
+													* </span></label>
+                                                <div class="checkbox-list col-md-9">
+                                                    <div style="margin-bottom: 3px;line-height: 24px">
+                                                        <input type="text" style="font-size: 16px" id="addWorkStr">
+                                                        <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
+                                                    </div>
+                                                    <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="key-wrap"></div>
+                                                    <div class="custom-error" id="key_work" style="display: none">请添加至少一个关键词</div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">来源<span  class="required">
+													* </span></label>
+                                                <div class="col-md-6" id="dataSourceDes">
+                                                    <textarea name="need_checked" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;"></textarea>
+                                                    <div class="custom-error" name="need_message" style="display: none">请输入来源</div>
+                                                </div>
+
+                                            </div>
+                                        </form>
 
 
-                                                </div>
-                                                <%--<label class="checkbox-inline">
-                                                    <input type="checkbox" id="centerCheckbox" name="catalogCheckbox" value="center"> 中心门户</label>
-                                                <label class="checkbox-inline">
-                                                    <input type="checkbox" id="localCheckbox" name="catalogCheckbox" value="local"> 本地门户 </label>--%>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3">来源<span span class="required">
-													* </span></label>
-                                            <div class="col-md-6" id="cemterCatalogDiv">
-                                                <textarea name="dataSourceDes" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;"></textarea>
-                                            </div>
-                                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
                                     </form>
                                 </div>
                                 <div class="tab-pane" id="tab2">
-                                    <h3 class="block">实体据信息描述</h3>
-                                    <div style="overflow: hidden">
-                                        <div class="col-md-3" style="font-size: 18px">
-                                            <span>选择表资源查看/修改描述</span>
+
+                                    <h3 class="block">确定数据对象范围，发布数据</h3>
+                                    <h3>
+                                        <span>数据源:</span>
+                                        <label for="aaa" style="font-size: 23px;color: #1CA04C">数据库表</label>
+                                        <input name="ways" type="radio" checked="checked" value="DB" id="aaa"/>
+                                        <label for="bbb" style="font-size: 23px;color: #1CA04C">文件型数据</label>
+                                        <input name="ways" type="radio" value="LH" id="bbb"/>
+                                    </h3>
+                                    <div style="overflow: hidden" class="select-database" >
+                                        <div class="col-md-3" style="font-size: 18px;text-align:right ">
+                                            <span>选择表资源</span>
                                         </div>
                                         <div class="col-md-9" >
                                             <div class="row undeslist" >
                                                 <div class="col-md-4">
                                                     <label>
-                                                        <input type="radio">
+                                                        <input type="checkbox">
                                                         <span>dictionay</span>
                                                     </label>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label>
-                                                        <input type="radio">
+                                                        <input type="checkbox">
                                                         <span>dictionay</span>
                                                     </label>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label>
-                                                        <input type="radio">
+                                                        <input type="checkbox">
                                                         <span>dictionay</span>
                                                     </label>
                                                 </div>
@@ -192,9 +281,42 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div style="overflow: hidden;display: none" class="select-local">
+                                        <div class="col-md-6 col-md-offset-3" style="font-size: 18px" id="fileContainerTree"></div>
+                                        <div id="fileDescribeDiv" style="display: none">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="tab3">
+
+                                    <h3>确定数据对象发布的权限分配范围</h3>
+                                    <div style="overflow: hidden">
+                                        <div class="col-md-6 col-md-offset-3" style="font-size: 18px">
+                                            <form class="form-horizontal">
+                                                <div class="form-group">
+                                                    <label  class="col-sm-4 control-label">可公开范围</label>
+                                                    <div class="col-sm-8">
+                                                        <select name="" id="permissions" class="form-control">
+                                                            <option value="" selected="selected">请选择公开范围</option>
+                                                            <option value="外网公开用户">外网公开用户</option>
+                                                            <option value="内网用户">内网用户</option>
+                                                            <option value="质量组用户">质量组用户</option>
+                                                            <option value="分析组用户">分析组用户</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label  class="col-sm-4 control-label">已选择</label>
+                                                    <div class="col-sm-8">
+                                                        <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="permissions-wrap"></div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
 
                                 </div>
-                                <div class="tab-pane" id="tab3"></div>
                             </div>
                         </div>
                         <div class="form-actions">
@@ -218,30 +340,111 @@
         </div>
     </div>
 </div>
-
+<script type="text/html" id="dataRelationshipList">
+    {{each list as value i}}
+    <div class="col-md-4">
+        <label>
+            <input type="checkbox" name="resTable" value="{{value}}">
+            <span style="word-break: break-all">{{value}}</span>
+        </label>
+    </div>
+    {{/each}}
+</script>
 </body>
 
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.js"></script>
-
+    <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
     <script type="text/javascript">
         var ctx = '${ctx}';
-        var initNum =1
+        var initNum =1;
+        var firstFlag=false;
+        var secondFlag=false;
+        var resourceId="5bdfd44981b55a207c7bd5df";
+        var publicType="0";
+        var tagNames=new Array();
         $(".progress-bar-success").width(initNum*33+"%");
+        $("[name='ways']").on("change",function () {
+            if(this.value =="DB"){
+                $(".select-database").show();
+                $(".select-local").hide();
+                publicType ="0"
+            }else {
+                $(".select-database").hide();
+                $(".select-local").show();
+                publicType ="1"
+            }
+        })
+        $("[name='need_checked']").on("change",function () {
+            var $index = $("[name='need_checked']").index($(this))
+            if($(this).val() != "" &&$(this).val().trim()!=""){
+                $("[name='need_checked']:eq("+$index +")").removeClass("custom-error")
+                $("[name='need_message']:eq("+$index +")").removeClass("custom-error")
+                $("[name='need_message']:eq("+$index +")").hide()
+                $(".required:eq("+$index +")").parent().removeClass("custom-error")
+            }
+        })
+        $("#permissions").on("change",function () {
+            var $selEle=$("#permissions option:selected")
+            var valStr = $selEle.val();
+            if(valStr ==""){
+                return
+            }
+            $selEle.remove()
+            $(".permissions-wrap").append("<div class='permissions-word'> <p class='tagname'>"+valStr+"</p> <span class='closeWord'>×</span> </div>");
 
+        })
+        $(".button-submit").click(function () {
+            addResourceThirdStep()
+        })
+        $(".key-wrap").delegate(".closeWord","click",function () {
+            var index = $(".closeWord").index($(this))
+            $(this).parent().remove()
+            tagNames.splice(index,1)
+            if(tagNames==0){
+                $("#key_work").show();
+            }
 
+        })
+        $(".permissions-wrap").delegate(".closeWord","click",function () {
+            $(this).parent().remove()
+            var str =$(this).parent().find(".tagname").text()
+            $("#permissions").append("<option value="+str +">"+ str+"</option>")
+
+        })
+        initCenterResourceCatalogTree($("#jstree-demo"));
+        relationalDatabaseTableList();
 
         function fromAction(flag) {
             if(flag){
-                ++initNum
-                $(".progress-bar-success").width(initNum*33+"%");
-                if(initNum ==2){
+                ++initNum;
+                if(initNum ==2 ){
+                    if(resourceId == ""){
+                        addResourceFirstStep()
+                    }else {
+                        editResourceFirstStep
+                    }
+                    if(firstFlag){
+                        initNum--
+                        toastr["error"]("请填写必须项目");
+                        return
+                    }
+                    $("#staNum").html(initNum)
+                    $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab1").removeClass("active")
                     $("#tab2").addClass("active")
                     $(".steps li:eq(1)").addClass("active")
                     $(".button-previous").show();
-                }else {
+                }else if(initNum ==3) {
+                    addResourceSecondStep()
+                    if(secondFlag){
+                        initNum--
+                        toastr["error"]("请选择至少一项");
+                        return
+                    }
+                    $("#staNum").html(initNum)
+                    $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab2").removeClass("active")
                     $("#tab3").addClass("active")
                     $(".steps li:eq(2)").addClass("active")
@@ -250,18 +453,306 @@
                 }
             }else {
                 --initNum
-                $(".progress-bar-success").width(initNum*33+"%");
                 if(initNum == 1){
+                    $("#staNum").html(initNum)
+                    $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab2").removeClass("active")
                     $("#tab1").addClass("active")
                     $(".steps li:eq(1)").removeClass("active")
                     $(".button-previous").hide();
-                }else {
+                }else if(initNum == 2){
+                    $("#staNum").html(initNum)
+                    $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab3").removeClass("active")
                     $("#tab2").addClass("active")
                     $(".steps li:eq(2)").removeClass("active")
                     $(".button-next").show()
                     $(".button-submit").hide()
+                }
+            }
+        }
+        function initCenterResourceCatalogTree(container) {
+            $.ajax({
+                url: ctx + "/getLocalResCatalog",
+                type: "get",
+                dataType: "json",
+                data: {editable: false},
+                success: function (data) {
+                    $(container).jstree(data).bind("select_node.jstree", function (event, selected) {
+                        /*$(".button-save").removeAttr("disabled");*/
+                        $("#centerCatalogId").val(selected.node.id);
+                        $("#file_dir").hide();
+                    })
+                }
+            })
+        }
+        function relationalDatabaseTableList() {
+            $.ajax({
+                url:ctx+"/resource/relationalDatabaseTableList",
+                type:"GET",
+                success:function (data) {
+                    $(".undeslist").empty();
+                    var List =JSON.parse(data)
+                    var tabCon = template("dataRelationshipList", List);
+                    $(".undeslist").append(tabCon);
+                },
+                error:function (data) {
+                    console.log("请求失败")
+                }
+            })
+        }
+        function addKeyWords() {
+            var newStr = $("#addWorkStr").val()
+            if(newStr =="" ||newStr.trim() == ""){
+                return
+            }
+            for(var i=0;i<tagNames.length;i++){
+                if(newStr ==tagNames[i]){
+                    toastr["error"]("不可添加重复标签");
+                    return
+                }
+            }
+            tagNames.push(newStr)
+            $(".key-wrap").append("<div class='key-word'> <p class='tagname'>"+newStr+"</p> <span class='closeWord'>×</span> </div>");
+            $("#addWorkStr").val("")
+            $("#key_work").hide();
+        }
+
+        function addResourceFirstStep() {
+            $("[name='need_checked']").each(function () {
+                var $index = $("[name='need_checked']").index($(this))
+                if($(this).val() == "" ||$(this).val().trim()==""){
+                    $("[name='need_checked']:eq("+$index +")").addClass("custom-error")
+                    $("[name='need_message']:eq("+$index +")").addClass("custom-error")
+                    $("[name='need_message']:eq("+$index +")").show()
+                    $(".required:eq("+$index +")").parent().addClass("custom-error")
+                    firstFlag=true
+                    return
+                }
+            })
+            if(tagNames.length ==0){
+                $("#key_work").show()
+                firstFlag=true
+                return
+            }
+            if($("#centerCatalogId").val() ==""){
+                $("#file_dir").show();
+                firstFlag=true
+                return
+            }
+            firstFlag=false
+            var keywordStr = ""
+            for(var i=0;i<tagNames.length;i++){
+                keywordStr+=tagNames[i]+";"
+            }
+            $.ajax({
+                url:ctx+"/resource/addResourceFirstStep",
+                type:"POST",
+                data:{
+                    title:$("#task_title").val(),
+                    imagePath:"",
+                    introduction:$("#dataDescribeID").val(),
+                    keyword:keywordStr,
+                    catalogId:$("#centerCatalogId").val(),
+                    createdByOrganization:$("#dataSourceDesID").val()
+                },
+                success:function (data) {
+                    var data = JSON.parse(data)
+                    resourceId = data.resourceId
+                },
+                error:function (data) {
+                    console.log("请求失败")
+                }
+            })
+        }
+        function addResourceSecondStep() {
+
+            var dataList=""
+            if(publicType =="0"){
+                var $ele = $("[name='resTable']:checked")
+
+                $ele.each(function () {
+                    dataList+=$(this).val()+";"
+                })
+            }else {
+                var $ele = $("#fileDescribeDiv span")
+                $ele.each(function () {
+                    dataList+=$(this).text()+";"
+                })
+            }
+            if($ele.size() ==0 ){
+                secondFlag = true
+            }else {
+                secondFlag = false
+            }
+            $.ajax({
+                url:ctx+"/resource/addResourceSecondStep",
+                type:"POST",
+                data:{
+                    resourceId:resourceId,
+                    publicType:publicType,
+                    dataList:dataList
+                },
+                success:function (data) {
+                    console.log(data)
+                },
+                error:function (data) {
+                    console.log("请求失败")
+                }
+            })
+        }
+        function addResourceThirdStep() {
+            var $preEle= $(".permissions-word .tagname")
+            if($preEle.size() ==0){
+                toastr["error"]("请选择用户组");
+                return
+            }
+            var userStr = ""
+            $preEle.each(function () {
+                userStr+=$(this).text()+";"
+            })
+            $.ajax({
+                url:ctx+"/resource/addResourceThirdStep",
+                type:"POST",
+                data:{
+                    resourceId:resourceId,
+                    userGroupIdList:userStr
+                },
+                success:function (data) {
+                    window.location.href = "${ctx}/dataRelease"
+                },
+                error:function (data) {
+                    console.log("请求失败")
+                }
+            })
+        }
+        function editResourceFirstStep() {
+            $("[name='need_checked']").each(function () {
+                var $index = $("[name='need_checked']").index($(this))
+                if($(this).val() == "" ||$(this).val().trim()==""){
+                    $("[name='need_checked']:eq("+$index +")").addClass("custom-error")
+                    $("[name='need_message']:eq("+$index +")").addClass("custom-error")
+                    $("[name='need_message']:eq("+$index +")").show()
+                    $(".required:eq("+$index +")").parent().addClass("custom-error")
+                    firstFlag=true
+                    return
+                }
+            })
+            if(tagNames.length ==0){
+                $("#key_work").show()
+                firstFlag=true
+                return
+            }
+            if($("#centerCatalogId").val() ==""){
+                $("#file_dir").show();
+                firstFlag=true
+                return
+            }
+            firstFlag=false;
+            var keywordStr = ""
+            for(var i=0;i<tagNames.length;i++){
+                keywordStr+=tagNames[i]+";"
+            }
+            $.ajax({
+                url:ctx+"/resource/editResourceFirstStep",
+                type:"POST",
+                data:{
+                    resourceId:resourceId,
+                    title:$("#task_title").val(),
+                    imagePath:"",
+                    introduction:$("#dataDescribeID").val(),
+                    keyword:keywordStr,
+                    catalogId:$("#centerCatalogId").val(),
+                    createdByOrganization:$("#dataSourceDesID").val()
+                },
+                success:function (data) {
+                },
+                error:function (data) {
+                    console.log("请求失败")
+                }
+            })
+        }
+
+        /*function getResourceById() {
+            $.ajax({
+                url:ctx+"/resource/getResourceById",
+                type:"POST",
+                data:{
+                    resourceId:"5bdfcd0881b55a207c7bd5de",
+                },
+                success:function (data) {
+                    console.log(data)
+                },
+                error:function (data) {
+                    console.log("请求失败")
+                }
+            })
+        }
+        getResourceById();*/
+        $('#fileContainerTree').jstree({
+            'core': {
+                'data': function (node, cb) {
+                    var children;
+                    if (node.id == '#') {
+                        children = initFileTree();
+                    } else {
+                        children = getFileList(node.id);
+                    }
+                    generateChildJson(children);
+                    cb.call(this, children);
+                }
+            },
+            "plugins": [
+                "checkbox", "wholerow"
+            ]
+        }).bind('select_node.jstree', function (e, data) {
+            var fileId = data.node.id;
+            var str = fileId.replace(/%_%/g, "/");
+            /*var isContain = false;*/
+            $("#fileDescribeDiv").append("<div name="+ fileId+"><span>"+str +"</span></div>")
+            /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
+        }).bind("deselect_node.jstree", function (e, data) {
+            var fileId = data.node.id;
+            var fileName = data.node.text;
+            $("div[name='" + fileId + "']").remove();
+            /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
+        });
+        function initFileTree() {
+            var root;
+            $.ajax({
+                type: "GET",
+                url: '${ctx}/resource/fileSourceFileList',
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    root = data;
+                }
+            });
+            return root;
+        }
+        function getFileList(folderPath) {
+            var children;
+            $.ajax({
+                url: "${ctx}/resource/treeNode",
+                type: "get",
+                data: {'filePath': folderPath},
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    children = data;
+                }
+            });
+            return children;
+        }
+        function generateChildJson(childArray) {
+            console.log(childArray)
+            for (var i = 0; i < childArray.length; i++) {
+                var child = childArray[i];
+                if (child.type == 'directory') {
+                    child.children = true;
+                    child.icon = "jstree-folder";
+                } else {
+                    child.icon = "jstree-file";
                 }
             }
         }
@@ -271,6 +762,4 @@
 </div>
 
 </html>
-
-
 

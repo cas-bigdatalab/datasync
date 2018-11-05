@@ -73,8 +73,8 @@
                         <td>2018-04-02 10:14</td>
                         <td>成功</td>
                         <td>
-                            <button type="button" class="btn green btn-xs " onclick="resSend()">重新发布</button>
-                            <button type="button" class="btn blue btn-xs" >查看</button>
+                            <button type="button" class="btn green btn-xs " onclick="textsee()">重新发布</button>
+                            <button type="button" class="btn blue btn-xs"  >查看</button>
                         </td>
                     </tr>
                 </tbody>
@@ -185,6 +185,18 @@
         $("#seachDataSource").click(function () {
             tableConfiguration2(1,dataSourceName,dataSourceStatus)
         })
+        function textsee() {
+            $.ajax({
+                url:"${ctx}/resource/editResource",
+                type:"POST",
+                data:{
+                    resourceId:"5bdfd44981b55a207c7bd5df"
+                },
+                success:function (data) {
+                    console.log("data")
+                }
+            })
+        }
         function resSend() {
             window.location.href="${ctx}/dataSourceDescribeEdit"
         }
