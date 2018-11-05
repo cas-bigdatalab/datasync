@@ -365,6 +365,7 @@
         var resourceId=sdoId;
         var publicType="0";
         var tagNames=new Array();
+        var dataRelationsList ;
         getResourceById();
         $(".progress-bar-success").width(initNum*33+"%");
         $("[name='ways']").on("change",function () {
@@ -495,6 +496,8 @@
                 success:function (data) {
                     $(".undeslist").empty();
                     var List =JSON.parse(data)
+                    console.log(List)
+                    dataRelationsList =List.list
                     var tabCon = template("dataRelationshipList", List);
                     $(".undeslist").append(tabCon);
                 },
@@ -695,8 +698,13 @@
                         $(".key-wrap").append("<div class='key-word'> <p class='tagname'>"+tagNames[i]+"</p> <span class='closeWord'>×</span> </div>");
                     }
                     $("#dataSourceDesID").val(totalList.createdByOrganization)
-                    $("[name='ways']:eq("+ totalList.publicType+")").prop("checked")
+                    var typeNum = totalList.publicType=="mysql"?0:1;
+                    $("[name='ways']:eq("+ typeNum+")").prop("checked")
+                    if(typeNum ==0){
 
+                    }else {
+
+                    }
                     var userList = totalList.userGroupId.split(";")
                     $("#permissions option").each(function () {
                         for(var i=0;i<userList.length-1;i++){

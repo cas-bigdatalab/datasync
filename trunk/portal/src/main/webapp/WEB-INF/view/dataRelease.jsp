@@ -169,10 +169,10 @@
                     value="{{value.id}}">审核
             </button>
             {{/if}}
-            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}"
+            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.id}}"
                     style="background-color: dimgrey">编辑
             </button>
-            <button type="button" class="btn  edit-data btn-xs blue" keyIdTd="{{value.dataTaskId}}"><i
+            <button type="button" class="btn  edit-data btn-xs blue" keyIdTd="{{value.id}}"><i
                     class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
             </button>
             <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.id}}');"><i
@@ -201,6 +201,11 @@
         });
         $("#seachResource").click(function () {
             tableConfiguration2(1,publicType,resourceState);
+        })
+        $("#bd-data").delegate(".upload-data","click",function () {
+            var id = $(this).attr("keyIdTd");
+            console.log(id)
+            window.location.href="${ctx}/resource/editResource?resourceId="+id;
         })
 
         function resSend() {
