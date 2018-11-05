@@ -147,14 +147,14 @@
     </div>
 </div>
 <script type="text/html" id="resourceTmp1">
-    {{each dataTasks as value i}}
+    {{each resourceList as value i}}
     <tr keyIdTr="{{value.id}}">
         <td>{{i + 1}}</td>
         <td>{{value.title}}</td>
         <td>{{value.publicType}}</td>
         <td>{{value.createdByOrganization}}</td>
         <td>{{dateFormat(value.creationDate)}}</td>
-        <td id="{{value.dataTaskId}}">--</td>
+        <td id="{{value.dataTaskId}}">{{value.resState}}</td>
         <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>
         <td>
             <%--<button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.id}}"
@@ -173,7 +173,20 @@
             <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i
                     class="glyphicon glyphicon-trash"></i>&nbsp;删除
             </button>--%>
-
+                {{if value.resState == '待审核'}}
+                <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.id}}"
+                        value="{{value.id}}">审核
+                </button>
+                {{/if}}
+                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}"
+                        style="background-color: dimgrey">编辑
+                </button>
+                <button type="button" class="btn  edit-data btn-xs blue" keyIdTd="{{value.dataTaskId}}"><i
+                        class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
+                </button>
+                <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.id}}');"><i
+                        class="glyphicon glyphicon-trash"></i>&nbsp;删除
+                </button>
         </td>
     </tr>
     {{/each}}
