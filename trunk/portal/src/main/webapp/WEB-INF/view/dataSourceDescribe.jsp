@@ -376,9 +376,14 @@
                     console.log(event.target.result)
                     api = $.Jcrop('#cutimg', {
                         setSelect: [ 10, 10, 100, 100 ],
-                        aspectRatio: 1,
+                        aspectRatio: 4/3,
+                        allowSelect:true,
+/*
                         allowSelect:false,
+*/
+/*
                         allowResize:false,
+*/
                         onSelect: updateCoords,
                         onChange:updateCoords
                     });
@@ -608,7 +613,7 @@
                 type:"POST",
                 data:{
                     title:$("#task_title").val(),
-                    imagePath:"",
+                    imagePath:$("#imgPath").val(),
                     introduction:$("#dataDescribeID").val(),
                     keyword:keywordStr,
                     catalogId:$("#centerCatalogId").val(),
