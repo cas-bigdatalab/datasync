@@ -40,7 +40,6 @@
             </ul>
             <!--tab content-->
             <div class="tab-content">
-
                 <!--user tab-->
                 <div class="tab-pane active" id="userContent" style="min-height: 400px">
                     <div class="row">
@@ -203,59 +202,62 @@
             <div class="modal-header">
                 <h4 id="titleForAddUserDialog" class="modal-title" >添加用户</h4>
             </div>
-                <form id="addUserForm" class="form-horizontal" role="form" method="post" accept-charset="utf-8"  action="${ctx}/user/addUser">
-            <div class="modal-body">
-                <div class="col-md-12">
-                    <div class="form-body">
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="userName">
-                                用&nbsp;户&nbsp;名<span style="color: red;">*</span>
-                            </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入用户名称" id="userName" name="userName" required="required"/>
+            <form id="addUserForm" class="form-horizontal" role="form" method="post" accept-charset="utf-8"  action="${ctx}/user/addUser">
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="userName">
+                                    用&nbsp;户&nbsp;名<span style="color: red;">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="请输入用户名称" id="userName" name="userName" required="required"/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="loginId">
-                                用户账号<span style="color: red;">*</span>
-                            </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入用户账号" id="loginId" name="loginId"  required="required" />
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="loginId">
+                                    用户账号<span style="color: red;">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="请输入用户账号" id="loginId" name="loginId"  required="required" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="password">
-                                密&nbsp;&nbsp;&nbsp;&nbsp;码<span style="color: red;">*</span>
-                            </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入密码"  id="password" name="password" required="required">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="password">
+                                    密&nbsp;&nbsp;&nbsp;&nbsp;码<span style="color: red;">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="请输入密码"  id="password" name="password" required="required">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="groups">
-                                角&nbsp;&nbsp;&nbsp;&nbsp;色<span style="color: red;">*</span>
-                            </label>
-                            <div class="col-md-9">
-                                <select class="form-control" id="groups" name="groups" >
-                                    <option value="外网公开用户" selected="selected">外网公开用户</option>
-                                    <option value="内网用户">内网用户</option>
-                                    <option value="质量组用户">质量组用户</option>
-                                    <option value="分析组用户">分析组用户</option>
-                                </select>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="groups">
+                                    角&nbsp;&nbsp;&nbsp;&nbsp;色<span style="color: red;">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <select class="form-control" id="groups" name="groups" >
+                                        <option value="外网公开用户" selected="selected">外网公开用户</option>
+                                        <option value="内网用户">内网用户</option>
+                                        <option value="质量组用户">质量组用户</option>
+                                        <option value="分析组用户">分析组用户</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button id="saveUserAddBtn" class="btn green" type="submit">
-                    保存
-                </button>
-                <button id="cancelUserAddBtn" class="btn default"  data-dismiss="modal">
-                    取消
-                </button>
-            </div>
-                </form>
+                <div class="modal-footer">
+                    <button id="saveUserAddBtn" class="btn green" type="submit">
+                        保存
+                    </button>
+                    <button id="cancelUserAddBtn" class="btn default"  data-dismiss="modal">
+                        取消
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <!--修改用户组Group-->
 <div class="modal fade" tabindex="-1" role="dialog" id="editModal">
@@ -343,6 +345,9 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
 
 <!--用户组Group, 添加用户-->
 <div class="modal fade" tabindex="-1" role="dialog" id="groupModalForAddUser">
@@ -389,10 +394,6 @@
     </div>
 </div>
 
-        </div>
-    </div>
-</div>
-
 <script type="text/html" id="userListTable">
     {{each list}}
     <tr>
@@ -428,6 +429,7 @@
     </tr>
     {{/each}}
 </script>
+
 
 </body>
 
