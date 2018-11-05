@@ -27,7 +27,7 @@
             color:#a94442!important;
             border-color:#a94442!important;
         }
-        .key-word{
+        .key-word ,.permissions-word{
             padding:0 8px;
             height: 28px;
             background:#57add9;
@@ -38,18 +38,19 @@
             float:left;
         }
 
-        .key-word p{
+        .key-word p , .permissions-word p{
             float:left;
             font-size:14px;
             line-height:28px;
         }
-        .key-word span{
+        .key-word span , .permissions-word span{
             float:left;
             cursor:pointer;
             margin-left:5px;
             font-size:16px;
             margin-top:2px;
         }
+
     </style>
 </head>
 
@@ -212,9 +213,7 @@
                                                         <input type="text" style="font-size: 16px" id="addWorkStr">
                                                         <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
                                                     </div>
-                                                    <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="key-wrap">
-                                                        <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
-                                                    </div>
+                                                    <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="key-wrap"></div>
                                                     <div class="custom-error" id="key_work" style="display: none">请添加至少一个关键词</div>
                                                 </div>
                                             </div>
@@ -296,21 +295,21 @@
                                         <div class="col-md-6 col-md-offset-3" style="font-size: 18px">
                                             <form class="form-horizontal">
                                                 <div class="form-group">
-                                                    <label for="inputEmail3" class="col-sm-4 control-label">可公开范围</label>
+                                                    <label  class="col-sm-4 control-label">可公开范围</label>
                                                     <div class="col-sm-8">
-                                                        <select name="" id="inputEmail3" class="form-control">
-                                                            <option value="">请选择公开范围</option>
-                                                            <option value="">外网公开用户</option>
-                                                            <option value="">内网用户</option>
-                                                            <option value="">质量组用户</option>
-                                                            <option value="">分析组用户</option>
+                                                        <select name="" id="permissions" class="form-control">
+                                                            <option value="" selected="selected">请选择公开范围</option>
+                                                            <option value="外网公开用户">外网公开用户</option>
+                                                            <option value="内网用户">内网用户</option>
+                                                            <option value="质量组用户">质量组用户</option>
+                                                            <option value="分析组用户">分析组用户</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label  class="col-sm-4 control-label">已选择</label>
                                                     <div class="col-sm-8">
-
+                                                        <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="permissions-wrap"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -389,6 +388,19 @@
                 $(".required:eq("+$index +")").parent().removeClass("custom-error")
             }
         })
+        $("#permissions").on("change",function () {
+            var $selEle=$("#permissions option:selected")
+            var valStr = $selEle.val();
+            if(valStr ==""){
+                return
+            }
+            $selEle.remove()
+            $(".permissions-wrap").append("<div class='permissions-word'> <p class='tagname'>"+valStr+"</p> <span class='closeWord'>×</span> </div>");
+
+        })
+        $(".button-submit").click(function () {
+            addResourceThirdStep()
+        })
         initCenterResourceCatalogTree($("#jstree-demo"));
         relationalDatabaseTableList();
 
@@ -408,7 +420,7 @@
                     $("#tab2").addClass("active")
                     $(".steps li:eq(1)").addClass("active")
                     $(".button-previous").show();
-                }else {
+                }else if(initNum ==3) {
                     addResourceSecondStep()
                     if(secondFlag){
                         initNum--
@@ -432,7 +444,7 @@
                     $("#tab1").addClass("active")
                     $(".steps li:eq(1)").removeClass("active")
                     $(".button-previous").hide();
-                }else {
+                }else if(initNum == 2){
                     $("#staNum").html(initNum)
                     $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab3").removeClass("active")
@@ -499,6 +511,12 @@
             if(tagNames==0){
                 $("#key_work").show();
             }
+
+        })
+        $(".permissions-wrap").delegate(".closeWord","click",function () {
+            $(this).parent().remove()
+            var str =$(this).parent().find(".tagname").text()
+            $("#permissions").append("<option value="+str +">"+ str+"</option>")
 
         })
         function addResourceFirstStep() {
@@ -581,6 +599,31 @@
                     console.log("请求失败")
                 }
             })*/
+        }
+        function addResourceThirdStep() {
+           var $preEle= $(".permissions-word .tagname")
+            if($preEle.size() ==0){
+                toastr["error"]("请选择用户组");
+                return
+            }
+            var userStr = ""
+            $preEle.each(function () {
+                userStr+=$(this).text()+";"
+            })
+            $.ajax({
+                url:ctx+"/resource/addResourceThirdStep",
+                type:"POST",
+                data:{
+                    resourceId:"5bdc180e095e0423ec2a2597",
+                    userGroupIdList:userStr
+                },
+                success:function (data) {
+                    console.log(data)
+                },
+                error:function (data) {
+                    console.log("请求失败")
+                }
+            })
         }
         function getResourceById() {
             $.ajax({
