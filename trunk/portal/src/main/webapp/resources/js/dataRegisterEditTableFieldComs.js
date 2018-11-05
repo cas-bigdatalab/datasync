@@ -111,7 +111,6 @@ function saveEditTableFieldComs() {
         curSQL = null;
         curRefer = null;
         // }
-
     }
 }
 
@@ -198,6 +197,8 @@ function saveTableFieldComs(dataSourceId, tableInfos) {
             },
             dataType: "json",
             success: function () {
+                toastr["success"]("操作成功");
+                chooseTable(7,0);
             }
         });
     }
