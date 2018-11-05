@@ -96,8 +96,7 @@ public class UserDao {
         return totalUsers;
     }
 
-    public int updateGroups(String loginId, String group)
-    {
+    public int updateGroups(String loginId, String group) {
         int updatedUserCnt = 1;
 
         Query query = new Query();
@@ -106,5 +105,17 @@ public class UserDao {
         mongoTemplate.upsert(query, update, "t_user");
 
         return updatedUserCnt;
+    }
+
+    /**
+     * Function Description: 获取所有的用户
+     *
+     * @param:
+     * @return:
+     * @auther: xiajl
+     * @date:   2018/11/5 15:14
+     */
+    public List<User> getAll(){
+        return mongoTemplate.findAll(User.class);
     }
 }

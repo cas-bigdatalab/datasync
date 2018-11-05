@@ -3,6 +3,8 @@ package cn.csdb.portal.controller;
 import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.service.ResourceService;
 import cn.csdb.portal.service.SubjectService;
+import cn.csdb.portal.utils.FileUploadUtil;
+import cn.csdb.portal.utils.ImgCut;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
@@ -13,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -60,14 +64,14 @@ public class ResourceController {
     public JSONObject getPageData(HttpServletRequest request, @RequestParam(value = "subjectCode", required = false) String subjectCode,
                                   @RequestParam(value = "title", required = false) String title,
                                   @RequestParam(value = "publicType", required = false) String publicType,
-                                  @RequestParam(value = "status", required = false) String status,
+                                  @RequestParam(value = "status", required = false) String resState,
                                   @RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
                                   @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
 
-        List<cn.csdb.portal.model.Resource> list = resourceService.getListByPage(subjectCode, title, publicType, status, pageNo, pageSize);
-        long count = resourceService.countByPage(subjectCode, title, publicType, status);
+        List<cn.csdb.portal.model.Resource> list = resourceService.getListByPage(subjectCode, title, publicType, resState, pageNo, pageSize);
+        long count = resourceService.countByPage(subjectCode, title, publicType, resState);
         JSONObject json = new JSONObject();
-        json.put("list", list);
+        json.put("resourceList", list);
         json.put("totalCount", count);
         json.put("currentPage", pageNo);
         json.put("pageSize", pageSize);
@@ -111,8 +115,10 @@ public class ResourceController {
     }
 
     @RequestMapping(value = "editResource")
-    public String resourceEdit() {
-        return "editResource";
+    public ModelAndView resourceEdit(String resourceId) {
+        ModelAndView mv = new ModelAndView("editResource");
+        mv.addObject("resourceId",resourceId);
+        return mv;
     }
 
     /**
@@ -260,11 +266,12 @@ public class ResourceController {
         Subject subject = subjectService.findBySubjectCode("sdc002");
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
-        resource.setPublicType(publicType);
         if (publicType.equals("mysql")) {
             resource.setPublicContent(dataList);
             resource.setToFilesNumber(0);
+            resource.setPublicType("mysql");
         } else if (publicType.equals("file")) {
+            resource.setPublicType("file");
             StringBuffer sb = new StringBuffer();
             long size = 0L;
             if (StringUtils.isNoneBlank(dataList)) {
@@ -282,13 +289,16 @@ public class ResourceController {
                             }
                             sb.append(fp + ";");
                         }
+                    }else{
+                        sb.append(str+";");
+                        size += file.length();
                     }
                 }
             }
             resource.setFilePath(sb.toString().replace("/", "%_%"));
             resource.setToMemorySize(String.valueOf(size));
         }
-        resource.setResState("未发布");
+        resource.setResState("未完成");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -311,7 +321,7 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setUserGroupId(userGroupIdList);
-        resource.setResState("已发布");
+        resource.setResState("待审核");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -330,6 +340,7 @@ public class ResourceController {
     public JSONObject getResourceById(@RequestParam(name = "resourceId") String resourceId) {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        jsonObject.put("resource",resource);
         return jsonObject;
     }
 
@@ -385,11 +396,12 @@ public class ResourceController {
         Subject subject = subjectService.findBySubjectCode("sdc002");
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
-        resource.setPublicType(publicType);
         if (publicType.equals("mysql")) {
             resource.setPublicContent(dataList);
             resource.setToFilesNumber(0);
+            resource.setPublicType("mysql");
         } else if (publicType.equals("file")) {
+            resource.setPublicType("file");
             StringBuffer sb = new StringBuffer();
             long size = 0L;
             if (StringUtils.isNoneBlank(dataList)) {
@@ -413,7 +425,7 @@ public class ResourceController {
             resource.setFilePath(sb.toString().replace("/", "%_%"));
             resource.setToMemorySize(String.valueOf(size));
         }
-        resource.setResState("未发布");
+        resource.setResState("未完成");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -436,9 +448,52 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setUserGroupId(userGroupIdList);
-        resource.setResState("已发布");
+        resource.setResState("待审核");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
+        return jsonObject;
+    }
+    //截图并上传
+    @RequestMapping(value = "/uploadHeadImage",method = RequestMethod.POST)
+    @ResponseBody
+    public JSONObject uploadHeadImage(
+            HttpServletRequest request,
+            @RequestParam(value = "x") String x,
+            @RequestParam(value = "y") String y,
+            @RequestParam(value = "h") String h,
+            @RequestParam(value = "w") String w,
+            @RequestParam(value = "imgFile") MultipartFile imageFile
+    ) throws Exception{
+        System.out.println("==========Start=============");
+        String saveName = "";
+        String realPath = request.getSession().getServletContext().getRealPath("/");
+        String resourcePath = "resources\\img\\images\\";
+        if(imageFile!=null){
+            if(FileUploadUtil.allowUpload(imageFile.getContentType())){
+                String fileName = FileUploadUtil.rename(imageFile.getOriginalFilename());
+                int end = fileName.lastIndexOf(".");
+                saveName = fileName.substring(0,end);
+                File dir = new File(realPath + resourcePath);
+                if(!dir.exists()){
+                    dir.mkdirs();
+                }
+                File file = new File(dir,saveName+"_src.jpg");
+                imageFile.transferTo(file);
+                String srcImagePath = realPath + resourcePath + saveName;
+                int imageX = Integer.parseInt(x);
+                int imageY = Integer.parseInt(y);
+                int imageH = Integer.parseInt(h);
+                int imageW = Integer.parseInt(w);
+                //这里开始截取操作
+                System.out.println("==========imageCutStart=============");
+                ImgCut.imgCut(srcImagePath,imageX,imageY,imageW,imageH);
+                System.out.println("==========imageCutEnd=============");
+                request.getSession().setAttribute("imgSrc",resourcePath + saveName+"_src.jpg");//成功之后显示用
+                request.getSession().setAttribute("imgCut",resourcePath + saveName+"_cut.jpg");//成功之后显示用
+            }
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("saveName",saveName);
         return jsonObject;
     }
 

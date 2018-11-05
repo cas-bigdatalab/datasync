@@ -32,8 +32,20 @@ public class UserService {
     }
 
     @Transactional
-    public int updateGroups(String loginId, String group)
-    {
+    public int updateGroups(String loginId, String group) {
         return userDao.updateGroups(loginId, group);
+    }
+
+    /**
+     * Function Description: 获取所有的用户
+     *
+     * @param:
+     * @return:
+     * @auther: Administrator
+     * @date:   2018/11/5 15:16
+     */
+    @Transactional(readOnly = true)
+    public List<User> getAll(){
+        return userDao.getAll();
     }
 }

@@ -1,6 +1,6 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Administrator
+  User: shibaoping
   Date: 2018/10/30
   Time: 13:35
   To change this template use File | Settings | File Templates.
@@ -45,10 +45,10 @@
     </div>
     <div>
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#undescribe" aria-controls="undescribe" role="tab" data-toggle="tab">待描述数据表</a></li>
-            <li role="presentation"><a href="#isdescribe" aria-controls="isdescribe" role="tab" data-toggle="tab">已描述数据表</a></li>
-            <li role="presentation"><a href="#filedata" aria-controls="filedata" role="tab" data-toggle="tab">文件数据</a></li>
+        <ul class="nav nav-tabs" role="tablist" id="tabDescribe">
+            <li role="presentation" class="active" value="0"><a href="#undescribe" aria-controls="undescribe" role="tab" data-toggle="tab">待描述数据表</a></li>
+            <li role="presentation" value="1"><a href="#isdescribe" aria-controls="isdescribe" role="tab" data-toggle="tab">已描述数据表</a></li>
+            <li role="presentation" value="2"><a href="#filedata" aria-controls="filedata" role="tab" data-toggle="tab">文件数据</a></li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -110,17 +110,122 @@
             </div>
             <div role="tabpanel" class="tab-pane" id="filedata">cccccccc</div>
         </div>
-
+        <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
+            <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                id="editTableFieldComsCloseId"></button>
+                        <h4 class="modal-title" id="relationalDatabaseModalTitle">编辑表字段注释</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="portlet box green-haze" style="border:0;">
+                                    <div class="portlet-title">
+                                        <ul class="nav nav-tabs" style="float:left;">
+                                            <li class="active">
+                                                <a href="#editTableFieldComsId" data-toggle="tab"
+                                                   id="editTableDataAndComsButtonId" aria-expanded="true">
+                                                    编辑 </a>
+                                            </li>
+                                            <li class="">
+                                                <a href="#previewTableDataAndComsId" id="previewTableDataAndComsButtonId"
+                                                   data-toggle="tab" aria-expanded="false">
+                                                    预览 </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="tab-content"
+                                         style="background-color: white;min-height:300px;max-height:70%;padding-top: 20px ; overflow: scroll;">
+                                        <div class="tab-pane active" id="editTableFieldComsId">
+                                        </div>
+                                        <div class="tab-pane" id="previewTableDataAndComsId">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="editTableFieldComsSaveId" data-dismiss="modal" class="btn green">保存
+                        </button>
+                        <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+<%@ include file="./tableFieldComsTmpl.jsp" %>
 
+<script type="text/html" id="systemTmpl">
+    {{each list}}
+    <tr>
+        <td style="text-align: center">{{(currentPage-1)*pageSize+$index+1}}</td>
+        <td><a href="javascript:viewData('{{$value.templateId}}');">{{$value.templateName}}</a>
+        </td>
+        <td style="text-align: center">{{$value.creator}}</td>
+        <td style="text-align: center">{{dateFormat($value.createDate)}}</td>
+        <td style="text-align: center">{{$value.memo}}</td>
+        <td id="{{$value.templateId}}" style="text-align: center">
+            <button type="button" class="btn default btn-xs purple updateButton"
+                    onclick="selectData('{{$value.templateId}}')"><i class="fa fa-edit"></i>&nbsp;&nbsp;选择
+            </button>
+            &nbsp;&nbsp;
+        </td>
+    </tr>
+    {{/each}}
+</script>
 </body>
-
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
-
-    <script type="text/javascript">
-        var ctx = '${ctx}';
+    <script src="${ctx}/resources/bundles/artTemplate/template.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.min.js"></script>
+    <script type="text/javascript"
+            src="${ctx}/resources/bundles/jquery-validation/js/additional-methods.min.js"></script>
+    <script src="${ctx}/resources/bundles/jquery-json/dist/jquery.json.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
+    <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
+    <script src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
+    <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
+    <script src="${ctx}/resources/js/regex.js"></script>
+    <script src="${ctx}/resources/js/metaTemplate.js"></script>
+    <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
+    <script>
+        var ctx = '${ctx}', edit = false;
+        $(function () {
+            chooseTable(7,0);
+        });
+        $("#tabDescribe li").click(function () {
+            var flag = $(this).val();
+            chooseTable(7,flag);
+        })
+        function chooseTable(dataSourceId,flag) {
+            $("#dataSourceId").val(dataSourceId);
+            $.ajax({
+                type: "GET",
+                url: '${ctx}/relationalDatabaseTableList',
+                data: {dataSourceId: dataSourceId,"flag":flag},
+                dataType: "json",
+                success: function (data) {
+                    var html = "<div class='form-group'>" +
+                    "<div class='col-md-12'>" +
+                    "<div class='icheck-list' style='padding-top: 7px'>";
+                    var list = data.list;
+                    for (var i = 0; i < list.length; i++) {
+                        html += "<label class='col-md-6' style='padding-left: 0px'><input type='checkbox' name='mapTable' onclick=\"staticSourceTableChoice(1,this," + dataSourceId + ",'" + list[i] + "','dataResource')\" value='" + list[i] + "'>&nbsp;" + list[i] + "</label>"
+                    }
+                    html += "</div><input type='text' class='form-control' name='maptableinput' id='maptableinput' style='display:none;'/></div></div>";
+                    if(flag=='0') {
+                        $("#undescribe").html(html);
+                    }else{
+                        $("#isdescribe").html(html);
+                    }
+                }
+            });
+        }
     </script>
 </div>
 

@@ -64,7 +64,7 @@ public class ResourceDao {
      * @auther: Administrator
      * @date:   2018/10/23 16:11
      */
-    public List<cn.csdb.portal.model.Resource> getListByPage(String subjectCode, String title, String publicType, String status, int pageNo, int pageSize){
+    public List<cn.csdb.portal.model.Resource> getListByPage(String subjectCode, String title, String publicType, String resState, int pageNo, int pageSize){
         QueryBuilder queryBuilder = QueryBuilder.start();
         if(StringUtils.isNotEmpty(subjectCode)){
             queryBuilder = queryBuilder.and("subjectCode").is(subjectCode);
@@ -75,8 +75,8 @@ public class ResourceDao {
         if (StringUtils.isNotEmpty(publicType)){
             queryBuilder =queryBuilder.and("publicType").is(publicType);
         }
-        if (StringUtils.isNotEmpty(status)){
-            queryBuilder =queryBuilder.and("status").is(status);
+        if (StringUtils.isNotEmpty(resState)){
+            queryBuilder =queryBuilder.and("resState").is(resState);
         }
 
         DBObject dbObject = queryBuilder.get();
@@ -91,7 +91,7 @@ public class ResourceDao {
     }
 
 
-    public long countByPage(String subjectCode, String title, String publicType, String status){
+    public long countByPage(String subjectCode, String title, String publicType, String resState){
         QueryBuilder queryBuilder = QueryBuilder.start();
         if(StringUtils.isNotEmpty(subjectCode)){
             queryBuilder = queryBuilder.and("subjectCode").is(subjectCode);
@@ -102,8 +102,8 @@ public class ResourceDao {
         if (StringUtils.isNotEmpty(publicType)){
             queryBuilder =queryBuilder.and("publicType").is(publicType);
         }
-        if (StringUtils.isNotEmpty(status)){
-            queryBuilder =queryBuilder.and("status").is(status);
+        if (StringUtils.isNotEmpty(resState)){
+            queryBuilder =queryBuilder.and("resState").is(resState);
         }
 
         DBObject dbObject = queryBuilder.get();

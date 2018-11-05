@@ -64,7 +64,7 @@
                 <div class="portlet-title" style="background-color:#3fd5c0">
                     <div class="caption">
                         <i class="fa fa-gift"></i> 数据发布 - <span class="step-title">
-                                第&nbsp;<span id="staNum">1</span>&nbsp;步,共&nbsp;3&nbsp;步</span>
+								第&nbsp;<span id="staNum">1</span>&nbsp;步,共&nbsp;3&nbsp;步</span>
                     </div>
                 </div>
                 <div class="portlet-body form">
@@ -73,26 +73,26 @@
                             <ul class="nav nav-pills nav-justified steps">
                                 <li class="active">
                                     <a href="#tab1"  class="step">
-                                                <span class="number">
-                                                1 </span>
+												<span class="number">
+												1 </span>
                                         <span class="desc">
-                                                <i class="fa fa-check"></i> 元数据 </span>
+												<i class="fa fa-check"></i> 元数据 </span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="#tab2"  class="step">
-                                                <span class="number">
-                                                2 </span>
+												<span class="number">
+												2 </span>
                                         <span class="desc">
-                                                <i class="fa fa-check"></i> 实体数据 </span>
+												<i class="fa fa-check"></i> 实体数据 </span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="#tab3"  class="step">
-                                                <span class="number">
-                                                3 </span>
+												<span class="number">
+												3 </span>
                                         <span class="desc">
-                                                <i class="fa fa-check"></i> 设置权限 </span>
+												<i class="fa fa-check"></i> 设置权限 </span>
                                     </a>
                                 </li>
                             </ul>
@@ -103,12 +103,15 @@
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab1">
 
-
                                     <form class="form-horizontal" id="submit_form"
                                           method="POST">
+
+
+
+
                                         <div class="form-group">
                                             <label class="control-label col-md-3" >数据集名称 <span class="required">
-                                                    * </span>
+													* </span>
                                             </label>
                                             <div class="col-md-4" style="padding-top:14px">
                                                 <input type="text" class="form-control" name="need_checked"
@@ -119,36 +122,36 @@
                                         </div>
                                     </form>
                                     <%--<div class="form-group">
-                                        <label class="control-label col-md-3">图片<span >
-                                                * </span>
-                                        </label>
-                                        <div class="col-md-9">
-                                            <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                <div class="fileinput-preview thumbnail"
-                                                     data-trigger="fileinput"
-                                                     style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
-                                                </div>
-                                                <div>
-                                                        <span class="btn default btn-file">
-                                                        <span class="fileinput-new">
-                                                        选择一个图片</span>
-                                                        <span class="fileinput-exists">
-                                                        换一个</span>
-                                                        <input id="imagePath" type="file" name="imageFile">
-                                                        </span>
-                                                    <a href="#" class="btn red fileinput-exists"
-                                                       data-dismiss="fileinput">
-                                                        删除 </a>
-                                                </div>
-                                            </div>
-                                            <div class="clearfix margin-top-10">
-                                            <span class="label label-danger">
-                                            注意! </span>
-                                                图片只能在 IE10+, FF3.6+, Safari6.0+, Chrome6.0+ 和
-                                                Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。
-                                            </div>
-                                        </div>
-                                    </div>--%>
+                                             <label class="control-label col-md-3">图片<span >
+                                                     * </span>
+                                             </label>
+                                             <div class="col-md-9">
+                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                     <div class="fileinput-preview thumbnail"
+                                                          data-trigger="fileinput"
+                                                          style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
+                                                     </div>
+                                                     <div>
+                                                             <span class="btn default btn-file">
+                                                             <span class="fileinput-new">
+                                                             选择一个图片</span>
+                                                             <span class="fileinput-exists">
+                                                             换一个</span>
+                                                             <input id="imagePath" type="file" name="imageFile">
+                                                             </span>
+                                                         <a href="#" class="btn red fileinput-exists"
+                                                            data-dismiss="fileinput">
+                                                             删除 </a>
+                                                     </div>
+                                                 </div>
+                                                 <div class="clearfix margin-top-10">
+                                                 <span class="label label-danger">
+                                                 注意! </span>
+                                                     图片只能在 IE10+, FF3.6+, Safari6.0+, Chrome6.0+ 和
+                                                     Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。
+                                                 </div>
+                                             </div>
+                                         </div>--%>
                                     <div style="overflow: hidden" class="row">
                                         <div class="form-group">
                                             <label class="control-label col-md-3" style="text-align: right">图片<span >
@@ -158,12 +161,12 @@
                                                 <div class=" margin-top-10">
                                                     <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
                                                         <div id="cutDiv" style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
-                                                            <%--<img alt="" src="" id="cutimg" style="height: 150px; width: 200px;"/>--%>
-                                                            <input type="hidden" id="x" name="x" />
-                                                            <input type="hidden" id="y" name="y" />
-                                                            <input type="hidden" id="w" name="w" />
-                                                            <input type="hidden" id="h" name="h" />
-                                                            <input type="hidden" id="tag" name="tag" val=""/>
+                                                                <img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>
+                                                                <input type="hidden" id="x" name="x" />
+                                                                <input type="hidden" id="y" name="y" />
+                                                                <input type="hidden" id="w" name="w" />
+                                                                <input type="hidden" id="h" name="h" />
+                                                                <input type="hidden" id="tag" name="tag" val=""/>
                                                         </div>
                                                             <span class="btn default btn-file" id="checkPicture">
                                                             <span class="fileinput-new">
@@ -186,53 +189,52 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <form class="form-horizontal">
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3">资源目录<span  >
-                                                    * </span>
-                                            </label>
-                                            <div class="col-md-4" id="cemterCatalogDiv" style="padding-top:14px" >
-                                                <input type="hidden"  id="centerCatalogId">
-                                                <div id="jstree-demo"></div>
-                                                <div class="custom-error" style="display: none" id="file_dir">请选择目录</div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group dataLicenseInputGroup">
-                                            <label class="control-label col-md-3">描述 <span class="required">
-                                                    * </span>
-                                            </label>
-                                            <div class="col-md-6" style="padding-top:14px">
-                                                <textarea name="need_checked" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;"></textarea>
-                                                <div class="custom-error" name="need_message" style="display: none">请输入描述信息</div>
-                                            </div>
-
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3">关键词<span>
-                                                    * </span></label>
-                                            <div class="checkbox-list col-md-9" style="padding-top:14px">
-                                                <div style="margin-bottom: 3px;line-height: 24px">
-                                                    <input type="text" style="font-size: 16px" id="addWorkStr">
-                                                    <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" >资源目录<span  >
+													* </span>
+                                                </label>
+                                                <div class="col-md-4" id="cemterCatalogDiv" style="padding-top: 14px" >
+                                                    <input type="hidden"  id="centerCatalogId">
+                                                    <div id="jstree-demo"></div>
+                                                    <div class="custom-error" style="display: none" id="file_dir">请选择目录</div>
                                                 </div>
-                                                <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden;padding-left: 3px" class="key-wrap"></div>
-                                                <div class="custom-error" id="key_work" style="display: none">请添加至少一个关键词</div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3">来源<span  class="required">
-                                                    * </span></label>
-                                            <div class="col-md-6" id="dataSourceDes" style="padding-top:14px">
-                                                <textarea name="need_checked" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;"></textarea>
-                                                <div class="custom-error" name="need_message" style="display: none">请输入来源</div>
-                                            </div>
+                                            <div class="form-group dataLicenseInputGroup">
+                                                <label class="control-label col-md-3">描述 <span class="required">
+													* </span>
+                                                </label>
+                                                <div class="col-md-6" style="padding-top: 14px">
+                                                    <textarea name="need_checked" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;"></textarea>
+                                                    <div class="custom-error" name="need_message" style="display: none">请输入描述信息</div>
+                                                </div>
 
-                                        </div>
-                                    </form>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">关键词<span>
+													* </span></label>
+                                                <div class="checkbox-list col-md-9" style="padding-top: 14px">
+                                                    <div style="margin-bottom: 3px;line-height: 24px">
+                                                        <input type="text" style="font-size: 16px" id="addWorkStr">
+                                                        <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
+                                                    </div>
+                                                    <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden;padding-left: 5px" class="key-wrap"></div>
+                                                    <div class="custom-error" id="key_work" style="display: none">请添加至少一个关键词</div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="padding-top: 14px">
+                                                <label class="control-label col-md-3">来源<span  class="required">
+													* </span></label>
+                                                <div class="col-md-6" id="dataSourceDes">
+                                                    <textarea name="need_checked" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;"></textarea>
+                                                    <div class="custom-error" name="need_message" style="display: none">请输入来源</div>
+                                                </div>
+
+                                            </div>
+                                        </form>
+
                                 </div>
                                 <div class="tab-pane" id="tab2">
-
                                     <h3>
                                         <span>数据源:</span>
                                         <label for="aaa" style="font-size: 23px;color: #1CA04C">数据库表</label>
@@ -269,8 +271,9 @@
                                         </div>
                                     </div>
                                     <div style="overflow: hidden;display: none" class="select-local">
-                                        <div class="col-md-6 col-md-offset-3" style="font-size: 18px" id="fileContainerTree"></div>
-                                        <div id="fileDescribeDiv" style="display: none">
+                                        <div class="col-md-4 col-md-offset-2" style="font-size: 18px" id="fileContainerTree"></div>
+                                        <div id="fileDescribeDiv" class="col-md-5 tagsinput" style="border: 1px solid black">
+
 
                                         </div>
                                     </div>
@@ -278,7 +281,7 @@
                                 <div class="tab-pane" id="tab3">
 
                                     <div style="overflow: hidden">
-                                        <div class="col-md-6 col-md-offset-3" style="font-size: 18px">
+                                        <div class="col-md-6 col-md-offset-1" style="font-size: 18px">
                                             <form class="form-horizontal">
                                                 <div class="form-group">
                                                     <label  class="col-sm-4 control-label">可公开范围</label>
@@ -295,7 +298,7 @@
                                                 <div class="form-group">
                                                     <label  class="col-sm-4 control-label">已选择</label>
                                                     <div class="col-sm-8">
-                                                        <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="permissions-wrap"></div>
+                                                        <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden;padding-left: 5px" class="permissions-wrap"></div>
                                                     </div>
                                                 </div>
                                             </form>
@@ -331,7 +334,7 @@
     {{each list as value i}}
     <div class="col-md-4">
         <label>
-            <input type="checkbox" name="resTable" value="{{value}}">
+            <input type="checkbox" name="resTable" value="{{value}}" valName="{{value}}">
             <span style="word-break: break-all">{{value}}</span>
         </label>
     </div>
@@ -348,12 +351,14 @@
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
     <script type="text/javascript">
         var ctx = '${ctx}';
+        var sdoId = "${resourceId}";
         var initNum =1;
         var firstFlag=false;
         var secondFlag=false;
-        var resourceId="";
-        var publicType="0";
+        var resourceId=sdoId;
+        var publicType="";
         var tagNames=new Array();
+        var dataRelationsList ;
         //将图片截图并上传功能
         var api = null;
         function readURL(input) {
@@ -361,11 +366,6 @@
                 var reader = new FileReader();
                 reader.readAsDataURL(input.files[0]);
                 reader.onload = function(event) {
-                    var tag = $("#tag").val();
-                    if(tag=="") {
-                        $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
-                        $("#tag").val("1");
-                    }
                     $('#cutimg').removeAttr('src');
                     $('#cutimg').attr('src', event.target.result);
                     $("#checkPicture").hide();
@@ -375,12 +375,8 @@
                         setSelect: [ 10, 10, 100, 100 ],
                         aspectRatio: 4/3,
                         allowSelect:true,
-/*
-                        allowSelect:false,
-*/
-/*
-                        allowResize:false,
-*/
+                       /* allowSelect:false,
+                        allowResize:false,*/
                         onSelect: updateCoords,
                         onChange:updateCoords
                     });
@@ -409,7 +405,8 @@
                 processData: false,
                 success: function (result) {
                     var resultJson = JSON.parse(result);
-                    var filePath = 'resources/img/images/'+resultJson.saveName;
+                    console.log(resultJson)
+                    var filePath = '${ctx}/resources/img/images/'+resultJson.saveName;
                     $("#imgPath").val('resources/img/images/'+resultJson.saveName);
                     $('.jcrop-tracker').hide();
                     $("#checkPicture").show();
@@ -427,11 +424,11 @@
             if(this.value =="DB"){
                 $(".select-database").show();
                 $(".select-local").hide();
-                publicType ="0"
+                publicType ="mysql"
             }else {
                 $(".select-database").hide();
                 $(".select-local").show();
-                publicType ="1"
+                publicType ="file"
             }
         })
         $("[name='need_checked']").on("change",function () {
@@ -536,7 +533,6 @@
                 dataType: "json",
                 data: {editable: false},
                 success: function (data) {
-                    console.log(data)
                     $(container).jstree(data).bind("select_node.jstree", function (event, selected) {
                         /*$(".button-save").removeAttr("disabled");*/
                         $("#centerCatalogId").val(selected.node.id);
@@ -555,6 +551,7 @@
                     console.log(List)
                     var tabCon = template("dataRelationshipList", List);
                     $(".undeslist").append(tabCon);
+                    getResourceById();
                 },
                 error:function (data) {
                     console.log("请求失败")
@@ -613,7 +610,7 @@
                 type:"POST",
                 data:{
                     title:$("#task_title").val(),
-                    imagePath:$("#imgPath").val(),
+                    imagePath:"",
                     introduction:$("#dataDescribeID").val(),
                     keyword:keywordStr,
                     catalogId:$("#centerCatalogId").val(),
@@ -621,9 +618,7 @@
                 },
                 success:function (data) {
                     var data = JSON.parse(data)
-                    console.log(data)
                     resourceId = data.resourceId
-                    console.log(resourceId)
                 },
                 error:function (data) {
                     console.log("请求失败")
@@ -633,16 +628,16 @@
         function addResourceSecondStep() {
 
             var dataList=""
-            if(publicType =="0"){
+            if(publicType =="mysql"){
                 var $ele = $("[name='resTable']:checked")
 
                 $ele.each(function () {
                     dataList+=$(this).val()+";"
                 })
             }else {
-                var $ele = $("#fileDescribeDiv span")
+                var $ele = $(".fileTag")
                 $ele.each(function () {
-                    dataList+=$(this).text()+";"
+                    dataList+=$(this).attr("name")+";"
                 })
             }
             if($ele.size() ==0 ){
@@ -655,7 +650,7 @@
                 type:"POST",
                 data:{
                     resourceId:resourceId,
-                    publicType:publicType=="0"?"mysql":"file",
+                    publicType:publicType,
                     dataList:dataList
                 },
                 success:function (data) {
@@ -703,9 +698,6 @@
                     return
                 }
             })
-            if(firstFlag){
-                return
-            }
             if(tagNames.length ==0){
                 $("#key_work").show()
                 firstFlag=true
@@ -741,22 +733,68 @@
             })
         }
 
-        /*function getResourceById() {
+        function getResourceById() {
             $.ajax({
                 url:ctx+"/resource/getResourceById",
                 type:"POST",
                 data:{
-                    resourceId:"5bdfd44981b55a207c7bd5df",
+                    resourceId:resourceId,
                 },
                 success:function (data) {
-                    console.log(data)
+                    var totalList = JSON.parse(data).resource
+                    console.log(JSON.parse(data));
+                    $("#task_title").val(totalList.title)
+                    $("#dataDescribeID").val(totalList.introduction)
+                    var path = "${ctx}/"+totalList.imagePath+"_cut.jpg";
+                    $('#cutimg').attr('src',path);
+
+                    publicType =  totalList.publicType
+                    var keyList  = totalList.keyword.split(";")
+
+                    tagNames=keyList.slice(0,keyList.length-1)
+                    for(var i=0;i<tagNames.length;i++){
+                        $(".key-wrap").append("<div class='key-word'> <p class='tagname'>"+tagNames[i]+"</p> <span class='closeWord'>×</span> </div>");
+                    }
+                    $("#dataSourceDesID").val(totalList.createdByOrganization)
+                    console.log(totalList.publicContent)
+
+                    var publicContentList = totalList.publicContent.split(";")
+                    var typeNum = totalList.publicType=="mysql"?0:1;
+                    $("[name='ways']:eq("+ typeNum+")").prop("checked",true)
+                    if(typeNum ==0){
+                        for(var i=0;i<publicContentList.length-1;i++){
+                            $("[valName='"+publicContentList[i] +"']").prop("checked",true)
+                        }
+                    }else {
+                        var fileId=totalList.filePath
+                        var str = fileId.replace(/%_%/g, "/");
+                        var filePathList = str.split(";")
+                        console.log(filePathList)
+                        for (var i=0;i<filePathList.length-1;i++){
+                            $("#fileDescribeDiv").append("<span class='tag fileTag' style='display: inline-block;margin-right: 5px' name="+ filePathList[i]+"><span class='filePathClass'>"+filePathList[i] +"</span> &nbsp;&nbsp; <a href='javascript:void(0)' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
+                        }
+                        $(".select-database").hide();
+                        $(".select-local").show();
+
+                    }
+                    var userList = totalList.userGroupId.split(";")
+                    $("#permissions option").each(function () {
+                        for(var i=0;i<userList.length-1;i++){
+                            if($(this).val() ==userList[i] ){
+                                $(this).remove()
+                            }
+                        }
+                    })
+                    for(var i=0;i<userList.length-1;i++){
+                        $(".permissions-wrap").append("<div class='permissions-word'> <p class='tagname'>"+userList[i]+"</p> <span class='closeWord'>×</span> </div>");
+                    }
                 },
                 error:function (data) {
                     console.log("请求失败")
                 }
             })
         }
-        getResourceById();*/
+
         $('#fileContainerTree').jstree({
             'core': {
                 'data': function (node, cb) {
@@ -777,14 +815,16 @@
             var fileId = data.node.id;
             var str = fileId.replace(/%_%/g, "/");
             /*var isContain = false;*/
-            $("#fileDescribeDiv").append("<div name="+ fileId+"><span>"+str +"</span></div>")
+            $("#fileDescribeDiv").append("<span class='tag fileTag' style='display: inline-block;margin-right: 5px' name="+ fileId+"><span class='filePathClass'>"+str +"</span> &nbsp;&nbsp; <a href='javascript:void(0)' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
+            /*$("#fileDescribeDiv").append("<div name="+ fileId+"><span>"+str +"</span></div>")*/
             /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
         }).bind("deselect_node.jstree", function (e, data) {
             var fileId = data.node.id;
             var fileName = data.node.text;
-            $("div[name='" + fileId + "']").remove();
+            $("span[name='" + fileId + "']").remove();
             /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
         });
+
         function initFileTree() {
             var root;
             $.ajax({
@@ -793,7 +833,6 @@
                 dataType: "json",
                 async: false,
                 success: function (data) {
-                    console.log(data)
                     root = data;
                 }
             });
@@ -825,6 +864,10 @@
                 }
             }
         }
+        function tagClick(obj){
+            $(obj).parent().remove();
+        }
+
     </script>
 </div>
 

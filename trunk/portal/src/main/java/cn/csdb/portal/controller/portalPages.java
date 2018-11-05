@@ -15,9 +15,9 @@ public class portalPages {
         ModelAndView modelAndView = new ModelAndView("dataSourceDescribe");
         return modelAndView;
     }
-    @RequestMapping("/dataSourceDescribeEdit")
+    @RequestMapping("/editResource")
     public ModelAndView index3() {
-        ModelAndView modelAndView = new ModelAndView("dataSourceDescribeEdit");
+        ModelAndView modelAndView = new ModelAndView("editResource");
         return modelAndView;
     }
     @RequestMapping("/dataDataDescribe")

@@ -16,6 +16,7 @@
     <title>用户管理</title>
     <link href="${ctx}/resources/bundles/rateit/src/rateit.css" rel="stylesheet" type="text/css">
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css">
+    <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>
@@ -135,8 +136,8 @@
                                         <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">
                                             用户组名
                                         </th>
-                                        <th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">描述</th>
-                                        <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">创建时间</th>
+                                        <th style="width: 25%;text-align: left;background: #64aed9;color: #FFF;font-weight: bold">描述</th>
+                                        <th style="width: 10%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">创建时间</th>
                                         <th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">操作</th>
                                     </tr>
                                     </thead>
@@ -159,7 +160,7 @@
     </div>
 </div>
 
-<!--new group-->
+<!--新增用户组Group-->
 <div class="modal fade" tabindex="-1" role="dialog" id="addModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -255,6 +256,42 @@
                 </button>
             </div>
                 </form>
+
+<!--修改用户组Group-->
+<div class="modal fade" tabindex="-1" role="dialog" id="editModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">修改用户组</h4>
+            </div>
+            <div class="modal-body" style="min-height: 150px">
+                <form class="form-horizontal" id="editGroupForm" method="post" accept-charset="utf-8" role="form"  onfocusout="true">
+                    <div class="form-group">
+                        <input type="hidden" class="form-control"
+                               id="groupId"
+                               name="id" value=""/>
+                        <label for="groupNameEdit" class="col-sm-3 control-label">用户组名称<span class="required">
+													*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="groupNameEdit" name="groupName" placeholder="请输入用户组名称"  required="required" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="descEdit" class="col-sm-3 control-label">描述<span class="required">
+													*</span></label>
+                        <div class="col-sm-8">
+                            <textarea  type="text" class="form-control" cols="30" rows="5" id="descEdit" name="desc" placeholder="请输入用户组描述信息" required="required"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn green" onclick="submitEditData();" ><i
+                        class="glyphicon glyphicon-ok"></i>保存
+                </button>
+                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+            </div>
         </div>
     </div>
 </div>
@@ -307,6 +344,50 @@
                 </div>
             </form>
 
+<!--用户组Group, 添加用户-->
+<div class="modal fade" tabindex="-1" role="dialog" id="groupModalForAddUser">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">用户组添加用户</h4>
+            </div>
+            <div class="modal-body" style="min-height: 150px">
+                <form class="form-horizontal" id="groupFormForAdduser" method="post" accept-charset="utf-8" role="form"  onfocusout="true">
+                    <div class="form-group" style="margin-bottom:2px;">
+                        <input type="hidden" id="spanGroupId">
+                        <label class="col-sm-3 control-label">用户组名称:</label>
+                        <div class="col-sm-8" style="padding-top: 7px;" >
+                            <span id="spanGroupName"></span>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:2px;">
+                        <label  class="col-sm-3 control-label">描述:</label>
+                        <div class="col-sm-8" style="padding-top: 7px;" >
+                            <span id="spanDesc"></span>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:2px;">
+                        <label  class="col-sm-3 control-label">本组己有用户:</label>
+                        <div class="col-sm-8" style="padding-top: 7px;" >
+                            <select class='form-control select2me' name='users' id='users' multiple>
+                                <c:forEach  var="item"  items="${list}">
+                                    <option value="${item.id}" id="${item.id}" >${item.userName}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn green" onclick="submitAddUser();" ><i
+                        class="glyphicon glyphicon-ok"></i>保存
+                </button>
+                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
 
         </div>
     </div>
@@ -329,18 +410,20 @@
 </script>
 
 
+<!-- 用户组 group -->
 <script type="text/html" id="groupTmpl">
     {{each list}}
     <tr>
-        <td style="text-align: center">{{(currentPage-1)*pageSize+$index+1}}</td>
-        <td><a href="javascript:editData('{{$value.id}}');">{{$value.groupName}}</a>
+        <td style="display:table-cell; vertical-align:middle ; text-align: center;" >{{(currentPage-1)*pageSize+$index+1}}</td>
+        <td style="display:table-cell; vertical-align:middle" ><a href="javascript:editData('{{$value.id}}');">{{$value.groupName}}</a>
         </td>
-        <td style="text-align: center">{{$value.desc}}</td>
-        <td style="text-align: center">{{dateFormat($value.createTime)}}</td>
-        <td id="a{{$value.id}}" style="text-align: center">
+        <td style="display:table-cell; vertical-align:middle ;text-align: left">{{$value.desc}}</td>
+        <td style="display:table-cell; vertical-align:middle ;text-align: center">{{dateFormat($value.createTime)}}</td>
+        <td style="display:table-cell; vertical-align:middle" id="a{{$value.id}}" style="text-align: center">
             <%--<button class="btn default btn-xs green-stripe" onclick="viewData()">查看</button>&nbsp;&nbsp;--%>
-            <button class="btn default btn-xs purple updateButton" onclick="editData('{{$value.id}}')"><i class="fa fa-edit"></i>&nbsp;&nbsp;修改</button>&nbsp;&nbsp;
-            <button class="btn default btn-xs red" onclick="deleteData('{{$value.id}}')"><i class="fa fa-trash"></i>&nbsp;&nbsp;删除</button>
+            <button class="btn default btn-xs purple updateButton" onclick="editData('{{$value.id}}')"><i class="fa fa-edit"></i>修改</button>&nbsp;&nbsp;
+            <button class="btn default btn-xs red" onclick="deleteData('{{$value.id}}')"><i class="fa fa-trash"></i>删除</button>&nbsp;&nbsp;
+            <button class="btn default btn-xs green" onclick="addUserData('{{$value.id}}')"><i class="fa fa-user"></i>添加用户</button>
         </td>
     </tr>
     {{/each}}
@@ -355,18 +438,21 @@
     <script src="${ctx}/resources/js/subStrLength.js"></script>
     <script src="${ctx}/resources/js/regex.js"></script>
     <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
+    <script src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.min.js"></script>
+
     <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
     <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.min.js"></script>
     <script src="${ctx}/resources/bundles/jquery-validation/js/additional-methods.min.js"></script>
     <script src="${ctx}/resources/bundles/jquery-validation/js/localization/messages_zh.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
+
 
     <script type="text/javascript">
-
         var ctx = '${ctx}';
         var currentPageNo = 1;
-        //var validatorAdd;
-
+        var validatorAdd;
+        var groupUsersSelect2;
         $(function () {
             template.helper("dateFormat", formatDate);
             getData(1);
@@ -432,17 +518,33 @@
                         .closest('.form-group').removeClass('has-error'); // set error class to the control group
                 }
             };
-            validatorAdd =  $("#addGroupForm").validate(validData);
-            //$("#editGroupForm").validate(validData);
+            $("#addGroupForm").validate(validData);
+            $("#editGroupForm").validate(validData);
 
+            //getAllUserList();
+            groupUsersSelect2 = $('#users').select2({
+                placeholder: "请选择用户",
+                allowClear: true
+            });
         });
 
         function search() {
             getData(1);
         }
 
+        //获取所有的用户信息
+        function getAllUserList() {
+            $.ajax({
+                url: "${ctx}/group/getUserList",
+                type: "get",
+                dataType: "json",
+                success: function (data) {
+
+                }
+            });
+        }
+
         function getData(pageNo) {
-            console.log("pageNo: " + pageNo);
             $.ajax({
                 url: "${ctx}/group/getPageData",
                 type: "get",
@@ -494,7 +596,7 @@
             bootbox.confirm("确定要删除此条记录吗？", function (r) {
                 if (r) {
                     $.ajax({
-                        url: ctx + "/resource/delete/" + id,
+                        url: ctx + "/group/delete/" + id,
                         type: "post",
                         dataType: "json",
                         success: function (data) {
@@ -545,6 +647,102 @@
             });
         }
 
+        <!--编辑用户组-->
+        function editData(id) {
+            $.ajax({
+                type: "GET",
+                url: '${ctx}/group/info',
+                data: {"id": id},
+                dataType: "json",
+                success: function (data) {
+                    $("#editModal").modal("show");
+                    $("#groupNameEdit").val(data.group.groupName);
+                    $("#descEdit").val(data.group.desc);
+                    $("#groupId").val(data.group.id);
+                }
+            });
+        }
+
+
+        <!--用户组中增加用户界面-->
+        function addUserData(id) {
+            $.ajax({
+                type: "GET",
+                url: '${ctx}/group/info',
+                data: {"id": id},
+                dataType: "json",
+                success: function (data) {
+                    $("#groupModalForAddUser").modal("show");
+                    $("#spanGroupName").html(data.group.groupName);
+                    $("#spanDesc").html(data.group.desc);
+                    $("#spanGroupId").val(data.group.id);
+                    //编辑显示己增加的用户
+                    console.log(data.group.users);
+
+                    $.each(data.group.users, function(index, item){
+                        console.log(item);
+                        groupUsersSelect2.val(item).trigger("change");
+                        groupUsersSelect2.change();
+                    });
+                }
+            });
+        }
+
+        function submitEditData() {
+            if (!$("#editGroupForm").valid()) {
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: '${ctx}/group/updateGroupUser',
+                data: $("#editGroupForm").serialize(),
+                dataType: "json",
+                success: function (data) {
+                    if (data.result == 'ok') {
+                        toastr["success"]("编辑成功！", "用户组编辑");
+                        $("#editModal").modal("hide");
+                        getData(currentPageNo);
+                    } else {
+                        toastr["error"]("编辑失败！", "用户组编辑");
+                    }
+                }
+            });
+        }
+
+        <!--用户组中增加用户信息确认 -->
+        function submitAddUser() {
+            console.log("id=" +$("#spanGroupId").val());
+            $.ajax({
+                type: "POST",
+                url: '${ctx}/group/updateUsers',
+                data: {"id": $("#spanGroupId").val(),
+                    "users":JSON.stringify($("#users").val())
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.result == 'ok') {
+                        toastr["success"]("用户组增加用户成功！", "用户组编辑");
+                        $("#groupModalForAddUser").modal("hide");
+                    } else {
+                        toastr["error"]("用户组增加用户失败！", "用户组编辑");
+                    }
+                }
+            });
+        }
+    </script>
+
+    <script type="text/javascript">
+        function updateUserGroup(btn) {
+            console.log(btn);
+            console.log("点击了修改用户组");
+            var theUserToBeUpdated = $(btn).parent().parent();
+            var tdList = theUserToBeUpdated.children("td");
+            setTimeout(function () {
+                console.log(tdList);
+                $("#loginIdForUpdateGroupDialog").val($(tdList[2]).text());
+                $("#groupsForUpdateGroupDialog").attr("value", $(tdList[5]).text().trim());
+            }, 500);
+        }
 
         function searchUser()
         {
@@ -606,17 +804,6 @@
             });
         }
 
-        function updateUserGroup(btn) {
-            console.log(btn);
-            console.log("点击了修改用户组");
-            var theUserToBeUpdated = $(btn).parent().parent();
-            var tdList = theUserToBeUpdated.children("td");
-            setTimeout(function () {
-                console.log(tdList);
-                $("#loginIdForUpdateGroupDialog").val($(tdList[2]).text());
-                $("#groupsForUpdateGroupDialog").attr("value", $(tdList[5]).text().trim());
-            }, 500);
-        }
     </script>
 </div>
 

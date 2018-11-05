@@ -71,8 +71,8 @@ public class ResourceService {
 
 
     @Transactional(readOnly = true)
-    public long countByPage(String subjectCode, String title,String publicType, String status){
-        return resourceDao.countByPage(subjectCode,title,publicType, status);
+    public long countByPage(String subjectCode, String title,String publicType, String resState){
+        return resourceDao.countByPage(subjectCode,title,publicType, resState);
     }
 /*----------------------------------------------------------------------------------------*/
 
