@@ -635,6 +635,9 @@
                     return
                 }
             })
+            if(firstFlag){
+                return
+            }
             if(tagNames.length ==0){
                 $("#key_work").show()
                 firstFlag=true
@@ -666,6 +669,8 @@
                     resourceId = data.resourceId
                 },
                 error:function (data) {
+                    firstFlag=true
+                    toastr["error"]("请求失败");
                     console.log("请求失败")
                 }
             })

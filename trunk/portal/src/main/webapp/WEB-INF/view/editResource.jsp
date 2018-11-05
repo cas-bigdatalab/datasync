@@ -358,12 +358,14 @@
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
     <script type="text/javascript">
         var ctx = '${ctx}';
+        var sdoId = "${resourceId}";
         var initNum =1;
         var firstFlag=false;
         var secondFlag=false;
-        var resourceId="5bdfd44981b55a207c7bd5df";
+        var resourceId=sdoId;
         var publicType="0";
         var tagNames=new Array();
+        getResourceById();
         $(".progress-bar-success").width(initNum*33+"%");
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
@@ -530,6 +532,9 @@
                     return
                 }
             })
+            if(firstFlag){
+                return
+            }
             if(tagNames.length ==0){
                 $("#key_work").show()
                 firstFlag=true
@@ -673,22 +678,43 @@
             })
         }
 
-        /*function getResourceById() {
+        function getResourceById() {
             $.ajax({
                 url:ctx+"/resource/getResourceById",
                 type:"POST",
                 data:{
-                    resourceId:"5bdfcd0881b55a207c7bd5de",
+                    resourceId:resourceId,
                 },
                 success:function (data) {
-                    console.log(data)
+                    var totalList = JSON.parse(data).resource
+                    console.log(JSON.parse(data));
+                    $("#task_title").val(totalList.title)
+                    $("#dataDescribeID").val(totalList.introduction)
+                    tagNames = totalList.keyword.split(";")
+                    for(var i=0;i<tagNames.length-1;i++){
+                        $(".key-wrap").append("<div class='key-word'> <p class='tagname'>"+tagNames[i]+"</p> <span class='closeWord'>×</span> </div>");
+                    }
+                    $("#dataSourceDesID").val(totalList.createdByOrganization)
+                    $("[name='ways']:eq("+ totalList.publicType+")").prop("checked")
+
+                    var userList = totalList.userGroupId.split(";")
+                    $("#permissions option").each(function () {
+                        for(var i=0;i<userList.length-1;i++){
+                            if($(this).val() ==userList[i] ){
+                                $(this).remove()
+                            }
+                        }
+                    })
+                    for(var i=0;i<userList.length-1;i++){
+                        $(".permissions-wrap").append("<div class='permissions-word'> <p class='tagname'>"+userList[i]+"</p> <span class='closeWord'>×</span> </div>");
+                    }
                 },
                 error:function (data) {
                     console.log("请求失败")
                 }
             })
         }
-        getResourceById();*/
+
         $('#fileContainerTree').jstree({
             'core': {
                 'data': function (node, cb) {
