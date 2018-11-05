@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,15 +39,20 @@ public class dataSourceController {
     @Autowired
     private TableFieldComsDao tableFieldComsDao;
 
+    @RequestMapping(value="/dataResourceStaticRegister1")
+    public String dataResourceRegister1(){
+        return "dataResourceRegister";
+    }
+
     @RequestMapping(value="/dataResourceStaticRegister")
     public String dataResourceRegister(){
-        return "dataResourceRegister";
+        return "dataConfiguration";
     }
 
     @RequestMapping(value="/relationalDatabaseTableList")
     public
     @ResponseBody
-    JSONObject relationalDatabaseTableList(String dataSourceId){
+    JSONObject relationalDatabaseTableList(String flag){
         JSONObject jsonObject = new JSONObject();
 /*
         DataSrc dataSrc = dataSrcService.findById(dataSourceId);
@@ -60,13 +66,23 @@ public class dataSourceController {
         datasrc.setPort("3306");
         datasrc.setUserName("root");
         datasrc.setPassword("");
-        List<String> list = dataSrcService.relationalDatabaseTableList(datasrc);
-        List<Described_Table> list_describe = tableFieldComsDao.queryDescribeTable();
-        for(Described_Table described_table : list_describe){
-            list.remove(described_table.getTableName());
+        if("0".equals(flag)) {
+            List<String> list = dataSrcService.relationalDatabaseTableList(datasrc);
+            List<Described_Table> list_describe = tableFieldComsDao.queryDescribeTable();
+            for (Described_Table described_table : list_describe) {
+                list.remove(described_table.getTableName());
+            }
+            jsonObject.put("list", list);
+            jsonObject.put("dataSourceName", datasrc.getDataSourceName());
+        }else{
+            List<String> list = new ArrayList<>();
+            List<Described_Table> list_describe = tableFieldComsDao.queryDescribeTable();
+            for (Described_Table described_table : list_describe) {
+                list.add(described_table.getTableName());
+            }
+            jsonObject.put("list", list);
+            jsonObject.put("dataSourceName", datasrc.getDataSourceName());
         }
-        jsonObject.put("list",list);
-        jsonObject.put("dataSourceName",datasrc.getDataSourceName());
         return jsonObject;
     }
 
