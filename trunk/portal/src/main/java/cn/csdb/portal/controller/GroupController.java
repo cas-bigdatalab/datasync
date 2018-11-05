@@ -1,8 +1,10 @@
 package cn.csdb.portal.controller;
 
 import cn.csdb.portal.model.Group;
+import cn.csdb.portal.model.User;
 import cn.csdb.portal.service.GroupService;
 import cn.csdb.portal.service.ResourceService;
+import cn.csdb.portal.service.UserService;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,11 +30,16 @@ public class GroupController {
     @Resource
     private GroupService groupService;
 
+    @Resource
+    private UserService userService;
+
     private Logger logger= LoggerFactory.getLogger(GroupController.class);
 
     @RequestMapping("/list")
     public String list(HttpServletRequest request, Model model){
         logger.info("进入用户组列表页面");
+        List<User> list = userService.getAll();
+        model.addAttribute("list",list);
         return "group";
     }
 
@@ -66,6 +75,7 @@ public class GroupController {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject addGroup(Group group) {
+        group.setCreateTime(new Date());
         groupService.add(group);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("result", "ok");
@@ -76,6 +86,7 @@ public class GroupController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject updateGroup(Group group) {
+        group.setCreateTime(new Date());
         groupService.update(group);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("result", "ok");
@@ -89,6 +100,28 @@ public class GroupController {
         Group group = groupService.get(id);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("group", group);
+        return jsonObject;
+    }
+
+
+    @RequestMapping("/getUserList")
+    @ResponseBody
+    public JSONObject getUserList() {
+        List<User> list = userService.getAll();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("users", list);
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/updateUsers", method = RequestMethod.POST, produces = {"application/json"})
+    @ResponseBody
+    public JSONObject updateUsers(String id, String[] users) {
+        Group group = groupService.get(id);
+        List<String> list = Arrays.asList(users);
+        group.setUsers(list);
+        groupService.update(group);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("result", "ok");
         return jsonObject;
     }
 
