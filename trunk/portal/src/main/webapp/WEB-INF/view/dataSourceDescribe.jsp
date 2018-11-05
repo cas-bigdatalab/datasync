@@ -104,6 +104,10 @@
                                     <form class="form-horizontal" id="submit_form"
                                           method="POST">
                                         <h3 class="block">元数据信息描述</h3>
+
+
+
+
                                         <div class="form-group">
                                             <label class="control-label col-md-3" >数据集名称 <span class="required">
 													* </span>
@@ -115,7 +119,7 @@
                                             </div>
 
                                         </div>
-                                        <div class="form-group">
+                                        <%--<div class="form-group">
                                             <label class="control-label col-md-3">图片<span >
 													* </span>
                                             </label>
@@ -145,50 +149,99 @@
                                                     Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3">资源目录<span  >
-													* </span>
-                                            </label>
-                                            <div class="col-md-4" id="cemterCatalogDiv" >
-                                                <input type="hidden"  id="centerCatalogId">
-                                                <div id="jstree-demo"></div>
-                                                <div class="custom-error" style="display: none" id="file_dir">请选择目录</div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group dataLicenseInputGroup">
-                                            <label class="control-label col-md-3">描述 <span class="required">
-													* </span>
-                                            </label>
-                                            <div class="col-md-6">
-                                                <textarea name="need_checked" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;"></textarea>
-                                                <div class="custom-error" name="need_message" style="display: none">请输入描述信息</div>
-                                            </div>
+                                        </div>--%>
 
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3">关键词<span>
-													* </span></label>
-                                            <div class="checkbox-list col-md-9">
-                                                <div style="margin-bottom: 3px;line-height: 24px">
-                                                    <input type="text" style="font-size: 16px" id="addWorkStr">
-                                                    <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">图片<span class="required">
+													* </span>
+                                                </label>
+                                                <div class="col-md-9">
+                                                    <div class=" margin-top-10">
+                                                        <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
+                                                            <div style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
+                                                                <%--<img alt="" src="" id="cutimg" style="height: 150px; width: 200px;"/>--%>
+                                                                <input type="hidden" id="x" name="x" />
+                                                                <input type="hidden" id="y" name="y" />
+                                                                <input type="hidden" id="w" name="w" />
+                                                                <input type="hidden" id="h" name="h" />
+                                                            </div>
+                                                            <span class="btn default btn-file" id="checkPicture">
+                                                            <span class="fileinput-new">
+                                                            选择一个图片</span>
+                                                            <input id="fcupload" type="file" name="imgFile" onchange="readURL(this);">
+                                                    </span>
+                                                            <span id="uploadSpan" class="fileinput-new" hidden>
+                                                                <button type="button" onclick="doUpload();">上传</button>
+                                                        </span>
+                                                        </form>
+                                                        <div class="clearfix margin-top-10">
+                                                    <span class="label label-danger">
+												注意! </span>
+                                                            图片只能在 IE10+, FF3.6+, Safari6.0+, Chrome6.0+ 和
+                                                            Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="key-wrap">
-                                                    <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
+                                            </div>
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">资源目录<span  >
+													* </span>
+                                                </label>
+                                                <div class="col-md-4" id="cemterCatalogDiv" >
+                                                    <input type="hidden"  id="centerCatalogId">
+                                                    <div id="jstree-demo"></div>
+                                                    <div class="custom-error" style="display: none" id="file_dir">请选择目录</div>
                                                 </div>
-                                                <div class="custom-error" id="key_work" style="display: none">请添加至少一个关键词</div>
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3">来源<span  class="required">
-													* </span></label>
-                                            <div class="col-md-6" id="dataSourceDes">
-                                                <textarea name="need_checked" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;"></textarea>
-                                                <div class="custom-error" name="need_message" style="display: none">请输入来源</div>
-                                            </div>
+                                            <div class="form-group dataLicenseInputGroup">
+                                                <label class="control-label col-md-3">描述 <span class="required">
+													* </span>
+                                                </label>
+                                                <div class="col-md-6">
+                                                    <textarea name="need_checked" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;"></textarea>
+                                                    <div class="custom-error" name="need_message" style="display: none">请输入描述信息</div>
+                                                </div>
 
-                                        </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">关键词<span>
+													* </span></label>
+                                                <div class="checkbox-list col-md-9">
+                                                    <div style="margin-bottom: 3px;line-height: 24px">
+                                                        <input type="text" style="font-size: 16px" id="addWorkStr">
+                                                        <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
+                                                    </div>
+                                                    <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="key-wrap">
+                                                        <div class='key-word'> <p>aaaaaaa</p> <span class='closeWord'>×</span> </div>
+                                                    </div>
+                                                    <div class="custom-error" id="key_work" style="display: none">请添加至少一个关键词</div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">来源<span  class="required">
+													* </span></label>
+                                                <div class="col-md-6" id="dataSourceDes">
+                                                    <textarea name="need_checked" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;"></textarea>
+                                                    <div class="custom-error" name="need_message" style="display: none">请输入来源</div>
+                                                </div>
+
+                                            </div>
+                                        </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                     </form>
                                 </div>
                                 <div class="tab-pane" id="tab2">
@@ -307,6 +360,9 @@
     <script type="text/javascript">
         var ctx = '${ctx}';
         var initNum =1;
+        var firstFlag=false;
+        var secondFlag=false;
+        var thirdFlag=false;
         var resourceId="";
         var publicType="0";
         var tagNames=new Array();
@@ -339,8 +395,13 @@
         function fromAction(flag) {
             if(flag){
                 ++initNum;
-                if(initNum ==2){
-
+                if(initNum ==2 ){
+                    addResourceFirstStep()
+                    if(firstFlag){
+                        initNum--
+                        toastr["error"]("请填写必须项目");
+                        return
+                    }
                     $("#staNum").html(initNum)
                     $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab1").removeClass("active")
@@ -349,6 +410,11 @@
                     $(".button-previous").show();
                 }else {
                     addResourceSecondStep()
+                    if(secondFlag){
+                        initNum--
+                        toastr["error"]("请选择至少一项");
+                        return
+                    }
                     $("#staNum").html(initNum)
                     $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab2").removeClass("active")
@@ -436,9 +502,6 @@
 
         })
         function addResourceFirstStep() {
-            /*$("[name='need_message']").change(function () {
-
-            })*/
             $("[name='need_checked']").each(function () {
                 var $index = $("[name='need_checked']").index($(this))
                 if($(this).val() == "" ||$(this).val().trim()==""){
@@ -446,16 +509,21 @@
                     $("[name='need_message']:eq("+$index +")").addClass("custom-error")
                     $("[name='need_message']:eq("+$index +")").show()
                     $(".required:eq("+$index +")").parent().addClass("custom-error")
+                    firstFlag=true
+                    return
                 }
             })
             if(tagNames.length ==0){
                 $("#key_work").show()
+                firstFlag=true
                 return
             }
             if($("#centerCatalogId").val() ==""){
                 $("#file_dir").show();
+                firstFlag=true
                 return
             }
+            firstFlag=false
             $.ajax({
                 url:ctx+"/resource/addResourceFirstStep",
                 type:"POST",
@@ -491,8 +559,12 @@
                     dataList+=$(this).text()+";"
                 })
             }
-            console.log(dataList)
-            $.ajax({
+            if($ele.size() ==0 ){
+                secondFlag = true
+            }else {
+                secondFlag = false
+            }
+            /*$.ajax({
                 url:ctx+"/resource/addResourceSecondStep",
                 type:"POST",
                 data:{
@@ -508,7 +580,7 @@
                 error:function (data) {
                     console.log("请求失败")
                 }
-            })
+            })*/
         }
         function getResourceById() {
             $.ajax({
