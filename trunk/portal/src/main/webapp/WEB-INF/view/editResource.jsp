@@ -17,6 +17,7 @@
     <title>DataSync专题库门户管理系统</title>
 
     <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jqeury-file-upload/css/jquery.fileupload.css">--%>
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/jquery.Jcrop.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jstree/dist/themes/default/style.min.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.css">
     <style>
@@ -120,70 +121,75 @@
                                             </div>
 
                                         </div>
-                                        <%--<div class="form-group">
-                                            <label class="control-label col-md-3">图片<span >
-													* </span>
-                                            </label>
-                                            <div class="col-md-9">
-                                                <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                    <div class="fileinput-preview thumbnail"
-                                                         data-trigger="fileinput"
-                                                         style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
-                                                    </div>
-                                                    <div>
-                                                            <span class="btn default btn-file">
-                                                            <span class="fileinput-new">
-                                                            选择一个图片</span>
-                                                            <span class="fileinput-exists">
-                                                            换一个</span>
-                                                            <input id="imagePath" type="file" name="imageFile">
-                                                            </span>
-                                                        <a href="#" class="btn red fileinput-exists"
-                                                           data-dismiss="fileinput">
-                                                            删除 </a>
-                                                    </div>
-                                                </div>
-                                                <div class="clearfix margin-top-10">
-												<span class="label label-danger">
-												注意! </span>
-                                                    图片只能在 IE10+, FF3.6+, Safari6.0+, Chrome6.0+ 和
-                                                    Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。
-                                                </div>
-                                            </div>
-                                        </div>--%>
-
+                                    </form>
+                                    <%--<div class="form-group">
+                                             <label class="control-label col-md-3">图片<span >
+                                                     * </span>
+                                             </label>
+                                             <div class="col-md-9">
+                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                     <div class="fileinput-preview thumbnail"
+                                                          data-trigger="fileinput"
+                                                          style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
+                                                     </div>
+                                                     <div>
+                                                             <span class="btn default btn-file">
+                                                             <span class="fileinput-new">
+                                                             选择一个图片</span>
+                                                             <span class="fileinput-exists">
+                                                             换一个</span>
+                                                             <input id="imagePath" type="file" name="imageFile">
+                                                             </span>
+                                                         <a href="#" class="btn red fileinput-exists"
+                                                            data-dismiss="fileinput">
+                                                             删除 </a>
+                                                     </div>
+                                                 </div>
+                                                 <div class="clearfix margin-top-10">
+                                                 <span class="label label-danger">
+                                                 注意! </span>
+                                                     图片只能在 IE10+, FF3.6+, Safari6.0+, Chrome6.0+ 和
+                                                     Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。
+                                                 </div>
+                                             </div>
+                                         </div>--%>
+                                    <div style="overflow: hidden" class="row">
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">图片<span class="required">
-													* </span>
+                                            <label class="control-label col-md-3" style="text-align: right">图片<span >
+                                                    * </span>
                                             </label>
                                             <div class="col-md-9">
                                                 <div class=" margin-top-10">
                                                     <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
-                                                        <div style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
+                                                        <div id="cutDiv" style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
                                                             <%--<img alt="" src="" id="cutimg" style="height: 150px; width: 200px;"/>--%>
                                                             <input type="hidden" id="x" name="x" />
                                                             <input type="hidden" id="y" name="y" />
                                                             <input type="hidden" id="w" name="w" />
                                                             <input type="hidden" id="h" name="h" />
+                                                            <input type="hidden" id="tag" name="tag" val=""/>
                                                         </div>
-                                                        <span class="btn default btn-file" id="checkPicture">
+                                                            <span class="btn default btn-file" id="checkPicture">
                                                             <span class="fileinput-new">
                                                             选择一个图片</span>
-                                                            <input id="fcupload" type="file" name="imgFile" onchange="readURL(this);">
-                                                    </span>
-                                                        <span id="uploadSpan" class="fileinput-new" hidden>
-                                                                <button type="button" onclick="doUpload();">上传</button>
+                                                            <input class="photo-file" id="fcupload" type="file" name="imgFile" onchange="readURL(this);">
+                                                            </span>
+                                                            <span id="uploadSpan" class="btn default btn-file" style="display: none">
+                                                                <span class="fileinput-new">
+                                                            上传</span>
+                                                                <input type="button" onclick="doUpload();"/>
                                                         </span>
                                                     </form>
                                                     <div class="clearfix margin-top-10">
                                                     <span class="label label-danger">
-												注意! </span>
+                                                注意! </span>
                                                         图片只能在 IE10+, FF3.6+, Safari6.0+, Chrome6.0+ 和
                                                         Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
                                         <form class="form-horizontal">
                                             <div class="form-group">
                                                 <label class="control-label col-md-3">资源目录<span  >
@@ -228,20 +234,6 @@
                                             </div>
                                         </form>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-                                    </form>
                                 </div>
                                 <div class="tab-pane" id="tab2">
 
@@ -354,6 +346,9 @@
 
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
+    <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/js/jquery.Jcrop.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/jquery-form/jquery.form.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.js"></script>
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
     <script type="text/javascript">
@@ -366,6 +361,68 @@
         var publicType="0";
         var tagNames=new Array();
         var dataRelationsList ;
+        //将图片截图并上传功能
+        var api = null;
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.readAsDataURL(input.files[0]);
+                reader.onload = function(event) {
+                    var tag = $("#tag").val();
+                    if(tag=="") {
+                        $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
+                        $("#tag").val("1");
+                    }
+                    $('#cutimg').removeAttr('src');
+                    $('#cutimg').attr('src', event.target.result);
+                    $("#checkPicture").hide();
+                    $("#uploadSpan").show();
+                    console.log(event.target.result)
+                    api = $.Jcrop('#cutimg', {
+                        setSelect: [ 10, 10, 100, 100 ],
+                        aspectRatio: 1,
+                        allowSelect:false,
+                        allowResize:false,
+                        onSelect: updateCoords,
+                        onChange:updateCoords
+                    });
+                };
+                if (api != undefined) {
+                    api.destroy();
+                }
+            }
+            function updateCoords(obj) {
+                $("#x").val(obj.x);
+                $("#y").val(obj.y);
+                $("#w").val(obj.w);
+                $("#h").val(obj.h);
+            };
+        }
+        function doUpload(){
+            $(".jcrop-holder").hide();
+            var formData = new FormData($( "#fileForm" )[0]);
+            $.ajax({
+                url: '${ctx}/resource/uploadHeadImage' ,
+                type: 'post',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    var resultJson = JSON.parse(result);
+                    var filePath = 'resources/img/images/'+resultJson.saveName;
+                    $('.jcrop-tracker').hide();
+                    $("#checkPicture").show();
+                    $("#uploadSpan").hide();
+                    $('#cutimg').attr('src',filePath+'_cut.jpg');
+                    $('#cutimg').show();
+                },
+                error: function (returndata) {
+                    alert(returndata);
+                }
+            });
+        }
         getResourceById();
         $(".progress-bar-success").width(initNum*33+"%");
         $("[name='ways']").on("change",function () {
