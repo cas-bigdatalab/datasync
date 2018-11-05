@@ -113,7 +113,7 @@
                                             </label>
                                             <div class="col-md-4">
                                                 <input type="text" class="form-control" name="need_checked"
-                                                       id="resTitle" style="border: 1px solid rgb(169, 169, 169)">
+                                                       id="task_title" style="border: 1px solid rgb(169, 169, 169)">
                                                 <div class="custom-error" name="need_message" style="display: none">请输入数据集名称</div>
                                             </div>
 
@@ -704,7 +704,7 @@
                 type:"POST",
                 data:{
                     resourceId:resourceId,
-                    publicType:publicType,
+                    publicType:publicType=="0"?"mysql":"file",
                     dataList:dataList
                 },
                 success:function (data) {
@@ -787,22 +787,6 @@
             })
         }
 
-        function getResourceById() {
-            $.ajax({
-                url:ctx+"/resource/getResourceById",
-                type:"POST",
-                data:{
-                    resourceId:"5bdfd44981b55a207c7bd5df",
-                },
-                success:function (data) {
-                    console.log(data)
-                },
-                error:function (data) {
-                    console.log("请求失败")
-                }
-            })
-        }
-        getResourceById();
         $('#fileContainerTree').jstree({
             'core': {
                 'data': function (node, cb) {

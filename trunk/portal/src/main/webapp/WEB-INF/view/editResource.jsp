@@ -595,7 +595,7 @@
                 type:"POST",
                 data:{
                     resourceId:resourceId,
-                    publicType:publicType,
+                    publicType:publicType=="0"?"mysql":"file",
                     dataList:dataList
                 },
                 success:function (data) {
