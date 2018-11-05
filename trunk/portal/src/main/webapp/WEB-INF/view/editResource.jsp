@@ -274,8 +274,9 @@
                                         </div>
                                     </div>
                                     <div style="overflow: hidden;display: none" class="select-local">
-                                        <div class="col-md-5 col-md-offset-2" style="font-size: 18px" id="fileContainerTree"></div>
-                                        <div id="fileDescribeDiv" class="col-md-5">
+                                        <div class="col-md-4 col-md-offset-2" style="font-size: 18px" id="fileContainerTree"></div>
+                                        <div id="fileDescribeDiv" class="col-md-5 tagsinput" style="border: 1px solid black">
+
 
                                         </div>
                                     </div>
@@ -810,7 +811,8 @@
             var fileId = data.node.id;
             var str = fileId.replace(/%_%/g, "/");
             /*var isContain = false;*/
-            $("#fileDescribeDiv").append("<div name="+ fileId+"><span>"+str +"</span></div>")
+            $("#fileDescribeDiv").append("<span class='tag' style='display: inline-block' name="+ fileId+"><span class='filePathClass'>"+str +"</span> &nbsp;&nbsp; <a href='#' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
+            /*$("#fileDescribeDiv").append("<div name="+ fileId+"><span>"+str +"</span></div>")*/
             /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
         }).bind("deselect_node.jstree", function (e, data) {
             var fileId = data.node.id;
@@ -818,6 +820,7 @@
             $("div[name='" + fileId + "']").remove();
             /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
         });
+
         function initFileTree() {
             var root;
             $.ajax({
