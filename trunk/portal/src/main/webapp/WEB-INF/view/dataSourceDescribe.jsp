@@ -481,7 +481,7 @@
                     if(resourceId == ""){
                         addResourceFirstStep()
                     }else {
-                        editResourceFirstStep
+                        editResourceFirstStep()
                     }
                     if(firstFlag){
                         initNum--
