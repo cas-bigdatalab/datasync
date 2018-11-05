@@ -291,7 +291,7 @@ public class ResourceController {
             resource.setFilePath(sb.toString().replace("/", "%_%"));
             resource.setToMemorySize(String.valueOf(size));
         }
-        resource.setResState("未发布");
+        resource.setResState("未完成");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -314,7 +314,7 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setUserGroupId(userGroupIdList);
-        resource.setResState("已发布");
+        resource.setResState("待审核");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -333,6 +333,7 @@ public class ResourceController {
     public JSONObject getResourceById(@RequestParam(name = "resourceId") String resourceId) {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        jsonObject.put("resource",resource);
         return jsonObject;
     }
 
@@ -416,7 +417,7 @@ public class ResourceController {
             resource.setFilePath(sb.toString().replace("/", "%_%"));
             resource.setToMemorySize(String.valueOf(size));
         }
-        resource.setResState("未发布");
+        resource.setResState("未完成");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -439,7 +440,7 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setUserGroupId(userGroupIdList);
-        resource.setResState("已发布");
+        resource.setResState("待审核");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
