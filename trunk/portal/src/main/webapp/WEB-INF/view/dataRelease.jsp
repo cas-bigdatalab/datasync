@@ -16,6 +16,8 @@
 <head>
     <title>DataSync专题库门户管理系统</title>
     <link href="${ctx}/resources/css/dataUpload.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
+
 </head>
 
 <body>
@@ -31,21 +33,22 @@
                 <form class="form-inline" style="margin-bottom: 0px">
                     <div class="form-group">
                         <label>数据类型</label>
-                        <select id="dataSourceList" class="form-control" style="width: 150px">
+                        <select id="resourcePublicType" class="form-control" style="width: 150px">
                             <option value="">全部</option>
-                            <option value="db">关系数据库</option>
+                            <option value="mysql">关系数据库</option>
                             <option value="file">文件数据库</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>状态</label>
-                        <select id="dataStatusList" class="form-control" style="width: 150px">
+                        <select id="resourceState" class="form-control" style="width: 150px">
                             <option value="">全部</option>
-                            <option value="1">上传完成</option>
-                            <option value="0">未上传</option>
+                            <option value="未完成">未完成</option>
+                            <option value="待审核">待审核</option>
+                            <option value="已审核">已审核</option>
                         </select>
                     </div>
-                    <button type="button" class="btn blue" style="margin-left: 49px" id="seachDataSource">查询</button>
+                    <button type="button" class="btn blue" style="margin-left: 49px" id="seachResource">查询</button>
                     <button type="button" class="btn green" style="margin-left: 49px" onclick="newRelease()">新建发布
                     </button>
                 </form>
@@ -66,18 +69,6 @@
                 </tr>
                 </thead>
                 <tbody id="bd-data">
-                <tr>
-                    <td>1</td>
-                    <td>DB2Data</td>
-                    <td>关系数据库</td>
-                    <td>/dataOneDB</td>
-                    <td>2018-04-02 10:14</td>
-                    <td>成功</td>
-                    <td>
-                        <button type="button" class="btn green btn-xs " onclick="resSend()">重新发布</button>
-                        <button type="button" class="btn blue btn-xs">查看</button>
-                    </td>
-                </tr>
                 </tbody>
             </table>
             <div class="page-message" style="float: left;line-height: 56px"></div>
@@ -173,20 +164,20 @@
             <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i
                     class="glyphicon glyphicon-trash"></i>&nbsp;删除
             </button>--%>
-                {{if value.resState == '待审核'}}
-                <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.id}}"
-                        value="{{value.id}}">审核
-                </button>
-                {{/if}}
-                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.id}}"
-                        style="background-color: dimgrey">编辑
-                </button>
-                <button type="button" class="btn  edit-data btn-xs blue" keyIdTd="{{value.id}}"><i
-                        class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
-                </button>
-                <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.id}}');"><i
-                        class="glyphicon glyphicon-trash"></i>&nbsp;删除
-                </button>
+            {{if value.resState == '待审核'}}
+            <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.id}}"
+                    value="{{value.id}}">审核
+            </button>
+            {{/if}}
+            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}"
+                    style="background-color: dimgrey">编辑
+            </button>
+            <button type="button" class="btn  edit-data btn-xs blue" keyIdTd="{{value.dataTaskId}}"><i
+                    class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
+            </button>
+            <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.id}}');"><i
+                    class="glyphicon glyphicon-trash"></i>&nbsp;删除
+            </button>
         </td>
     </tr>
     {{/each}}
@@ -197,24 +188,19 @@
 <div id="siteMeshJavaScript">
 
     <script type="text/javascript">
-        var dataSourceName = ""
-        var dataSourceStatus = ""
+        var publicType = ""
+        var resourceState = ""
         $(function(){
             tableConfiguration2(1,"","")
         });
-        $("#dataSourceList").on("change", function () {
-            dataSourceName = $("#dataSourceList option:selected").val();
+        $("#resourcePublicType").on("change", function () {
+            publicType = $("#resourcePublicType option:selected").val();
         });
-        $("#dataStatusList").on("change", function () {
-            dataSourceStatus = $("#dataStatusList option:selected").val();
+        $("#resourceState").on("change", function () {
+            resourceState = $("#resourceState option:selected").val();
         });
-        $("#seachDataSource").click(function () {
-            tableConfiguration2(1);
-        })
-        $("#bd-data").delegate(".upload-data","click",function () {
-            var id = $(this).attr("keyIdTd");
-            console.log(id)
-            window.location.href="${ctx}/resource/editResource?resourceId="+id;
+        $("#seachResource").click(function () {
+            tableConfiguration2(1,publicType,resourceState);
         })
 
         function resSend() {
@@ -225,16 +211,16 @@
             window.location.href = "${ctx}/dataSourceDescribe"
         }
 
-        function tableConfiguration2(num) {
+        function tableConfiguration2(num,publicType,resourceState) {
             $.ajax({
                 url: "${ctx}/resource/getPageData",
                 type: "GET",
                 data: {
                     pageNo: num,
                     title: "",
-                    publicType: "",
+                    publicType: publicType,
                     pageSize: 10,
-                    status: status
+                    status: resourceState
                 },
                 success: function (data) {
                     $(".table-message").hide();
@@ -258,11 +244,11 @@
                         $(".page-list").off();
                         $('.page-list').empty();
                     }
-                    $(".page-message").html("当前第" + DataList.pageNum + "页,共" + DataList.pageSize + "页,共" + DataList.totalCount + "条数据");
+                    $(".page-message").html("当前第" + DataList.currentPage + "页,共" + DataList.totalPages + "页,共" + DataList.totalCount + "条数据");
                     $('.page-list').bootpag({
-                        total: DataList.pageSize,
-                        page: DataList.pageNo,
-                        maxVisible: 6,
+                        total: DataList.totalPages,
+                        page: DataList.currentPage,
+                        maxVisible: 5,
                         leaps: true,
                         firstLastUse: true,
                         first: '首页',
@@ -275,13 +261,41 @@
                         lastClass: 'last',
                         firstClass: 'first'
                     }).on('page', function (event, num) {
-                        tableConfiguration2(num);
+                        tableConfiguration2(num,publicType,resourceState);
                     });
                 },
                 error: function () {
                     $(".table-message").html("请求失败");
                 }
             })
+
+
+        }
+
+        function removeData(id){
+            bootbox.confirm("确认删除",function (r) {
+                if(r){
+                    $.ajax({
+                        url:"${ctx}/resource/delete/"+id,
+                        type:"POST",
+                        /*data:{
+                            datataskId:id
+                        },*/
+                        success:function (data) {
+                            toastr["success"]("删除成功");
+                            tableConfiguration2(1,"","");
+                        },
+                        error:function () {
+                            toastr["error"]("删除失败");
+                            console.log("请求失败");
+                        }
+                    })
+                }else {
+
+                }
+            })
+
+
         }
     </script>
 </div>
