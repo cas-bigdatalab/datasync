@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -111,8 +112,10 @@ public class ResourceController {
     }
 
     @RequestMapping(value = "editResource")
-    public String resourceEdit() {
-        return "editResource";
+    public ModelAndView resourceEdit(String resourceId) {
+        ModelAndView mv = new ModelAndView("editResource");
+        mv.addObject("resourceId",resourceId);
+        return mv;
     }
 
     /**
