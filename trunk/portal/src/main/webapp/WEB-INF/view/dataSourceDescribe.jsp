@@ -64,7 +64,7 @@
                 <div class="portlet-title" style="background-color:#3fd5c0">
                     <div class="caption">
                         <i class="fa fa-gift"></i> 数据发布 - <span class="step-title">
-								第&nbsp;<span id="staNum">1</span>&nbsp;步,共&nbsp;3&nbsp;步</span>
+                                第&nbsp;<span id="staNum">1</span>&nbsp;步,共&nbsp;3&nbsp;步</span>
                     </div>
                 </div>
                 <div class="portlet-body form">
@@ -73,26 +73,26 @@
                             <ul class="nav nav-pills nav-justified steps">
                                 <li class="active">
                                     <a href="#tab1"  class="step">
-												<span class="number">
-												1 </span>
+                                                <span class="number">
+                                                1 </span>
                                         <span class="desc">
-												<i class="fa fa-check"></i> 元数据 </span>
+                                                <i class="fa fa-check"></i> 元数据 </span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="#tab2"  class="step">
-												<span class="number">
-												2 </span>
+                                                <span class="number">
+                                                2 </span>
                                         <span class="desc">
-												<i class="fa fa-check"></i> 实体数据 </span>
+                                                <i class="fa fa-check"></i> 实体数据 </span>
                                     </a>
                                 </li>
                                 <li>
                                     <a href="#tab3"  class="step">
-												<span class="number">
-												3 </span>
+                                                <span class="number">
+                                                3 </span>
                                         <span class="desc">
-												<i class="fa fa-check"></i> 设置权限 </span>
+                                                <i class="fa fa-check"></i> 设置权限 </span>
                                     </a>
                                 </li>
                             </ul>
@@ -113,7 +113,7 @@
                                             </label>
                                             <div class="col-md-4">
                                                 <input type="text" class="form-control" name="need_checked"
-                                                       id="task_title" style="border: 1px solid rgb(169, 169, 169)">
+                                                       id="resTitle" style="border: 1px solid rgb(169, 169, 169)">
                                                 <div class="custom-error" name="need_message" style="display: none">请输入数据集名称</div>
                                             </div>
 
@@ -164,13 +164,14 @@
                                                             <input type="hidden" id="y" name="y" />
                                                             <input type="hidden" id="w" name="w" />
                                                             <input type="hidden" id="h" name="h" />
+                                                            <input type="hidden" id="tag" name="tag" val=""/>
                                                         </div>
                                                             <span class="btn default btn-file" id="checkPicture">
                                                             <span class="fileinput-new">
                                                             选择一个图片</span>
                                                             <input class="photo-file" id="fcupload" type="file" name="imgFile" onchange="readURL(this);">
                                                             </span>
-                                                            <span id="uploadSpan" class="btn default btn-file" hidden>
+                                                            <span id="uploadSpan" class="btn default btn-file" style="display: none">
                                                                 <span class="fileinput-new">
                                                             上传</span>
                                                                 <input type="button" onclick="doUpload();"/>
@@ -188,61 +189,48 @@
                                     </div>
 
                                     <form class="form-horizontal">
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3">资源目录<span  >
-													* </span>
-                                                </label>
-                                                <div class="col-md-4" id="cemterCatalogDiv" >
-                                                    <input type="hidden"  id="centerCatalogId">
-                                                    <div id="jstree-demo"></div>
-                                                    <div class="custom-error" style="display: none" id="file_dir">请选择目录</div>
-                                                </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">资源目录<span  >
+                                                    * </span>
+                                            </label>
+                                            <div class="col-md-4" id="cemterCatalogDiv" >
+                                                <input type="hidden"  id="centerCatalogId">
+                                                <div id="jstree-demo"></div>
+                                                <div class="custom-error" style="display: none" id="file_dir">请选择目录</div>
                                             </div>
-                                            <div class="form-group dataLicenseInputGroup">
-                                                <label class="control-label col-md-3">描述 <span class="required">
-													* </span>
-                                                </label>
-                                                <div class="col-md-6">
-                                                    <textarea name="need_checked" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;"></textarea>
-                                                    <div class="custom-error" name="need_message" style="display: none">请输入描述信息</div>
-                                                </div>
-
+                                        </div>
+                                        <div class="form-group dataLicenseInputGroup">
+                                            <label class="control-label col-md-3">描述 <span class="required">
+                                                    * </span>
+                                            </label>
+                                            <div class="col-md-6">
+                                                <textarea name="need_checked" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;"></textarea>
+                                                <div class="custom-error" name="need_message" style="display: none">请输入描述信息</div>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3">关键词<span>
-													* </span></label>
-                                                <div class="checkbox-list col-md-9">
-                                                    <div style="margin-bottom: 3px;line-height: 24px">
-                                                        <input type="text" style="font-size: 16px" id="addWorkStr">
-                                                        <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
-                                                    </div>
-                                                    <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="key-wrap"></div>
-                                                    <div class="custom-error" id="key_work" style="display: none">请添加至少一个关键词</div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">关键词<span>
+                                                    * </span></label>
+                                            <div class="checkbox-list col-md-9">
+                                                <div style="margin-bottom: 3px;line-height: 24px">
+                                                    <input type="text" style="font-size: 16px" id="addWorkStr">
+                                                    <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
                                                 </div>
+                                                <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="key-wrap"></div>
+                                                <div class="custom-error" id="key_work" style="display: none">请添加至少一个关键词</div>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3">来源<span  class="required">
-													* </span></label>
-                                                <div class="col-md-6" id="dataSourceDes">
-                                                    <textarea name="need_checked" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;"></textarea>
-                                                    <div class="custom-error" name="need_message" style="display: none">请输入来源</div>
-                                                </div>
-
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">来源<span  class="required">
+                                                    * </span></label>
+                                            <div class="col-md-6" id="dataSourceDes">
+                                                <textarea name="need_checked" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;"></textarea>
+                                                <div class="custom-error" name="need_message" style="display: none">请输入来源</div>
                                             </div>
-                                        </form>
 
-
-
-
-
-
-
-
-
-
-
-
-
+                                        </div>
+                                    </form>
 
                                     </form>
                                 </div>
@@ -370,52 +358,31 @@
         var resourceId="";
         var publicType="0";
         var tagNames=new Array();
-        //将图片截图并上传
-        var api = null,
-
-                boundx,
-                boundy,
-
-                $preview = $('#preview-pane'),
-                $pcnt = $('#preview-pane .preview-container'),
-                $pimg = $('#preview-pane .preview-container img'),
-
-                xsize = $pcnt.width(),
-                ysize = $pcnt.height();
-
+        //将图片截图并上传功能
+        var api = null;
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.readAsDataURL(input.files[0]);
                 reader.onload = function(event) {
-                    $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
+                    var tag = $("#tag").val();
+                    if(tag=="") {
+                        $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
+                        $("#tag").val("1");
+                    }
                     $('#cutimg').removeAttr('src');
                     $('#cutimg').attr('src', event.target.result);
                     $("#checkPicture").hide();
                     $("#uploadSpan").show();
-
                     console.log(event.target.result)
-                    $pimg.removeAttr('src');
-                    $pimg.attr('src', event.target.result);
-
                     api = $.Jcrop('#cutimg', {
                         setSelect: [ 10, 10, 100, 100 ],
                         aspectRatio: 1,
                         allowSelect:false,
-                        /*
-                         allowMove:true,
-                         */
                         allowResize:false,
-
                         onSelect: updateCoords,
                         onChange:updateCoords
                     });
-                    setTimeout("delayBack()", 100);
-                    /*alert("456");
-                     var bounds = api.getBounds();
-                     boundx = bounds[0];
-                     boundy = bounds[1];
-                     $preview.appendTo(api.ui.holder);*/
                 };
                 if (api != undefined) {
                     api.destroy();
@@ -426,25 +393,8 @@
                 $("#y").val(obj.y);
                 $("#w").val(obj.w);
                 $("#h").val(obj.h);
-                if (parseInt(obj.w) > 0) {
-                    var rx = xsize / obj.w;
-                    var ry = ysize / obj.h;
-                    $pimg.css({
-                        width : Math.round(rx * boundx) + 'px',
-                        height : Math.round(ry * boundy) + 'px',
-                        marginLeft : '-' + Math.round(rx * obj.x) + 'px',
-                        marginTop : '-' + Math.round(ry * obj.y) + 'px'
-                    });
-                }
             };
         }
-        function delayBack(){
-            var bounds = api.getBounds();
-            boundx = bounds[0];
-            boundy = bounds[1];
-            $preview.appendTo(api.ui.holder);
-        }
-
         function doUpload(){
             $(".jcrop-holder").hide();
             var formData = new FormData($( "#fileForm" )[0]);
@@ -458,9 +408,6 @@
                 processData: false,
                 success: function (result) {
                     var resultJson = JSON.parse(result);
-/*
-                    alert(resultJson.saveName);
-*/
                     var filePath = 'resources/img/images/'+resultJson.saveName;
                     $('.jcrop-tracker').hide();
                     $("#checkPicture").show();
@@ -639,9 +586,6 @@
                     return
                 }
             })
-            if(firstFlag){
-                return
-            }
             if(tagNames.length ==0){
                 $("#key_work").show()
                 firstFlag=true
@@ -673,8 +617,6 @@
                     resourceId = data.resourceId
                 },
                 error:function (data) {
-                    firstFlag=true
-                    toastr["error"]("请求失败");
                     console.log("请求失败")
                 }
             })
@@ -704,7 +646,7 @@
                 type:"POST",
                 data:{
                     resourceId:resourceId,
-                    publicType:publicType=="0"?"mysql":"file",
+                    publicType:publicType,
                     dataList:dataList
                 },
                 success:function (data) {
@@ -716,7 +658,7 @@
             })
         }
         function addResourceThirdStep() {
-           var $preEle= $(".permissions-word .tagname")
+            var $preEle= $(".permissions-word .tagname")
             if($preEle.size() ==0){
                 toastr["error"]("请选择用户组");
                 return
@@ -787,6 +729,22 @@
             })
         }
 
+        function getResourceById() {
+            $.ajax({
+                url:ctx+"/resource/getResourceById",
+                type:"POST",
+                data:{
+                    resourceId:"5bdfd44981b55a207c7bd5df",
+                },
+                success:function (data) {
+                    console.log(data)
+                },
+                error:function (data) {
+                    console.log("请求失败")
+                }
+            })
+        }
+        getResourceById();
         $('#fileContainerTree').jstree({
             'core': {
                 'data': function (node, cb) {
@@ -854,8 +812,6 @@
                 }
             }
         }
-
-
     </script>
 </div>
 
