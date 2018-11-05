@@ -670,7 +670,9 @@
                 },
                 success:function (data) {
                     var data = JSON.parse(data)
+                    console.log(data)
                     resourceId = data.resourceId
+                    console.log(resourceId)
                 },
                 error:function (data) {
                     firstFlag=true

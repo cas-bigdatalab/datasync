@@ -282,8 +282,8 @@
                                         </div>
                                     </div>
                                     <div style="overflow: hidden;display: none" class="select-local">
-                                        <div class="col-md-6 col-md-offset-3" style="font-size: 18px" id="fileContainerTree"></div>
-                                        <div id="fileDescribeDiv" style="display: none">
+                                        <div class="col-md-5 col-md-offset-2" style="font-size: 18px" id="fileContainerTree"></div>
+                                        <div id="fileDescribeDiv" class="col-md-5">
 
                                         </div>
                                     </div>
@@ -344,7 +344,7 @@
     {{each list as value i}}
     <div class="col-md-4">
         <label>
-            <input type="checkbox" name="resTable" value="{{value}}">
+            <input type="checkbox" name="resTable" value="{{value}}" valName="{{value}}">
             <span style="word-break: break-all">{{value}}</span>
         </label>
     </div>
@@ -366,7 +366,7 @@
         var publicType="0";
         var tagNames=new Array();
         var dataRelationsList ;
-        getResourceById();
+
         $(".progress-bar-success").width(initNum*33+"%");
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
@@ -426,7 +426,7 @@
                     if(resourceId == ""){
                         addResourceFirstStep()
                     }else {
-                        editResourceFirstStep
+                        editResourceFirstStep()
                     }
                     if(firstFlag){
                         initNum--
@@ -497,9 +497,9 @@
                     $(".undeslist").empty();
                     var List =JSON.parse(data)
                     console.log(List)
-                    dataRelationsList =List.list
                     var tabCon = template("dataRelationshipList", List);
                     $(".undeslist").append(tabCon);
+                    getResourceById();
                 },
                 error:function (data) {
                     console.log("请求失败")
@@ -693,16 +693,26 @@
                     console.log(JSON.parse(data));
                     $("#task_title").val(totalList.title)
                     $("#dataDescribeID").val(totalList.introduction)
-                    tagNames = totalList.keyword.split(";")
-                    for(var i=0;i<tagNames.length-1;i++){
+
+                    var keyList  = totalList.keyword.split(";")
+
+                    tagNames=keyList.slice(0,keyList.length-1)
+                    for(var i=0;i<tagNames.length;i++){
                         $(".key-wrap").append("<div class='key-word'> <p class='tagname'>"+tagNames[i]+"</p> <span class='closeWord'>×</span> </div>");
                     }
                     $("#dataSourceDesID").val(totalList.createdByOrganization)
-                    var typeNum = totalList.publicType=="mysql"?0:1;
-                    $("[name='ways']:eq("+ typeNum+")").prop("checked")
-                    if(typeNum ==0){
+                    console.log(totalList.publicContent)
 
+                    var publicContentList = totalList.publicContent.split(";")
+                    var typeNum = totalList.publicType=="mysql"?0:1;
+                    $("[name='ways']:eq("+ typeNum+")").prop("checked",true)
+                    if(typeNum ==0){
+                        for(var i=0;i<publicContentList.length-1;i++){
+                            $("[valName='"+publicContentList[i] +"']").prop("checked",true)
+                        }
                     }else {
+                        $(".select-database").hide();
+                        $(".select-local").show();
 
                     }
                     var userList = totalList.userGroupId.split(";")
