@@ -289,6 +289,9 @@ public class ResourceController {
                             }
                             sb.append(fp + ";");
                         }
+                    }else{
+                        sb.append(str+";");
+                        size += file.length();
                     }
                 }
             }
