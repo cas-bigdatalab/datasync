@@ -162,12 +162,12 @@
                                                 <div class=" margin-top-10">
                                                     <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
                                                         <div id="cutDiv" style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
-                                                            <%--<img alt="" src="" id="cutimg" style="height: 150px; width: 200px;"/>--%>
-                                                            <input type="hidden" id="x" name="x" />
-                                                            <input type="hidden" id="y" name="y" />
-                                                            <input type="hidden" id="w" name="w" />
-                                                            <input type="hidden" id="h" name="h" />
-                                                            <input type="hidden" id="tag" name="tag" val=""/>
+                                                                <img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>
+                                                                <input type="hidden" id="x" name="x" />
+                                                                <input type="hidden" id="y" name="y" />
+                                                                <input type="hidden" id="w" name="w" />
+                                                                <input type="hidden" id="h" name="h" />
+                                                                <input type="hidden" id="tag" name="tag" val=""/>
                                                         </div>
                                                             <span class="btn default btn-file" id="checkPicture">
                                                             <span class="fileinput-new">
@@ -368,11 +368,6 @@
                 var reader = new FileReader();
                 reader.readAsDataURL(input.files[0]);
                 reader.onload = function(event) {
-                    var tag = $("#tag").val();
-                    if(tag=="") {
-                        $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
-                        $("#tag").val("1");
-                    }
                     $('#cutimg').removeAttr('src');
                     $('#cutimg').attr('src', event.target.result);
                     $("#checkPicture").hide();
@@ -380,9 +375,10 @@
                     console.log(event.target.result)
                     api = $.Jcrop('#cutimg', {
                         setSelect: [ 10, 10, 100, 100 ],
-                        aspectRatio: 1,
-                        allowSelect:false,
-                        allowResize:false,
+                        aspectRatio: 4/3,
+                        allowSelect:true,
+                       /* allowSelect:false,
+                        allowResize:false,*/
                         onSelect: updateCoords,
                         onChange:updateCoords
                     });
@@ -750,7 +746,8 @@
                     console.log(JSON.parse(data));
                     $("#task_title").val(totalList.title)
                     $("#dataDescribeID").val(totalList.introduction)
-
+                    var path = "${ctx}/"+totalList.imagePath+"_cut.jpg";
+                    $('#cutimg').attr('src',path);
                     var keyList  = totalList.keyword.split(";")
 
                     tagNames=keyList.slice(0,keyList.length-1)
