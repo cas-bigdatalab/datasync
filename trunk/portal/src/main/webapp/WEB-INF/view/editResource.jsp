@@ -752,7 +752,7 @@
                     $("#dataDescribeID").val(totalList.introduction)
                     var path = "${ctx}/"+totalList.imagePath+"_cut.jpg";
                     $('#cutimg').attr('src',path);
-
+                    $('#imgPath').val(totalList.imagePath);
                     publicType =  totalList.publicType
                     var keyList  = totalList.keyword.split(";")
 
