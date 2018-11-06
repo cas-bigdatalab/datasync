@@ -195,6 +195,49 @@
     </div>
 </div>
 
+<!--修改用户组Group-->
+<div class="modal fade" tabindex="-1" role="dialog" id="editModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">修改用户组</h4>
+            </div>
+            <div class="modal-body" style="min-height: 150px">
+                <form class="form-horizontal" id="editGroupForm" method="post" accept-charset="utf-8" role="form"  onfocusout="true">
+                    <div class="form-group">
+                        <input type="hidden" class="form-control"
+                               id="groupId"
+                               name="id" value=""/>
+                        <input type="hidden" class="form-control"
+                               id="groupUsers"
+                               name="users" />
+                        <label for="groupNameEdit" class="col-sm-3 control-label">用户组名称<span class="required">
+													*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="groupNameEdit" name="groupName" placeholder="请输入用户组名称"  required="required" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="descEdit" class="col-sm-3 control-label">描述<span class="required">
+													*</span></label>
+                        <div class="col-sm-8">
+                            <textarea  type="text" class="form-control" cols="30" rows="5" id="descEdit" name="desc" placeholder="请输入用户组描述信息" required="required"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn green" onclick="submitEditData();" ><i
+                        class="glyphicon glyphicon-ok"></i>保存
+                </button>
+                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!--new user-->
 <div id="addUserDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
     <div class="modal-dialog">
@@ -261,44 +304,6 @@
     </div>
 </div>
 
-<!--修改用户组Group-->
-<div class="modal fade" tabindex="-1" role="dialog" id="editModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">修改用户组</h4>
-            </div>
-            <div class="modal-body" style="min-height: 150px">
-                <form class="form-horizontal" id="editGroupForm" method="post" accept-charset="utf-8" role="form"  onfocusout="true">
-                    <div class="form-group">
-                        <input type="hidden" class="form-control"
-                               id="groupId"
-                               name="id" value=""/>
-                        <label for="groupNameEdit" class="col-sm-3 control-label">用户组名称<span class="required">
-													*</span></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="groupNameEdit" name="groupName" placeholder="请输入用户组名称"  required="required" >
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="descEdit" class="col-sm-3 control-label">描述<span class="required">
-													*</span></label>
-                        <div class="col-sm-8">
-                            <textarea  type="text" class="form-control" cols="30" rows="5" id="descEdit" name="desc" placeholder="请输入用户组描述信息" required="required"></textarea>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn green" onclick="submitEditData();" ><i
-                        class="glyphicon glyphicon-ok"></i>保存
-                </button>
-                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!--update user's groups-->
 <div id="updateUserGroupDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
@@ -683,13 +688,9 @@
                     $("#spanDesc").html(data.group.desc);
                     $("#spanGroupId").val(data.group.id);
                     //编辑显示己增加的用户
-                    console.log(data.group.users);
+                    //编辑显示己增加的用户
+                    $("#users").select2().val(JSON.parse(data.group.users)).trigger("change");
 
-                    $.each(data.group.users, function(index, item){
-                        console.log(item);
-                        groupUsersSelect2.val(item).trigger("change");
-                        groupUsersSelect2.change();
-                    });
                 }
             });
         }
@@ -700,7 +701,7 @@
             }
             $.ajax({
                 type: "POST",
-                url: '${ctx}/group/updateGroupUser',
+                url: '${ctx}/group/update',
                 data: $("#editGroupForm").serialize(),
                 dataType: "json",
                 success: function (data) {
