@@ -199,62 +199,64 @@
 <div id="addUserDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
     <div class="modal-dialog">
         <div class="modal-content">
+
             <div class="modal-header">
                 <h4 id="titleForAddUserDialog" class="modal-title" >添加用户</h4>
             </div>
-            <form id="addUserForm" class="form-horizontal" role="form" method="post" accept-charset="utf-8"  action="${ctx}/user/addUser">
-                <div class="modal-body">
-                    <div class="col-md-12">
-                        <div class="form-body">
-                            <div class="form-group">
-                                <label class="col-md-3 control-label" for="userName">
-                                    用&nbsp;户&nbsp;名<span style="color: red;">*</span>
-                                </label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" placeholder="请输入用户名称" id="userName" name="userName" required="required"/>
-                                </div>
+
+            <div class="modal-body">
+                <form id="addUserForm" class="form-horizontal" role="form" method="post" accept-charset="utf-8"  onfocusout="true">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="userName">
+                                用&nbsp;户&nbsp;名<span style="color: red;">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" placeholder="请输入用户名称" id="userName" name="userName" required="required"/>
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label" for="loginId">
-                                    用户账号<span style="color: red;">*</span>
-                                </label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" placeholder="请输入用户账号" id="loginId" name="loginId"  required="required" />
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="loginId">
+                                用户账号<span style="color: red;">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" placeholder="请输入用户账号" id="loginId" name="loginId"  required="required" />
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label" for="password">
-                                    密&nbsp;&nbsp;&nbsp;&nbsp;码<span style="color: red;">*</span>
-                                </label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" placeholder="请输入密码"  id="password" name="password" required="required">
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="password">
+                                密&nbsp;&nbsp;&nbsp;&nbsp;码<span style="color: red;">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" placeholder="请输入密码"  id="password" name="password" required="required">
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label" for="groups">
-                                    角&nbsp;&nbsp;&nbsp;&nbsp;色<span style="color: red;">*</span>
-                                </label>
-                                <div class="col-md-9">
-                                    <select class="form-control" id="groups" name="groups" >
-                                        <option value="外网公开用户" selected="selected">外网公开用户</option>
-                                        <option value="内网用户">内网用户</option>
-                                        <option value="质量组用户">质量组用户</option>
-                                        <option value="分析组用户">分析组用户</option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="groups">
+                                角&nbsp;&nbsp;&nbsp;&nbsp;色<span style="color: red;">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="groups" name="groups" >
+                                    <option value="外网公开用户" selected="selected">外网公开用户</option>
+                                    <option value="内网用户">内网用户</option>
+                                    <option value="质量组用户">质量组用户</option>
+                                    <option value="分析组用户">分析组用户</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button id="saveUserAddBtn" class="btn green" type="submit">
-                        保存
-                    </button>
-                    <button id="cancelUserAddBtn" class="btn default"  data-dismiss="modal">
-                        取消
-                    </button>
-                </div>
-            </form>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button id="saveUserAddBtn" class="btn green" onclick="addUser();">
+                    保存
+                </button>
+                <button id="cancelUserAddBtn" class="btn default"  data-dismiss="modal">
+                    取消
+                </button>
+            </div>
+        </div>
         </div>
     </div>
 </div>
@@ -298,7 +300,7 @@
     </div>
 </div>
 
-<!--update groups-->
+<!--update user's groups-->
 <div id="updateUserGroupDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -306,45 +308,43 @@
             <div class="modal-header">
                 <h4 id="titleForUpdateGroupsDialog" class="modal-title" >编辑用户组</h4>
             </div>
-            <form id="updateGroupsForm" class="form-horizontal" role="form" method="post" accept-charset="utf-8"  action="${ctx}/user/updateGroup">
 
-                <div class="modal-body">
-                    <div class="col-md-12">
-                        <div class="form-body">
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">
-                                    账号<span style="color: red;">*</span>:
-                                </label>
-                                <div class="col-md-9">
-                                    <input type="text" class="form-control" readonly="readonly" id="loginIdForUpdateGroupDialog" name="loginId"  required="required" />
-                                </div>
+            <div class="modal-body">
+                <form id="updateGroupsForm" class="form-horizontal" role="form" method="post" accept-charset="utf-8"  onfocusout="true">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">
+                                账号<span style="color: red;">*</span>:
+                            </label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" readonly="readonly" id="loginIdForUpdateUserGroupDialog" name="loginId"  required="required" />
                             </div>
-                            <div class="form-group">
-                                <label class="col-md-3 control-label" for="groups">
-                                    角色<span style="color: red;">*</span>:
-                                </label>
-                                <div class="col-md-9">
-                                    <select class="form-control" id="groupForUpdateGroupDialog" name="group" >
-                                        <option value="外网公开用户">外网公开用户</option>
-                                        <option value="内网用户">内网用户</option>
-                                        <option value="质量组用户">质量组用户</option>
-                                        <option value="分析组用户">分析组用户</option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="groups">
+                                角色<span style="color: red;">*</span>:
+                            </label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="groupForUpdateUserGroupDialog" name="group" >
+                                    <option value="外网公开用户">外网公开用户</option>
+                                    <option value="内网用户">内网用户</option>
+                                    <option value="质量组用户">质量组用户</option>
+                                    <option value="分析组用户">分析组用户</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
+            </div>
 
-                <div class="modal-footer">
-                    <button id="saveUpdateGroupsBtn" class="btn green" type="submit">
-                        保存
-                    </button>
-                    <button id="cancelUpdateGroupsBtn" class="btn default"  data-dismiss="modal">
-                        取消
-                    </button>
-                </div>
-            </form>
+            <div class="modal-footer">
+                <button id="saveUpdateUserGroupsBtn" class="btn green" onclick="submitUpdateUserGroup();">
+                    保存
+                </button>
+                <button id="cancelUpdateUserGroupsBtn" class="btn default"  data-dismiss="modal">
+                    取消
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -734,6 +734,44 @@
     </script>
 
     <script type="text/javascript">
+        function addUser()
+        {
+            $.ajax({
+                url: "${ctx}/user/addUser",
+                type: "get",
+                data: {
+                    "userName": $("#userName").val(),
+                    "loginId": $("#loginId").val(),
+                    "password": $("#password").val(),
+                    "groups": $("#groups").val(),
+                },
+                dataType: "text",
+                success: function (data) {
+                    console.log(data);
+                    $("#addUserDialog").modal("hide");
+                    queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
+                }
+            });
+        }
+
+        function submitUpdateUserGroup()
+        {
+            $.ajax({
+                url: "${ctx}/user/updateGroup",
+                type: "get",
+                data: {
+                    "loginId": $("#loginIdForUpdateUserGroupDialog").val(),
+                    "groups": $("#groupsForUpdateUserGroupDialog").val(),
+                },
+                dataType: "text",
+                success: function (data) {
+                    console.log(data);
+                    $("#updateUserGroupDialog").modal("hide");
+                    queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
+                }
+            });
+        }
+
         function updateUserGroup(btn) {
             console.log(btn);
             console.log("点击了修改用户组");

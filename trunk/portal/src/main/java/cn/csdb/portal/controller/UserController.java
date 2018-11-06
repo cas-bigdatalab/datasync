@@ -58,6 +58,7 @@ public class UserController {
         return userQueryResult;
     }
 
+    @ResponseBody
     @RequestMapping(value="/addUser")
     public String addUser(HttpServletRequest request, User user)
     {
@@ -68,7 +69,7 @@ public class UserController {
         int addedUserCnt = userService.addUser(user);
         logger.info("after addUser - addedUserCnt = " + addedUserCnt);
 
-        return "redirect:/user/queryUser";
+        return "addUserNotice： add user successfully.";
     }
 
     @RequestMapping(value="/updateGroup")
@@ -78,7 +79,7 @@ public class UserController {
         int updatedUserCnt = userService.updateGroups(loginId, group);
         logger.info("after updateGroups - updatedUserCnt = " + updatedUserCnt);
 
-        return "redirect:/user/queryUser";
+        return "updateGroupsNotice： update groups successfully.";
     }
 
 }
