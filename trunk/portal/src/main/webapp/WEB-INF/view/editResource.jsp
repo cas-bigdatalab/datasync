@@ -576,6 +576,7 @@
         }
 
         function addResourceFirstStep() {
+            firstFlag=false
             $("[name='need_checked']").each(function () {
                 var $index = $("[name='need_checked']").index($(this))
                 if($(this).val() == "" ||$(this).val().trim()==""){
@@ -610,7 +611,7 @@
                 type:"POST",
                 data:{
                     title:$("#task_title").val(),
-                    imagePath:"",
+                    imagePath:$("#imgPath").val(),
                     introduction:$("#dataDescribeID").val(),
                     keyword:keywordStr,
                     catalogId:$("#centerCatalogId").val(),
@@ -687,6 +688,7 @@
             })
         }
         function editResourceFirstStep() {
+            firstFlag=false
             $("[name='need_checked']").each(function () {
                 var $index = $("[name='need_checked']").index($(this))
                 if($(this).val() == "" ||$(this).val().trim()==""){
@@ -698,6 +700,9 @@
                     return
                 }
             })
+            if(firstFlag){
+                return
+            }
             if(tagNames.length ==0){
                 $("#key_work").show()
                 firstFlag=true
