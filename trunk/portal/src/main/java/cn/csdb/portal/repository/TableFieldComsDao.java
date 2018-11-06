@@ -36,7 +36,7 @@ public class TableFieldComsDao {
 
     }
 
-    public void saveTableFieldComs(TableFieldComs tableFieldComs,String tableName) {
+    public void saveTableFieldComs(TableFieldComs tableFieldComs,String tableName,String state) {
         Query query = new Query();
         query.with(new Sort(new Sort.Order(Sort.Direction.DESC,"id")));
         List<TableFieldComs> resList = this.mongoTemplate.find(query, TableFieldComs.class);
@@ -49,7 +49,11 @@ public class TableFieldComsDao {
         Described_Table described_table = new Described_Table();
         described_table.setTableName(tableName);
         mongoTemplate.save(tableFieldComs);
+        if("1".equals(state)){
         mongoTemplate.save(described_table);
+        }else{
+
+        }
     }
 
     public List<Described_Table> queryDescribeTable(){
