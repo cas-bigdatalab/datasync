@@ -579,6 +579,7 @@
         }
 
         function addResourceFirstStep() {
+            firstFlag=false
             $("[name='need_checked']").each(function () {
                 var $index = $("[name='need_checked']").index($(this))
                 if($(this).val() == "" ||$(this).val().trim()==""){
@@ -692,6 +693,7 @@
             })
         }
         function editResourceFirstStep() {
+            firstFlag=false
             $("[name='need_checked']").each(function () {
                 var $index = $("[name='need_checked']").index($(this))
                 if($(this).val() == "" ||$(this).val().trim()==""){
