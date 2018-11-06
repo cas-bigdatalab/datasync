@@ -19,9 +19,9 @@ public class User {
     @Field("createTime")
     private String createTime;
     @Field("stat")
-    private int stat;
+    private int stat;  //0：数据有效，1：数据无效
     @Field("groups")
-    private ArrayList<String> groups;
+    private String groups;
 
     public String getId() {
         return id;
@@ -71,11 +71,11 @@ public class User {
         this.stat = stat;
     }
 
-    public ArrayList<String> getGroups() {
+    public String getGroups() {
         return groups;
     }
 
-    public void setGroups(ArrayList<String> groups) {
+    public void setGroups(String groups) {
         this.groups = groups;
     }
 

@@ -13,7 +13,7 @@
 <html>
 
 <head>
-    <title>用户组管理</title>
+    <title>用户管理</title>
     <link href="${ctx}/resources/bundles/rateit/src/rateit.css" rel="stylesheet" type="text/css">
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css">
     <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
@@ -22,10 +22,11 @@
 <body>
 
 <div class="page-content" style="min-height: 650px;">
-    <h3><b>用户组管理</b></h3>
+    <h3>&nbsp;&nbsp;用户管理</h3>
+    <hr />
+
     <div class="col-md-12">
         <div class="tabbable-custom ">
-
             <!-- tab header --->
             <ul class="nav nav-tabs ">
                 <li class="active">
@@ -37,36 +38,41 @@
                         用户组管理</a>
                 </li>
             </ul>
-
+            <!--tab content-->
             <div class="tab-content">
+                <!--user tab-->
                 <div class="tab-pane active" id="userContent" style="min-height: 400px">
                     <div class="row">
                         <div class="col-xs-12 col-md-12 col-lg-12">
-                            <!--查询条件 -->
                             <div class="alert alert-info" role="alert">
                                 <div class="row">
                                     <div class="col-md-12">
+                                            <label class="control-label">用户账号:</label>
+                                            <input type="text" id="loginIdFilter" name="loginIdFilter" placeholder="用户账号" class="input-small">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;
 
-                                        <label class="control-label">用户账号:</label>
-                                        <input type="text" id="loginId" name="loginId" placeholder="用户账号" class="input-small search-text">
-                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                            <label class="control-label">用户名:</label>
+                                            <input type="text" id="userNameFilter" name="userNameFilter" placeholder="用户名" class="input-small">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;
 
-                                        <label class="control-label">用户名:</label>
-                                        <input type="text" id="userName" name="userName" placeholder="用户名" class="input-small search-text">
-                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                            <label class="control-label">用户组:</label>
+                                            <select id="groupsFilter" name="groupsFilter">
+                                                <option value="外网公开用户">外网公开用户</option>
+                                                <option value="内网用户">内网用户</option>
+                                                <option value="质量组用户">质量组用户</option>
+                                                <option value="分析组用户">分析组用户</option>
+                                            </select>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;
 
-                                        <label class="control-label">用户组:</label>
-                                        <input type="text" id="group" name="group" placeholder="用户组" class="input-small search-text">
-                                        &nbsp;&nbsp;&nbsp;&nbsp;
-
-                                        <button id="searchUser" name="searchUser" onclick="searchUser();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;
-                                        <button id="addUser" name="addUser" onclick="addUser()" class="btn info green btn-sm"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建用户</button>
-                                    </div>
+                                            <button id="searchUserBtn" name="searchUserBtn" onclick="searchUser();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                            <button id="addUserBtn" name="addUserBtn" class="btn info green btn-sm" data-target="#addUserDialog" data-toggle="modal" ><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建用户</button>
+                                     </div>
                                 </div>
                             </div>
 
-                            <!--用户列表-->
+
+                            <!--user table-->
                             <div class="table-scrollable">
                                 <table class="table table-striped table-bordered table-advance table-hover">
                                     <thead>
@@ -80,16 +86,18 @@
                                             <th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">操作</th>
                                         </tr>
                                     </thead>
+
                                     <tbody id="userList">
 
                                     </tbody>
+
                                 </table>
                             </div>
 
-                            <!-- 分页 -->
+                            <!-- pagination -->
                             <div class="row margin-top-20">
                                 <div class="col-md-6 margin-top-10">
-                                    当前第<span style="color:blue;" id="curPageNum"></span>页,共<span style="color:blue;" id="pageCnt"></span>页, 共<span style="color:blue;" id="totalCnt"></span>条数据
+                                    当前第<span style="color:blue;" id="curUserPageNum"></span>页,共<span style="color:blue;" id="totalUserPages"></span>页, 共<span style="color:blue;" id="totalUsers"></span>条数据
                                 </div>
                                 <div class="col-md-6">
                                     <div id="paginationForUser" style="float: right"></div>
@@ -99,6 +107,7 @@
                     </div>
                 </div>
 
+                <!--group tab-->
                 <div class="tab-pane" id="groupContent">
                     <div class="row">
                         <div class="col-xs-12 col-md-12 col-lg-12">
@@ -145,13 +154,9 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
     </div>
-
-
 </div>
 
 <!--新增用户组Group-->
@@ -186,6 +191,70 @@
                 </button>
                 <button type="button" data-dismiss="modal" onclick="resetData();" class="btn  btn-danger">取消</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!--new user-->
+<div id="addUserDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="titleForAddUserDialog" class="modal-title" >添加用户</h4>
+            </div>
+            <form id="addUserForm" class="form-horizontal" role="form" method="post" accept-charset="utf-8"  action="${ctx}/user/addUser">
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="userName">
+                                    用&nbsp;户&nbsp;名<span style="color: red;">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="请输入用户名称" id="userName" name="userName" required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="loginId">
+                                    用户账号<span style="color: red;">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="请输入用户账号" id="loginId" name="loginId"  required="required" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="password">
+                                    密&nbsp;&nbsp;&nbsp;&nbsp;码<span style="color: red;">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" placeholder="请输入密码"  id="password" name="password" required="required">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="groups">
+                                    角&nbsp;&nbsp;&nbsp;&nbsp;色<span style="color: red;">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <select class="form-control" id="groups" name="groups" >
+                                        <option value="外网公开用户" selected="selected">外网公开用户</option>
+                                        <option value="内网用户">内网用户</option>
+                                        <option value="质量组用户">质量组用户</option>
+                                        <option value="分析组用户">分析组用户</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="saveUserAddBtn" class="btn green" type="submit">
+                        保存
+                    </button>
+                    <button id="cancelUserAddBtn" class="btn default"  data-dismiss="modal">
+                        取消
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -229,6 +298,56 @@
     </div>
 </div>
 
+<!--update groups-->
+<div id="updateUserGroupDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 id="titleForUpdateGroupsDialog" class="modal-title" >编辑用户组</h4>
+            </div>
+            <form id="updateGroupsForm" class="form-horizontal" role="form" method="post" accept-charset="utf-8"  action="${ctx}/user/updateGroup">
+
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">
+                                    账号<span style="color: red;">*</span>:
+                                </label>
+                                <div class="col-md-9">
+                                    <input type="text" class="form-control" readonly="readonly" id="loginIdForUpdateGroupDialog" name="loginId"  required="required" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="groups">
+                                    角色<span style="color: red;">*</span>:
+                                </label>
+                                <div class="col-md-9">
+                                    <select class="form-control" id="groupForUpdateGroupDialog" name="group" >
+                                        <option value="外网公开用户">外网公开用户</option>
+                                        <option value="内网用户">内网用户</option>
+                                        <option value="质量组用户">质量组用户</option>
+                                        <option value="分析组用户">分析组用户</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="saveUpdateGroupsBtn" class="btn green" type="submit">
+                        保存
+                    </button>
+                    <button id="cancelUpdateGroupsBtn" class="btn default"  data-dismiss="modal">
+                        取消
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <!--用户组Group, 添加用户-->
 <div class="modal fade" tabindex="-1" role="dialog" id="groupModalForAddUser">
@@ -275,18 +394,17 @@
     </div>
 </div>
 
-
 <script type="text/html" id="userListTable">
     {{each list}}
     <tr>
-        <td style="text-align: center">{{(currentPage-1)*pageSize+$index+1}}</td>
-        <td style="text-align: center">{{$data.userName}}</td>
-        <td style="text-align: center">{{$data.loginId}}</td>
-        <td style="text-align: center">{{dateFormat($data.createTime)}}</td>
-        <td style="text-align: center">{{$data.stat}}</td>
-        <td style="text-align: center">{{$data.groups}}</td>
-        <td id="{{$data.id}}" style="text-align: center">
-                <button class="btn default btn-xs purple updateButton" onclick="updateGroups('{{$value.id}}')"><i class="fa fa-edit"></i>修改用户组</button>
+        <td style="text-align: center">{{(curUserPageNum-1) * pageSize + 1 + $index}}</td>
+        <td style="text-align: center">{{$value.userName}}</td>
+        <td style="text-align: center">{{$value.loginId}}</td>
+        <td style="text-align: center">{{$value.createTime}}</td>
+        <td style="text-align: center">{{$value.stat}}</td>
+        <td style="text-align: center">{{$value.groups}}</td>
+        <td style="text-align: center" id = "{{$value.id}}">
+            <button class="btn default btn-xs purple updateUserGroupButton" data-target="#updateUserGroupDialog" data-toggle="modal" onclick="updateUserGroup(this);"><i class="fa fa-edit"></i>修改用户组</button>
         </td>
     </tr>
     {{/each}}
@@ -312,6 +430,7 @@
     {{/each}}
 </script>
 
+
 </body>
 
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
@@ -332,7 +451,6 @@
 
 
     <script type="text/javascript">
-
         var ctx = '${ctx}';
         var currentPageNo = 1;
         var validatorAdd;
@@ -340,6 +458,8 @@
         $(function () {
             template.helper("dateFormat", formatDate);
             getData(1);
+
+            queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
 
             $(".search-text").keydown(function (event) {
                 if (event.keyCode == 13){
@@ -437,6 +557,7 @@
                     "pageSize": 10
                 },
                 success: function (data) {
+
                     var html = template("groupTmpl", data);
                     $("#groupList").empty();
                     $("#groupList").append(html);
@@ -444,10 +565,12 @@
                     currentPageNo = data.currentPage;
                     $("#totalPages").html(data.totalPages);
                     $("#totalCount").html(data.totalCount);
+
                     if ($("#pagination .bootpag").length != 0) {
                         $("#pagination").off();
                         $('#pagination').empty();
                     }
+
                     $('#pagination').bootpag({
                         total: data.totalPages,
                         page: data.currentPage,
@@ -470,7 +593,6 @@
                 }
             });
         }
-
 
         function deleteData(id) {
             bootbox.confirm("确定要删除此条记录吗？", function (r) {
@@ -606,6 +728,80 @@
                     } else {
                         toastr["error"]("用户组增加用户失败！", "用户组编辑");
                     }
+                }
+            });
+        }
+    </script>
+
+    <script type="text/javascript">
+        function updateUserGroup(btn) {
+            console.log(btn);
+            console.log("点击了修改用户组");
+            var theUserToBeUpdated = $(btn).parent().parent();
+            var tdList = theUserToBeUpdated.children("td");
+            setTimeout(function () {
+                console.log(tdList);
+                $("#loginIdForUpdateGroupDialog").val($(tdList[2]).text());
+                $("#groupsForUpdateGroupDialog").attr("value", $(tdList[5]).text().trim());
+            }, 500);
+        }
+
+        function searchUser()
+        {
+            var loginId = $("#loginIdFilter").val();
+            var userName = $("#userNameFilter").val();
+            var groups = $("#groupsFilter").val();
+            queryUser(loginId, userName, groups, 1);
+        }
+
+        function queryUser(loginId, userName, groups, curUserPageNum)
+        {
+            $.ajax({
+                url: "${ctx}/user/queryUser",
+                type: "get",
+                data: {
+                    "loginId": loginId,
+                    "userName": userName,
+                    "groups": groups,
+                    "curUserPageNum": curUserPageNum,
+                    "pageSize": 10
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+
+                    var html = template("userListTable", data);
+
+                    $("#userList").empty();
+                    $("#userList").append(html);
+
+                    $("#curUserPageNum").html(data.curUserPageNum);
+                    $("#totalUserPages").html(data.totalUserPages);
+                    $("#totalUsers").html(data.totalUsers);
+
+                    if ($("#paginationForUser .bootpag").length != 0) {
+                        $("#paginationForUser").off();
+                        $('#paginationForUser').empty();
+                    }
+
+                    $('#paginationForUser').bootpag({
+                        total: data.totalUserPages,
+                        page: data.curUserPageNum,
+                        maxVisible: 5,
+                        leaps: true,
+                        firstLastUse: true,
+                        first: '首页',
+                        last: '尾页',
+                        wrapClass: 'pagination',
+                        activeClass: 'active',
+                        disabledClass: 'disabled',
+                        nextClass: 'next',
+                        prevClass: 'prev',
+                        lastClass: 'last',
+                        firstClass: 'first'
+                    }).on('page', function (event, toNum) {
+                        queryUser(loginId, userName, groups, toNum);
+                    });
                 }
             });
         }
