@@ -28,7 +28,7 @@ public class UserDao {
     public List<User> queryUser(String loginId, String userName, String groups, int curUserPageNum, int pageSize)
     {
         long totalUsers =  0;
-        totalUsers = getTotalUsers();
+        totalUsers = getTotalUsers(loginId, userName, groups);
         long totalUserPages = 0;
         totalUserPages = totalUsers / pageSize + (totalUsers % pageSize == 0 ? 0 : 1);
         int start = 0;
@@ -88,9 +88,9 @@ public class UserDao {
         return users;
     }
 
-    public long getTotalUsers()
+    public long getTotalUsers(String loginId, String userName, String groups)
     {
-        DBObject dbObject = QueryBuilder.start().get();
+        DBObject dbObject = QueryBuilder.start().and("loginId").is(loginId).and("userName").is(userName).and("groups").is(groups).get();
         Query query = new BasicQuery(dbObject);
         long totalUsers = mongoTemplate.count(query, "t_user");
         return totalUsers;

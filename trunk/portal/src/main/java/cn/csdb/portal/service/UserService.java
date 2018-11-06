@@ -26,9 +26,9 @@ public class UserService {
         return userDao.queryUser(loginId, userName, groups, curUserPageNum, pageSize);
     }
 
-    public long getTotalUsers()
+    public long getTotalUsers(String loginId, String userName, String groups)
     {
-        return userDao.getTotalUsers();
+        return userDao.getTotalUsers(loginId, userName, groups);
     }
 
     @Transactional
