@@ -53,10 +53,11 @@ public class TableFieldComsController {
     @RequestMapping(value = "saveTableFieldComs")
     public JSONObject saveTableFieldComs(@RequestParam(required = false) int dataSourceId,
                                          @RequestParam(required = false) String tableName,
-                                         @RequestParam(required = false) String tableInfos) {
+                                         @RequestParam(required = false) String tableInfos,
+                                         @RequestParam(required = false) String state ) {
         JSONObject jsonObject = new JSONObject();
         List<TableInfo> tableInfosList = JSON.parseArray(tableInfos, TableInfo.class);
-        boolean result = tableFieldComsService.insertTableFieldComs(dataSourceId, tableName, tableInfosList);
+        boolean result = tableFieldComsService.insertTableFieldComs(dataSourceId, tableName, tableInfosList, state);
         jsonObject.put("result", result);
         return jsonObject;
     }

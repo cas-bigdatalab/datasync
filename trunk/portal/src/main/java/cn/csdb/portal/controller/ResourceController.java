@@ -480,10 +480,10 @@ public class ResourceController {
                 File file = new File(dir,saveName+"_src.jpg");
                 imageFile.transferTo(file);
                 String srcImagePath = realPath + resourcePath + saveName;
-                int imageX = Integer.parseInt(x);
-                int imageY = Integer.parseInt(y);
-                int imageH = Integer.parseInt(h);
-                int imageW = Integer.parseInt(w);
+                int imageX = Double.valueOf(x).intValue();
+                int imageY = Double.valueOf(y).intValue();
+                int imageH = Double.valueOf(h).intValue();
+                int imageW = Double.valueOf(w).intValue();
                 //这里开始截取操作
                 System.out.println("==========imageCutStart=============");
                 ImgCut.imgCut(srcImagePath,imageX,imageY,imageW,imageH);
