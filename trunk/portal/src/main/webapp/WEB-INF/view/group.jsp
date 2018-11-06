@@ -78,12 +78,12 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 5%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编号</th>
-                                            <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户名 </th>
-                                            <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">账号 </th>
-                                            <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">创建时间</th>
-                                            <th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">状态</th>
-                                            <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户组</th>
-                                            <th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">操作</th>
+                                            <th style="width: 13%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户名 </th>
+                                            <th style="width: 13%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">账号 </th>
+                                            <th style="width: 22%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">创建时间</th>
+                                            <%--<th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">状态</th>--%>
+                                            <th style="width: 22%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户组</th>
+                                            <th style="text-align: center;background: #64aed9;color: #FFF;font-weight: bold">操作</th>
                                         </tr>
                                     </thead>
 
@@ -401,10 +401,14 @@
         <td style="text-align: center">{{$value.userName}}</td>
         <td style="text-align: center">{{$value.loginId}}</td>
         <td style="text-align: center">{{$value.createTime}}</td>
-        <td style="text-align: center">{{$value.stat}}</td>
+        <%--<td style="text-align: center">{{$value.stat}}</td>--%>
         <td style="text-align: center">{{$value.groups}}</td>
         <td style="text-align: center" id = "{{$value.id}}">
             <button class="btn default btn-xs purple updateUserGroupButton" data-target="#updateUserGroupDialog" data-toggle="modal" onclick="updateUserGroup(this);"><i class="fa fa-edit"></i>修改用户组</button>
+            &nbsp;
+            <button class="btn default btn-xs purple updateUserButton" data-target="#updateUserDialog" data-toggle="modal" onclick="updateUserInfo(this);"><i class="fa fa-edit"></i>修改</button>
+            &nbsp;
+            <button class="btn default btn-xs purple updateUserGroupButton" data-target="#deleteUserDialog" data-toggle="modal" onclick="deleteUser(this);"><i class="fa fa-trash"></i>删除</button>
         </td>
     </tr>
     {{/each}}
@@ -750,6 +754,9 @@
                     console.log(data);
                     $("#addUserDialog").modal("hide");
                     queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
+                },
+                error: function(data) {
+
                 }
             });
         }

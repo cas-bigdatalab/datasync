@@ -98,7 +98,7 @@ public class TableFieldComsService {
     }
 
     @Transactional
-    public boolean insertTableFieldComs(int dataSourceId, String tableName, List<TableInfo> tableInfos) {
+    public boolean insertTableFieldComs(int dataSourceId, String tableName, List<TableInfo> tableInfos, String state) {
 /*
         DataSrc dataSrc = dataSrcDao.findById(dataSourceId);
 */
@@ -133,7 +133,7 @@ public class TableFieldComsService {
             tableFieldComs.setCreateTime(new Date());
             tableFieldComs.setUriEx(uriEx);
             tableFieldComs.setUriHash(uriHash);
-            tableFieldComsDao.saveTableFieldComs(tableFieldComs,tableName);
+            tableFieldComsDao.saveTableFieldComs(tableFieldComs,tableName,state);
             return true;
         }
         tableFieldComs.setUpdateTime(new Date());

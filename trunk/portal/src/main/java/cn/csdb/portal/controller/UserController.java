@@ -47,7 +47,7 @@ public class UserController {
         userQueryResult.put("curUserPageNum", curUserPageNum);
         userQueryResult.put("pageSize", 10);
 
-        long totalUsers = userService.getTotalUsers();
+        long totalUsers = userService.getTotalUsers(loginId, userName, groups);
 
         userQueryResult.put("totalUsers", totalUsers);
         userQueryResult.put("totalUserPages", (totalUsers / pageSize + (totalUsers % pageSize == 0 ? 0 : 1)));
@@ -63,7 +63,7 @@ public class UserController {
     public String addUser(HttpServletRequest request, User user)
     {
         logger.info("enter addUser - parameters[user = " + user + "]");
-        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-mm-dd  HH:mm:ss");
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
         user.setCreateTime(sdf.format(new Date()));
         user.setStat(1);
         int addedUserCnt = userService.addUser(user);

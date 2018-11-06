@@ -186,11 +186,19 @@ function getEditTableOrSqlFieldComs() {
 }
 
 function saveTableFieldComs(dataSourceId, tableInfos) {
+    var state = "1";
+    for (var index in tableInfos) {
+        for(var key in tableInfos[index].tableInfos)
+            if(tableInfos[index].tableInfos[key].columnComment==""){
+                state = "0";
+            }
+    }
     if (tableInfos && tableInfos.length == 1) {
         $.ajax({
             type: "POST",
             url: ctx + '/saveTableFieldComs',
             data: {
+                "state": state,
                 "dataSourceId": dataSourceId,
                 "tableName": tableInfos[0].tableName,
                 "tableInfos": $.toJSON(tableInfos[0].tableInfos)
