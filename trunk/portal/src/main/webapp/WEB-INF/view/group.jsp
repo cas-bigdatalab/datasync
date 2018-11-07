@@ -212,6 +212,12 @@
                         <input type="hidden" class="form-control"
                                id="groupId"
                                name="id" value=""/>
+<<<<<<< HEAD
+=======
+                        <input type="hidden" class="form-control"
+                               id="groupUsers"
+                               name="users" />
+>>>>>>> 4e78acd7282b4489e4dc1b81993fd7652657565c
                         <label for="groupNameEdit" class="col-sm-3 control-label">用户组名称<span class="required">
 													*</span></label>
                         <div class="col-sm-8">
@@ -706,13 +712,9 @@
                     $("#spanDesc").html(data.group.desc);
                     $("#spanGroupId").val(data.group.id);
                     //编辑显示己增加的用户
-                    console.log(data.group.users);
+                    //编辑显示己增加的用户
+                    $("#users").select2().val(JSON.parse(data.group.users)).trigger("change");
 
-                    $.each(data.group.users, function(index, item){
-                        console.log(item);
-                        groupUsersSelect2.val(item).trigger("change");
-                        groupUsersSelect2.change();
-                    });
                 }
             });
         }
@@ -723,7 +725,7 @@
             }
             $.ajax({
                 type: "POST",
-                url: '${ctx}/group/updateGroupUser',
+                url: '${ctx}/group/update',
                 data: $("#editGroupForm").serialize(),
                 dataType: "json",
                 success: function (data) {
@@ -761,11 +763,11 @@
     </script>
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////
+    <%--//////////////////////////////////////////////////////////////////////////////////////////////////
     //
     // 用户管理标签页：javascript代码
     //
-    //////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////--%>
     <script type="text/javascript">
         function addUser()
         {
@@ -879,7 +881,6 @@
                 }
             });
         }
-
     </script>
 </div>
 

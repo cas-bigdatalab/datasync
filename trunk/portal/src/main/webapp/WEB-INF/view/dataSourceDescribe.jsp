@@ -20,6 +20,7 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/jquery.Jcrop.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jstree/dist/themes/default/style.min.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.css">
+    <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
     <style>
         .undeslist label{
             font-size: 18px;
@@ -211,12 +212,16 @@
                                         <div class="form-group">
                                             <label class="control-label col-md-3">关键词<span>
                                                     * </span></label>
-                                            <div class="checkbox-list col-md-9" style="padding-top:14px">
-                                                <div style="margin-bottom: 3px;line-height: 24px">
+                                            <div class="checkbox-list col-md-5" style="padding-top:14px">
+                                                <%--<div style="margin-bottom: 3px;line-height: 24px">
                                                     <input type="text" style="font-size: 16px" id="addWorkStr">
                                                     <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
-                                                </div>
+                                                </div>--%>
+                                                    <input type="hidden" class="form-control" id="select2_tags" value="" name="select2tags">
+
+                                                <%--
                                                 <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden;padding-left: 3px" class="key-wrap"></div>
+--%>
                                                 <div class="custom-error" id="key_work" style="display: none">请添加至少一个关键词</div>
                                             </div>
                                         </div>
@@ -235,10 +240,10 @@
 
                                     <h3>
                                         <span>数据源:</span>
-                                        <label for="aaa" style="font-size: 23px;color: #1CA04C">数据库表</label>
                                         <input name="ways" type="radio" checked="checked" value="DB" id="aaa"/>
-                                        <label for="bbb" style="font-size: 23px;color: #1CA04C">文件型数据</label>
+                                        <label for="aaa" style="font-size: 18px;color: #1CA04C">数据库表</label>
                                         <input name="ways" type="radio" value="LH" id="bbb"/>
+                                        <label for="bbb" style="font-size: 18px;color: #1CA04C">文件型数据</label>
                                     </h3>
                                     <div style="overflow: hidden" class="select-database" >
                                         <div class="col-md-3" style="font-size: 18px;text-align:right ">
@@ -281,10 +286,9 @@
                                         <div class="col-md-6 col-md-offset-3" style="font-size: 18px">
                                             <form class="form-horizontal">
                                                 <div class="form-group">
-                                                    <label  class="col-sm-4 control-label">可公开范围</label>
+                                                    <label  class="col-sm-4 control-label">选择公开范围</label>
                                                     <div class="col-sm-8">
-                                                        <select name="" id="permissions" class="form-control">
-                                                            <option value="" selected="selected">请选择公开范围</option>
+                                                        <select name="permissions" id="permissions" class="form-control" multiple>
                                                             <option value="外网公开用户">外网公开用户</option>
                                                             <option value="内网用户">内网用户</option>
                                                             <option value="质量组用户">质量组用户</option>
@@ -292,12 +296,12 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <%--<div class="form-group">
                                                     <label  class="col-sm-4 control-label">已选择</label>
                                                     <div class="col-sm-8">
                                                         <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="permissions-wrap"></div>
                                                     </div>
-                                                </div>
+                                                </div>--%>
                                             </form>
                                         </div>
                                     </div>
@@ -346,16 +350,30 @@
     <script type="text/javascript" src="${ctx}/resources/bundles/jquery-form/jquery.form.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.js"></script>
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
+
     <script type="text/javascript">
         var ctx = '${ctx}';
+
+
         var initNum =1;
         var firstFlag=false;
         var secondFlag=false;
         var resourceId="";
         var publicType="0";
-        var tagNames=new Array();
+        /*var tagNames=new Array();*/
         //将图片截图并上传功能
+
         var api = null;
+        $("#select2_tags").select2({
+            tags: true,
+            multiple: true,
+            tags:[""],
+        });
+        $('#permissions').select2({
+            placeholder: "请选择用户",
+            allowClear: true
+        });
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -443,7 +461,7 @@
                 $(".required:eq("+$index +")").parent().removeClass("custom-error")
             }
         })
-        $("#permissions").on("change",function () {
+        /*$("#permissions").on("change",function () {
             var $selEle=$("#permissions option:selected")
             var valStr = $selEle.val();
             if(valStr ==""){
@@ -452,11 +470,11 @@
             $selEle.remove()
             $(".permissions-wrap").append("<div class='permissions-word'> <p class='tagname'>"+valStr+"</p> <span class='closeWord'>×</span> </div>");
 
-        })
+        })*/
         $(".button-submit").click(function () {
             addResourceThirdStep()
         })
-        $(".key-wrap").delegate(".closeWord","click",function () {
+        /*$(".key-wrap").delegate(".closeWord","click",function () {
             var index = $(".closeWord").index($(this))
             $(this).parent().remove()
             tagNames.splice(index,1)
@@ -464,13 +482,13 @@
                 $("#key_work").show();
             }
 
-        })
-        $(".permissions-wrap").delegate(".closeWord","click",function () {
+        })*/
+       /* $(".permissions-wrap").delegate(".closeWord","click",function () {
             $(this).parent().remove()
             var str =$(this).parent().find(".tagname").text()
             $("#permissions").append("<option value="+str +">"+ str+"</option>")
 
-        })
+        })*/
         initCenterResourceCatalogTree($("#jstree-demo"));
         relationalDatabaseTableList();
 
@@ -561,7 +579,7 @@
                 }
             })
         }
-        function addKeyWords() {
+       /* function addKeyWords() {
             var newStr = $("#addWorkStr").val()
             if(newStr =="" ||newStr.trim() == ""){
                 return
@@ -576,7 +594,7 @@
             $(".key-wrap").append("<div class='key-word'> <p class='tagname'>"+newStr+"</p> <span class='closeWord'>×</span> </div>");
             $("#addWorkStr").val("")
             $("#key_work").hide();
-        }
+        }*/
 
         function addResourceFirstStep() {
             firstFlag=false
@@ -594,7 +612,7 @@
             if(firstFlag){
                 return
             }
-            if(tagNames.length ==0){
+            if($("#select2_tags").val() ==""){
                 $("#key_work").show()
                 firstFlag=true
                 return
@@ -605,10 +623,7 @@
                 return
             }
             firstFlag=false
-            var keywordStr = ""
-            for(var i=0;i<tagNames.length;i++){
-                keywordStr+=tagNames[i]+";"
-            }
+            var keywordStr = $("#select2_tags").val()
             $.ajax({
                 url:ctx+"/resource/addResourceFirstStep",
                 type:"POST",
@@ -668,21 +683,17 @@
             })
         }
         function addResourceThirdStep() {
-            var $preEle= $(".permissions-word .tagname")
-            if($preEle.size() ==0){
+            var $preEle= $("#permissions").val();
+            if($preEle == null){
                 toastr["error"]("请选择用户组");
                 return
             }
-            var userStr = ""
-            $preEle.each(function () {
-                userStr+=$(this).text()+";"
-            })
             $.ajax({
                 url:ctx+"/resource/addResourceThirdStep",
                 type:"POST",
                 data:{
                     resourceId:resourceId,
-                    userGroupIdList:userStr
+                    userGroupIdList:$preEle.toString()
                 },
                 success:function (data) {
                     window.location.href = "${ctx}/dataRelease"
@@ -708,7 +719,7 @@
             if(firstFlag){
                 return
             }
-            if(tagNames.length ==0){
+            if($("#select2_tags").val() ==""){
                 $("#key_work").show()
                 firstFlag=true
                 return
@@ -719,10 +730,10 @@
                 return
             }
             firstFlag=false;
-            var keywordStr = ""
-            for(var i=0;i<tagNames.length;i++){
+            var keywordStr = $("#select2_tags").val()
+            /*for(var i=0;i<tagNames.length;i++){
                 keywordStr+=tagNames[i]+";"
-            }
+            }*/
             $.ajax({
                 url:ctx+"/resource/editResourceFirstStep",
                 type:"POST",
@@ -743,22 +754,6 @@
             })
         }
 
-        /*function getResourceById() {
-            $.ajax({
-                url:ctx+"/resource/getResourceById",
-                type:"POST",
-                data:{
-                    resourceId:"5bdfd44981b55a207c7bd5df",
-                },
-                success:function (data) {
-                    console.log(data)
-                },
-                error:function (data) {
-                    console.log("请求失败")
-                }
-            })
-        }
-        getResourceById();*/
         $('#fileContainerTree').jstree({
             'core': {
                 'data': function (node, cb) {

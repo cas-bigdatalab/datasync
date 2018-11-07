@@ -86,6 +86,8 @@ public class GroupController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject updateGroup(Group group) {
+        Group newGroup  = groupService.get(group.getId());
+        group.setUsers(newGroup.getUsers());
         group.setCreateTime(new Date());
         groupService.update(group);
         JSONObject jsonObject = new JSONObject();
