@@ -74,7 +74,7 @@
          <property name="casService" value="${resreg.url}/shiro-cas"/>
     </bean>-->
     <!-- 自定义Realm -->
-    <bean id="myRealm" class="cn.csdb.portal.utils.MyRealm"/>
+    <bean id="myRealm" class="cn.csdb.portal.common.MyRealm"/>
 
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="cacheManager" ref="shiroCacheManager"/>
