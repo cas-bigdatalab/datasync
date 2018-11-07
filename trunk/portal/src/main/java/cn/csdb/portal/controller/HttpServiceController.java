@@ -5,7 +5,6 @@ import cn.csdb.portal.model.Site;
 import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.service.ConfigPropertyService;
 import cn.csdb.portal.service.DataTaskService;
-import cn.csdb.portal.service.SiteService;
 import cn.csdb.portal.service.SubjectMgmtService;
 import cn.csdb.portal.utils.SqlUtil;
 import cn.csdb.portal.utils.ZipUtil;
