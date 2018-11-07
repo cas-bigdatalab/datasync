@@ -8,6 +8,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <c:set value="${pageContext.request.contextPath}" var="ctx"/>
 
 <html>
@@ -20,6 +21,12 @@
 
 <div class="page-content">
     <h3><b>欢迎使用DataSync专题库门户管理系统</b></h3>
+    <shiro:hasRole name="root">
+        系统管理员才可以看见
+    </shiro:hasRole>
+    <shiro:hasRole name="admin">
+        专题库管理员才可以看见
+    </shiro:hasRole>
 </div>
 
 </body>
