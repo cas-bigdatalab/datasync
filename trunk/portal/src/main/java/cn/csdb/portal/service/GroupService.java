@@ -72,4 +72,17 @@ public class GroupService {
     public long countByPage(String groupName){
         return groupDao.countByPage(groupName);
     }
+
+    /**
+     *
+     * Function Description: get all group
+     *
+     * @param: []
+     * @return: java.util.List<cn.csdb.portal.model.Group>
+     * @auther: hw
+     * @date: 2018/11/7 14:22
+     */
+    public List<Group> getAll(){
+        return groupDao.getAll();
+    }
 }
