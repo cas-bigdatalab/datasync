@@ -90,7 +90,8 @@ public class UserDao {
 
     public long getTotalUsers(String loginId, String userName, String groups)
     {
-        DBObject dbObject = QueryBuilder.start().and("loginId").is(loginId).and("userName").is(userName).and("groups").is(groups).get();
+        DBObject dbObject = QueryBuilder.start().and("loginId").is(loginId).and("userName").is(userName).and("groups").exists(groups).get();
+        ;
         Query query = new BasicQuery(dbObject);
         long totalUsers = mongoTemplate.count(query, "t_user");
         return totalUsers;

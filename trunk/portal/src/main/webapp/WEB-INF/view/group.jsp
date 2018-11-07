@@ -8,7 +8,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set value="${pageContext.request.contextPath}" var="ctx"/>
+<c:set value="${pageContext.request.contextPath}" var="ctx" />
 
 <html>
 
@@ -40,10 +40,13 @@
             </ul>
             <!--tab content-->
             <div class="tab-content">
-                <!--user tab-->
+
+                <!--用户管理标签页-->
                 <div class="tab-pane active" id="userContent" style="min-height: 400px">
                     <div class="row">
                         <div class="col-xs-12 col-md-12 col-lg-12">
+
+                            <!--用户管理标签页: 用户筛选条件-->
                             <div class="alert alert-info" role="alert">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -56,12 +59,13 @@
                                             &nbsp;&nbsp;&nbsp;&nbsp;
 
                                             <label class="control-label">用户组:</label>
-                                            <select id="groupsFilter" name="groupsFilter">
-                                                <option value="外网公开用户">外网公开用户</option>
-                                                <option value="内网用户">内网用户</option>
-                                                <option value="质量组用户">质量组用户</option>
-                                                <option value="分析组用户">分析组用户</option>
+
+                                            <select class='form-control' name='groupsFilter' id='groupsFilter' multiple="multiple"  style="width: 150px;" >
+                                                <c:forEach  var="group"  items="${groupList}">
+                                                    <option value="${group.groupName}" id="${group.id}" >${group.groupName}</option>
+                                                </c:forEach>
                                             </select>
+
                                             &nbsp;&nbsp;&nbsp;&nbsp;
 
                                             <button id="searchUserBtn" name="searchUserBtn" onclick="searchUser();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
@@ -71,8 +75,7 @@
                                 </div>
                             </div>
 
-
-                            <!--user table-->
+                            <!--用户管理标签页: 用户列表-->
                             <div class="table-scrollable">
                                 <table class="table table-striped table-bordered table-advance table-hover">
                                     <thead>
@@ -94,7 +97,7 @@
                                 </table>
                             </div>
 
-                            <!-- pagination -->
+                            <!--用户管理标签页: 分页-->
                             <div class="row margin-top-20">
                                 <div class="col-md-6 margin-top-10">
                                     当前第<span style="color:blue;" id="curUserPageNum"></span>页,共<span style="color:blue;" id="totalUserPages"></span>页, 共<span style="color:blue;" id="totalUsers"></span>条数据
@@ -195,72 +198,6 @@
     </div>
 </div>
 
-<!--new user-->
-<div id="addUserDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h4 id="titleForAddUserDialog" class="modal-title" >添加用户</h4>
-            </div>
-
-            <div class="modal-body">
-                <form id="addUserForm" class="form-horizontal" role="form" method="post" accept-charset="utf-8"  onfocusout="true">
-                    <div class="form-body">
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="userName">
-                                用&nbsp;户&nbsp;名<span style="color: red;">*</span>
-                            </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入用户名称" id="userName" name="userName" required="required"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="loginId">
-                                用户账号<span style="color: red;">*</span>
-                            </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入用户账号" id="loginId" name="loginId"  required="required" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="password">
-                                密&nbsp;&nbsp;&nbsp;&nbsp;码<span style="color: red;">*</span>
-                            </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入密码"  id="password" name="password" required="required">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="groups">
-                                角&nbsp;&nbsp;&nbsp;&nbsp;色<span style="color: red;">*</span>
-                            </label>
-                            <div class="col-md-9">
-                                <select class="form-control" id="groups" name="groups" >
-                                    <option value="外网公开用户" selected="selected">外网公开用户</option>
-                                    <option value="内网用户">内网用户</option>
-                                    <option value="质量组用户">质量组用户</option>
-                                    <option value="分析组用户">分析组用户</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <div class="modal-footer">
-                <button id="saveUserAddBtn" class="btn green" onclick="addUser();">
-                    保存
-                </button>
-                <button id="cancelUserAddBtn" class="btn default"  data-dismiss="modal">
-                    取消
-                </button>
-            </div>
-        </div>
-        </div>
-    </div>
-</div>
-
 <!--修改用户组Group-->
 <div class="modal fade" tabindex="-1" role="dialog" id="editModal">
     <div class="modal-dialog" role="document">
@@ -295,55 +232,6 @@
                         class="glyphicon glyphicon-ok"></i>保存
                 </button>
                 <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--update user's groups-->
-<div id="updateUserGroupDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h4 id="titleForUpdateGroupsDialog" class="modal-title" >编辑用户组</h4>
-            </div>
-
-            <div class="modal-body">
-                <form id="updateGroupsForm" class="form-horizontal" role="form" method="post" accept-charset="utf-8"  onfocusout="true">
-                    <div class="form-body">
-                        <div class="form-group">
-                            <label class="col-md-3 control-label">
-                                账号<span style="color: red;">*</span>:
-                            </label>
-                            <div class="col-md-9">
-                                <input type="text" class="form-control" readonly="readonly" id="loginIdForUpdateUserGroupDialog" name="loginId"  required="required" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-3 control-label" for="groups">
-                                角色<span style="color: red;">*</span>:
-                            </label>
-                            <div class="col-md-9">
-                                <select class="form-control" id="groupForUpdateUserGroupDialog" name="group" >
-                                    <option value="外网公开用户">外网公开用户</option>
-                                    <option value="内网用户">内网用户</option>
-                                    <option value="质量组用户">质量组用户</option>
-                                    <option value="分析组用户">分析组用户</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
-            <div class="modal-footer">
-                <button id="saveUpdateUserGroupsBtn" class="btn green" onclick="submitUpdateUserGroup();">
-                    保存
-                </button>
-                <button id="cancelUpdateUserGroupsBtn" class="btn default"  data-dismiss="modal">
-                    取消
-                </button>
             </div>
         </div>
     </div>
@@ -394,27 +282,6 @@
     </div>
 </div>
 
-<script type="text/html" id="userListTable">
-    {{each list}}
-    <tr>
-        <td style="text-align: center">{{(curUserPageNum-1) * pageSize + 1 + $index}}</td>
-        <td style="text-align: center">{{$value.userName}}</td>
-        <td style="text-align: center">{{$value.loginId}}</td>
-        <td style="text-align: center">{{$value.createTime}}</td>
-        <%--<td style="text-align: center">{{$value.stat}}</td>--%>
-        <td style="text-align: center">{{$value.groups}}</td>
-        <td style="text-align: center" id = "{{$value.id}}">
-            <button class="btn default btn-xs purple updateUserGroupButton" data-target="#updateUserGroupDialog" data-toggle="modal" onclick="updateUserGroup(this);"><i class="fa fa-edit"></i>修改用户组</button>
-            &nbsp;
-            <button class="btn default btn-xs purple updateUserButton" data-target="#updateUserDialog" data-toggle="modal" onclick="updateUserInfo(this);"><i class="fa fa-edit"></i>修改</button>
-            &nbsp;
-            <button class="btn default btn-xs purple updateUserGroupButton" data-target="#deleteUserDialog" data-toggle="modal" onclick="deleteUser(this);"><i class="fa fa-trash"></i>删除</button>
-        </td>
-    </tr>
-    {{/each}}
-</script>
-
-
 <!-- 用户组 group -->
 <script type="text/html" id="groupTmpl">
     {{each list}}
@@ -434,6 +301,139 @@
     {{/each}}
 </script>
 
+
+<!--用户管理标签页：新建用户对话框-->
+<div id="addUserDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 id="titleForAddUserDialog" class="modal-title" >添加用户</h4>
+            </div>
+
+            <div class="modal-body">
+                <form id="addUserForm" class="form-horizontal" role="form" method="post" accept-charset="utf-8"  onfocusout="true">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="userName">
+                                用&nbsp;户&nbsp;名<span style="color: red;">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" placeholder="请输入用户名称" id="userName" name="userName" required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="loginId">
+                                用户账号<span style="color: red;">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" placeholder="请输入用户账号" id="loginId" name="loginId"  required="required" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="password">
+                                密&nbsp;&nbsp;&nbsp;&nbsp;码<span style="color: red;">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" placeholder="请输入密码"  id="password" name="password" required="required">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="groupsForAddUserDialog">
+                                角&nbsp;&nbsp;&nbsp;&nbsp;色<span style="color: red;">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <select class='form-control select2me' name='groupsForAddUserDialog' id='groupsForAddUserDialog' multiple="multiple">
+                                    <c:forEach  var="group"  items="${groupList}">
+                                        <option value="${group.groupName}" id="${group.id}" >${group.groupName}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button id="saveUserAddBtn" class="btn green" onclick="addUser();">
+                    保存
+                </button>
+                <button id="cancelUserAddBtn" class="btn default"  data-dismiss="modal">
+                    取消
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--用户管理标签页：修改用户组对话框-->
+<div id="updateUserGroupDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 id="titleForUpdateGroupsDialog" class="modal-title" >编辑用户组</h4>
+            </div>
+
+            <div class="modal-body">
+                <form id="updateGroupsForm" class="form-horizontal" role="form" method="post" accept-charset="utf-8"  onfocusout="true">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">
+                                账号<span style="color: red;">*</span>:
+                            </label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" readonly="readonly" id="loginIdForUpdateUserGroupDialog" name="loginId"  required="required" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="groupForUpdateUserGroupDialog">
+                                角色<span style="color: red;">*</span>:
+                            </label>
+                            <div class="col-md-9">
+                                <select class="form-control select2me" name="groupForUpdateUserGroupDialog" id="groupForUpdateUserGroupDialog" multiple="multiple">
+                                    <c:forEach  var="group"  items="${groupList}">
+                                        <option value="${group.groupName}" id="${group.id}"> ${group.groupName} </option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button id="saveUpdateUserGroupsBtn" class="btn green" onclick="submitUpdateUserGroup();">
+                    保存
+                </button>
+                <button id="cancelUpdateUserGroupsBtn" class="btn default"  data-dismiss="modal">
+                    取消
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--用户管理标签页：用户列表表格-->
+<script type="text/html" id="userListTable">
+    {{each list}}
+    <tr>
+        <td style="text-align: center">{{(curUserPageNum-1) * pageSize + 1 + $index}}</td>
+        <td style="text-align: center">{{$value.userName}}</td>
+        <td style="text-align: center">{{$value.loginId}}</td>
+        <td style="text-align: center">{{$value.createTime}}</td>
+        <%--<td style="text-align: center">{{$value.stat}}</td>--%>
+        <td style="text-align: center">{{$value.groups}}</td>
+        <td style="text-align: center" id = "{{$value.id}}">
+            <button class="btn default btn-xs purple updateUserGroupButton" data-target="#updateUserGroupDialog" data-toggle="modal" onclick="updateUserGroup(this);"><i class="fa fa-edit"></i>修改用户组</button>
+            &nbsp;
+            <button class="btn default btn-xs red updateUserButton" data-target="#updateUserDialog" data-toggle="modal" onclick="updateUserInfo(this);"><i class="fa fa-edit"></i>修改</button>
+            &nbsp;
+            <button class="btn default btn-xs green updateUserGroupButton" data-target="#deleteUserDialog" data-toggle="modal" onclick="deleteUser(this);"><i class="fa fa-trash"></i>删除</button>
+        </td>
+    </tr>
+    {{/each}}
+</script>
 
 </body>
 
@@ -462,8 +462,6 @@
         $(function () {
             template.helper("dateFormat", formatDate);
             getData(1);
-
-            queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
 
             $(".search-text").keydown(function (event) {
                 if (event.keyCode == 13){
@@ -530,6 +528,31 @@
             //getAllUserList();
             groupUsersSelect2 = $('#users').select2({
                 placeholder: "请选择用户",
+                allowClear: true
+            });
+
+
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+            //
+            // 用户管理标签页：jquery初始化代码
+            //
+            //////////////////////////////////////////////////////////////////////////////////////////////////
+            queryUser(null, null, null, 1); //用户管理标签页：获得用户列表
+            //选择用户组筛选用户
+            groupsFilterSelect2 = $("#groupsFilter").select2(
+                {
+                    placeholder: "请选择用户组",
+                    allowClear: true
+                }
+            );
+            //添加用户对话框中，选择用户组
+            userGroupForAddUserGroupDialogSelect2 = $("#groupsForAddUserDialog").select2({
+                placeholder: "请选择用户组",
+                allowClear: true
+            });
+            //添加更新用户组对话框中，选择用户组
+            userGroupForUpdateUserGroupDialogSelect2 = $('#groupForUpdateUserGroupDialog').select2({
+                placeholder: "请选择用户组",
                 allowClear: true
             });
         });
@@ -737,6 +760,12 @@
         }
     </script>
 
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // 用户管理标签页：javascript代码
+    //
+    //////////////////////////////////////////////////////////////////////////////////////////////////
     <script type="text/javascript">
         function addUser()
         {

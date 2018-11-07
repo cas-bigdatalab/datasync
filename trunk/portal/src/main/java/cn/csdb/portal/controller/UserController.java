@@ -41,20 +41,20 @@ public class UserController {
 
         logger.info("query user result - users = " + users);
 
-        // prepare date to retrieve
+        // 准备返回数据
         JSONObject userQueryResult = new JSONObject();
         userQueryResult.put("list", users);
         userQueryResult.put("curUserPageNum", curUserPageNum);
         userQueryResult.put("pageSize", 10);
-
         long totalUsers = userService.getTotalUsers(loginId, userName, groups);
-
         userQueryResult.put("totalUsers", totalUsers);
         userQueryResult.put("totalUserPages", (totalUsers / pageSize + (totalUsers % pageSize == 0 ? 0 : 1)));
 
+        //设置http响应的编码
         response.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=UTF-8");
 
+        logger.info(userQueryResult.toJSONString());
         return userQueryResult;
     }
 
