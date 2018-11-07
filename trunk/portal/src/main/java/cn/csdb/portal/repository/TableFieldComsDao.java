@@ -28,11 +28,19 @@ public class TableFieldComsDao {
         return mongoTemplate.find(new Query(Criteria.where("uriHash").is(uriHash)),TableFieldComs.class);
     }
 
-    public void updateFieldComs(TableFieldComs tableFieldComs) {
+    public void updateFieldComs(TableFieldComs tableFieldComs,String tableName,String state) {
 
         mongoTemplate.findAndModify(new Query(Criteria.where("id").is(tableFieldComs.getId())),
                 new Update().set("fieldComs", tableFieldComs.getFieldComs()).set("updateTime", tableFieldComs.getUpdateTime())
         ,TableFieldComs.class);
+        Described_Table described_table = new Described_Table();
+        described_table.setTableName(tableName);
+        mongoTemplate.save(tableFieldComs);
+        if("1".equals(state)){
+            mongoTemplate.save(described_table);
+        }else{
+
+        }
 
     }
 

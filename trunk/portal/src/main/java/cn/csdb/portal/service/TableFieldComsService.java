@@ -140,7 +140,7 @@ public class TableFieldComsService {
         String fieldComs = tableFieldComs.getFieldComs();
         if (StringUtils.isBlank(fieldComs)) {
             tableFieldComs.setFieldComs(fieldComs);
-            tableFieldComsDao.updateFieldComs(tableFieldComs);
+            tableFieldComsDao.updateFieldComs(tableFieldComs,tableName,state);
             return true;
         }
         List<TableInfo> tableInfosPre = JSON.parseArray(fieldComs, TableInfo.class);
@@ -155,7 +155,7 @@ public class TableFieldComsService {
                 return true;
             }
         }));
-        tableFieldComsDao.updateFieldComs(tableFieldComs);
+        tableFieldComsDao.updateFieldComs(tableFieldComs,tableName,state);
         return true;
     }
 

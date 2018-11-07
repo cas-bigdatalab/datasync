@@ -174,7 +174,10 @@
 
     <div class=" container tatle_div">
         DataSync专题库门户管理系统
+<%--
         <button class="btn blue" style="float: right;margin-top: 28px;" ><i class="icon-user"></i>登录</button>
+--%>
+
     </div>
 
     <div class="page-container" style="min-height: 550px;width: 90%;margin: 0 auto">
@@ -192,6 +195,12 @@
                     <li>
                         <div style="height: 70px"></div>
                     </li>
+
+<%--
+                <shiro:hasRole name="root">
+--%>
+
+
                     <li class="start">
                         <a href="${ctx}/subjectMgmt/querySubject?currentPage=1">
                             <i class="icon-user"></i>
@@ -239,6 +248,9 @@
                             </li>
                         </ul>
                     </li>
+<%--
+                </shiro:hasRole>
+--%>
                     <%-- </shiro:hasRole>
                      <shiro:hasRole name="管理员">--%>
                     <%--<li>
@@ -264,6 +276,10 @@
                             <span class="arrow "></span>
                         </a>
                     </li>--%>
+<%--
+                    <shiro:hasRole name="admin">
+--%>
+
                     <li>
                         <a href="${ctx}/dataConfiguration">
                             <i class="icon-wrench"></i>
@@ -278,6 +294,9 @@
                             <span class="arrow "></span>
                         </a>
                     </li>
+<%--
+                    </shiro:hasRole>
+--%>
 
                 </ul>
                 <!-- END SIDEBAR MENU -->

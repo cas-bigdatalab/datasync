@@ -3,6 +3,7 @@
     <mapping path="/resources/*" exclue="true"/>
     <mapping path="/global/*" exclue="true"/>
     <mapping path="/upload/*" exclue="true"/>
+    <mapping path="/login" exclue="true"/>
     <mapping path="/403" exclue="true"/>
     <mapping path="/404" exclue="true"/>
     <mapping path="/500" exclue="true"/>
