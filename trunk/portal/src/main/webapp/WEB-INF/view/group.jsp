@@ -209,15 +209,15 @@
             <div class="modal-body" style="min-height: 150px">
                 <form class="form-horizontal" id="editGroupForm" method="post" accept-charset="utf-8" role="form"  onfocusout="true">
                     <div class="form-group">
+
                         <input type="hidden" class="form-control"
                                id="groupId"
                                name="id" value=""/>
-<<<<<<< HEAD
-=======
+
                         <input type="hidden" class="form-control"
                                id="groupUsers"
                                name="users" />
->>>>>>> 4e78acd7282b4489e4dc1b81993fd7652657565c
+
                         <label for="groupNameEdit" class="col-sm-3 control-label">用户组名称<span class="required">
 													*</span></label>
                         <div class="col-sm-8">
