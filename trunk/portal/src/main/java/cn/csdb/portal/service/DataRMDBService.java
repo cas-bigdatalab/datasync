@@ -1,7 +1,9 @@
 package cn.csdb.portal.service;
 
 import cn.csdb.portal.model.DataSrc;
+import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.model.TableInfo;
+import cn.csdb.portal.repository.CheckUserDao;
 import cn.csdb.portal.repository.DataSrcDao;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
@@ -33,15 +35,18 @@ public class DataRMDBService {
     @Resource
     private DataSrcDao dataSrcDao;
 
+    @Resource
+    private CheckUserDao checkUserDao;
+
     @Value("#{systemPro['tableDataFilePath']}")
     private String tableDataFilePath;
 
     public List<List<Object>> getDataBySql(String sql, Map<String, List<TableInfo>> tableComsMap,
-                                           int dataSourceId, int start, int limit) {
+                                           String curDataSubjectCode, int start, int limit) {
 /*
         DataSrc dataSrc = dataSrcDao.findById(dataSourceId);
 */
-        DataSrc datasrc = new DataSrc();
+        /*DataSrc datasrc = new DataSrc();
         datasrc.setDataSourceName("10.0.86.78_usdr");
         datasrc.setDataSourceType("db");
         datasrc.setDatabaseName("drsrnew");
@@ -49,7 +54,15 @@ public class DataRMDBService {
         datasrc.setHost("10.0.86.78");
         datasrc.setPort("3306");
         datasrc.setUserName("root");
-        datasrc.setPassword("");
+        datasrc.setPassword("");*/
+        Subject subject = checkUserDao.getSubjectByCode(curDataSubjectCode);
+        DataSrc datasrc = new DataSrc();
+        datasrc.setDatabaseName(subject.getDbName());
+        datasrc.setDatabaseType("mysql");
+        datasrc.setHost(subject.getDbHost());
+        datasrc.setPort(subject.getDbPort());
+        datasrc.setUserName(subject.getDbUserName());
+        datasrc.setPassword(subject.getDbPassword());
         IDataSource dataSource = DataSourceFactory.getDataSource(datasrc.getDatabaseType());
         Connection connection = dataSource.getConnection(datasrc.getHost(), datasrc.getPort(),
                 datasrc.getUserName(), datasrc.getPassword(), datasrc.getDatabaseName());
@@ -86,8 +99,8 @@ public class DataRMDBService {
     }
 
     public List<List<Object>> getDataByTable(String tableName, HashMap<String, List<TableInfo>> tableComsMap,
-                                             int dataSourceId, int start, int limit) {
-        return getDataBySql("select * from " + tableName, tableComsMap, dataSourceId, start, limit);
+                                             String curDataSubjectCode, int start, int limit) {
+        return getDataBySql("select * from " + tableName, tableComsMap, curDataSubjectCode, start, limit);
     }
 
 

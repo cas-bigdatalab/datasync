@@ -68,10 +68,10 @@ public class MyRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         //获取用户名
-        String username = (String) token.getPrincipal();
+        String LoginId = (String) token.getPrincipal();
 
         //从数据库中查找用户信息
-        User user = CheckUserService.getByUserName(username);
+        User user = CheckUserService.getByUserName(LoginId);
         if (user == null) {
             return null;
         }

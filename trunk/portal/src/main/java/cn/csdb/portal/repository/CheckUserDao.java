@@ -20,11 +20,11 @@ public class CheckUserDao {
     private MongoTemplate mongoTemplate;
     /**
      *  通过用户名查找用户
-     *  @param userName
+     *  @param LoginId
      *  @return User
      */
-    public User getByUserName(String userName){
-        return mongoTemplate.find(new Query(Criteria.where("loginId").is(userName)),User.class).get(0);
+    public User getByUserName(String LoginId){
+        return mongoTemplate.find(new Query(Criteria.where("loginId").is(LoginId)),User.class).get(0);
     }
 
     public Subject getSubjectByCode(String subjectCode){

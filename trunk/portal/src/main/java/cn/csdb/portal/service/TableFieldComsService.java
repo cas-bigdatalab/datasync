@@ -2,8 +2,10 @@ package cn.csdb.portal.service;
 
 
 import cn.csdb.portal.model.DataSrc;
+import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.model.TableFieldComs;
 import cn.csdb.portal.model.TableInfo;
+import cn.csdb.portal.repository.CheckUserDao;
 import cn.csdb.portal.repository.TableFieldComsDao;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
@@ -39,10 +41,13 @@ public class TableFieldComsService {
     @Resource
     private TableFieldComsDao tableFieldComsDao;
 
+    @Resource
+    private CheckUserDao checkUserDao;
+
     private final static String URISPLIT = "#";
 
     @Transactional(readOnly = true)
-    public Map<String, List<TableInfo>> getDefaultFieldComsByTableName(int dataSourceId, String tableName) {
+    public Map<String, List<TableInfo>> getDefaultFieldComsByTableName(String subjectCode, String tableName) {
 
 
         if (StringUtils.isBlank(tableName)) {
@@ -53,15 +58,14 @@ public class TableFieldComsService {
 /*
         DataSrc dataSrc = dataSrcDao.findById(dataSourceId);
 */
+        Subject subject = checkUserDao.getSubjectByCode(subjectCode);
         DataSrc datasrc = new DataSrc();
-        datasrc.setDataSourceName("10.0.86.78_usdr");
-        datasrc.setDataSourceType("db");
-        datasrc.setDatabaseName("drsrnew");
+        datasrc.setDatabaseName(subject.getDbName());
         datasrc.setDatabaseType("mysql");
-        datasrc.setHost("10.0.86.78");
-        datasrc.setPort("3306");
-        datasrc.setUserName("root");
-        datasrc.setPassword("");
+        datasrc.setHost(subject.getDbHost());
+        datasrc.setPort(subject.getDbPort());
+        datasrc.setUserName(subject.getDbUserName());
+        datasrc.setPassword(subject.getDbPassword());
         if (datasrc == null) {
             return null;
         }
@@ -98,11 +102,11 @@ public class TableFieldComsService {
     }
 
     @Transactional
-    public boolean insertTableFieldComs(int dataSourceId, String tableName, List<TableInfo> tableInfos, String state) {
+    public boolean insertTableFieldComs(String curDataSubjectCode, String tableName, List<TableInfo> tableInfos, String state) {
 /*
         DataSrc dataSrc = dataSrcDao.findById(dataSourceId);
 */
-        DataSrc datasrc = new DataSrc();
+        /*DataSrc datasrc = new DataSrc();
         datasrc.setDataSourceName("10.0.86.78_usdr");
         datasrc.setDataSourceType("db");
         datasrc.setDatabaseName("drsrnew");
@@ -110,7 +114,15 @@ public class TableFieldComsService {
         datasrc.setHost("10.0.86.78");
         datasrc.setPort("3306");
         datasrc.setUserName("root");
-        datasrc.setPassword("");
+        datasrc.setPassword("");*/
+        Subject subject = checkUserDao.getSubjectByCode(curDataSubjectCode);
+        DataSrc datasrc = new DataSrc();
+        datasrc.setDatabaseName(subject.getDbName());
+        datasrc.setDatabaseType("mysql");
+        datasrc.setHost(subject.getDbHost());
+        datasrc.setPort(subject.getDbPort());
+        datasrc.setUserName(subject.getDbUserName());
+        datasrc.setPassword(subject.getDbPassword());
         if (datasrc == null) {
             return false;
         }

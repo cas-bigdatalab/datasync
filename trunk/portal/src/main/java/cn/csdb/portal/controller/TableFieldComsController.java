@@ -33,15 +33,15 @@ public class TableFieldComsController {
     /**
      * 获取表的字段注释
      *
-     * @param dataSourceId
+     * @param subjectCode
      * @param tableName
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "getTableFieldComs")
-    public JSONObject getFieldComsByTableName(int dataSourceId, String tableName) {
+    public JSONObject getFieldComsByTableName(String subjectCode, String tableName) {
         JSONObject jsonObject = new JSONObject();
-        Map<String, List<TableInfo>> fieldComsByTableName = tableFieldComsService.getDefaultFieldComsByTableName(dataSourceId, tableName);
+        Map<String, List<TableInfo>> fieldComsByTableName = tableFieldComsService.getDefaultFieldComsByTableName(subjectCode, tableName);
         if (fieldComsByTableName != null) {
             List<TableInfo> tableInfos = fieldComsByTableName.get(tableName);
             jsonObject.put("tableInfos", tableInfos);
@@ -51,13 +51,13 @@ public class TableFieldComsController {
 
     @ResponseBody
     @RequestMapping(value = "saveTableFieldComs")
-    public JSONObject saveTableFieldComs(@RequestParam(required = false) int dataSourceId,
+    public JSONObject saveTableFieldComs(@RequestParam(required = false) String curDataSubjectCode,
                                          @RequestParam(required = false) String tableName,
                                          @RequestParam(required = false) String tableInfos,
                                          @RequestParam(required = false) String state ) {
         JSONObject jsonObject = new JSONObject();
         List<TableInfo> tableInfosList = JSON.parseArray(tableInfos, TableInfo.class);
-        boolean result = tableFieldComsService.insertTableFieldComs(dataSourceId, tableName, tableInfosList, state);
+        boolean result = tableFieldComsService.insertTableFieldComs(curDataSubjectCode, tableName, tableInfosList, state);
         jsonObject.put("result", result);
         return jsonObject;
     }

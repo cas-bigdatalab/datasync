@@ -40,9 +40,9 @@
         <strong>DataSync专题库门户管理系统</strong>
         <em>Management System</em>
     </dt>
-    <form action="${pageContext.request.contextPath }/login" method="post">
+    <form action="${pageContext.request.contextPath}/login" method="post">
     <dd class="user_icon">
-        <input type="text" id="userName" name="userName" placeholder="用户名" class="login_txtbx"/>
+        <input type="text" id="loginId" name="loginId" placeholder="用户名" class="login_txtbx"/>
     </dd>
     <dd class="pwd_icon">
         <input type="password" id="password" name="password" placeholder="密码" class="login_txtbx"/>
