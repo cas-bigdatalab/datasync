@@ -205,7 +205,7 @@
             $.ajax({
                 type: "GET",
                 url: '${ctx}/relationalDatabaseTableList',
-                data: {dataSourceId: dataSourceId,"flag":flag},
+                data: {/*dataSourceId: dataSourceId,*/"flag":flag},
                 dataType: "json",
                 success: function (data) {
                     var html = "<div class='form-group'>" +
