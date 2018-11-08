@@ -34,11 +34,6 @@ public class DataTaskService {
         return dataTaskDao.get(dataTaskId);
     }
 
-    @Transactional
-    public boolean update(DataTask dataTask){
-        return dataTaskDao.update(dataTask);
-    }
-
     public void insertDataTask(final DataTask dataTask){
          dataTaskDao.insertDataTask(dataTask);
     }

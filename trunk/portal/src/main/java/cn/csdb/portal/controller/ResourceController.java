@@ -9,6 +9,7 @@ import cn.csdb.portal.service.ResourceService;
 import cn.csdb.portal.service.SubjectService;
 import cn.csdb.portal.utils.FileUploadUtil;
 import cn.csdb.portal.utils.ImgCut;
+import cn.csdb.portal.utils.SqlUtil;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
