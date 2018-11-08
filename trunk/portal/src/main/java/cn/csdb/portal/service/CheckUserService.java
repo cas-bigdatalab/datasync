@@ -1,5 +1,6 @@
 package cn.csdb.portal.service;
 
+import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.model.User;
 import cn.csdb.portal.repository.CheckUserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ public class CheckUserService {
 
     public User getByUserName(String username) {
         return userDao.getByUserName(username);
+    }
+
+    public Subject getSubjectByCode(String subjectCode){
+        return userDao.getSubjectByCode(subjectCode);
     }
 
     /*public Set<String> getRoles(String username) {

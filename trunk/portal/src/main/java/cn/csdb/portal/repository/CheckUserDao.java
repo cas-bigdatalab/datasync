@@ -1,6 +1,7 @@
 package cn.csdb.portal.repository;
 
 import cn.csdb.portal.model.ResCatalog_Mongo;
+import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.model.User;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -24,6 +25,10 @@ public class CheckUserDao {
      */
     public User getByUserName(String userName){
         return mongoTemplate.find(new Query(Criteria.where("loginId").is(userName)),User.class).get(0);
+    }
+
+    public Subject getSubjectByCode(String subjectCode){
+        return mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)),Subject.class).get(0);
     }
 
     /**

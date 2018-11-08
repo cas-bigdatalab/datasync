@@ -24,6 +24,8 @@ public class User {
     private int stat;  //0：数据有效，1：数据无效
     @Field("groups")
     private String groups;
+    @Field("subjectCode")
+    private String subjectCode;
 
     public String getId() {
         return id;
@@ -89,6 +91,14 @@ public class User {
         this.groups = groups;
     }
 
+    public String getSubjectCode() {
+        return subjectCode;
+    }
+
+    public void setSubjectCode(String subjectCode) {
+        this.subjectCode = subjectCode;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -98,7 +108,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", createTime='" + createTime + '\'' +
                 ", stat=" + stat +
-                ", groups=" + groups +
+                ", groups='" + groups + '\'' +
+                ", subjectCode='" + subjectCode + '\'' +
                 '}';
     }
 }
