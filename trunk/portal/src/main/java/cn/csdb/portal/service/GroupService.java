@@ -72,4 +72,10 @@ public class GroupService {
     public long countByPage(String groupName){
         return groupDao.countByPage(groupName);
     }
+
+
+    public List<Group> getGroupList()
+    {
+        return groupDao.getGroupList();
+    }
 }

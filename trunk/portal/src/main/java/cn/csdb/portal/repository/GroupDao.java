@@ -120,4 +120,9 @@ public class GroupDao {
         return mongoTemplate.count(basicQuery,Group.class);
     }
 
+    public List<Group> getGroupList()
+    {
+        return mongoTemplate.findAll(Group.class);
+    }
+
 }

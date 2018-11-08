@@ -16,6 +16,8 @@ public class User {
     private String loginId;
     @Field("password")
     private String password;
+    @Field("subjectCode")
+    private String subjectCode;
     @Field("createTime")
     private String createTime;
     @Field("stat")
@@ -53,6 +55,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSubjectCode() {
+        return subjectCode;
+    }
+
+    public void setSubjectCode(String subjectCode) {
+        this.subjectCode = subjectCode;
     }
 
     public String getCreateTime() {

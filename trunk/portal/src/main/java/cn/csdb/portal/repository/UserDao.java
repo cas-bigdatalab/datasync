@@ -90,8 +90,57 @@ public class UserDao {
 
     public long getTotalUsers(String loginId, String userName, String groups)
     {
+/*
         DBObject dbObject = QueryBuilder.start().and("loginId").is(loginId).and("userName").is(userName).and("groups").exists(groups).get();
-        ;
+*/
+        DBObject dbObject = null;
+
+        if (loginId.trim().equals(""))
+        {
+            loginId = null;
+        }
+        if (userName.trim().equals(""))
+        {
+            userName = null;
+        }
+        if (groups.trim().equals(""))
+        {
+            groups = null;
+        }
+
+        if (loginId != null && userName != null && groups != null)
+        {
+            dbObject = QueryBuilder.start().and("loginId").is(loginId).and("userName").is(userName).and("groups").is(groups).get();
+        }
+        else if (loginId != null && userName != null && groups == null)
+        {
+            dbObject = QueryBuilder.start().and("loginId").is(loginId).and("userName").is(userName).get();
+        }
+        else if (loginId != null && userName == null && groups != null)
+        {
+            dbObject = QueryBuilder.start().and("loginId").is(loginId).and("groups").is(groups).get();
+        }
+        else if (loginId == null && userName != null && groups != null)
+        {
+            dbObject = QueryBuilder.start().and("userName").is(userName).and("groups").is(groups).get();
+        }
+        else if (loginId != null && userName == null && groups == null)
+        {
+            dbObject = QueryBuilder.start().and("loginId").is(loginId).get();
+        }
+        else if (loginId == null && userName != null && groups == null)
+        {
+            dbObject = QueryBuilder.start().and("userName").is(userName).get();
+        }
+        else if (loginId == null && userName == null && groups != null)
+        {
+            dbObject = QueryBuilder.start().and("groups").is(groups).get();
+        }
+        else
+        {
+            dbObject = QueryBuilder.start().get();
+        }
+
         Query query = new BasicQuery(dbObject);
         long totalUsers = mongoTemplate.count(query, "t_user");
         return totalUsers;

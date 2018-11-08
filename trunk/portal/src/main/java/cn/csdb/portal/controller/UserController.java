@@ -66,6 +66,7 @@ public class UserController {
         SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
         user.setCreateTime(sdf.format(new Date()));
         user.setStat(1);
+        logger.info("user to be added = " + user);
         int addedUserCnt = userService.addUser(user);
         logger.info("after addUser - addedUserCnt = " + addedUserCnt);
 
@@ -82,4 +83,10 @@ public class UserController {
         return "updateGroupsNotice： update groups successfully.";
     }
 
+
+    @RequestMapping(value = "deleteUser")
+    public String deleteUser(HttpServletRequest request, String id)
+    {
+        return "删除用户：删除成功";
+    }
 }
