@@ -70,7 +70,7 @@
 
                 <li>
                     <a href="${ctx}/">
-                        <span style="color:black;">hi, ${userName} &nbsp</span>
+                        <span style="color:black;">hi, ${sessionScope.userName} &nbsp</span>
                         <i class="glyphicon glyphicon-user" style="color: white;"></i>
                         <i class="fa fa-angle-down" style="color: white;"></i>
                     </a>

@@ -5,6 +5,7 @@ import cn.csdb.portal.repository.UserDao;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
@@ -34,6 +35,25 @@ public class UserService {
     @Transactional
     public int updateGroups(String loginId, String group) {
         return userDao.updateGroups(loginId, group);
+    }
+
+
+    @Transactional
+    public int deleteUser(String id)
+    {
+        return userDao.deleteUser(id);
+    }
+
+    public User getUserById(String id)
+    {
+        return userDao.getUserById(id);
+
+    }
+
+    @Transactional
+    public int updateUser(User user)
+    {
+        return userDao.updateUser(user);
     }
 
     /**

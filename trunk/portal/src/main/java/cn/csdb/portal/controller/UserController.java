@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -73,6 +74,16 @@ public class UserController {
         return "addUserNotice： add user successfully.";
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/deleteUser")
+    public String deleteUser(HttpServletRequest request, String id)
+    {
+        logger.info("enterring deleteUser - id = " + id);
+        int deletedUserCnt = userService.deleteUser(id);
+        logger.info("deletedUserCnt = " + deletedUserCnt);
+        return "删除用户：删除成功";
+    }
+
     @RequestMapping(value="/updateGroup")
     public String updateGroups(HttpServletRequest request, @RequestParam(value = "loginId") String loginId, @RequestParam(value = "group") String group)
     {
@@ -83,10 +94,31 @@ public class UserController {
         return "updateGroupsNotice： update groups successfully.";
     }
 
-
-    @RequestMapping(value = "deleteUser")
-    public String deleteUser(HttpServletRequest request, String id)
+    @ResponseBody
+    @RequestMapping(value = "/getUserById")
+    public User getUserById(HttpServletRequest request, String id)
     {
-        return "删除用户：删除成功";
+        logger.info("enterring getUserById - id = " + id);
+        User user = userService.getUserById(id);
+        logger.info("user to be updated : user = " + user);
+
+        return user;
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateUser")
+    public int updateUser(HttpServletRequest request, User user)
+    {
+        logger.info("enterring updateUser - user = " + user);
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+        user.setCreateTime(sdf.format(new Date()));
+        user.setStat(1);
+        int updatedUserCnt = userService.updateUser(user);
+        logger.info("user cnt updated : updatedUserCnt = " + updatedUserCnt);
+
+        return updatedUserCnt;
+    }
+
+
+
 }

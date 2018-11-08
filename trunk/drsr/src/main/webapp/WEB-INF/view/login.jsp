@@ -57,6 +57,7 @@
 
         <span>烟草专题库客户端登录</span>
 
+        <form action="${ctx}/validateLogin" method="post">
         <div id="u" class="form-group">
             <input id="userName" spellcheck="false" class="form-control" name="userName" type="text" size="18" required="" />
             <span class="form-highlight"></span>
@@ -90,6 +91,7 @@
         </div>
 
         <div id="loginNotice" class="form-group" style="color: #FF0000; font-size: medium;">
+            ${loginNotice}
         </div>
 
         <div class="form-group">
@@ -97,6 +99,7 @@
             <label for="remember">记住密码</label>
             <button id="loginBtn" type="submit" ripple>登录</button>
         </div>
+        </form>
 
     </div>
 </div>
@@ -194,7 +197,7 @@
     });
 </script>
 <script type="text/javascript">
-    jQuery("#loginBtn").click(
+    /*jQuery("#loginBtn").click(
         function() {
             var userName = $.trim($("#userName").val());
             var password = $.trim($("#password").val());
@@ -226,7 +229,7 @@
                 }
             });
         }
-    );
+    );*/
 </script>
 
 
