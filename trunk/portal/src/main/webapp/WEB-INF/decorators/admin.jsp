@@ -182,15 +182,17 @@
                         <i class="glyphicon glyphicon-user"></i>
                         <span class="username username-hide-on-mobile">
                            <%--<shiro:user>--%>
-                               欢迎您！${sessionScope.loginId} &nbsp;&nbsp;
+                               欢迎您！${sessionScope.userName} &nbsp;&nbsp;
                                <%--<span>角色:${sessionScope.roleNames} </span>--%>
                            <%--</shiro:user>--%>
                         </span>
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-default">
-                        <li><a href="#">Action</a></li>
+                        <li><a href="logout">安全退出</a></li>
+<%--
                         <li><a href="#">Another action</a></li>
+--%>
                         <%--<shiro:guest>
                             <li>
                                 <a href="${applicationScope.systemPro['cas.url.prefix']}/login?service=${applicationScope.systemPro['drsr.url']}/shiro-cas">

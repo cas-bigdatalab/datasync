@@ -23,7 +23,7 @@ public class CheckUserDao {
      *  @return User
      */
     public User getByUserName(String userName){
-        return mongoTemplate.find(new Query(Criteria.where("userName").is(userName)),User.class).get(0);
+        return mongoTemplate.find(new Query(Criteria.where("loginId").is(userName)),User.class).get(0);
     }
 
     /**

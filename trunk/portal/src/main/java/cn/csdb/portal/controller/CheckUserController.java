@@ -1,12 +1,14 @@
 package cn.csdb.portal.controller;
 
 import cn.csdb.portal.model.User;
+import cn.csdb.portal.service.CheckUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -14,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 public class CheckUserController {
+    @Resource
+    private CheckUserService checkUserService;
+
     @RequestMapping("/login")
         public String login(User user, HttpServletRequest request) {
 
@@ -23,6 +28,8 @@ public class CheckUserController {
             try {
                 //为当前用户进行认证，授权
                 subject.login(token);
+                User u = checkUserService.getByUserName(user.getUserName());
+                request.getSession().setAttribute("userName",u.getUserName());
                 return "redirect:/loginSuccess";
 
             } catch (Exception e) {
