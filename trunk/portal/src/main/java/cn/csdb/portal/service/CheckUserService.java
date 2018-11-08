@@ -14,8 +14,8 @@ public class CheckUserService {
     @Autowired
     private CheckUserDao userDao;
 
-    public User getByUserName(String username) {
-        return userDao.getByUserName(username);
+    public User getByUserName(String LoginId) {
+        return userDao.getByUserName(LoginId);
     }
 
     public Subject getSubjectByCode(String subjectCode){

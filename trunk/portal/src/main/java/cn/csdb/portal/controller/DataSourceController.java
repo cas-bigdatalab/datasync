@@ -1,9 +1,7 @@
 package cn.csdb.portal.controller;
 
-import cn.csdb.portal.model.DataSrc;
-import cn.csdb.portal.model.Described_Table;
-import cn.csdb.portal.model.TableInfo;
-import cn.csdb.portal.model.TableInfoR;
+import cn.csdb.portal.model.*;
+import cn.csdb.portal.repository.CheckUserDao;
 import cn.csdb.portal.repository.TableFieldComsDao;
 import cn.csdb.portal.service.DataRMDBService;
 import cn.csdb.portal.service.DataSrcService;
@@ -37,6 +35,9 @@ public class DataSourceController {
     @Autowired
     private TableFieldComsDao tableFieldComsDao;
 
+    @Autowired
+    private CheckUserDao checkUserDao;
+
     @RequestMapping(value="/dataResourceStaticRegister1")
     public String dataResourceRegister1(){
         return "dataResourceRegister";
@@ -50,20 +51,19 @@ public class DataSourceController {
     @RequestMapping(value="/relationalDatabaseTableList")
     public
     @ResponseBody
-    JSONObject relationalDatabaseTableList(String flag){
+    JSONObject relationalDatabaseTableList(String subjectCode,String flag){
         JSONObject jsonObject = new JSONObject();
 /*
         DataSrc dataSrc = dataSrcService.findById(dataSourceId);
 */
+        Subject subject = checkUserDao.getSubjectByCode(subjectCode);
         DataSrc datasrc = new DataSrc();
-        datasrc.setDataSourceName("10.0.86.78_usdr");
-        datasrc.setDataSourceType("db");
-        datasrc.setDatabaseName("drsrnew");
+        datasrc.setDatabaseName(subject.getDbName());
         datasrc.setDatabaseType("mysql");
-        datasrc.setHost("10.0.86.78");
-        datasrc.setPort("3306");
-        datasrc.setUserName("root");
-        datasrc.setPassword("");
+        datasrc.setHost(subject.getDbHost());
+        datasrc.setPort(subject.getDbPort());
+        datasrc.setUserName(subject.getDbUserName());
+        datasrc.setPassword(subject.getDbPassword());
         if("0".equals(flag)) {
             List<String> list = dataSrcService.relationalDatabaseTableList(datasrc);
             List<Described_Table> list_describe = tableFieldComsDao.queryDescribeTable();
@@ -87,7 +87,7 @@ public class DataSourceController {
     @ResponseBody
     @RequestMapping(value = "/previewRelationalDatabaseByTableName")
     public JSONObject previewRelationalDatabaseByTableName(
-            @RequestParam(required = false) String dataSourceId,
+            @RequestParam(required = false) String curDataSubjectCode,
             @RequestParam(required = false, name = "tableInfosList") String tableInfosListStr,
             @RequestParam(required = false, defaultValue = "10") int pageSize) {
         logger.info("预览表数据");
@@ -101,7 +101,7 @@ public class DataSourceController {
         } else {
             return jsonObject;
         }
-        List<List<Object>> datas = dataRMDBservice.getDataByTable(tableName, maps, Integer.valueOf(dataSourceId), 0, pageSize);
+        List<List<Object>> datas = dataRMDBservice.getDataByTable(tableName, maps, curDataSubjectCode, 0, pageSize);
         jsonObject.put("datas", datas);
         return jsonObject;
     }
