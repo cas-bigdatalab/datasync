@@ -121,6 +121,10 @@ public class GroupDao {
         return mongoTemplate.count(basicQuery,Group.class);
     }
 
+    public List<Group> getGroupList() {
+        return mongoTemplate.findAll(Group.class);
+    }
+
     public List<Group> getAll(){
         DBObject query = QueryBuilder.start().get();
         BasicQuery basicQuery = new BasicQuery(query);
@@ -129,5 +133,4 @@ public class GroupDao {
         List<Group> list = mongoTemplate.find(basicQuery, Group.class);
         return list;
     }
-
 }

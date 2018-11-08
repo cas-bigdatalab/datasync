@@ -51,18 +51,18 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                             <label class="control-label">用户账号:</label>
-                                            <input type="text" id="loginIdFilter" name="loginIdFilter" placeholder="用户账号" class="input-small">
+                                            <input type="text" id="loginIdFilter" name="loginIdFilter" placeholder="用户账号" class="input-small" style="height: 30px;" />
                                             &nbsp;&nbsp;&nbsp;&nbsp;
 
                                             <label class="control-label">用户名:</label>
-                                            <input type="text" id="userNameFilter" name="userNameFilter" placeholder="用户名" class="input-small">
+                                            <input type="text" id="userNameFilter" name="userNameFilter" placeholder="用户名" class="input-small" style="height: 30px;" />
                                             &nbsp;&nbsp;&nbsp;&nbsp;
 
                                             <label class="control-label">用户组:</label>
 
-                                            <select class='form-control' name='groupsFilter' id='groupsFilter' multiple="multiple"  style="width: 150px;" >
+                                            <select name='groupsFilter' id='groupsFilter' multiple="multiple" class="form-control select2me" style="width: 300px; height: 30px;" >
                                                 <c:forEach  var="group"  items="${groupList}">
-                                                    <option value="${group.groupName}" id="${group.id}" >${group.groupName}</option>
+                                                    <option value="${group.groupName}" id="${group.id}" style="width: 150px; height: 30px;">${group.groupName}</option>
                                                 </c:forEach>
                                             </select>
 
@@ -345,6 +345,14 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-md-3 control-label" for="subjectCode">
+                                专题库代码<span style="color: red;">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" placeholder="请输入专题库代码"  id="subjectCode" name="subjectCode" required="required">
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-3 control-label" for="groupsForAddUserDialog">
                                 角&nbsp;&nbsp;&nbsp;&nbsp;色<span style="color: red;">*</span>
                             </label>
@@ -435,11 +443,33 @@
             &nbsp;
             <button class="btn default btn-xs red updateUserButton" data-target="#updateUserDialog" data-toggle="modal" onclick="updateUserInfo(this);"><i class="fa fa-edit"></i>修改</button>
             &nbsp;
-            <button class="btn default btn-xs green updateUserGroupButton" data-target="#deleteUserDialog" data-toggle="modal" onclick="deleteUser(this);"><i class="fa fa-trash"></i>删除</button>
+            <button class="btn default btn-xs green updateUserGroupButton" onclick="deleteUser(this);"><i class="fa fa-trash"></i>删除</button>
         </td>
     </tr>
     {{/each}}
 </script>
+
+<!--用户管理标签页：删除用户对话框-->
+<div id="deleteUserDialog" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    删除用户
+                </h5>
+            </div>
+            <div class="modal-body">
+                <h5>确认删除该用户？</h5>
+            </div>
+
+            <div class="modal-footer">
+                <span id="idOfUserToBeDeleted" hidden="hidden"></span>
+                <button id="agreeDeleteUserBtn" class="btn green" onclick="agreeDeleteUser();">确认</button>
+                <button id="cancelDeleteUserBtn"  class="btn default" data-dismiss="modal">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 
@@ -769,8 +799,12 @@
     //
     //////////////////////////////////////////////////////////////////////////////////////////////////--%>
     <script type="text/javascript">
+
+        //添加用户 对话框的保存
         function addUser()
         {
+            console.log("adduser\n" + (typeof $("#groupsForAddUserDialog").val()) + "\nadduser");
+
             $.ajax({
                 url: "${ctx}/user/addUser",
                 type: "get",
@@ -778,7 +812,8 @@
                     "userName": $("#userName").val(),
                     "loginId": $("#loginId").val(),
                     "password": $("#password").val(),
-                    "groups": $("#groups").val(),
+                    "subjectCode": $("#subjectCode").val(),
+                    "groups": $("#groupsForAddUserDialog").val().toString(),
                 },
                 dataType: "text",
                 success: function (data) {
@@ -822,11 +857,12 @@
             }, 500);
         }
 
+        //查询 按钮
         function searchUser()
         {
             var loginId = $("#loginIdFilter").val();
             var userName = $("#userNameFilter").val();
-            var groups = $("#groupsFilter").val();
+            var groups = $("#groupsFilter").val().toString();
             queryUser(loginId, userName, groups, 1);
         }
 
@@ -878,6 +914,34 @@
                     }).on('page', function (event, toNum) {
                         queryUser(loginId, userName, groups, toNum);
                     });
+                }
+            });
+        }
+
+        //删除按钮
+        function deleteUser(deleteBtn)
+        {
+            idOfUser = $(deleteBtn).parent().attr("id");
+
+            $("#deleteUserDialog").modal("show");
+            $("#idOfUserToBeDeleted").html(idOfUser);
+        }
+
+        function agreeDeleteUser(agreeDeleteBtn)
+        {
+            $("#deleteUserDialog").modal("hide");
+            var idOfUser = $("#idOfUserToBeDeleted").html();
+            $.ajax({
+                url: "${ctx}/user/deleteUser",
+                type: "get",
+                data:
+                    {"id": idOfUser},
+                dataType: "json",
+                success: function (data) {
+                    queryUser(null, null, null, 1);
+                },
+                error: function(data) {
+
                 }
             });
         }

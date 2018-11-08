@@ -73,6 +73,10 @@ public class GroupService {
         return groupDao.countByPage(groupName);
     }
 
+    public List<Group> getGroupList() {
+        return groupDao.getGroupList();
+    }
+
     /**
      *
      * Function Description: get all group

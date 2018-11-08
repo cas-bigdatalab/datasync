@@ -29,7 +29,14 @@ public class CheckUserController {
                 //为当前用户进行认证，授权
                 subject.login(token);
                 User u = checkUserService.getByUserName(user.getUserName());
-                request.getSession().setAttribute("userName",u.getUserName());
+                if(user.getSubjectCode()!=null) {
+                    cn.csdb.portal.model.Subject sub = checkUserService.getSubjectByCode(u.getSubjectCode());
+                    request.getSession().setAttribute("userName", u.getUserName());
+                    request.getSession().setAttribute("LoginId", u.getLoginId());
+                    request.getSession().setAttribute("DbName", sub.getDbName());
+                    request.getSession().setAttribute("SubjectName", sub.getSubjectName());
+                    request.getSession().setAttribute("SubjectCode", sub.getSubjectCode());
+                }
                 return "redirect:/loginSuccess";
 
             } catch (Exception e) {

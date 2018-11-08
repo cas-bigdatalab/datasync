@@ -16,12 +16,15 @@ public class User {
     private String loginId;
     @Field("password")
     private String password;
+    @Field("subjectCode")
+    private String subjectCode;
     @Field("createTime")
     private String createTime;
     @Field("stat")
     private int stat;  //0：数据有效，1：数据无效
     @Field("groups")
     private String groups;
+
 
     public String getId() {
         return id;
@@ -79,6 +82,14 @@ public class User {
         this.groups = groups;
     }
 
+    public String getSubjectCode() {
+        return subjectCode;
+    }
+
+    public void setSubjectCode(String subjectCode) {
+        this.subjectCode = subjectCode;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -88,7 +99,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", createTime='" + createTime + '\'' +
                 ", stat=" + stat +
-                ", groups=" + groups +
+                ", groups='" + groups + '\'' +
+                ", subjectCode='" + subjectCode + '\'' +
                 '}';
     }
 }

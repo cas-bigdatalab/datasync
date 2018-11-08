@@ -38,8 +38,14 @@ public class GroupController {
     @RequestMapping("/list")
     public String list(HttpServletRequest request, Model model){
         logger.info("进入用户组列表页面");
+
         List<User> list = userService.getAll();
         model.addAttribute("list",list);
+
+        List<Group> groupList = groupService.getGroupList();
+        model.addAttribute("groupList", groupList);
+        logger.info("groupList : " + groupList);
+
         return "group";
     }
 
