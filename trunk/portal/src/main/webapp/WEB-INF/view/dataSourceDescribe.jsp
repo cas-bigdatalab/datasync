@@ -341,6 +341,7 @@
     </div>
     {{/each}}
 </script>
+<%@ include file="./tableFieldComsTmpl.jsp" %>
 </body>
 
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
@@ -350,6 +351,8 @@
     <script type="text/javascript" src="${ctx}/resources/bundles/jquery-form/jquery.form.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.js"></script>
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
+    <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
+    <script src="${ctx}/resources/js/metaTemplate.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
 
     <script type="text/javascript">
