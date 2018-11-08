@@ -574,6 +574,7 @@
                     $(".undeslist").empty();
                     var List =JSON.parse(data)
                     console.log(List)
+                    console.log(List)
                     var tabCon = template("dataRelationshipList", List);
                     $(".undeslist").append(tabCon);
                 },
@@ -669,6 +670,7 @@
             }else {
                 secondFlag = false
             }
+            dataList = dataList.substr(0, dataList.length - 1);
             $.ajax({
                 url:ctx+"/resource/addResourceSecondStep",
                 type:"POST",

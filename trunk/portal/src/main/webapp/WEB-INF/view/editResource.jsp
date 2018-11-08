@@ -661,6 +661,7 @@
             }else {
                 secondFlag = false
             }
+            dataList = dataList.substr(0, dataList.length - 1);
             $.ajax({
                 url:ctx+"/resource/addResourceSecondStep",
                 type:"POST",
