@@ -53,7 +53,7 @@
         <!-- Tab panes -->
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="undescribe">
-                <div class="col-md-3" style="font-size: 18px">
+                <%--<div class="col-md-3" style="font-size: 18px">
                     <span>选择表资源进行描述</span>
                 </div>
                 <div class="col-md-9" >
@@ -78,10 +78,10 @@
                         </div>
 
                     </div>
-                </div>
+                </div>--%>
             </div>
             <div role="tabpanel" class="tab-pane" id="isdescribe">
-                <div class="col-md-3" style="font-size: 18px">
+                <%--<div class="col-md-3" style="font-size: 18px">
                     <span>选择表资源查看/修改描述</span>
                 </div>
                 <div class="col-md-9" >
@@ -106,7 +106,7 @@
                         </div>
 
                     </div>
-                </div>
+                </div>--%>
             </div>
             <div role="tabpanel" class="tab-pane" id="filedata">cccccccc</div>
         </div>
@@ -184,15 +184,13 @@
     <script type="text/javascript" src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.min.js"></script>
     <script type="text/javascript"
             src="${ctx}/resources/bundles/jquery-validation/js/additional-methods.min.js"></script>
-    <script src="${ctx}/resources/bundles/jquery-json/dist/jquery.json.min.js"></script>
+    <script src="${ctx}/resources/js/jquery.json.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
     <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
-    <script src="${ctx}/resources/js/regex.js"></script>
     <script src="${ctx}/resources/js/metaTemplate.js"></script>
-    <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
     <script>
         var ctx = '${ctx}', edit = false;
         $(function () {
@@ -207,7 +205,7 @@
             $.ajax({
                 type: "GET",
                 url: '${ctx}/relationalDatabaseTableList',
-                data: {dataSourceId: dataSourceId,"flag":flag},
+                data: {/*dataSourceId: dataSourceId,*/"flag":flag},
                 dataType: "json",
                 success: function (data) {
                     var html = "<div class='form-group'>" +

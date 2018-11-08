@@ -116,4 +116,8 @@ public class ResCatalogService {
         return resCatalogDao.getLocalResCatalogAll();
     }
 
+    public ResCatalog_Mongo getLocalResCatalogNodeById(String resCatalogId) {
+        return resCatalogDao.getLocalResCatalogNodeById(resCatalogId);
+    }
+
 }

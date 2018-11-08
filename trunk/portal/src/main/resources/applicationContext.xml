@@ -98,7 +98,7 @@
     <import resource="spring-mongodb.xml"/>
 
     <!-- 缓存配置文件 -->
-   <!-- <import resource="spring-cache.xml"/>
-    &lt;!&ndash; 权限控制配置文件  &ndash;&gt;
-    <import resource="spring-shiro.xml"/>-->
+    <import resource="spring-cache.xml"/>
+    <!-- 权限控制配置文件  -->
+    <import resource="spring-shiro.xml"/>
 </beans>

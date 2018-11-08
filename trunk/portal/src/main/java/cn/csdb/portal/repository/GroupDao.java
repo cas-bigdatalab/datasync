@@ -1,6 +1,7 @@
 package cn.csdb.portal.repository;
 
 import cn.csdb.portal.model.Group;
+import com.google.common.collect.Lists;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
 import org.apache.commons.lang.StringUtils;
@@ -120,9 +121,16 @@ public class GroupDao {
         return mongoTemplate.count(basicQuery,Group.class);
     }
 
-    public List<Group> getGroupList()
-    {
+    public List<Group> getGroupList() {
         return mongoTemplate.findAll(Group.class);
     }
 
+    public List<Group> getAll(){
+        DBObject query = QueryBuilder.start().get();
+        BasicQuery basicQuery = new BasicQuery(query);
+        Sort.Order order = new Sort.Order(Sort.Direction.DESC,"createTime");
+        List<Sort.Order> orders = Lists.newArrayList(order);
+        List<Group> list = mongoTemplate.find(basicQuery, Group.class);
+        return list;
+    }
 }

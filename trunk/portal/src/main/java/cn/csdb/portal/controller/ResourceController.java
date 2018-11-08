@@ -1,10 +1,15 @@
 package cn.csdb.portal.controller;
 
+import cn.csdb.portal.model.Group;
+import cn.csdb.portal.model.ResCatalog_Mongo;
 import cn.csdb.portal.model.Subject;
+import cn.csdb.portal.service.GroupService;
+import cn.csdb.portal.service.ResCatalogService;
 import cn.csdb.portal.service.ResourceService;
 import cn.csdb.portal.service.SubjectService;
 import cn.csdb.portal.utils.FileUploadUtil;
 import cn.csdb.portal.utils.ImgCut;
+import cn.csdb.portal.utils.SqlUtil;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
@@ -37,6 +42,10 @@ import java.util.List;
 public class ResourceController {
     @Resource
     private ResourceService resourceService;
+    @Resource
+    private ResCatalogService resCatalogService;
+    @Resource
+    private GroupService groupService;
 
     @Resource
     private SubjectService subjectService;
@@ -230,7 +239,12 @@ public class ResourceController {
                                             @RequestParam(name = "introduction") String introduction,
                                             @RequestParam(name = "keyword") String keyword,
                                             @RequestParam(name = "catalogId") String catalogId,
-                                            @RequestParam(name = "createdByOrganization") String createdByOrganization) {
+                                            @RequestParam(name = "createdByOrganization") String createdByOrganization
+                                            /*@RequestParam(name = "startTime") String startTime,
+                                            @RequestParam(name = "endTime") String endTime,
+                                            @RequestParam(name = "email") String email,
+                                            @RequestParam(name = "phoneNum") String phoneNum*/
+    ) {
         Subject subject = subjectService.findBySubjectCode("sdc002");
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = new cn.csdb.portal.model.Resource();
@@ -494,6 +508,35 @@ public class ResourceController {
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("saveName",saveName);
+        return jsonObject;
+    }
+
+    /**
+     *
+     * Function Description: 查看资源
+     *
+     * @param: [resourceId]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/6 14:54
+     */
+    @ResponseBody
+    @RequestMapping(value = "resourceDetail")
+    public JSONObject resourceDetail(String resourceId){
+        JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        ResCatalog_Mongo resCatalog_mongo = resCatalogService.getLocalResCatalogNodeById(resource.getCatalogId());
+        jsonObject.put("resCatalog",resCatalog_mongo);
+        jsonObject.put("resource",resource);
+        return jsonObject;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "getUserGroups")
+    public JSONObject getUserGroups() {
+        JSONObject jsonObject = new JSONObject();
+        List<Group> groupList = groupService.getAll();
+        jsonObject.put("groupList",groupList);
         return jsonObject;
     }
 
