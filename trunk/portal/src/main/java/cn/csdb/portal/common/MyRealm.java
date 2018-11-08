@@ -1,4 +1,4 @@
-package cn.csdb.portal.utils;
+package cn.csdb.portal.common;
 
 import cn.csdb.portal.model.User;
 import cn.csdb.portal.service.CheckUserService;
