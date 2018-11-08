@@ -24,8 +24,7 @@ public class User {
     private int stat;  //0：数据有效，1：数据无效
     @Field("groups")
     private String groups;
-    @Field("subjectCode")
-    private String subjectCode;
+
 
     public String getId() {
         return id;
@@ -57,14 +56,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getSubjectCode() {
-        return subjectCode;
-    }
-
-    public void setSubjectCode(String subjectCode) {
-        this.subjectCode = subjectCode;
     }
 
     public String getCreateTime() {
