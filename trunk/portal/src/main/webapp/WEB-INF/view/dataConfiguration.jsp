@@ -53,7 +53,7 @@
         <!-- Tab panes -->
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="undescribe">
-                <div class="col-md-3" style="font-size: 18px">
+                <%--<div class="col-md-3" style="font-size: 18px">
                     <span>选择表资源进行描述</span>
                 </div>
                 <div class="col-md-9" >
@@ -78,10 +78,10 @@
                         </div>
 
                     </div>
-                </div>
+                </div>--%>
             </div>
             <div role="tabpanel" class="tab-pane" id="isdescribe">
-                <div class="col-md-3" style="font-size: 18px">
+                <%--<div class="col-md-3" style="font-size: 18px">
                     <span>选择表资源查看/修改描述</span>
                 </div>
                 <div class="col-md-9" >
@@ -106,7 +106,7 @@
                         </div>
 
                     </div>
-                </div>
+                </div>--%>
             </div>
             <div role="tabpanel" class="tab-pane" id="filedata">cccccccc</div>
         </div>
@@ -184,7 +184,7 @@
     <script type="text/javascript" src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.min.js"></script>
     <script type="text/javascript"
             src="${ctx}/resources/bundles/jquery-validation/js/additional-methods.min.js"></script>
-    <script src="${ctx}/resources/bundles/jquery-json/dist/jquery.json.min.js"></script>
+    <script src="${ctx}/resources/js/jquery.json.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
