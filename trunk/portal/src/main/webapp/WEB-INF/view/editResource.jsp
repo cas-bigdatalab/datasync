@@ -21,6 +21,7 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jstree/dist/themes/default/style.min.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.css">
     <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">
     <style>
         .undeslist label{
             font-size: 18px;
@@ -201,6 +202,21 @@
                                                     <div class="custom-error" style="display: none" id="file_dir">请选择目录</div>
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3">选择时间<span  class="required">
+                                                    * </span></label>
+                                                <div class="col-md-6"  style="padding-top:14px">
+                                                    <div class="input-group input-daterange">
+                                                        <input type="text" class="form-control selectData"
+                                                               data-date-format="yyyy-mm-dd" placeholder="起始时间" readonly>
+                                                        <div class="input-group-addon">to</div>
+                                                        <input type="text" class="form-control selectData"
+                                                               data-date-format="yyyy-mm-dd" placeholder="起始时间" readonly>
+                                                        <input type="text" id="firstTime" hidden>
+                                                        <input type="text" id="lastTime" hidden>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="form-group dataLicenseInputGroup">
                                                 <label class="control-label col-md-3">描述 <span class="required">
 													* </span>
@@ -332,7 +348,7 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                          </div>
                     </div>
 
                 </div>
@@ -361,6 +377,8 @@
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.js"></script>
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
 
     <script type="text/javascript">
         var ctx = '${ctx}';
@@ -370,9 +388,21 @@
         var secondFlag=false;
         var resourceId=sdoId;
         var publicType="";
+        var firstTime = 0;
+        var lastTime = 0;
         /*var tagNames=new Array();*/
-        var dataRelationsList
-        var groupUsersSelect2
+        $('.selectData').datepicker({
+            language:'zh-CN'
+        });
+        $('.selectData').each(function() {
+            $(this).datepicker('clearDates');
+        });
+        $('.selectData:eq(0)').datepicker().on("changeDate",function (ev) {
+            firstTime = new Date(ev.date).getTime()
+        })
+        $('.selectData:eq(1)').datepicker().on("changeDate",function (ev) {
+            lastTime =new Date(ev.date).getTime()
+        })
         //将图片截图并上传功能
         var api = null;
         function readURL(input) {

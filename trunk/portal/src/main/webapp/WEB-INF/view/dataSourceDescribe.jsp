@@ -21,6 +21,8 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jstree/dist/themes/default/style.min.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.css">
     <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">
+
     <style>
         .undeslist label{
             font-size: 18px;
@@ -103,8 +105,6 @@
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab1">
-
-
                                     <form class="form-horizontal" id="submit_form"
                                           method="POST">
                                         <div class="form-group">
@@ -118,38 +118,29 @@
                                             </div>
 
                                         </div>
-                                    </form>
-                                    <%--<div class="form-group">
-                                        <label class="control-label col-md-3">图片<span >
-                                                * </span>
-                                        </label>
-                                        <div class="col-md-9">
-                                            <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                <div class="fileinput-preview thumbnail"
-                                                     data-trigger="fileinput"
-                                                     style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
-                                                </div>
-                                                <div>
-                                                        <span class="btn default btn-file">
-                                                        <span class="fileinput-new">
-                                                        选择一个图片</span>
-                                                        <span class="fileinput-exists">
-                                                        换一个</span>
-                                                        <input id="imagePath" type="file" name="imageFile">
-                                                        </span>
-                                                    <a href="#" class="btn red fileinput-exists"
-                                                       data-dismiss="fileinput">
-                                                        删除 </a>
-                                                </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3" >邮箱号<span class="required">
+                                                    * </span>
+                                            </label>
+                                            <div class="col-md-4" style="padding-top:14px">
+                                                <input type="email" class="form-control" name="need_checked"
+                                                       id="task_email" style="border: 1px solid rgb(169, 169, 169)">
+                                                <div class="custom-error" name="need_message" style="display: none">请输入数据集名称</div>
                                             </div>
-                                            <div class="clearfix margin-top-10">
-                                            <span class="label label-danger">
-                                            注意! </span>
-                                                图片只能在 IE10+, FF3.6+, Safari6.0+, Chrome6.0+ 和
-                                                Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。
-                                            </div>
+
                                         </div>
-                                    </div>--%>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3" >电话号码 <span class="required">
+                                                    * </span>
+                                            </label>
+                                            <div class="col-md-4" style="padding-top:14px">
+                                                <input type="text" class="form-control" name="need_checked"
+                                                       id="task_phone" style="border: 1px solid rgb(169, 169, 169)">
+                                                <div class="custom-error" name="need_message" style="display: none">请输入数据集名称</div>
+                                            </div>
+
+                                        </div>
+                                    </form>
                                     <div style="overflow: hidden" class="row">
                                         <div class="form-group">
                                             <label class="control-label col-md-3" style="text-align: right">图片<span >
@@ -187,7 +178,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <form class="form-horizontal">
                                         <div class="form-group">
                                             <label class="control-label col-md-3">资源目录<span  >
@@ -197,6 +187,21 @@
                                                 <input type="hidden"  id="centerCatalogId">
                                                 <div id="jstree-demo"></div>
                                                 <div class="custom-error" style="display: none" id="file_dir">请选择目录</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">选择时间<span  class="required">
+                                                    * </span></label>
+                                            <div class="col-md-6"  style="padding-top:14px">
+                                                <div class="input-group input-daterange">
+                                                    <input type="text" class="form-control selectData"
+                                                           data-date-format="yyyy-mm-dd" placeholder="起始时间" readonly>
+                                                    <div class="input-group-addon">to</div>
+                                                    <input type="text" class="form-control selectData"
+                                                           data-date-format="yyyy-mm-dd" placeholder="起始时间" readonly>
+                                                    <input type="text" id="firstTime" hidden>
+                                                    <input type="text" id="lastTime" hidden>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group dataLicenseInputGroup">
@@ -235,6 +240,7 @@
 
                                         </div>
                                     </form>
+
                                 </div>
                                 <div class="tab-pane" id="tab2">
 
@@ -354,6 +360,8 @@
     <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
     <script src="${ctx}/resources/js/metaTemplate.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
 
     <script type="text/javascript">
         var ctx = '${ctx}';
@@ -364,8 +372,23 @@
         var secondFlag=false;
         var resourceId="";
         var publicType="0";
+        var firstTime = 0;
+        var lastTime = 0;
         /*var tagNames=new Array();*/
         //将图片截图并上传功能
+        $('.selectData').datepicker({
+            language:'zh-CN'
+        });
+        $('.selectData').each(function() {
+            $(this).datepicker('clearDates');
+        });
+        $('.selectData:eq(0)').datepicker().on("changeDate",function (ev) {
+
+            firstTime = new Date(ev.date).getTime()
+        })
+        $('.selectData:eq(1)').datepicker().on("changeDate",function (ev) {
+            lastTime =new Date(ev.date).getTime()
+        })
 
         var api = null;
         $("#select2_tags").select2({
