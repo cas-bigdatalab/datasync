@@ -262,9 +262,10 @@ public class ResourceController {
         resource.setCatalogId(catalogId);
         resource.setCreatedByOrganization(createdByOrganization);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        ParsePosition pos = new ParsePosition(0);
-        Date startDate = formatter.parse(startTime, pos);
-        Date endDate = formatter.parse(endTime, pos);
+        ParsePosition pos1 = new ParsePosition(0);
+        ParsePosition pos2 = new ParsePosition(0);
+        Date startDate = formatter.parse(startTime, pos1);
+        Date endDate = formatter.parse(endTime, pos2);
         resource.setStartTime(startDate);
         resource.setEndTime(endDate);
         resource.setEmail(email);
@@ -411,9 +412,10 @@ public class ResourceController {
         resource.setCatalogId(catalogId);
         resource.setCreatedByOrganization(createdByOrganization);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        ParsePosition pos = new ParsePosition(0);
-        Date startDate = formatter.parse(startTime, pos);
-        Date endDate = formatter.parse(endTime, pos);
+        ParsePosition pos1 = new ParsePosition(0);
+        ParsePosition pos2 = new ParsePosition(0);
+        Date startDate = formatter.parse(startTime, pos1);
+        Date endDate = formatter.parse(endTime, pos2);
         resource.setStartTime(startDate);
         resource.setEndTime(endDate);
         resource.setEmail(email);
