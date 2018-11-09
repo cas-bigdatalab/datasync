@@ -46,6 +46,7 @@ html, body
 	top: calc(50% - 13em);
 	width: 400px;
 	height: 460px;
+
 	border-radius: 3px;
 	background: white;
 	box-shadow: 0 1px 5px 0 rgba(0,0,0,0.26);
@@ -61,19 +62,25 @@ html, body
 	cursor: pointer;
 }
 
-.login .photo {
+.login .photo
+{
+	height: 80px;
+}
+
+/*.login .photo {
 	position: relative;
 	width: 100px;
 	height: 100px;
 	margin: 30px 135px;
-	border-radius: 50%;
+	!*border-radius: 50%;
 	background: rgb(223, 223, 223);
 	border: 13px solid rgb(223, 223, 223);
 	overflow: hidden !important;
-	transform: rotate(-1deg);
-}
+	transform: rotate(-1deg);*!
+}*/
 
-.login .photo:before {
+
+/*.login .photo:before {
 	position: absolute;
 	content: '';
 	width: 35px;
@@ -105,7 +112,7 @@ html, body
 	-webkit-animation: user-body 0.5s 0.3s forwards;
 	-moz-animation: user-body 0.5s 0.3s forwards;
 	animation: user-body 0.5s 0.3s forwards;
-}
+}*/
 
 .login > span {
 	display: block;
