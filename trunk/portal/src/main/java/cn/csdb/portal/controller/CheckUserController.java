@@ -36,6 +36,7 @@ public class CheckUserController {
                     request.getSession().setAttribute("DbName", sub.getDbName());
                     request.getSession().setAttribute("SubjectName", sub.getSubjectName());
                     request.getSession().setAttribute("SubjectCode", sub.getSubjectCode());
+                    request.getSession().setAttribute("FtpFilePath", sub.getFtpFilePath());
                 }
                 return "redirect:/loginSuccess";
 

@@ -15,7 +15,8 @@
 
 <head>
     <title>DataSync专题库门户管理系统</title>
-    <link rel="stylesheet" href="${ctx}/resources/css/dataConfig.css">
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jstree/dist/themes/default/style.css">
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/dataConfig.css">
     <style type="text/css">
         .nav-tabs li a{
             font-size: 22px;
@@ -108,7 +109,9 @@
                     </div>
                 </div>--%>
             </div>
-            <div role="tabpanel" class="tab-pane" id="filedata">cccccccc</div>
+            <div role="tabpanel" class="tab-pane" id="filedata">
+                <div id="jstree_show"></div>
+            </div>
         </div>
         <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
             <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
@@ -195,8 +198,10 @@
     <script>
         var ctx = '${ctx}', edit = false;
         var sub = '${sessionScope.SubjectCode}'
+        var filePath = '${FtpFilePath}'
         $(function () {
             chooseTable(sub,0);
+            loadTree();
         });
         var sub1 = '${sessionScope.SubjectCode}'
         $("#tabDescribe li").click(function () {
@@ -225,6 +230,65 @@
                     }
                 }
             });
+        }
+       function loadTree() {
+        //加载文件树
+        $('#jstree_show').jstree({
+            "core": {
+                "themes": {
+                    "responsive": false,
+                },
+                // so that create works
+                "check_callback": true,
+                'data': function (obj, callback) {
+                    var jsonstr = "[]";
+                    var jsonarray = eval('(' + jsonstr + ')');
+                    var children;
+                    if (obj.id != '#') {
+                        var str = obj.id;
+                        var str1 = str.replace(/%_%/g, "/");
+                    }else{
+                        str1 = filePath;
+                    }
+                    $.ajax({
+                        type: "GET",
+                        url: "${ctx}/resource/treeNode",
+                        dataType: "json",
+                        data: {"filePath": str1},
+                        async: false,
+                        success: function (data) {
+                            children = data;
+                        }
+
+                    });
+                    generateChildJson(children);
+                    callback.call(this, children);
+                    /*else{
+                     callback.call(this,);
+                     }*/
+                }
+            },
+            "types": {
+                "default": {
+                    "icon": "glyphicon glyphicon-flash"
+                },
+                "file": {
+                    "icon": "glyphicon glyphicon-ok"
+                }
+            },
+            "plugins": ["dnd"/*, "state"*/, "types", /*"checkbox",*/ "wholerow"]
+        })
+        }
+        function generateChildJson(childArray) {
+            for (var i = 0; i < childArray.length; i++) {
+                var child = childArray[i];
+                if (child.type == 'directory') {
+                    child.children = true;
+                    child.icon = "jstree-folder";
+                } else {
+                    child.icon = "jstree-file";
+                }
+            }
         }
     </script>
 </div>
