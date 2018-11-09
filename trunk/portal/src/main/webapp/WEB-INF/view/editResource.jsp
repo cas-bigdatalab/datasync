@@ -342,17 +342,64 @@
         </div>
     </div>
 </div>
+<input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
 <input type="hidden" id="imgPath" val="">
 <script type="text/html" id="dataRelationshipList">
     {{each list as value i}}
     <div class="col-md-4">
         <label>
-            <input type="checkbox" name="resTable" value="{{value}}" valName="{{value}}">
+            <input type="checkbox" name="resTable"  valName="{{value}}" keyval="{{value}}">
             <span style="word-break: break-all">{{value}}</span>
         </label>
     </div>
     {{/each}}
 </script>
+<div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
+    <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                        id="editTableFieldComsCloseId"></button>
+                <h4 class="modal-title" id="relationalDatabaseModalTitle">编辑表字段注释</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="portlet box green-haze" style="border:0;">
+                            <div class="portlet-title">
+                                <ul class="nav nav-tabs" style="float:left;">
+                                    <li class="active" style="display: none">
+                                        <a href="#editTableFieldComsId" data-toggle="tab"
+                                           id="editTableDataAndComsButtonId" aria-expanded="true">
+                                            编辑 </a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="#previewTableDataAndComsId" id="previewTableDataAndComsButtonId"
+                                           data-toggle="tab" aria-expanded="false">
+                                            预览 </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tab-content"
+                                 style="background-color: white;min-height:300px;max-height:70%;padding-top: 20px ; overflow: scroll;">
+                                <div class="tab-pane active" id="editTableFieldComsId">
+                                </div>
+                                <div class="tab-pane" id="previewTableDataAndComsId">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button"  data-dismiss="modal" class="btn green">保存
+                </button>
+                <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
+            </div>
+        </div>
+    </div>
+</div>
+<%@ include file="./tableFieldComsTmpl.jsp" %>
 </body>
 
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
@@ -365,7 +412,8 @@
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
-
+    <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
+    <script src="${ctx}/resources/js/jquery.json.min.js"></script>
     <script type="text/javascript">
         var ctx = '${ctx}';
         var sdoId = "${resourceId}";
@@ -477,34 +525,13 @@
         $("#task_phone").on("change",function () {
             $("[name='data_phone']").hide()
         })
-        /*$("#permissions").on("change",function () {
-            var $selEle=$("#permissions option:selected")
-            var valStr = $selEle.val();
-            if(valStr ==""){
-                return
-            }
-            $selEle.remove()
-            $(".permissions-wrap").append("<div class='permissions-word'> <p class='tagname'>"+valStr+"</p> <span class='closeWord'>×</span> </div>");
-
-        })*/
+        $(".undeslist").delegate("input","click",function () {
+            staticSourceTableChoice(1,this,sub,$(this).attr("keyval"),"dataResource")
+            $("#previewTableDataAndComsButtonId").click()
+        })
         $(".button-submit").click(function () {
             addResourceThirdStep()
         })
-        /*$(".key-wrap").delegate(".closeWord","click",function () {
-            var index = $(".closeWord").index($(this))
-            $(this).parent().remove()
-            tagNames.splice(index,1)
-            if(tagNames==0){
-                $("#key_work").show();
-            }
-
-        })*/
-       /* $(".permissions-wrap").delegate(".closeWord","click",function () {
-            $(this).parent().remove()
-            var str =$(this).parent().find(".tagname").text()
-            $("#permissions").append("<option value="+str +">"+ str+"</option>")
-
-        })*/
         initCenterResourceCatalogTree($("#jstree-demo"));
         relationalDatabaseTableList();
 
@@ -595,22 +622,6 @@
                 }
             })
         }
-        /*function addKeyWords() {
-            var newStr = $("#addWorkStr").val()
-            if(newStr =="" ||newStr.trim() == ""){
-                return
-            }
-            for(var i=0;i<tagNames.length;i++){
-                if(newStr ==tagNames[i]){
-                    toastr["error"]("不可添加重复标签");
-                    return
-                }
-            }
-            tagNames.push(newStr)
-            $(".key-wrap").append("<div class='key-word'> <p class='tagname'>"+newStr+"</p> <span class='closeWord'>×</span> </div>");
-            $("#addWorkStr").val("")
-            $("#key_work").hide();
-        }*/
 
         function addResourceFirstStep() {
             firstFlag=false
@@ -784,7 +795,7 @@
                     introduction:$("#dataDescribeID").val(),
                     keyword:keywordStr,
                     catalogId:$("#centerCatalogId").val(),
-                    createdByOrganization:$("#dataSourceDesID").val()
+                    createdByOrganization:$("#dataSourceDesID").val(),
                     startTime:firstTime,
                     endTime:lastTime,
                     email:$("#task_email").val(),
@@ -809,22 +820,21 @@
                     var totalList = JSON.parse(data).resource
                     console.log(JSON.parse(data));
                     $("#task_title").val(totalList.title)
+                    $("#task_email").val(totalList.email)
+                    $("#task_phone").val(totalList.phoneNum)
+                    $('.selectData:eq(0)').val(totalList.startTime)
+                    $('.selectData:eq(1)').val(totalList.endTime)
                     $("#dataDescribeID").val(totalList.introduction)
                     var path = "${ctx}/"+totalList.imagePath+"_cut.jpg";
                     $('#cutimg').attr('src',path);
                     $('#imgPath').val(totalList.imagePath);
                     publicType =  totalList.publicType
-                    /*var keyList  = totalList.keyword.split(";")*/
                     $("#select2_tags").val(totalList.keyword)
                     $("#select2_tags").select2({
                         tags: true,
                         multiple: true,
                         tags:[""],
                     });
-                    /*tagNames=keyList.slice(0,keyList.length-1)
-                    for(var i=0;i<tagNames.length;i++){
-                        $(".key-wrap").append("<div class='key-word'> <p class='tagname'>"+tagNames[i]+"</p> <span class='closeWord'>×</span> </div>");
-                    }*/
                     $("#dataSourceDesID").val(totalList.createdByOrganization)
                     console.log(totalList.publicContent)
 
@@ -856,22 +866,6 @@
                     for(var i=0;i<userList.length;i++){
                         $('#permissions').select2().val(userList[i]).trigger("change");
                     }
-                    /*$.each(userList, function(index, item){
-                        console.log(item);
-                        groupUsersSelect2.val(item).trigger("change");
-                        groupUsersSelect2.change();
-                    });*/
-
-                    /*$("#permissions option").each(function () {
-                        for(var i=0;i<userList.length-1;i++){
-                            if($(this).val() ==userList[i] ){
-                                $(this).remove()
-                            }
-                        }
-                    })*/
-                    /*for(var i=0;i<userList.length-1;i++){
-                        $(".permissions-wrap").append("<div class='permissions-word'> <p class='tagname'>"+userList[i]+"</p> <span class='closeWord'>×</span> </div>");
-                    }*/
                 },
                 error:function (data) {
                     console.log("请求失败")

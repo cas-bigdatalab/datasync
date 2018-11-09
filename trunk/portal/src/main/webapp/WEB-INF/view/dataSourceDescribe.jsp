@@ -208,7 +208,7 @@
                                                     * </span>
                                             </label>
                                             <div class="col-md-6" style="padding-top:14px">
-                                                <textarea name="need_checked" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;"></textarea>
+                                                <textarea name="need_checked" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;border:1px solid rgb(169, 169, 169)"></textarea>
                                                 <div class="custom-error" name="need_message" style="display: none">请输入描述信息</div>
                                             </div>
 
@@ -233,7 +233,7 @@
                                             <label class="control-label col-md-3">来源<span  class="required">
                                                     * </span></label>
                                             <div class="col-md-6" id="dataSourceDes" style="padding-top:14px">
-                                                <textarea name="need_checked" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;"></textarea>
+                                                <textarea name="need_checked" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;border:1px solid rgb(169, 169, 169)"></textarea>
                                                 <div class="custom-error" name="need_message" style="display: none">请输入来源</div>
                                             </div>
 
@@ -316,12 +316,13 @@
         </div>
     </div>
 </div>
+<input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
 <input type="hidden" id="imgPath" val="">
 <script type="text/html" id="dataRelationshipList">
     {{each list as value i}}
     <div class="col-md-4">
         <label>
-            <input type="checkbox checkRelShow" name="resTable" value="{{value}}">
+            <input type="checkbox" name="resTable" keyval="{{value}}">
             <span style="word-break: break-all">{{value}}</span>
         </label>
     </div>
@@ -341,12 +342,12 @@
                         <div class="portlet box green-haze" style="border:0;">
                             <div class="portlet-title">
                                 <ul class="nav nav-tabs" style="float:left;">
-                                    <li class="active">
+                                    <li class="active" style="display: none">
                                         <a href="#editTableFieldComsId" data-toggle="tab"
                                            id="editTableDataAndComsButtonId" aria-expanded="true">
                                             编辑 </a>
                                     </li>
-                                    <li class="">
+                                    <li class="active">
                                         <a href="#previewTableDataAndComsId" id="previewTableDataAndComsButtonId"
                                            data-toggle="tab" aria-expanded="false">
                                             预览 </a>
@@ -365,7 +366,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="editTableFieldComsSaveId" data-dismiss="modal" class="btn green">保存
+                <button type="button"  data-dismiss="modal" class="btn green">保存
                 </button>
                 <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
             </div>
@@ -377,16 +378,17 @@
 
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
-    <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
+    <%--<script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>--%>
     <script type="text/javascript" src="${ctx}/resources/js/jquery.Jcrop.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/jquery-form/jquery.form.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.js"></script>
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
-    <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
     <script src="${ctx}/resources/js/metaTemplate.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2_locale_zh-CN.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
+    <script src="${ctx}/resources/js/jquery.json.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
     <script type="text/javascript">
         var ctx = '${ctx}';
@@ -518,37 +520,15 @@
         $("#task_phone").on("change",function () {
             $("[name='data_phone']").hide()
         })
-        $(".undeslist").delegate(".checkRelShow","click",function () {
-            staticSourceTableChoice(1,this,sub,$(this).val(),"dataResource")
+        $(".undeslist").delegate("input","click",function () {
+            staticSourceTableChoice(1,this,sub,$(this).attr("keyval"),"dataResource")
+            $("#previewTableDataAndComsButtonId").click()
         })
-        /*$("#permissions").on("change",function () {
-            var $selEle=$("#permissions option:selected")
-            var valStr = $selEle.val();
-            if(valStr ==""){
-                return
-            }
-            $selEle.remove()
-            $(".permissions-wrap").append("<div class='permissions-word'> <p class='tagname'>"+valStr+"</p> <span class='closeWord'>×</span> </div>");
 
-        })*/
         $(".button-submit").click(function () {
             addResourceThirdStep()
         })
-        /*$(".key-wrap").delegate(".closeWord","click",function () {
-            var index = $(".closeWord").index($(this))
-            $(this).parent().remove()
-            tagNames.splice(index,1)
-            if(tagNames==0){
-                $("#key_work").show();
-            }
 
-        })*/
-       /* $(".permissions-wrap").delegate(".closeWord","click",function () {
-            $(this).parent().remove()
-            var str =$(this).parent().find(".tagname").text()
-            $("#permissions").append("<option value="+str +">"+ str+"</option>")
-
-        })*/
         initCenterResourceCatalogTree($("#jstree-demo"));
         relationalDatabaseTableList();
 
@@ -628,7 +608,6 @@
                 url:ctx+"/resource/relationalDatabaseTableList",
                 type:"GET",
                 success:function (data) {
-                    console.log(data)
                     $(".undeslist").empty();
                     var List =JSON.parse(data)
                     var tabCon = template("dataRelationshipList", List);
@@ -639,22 +618,7 @@
                 }
             })
         }
-       /* function addKeyWords() {
-            var newStr = $("#addWorkStr").val()
-            if(newStr =="" ||newStr.trim() == ""){
-                return
-            }
-            for(var i=0;i<tagNames.length;i++){
-                if(newStr ==tagNames[i]){
-                    toastr["error"]("不可添加重复标签");
-                    return
-                }
-            }
-            tagNames.push(newStr)
-            $(".key-wrap").append("<div class='key-word'> <p class='tagname'>"+newStr+"</p> <span class='closeWord'>×</span> </div>");
-            $("#addWorkStr").val("")
-            $("#key_work").hide();
-        }*/
+
 
         function addResourceFirstStep() {
             firstFlag=false
@@ -704,8 +668,8 @@
                     keyword:keywordStr,
                     catalogId:$("#centerCatalogId").val(),
                     createdByOrganization:$("#dataSourceDesID").val(),
-                    startTime:firstTime,
-                    endTime:lastTime,
+                    startTime:$('.selectData:eq(0)').val(),
+                    endTime:$('.selectData:eq(1)').val(),
                     email:$("#task_email").val(),
                     phoneNum:$("#task_phone").val()
                 },
@@ -878,7 +842,6 @@
                 dataType: "json",
                 async: false,
                 success: function (data) {
-                    console.log(data)
                     root = data;
                 }
             });
@@ -910,6 +873,7 @@
                 }
             }
         }
+
     </script>
 </div>
 
