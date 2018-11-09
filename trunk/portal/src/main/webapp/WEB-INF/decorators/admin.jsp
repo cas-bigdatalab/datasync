@@ -244,9 +244,7 @@
                         <div style="height: 70px"></div>
                     </li>
 
-<%--
                 <shiro:hasRole name="root">
---%>
 
 
                     <li class="start">
@@ -296,9 +294,7 @@
                             </li>
                         </ul>
                     </li>
-<%--
                 </shiro:hasRole>
---%>
                     <%-- </shiro:hasRole>
                      <shiro:hasRole name="管理员">--%>
                     <%--<li>
@@ -324,9 +320,7 @@
                             <span class="arrow "></span>
                         </a>
                     </li>--%>
-<%--
                     <shiro:hasRole name="admin">
---%>
 
                     <li>
                         <a href="${ctx}/dataConfiguration">
@@ -342,9 +336,7 @@
                             <span class="arrow "></span>
                         </a>
                     </li>
-<%--
                     </shiro:hasRole>
---%>
 
                 </ul>
                 <!-- END SIDEBAR MENU -->
