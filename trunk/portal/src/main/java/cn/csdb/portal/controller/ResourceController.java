@@ -27,6 +27,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.sql.Connection;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -239,11 +241,11 @@ public class ResourceController {
                                             @RequestParam(name = "introduction") String introduction,
                                             @RequestParam(name = "keyword") String keyword,
                                             @RequestParam(name = "catalogId") String catalogId,
-                                            @RequestParam(name = "createdByOrganization") String createdByOrganization
-                                            /*@RequestParam(name = "startTime") String startTime,
+                                            @RequestParam(name = "createdByOrganization") String createdByOrganization,
+                                            @RequestParam(name = "startTime") String startTime,
                                             @RequestParam(name = "endTime") String endTime,
                                             @RequestParam(name = "email") String email,
-                                            @RequestParam(name = "phoneNum") String phoneNum*/
+                                            @RequestParam(name = "phoneNum") String phoneNum
     ) {
         Subject subject = subjectService.findBySubjectCode("sdc002");
         JSONObject jsonObject = new JSONObject();
@@ -254,6 +256,14 @@ public class ResourceController {
         resource.setKeyword(keyword);
         resource.setCatalogId(catalogId);
         resource.setCreatedByOrganization(createdByOrganization);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        ParsePosition pos = new ParsePosition(0);
+        Date startDate = formatter.parse(startTime, pos);
+        Date endDate = formatter.parse(endTime, pos);
+        resource.setStartTime(startDate);
+        resource.setEndTime(endDate);
+        resource.setEmail(email);
+        resource.setPhoneNum(phoneNum);
         resource.setSubjectCode(subject.getSubjectCode());
         resource.setResState("未完成");
         resource.setCreationDate(new Date());
@@ -375,7 +385,11 @@ public class ResourceController {
                                             @RequestParam(name = "introduction") String introduction,
                                             @RequestParam(name = "keyword") String keyword,
                                             @RequestParam(name = "catalogId") String catalogId,
-                                            @RequestParam(name = "createdByOrganization") String createdByOrganization) {
+                                            @RequestParam(name = "createdByOrganization") String createdByOrganization,
+                                            @RequestParam(name = "startTime") String startTime,
+                                            @RequestParam(name = "endTime") String endTime,
+                                            @RequestParam(name = "email") String email,
+                                            @RequestParam(name = "phoneNum") String phoneNum) {
         Subject subject = subjectService.findBySubjectCode("sdc002");
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
@@ -385,6 +399,14 @@ public class ResourceController {
         resource.setKeyword(keyword);
         resource.setCatalogId(catalogId);
         resource.setCreatedByOrganization(createdByOrganization);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        ParsePosition pos = new ParsePosition(0);
+        Date startDate = formatter.parse(startTime, pos);
+        Date endDate = formatter.parse(endTime, pos);
+        resource.setStartTime(startDate);
+        resource.setEndTime(endDate);
+        resource.setEmail(email);
+        resource.setPhoneNum(phoneNum);
         resource.setSubjectCode(subject.getSubjectCode());
         resource.setResState("未完成");
         resource.setUpdateDate(new Date());
