@@ -145,14 +145,14 @@ public class TableFieldComsService {
             tableFieldComs.setCreateTime(new Date());
             tableFieldComs.setUriEx(uriEx);
             tableFieldComs.setUriHash(uriHash);
-            tableFieldComsDao.saveTableFieldComs(tableFieldComs,tableName,state);
+            tableFieldComsDao.saveTableFieldComs(tableFieldComs,subject.getSubjectCode(),subject.getDbName(),tableName,state);
             return true;
         }
         tableFieldComs.setUpdateTime(new Date());
         String fieldComs = tableFieldComs.getFieldComs();
         if (StringUtils.isBlank(fieldComs)) {
             tableFieldComs.setFieldComs(fieldComs);
-            tableFieldComsDao.updateFieldComs(tableFieldComs,tableName,state);
+            tableFieldComsDao.updateFieldComs(tableFieldComs,subject.getSubjectCode(),subject.getDbName(),tableName,state);
             return true;
         }
         List<TableInfo> tableInfosPre = JSON.parseArray(fieldComs, TableInfo.class);
@@ -167,7 +167,7 @@ public class TableFieldComsService {
                 return true;
             }
         }));
-        tableFieldComsDao.updateFieldComs(tableFieldComs,tableName,state);
+        tableFieldComsDao.updateFieldComs(tableFieldComs,subject.getSubjectCode(),subject.getDbName(),tableName,state);
         return true;
     }
 

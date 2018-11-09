@@ -66,7 +66,7 @@ public class DataSourceController {
         datasrc.setPassword(subject.getDbPassword());
         if("0".equals(flag)) {
             List<String> list = dataSrcService.relationalDatabaseTableList(datasrc);
-            List<Described_Table> list_describe = tableFieldComsDao.queryDescribeTable();
+            List<Described_Table> list_describe = tableFieldComsDao.queryDescribeTable(subject.getDbName());
             for (Described_Table described_table : list_describe) {
                 list.remove(described_table.getTableName());
             }
@@ -74,7 +74,7 @@ public class DataSourceController {
             jsonObject.put("dataSourceName", datasrc.getDataSourceName());
         }else{
             List<String> list = new ArrayList<>();
-            List<Described_Table> list_describe = tableFieldComsDao.queryDescribeTable();
+            List<Described_Table> list_describe = tableFieldComsDao.queryDescribeTable(subject.getDbName());
             for (Described_Table described_table : list_describe) {
                 list.add(described_table.getTableName());
             }

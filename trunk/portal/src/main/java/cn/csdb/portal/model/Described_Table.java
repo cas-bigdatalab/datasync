@@ -13,6 +13,10 @@ public class Described_Table {
     private String objectId;
     @Field("tableName")
     private String tableName;
+    @Field("dbName")
+    private String dbName;
+    @Field("subjectCode")
+    private String subjectCode;
 
     public String getObjectId() {
         return objectId;
@@ -28,5 +32,21 @@ public class Described_Table {
 
     public void setTableName(String tableName) {
         this.tableName = tableName;
+    }
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+    }
+
+    public String getSubjectCode() {
+        return subjectCode;
+    }
+
+    public void setSubjectCode(String subjectCode) {
+        this.subjectCode = subjectCode;
     }
 }
