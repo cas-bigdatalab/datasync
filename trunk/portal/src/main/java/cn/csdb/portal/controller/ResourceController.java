@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.sql.Connection;
 import java.text.ParsePosition;
@@ -142,8 +143,9 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping(value = "relationalDatabaseTableList")
-    public JSONObject relationalDatabaseTableList() {
-        Subject subject = subjectService.findBySubjectCode("sdc002");
+    public JSONObject relationalDatabaseTableList(HttpSession session) {
+        String subjectCode = session.getAttribute("SubjectCode").toString();
+        Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
         IDataSource dataSource = DataSourceFactory.getDataSource("mysql");
         Connection connection = dataSource.getConnection(subject.getDbHost(), subject.getDbPort(),
@@ -185,8 +187,9 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping(value = "fileSourceFileList")
-    public List<JSONObject> fileSourceFileList() {
-        Subject subject = subjectService.findBySubjectCode("sdc002");
+    public List<JSONObject> fileSourceFileList(HttpSession session) {
+        String subjectCode = session.getAttribute("SubjectCode").toString();
+        Subject subject = subjectService.findBySubjectCode(subjectCode);
         List<JSONObject> jsonObjects = resourceService.fileSourceFileList(subject.getFtpFilePath());
         return jsonObjects;
     }
@@ -236,7 +239,8 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping(value = "addResourceFirstStep")
-    public JSONObject saveResourceFirstStep(@RequestParam(name = "title") String title,
+    public JSONObject saveResourceFirstStep(HttpSession session,
+                                            @RequestParam(name = "title") String title,
                                             @RequestParam(name = "imagePath", required = false) String imagePath,
                                             @RequestParam(name = "introduction") String introduction,
                                             @RequestParam(name = "keyword") String keyword,
@@ -247,7 +251,8 @@ public class ResourceController {
                                             @RequestParam(name = "email") String email,
                                             @RequestParam(name = "phoneNum") String phoneNum
     ) {
-        Subject subject = subjectService.findBySubjectCode("sdc002");
+        String subjectCode = session.getAttribute("SubjectCode").toString();
+        Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = new cn.csdb.portal.model.Resource();
         resource.setTitle(title);
@@ -284,10 +289,12 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping(value = "addResourceSecondStep")
-    public JSONObject addResourceSecondStep(@RequestParam(name = "resourceId") String resourceId,
+    public JSONObject addResourceSecondStep(HttpSession session,
+                                            @RequestParam(name = "resourceId") String resourceId,
                                             @RequestParam(name = "publicType") String publicType,
                                             @RequestParam(name = "dataList") String dataList) {
-        Subject subject = subjectService.findBySubjectCode("sdc002");
+        String subjectCode = session.getAttribute("SubjectCode").toString();
+        Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         if (publicType.equals("mysql")) {
@@ -339,9 +346,11 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping(value = "addResourceThirdStep")
-    public JSONObject addResourceThirdStep(@RequestParam(name = "resourceId") String resourceId,
+    public JSONObject addResourceThirdStep(HttpSession session,
+                                           @RequestParam(name = "resourceId") String resourceId,
                                            @RequestParam(name = "userGroupIdList") String userGroupIdList) {
-        Subject subject = subjectService.findBySubjectCode("sdc002");
+        String subjectCode = session.getAttribute("SubjectCode").toString();
+        Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setUserGroupId(userGroupIdList);
@@ -379,7 +388,8 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping(value = "editResourceFirstStep")
-    public JSONObject editResourceFirstStep(@RequestParam(name = "resourceId") String resourceId,
+    public JSONObject editResourceFirstStep(HttpSession session,
+                                            @RequestParam(name = "resourceId") String resourceId,
                                             @RequestParam(name = "title") String title,
                                             @RequestParam(name = "imagePath", required = false) String imagePath,
                                             @RequestParam(name = "introduction") String introduction,
@@ -390,7 +400,8 @@ public class ResourceController {
                                             @RequestParam(name = "endTime") String endTime,
                                             @RequestParam(name = "email") String email,
                                             @RequestParam(name = "phoneNum") String phoneNum) {
-        Subject subject = subjectService.findBySubjectCode("sdc002");
+        String subjectCode = session.getAttribute("SubjectCode").toString();
+        Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setTitle(title);
@@ -426,10 +437,12 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping(value = "editResourceSecondStep")
-    public JSONObject editResourceSecondStep(@RequestParam(name = "resourceId") String resourceId,
+    public JSONObject editResourceSecondStep(HttpSession session,
+                                             @RequestParam(name = "resourceId") String resourceId,
                                             @RequestParam(name = "publicType") String publicType,
                                             @RequestParam(name = "dataList") String dataList) {
-        Subject subject = subjectService.findBySubjectCode("sdc002");
+        String subjectCode = session.getAttribute("SubjectCode").toString();
+        Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         if (publicType.equals("mysql")) {
@@ -478,9 +491,11 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping(value = "editResourceThirdStep")
-    public JSONObject editResourceThirdStep(@RequestParam(name = "resourceId") String resourceId,
+    public JSONObject editResourceThirdStep(HttpSession session,
+                                            @RequestParam(name = "resourceId") String resourceId,
                                            @RequestParam(name = "userGroupIdList") String userGroupIdList) {
-        Subject subject = subjectService.findBySubjectCode("sdc002");
+        String subjectCode = session.getAttribute("SubjectCode").toString();
+        Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setUserGroupId(userGroupIdList);
