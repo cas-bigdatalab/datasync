@@ -44,22 +44,26 @@ public class MyRealm extends AuthorizingRealm {
         Set<String> permissions = userService.getPermissions(userName);
 */
         //为当前用户赋予对应角色和权限
-        if("系统管理员".equals(user.getGroups())){
-            Set<String>roles = new HashSet<>();
-            roles.add("root");
-            info.setRoles(roles);
-        }else if ("专题库管理员".equals(user.getGroups())){
-            Set<String>roles = new HashSet<>();
-            roles.add("admin");
-            info.setRoles(roles);
-        }else{
+        String[] group = user.getGroups().split(",");
+        for(String str : group) {
+            if (str.equals("系统管理员")) {
+                Set<String> roles = new HashSet<>();
+                roles.add("root");
+                info.setRoles(roles);
+                break;
+            } else if (str.equals("主题库管理员")) {
+                Set<String> roles = new HashSet<>();
+                roles.add("admin");
+                info.setRoles(roles);
+            } else {
 
-        }
+            }
 /*
         info.setStringPermissions(permissions);
 */
-
+        }
         return info;
+
     }
 
     /**
