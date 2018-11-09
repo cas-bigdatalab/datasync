@@ -189,7 +189,7 @@
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-default">
-                        <li><a href="logout">安全退出</a></li>
+                        <li><a href="logout"><i class="icon-key"></i>&nbsp;安全退出</a></li>
 <%--
                         <li><a href="#">Another action</a></li>
 --%>

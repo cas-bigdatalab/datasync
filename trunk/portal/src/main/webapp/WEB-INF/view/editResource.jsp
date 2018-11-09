@@ -107,10 +107,6 @@
 
                                     <form class="form-horizontal" id="submit_form"
                                           method="POST">
-
-
-
-
                                         <div class="form-group">
                                             <label class="control-label col-md-3" >数据集名称 <span class="required">
 													* </span>
@@ -122,38 +118,29 @@
                                             </div>
 
                                         </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3" >邮箱号<span >
+                                                    * </span>
+                                            </label>
+                                            <div class="col-md-4" style="padding-top:14px">
+                                                <input type="email" class="form-control"
+                                                       id="task_email" style="border: 1px solid rgb(169, 169, 169)">
+                                                <div class="custom-error" name="data_email" style="display: none">请输入正确的邮箱地址</div>
+                                            </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3" >电话号码 <span >
+                                                    * </span>
+                                            </label>
+                                            <div class="col-md-4" style="padding-top:14px">
+                                                <input type="text" class="form-control"
+                                                       id="task_phone" style="border: 1px solid rgb(169, 169, 169)">
+                                                <div class="custom-error" name="data_phone" style="display: none">请输入正确的手机号</div>
+                                            </div>
+
+                                        </div>
                                     </form>
-                                    <%--<div class="form-group">
-                                             <label class="control-label col-md-3">图片<span >
-                                                     * </span>
-                                             </label>
-                                             <div class="col-md-9">
-                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                     <div class="fileinput-preview thumbnail"
-                                                          data-trigger="fileinput"
-                                                          style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
-                                                     </div>
-                                                     <div>
-                                                             <span class="btn default btn-file">
-                                                             <span class="fileinput-new">
-                                                             选择一个图片</span>
-                                                             <span class="fileinput-exists">
-                                                             换一个</span>
-                                                             <input id="imagePath" type="file" name="imageFile">
-                                                             </span>
-                                                         <a href="#" class="btn red fileinput-exists"
-                                                            data-dismiss="fileinput">
-                                                             删除 </a>
-                                                     </div>
-                                                 </div>
-                                                 <div class="clearfix margin-top-10">
-                                                 <span class="label label-danger">
-                                                 注意! </span>
-                                                     图片只能在 IE10+, FF3.6+, Safari6.0+, Chrome6.0+ 和
-                                                     Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。
-                                                 </div>
-                                             </div>
-                                         </div>--%>
                                     <div style="overflow: hidden" class="row">
                                         <div class="form-group">
                                             <label class="control-label col-md-3" style="text-align: right">图片<span >
@@ -191,7 +178,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                        <form class="form-horizontal">
+                                    <form class="form-horizontal">
                                             <div class="form-group">
                                                 <label class="control-label col-md-3" >资源目录<span  >
 													* </span>
@@ -203,7 +190,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-md-3">选择时间<span  class="required">
+                                                <label class="control-label col-md-3">选择时间<span >
                                                     * </span></label>
                                                 <div class="col-md-6"  style="padding-top:14px">
                                                     <div class="input-group input-daterange">
@@ -212,9 +199,8 @@
                                                         <div class="input-group-addon">to</div>
                                                         <input type="text" class="form-control selectData"
                                                                data-date-format="yyyy-mm-dd" placeholder="起始时间" readonly>
-                                                        <input type="text" id="firstTime" hidden>
-                                                        <input type="text" id="lastTime" hidden>
                                                     </div>
+                                                    <div class="custom-error" id="data_time" style="display: none">请添正确选择日期</div>
                                                 </div>
                                             </div>
                                             <div class="form-group dataLicenseInputGroup">
@@ -228,21 +214,21 @@
 
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-md-3">关键词<span>
-													* </span></label>
-                                                <div class="checkbox-list col-md-5" style="padding-top: 14px">
-                                                    <%--<div style="margin-bottom: 3px;line-height: 24px">
-                                                        <input type="text" style="font-size: 16px" id="addWorkStr">
-                                                        <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
-                                                    </div>--%>
-                                                        <input type="hidden" class="form-control" id="select2_tags" value="" name="select2tags">
-                                                    <%--
-                                                    <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden;padding-left: 5px" class="key-wrap"></div>
---%>
-                                                    <div class="custom-error" id="key_work" style="display: none">请添加至少一个关键词</div>
+                                            <label class="control-label col-md-3" id="lab_key">关键词<span class="required">
+                                                    * </span></label>
+                                            <div class="checkbox-list col-md-5" style="padding-top:14px">
+                                                <%--<div style="margin-bottom: 3px;line-height: 24px">
+                                                    <input type="text" style="font-size: 16px" id="addWorkStr">
+                                                    <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
+                                                </div>--%>
+                                                <input type="hidden" class="form-control" id="select2_tags" value="" name="need_checked">
 
-                                                </div>
+                                                <%--
+                                                <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden;padding-left: 3px" class="key-wrap"></div>
+--%>
+                                                <div class="custom-error" name="need_message" id="key_work" style="display: none">请添加至少两个关键词</div>
                                             </div>
+                                        </div>
                                             <div class="form-group" style="padding-top: 14px">
                                                 <label class="control-label col-md-3">来源<span  class="required">
 													* </span></label>
@@ -485,6 +471,12 @@
                 $(".required:eq("+$index +")").parent().removeClass("custom-error")
             }
         })
+        $("#task_email").on("change",function () {
+            $("[name='data_email']").hide()
+        })
+        $("#task_phone").on("change",function () {
+            $("[name='data_phone']").hide()
+        })
         /*$("#permissions").on("change",function () {
             var $selEle=$("#permissions option:selected")
             var valStr = $selEle.val();
@@ -646,6 +638,11 @@
                 firstFlag=true
                 return
             }
+            if(firstTime ==0 || lastTime ==0|| firstTime>lastTime){
+                $("#data_time").show();
+                firstFlag=true
+                return
+            }
             firstFlag=false
             var keywordStr = $("#select2_tags").val()
             /*for(var i=0;i<tagNames.length;i++){
@@ -751,20 +748,30 @@
                     return
                 }
             })
-            if(firstFlag){
-                return
-            }
-            if($("#select2_tags").val() ==""){
+            if($("#select2_tags").val().split(",").length <2){
+                $("#lab_key").addClass("custom-error")
                 $("#key_work").show()
                 firstFlag=true
-                return
             }
             if($("#centerCatalogId").val() ==""){
                 $("#file_dir").show();
                 firstFlag=true
+            }
+            if(firstTime ==0 || lastTime ==0|| firstTime>lastTime){
+                $("#data_time").show();
+                firstFlag=true
+            }
+            if(!(/^1[34578]\d{9}$/.test($("#task_phone").val()))){
+                $("[name='data_phone']").show()
+                firstFlag=true
+            }
+            if(!testEmail.test($("#task_email").val())){
+                $("[name='data_email']").show()
+                firstFlag=true
+            }
+            if(firstFlag){
                 return
             }
-            firstFlag=false;
             var keywordStr = $("#select2_tags").val()
 
             $.ajax({
@@ -778,6 +785,10 @@
                     keyword:keywordStr,
                     catalogId:$("#centerCatalogId").val(),
                     createdByOrganization:$("#dataSourceDesID").val()
+                    startTime:firstTime,
+                    endTime:lastTime,
+                    email:$("#task_email").val(),
+                    phoneNum:$("#task_phone").val()
                 },
                 success:function (data) {
                 },

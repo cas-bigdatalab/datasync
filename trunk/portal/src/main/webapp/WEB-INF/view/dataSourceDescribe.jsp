@@ -119,24 +119,24 @@
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" >邮箱号<span class="required">
+                                            <label class="control-label col-md-3" >邮箱号<span >
                                                     * </span>
                                             </label>
                                             <div class="col-md-4" style="padding-top:14px">
-                                                <input type="email" class="form-control" name="need_checked"
+                                                <input type="email" class="form-control"
                                                        id="task_email" style="border: 1px solid rgb(169, 169, 169)">
-                                                <div class="custom-error" name="need_message" style="display: none">请输入数据集名称</div>
+                                                <div class="custom-error" name="data_email" style="display: none">请输入正确的邮箱地址</div>
                                             </div>
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" >电话号码 <span class="required">
+                                            <label class="control-label col-md-3" >电话号码 <span >
                                                     * </span>
                                             </label>
                                             <div class="col-md-4" style="padding-top:14px">
-                                                <input type="text" class="form-control" name="need_checked"
+                                                <input type="text" class="form-control"
                                                        id="task_phone" style="border: 1px solid rgb(169, 169, 169)">
-                                                <div class="custom-error" name="need_message" style="display: none">请输入数据集名称</div>
+                                                <div class="custom-error" name="data_phone" style="display: none">请输入正确的手机号</div>
                                             </div>
 
                                         </div>
@@ -190,7 +190,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">选择时间<span  class="required">
+                                            <label class="control-label col-md-3">选择时间<span >
                                                     * </span></label>
                                             <div class="col-md-6"  style="padding-top:14px">
                                                 <div class="input-group input-daterange">
@@ -199,9 +199,8 @@
                                                     <div class="input-group-addon">to</div>
                                                     <input type="text" class="form-control selectData"
                                                            data-date-format="yyyy-mm-dd" placeholder="起始时间" readonly>
-                                                    <input type="text" id="firstTime" hidden>
-                                                    <input type="text" id="lastTime" hidden>
                                                 </div>
+                                                <div class="custom-error" id="data_time" style="display: none">请添正确选择日期</div>
                                             </div>
                                         </div>
                                         <div class="form-group dataLicenseInputGroup">
@@ -215,19 +214,19 @@
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">关键词<span>
+                                            <label class="control-label col-md-3" id="lab_key">关键词<span class="required">
                                                     * </span></label>
                                             <div class="checkbox-list col-md-5" style="padding-top:14px">
                                                 <%--<div style="margin-bottom: 3px;line-height: 24px">
                                                     <input type="text" style="font-size: 16px" id="addWorkStr">
                                                     <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
                                                 </div>--%>
-                                                    <input type="hidden" class="form-control" id="select2_tags" value="" name="select2tags">
+                                                    <input type="hidden" class="form-control" id="select2_tags" value="" name="need_checked">
 
                                                 <%--
                                                 <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden;padding-left: 3px" class="key-wrap"></div>
 --%>
-                                                <div class="custom-error" id="key_work" style="display: none">请添加至少一个关键词</div>
+                                                <div class="custom-error" name="need_message" id="key_work" style="display: none">请添加至少两个关键词</div>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -257,25 +256,6 @@
                                         </div>
                                         <div class="col-md-9" >
                                             <div class="row undeslist" >
-                                                <div class="col-md-4">
-                                                    <label>
-                                                        <input type="checkbox">
-                                                        <span>dictionay</span>
-                                                    </label>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label>
-                                                        <input type="checkbox">
-                                                        <span>dictionay</span>
-                                                    </label>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label>
-                                                        <input type="checkbox">
-                                                        <span>dictionay</span>
-                                                    </label>
-                                                </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -341,12 +321,57 @@
     {{each list as value i}}
     <div class="col-md-4">
         <label>
-            <input type="checkbox" name="resTable" value="{{value}}">
+            <input type="checkbox checkRelShow" name="resTable" value="{{value}}">
             <span style="word-break: break-all">{{value}}</span>
         </label>
     </div>
     {{/each}}
 </script>
+<div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
+    <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                        id="editTableFieldComsCloseId"></button>
+                <h4 class="modal-title" id="relationalDatabaseModalTitle">编辑表字段注释</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="portlet box green-haze" style="border:0;">
+                            <div class="portlet-title">
+                                <ul class="nav nav-tabs" style="float:left;">
+                                    <li class="active">
+                                        <a href="#editTableFieldComsId" data-toggle="tab"
+                                           id="editTableDataAndComsButtonId" aria-expanded="true">
+                                            编辑 </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="#previewTableDataAndComsId" id="previewTableDataAndComsButtonId"
+                                           data-toggle="tab" aria-expanded="false">
+                                            预览 </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="tab-content"
+                                 style="background-color: white;min-height:300px;max-height:70%;padding-top: 20px ; overflow: scroll;">
+                                <div class="tab-pane active" id="editTableFieldComsId">
+                                </div>
+                                <div class="tab-pane" id="previewTableDataAndComsId">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="editTableFieldComsSaveId" data-dismiss="modal" class="btn green">保存
+                </button>
+                <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
+            </div>
+        </div>
+    </div>
+</div>
 <%@ include file="./tableFieldComsTmpl.jsp" %>
 </body>
 
@@ -360,13 +385,12 @@
     <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
     <script src="${ctx}/resources/js/metaTemplate.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2_locale_zh-CN.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
-
     <script type="text/javascript">
         var ctx = '${ctx}';
-
-
+        var sub = '${sessionScope.SubjectCode}'
         var initNum =1;
         var firstFlag=false;
         var secondFlag=false;
@@ -374,6 +398,7 @@
         var publicType="0";
         var firstTime = 0;
         var lastTime = 0;
+        var testEmail =/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
         /*var tagNames=new Array();*/
         //将图片截图并上传功能
         $('.selectData').datepicker({
@@ -383,11 +408,12 @@
             $(this).datepicker('clearDates');
         });
         $('.selectData:eq(0)').datepicker().on("changeDate",function (ev) {
-
             firstTime = new Date(ev.date).getTime()
+            $("#data_time").hide()
         })
         $('.selectData:eq(1)').datepicker().on("changeDate",function (ev) {
             lastTime =new Date(ev.date).getTime()
+            $("#data_time").hide()
         })
 
         var api = null;
@@ -482,10 +508,18 @@
             var $index = $("[name='need_checked']").index($(this))
             if($(this).val() != "" &&$(this).val().trim()!=""){
                 $("[name='need_checked']:eq("+$index +")").removeClass("custom-error")
-                $("[name='need_message']:eq("+$index +")").removeClass("custom-error")
                 $("[name='need_message']:eq("+$index +")").hide()
                 $(".required:eq("+$index +")").parent().removeClass("custom-error")
             }
+        })
+        $("#task_email").on("change",function () {
+            $("[name='data_email']").hide()
+        })
+        $("#task_phone").on("change",function () {
+            $("[name='data_phone']").hide()
+        })
+        $(".undeslist").delegate(".checkRelShow","click",function () {
+            staticSourceTableChoice(1,this,sub,$(this).val(),"dataResource")
         })
         /*$("#permissions").on("change",function () {
             var $selEle=$("#permissions option:selected")
@@ -594,10 +628,9 @@
                 url:ctx+"/resource/relationalDatabaseTableList",
                 type:"GET",
                 success:function (data) {
+                    console.log(data)
                     $(".undeslist").empty();
                     var List =JSON.parse(data)
-                    console.log(List)
-                    console.log(List)
                     var tabCon = template("dataRelationshipList", List);
                     $(".undeslist").append(tabCon);
                 },
@@ -629,27 +662,37 @@
                 var $index = $("[name='need_checked']").index($(this))
                 if($(this).val() == "" ||$(this).val().trim()==""){
                     $("[name='need_checked']:eq("+$index +")").addClass("custom-error")
-                    $("[name='need_message']:eq("+$index +")").addClass("custom-error")
                     $("[name='need_message']:eq("+$index +")").show()
                     $(".required:eq("+$index +")").parent().addClass("custom-error")
                     firstFlag=true
                     return
                 }
             })
-            if(firstFlag){
-                return
-            }
-            if($("#select2_tags").val() ==""){
+
+            if($("#select2_tags").val().split(",").length <2){
+                $("#lab_key").addClass("custom-error")
                 $("#key_work").show()
                 firstFlag=true
-                return
             }
             if($("#centerCatalogId").val() ==""){
                 $("#file_dir").show();
                 firstFlag=true
+            }
+            if(firstTime ==0 || lastTime ==0|| firstTime>lastTime){
+                $("#data_time").show();
+                firstFlag=true
+            }
+            if(!(/^1[34578]\d{9}$/.test($("#task_phone").val()))){
+                $("[name='data_phone']").show()
+                firstFlag=true
+            }
+            if(!testEmail.test($("#task_email").val())){
+                $("[name='data_email']").show()
+                firstFlag=true
+            }
+            if(firstFlag){
                 return
             }
-            firstFlag=false
             var keywordStr = $("#select2_tags").val()
             $.ajax({
                 url:ctx+"/resource/addResourceFirstStep",
@@ -660,7 +703,11 @@
                     introduction:$("#dataDescribeID").val(),
                     keyword:keywordStr,
                     catalogId:$("#centerCatalogId").val(),
-                    createdByOrganization:$("#dataSourceDesID").val()
+                    createdByOrganization:$("#dataSourceDesID").val(),
+                    startTime:firstTime,
+                    endTime:lastTime,
+                    email:$("#task_email").val(),
+                    phoneNum:$("#task_phone").val()
                 },
                 success:function (data) {
                     var data = JSON.parse(data)
@@ -744,20 +791,29 @@
                     return
                 }
             })
-            if(firstFlag){
-                return
-            }
             if($("#select2_tags").val() ==""){
                 $("#key_work").show()
                 firstFlag=true
-                return
             }
             if($("#centerCatalogId").val() ==""){
                 $("#file_dir").show();
                 firstFlag=true
+            }
+            if(firstTime ==0 || lastTime ==0|| firstTime>lastTime){
+                $("#data_time").show();
+                firstFlag=true
+            }
+            if(!(/^1[34578]\d{9}$/.test($("#task_phone").val()))){
+                $("[name='data_phone']").show()
+                firstFlag=true
+            }
+            if(!testEmail.test($("#task_email").val())){
+                $("[name='data_email']").show()
+                firstFlag=true
+            }
+            if(firstFlag){
                 return
             }
-            firstFlag=false;
             var keywordStr = $("#select2_tags").val()
             /*for(var i=0;i<tagNames.length;i++){
                 keywordStr+=tagNames[i]+";"
@@ -772,7 +828,11 @@
                     introduction:$("#dataDescribeID").val(),
                     keyword:keywordStr,
                     catalogId:$("#centerCatalogId").val(),
-                    createdByOrganization:$("#dataSourceDesID").val()
+                    createdByOrganization:$("#dataSourceDesID").val(),
+                    startTime:firstTime,
+                    endTime:lastTime,
+                    email:$("#task_email").val(),
+                    phoneNum:$("#task_phone").val()
                 },
                 success:function (data) {
                 },
