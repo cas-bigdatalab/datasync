@@ -3,6 +3,7 @@ package cn.csdb.portal.repository;
 import cn.csdb.portal.model.User;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
+import com.mongodb.WriteResult;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -153,6 +154,34 @@ public class UserDao {
         query.addCriteria(Criteria.where("loginId").is(loginId));
         Update update = Update.update("group", group);
         mongoTemplate.upsert(query, update, "t_user");
+
+        return updatedUserCnt;
+    }
+
+    public int deleteUser(String id)
+    {
+        int deletedUserCnt = 0;
+        DBObject dbObject = QueryBuilder.start().and("_id").is(id).get();
+        Query query = new BasicQuery(dbObject);
+        WriteResult writeResult = mongoTemplate.remove(query, "t_user");
+        deletedUserCnt = writeResult.getN();
+
+        return deletedUserCnt;
+    }
+
+    public User getUserById(String id)
+    {
+        DBObject dbObject = QueryBuilder.start().and("_id").is(id).get();
+        Query query = new BasicQuery(dbObject);
+        User user = mongoTemplate.findOne(query, User.class);
+
+        return user;
+    }
+
+    public int updateUser(User user)
+    {
+        int updatedUserCnt = 1;
+        mongoTemplate.save(user);
 
         return updatedUserCnt;
     }

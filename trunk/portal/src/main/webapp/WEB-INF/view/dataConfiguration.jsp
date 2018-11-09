@@ -157,6 +157,7 @@
         </div>
     </div>
 </div>
+<input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
 <%@ include file="./tableFieldComsTmpl.jsp" %>
 
 <script type="text/html" id="systemTmpl">
@@ -193,19 +194,20 @@
     <script src="${ctx}/resources/js/metaTemplate.js"></script>
     <script>
         var ctx = '${ctx}', edit = false;
+        var sub = '${sessionScope.SubjectCode}'
         $(function () {
-            chooseTable(7,0);
+            chooseTable(sub,0);
         });
+        var sub1 = '${sessionScope.SubjectCode}'
         $("#tabDescribe li").click(function () {
             var flag = $(this).val();
-            chooseTable(7,flag);
+            chooseTable(sub1,flag);
         })
-        function chooseTable(dataSourceId,flag) {
-            $("#dataSourceId").val(dataSourceId);
+        function chooseTable(subjectCode,flag) {
             $.ajax({
                 type: "GET",
                 url: '${ctx}/relationalDatabaseTableList',
-                data: {/*dataSourceId: dataSourceId,*/"flag":flag},
+                data: {"subjectCode":subjectCode,"flag":flag},
                 dataType: "json",
                 success: function (data) {
                     var html = "<div class='form-group'>" +
@@ -213,7 +215,7 @@
                     "<div class='icheck-list' style='padding-top: 7px'>";
                     var list = data.list;
                     for (var i = 0; i < list.length; i++) {
-                        html += "<label class='col-md-6' style='padding-left: 0px'><input type='checkbox' name='mapTable' onclick=\"staticSourceTableChoice(1,this," + dataSourceId + ",'" + list[i] + "','dataResource')\" value='" + list[i] + "'>&nbsp;" + list[i] + "</label>"
+                        html += "<label class='col-md-6' style='padding-left: 0px'><input type='checkbox' name='mapTable' onclick=\"staticSourceTableChoice(1,this" + ",'" + sub1 + "','" + list[i] + "','dataResource')\" value='" + list[i] + "'>&nbsp;" + list[i] + "</label>"
                     }
                     html += "</div><input type='text' class='form-control' name='maptableinput' id='maptableinput' style='display:none;'/></div></div>";
                     if(flag=='0') {

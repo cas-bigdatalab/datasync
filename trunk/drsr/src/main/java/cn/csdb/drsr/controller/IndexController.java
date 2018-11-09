@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
@@ -31,10 +32,11 @@ public class IndexController {
     }
 
     @RequestMapping("/")
-    public ModelAndView login()
+    public ModelAndView login(HttpServletRequest request)
     {
         logger.info("登录认证页面!");
         ModelAndView mv = new ModelAndView("login");
+        mv.addObject("loginNotice", request.getAttribute("loginNotice"));
         return  mv;
     }
 

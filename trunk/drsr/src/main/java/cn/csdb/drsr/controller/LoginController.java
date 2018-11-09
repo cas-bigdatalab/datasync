@@ -19,8 +19,7 @@ public class LoginController {
     private static final Logger logger = LogManager.getLogger(LoginController.class);
 
     @RequestMapping(value = "/validateLogin")
-    @ResponseBody
-    public int validateLogin(HttpServletRequest request, @RequestParam(required = true) String userName, @RequestParam(required = true) String password) {
+    public String validateLogin(HttpServletRequest request, @RequestParam(required = true) String userName, @RequestParam(required = true) String password) {
         logger.info("enterring validateLogin");
         logger.info("userName = " + userName + ", password = " + password);
 
@@ -28,6 +27,18 @@ public class LoginController {
         int loginStatus = 0; // log success or not， 0 ：success, 1: failed, notice : username or password is wrong
         loginStatus = loginService.validateLogin(userName, password);
 
-       return loginStatus;
+        String retView = "";
+        if (loginStatus == 1)
+        {
+            request.getSession().setAttribute("userName", userName);
+            retView = "redirect:/index";
+        }
+        else
+        {
+            retView = "redirect:/";
+            request.setAttribute("loginNotice", "用户名或密码错误！");
+        }
+
+        return retView;
     }
 }

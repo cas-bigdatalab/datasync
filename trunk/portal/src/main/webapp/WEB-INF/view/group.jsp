@@ -81,11 +81,11 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 5%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编号</th>
-                                            <th style="width: 13%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户名 </th>
-                                            <th style="width: 13%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">账号 </th>
-                                            <th style="width: 22%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">创建时间</th>
+                                            <th style="width: 12%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户名 </th>
+                                            <th style="width: 12%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">账号 </th>
+                                            <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">创建时间</th>
                                             <%--<th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">状态</th>--%>
-                                            <th style="width: 22%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户组</th>
+                                            <th style="width: 30%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户组</th>
                                             <th style="text-align: center;background: #64aed9;color: #FFF;font-weight: bold">操作</th>
                                         </tr>
                                     </thead>
@@ -307,6 +307,24 @@
     {{/each}}
 </script>
 
+<!--用户管理标签页：用户列表表格-->
+<script type="text/html" id="userListTable">
+    {{each list}}
+    <tr>
+        <td style="text-align: center">{{(curUserPageNum-1) * pageSize + 1 + $index}}</td>
+        <td style="text-align: center">{{$value.userName}}</td>
+        <td style="text-align: center">{{$value.loginId}}</td>
+        <td style="text-align: center">{{$value.createTime}}</td>
+        <%--<td style="text-align: center">{{$value.stat}}</td>--%>
+        <td style="text-align: center">{{$value.groups}}</td>
+        <td style="text-align: center" id = "{{$value.id}}">
+            <button class="btn default btn-xs red updateUserButton" data-target="#updateUserDialog" data-toggle="modal" onclick="updateUser(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>
+            &nbsp;
+            <button class="btn default btn-xs green updateUserGroupButton" onclick="deleteUser(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>
+        </td>
+    </tr>
+    {{/each}}
+</script>
 
 <!--用户管理标签页：新建用户对话框-->
 <div id="addUserDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
@@ -380,34 +398,58 @@
     </div>
 </div>
 
-<!--用户管理标签页：修改用户组对话框-->
-<div id="updateUserGroupDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
+<!--用户管理标签页：修改用户对话框-->
+<div id="updateUserDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
     <div class="modal-dialog">
         <div class="modal-content">
-
             <div class="modal-header">
-                <h4 id="titleForUpdateGroupsDialog" class="modal-title" >编辑用户组</h4>
+                <h4 id="titleForUpdateUserDialog" class="modal-title" >修改用户</h4>
             </div>
 
             <div class="modal-body">
-                <form id="updateGroupsForm" class="form-horizontal" role="form" method="post" accept-charset="utf-8"  onfocusout="true">
+                <form id="updateUserForm" class="form-horizontal" role="form" method="post" accept-charset="utf-8"  onfocusout="true">
                     <div class="form-body">
+                        <span id="idForUpdate" hidden="hidden"></span>
                         <div class="form-group">
-                            <label class="col-md-3 control-label">
-                                账号<span style="color: red;">*</span>:
+                            <label class="col-md-3 control-label" for="userNameForUpdate">
+                                用&nbsp;户&nbsp;名<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" readonly="readonly" id="loginIdForUpdateUserGroupDialog" name="loginId"  required="required" />
+                                <input type="text" class="form-control" placeholder="请输入用户名称" id="userNameForUpdate" name="userNameForUpdate" required="required"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-3 control-label" for="groupForUpdateUserGroupDialog">
-                                角色<span style="color: red;">*</span>:
+                            <label class="col-md-3 control-label" for="loginIdForUpdate">
+                                用户账号<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <select class="form-control select2me" name="groupForUpdateUserGroupDialog" id="groupForUpdateUserGroupDialog" multiple="multiple">
+                                <input type="text" class="form-control" placeholder="请输入用户账号" id="loginIdForUpdate" name="loginIdForUpdate"  required="required" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="passwordForUpdate">
+                                密&nbsp;&nbsp;&nbsp;&nbsp;码<span style="color: red;">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" placeholder="请输入密码"  id="passwordForUpdate" name="passwordForUpdate" required="required">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="subjectCodeForUpdate">
+                                专题库代码<span style="color: red;">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control" placeholder="请输入专题库代码"  id="subjectCodeForUpdate" name="subjectCodeForUpdate" required="required">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label" for="groupsForUpdateUserDialog">
+                                角&nbsp;&nbsp;&nbsp;&nbsp;色<span style="color: red;">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <select class='form-control select2me' name='groupsForUpdateUserDialog' id='groupsForUpdateUserDialog' multiple="multiple">
                                     <c:forEach  var="group"  items="${groupList}">
-                                        <option value="${group.groupName}" id="${group.id}"> ${group.groupName} </option>
+                                        <option value="${group.groupName}" id="${group.id}" >${group.groupName}</option>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -417,37 +459,16 @@
             </div>
 
             <div class="modal-footer">
-                <button id="saveUpdateUserGroupsBtn" class="btn green" onclick="submitUpdateUserGroup();">
+                <button id="saveUserUpdateBtn" class="btn green" onclick="agreeUpdateUser();">
                     保存
                 </button>
-                <button id="cancelUpdateUserGroupsBtn" class="btn default"  data-dismiss="modal">
+                <button id="cancelUserUpdateBtn" class="btn default"  data-dismiss="modal">
                     取消
                 </button>
             </div>
         </div>
     </div>
 </div>
-
-<!--用户管理标签页：用户列表表格-->
-<script type="text/html" id="userListTable">
-    {{each list}}
-    <tr>
-        <td style="text-align: center">{{(curUserPageNum-1) * pageSize + 1 + $index}}</td>
-        <td style="text-align: center">{{$value.userName}}</td>
-        <td style="text-align: center">{{$value.loginId}}</td>
-        <td style="text-align: center">{{$value.createTime}}</td>
-        <%--<td style="text-align: center">{{$value.stat}}</td>--%>
-        <td style="text-align: center">{{$value.groups}}</td>
-        <td style="text-align: center" id = "{{$value.id}}">
-            <button class="btn default btn-xs purple updateUserGroupButton" data-target="#updateUserGroupDialog" data-toggle="modal" onclick="updateUserGroup(this);"><i class="fa fa-edit"></i>修改用户组</button>
-            &nbsp;
-            <button class="btn default btn-xs red updateUserButton" data-target="#updateUserDialog" data-toggle="modal" onclick="updateUserInfo(this);"><i class="fa fa-edit"></i>修改</button>
-            &nbsp;
-            <button class="btn default btn-xs green updateUserGroupButton" onclick="deleteUser(this);"><i class="fa fa-trash"></i>删除</button>
-        </td>
-    </tr>
-    {{/each}}
-</script>
 
 <!--用户管理标签页：删除用户对话框-->
 <div id="deleteUserDialog" class="modal fade" tabindex="-1">
@@ -819,42 +840,13 @@
                 success: function (data) {
                     console.log(data);
                     $("#addUserDialog").modal("hide");
+                    $("#updateUserDialog").remove();
                     queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
                 },
                 error: function(data) {
 
                 }
             });
-        }
-
-        function submitUpdateUserGroup()
-        {
-            $.ajax({
-                url: "${ctx}/user/updateGroup",
-                type: "get",
-                data: {
-                    "loginId": $("#loginIdForUpdateUserGroupDialog").val(),
-                    "groups": $("#groupsForUpdateUserGroupDialog").val(),
-                },
-                dataType: "text",
-                success: function (data) {
-                    console.log(data);
-                    $("#updateUserGroupDialog").modal("hide");
-                    queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
-                }
-            });
-        }
-
-        function updateUserGroup(btn) {
-            console.log(btn);
-            console.log("点击了修改用户组");
-            var theUserToBeUpdated = $(btn).parent().parent();
-            var tdList = theUserToBeUpdated.children("td");
-            setTimeout(function () {
-                console.log(tdList);
-                $("#loginIdForUpdateGroupDialog").val($(tdList[2]).text());
-                $("#groupsForUpdateGroupDialog").attr("value", $(tdList[5]).text().trim());
-            }, 500);
         }
 
         //查询 按钮
@@ -921,7 +913,7 @@
         //删除按钮
         function deleteUser(deleteBtn)
         {
-            idOfUser = $(deleteBtn).parent().attr("id");
+            var idOfUser = $(deleteBtn).parent().attr("id");
 
             $("#deleteUserDialog").modal("show");
             $("#idOfUserToBeDeleted").html(idOfUser);
@@ -939,6 +931,70 @@
                 dataType: "json",
                 success: function (data) {
                     queryUser(null, null, null, 1);
+                },
+                error: function(data) {
+
+                }
+            });
+        }
+
+        function updateUser(updateBtn)
+        {
+            var idOfUser = $(updateBtn).parent().attr("id");
+
+            $.ajax(
+                {
+                    url: "${ctx}/user/getUserById",
+                    type: "get",
+                    data: {
+                        "id": idOfUser
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        console.log("updateUser - getUserById user = " + data.toString());
+                        console.log("udpateUser - idForUpdate = " + data.id);
+                        $("#idForUpdate").html(data.id);
+                        $("#userNameForUpdate").val(data.userName);
+                        $("#loginIdForUpdate").val(data.loginId);
+                        $("#passwordForUpdate").val(data.password);
+                        $("#subjectCodeForUpdate").val(data.subjectCode);
+
+                        var groupArr = data.groups.split(",");
+                        console.log("getUserById - groupArr - " + groupArr);
+                        for (var i = 0; i < groupArr.length; i++) {
+                            $("#groupsForUpdateUserDialog").val(groupArr[i]);
+                        }
+
+                        $("#updateUserDialog").modal("show");
+
+                    },
+                    error: function(data) {
+
+                    }
+                }
+
+            );
+        }
+
+        function agreeUpdateUser()
+        {
+            $.ajax({
+                url: "${ctx}/user/updateUser",
+                type: "get",
+                data: {
+                    "id": $("#idForUpdate").html(),
+                    "userName": $("#userNameForUpdate").val(),
+                    "loginId": $("#loginIdForUpdate").val(),
+                    "password": $("#passwordForUpdate").val(),
+                    "subjectCode": $("#subjectCodeForUpdate").val(),
+                    "groups": $("#groupsForUpdateUserDialog").val().toString(),
+                },
+                dataType: "text",
+                success: function (data) {
+                    console.log(data);
+                    $("#updateUserDialog").modal("hide");
+                    $("#updateUserDialog").remove();
+                    queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
                 },
                 error: function(data) {
 

@@ -24,12 +24,12 @@ public class CheckUserController {
 
             //获取当前用户
             Subject subject = SecurityUtils.getSubject();
-            UsernamePasswordToken token = new UsernamePasswordToken(user.getUserName(), user.getPassword());
+            UsernamePasswordToken token = new UsernamePasswordToken(user.getLoginId(), user.getPassword());
             try {
                 //为当前用户进行认证，授权
                 subject.login(token);
-                User u = checkUserService.getByUserName(user.getUserName());
-                if(user.getSubjectCode()!=null) {
+                User u = checkUserService.getByUserName(user.getLoginId());
+                if(u.getSubjectCode()!=null) {
                     cn.csdb.portal.model.Subject sub = checkUserService.getSubjectByCode(u.getSubjectCode());
                     request.getSession().setAttribute("userName", u.getUserName());
                     request.getSession().setAttribute("LoginId", u.getLoginId());
