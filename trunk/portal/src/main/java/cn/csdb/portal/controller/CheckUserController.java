@@ -26,19 +26,23 @@ public class CheckUserController {
             Subject subject = SecurityUtils.getSubject();
             UsernamePasswordToken token = new UsernamePasswordToken(user.getLoginId(), user.getPassword());
             try {
-                //为当前用户进行认证，授权
-                subject.login(token);
-                User u = checkUserService.getByUserName(user.getLoginId());
-                if(u.getSubjectCode()!=null) {
-                    cn.csdb.portal.model.Subject sub = checkUserService.getSubjectByCode(u.getSubjectCode());
-                    request.getSession().setAttribute("userName", u.getUserName());
-                    request.getSession().setAttribute("LoginId", u.getLoginId());
-                    request.getSession().setAttribute("DbName", sub.getDbName());
-                    request.getSession().setAttribute("SubjectName", sub.getSubjectName());
-                    request.getSession().setAttribute("SubjectCode", sub.getSubjectCode());
-                    request.getSession().setAttribute("FtpFilePath", sub.getFtpFilePath());
+                if(user.getUserName()==null&&user.getPassword()==null){
+                    return "loginNew";
+                }else {
+                    //为当前用户进行认证，授权
+                    subject.login(token);
+                    User u = checkUserService.getByUserName(user.getLoginId());
+                    if (u.getSubjectCode() != null) {
+                        cn.csdb.portal.model.Subject sub = checkUserService.getSubjectByCode(u.getSubjectCode());
+                        request.getSession().setAttribute("userName", u.getUserName());
+                        request.getSession().setAttribute("LoginId", u.getLoginId());
+                        request.getSession().setAttribute("DbName", sub.getDbName());
+                        request.getSession().setAttribute("SubjectName", sub.getSubjectName());
+                        request.getSession().setAttribute("SubjectCode", sub.getSubjectCode());
+                        request.getSession().setAttribute("FtpFilePath", sub.getFtpFilePath());
+                    }
+                    return "redirect:/loginSuccess";
                 }
-                return "redirect:/loginSuccess";
 
             } catch (Exception e) {
                 e.printStackTrace();
