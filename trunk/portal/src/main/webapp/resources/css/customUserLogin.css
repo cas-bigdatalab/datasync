@@ -29,6 +29,7 @@
     display: none;
 }.cus_drop li {
      background-color: #eee;
+    margin-top: 1px;
  }
 
 /*

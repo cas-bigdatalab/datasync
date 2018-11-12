@@ -422,10 +422,18 @@
             $("#cus_User_id").css("background-color","#eee")
         },
         function () {
-            $(".cus_drop").hide();
+            $(".cus_drop").show();
             $("#cus_User_id").css("background-color","#eee")
         }
     )
+    /*$("#cus_User_id").click(function () {
+        $(".cus_drop").show();
+        $("#cus_User_id").css("background-color","#eee")
+    })*/
+    $("body:not(.cus_ul)").click(function () {
+        $(".cus_drop").hide();
+        $("#cus_User_id").css("background-color","")
+    })
     toastr.options = {
         "closeButton": true,
         "debug": false,
