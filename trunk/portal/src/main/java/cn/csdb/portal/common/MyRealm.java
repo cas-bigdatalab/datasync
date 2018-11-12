@@ -48,14 +48,12 @@ public class MyRealm extends AuthorizingRealm {
         boolean status = user.getGroups().contains(",");
         if(status){
         String[] group = user.getGroups().split(",");
-        for(String str : group) {
+        Set<String> roles = new HashSet<>();
+            for(String str : group) {
             if (str.equals("系统管理员")) {
-                Set<String> roles = new HashSet<>();
                 roles.add("root");
                 info.setRoles(roles);
-                break;
             } else if (str.equals("主题库管理员")) {
-                Set<String> roles = new HashSet<>();
                 roles.add("admin");
                 info.setRoles(roles);
             } else {
