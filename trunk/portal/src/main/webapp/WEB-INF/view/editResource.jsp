@@ -301,10 +301,10 @@
                                                             <option value="分析组用户">分析组用户</option>
                                                         </select>--%>
                                                             <select name="permissions" id="permissions" class="form-control" multiple>
-                                                                <option value="外网公开用户">外网公开用户</option>
+                                                                <%--<option value="外网公开用户">外网公开用户</option>
                                                                 <option value="内网用户">内网用户</option>
                                                                 <option value="质量组用户">质量组用户</option>
-                                                                <option value="分析组用户">分析组用户</option>
+                                                                <option value="分析组用户">分析组用户</option>--%>
                                                             </select>
                                                     </div>
                                                 </div>
@@ -399,6 +399,11 @@
         </div>
     </div>
 </div>
+<script type="text/html" id="dataUserList">
+    {{each groupList as value i}}
+    <option value="{{value.groupName}}">{{value.groupName}}</option>
+    {{/each}}
+</script>
 <%@ include file="./tableFieldComsTmpl.jsp" %>
 </body>
 
@@ -435,9 +440,11 @@
         });
         $('.selectData:eq(0)').datepicker().on("changeDate",function (ev) {
             firstTime = new Date(ev.date).getTime()
+            $("#data_time").hide()
         })
         $('.selectData:eq(1)').datepicker().on("changeDate",function (ev) {
             lastTime =new Date(ev.date).getTime()
+            $("#data_time").hide()
         })
         //将图片截图并上传功能
         var api = null;
@@ -499,7 +506,6 @@
                 }
             });
         }
-
         $(".progress-bar-success").width(initNum*33+"%");
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
@@ -536,7 +542,7 @@
         })
         initCenterResourceCatalogTree($("#jstree-demo"));
         relationalDatabaseTableList();
-
+        userGroupList()
         function fromAction(flag) {
             if(flag){
                 ++initNum;
@@ -617,14 +623,31 @@
                     console.log(List)
                     var tabCon = template("dataRelationshipList", List);
                     $(".undeslist").append(tabCon);
-                    getResourceById();
+
                 },
                 error:function (data) {
                     console.log("请求失败")
                 }
             })
         }
-
+        function userGroupList() {
+            $.ajax({
+                url:ctx+"/resource/getUserGroups",
+                type:"GET",
+                success:function (data) {
+                    var list = JSON.parse(data)
+                    var tabCon = template("dataUserList", list);
+                    $("#permissions").append(tabCon);
+                    $('#permissions').select2({
+                        placeholder: "请选择用户",
+                        allowClear: true
+                    });
+                },
+                error:function () {
+                    console.log("请求失败")
+                }
+            })
+        }
         function addResourceFirstStep() {
             firstFlag=false
             $("[name='need_checked']").each(function () {
@@ -688,7 +711,7 @@
                 var $ele = $("[name='resTable']:checked")
 
                 $ele.each(function () {
-                    dataList+=$(this).val()+";"
+                    dataList+=$(this).attr("keyval")+";"
                 })
             }else {
                 var $ele = $(".fileTag")
@@ -702,6 +725,7 @@
                 secondFlag = false
             }
             dataList = dataList.substr(0, dataList.length - 1);
+            console.log(dataList)
             $.ajax({
                 url:ctx+"/resource/addResourceSecondStep",
                 type:"POST",
@@ -770,7 +794,7 @@
                 $("#file_dir").show();
                 firstFlag=true
             }
-            if(firstTime ==0 || lastTime ==0|| firstTime>lastTime){
+            if(firstTime ==0 || lastTime ==0|| firstTime>lastTime ||$('.selectData:eq(0)').val()==""||$('.selectData:eq(1)').val()==""){
                 $("#data_time").show();
                 firstFlag=true
             }
@@ -798,8 +822,8 @@
                     keyword:keywordStr,
                     catalogId:$("#centerCatalogId").val(),
                     createdByOrganization:$("#dataSourceDesID").val(),
-                    startTime:firstTime,
-                    endTime:lastTime,
+                    startTime:$('.selectData:eq(0)').val(),
+                    endTime:$('.selectData:eq(1)').val(),
                     email:$("#task_email").val(),
                     phoneNum:$("#task_phone").val()
                 },
@@ -840,36 +864,33 @@
                         tags:[""],
                     });
                     $("#dataSourceDesID").val(totalList.createdByOrganization)
-                    console.log(totalList.publicContent)
-
                     var publicContentList = totalList.publicContent.split(";")
                     var typeNum = totalList.publicType=="mysql"?0:1;
                     $("[name='ways']:eq("+ typeNum+")").prop("checked",true)
                     if(typeNum ==0){
-                        for(var i=0;i<publicContentList.length-1;i++){
+                        for(var i=0;i<publicContentList.length;i++){
                             $("[valName='"+publicContentList[i] +"']").prop("checked",true)
                         }
                     }else {
                         var fileId=totalList.filePath
+                        fileId = fileId.substr(0, fileId.length - 1);
                         var str = fileId.replace(/%_%/g, "/");
+                        console.log(str);
                         var filePathList = str.split(";")
                         console.log(filePathList)
-                        for (var i=0;i<filePathList.length-1;i++){
+                        for (var i=0;i<filePathList.length;i++){
                             $("#fileDescribeDiv").append("<span class='tag fileTag' style='display: inline-block;margin-right: 5px' name="+ filePathList[i]+"><span class='filePathClass'>"+filePathList[i] +"</span> &nbsp;&nbsp; <a href='javascript:void(0)' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
                         }
                         $(".select-database").hide();
                         $(".select-local").show();
 
                     }
+                    var userList = totalList.userGroupId.split(",")
+                    $('#permissions').select2().val(userList).trigger("change");
                     $('#permissions').select2({
                         placeholder: "请选择用户",
                         allowClear: true,
                     });
-                    var userList = totalList.userGroupId.split(",")
-                    console.log(userList)
-                    for(var i=0;i<userList.length;i++){
-                        $('#permissions').select2().val(userList[i]).trigger("change");
-                    }
                 },
                 error:function (data) {
                     console.log("请求失败")
@@ -897,9 +918,7 @@
             var fileId = data.node.id;
             var str = fileId.replace(/%_%/g, "/");
             /*var isContain = false;*/
-            $("#fileDescribeDiv").append("<span class='tag fileTag' style='display: inline-block;margin-right: 5px' name="+ fileId+"><span class='filePathClass'>"+str +"</span> &nbsp;&nbsp; <a href='javascript:void(0)' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
-            /*$("#fileDescribeDiv").append("<div name="+ fileId+"><span>"+str +"</span></div>")*/
-            /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
+            $("#fileDescribeDiv").append("<span class='tag fileTag' style='display: inline-block;margin-right: 5px;display: none' name="+ fileId+"><span class='filePathClass'>"+str +"</span> &nbsp;&nbsp; <a href='javascript:void(0)' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
         }).bind("deselect_node.jstree", function (e, data) {
             var fileId = data.node.id;
             var fileName = data.node.text;
@@ -949,6 +968,10 @@
         function tagClick(obj){
             $(obj).parent().remove();
         }
+
+        jQuery(document).ready(function () {
+            getResourceById();
+        })
 
     </script>
 </div>

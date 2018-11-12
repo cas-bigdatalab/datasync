@@ -275,10 +275,10 @@
                                                     <label  class="col-sm-4 control-label">选择公开范围</label>
                                                     <div class="col-sm-8">
                                                         <select name="permissions" id="permissions" class="form-control" multiple>
-                                                            <option value="外网公开用户">外网公开用户</option>
+                                                            <%--<option value="外网公开用户">外网公开用户</option>
                                                             <option value="内网用户">内网用户</option>
                                                             <option value="质量组用户">质量组用户</option>
-                                                            <option value="分析组用户">分析组用户</option>
+                                                            <option value="分析组用户">分析组用户</option>--%>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -326,6 +326,11 @@
             <span style="word-break: break-all" keyval="{{value}}">{{value}}</span>
         </label>
     </div>
+    {{/each}}
+</script>
+<script type="text/html" id="dataUserList">
+    {{each groupList as value i}}
+        <option value="{{value.groupName}}">{{value.groupName}}</option>
     {{/each}}
 </script>
 <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
@@ -397,9 +402,10 @@
         var firstFlag=false;
         var secondFlag=false;
         var resourceId="";
-        var publicType="0";
+        var publicType="mysql";
         var firstTime = 0;
         var lastTime = 0;
+        var api = null;
         var testEmail =/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
         /*var tagNames=new Array();*/
         //将图片截图并上传功能
@@ -411,23 +417,21 @@
         });
         $('.selectData:eq(0)').datepicker().on("changeDate",function (ev) {
             firstTime = new Date(ev.date).getTime()
+            console.log(firstTime)
             $("#data_time").hide()
         })
         $('.selectData:eq(1)').datepicker().on("changeDate",function (ev) {
             lastTime =new Date(ev.date).getTime()
+            console.log(lastTime)
             $("#data_time").hide()
         })
 
-        var api = null;
         $("#select2_tags").select2({
             tags: true,
             multiple: true,
             tags:[""],
         });
-        $('#permissions').select2({
-            placeholder: "请选择用户",
-            allowClear: true
-        });
+
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -499,11 +503,11 @@
             if(this.value =="DB"){
                 $(".select-database").show();
                 $(".select-local").hide();
-                publicType ="0"
+                publicType ="mysql"
             }else {
                 $(".select-database").hide();
                 $(".select-local").show();
-                publicType ="1"
+                publicType ="file"
             }
         })
         $("[name='need_checked']").on("change",function () {
@@ -520,7 +524,7 @@
         $("#task_phone").on("change",function () {
             $("[name='data_phone']").hide()
         })
-        $(".undeslist").delegate("span","click",function () {
+        $(".undeslist").delegate("input","click",function () {
             staticSourceTableChoice(1,this,sub,$(this).attr("keyval"),"dataResource")
             $("#previewTableDataAndComsButtonId").click()
         })
@@ -531,7 +535,7 @@
 
         initCenterResourceCatalogTree($("#jstree-demo"));
         relationalDatabaseTableList();
-
+        userGroupList()
         function fromAction(flag) {
             if(flag){
                 ++initNum;
@@ -618,7 +622,24 @@
                 }
             })
         }
-
+        function userGroupList() {
+            $.ajax({
+                url:ctx+"/resource/getUserGroups",
+                type:"GET",
+                success:function (data) {
+                    var list = JSON.parse(data)
+                    var tabCon = template("dataUserList", list);
+                    $("#permissions").append(tabCon);
+                    $('#permissions').select2({
+                        placeholder: "请选择用户",
+                        allowClear: true
+                    });
+                },
+                error:function () {
+                    console.log("请求失败")
+                }
+            })
+        }
 
         function addResourceFirstStep() {
             firstFlag=false
@@ -687,11 +708,11 @@
         function addResourceSecondStep() {
 
             var dataList=""
-            if(publicType =="0"){
+            if(publicType =="mysql"){
                 var $ele = $("[name='resTable']:checked")
 
                 $ele.each(function () {
-                    dataList+=$(this).val()+";"
+                    dataList+=$(this).attr("keyval")+";"
                 })
             }else {
                 var $ele = $("#fileDescribeDiv span")
@@ -705,12 +726,13 @@
                 secondFlag = false
             }
             dataList = dataList.substr(0, dataList.length - 1);
+            console.log(dataList);
             $.ajax({
                 url:ctx+"/resource/addResourceSecondStep",
                 type:"POST",
                 data:{
                     resourceId:resourceId,
-                    publicType:publicType=="0"?"mysql":"file",
+                    publicType:publicType,
                     dataList:dataList
                 },
                 success:function (data) {
@@ -793,8 +815,8 @@
                     keyword:keywordStr,
                     catalogId:$("#centerCatalogId").val(),
                     createdByOrganization:$("#dataSourceDesID").val(),
-                    startTime:firstTime,
-                    endTime:lastTime,
+                    startTime:$('.selectData:eq(0)').val(),
+                    endTime:$('.selectData:eq(1)').val(),
                     email:$("#task_email").val(),
                     phoneNum:$("#task_phone").val()
                 },
