@@ -362,6 +362,7 @@
                                 <input type="text" class="form-control" placeholder="请输入密码"  id="password" name="password" required="required">
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectCode">
                                 专题库代码<span style="color: red;">*</span>
@@ -370,6 +371,7 @@
                                 <input type="text" class="form-control" placeholder="请输入专题库代码"  id="subjectCode" name="subjectCode" required="required">
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="groupsForAddUserDialog">
                                 角&nbsp;&nbsp;&nbsp;&nbsp;色<span style="color: red;">*</span>

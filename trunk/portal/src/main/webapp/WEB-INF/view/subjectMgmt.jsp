@@ -41,9 +41,8 @@
         <br />
         <br />
 
-        <!--the table to list all available subjects-->
-        <div class="portlet-body">
-            <table class="table table-hover table-bordered">
+        <div class="table-scrollable">
+            <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
                 <tr>
                     <th style="display:none;">专题库ID</th>
@@ -57,11 +56,8 @@
                     <th>操作</th>
                 </tr>
                 </thead>
-
                 <tbody id="subjectList">
-
                 </tbody>
-
             </table>
         </div>
 
