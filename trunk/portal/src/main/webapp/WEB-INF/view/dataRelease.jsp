@@ -98,10 +98,10 @@
                         <label class="col-sm-3 control-label">分类ID:</label>
                         <div class="col-sm-8 modediv" id="rel-catalogId"></div>
                     </div>
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label class="col-sm-3 control-label">图片地址:</label>
                         <div class="col-sm-8 modediv" id="rel-imagePath"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">状态:</label>
                         <div class="col-sm-8 modediv" id="rel-status"></div>
@@ -118,14 +118,14 @@
                         <label class="col-sm-3 control-label">发布内容:</label>
                         <div class="col-sm-8 modediv" id="rel-publicContent"></div>
                     </div>
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label class="col-sm-3 control-label">文件路径:</label>
                         <div class="col-sm-8 modediv" id="rel-filePath"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">文件名称:</label>
                         <div class="col-sm-8 modediv" id="rel-fileName"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">字段注释:</label>
                         <div class="col-sm-8 modediv" id="rel-fieldComs"></div>
@@ -167,6 +167,14 @@
                         <div class="col-sm-8 modediv" id="rel-endTime"></div>
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-3 control-label">最新发布日期:</label>
+                        <div class="col-sm-8 modediv" id="rel-updateDate"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">创建日期:</label>
+                        <div class="col-sm-8 modediv" id="rel-creationDate"></div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-3 control-label">创建机构:</label>
                         <div class="col-sm-8 modediv" id="rel-createdByOrganization"></div>
                     </div>
@@ -174,14 +182,11 @@
                         <label class="col-sm-3 control-label">创建人员:</label>
                         <div class="col-sm-8 modediv" id="rel-createdBy"></div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">创建日期:</label>
-                        <div class="col-sm-8 modediv" id="rel-creationDate"></div>
-                    </div>
-                    <div class="form-group">
+
+                    <%--<div class="form-group">
                         <label class="col-sm-3 control-label">机构:</label>
                         <div class="col-sm-8 modediv" id="rel-organizationName"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">邮件:</label>
                         <div class="col-sm-8 modediv" id="rel-email"></div>
@@ -190,10 +195,7 @@
                         <label class="col-sm-3 control-label">电话:</label>
                         <div class="col-sm-8 modediv" id="rel-phoneNum"></div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">最新发布日期:</label>
-                        <div class="col-sm-8 modediv" id="rel-updateDate"></div>
-                    </div>
+
                     <div class="form-group">
                         <label class="col-sm-3 control-label">引用格式:</label>
                         <div class="col-sm-8 modediv" id="rel-citation"></div>
@@ -243,10 +245,10 @@
                         <label class="col-sm-3 control-label">分类ID:</label>
                         <div class="col-sm-8 modediv" id="file-catalogId"></div>
                     </div>
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label class="col-sm-3 control-label">图片地址:</label>
                         <div class="col-sm-8 modediv" id="file-imagePath"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">状态:</label>
                         <div class="col-sm-8 modediv" id="file-status"></div>
@@ -259,10 +261,10 @@
                         <label class="col-sm-3 control-label">发布类型:</label>
                         <div class="col-sm-8 modediv" id="file-publicType"></div>
                     </div>
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label class="col-sm-3 control-label">发布内容:</label>
                         <div class="col-sm-8 modediv" id="file-publicContent"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">文件路径:</label>
                         <div class="col-sm-8 modediv" id="file-filePath"></div>
@@ -312,6 +314,14 @@
                         <div class="col-sm-8 modediv" id="file-endTime"></div>
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-3 control-label">最新发布日期:</label>
+                        <div class="col-sm-8 modediv" id="file-updateDate"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">创建日期:</label>
+                        <div class="col-sm-8 modediv" id="file-creationDate"></div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-3 control-label">创建机构:</label>
                         <div class="col-sm-8 modediv" id="file-createdByOrganization"></div>
                     </div>
@@ -319,14 +329,11 @@
                         <label class="col-sm-3 control-label">创建人员:</label>
                         <div class="col-sm-8 modediv" id="file-createdBy"></div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">创建日期:</label>
-                        <div class="col-sm-8 modediv" id="file-creationDate"></div>
-                    </div>
-                    <div class="form-group">
+
+                    <%--<div class="form-group">
                         <label class="col-sm-3 control-label">机构:</label>
                         <div class="col-sm-8 modediv" id="file-organizationName"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">邮件:</label>
                         <div class="col-sm-8 modediv" id="file-email"></div>
@@ -335,10 +342,7 @@
                         <label class="col-sm-3 control-label">电话:</label>
                         <div class="col-sm-8 modediv" id="file-phoneNum"></div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">最新发布日期:</label>
-                        <div class="col-sm-8 modediv" id="file-updateDate"></div>
-                    </div>
+
                     <div class="form-group">
                         <label class="col-sm-3 control-label">引用格式:</label>
                         <div class="col-sm-8 modediv" id="file-citation"></div>
@@ -405,7 +409,7 @@
             <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.id}}"
                     style="background-color: dimgrey">编辑
             </button>
-            <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.id}}','{{value.publicType}}')"><i
+            <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.resState}}')"><i
                     class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
             </button>
             <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.id}}');"><i
@@ -444,7 +448,7 @@
         function resSend() {
             window.location.href = "${ctx}/dataSourceDescribeEdit"
         }
-        function showData(id,type) {
+        function showData(id,type,tabStatus) {
             $.ajax({
                 url: "${ctx}/resource/resourceDetail",
                 type: "GET",
@@ -457,7 +461,7 @@
                         $("#rel-dataSourceId").html(dataList.dataSourceId)
                         $("#rel-catalogId").html(dataList.catalogId)
                         $("#rel-imagePath").html(dataList.imagePath)
-                        $("#rel-status").html(dataList.status)
+                        $("#rel-status").html(tabStatus)
                         $("#rel-resState").html(dataList.resState)
                         $("#rel-publicType").html(dataList.publicType)
                         $("#rel-publicContent").html(dataList.publicContent)
@@ -471,15 +475,15 @@
                         $("#rel-keyword").html(dataList.keyword)
                         $("#rel-taxonomy").html(dataList.taxonomy)
                         $("#rel-dataFormat").html(dataList.dataFormat)
-                        $("#rel-startTime").html(dataList.startTime)
-                        $("#rel-endTime").html(dataList.endTime)
+                        $("#rel-startTime").html(convertMilsToDateString(dataList.startTime))
+                        $("#rel-endTime").html(convertMilsToDateString(dataList.endTime))
                         $("#rel-createdByOrganization").html(dataList.createdByOrganization)
                         $("#rel-createdBy").html(dataList.createdBy)
-                        $("#rel-creationDate").html(dataList.creationDate)
+                        $("#rel-creationDate").html(convertMilsToDateString(dataList.creationDate))
                         $("#rel-organizationName").html(dataList.organizationName)
                         $("#rel-mail").html(dataList.mail)
                         $("#rel-phoneNum").html(dataList.phoneNum)
-                        $("#rel-updateDate").html(dataList.updateDate)
+                        $("#rel-updateDate").html(convertMilsToDateString(dataList.updateDate))
                         $("#rel-citation").html(dataList.citation)
                         $("#rel-toMemorySize").html(dataList.toMemorySize)
                         $("#rel-toFilesNumber").html(dataList.toFilesNumber)
@@ -490,7 +494,7 @@
                         $("#file-dataSourceId").html(dataList.dataSourceId)
                         $("#file-catalogId").html(dataList.catalogId)
                         $("#file-imagePath").html(dataList.imagePath)
-                        $("#file-status").html(dataList.status)
+                        $("#file-status").html(tabStatus)
                         $("#file-resState").html(dataList.resState)
                         $("#file-publicType").html(dataList.publicType)
                         $("#file-publicContent").html(dataList.publicContent)
@@ -504,15 +508,15 @@
                         $("#file-keyword").html(dataList.keyword)
                         $("#file-taxonomy").html(dataList.taxonomy)
                         $("#file-dataFormat").html(dataList.dataFormat)
-                        $("#file-startTime").html(dataList.startTime)
-                        $("#file-endTime").html(dataList.endTime)
+                        $("#file-startTime").html(convertMilsToDateString(dataList.startTime))
+                        $("#file-endTime").html(convertMilsToDateString(dataList.endTime))
                         $("#file-createdByOrganization").html(dataList.createdByOrganization)
                         $("#file-createdBy").html(dataList.createdBy)
-                        $("#file-creationDate").html(dataList.creationDate)
+                        $("#file-creationDate").html(convertMilsToDateString(dataList.creationDate))
                         $("#file-organizationName").html(dataList.organizationName)
                         $("#file-mail").html(dataList.mail)
                         $("#file-phoneNum").html(dataList.phoneNum)
-                        $("#file-updateDate").html(dataList.updateDate)
+                        $("#file-updateDate").html(convertMilsToDateString(dataList.updateDate))
                         $("#file-citation").html(dataList.citation)
                         $("#file-toMemorySize").html(dataList.toMemorySize)
                         $("#file-toFilesNumber").html(dataList.toFilesNumber)

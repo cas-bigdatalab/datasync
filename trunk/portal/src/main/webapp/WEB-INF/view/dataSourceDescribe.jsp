@@ -323,7 +323,7 @@
     <div class="col-md-4">
         <label>
             <input type="checkbox" name="resTable" keyval="{{value}}">
-            <span style="word-break: break-all">{{value}}</span>
+            <span style="word-break: break-all" keyval="{{value}}">{{value}}</span>
         </label>
     </div>
     {{/each}}
@@ -520,7 +520,7 @@
         $("#task_phone").on("change",function () {
             $("[name='data_phone']").hide()
         })
-        $(".undeslist").delegate("input","click",function () {
+        $(".undeslist").delegate("span","click",function () {
             staticSourceTableChoice(1,this,sub,$(this).attr("keyval"),"dataResource")
             $("#previewTableDataAndComsButtonId").click()
         })

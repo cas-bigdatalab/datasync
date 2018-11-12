@@ -349,7 +349,7 @@
     <div class="col-md-4">
         <label>
             <input type="checkbox" name="resTable"  valName="{{value}}" keyval="{{value}}">
-            <span style="word-break: break-all">{{value}}</span>
+            <span style="word-break: break-all" keyval="{{value}}">{{value}}</span>
         </label>
     </div>
     {{/each}}
@@ -404,7 +404,6 @@
 
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
-    <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/js/jquery.Jcrop.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/jquery-form/jquery.form.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.js"></script>
@@ -417,6 +416,7 @@
     <script type="text/javascript">
         var ctx = '${ctx}';
         var sdoId = "${resourceId}";
+        var sub = '${sessionScope.SubjectCode}'
         var initNum =1;
         var firstFlag=false;
         var secondFlag=false;
@@ -424,6 +424,8 @@
         var publicType="";
         var firstTime = 0;
         var lastTime = 0;
+        var testEmail =/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
+
         /*var tagNames=new Array();*/
         $('.selectData').datepicker({
             language:'zh-CN'
@@ -822,8 +824,10 @@
                     $("#task_title").val(totalList.title)
                     $("#task_email").val(totalList.email)
                     $("#task_phone").val(totalList.phoneNum)
-                    $('.selectData:eq(0)').val(totalList.startTime)
-                    $('.selectData:eq(1)').val(totalList.endTime)
+                    firstTime = totalList.startTime
+                    lastTime =totalList.endTime
+                    $('.selectData:eq(0)').val(convertMilsToDateString(firstTime))
+                    $('.selectData:eq(1)').val(convertMilsToDateString(lastTime))
                     $("#dataDescribeID").val(totalList.introduction)
                     var path = "${ctx}/"+totalList.imagePath+"_cut.jpg";
                     $('#cutimg').attr('src',path);
