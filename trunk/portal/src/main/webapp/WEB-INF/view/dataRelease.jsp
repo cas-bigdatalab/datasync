@@ -17,7 +17,15 @@
     <title>DataSync专题库门户管理系统</title>
     <link href="${ctx}/resources/css/dataUpload.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
-
+    <style type="text/css">
+        .arrListSty{
+            display: inline-block;
+            margin-right: 5px;
+            background-color: #aaaaaa;
+            padding: 3px 6px;
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 
 <body>
@@ -464,15 +472,24 @@
                         $("#rel-status").html(tabStatus)
                         $("#rel-resState").html(dataList.resState)
                         $("#rel-publicType").html(dataList.publicType)
-                        $("#rel-publicContent").html(dataList.publicContent)
-                        $("#rel-filePath").html(dataList.filePath)
+                        var $publicContent=$("#rel-publicContent")
+                        listSpan(dataList.publicContent,";",$publicContent)
+                       /* $("#rel-publicContent").html(dataList.publicContent)*/
+                        var $filePath=$("#rel-filePath")
+                        var filrStr = dataList.filePath.substr(0, dataList.filePath.length - 1);
+                        listSpan(filrStr,";",$filePath)
+                        /*$("#rel-filePath").html(dataList.filePath)*/
+
                         $("#rel-fileName").html(dataList.fileName)
                         $("#rel-fieldComs").html(dataList.fieldComs)
                         $("#rel-subjectCode").html(dataList.subjectCode)
                         $("#rel-pid").html(dataList.pid)
                         $("#rel-title").html(dataList.title)
                         $("#rel-introduction").html(dataList.introduction)
-                        $("#rel-keyword").html(dataList.keyword)
+
+                        var $keyword=$("#rel-keyword")
+                        listSpan(dataList.keyword,",",$keyword)
+                        /*$("#rel-keyword").html(dataList.keyword)*/
                         $("#rel-taxonomy").html(dataList.taxonomy)
                         $("#rel-dataFormat").html(dataList.dataFormat)
                         $("#rel-startTime").html(convertMilsToDateString(dataList.startTime))
@@ -488,7 +505,9 @@
                         $("#rel-toMemorySize").html(dataList.toMemorySize)
                         $("#rel-toFilesNumber").html(dataList.toFilesNumber)
                         $("#rel-toRecordNumber").html(dataList.toRecordNumber)
-                        $("#rel-userGroupId").html(dataList.userGroupId)
+                        var $userGroupId=$("#rel-userGroupId")
+                        listSpan(dataList.userGroupId,",",$userGroupId)
+                       /* $("#rel-userGroupId").html(dataList.userGroupId)*/
                         $("#relModal").modal("show")
                     }else {
                         $("#file-dataSourceId").html(dataList.dataSourceId)
@@ -497,15 +516,22 @@
                         $("#file-status").html(tabStatus)
                         $("#file-resState").html(dataList.resState)
                         $("#file-publicType").html(dataList.publicType)
-                        $("#file-publicContent").html(dataList.publicContent)
-                        $("#file-filePath").html(dataList.filePath)
+                        var $publicContent=$("#file-publicContent")
+                        listSpan(dataList.publicContent,";",$publicContent)
+                        /*$("#file-publicContent").html(dataList.publicContent)*/
+                        var $filePath=$("#file-filePath")
+                        var filrStr = dataList.filePath.substr(0, dataList.filePath.length - 1);
+                        listSpan(filrStr,";",$filePath)
+                        /*$("#file-filePath").html(dataList.filePath)*/
                         $("#file-fileName").html(dataList.fileName)
                         $("#file-fieldComs").html(dataList.fieldComs)
                         $("#file-subjectCode").html(dataList.subjectCode)
                         $("#file-pid").html(dataList.pid)
                         $("#file-title").html(dataList.title)
                         $("#file-introduction").html(dataList.introduction)
-                        $("#file-keyword").html(dataList.keyword)
+                        var $keyword=$("#file-keyword")
+                        listSpan(dataList.keyword,",",$keyword)
+                        /*$("#file-keyword").html(dataList.keyword)*/
                         $("#file-taxonomy").html(dataList.taxonomy)
                         $("#file-dataFormat").html(dataList.dataFormat)
                         $("#file-startTime").html(convertMilsToDateString(dataList.startTime))
@@ -521,7 +547,9 @@
                         $("#file-toMemorySize").html(dataList.toMemorySize)
                         $("#file-toFilesNumber").html(dataList.toFilesNumber)
                         $("#file-toRecordNumber").html(dataList.toRecordNumber)
-                        $("#file-userGroupId").html(dataList.userGroupId)
+                        var $userGroupId=$("#file-userGroupId")
+                        listSpan(dataList.userGroupId,",",$userGroupId)
+                       /* $("#file-userGroupId").html(dataList.userGroupId)*/
                         $("#fileModal").modal("show")
                     }
                 },
@@ -619,6 +647,14 @@
             })
 
 
+        }
+        function listSpan(arrStr,spl,ele){
+            var arrList =  arrStr.split(spl);
+            var arrListStr = ""
+            for(var i=0;i<arrList.length;i++){
+                arrListStr+="<span class='arrListSty'>"+arrList[i]+"</span>"
+            }
+            ele.append(arrListStr)
         }
     </script>
 </div>

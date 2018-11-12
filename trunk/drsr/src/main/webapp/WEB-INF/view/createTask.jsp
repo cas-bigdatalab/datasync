@@ -23,7 +23,7 @@
         <span>确定数据对象范围，上传数据</span>
         <form class="form-inline">
             <div class="form-group">
-                <label for="dataTaskName" style="font-size: 18px;font-weight: 700" >创建任务名</label>
+                <label for="dataTaskName" style="font-size: 18px;font-weight: 700;color: #000000" >创建任务名</label>
                 <input type="text" class="form-control" id="dataTaskName" >
             </div>
         </form>
@@ -32,10 +32,10 @@
     <div class="select-way">
 
         <span>数据源:</span>
-        <label for="aaa">数据库</label>
         <input name="ways" type="radio" checked="checked" value="DB" id="aaa"/>
-        <label for="bbb">本地上传</label>
+        <label for="aaa">数据库</label>
         <input name="ways" type="radio" value="LH" id="bbb"/>
+        <label for="bbb">本地上传</label>
     </div>
     <div class="select-ways" >
         <div class="select-database ">
@@ -355,12 +355,12 @@
             var dataRelSqlTableList="";
             var $eleChecked = $("[name='relationBox']:checked")
             if($("#dataTaskName").val() ==""){
-                toastr["warning"]("提示！", "请创建任务名");
+                toastr["error"]("提示！", "请创建任务名");
                 return
             }
             $("[name='sqlTableName']").each(function () {
                 if($(this).val() == ""){
-                    toastr["warning"]("提示！", "请为预览sql编辑一个表名");
+                    toastr["error"]("提示！", "请为预览sql编辑一个表名");
                     return
                 }
                 dataRelSqlTableList+=$(this).val()+";"
@@ -368,7 +368,7 @@
             var numChecked = $eleChecked.size();
 
             if (numChecked == 0) {
-                toastr["success"]("最少选择一个表资源");
+                toastr["error"]("最少选择一个表资源");
                 return
             }
             var relTabStr = "";
@@ -403,11 +403,11 @@
             var $eleChecked = $("[name='fileTable']:checked")
             var numChecked = $eleChecked.size();
             if($("#dataTaskName").val() ==""){
-                toastr["warning"]("提示！", "请创建任务名");
+                toastr["error"]("提示！", "请创建任务名");
                 return
             }
             if (numChecked == 0) {
-                toastr["success"]("最少选择一个文件资源");
+                toastr["error"]("最少选择一个文件资源");
                 return
             }
             var fileTabStr = "";
