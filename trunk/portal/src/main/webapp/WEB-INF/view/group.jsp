@@ -327,7 +327,7 @@
 </script>
 
 <!--用户管理标签页：新建用户对话框-->
-<div id="addUserDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
+<div id="addUserDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-width="400">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -399,7 +399,7 @@
 </div>
 
 <!--用户管理标签页：修改用户对话框-->
-<div id="updateUserDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
+<div id="updateUserDialog" class="modal fade" tabindex="-1"  role="dialog" aria-hidden="true" data-width="400">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -608,7 +608,7 @@
                 allowClear: true
             });
             //添加更新用户组对话框中，选择用户组
-            userGroupForUpdateUserGroupDialogSelect2 = $('#groupForUpdateUserGroupDialog').select2({
+            groupsForUpdateUserDialogSelect2 = $('#groupsForUpdateUserDialog').select2({
                 placeholder: "请选择用户组",
                 allowClear: true
             });
@@ -840,7 +840,7 @@
                 success: function (data) {
                     console.log(data);
                     $("#addUserDialog").modal("hide");
-                    $("#updateUserDialog").remove();
+                    setTimeout(function(){}, 100);
                     queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
                 },
                 error: function(data) {
@@ -961,9 +961,13 @@
 
                         var groupArr = data.groups.split(",");
                         console.log("getUserById - groupArr - " + groupArr);
+/*
                         for (var i = 0; i < groupArr.length; i++) {
-                            $("#groupsForUpdateUserDialog").val(groupArr[i]);
-                        }
+*/
+                            /*$("#groupsForUpdateUserDialog").val(groupArr[i]);*/
+
+                        $("#groupsForUpdateUserDialog").val(groupArr);
+                        /*}*/
 
                         $("#updateUserDialog").modal("show");
 
@@ -987,13 +991,12 @@
                     "loginId": $("#loginIdForUpdate").val(),
                     "password": $("#passwordForUpdate").val(),
                     "subjectCode": $("#subjectCodeForUpdate").val(),
-                    "groups": $("#groupsForUpdateUserDialog").val().toString(),
+                    "groups": $("#groupsForUpdateUserDialog").val().toString()
                 },
                 dataType: "text",
                 success: function (data) {
                     console.log(data);
                     $("#updateUserDialog").modal("hide");
-                    $("#updateUserDialog").remove();
                     queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
                 },
                 error: function(data) {

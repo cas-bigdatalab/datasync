@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,7 @@ public class LoginController {
     private static final Logger logger = LogManager.getLogger(LoginController.class);
 
     @RequestMapping(value = "/validateLogin")
-    public String validateLogin(HttpServletRequest request, @RequestParam(required = true) String userName, @RequestParam(required = true) String password) {
+    public String validateLogin(HttpServletRequest request, @RequestParam(required = true) String userName, @RequestParam(required = true) String password, RedirectAttributes attributes) {
         logger.info("enterring validateLogin");
         logger.info("userName = " + userName + ", password = " + password);
 
@@ -36,7 +37,7 @@ public class LoginController {
         else
         {
             retView = "redirect:/";
-            request.setAttribute("loginNotice", "用户名或密码错误！");
+            attributes.addFlashAttribute("loginNotice", "用户名或密码错误！");
         }
 
         return retView;

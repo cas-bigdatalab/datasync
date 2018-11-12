@@ -45,21 +45,21 @@
 
     <div class="login">
 
-        <!--svg photo-->
+        <%--<!--svg photo-->
         <i ripple>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path fill="#C7C7C7" d="m12,2c-5.52,0-10,4.48-10,10s4.48,10,10,10,10-4.48,10-10-4.48-10-10-10zm1,17h-2v-2h2zm2.07-7.75-0.9,0.92c-0.411277,0.329613-0.918558,0.542566-1.20218,1.03749-0.08045,0.14038-0.189078,0.293598-0.187645,0.470854,0.02236,2.76567,0.03004-0.166108,0.07573,1.85002l-1.80787,0.04803-0.04803-1.0764c-0.02822-0.632307-0.377947-1.42259,1.17-2.83l1.24-1.26c0.37-0.36,0.59-0.86,0.59-1.41,0-1.1-0.9-2-2-2s-2,0.9-2,2h-2c0-2.21,1.79-4,4-4s4,1.79,4,4c0,0.88-0.36,1.68-0.930005,2.25z"/>
             </svg>
-        </i>
+        </i>--%>
 
         <div class="photo">
         </div>
 
-        <span>烟草专题库客户端登录</span>
+        <span style="font-size: x-large; font-family:"黑体"; height: 50px;">烟草专题库客户端登录</span>
 
         <form action="${ctx}/validateLogin" method="post">
         <div id="u" class="form-group">
-            <input id="userName" spellcheck="false" class="form-control" name="userName" type="text" size="18" required="" />
+            <input id="userName" spellcheck="false" class="form-control" name="userName" type="text" size="15" required="" />
             <span class="form-highlight"></span>
             <span class="form-bar"></span>
             <label for="userName" class="float-label">用户名</label>
@@ -75,7 +75,7 @@
         </div>
 
         <div id="p" class="form-group">
-            <input id="password" class="form-control" spellcheck=false name="password" type="password" size="18" required="" />
+            <input id="password" class="form-control" spellcheck=false name="password" type="password" size="12" required="" />
             <span class="form-highlight"></span>
             <span class="form-bar"></span>
             <label for="password" class="float-label">密&nbsp;&nbsp;&nbsp;&nbsp;码</label>
@@ -95,9 +95,10 @@
         </div>
 
         <div class="form-group">
-            <input type="checkbox" id="remember">
-            <label for="remember">记住密码</label>
-            <button id="loginBtn" type="submit" ripple>登录</button>
+            <%--<input type="checkbox" id="remember">
+            <label for="remember">记住密码</label>--%>
+            <%-- ripple --%>
+            <button id="loginBtn" type="submit" >登录</button>
         </div>
         </form>
 
@@ -105,8 +106,7 @@
 </div>
 
 <script src="${ctx}/resources/bundles/jquery/jquery.min.js" type="text/javascript"></script>
-<script src="${ctx}/resources/js/base64.min.js" type="text/javascript"></script>
-<!--login dialog related javascript-->
+
 <script type="text/javascript">
     $(document).ready(function () {
         $(function () {
@@ -196,42 +196,6 @@
         });
     });
 </script>
-<script type="text/javascript">
-    /*jQuery("#loginBtn").click(
-        function() {
-            var userName = $.trim($("#userName").val());
-            var password = $.trim($("#password").val());
-            var loginUrl = "${ctx}/validateLogin?userName=" + userName + "&password=" + password;
-
-            $.ajax({
-                type: "GET",
-                url: loginUrl,
-                dataType: "text",
-                success: function (data) {
-                    var loginStatus = parseInt(data);
-                    console.log("loginStatus = " + loginStatus);
-
-                    if(loginStatus == 1) {
-                        console.log("登录成功！");
-                        //encodedUserName = Base64.encode(userName);
-                        //alert(encodedUserName);
-
-                        window.self.location.href="${ctx}/index?userName=" + userName;
-                    }
-                    else {
-                        $("#loginNotice").html("用户名或者密码错误，请重新输入!");
-                        $("#userName").focus();
-                    }
-                },
-                error: function(data)
-                {
-                    console.log(data);
-                }
-            });
-        }
-    );*/
-</script>
-
 
 </body>
 

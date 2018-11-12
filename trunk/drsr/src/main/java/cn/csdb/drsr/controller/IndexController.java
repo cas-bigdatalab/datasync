@@ -36,7 +36,6 @@ public class IndexController {
     {
         logger.info("登录认证页面!");
         ModelAndView mv = new ModelAndView("login");
-        mv.addObject("loginNotice", request.getAttribute("loginNotice"));
         return  mv;
     }
 
