@@ -511,7 +511,7 @@
                     var cntOfSubjectCode = parseInt(data);
                     if (cntOfSubjectCode > 0)
                     {
-                        alert("subjectCode必须已经存在，请另外选择一个！")
+                        alert("subjectCode已经存在，请另外选择一个！")
                     }
                 },
                 error: function(data) {
@@ -532,7 +532,7 @@
                     var cntOfAdmin = parseInt(data);
                     if (cntOfAdmin > 0)
                     {
-                        alert("admin必须已经存在，请另外选择一个！")
+                        alert("admin已经存在，请另外选择一个！")
                     }
                 },
                 error: function(data) {

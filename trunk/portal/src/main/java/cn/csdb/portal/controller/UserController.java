@@ -119,6 +119,16 @@ public class UserController {
         return updatedUserCnt;
     }
 
+    @RequestMapping(value = "/queryLoginId")
+    @ResponseBody
+    public long queryLoginId(HttpServletRequest request, @RequestParam(name="loginId", required = true) String loginId) {
+        logger.info("enterring UserController-queryLoginId");
+        logger.info("loginId = " + loginId);
+        long loginIdCnt = userService.queryLoginId(loginId.trim());
+        logger.info("queried loginIdCnt - loginIdCnt = " + loginIdCnt);
+
+        return loginIdCnt;
+    }
 
 
 }

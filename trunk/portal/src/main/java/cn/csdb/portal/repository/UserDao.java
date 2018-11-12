@@ -197,4 +197,13 @@ public class UserDao {
     public List<User> getAll(){
         return mongoTemplate.findAll(User.class);
     }
+
+    public long queryLoginId(String loginId)
+    {
+        DBObject dbObject = QueryBuilder.start().and("loginId").is(loginId).get();
+        Query query = new BasicQuery(dbObject);
+        long loginIdCnt = mongoTemplate.count(query, "t_user");
+
+        return loginIdCnt;
+    }
 }

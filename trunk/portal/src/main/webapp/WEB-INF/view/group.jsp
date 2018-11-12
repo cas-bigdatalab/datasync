@@ -351,7 +351,7 @@
                                 用户账号<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入用户账号" id="loginId" name="loginId"  required="required" />
+                                <input type="text" class="form-control" placeholder="请输入用户账号,只可输入数字和字母的组合" id="loginId" name="loginId"  required="required" onkeyup="this.value=this.value.replace(/[^\w_]/g,'');" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -1006,6 +1006,35 @@
                 }
             });
         }
+
+        //subjectCode唯一性
+        $("#loginId").change(
+            function()
+            {
+                var loginId = $(this).val();
+
+            }
+        )
+        $("#loginId").blur(
+            function() {
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: '${ctx}/user/queryLoginId',
+                    data: {loginId: $(this).val()},
+                    dataType: "text",
+                    success: function (data){
+                        var cntOfLoginId = parseInt(data);
+                        if (cntOfLoginId > 0)
+                        {
+                            alert("loginId已经存在，请另外选择一个！")
+                        }
+                    },
+                    error: function(data) {
+                        console.log(data);
+                    }
+            });
+        });
     </script>
 </div>
 
