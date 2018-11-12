@@ -141,13 +141,13 @@
                         <span class="arrow "></span>
                     </a>
                 </li>
-                <li>
+                <%--<li>
                     <a href="${ctx}/dataSource">
                         <i class="icon-wrench"></i>
                         <span class="title">数据源</span>
                         <span class="arrow "></span>
                     </a>
-                </li>
+                </li>--%>
                 <li>
                     <a href="${ctx}/subjectInfo">
                         <i class="icon-wrench"></i>
