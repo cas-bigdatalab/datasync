@@ -23,10 +23,9 @@ public class LoginService
         String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
 
         try {
-            String portalIp = ConfigUtil.getConfigItem(configFilePath, "PortalIP");
-            String portalPort = ConfigUtil.getConfigItem(configFilePath, "PortalPort");
-            String loginApiPath = "/portal/api/clientLogin";
-            String url = "http://" + portalIp + ":" + portalPort + loginApiPath + "?" + "userName=" + userName + "&password=" + password;
+            String portalUrl = ConfigUtil.getConfigItem(configFilePath, "PortalUrl");
+            String loginApiPath = "/api/clientLogin";
+            String url = "http://" + portalUrl + loginApiPath + "?" + "userName=" + userName + "&password=" + password;
             logger.info("before portal login: portal login api, url = " + url);
             RestTemplate restTemplate = new RestTemplate();
             JSONObject loginObject = restTemplate.getForObject(url, JSONObject.class);
@@ -62,12 +61,10 @@ public class LoginService
     {
         String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
 
-        //String subjectCode = getConfigItem(configFilePath, "SubjectCode");
-        String getSubjectApiPath = "/portal/api/getSubjectByUser/" + userName;
+        String portalUrl = ConfigUtil.getConfigItem(configFilePath, "PortalUrl");
+        String getSubjectApiPath = "/api/getSubjectByUser/" + userName;
 
-        String portalIp = ConfigUtil.getConfigItem(configFilePath, "PortalIP");
-        String portalPort = ConfigUtil.getConfigItem(configFilePath, "PortalPort");
-        String url = "http://" + portalIp + ":" + portalPort + getSubjectApiPath;
+        String url = "http://" + portalUrl + getSubjectApiPath;
 
         RestTemplate restTemplate = new RestTemplate();
         JSONObject subjectInfo = restTemplate.getForObject(url, JSONObject.class);

@@ -842,6 +842,7 @@
                     $("#addUserDialog").modal("hide");
                     setTimeout(function(){}, 100);
                     queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
+                    location.reload();
                 },
                 error: function(data) {
 
@@ -965,8 +966,8 @@
                         for (var i = 0; i < groupArr.length; i++) {
 */
                             /*$("#groupsForUpdateUserDialog").val(groupArr[i]);*/
-
-                        $("#groupsForUpdateUserDialog").val(groupArr);
+                        //$("#users").select2().val(JSON.parse(data.group.users)).trigger("change");
+                        $("#groupsForUpdateUserDialog").select2().val(groupArr).trigger("change");
                         /*}*/
 
                         $("#updateUserDialog").modal("show");
@@ -998,6 +999,7 @@
                     console.log(data);
                     $("#updateUserDialog").modal("hide");
                     queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
+                    location.reload();
                 },
                 error: function(data) {
 
