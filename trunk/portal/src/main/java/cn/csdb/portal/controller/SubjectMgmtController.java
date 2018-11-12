@@ -202,15 +202,17 @@ public class SubjectMgmtController {
         logger.info("updateSubject - delete image completed!");
     }
 
-    /**
-     * Function Description:
-     *
-     * @param currentPage
-     * @return ModelAndView mv
-     */
+    @RequestMapping(value = "/subjectIndex")
+    public ModelAndView subjectIndex(HttpServletRequest request) {
+        ModelAndView mv = new ModelAndView("subjectMgmt");
+        return mv;
+    }
+
+
+    @ResponseBody
     @RequestMapping(value = "/querySubject")
-    public ModelAndView querySubject(HttpServletRequest request, @RequestParam(required = true) int currentPage) {
-        logger.info("enterring SubjectMgmtController-querySubject");
+    public JSONObject querySubject(HttpServletRequest request, @RequestParam(value="pageNum",required = true) int currentPage) {
+        logger.info("enterring SubjectMgmtController-querySubject[currentPage = " + currentPage + "]");
 
         long totalPages = 0;
         totalPages = subjectService.getTotalPages();
@@ -218,13 +220,16 @@ public class SubjectMgmtController {
 
         logger.info("queried subject - " + subjectsOfThisPage);
 
-        ModelAndView mv = new ModelAndView("subjectMgmt");
-        mv.addObject("totalPages", totalPages);
-        mv.addObject("subjectsOfThisPage", subjectsOfThisPage);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("totalPages", totalPages);
+        jsonObject.put("pageNum", currentPage);
+        jsonObject.put("total", subjectService.getTotalSubject());
+        jsonObject.put("list", subjectsOfThisPage);
 
+        logger.info("jsonObject = " + jsonObject);
         logger.info("querySubject done!");
 
-        return mv;
+        return jsonObject;
     }
 
     /**

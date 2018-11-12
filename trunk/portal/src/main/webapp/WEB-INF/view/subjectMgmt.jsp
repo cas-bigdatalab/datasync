@@ -25,93 +25,77 @@
     </style>
 </head>
 <body>
-<div class="page-content">
-    <h3>欢迎来到专题库注册页面</h3>
+    <div class="page-content">
+        <h3>欢迎来到专题库注册页面</h3>
 
-    <hr />
+        <hr />
 
-    <!--the page to add subject-->
-    <a title="添加关系数据库" id="showAddSubjectDialog" data-target="#addSubjectDialog" data-toggle="modal" >
-        <span class="btn green btn-sm">
-            <i class="glyphicon glyphicon-plus"></i>
-            添加专题库
-        </span>
-    </a>
+        <!--the page to add subject-->
+        <a title="添加专题库" id="showAddSubjectDialog" data-target="#addSubjectDialog" data-toggle="modal" >
+            <span class="btn green btn-sm">
+                <i class="glyphicon glyphicon-plus"></i>
+                添加专题库
+            </span>
+        </a>
 
-    <br />
-    <br />
+        <br />
+        <br />
 
-    <!--the table to list all available subjects-->
-    <div class="portlet-body">
-        <table class="table table-hover table-bordered">
-            <thead>
-            <tr>
-                <th style="display:none;">专题库ID</th>
-                <th>序号</th>
-                <th>专题库名称</th>
-                <th>专题库代码</th>
-                <th>管理员账号</th>
-                <th>管理员密码</th>
-                <th>专题库负责人</th>
-                <th>负责人电话</th>
-                <th>FTP账号</th>
-                <th>FTP密码</th>
-                <th>操作</th>
-            </tr>
-            </thead>
-            <tbody
-            <c:forEach items="${subjectsOfThisPage}" var="subject" varStatus="vs">
+        <div class="table-scrollable">
+            <table class="table table-striped table-bordered table-advance table-hover">
+                <thead>
                 <tr>
-                    <td style="display:none;">${subject.id}</td>
-                    <td>${subject.serialNo}</td>
-                    <td>${subject.subjectName}</td>
-                    <td>${subject.subjectCode}</td>
-                    <td>${subject.admin}</td>
-                    <td>${subject.adminPasswd}</td>
-                    <td>${subject.contact}</td>
-                    <td>${subject.phone}</td>
-                    <td>${subject.ftpUser}</td>
-                    <td>${subject.ftpPassword}</td>
-                    <td id="${subject.id}">
-                        <a title="修改" class="updateSubjectBtn" data-target="#updateSubjectDialog" data-toggle="modal">
-                            <span class="btn default btn-xs purple updateButton"><i class="fa fa-edit"></i>&nbsp;&nbsp;修改</span>
-                        </a>
-                        &nbsp;&nbsp;
-                        <a title="删除"  class="deleteSubjectBtn" data-target="#deleteSubjectDialog" data-toggle="modal">
-                            <span class="btn default btn-xs red"><i class="fa fa-trash"></i>&nbsp;&nbsp;删除</span>
-                        </a>
-                    </td>
+                    <th style="display:none;">专题库ID</th>
+                    <th>序号</th>
+                    <th>专题库名称</th>
+                    <th>专题库代码</th>
+                    <th>管理员账号</th>
+                    <th>管理员密码</th>
+                    <th>负责人</th>
+                    <th>电话</th>
+                    <th>操作</th>
                 </tr>
-            </c:forEach>
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="subjectList">
+                </tbody>
+            </table>
+        </div>
+
+        <!--分页-->
+        <div class="row margin-top-20">
+            <div class="col-md-6 margin-top-10">
+                当前第<span style="color:blue;" id="pageNum"></span>页,共<span style="color:blue;" id="totalPages"></span>页, 共<span style="color:blue;" id="total"></span>条数据
+            </div>
+            <div class="col-md-6">
+                <div id="pagination" style="float: right"></div>
+            </div>
+        </div>
+
     </div>
 
-    <!--paging-->
-    <div align="center">
-        <ul class="pagination">
-            <li>
-                <a href="${ctx}/subjectMgmt/querySubject?currentPage=1">
-                    首页
+    <script type="text/html" id="subjectListTable">
+        {{each list as value index}}
+        <tr>
+            <td style="display:none;">{{value.id}}</td>
+            <td style="text-align: center">{{value.serialNo}}</td>
+            <td style="text-align: center">{{value.subjectName}}</td>
+            <td style="text-align: center">{{value.subjectCode}}</td>
+            <td style="text-align: center">{{value.admin}}</td>
+            <td style="text-align: center">{{value.adminPasswd}}</td>
+            <td style="text-align: center">{{value.contact}}</td>
+            <td style="text-align: center">{{value.phone}}</td>
+            <td id="{{value.id}}">
+                <a title="修改" class="updateSubjectBtn" data-target="#updateSubjectDialog" data-toggle="modal">
+                    <span class="btn default btn-xs purple"><i class="fa fa-edit"></i>&nbsp;&nbsp;修改</span>
                 </a>
-            </li>
-
-            <c:forEach begin="1" end="${totalPages}" step="1" varStatus="vs">
-                <li>
-                    <a href="${ctx}/subjectMgmt/querySubject?currentPage=${vs.count}">${vs.count}</a>
-                    <c:set value="${vs.count}" var="currentPage" />
-                </li>
-            </c:forEach>
-
-            <li>
-                <a href="${ctx}/subjectMgmt/querySubject?currentPage=${totalPages}">
-                    尾页
+                &nbsp;&nbsp;
+                <a title="删除"  class="deleteSubjectBtn" data-target="#deleteSubjectDialog" data-toggle="modal">
+                    <span class="btn default btn-xs red"><i class="fa fa-trash"></i>&nbsp;&nbsp;删除</span>
                 </a>
-                <c:set value="${totalPages}" var="currentPage" />
-            </li>
-        </ul>
-    </div>
-</div>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
 
 
     <div id="addSubjectDialog" class="modal fade" tabindex="-1" aria-hidden="true" data-width="400">
@@ -400,32 +384,90 @@
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/form-validation/form-validation.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/artTemplate/template.js"></script>
+
 
     <script type="text/javascript">
-        $(".deleteSubjectBtn").click(function (){
-            idOfSubjectToBeDeleted = $(this).parent().attr("id");
 
-            $("#agreeDeleteBtn").click(
-                function ()
-                {
-                    var deleteUrl = "${ctx}/subjectMgmt/deleteSubject?id=" + idOfSubjectToBeDeleted + "&currentPage=" + ${currentPage};
-                    $.ajax({
-                        type: "GET",
-                        url: deleteUrl,
-                        dataType: "text",
-                        success: function (data) {
-                            console.log(data);
-                            $("#" + data).parent().remove();
-                        },
-                        error: function(data)
-                        {
-                            console.log(data);
-                        }
-                    });
-                }
-            );
+        $(function () {
+            getSubject(1);
+            console.log("进入到jquery的初始化函数中了");
         });
 
+        //获得专题库
+        function getSubject(pageNum) {
+            $.ajax({
+                url: "${ctx}/subjectMgmt/querySubject",
+                type: "get",
+                data: {
+                    "pageNum": pageNum
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log("获得subject成功！");
+                    console.log("success - data = " + data);
+
+                    var html = template("subjectListTable", data);
+                    $("#subjectList").empty();
+                    $("#subjectList").append(html);
+
+                    $("#pageNum").html(data.pageNum);
+                    $("#totalPages").html(data.totalPages);
+                    $("#total").html(data.total);
+
+                    if ($("#pagination .bootpag").length != 0) {
+                        $("#pagination").off();
+                        $('#pagination').empty();
+                    }
+
+                    $('#pagination').bootpag({
+                        total: data.totalPages,
+                        page: data.pageNum,
+                        maxVisible: 5,
+                        leaps: true,
+                        firstLastUse: true,
+                        first: '首页',
+                        last: '尾页',
+                        wrapClass: 'pagination',
+                        activeClass: 'active',
+                        disabledClass: 'disabled',
+                        nextClass: 'next',
+                        prevClass: 'prev',
+                        lastClass: 'last',
+                        firstClass: 'first'
+                    }).on('page', function (event, num) {
+                        getSubject(num);
+                    });
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    console.log("textStatus = " + textStatus);
+                    console.log("errorThrown = " + errorThrown);
+                }
+            });
+        }
+
+        function agreeDeleteSubject(agreeDeleteBtn)
+        {
+           var id = $(agreeDeleteBtn).parrent().attr("id");
+            var deleteUrl = "${ctx}/subjectMgmt/deleteSubject?id=" + idOfSubjectToBeDeleted + "&currentPage=" + ${currentPage};
+            $.ajax({
+                type: "GET",
+                url: deleteUrl,
+                dataType: "text",
+                success: function (data) {
+                    console.log(data);
+                    $("#" + data).parent().remove();
+                },
+                error: function(data)
+                {
+                    console.log(data);
+                }
+            });
+        }
+
+
+
+        //更新专题库
         $(".updateSubjectBtn").click(
             function () {
                 $.ajax({
@@ -453,6 +495,7 @@
             }
         );
 
+        //subjectCode唯一性
         $("#subjectCode").blur(function() {
             $.ajax({
                 type: "GET",
@@ -464,7 +507,7 @@
                     var cntOfSubjectCode = parseInt(data);
                     if (cntOfSubjectCode > 0)
                     {
-                        alert("subjectCode必须已经存在，请另外选择一个！")
+                        alert("subjectCode已经存在，请另外选择一个！")
                     }
                 },
                 error: function(data) {
@@ -473,6 +516,7 @@
             });
         });
 
+        //用户名唯一性
         $("#admin").blur(function() {
             $.ajax({
                 type: "GET",
@@ -484,7 +528,7 @@
                     var cntOfAdmin = parseInt(data);
                     if (cntOfAdmin > 0)
                     {
-                        alert("admin必须已经存在，请另外选择一个！")
+                        alert("admin已经存在，请另外选择一个！")
                     }
                 },
                 error: function(data) {

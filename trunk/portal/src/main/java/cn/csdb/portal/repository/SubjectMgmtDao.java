@@ -358,8 +358,6 @@ public class SubjectMgmtDao {
      * Function Description:
      *
      * @return totalPages
-     * @author zzl
-     * @date 2018/10/23
      */
     public long getTotalPages() {
         //query the count of all documents in t_subject collection
@@ -370,6 +368,15 @@ public class SubjectMgmtDao {
         totalPages = totalRows / rowsPerPage + (totalRows % rowsPerPage == 0 ? 0 : 1);
 
         return totalPages;
+    }
+
+    public long getTotalSubject()
+    {
+        DBObject dbObject = QueryBuilder.start().get();
+        Query query = new BasicQuery(dbObject);
+        long totalRows = mongoTemplate.count(query, "t_subject");
+
+        return totalRows;
     }
 
     /**

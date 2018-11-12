@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by shiba on 2018/11/6.
@@ -32,6 +34,33 @@ public class CheckUserController {
                     //为当前用户进行认证，授权
                     subject.login(token);
                     User u = checkUserService.getByUserName(user.getLoginId());
+                    boolean flag = false;
+                    boolean status = u.getGroups().contains(",");
+                    if(status){
+                        String[] group = u.getGroups().split(",");
+                        for(String str : group) {
+                            if (str.equals("系统管理员")) {
+                                flag = true;
+                                break;
+                            } else if (str.equals("主题库管理员")) {
+                                flag = true;
+                            } else {
+
+                            }
+                        }
+                    }else{
+                        if (u.getGroups().equals("系统管理员")) {
+                            flag = true;
+                        } else if (u.getGroups().equals("主题库管理员")) {
+                            flag = true;
+                        } else {
+
+                        }
+                    }
+                    if(!flag){
+                        request.setAttribute("errorMsg", "请为账号赋予角色！");
+                        return "loginNew";
+                    }
                     if (u.getSubjectCode() != null) {
                         cn.csdb.portal.model.Subject sub = checkUserService.getSubjectByCode(u.getSubjectCode());
                         request.getSession().setAttribute("DbName", sub.getDbName());

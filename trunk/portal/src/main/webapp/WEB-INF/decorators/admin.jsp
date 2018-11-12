@@ -248,7 +248,7 @@
 
 
                     <li class="start">
-                        <a href="${ctx}/subjectMgmt/querySubject?currentPage=1">
+                        <a href="${ctx}/subjectMgmt/subjectIndex">
                             <i class="icon-user"></i>
                             <span class="title">专题库</span>
                             <span class="arrow"></span>

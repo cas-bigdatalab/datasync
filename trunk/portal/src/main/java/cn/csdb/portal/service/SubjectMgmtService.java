@@ -152,4 +152,10 @@ public class SubjectMgmtService {
     {
         return subjectMgmtDao.queryAdmin(userName);
     }
+
+    public long getTotalSubject()
+    {
+        return subjectMgmtDao.getTotalSubject();
+    }
+
 }

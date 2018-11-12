@@ -68,4 +68,10 @@ public class UserService {
     public List<User> getAll(){
         return userDao.getAll();
     }
+
+
+    public long queryLoginId(String loginId)
+    {
+        return userDao.queryLoginId(loginId);
+    }
 }

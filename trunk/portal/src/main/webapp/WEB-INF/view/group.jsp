@@ -351,7 +351,7 @@
                                 用户账号<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入用户账号" id="loginId" name="loginId"  required="required" />
+                                <input type="text" class="form-control" placeholder="请输入用户账号,只可输入数字和字母的组合" id="loginId" name="loginId"  required="required" onkeyup="this.value=this.value.replace(/[^\w_]/g,'');" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -362,6 +362,7 @@
                                 <input type="text" class="form-control" placeholder="请输入密码"  id="password" name="password" required="required">
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectCode">
                                 专题库代码<span style="color: red;">*</span>
@@ -370,6 +371,7 @@
                                 <input type="text" class="form-control" placeholder="请输入专题库代码"  id="subjectCode" name="subjectCode" required="required">
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="groupsForAddUserDialog">
                                 角&nbsp;&nbsp;&nbsp;&nbsp;色<span style="color: red;">*</span>
@@ -842,6 +844,7 @@
                     $("#addUserDialog").modal("hide");
                     setTimeout(function(){}, 100);
                     queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
+                    location.reload();
                 },
                 error: function(data) {
 
@@ -965,8 +968,8 @@
                         for (var i = 0; i < groupArr.length; i++) {
 */
                             /*$("#groupsForUpdateUserDialog").val(groupArr[i]);*/
-
-                        $("#groupsForUpdateUserDialog").val(groupArr);
+                        //$("#users").select2().val(JSON.parse(data.group.users)).trigger("change");
+                        $("#groupsForUpdateUserDialog").select2().val(groupArr).trigger("change");
                         /*}*/
 
                         $("#updateUserDialog").modal("show");
@@ -998,12 +1001,42 @@
                     console.log(data);
                     $("#updateUserDialog").modal("hide");
                     queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
+                    location.reload();
                 },
                 error: function(data) {
 
                 }
             });
         }
+
+        //subjectCode唯一性
+        $("#loginId").change(
+            function()
+            {
+                var loginId = $(this).val();
+
+            }
+        )
+        $("#loginId").blur(
+            function() {
+                $.ajax({
+                    type: "GET",
+                    async: false,
+                    url: '${ctx}/user/queryLoginId',
+                    data: {loginId: $(this).val()},
+                    dataType: "text",
+                    success: function (data){
+                        var cntOfLoginId = parseInt(data);
+                        if (cntOfLoginId > 0)
+                        {
+                            alert("loginId已经存在，请另外选择一个！")
+                        }
+                    },
+                    error: function(data) {
+                        console.log(data);
+                    }
+            });
+        });
     </script>
 </div>
 
