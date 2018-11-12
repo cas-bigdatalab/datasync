@@ -30,7 +30,7 @@
     <link href="${ctx}/resources/bundles/metronic/css/custom.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css"/>
-
+    <link href="${ctx}/resources/css/customUserLogin.css" rel="stylesheet" type="text/css"/>
 
     <!--BEGIN PAGE STYLES-->
     <sitemesh:write property="head"/>
@@ -173,7 +173,7 @@
 </div>--%>
 <div class="top_div">
 
-            <ul class="nav navbar-nav pull-right">
+            <%--<ul class="nav navbar-nav pull-right">
                 <!-- BEGIN USER LOGIN DROPDOWN -->
                 <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                 <li class="dropdown dropdown-user">
@@ -181,19 +181,19 @@
                        data-close-others="true">
                         <i class="glyphicon glyphicon-user"></i>
                         <span class="username username-hide-on-mobile">
-                           <%--<shiro:user>--%>
+                           &lt;%&ndash;<shiro:user>&ndash;%&gt;
                                欢迎您！${sessionScope.userName} &nbsp;&nbsp;
-                               <%--<span>角色:${sessionScope.roleNames} </span>--%>
-                           <%--</shiro:user>--%>
+                               &lt;%&ndash;<span>角色:${sessionScope.roleNames} </span>&ndash;%&gt;
+                           &lt;%&ndash;</shiro:user>&ndash;%&gt;
                         </span>
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-default">
                         <li><a href="logout"><i class="icon-key"></i>&nbsp;安全退出</a></li>
-<%--
+&lt;%&ndash;
                         <li><a href="#">Another action</a></li>
---%>
-                        <%--<shiro:guest>
+&ndash;%&gt;
+                        &lt;%&ndash;<shiro:guest>
                             <li>
                                 <a href="${applicationScope.systemPro['cas.url.prefix']}/login?service=${applicationScope.systemPro['drsr.url']}/shiro-cas">
                                     <i class="icon-rocket"></i>用户登录
@@ -210,11 +210,27 @@
                                 <a href="${applicationScope.systemPro['cas.url.prefix']}/logout?service=${applicationScope.systemPro['drsr.url']}/logout">
                                     <i class="icon-key"></i>退出</a>
                             </li>
-                        </shiro:user>--%>
+                        </shiro:user>&ndash;%&gt;
                     </ul>
                 </li>
                 <!-- END USER LOGIN DROPDOWN -->
+            </ul>--%>
+    <ul class="cus_ul">
+        <li>
+            <a href="#" id="cus_User_id">
+                <i class="glyphicon glyphicon-user"></i>
+                &nbsp;&nbsp;
+                <span>用户登录sadadsdadsad</span>
+                &nbsp;
+                <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="cus_drop">
+                <li>
+                    <a href="#"><i class="icon-key"></i>&nbsp;安全退出</a>
+                </li>
             </ul>
+        </li>
+    </ul>
 
 </div>
 
@@ -400,6 +416,16 @@
         var date = new Date(mil);
         return date.Format("yyyy-MM-dd");
     }
+    $("#cus_User_id").toggle(
+        function () {
+            $(".cus_drop").show();
+            $("#cus_User_id").css("background-color","#eee")
+        },
+        function () {
+            $(".cus_drop").hide();
+            $("#cus_User_id").css("background-color","#eee")
+        }
+    )
     toastr.options = {
         "closeButton": true,
         "debug": false,
