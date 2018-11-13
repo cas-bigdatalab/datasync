@@ -38,6 +38,7 @@
                 /shiro-cas=cas
 -->
                 /logout=logout
+                /*/logout=logout
                 /login=anon
                 /opencallback=anon
                 /403=anon
