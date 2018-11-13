@@ -34,10 +34,10 @@ public class SubjectMgmtController {
      * Function Description: add subject to db
      *
      * @param subject, the wrapped object which contains information of the subject ot be added
-     * @param image,   the image field of input form
      * @return redirectStr, the request is redirected to querySubject interface
      */
     @RequestMapping(value = "/addSubject", method = RequestMethod.POST)
+    @ResponseBody
     public String addSubject(HttpServletRequest request, Subject subject, @RequestParam("image") MultipartFile image) {
         //input parameter check
         logger.info("enterring subjectMgmt-addSubject.");
@@ -57,10 +57,10 @@ public class SubjectMgmtController {
         String addSubjectNotice = subjectService.addSubject(subject);
         logger.info("subject added, addSubjectNotice : " + addSubjectNotice);
 
-        long totalPages = subjectService.getTotalPages();
+      /*  long totalPages = subjectService.getTotalPages();
         String redirectStr = "redirect:/subjectMgmt/querySubject?pageNum=" + totalPages;
-        logger.info("redirect request to querySubject : " + redirectStr);
-        return redirectStr;
+        logger.info("redirect request to querySubject : " + redirectStr);*/
+        return addSubjectNotice;
     }
 
     /**

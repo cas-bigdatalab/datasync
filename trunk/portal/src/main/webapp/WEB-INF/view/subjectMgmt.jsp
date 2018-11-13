@@ -13,7 +13,6 @@
 
 <html>
 <head>
-    <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/default.css"/>--%>
     <style type="text/css">
         td {
             text-align: center;
@@ -21,6 +20,10 @@
 
         th {
             text-align: center;
+        }
+
+        .error-message {
+            color: red;
         }
     </style>
 </head>
@@ -109,7 +112,8 @@
 
                 <!--subject info input form-->
                 <div class="modal-body">
-                    <form id="addSubjectForm" class="form-horizontal" role="form">
+                    <form id="addSubjectForm" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" accept-charset="utf-8" onfocusout="true">
+
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectName">
                                 专题库名称<span style="color: red;">*</span>
@@ -377,7 +381,37 @@
 
         $(function () {
             getSubject(1);
-            console.log("进入到jquery的初始化函数中了");
+
+            var subjectValid = {
+                errorElement: 'span',
+                errorClass: 'error-message',
+                focusInvalid: false,
+                rules: {
+                    subjectName: "required",
+                    subjectCode: "required",
+                    image: "required",
+                    admin: "required",
+                    adminPasswd: "required",
+                    contact: "required",
+                    phone: "required",
+                    email: "required",
+                    serialNo: "required"
+                },
+                messages: {
+                    subjectName: "请输入专题库名称",
+                    subjectCode: "请输入专题库代码",
+                    image: "请选择一个图片",
+                    admin: "请输入专题库管理员账号",
+                    adminPasswd: "请输入专题库管理密码",
+                    contact: "请输入专题库联系人",
+                    phone: "请输入专题库联系人电话",
+                    email: "请输入专题库联系人email",
+                    serialNo: "请输入专题库的序号"
+                }
+            };
+
+            $("#addSubjectForm").validate(subjectValid);
+            $("#updateSubjectForm").validate(subjectValid);
         });
 
         //获得专题库
@@ -433,9 +467,53 @@
         }
 
         //添加专题库
-        function addSubject()
+        function agreeAddSubject()
         {
+            if (!$("#addSubjectForm").valid()) {
+                return;
+            }
 
+            var formData = new FormData();
+
+            formData.append("subjectName", $("#subjectCode").val());
+            formData.append("subjectCode", $("#subjectCode").val());
+            formData.append('image', $('#image').get(0).files[0]);
+            formData.append('brief', $("#brief").val());
+            formData.append("admin", $("#admin").val());
+            formData.append("adminPasswd", $("#adminPasswd").val());
+            formData.append("contact", $("#contact").val());
+            formData.append("phone", $("#phone").val());
+            formData.append("email", $("#email").val());
+            formData.append("serialNo", $("#serialNo").val());
+
+
+            $.ajax({
+                url: "${ctx}/subjectMgmt/addSubject",
+                type: "post",
+                contentType:false,
+                processData:false,
+                data: formData,
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    $("#addSubjectDialog").modal("hide");
+                    getSubject(1); //没有搜索条件的情况下，显示第一页
+                    location.reload();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    console.log("textStatus = " + textStatus);
+                    console.log("errorThrown = " + errorThrown);
+                }
+            });
+
+        }
+
+        //添加专题库
+        function agreeUpdateSubject()
+        {
+            if (!$("#updateSubjectForm").valid()) {
+                return;
+            }
         }
 
         function agreeDeleteSubject(agreeDeleteBtn)
