@@ -119,17 +119,18 @@ public class SubjectMgmtController {
      * Function Description:
      *
      * @param id, the id of Subject to be deleted
-     * @param currentPage, the page which contains the deleted subject, this parameter is designed for request redirect
+     * @param pageNum, the page which contains the deleted subject, this parameter is designed for request redirect
      * @return redirectStr, the request is redirected to querySubject interface
      */
     @RequestMapping(value = "/deleteSubject")
     @ResponseBody
-    public String deleteSubject(HttpServletRequest request, @RequestParam(required = true) String id, @RequestParam(required = true) int currentPage) {
-        logger.info("SubjectMgmtController-deleteSubject, id = " + id + ", currentPage = " + currentPage);
+    public String deleteSubject(HttpServletRequest request, @RequestParam(required = true) String id, @RequestParam(required = true) int pageNum) {
+        logger.info("SubjectMgmtController-deleteSubject, id = " + id + ", currentPage = " + pageNum);
 
         int deletedRowCnt = subjectService.deleteSubject(id);
         logger.info("SubjectMgmtController-deleteSubject，deletedRowCnt = " + deletedRowCnt);
 
+        //返回要删除的subject的id
         return id;
     }
 

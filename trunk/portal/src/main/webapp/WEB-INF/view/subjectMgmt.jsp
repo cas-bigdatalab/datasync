@@ -89,13 +89,9 @@
             <td style="text-align: center">{{$value.contact}}</td>
             <td style="text-align: center">{{$value.phone}}</td>
             <td id="{{$value.id}}">
-                <a title="修改" class="updateSubjectBtn" data-target="#updateSubjectDialog" data-toggle="modal">
-                    <span class="btn default btn-xs purple"><i class="fa fa-edit"></i>&nbsp;&nbsp;修改</span>
-                </a>
-                &nbsp;&nbsp;
-                <a title="删除"  class="deleteSubjectBtn" data-target="#deleteSubjectDialog" data-toggle="modal">
-                    <span class="btn default btn-xs red"><i class="fa fa-trash"></i>&nbsp;&nbsp;删除</span>
-                </a>
+                <button class="btn default btn-xs red updateSubjectBtn" data-target="#updateSubjectDialog" data-toggle="modal" onclick="(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>
+                &nbsp;
+                <button class="btn default btn-xs green deleteSubjectBtn" onclick="deleteSubject(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>
             </td>
         </tr>
         {{/each}}
@@ -486,7 +482,6 @@
             formData.append("email", $("#email").val());
             formData.append("serialNo", $("#serialNo").val());
 
-
             $.ajax({
                 url: "${ctx}/subjectMgmt/addSubject",
                 type: "post",
@@ -508,63 +503,9 @@
 
         }
 
-        //添加专题库
-        function agreeUpdateSubject()
-        {
-            if (!$("#updateSubjectForm").valid()) {
-                return;
-            }
-        }
-
-        function agreeDeleteSubject(agreeDeleteBtn)
-        {
-           var id = $(agreeDeleteBtn).parrent().attr("id");
-            var deleteUrl = "${ctx}/subjectMgmt/deleteSubject?id=" + idOfSubjectToBeDeleted + "&currentPage=" + ${currentPage};
-            $.ajax({
-                type: "GET",
-                url: deleteUrl,
-                dataType: "text",
-                success: function (data) {
-                    console.log(data);
-                    $("#" + data).parent().remove();
-                },
-                error: function(data)
-                {
-                    console.log(data);
-                }
-            });
-        }
-
-        $(".deleteSubjectBtn").click(
-            function ()
-            {
-                idOfSubjectToBeDeleted = $(this).parent().attr("id");
-                $("#agreeDeleteBtn").click(
-                    function ()
-                    {
-                        var deleteUrl = "${ctx}/subjectMgmt/deleteSubject?id=" + idOfSubjectToBeDeleted + "&currentPage=" + ${currentPage};
-                        $.ajax({
-                            type: "GET",
-                            url: deleteUrl,
-                            dataType: "text",
-                            success: function (data) {
-                                console.log(data);
-                                $("#" + data).parent().remove();
-                            },
-                            error: function(data)
-                            {
-                                console.log(data);
-                            }
-                        });
-                    }
-                );
-            }
-        );
-
         //更新专题库
-        $(".updateSubjectBtn").click(
-            function () {
-                $.ajax({
+        function updateSubject() {
+            $.ajax({
                     type: "GET",
                     async: false,
                     url: '${ctx}/subjectMgmt/querySubjectById',
@@ -586,8 +527,47 @@
                         console.log(data);
                     }
                 });
+        }
+        function agreeUpdateSubject()
+        {
+            if (!$("#updateSubjectForm").valid()) {
+                return;
             }
-        );
+        }
+
+        //删除专题库
+        function deleteSubject(deleteBtn)
+        {
+            $("#deleteSubjectDialog").modal("show");
+            idOfSubjectToBeDeleted = $(deleteBtn).parent().attr("id");
+
+            console.log("idOfSubjectToBeDeleted = " + idOfSubjectToBeDeleted);
+
+            $("#agreeDeleteBtn").click(
+                agreeDeleteSubject(idOfSubjectToBeDeleted)
+            );
+        };
+        function agreeDeleteSubject(id)
+        {
+            $("#deleteUserDialog").modal("hide");
+
+            var deleteUrl = "${ctx}/subjectMgmt/deleteSubject?id=" + id + "&pageNum=" + 1;
+            $.ajax({
+                type: "GET",
+                url: deleteUrl,
+                dataType: "text",
+                success: function (data) {
+                    console.log(data);
+                    getSubject(1);
+                },
+                error: function(data)
+                {
+                    console.log(data);
+                }
+            });
+        }
+
+
 
         //subjectCode唯一性
         $("#subjectCode").blur(function() {
