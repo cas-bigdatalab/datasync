@@ -220,13 +220,13 @@
             <a href="#" id="cus_User_id">
                 <i class="glyphicon glyphicon-user"></i>
                 &nbsp;&nbsp;
-                <span>用户登录sadadsdadsad</span>
+                <span>欢迎您！${sessionScope.userName}</span>
                 &nbsp;
                 <i class="fa fa-angle-down"></i>
             </a>
             <ul class="cus_drop">
                 <li>
-                    <a href="#"><i class="icon-key"></i>&nbsp;安全退出</a>
+                    <a href="logout"><i class="icon-key"></i>&nbsp;安全退出</a>
                 </li>
             </ul>
         </li>
