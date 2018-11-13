@@ -58,7 +58,7 @@ public class SubjectMgmtController {
         logger.info("subject added, addSubjectNotice : " + addSubjectNotice);
 
         long totalPages = subjectService.getTotalPages();
-        String redirectStr = "redirect:/subjectMgmt/querySubject?currentPage=" + totalPages;
+        String redirectStr = "redirect:/subjectMgmt/querySubject?pageNum=" + totalPages;
         logger.info("redirect request to querySubject : " + redirectStr);
         return redirectStr;
     }
@@ -152,7 +152,7 @@ public class SubjectMgmtController {
         String updateSubjectNotice = subjectService.updateSubject(subject);
         logger.info("update subject completed. updateSubjectNotice = " + updateSubjectNotice);
 
-        String redirectStr = "redirect:/subjectMgmt/querySubject?currentPage=1";
+        String redirectStr = "redirect:/subjectMgmt/querySubject?pageNum=1";
         logger.info("redirect request to querySubject : " + redirectStr);
 
         return redirectStr;
@@ -223,6 +223,7 @@ public class SubjectMgmtController {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("totalPages", totalPages);
         jsonObject.put("pageNum", currentPage);
+        jsonObject.put("pageSize", 10);
         jsonObject.put("total", subjectService.getTotalSubject());
         jsonObject.put("list", subjectsOfThisPage);
 
