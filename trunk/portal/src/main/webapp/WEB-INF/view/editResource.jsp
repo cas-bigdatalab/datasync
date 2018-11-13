@@ -209,7 +209,7 @@
                                                 </label>
                                                 <div class="col-md-6" style="padding-top: 14px">
                                                     <textarea name="need_checked" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;"></textarea>
-                                                    <div class="custom-error" name="need_message" style="display: none">请输入描述信息</div>
+                                                    <div class="custom-error" name="need_message" style="display: none">请输入描述信息,不得少于50字</div>
                                                 </div>
 
                                             </div>
@@ -234,7 +234,7 @@
 													* </span></label>
                                                 <div class="col-md-6" id="dataSourceDes">
                                                     <textarea name="need_checked" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;"></textarea>
-                                                    <div class="custom-error" name="need_message" style="display: none">请输入来源</div>
+                                                    <div class="custom-error" name="need_message" style="display: none">请输入来源,不得少于50字</div>
                                                 </div>
 
                                             </div>
@@ -783,6 +783,15 @@
                     $(".required:eq("+$index +")").parent().addClass("custom-error")
                     firstFlag=true
                     return
+                }
+                if($index==1 || $index==3){
+                    if($(this).val().length <=50 ){
+                        $("[name='need_checked']:eq("+$index +")").addClass("custom-error")
+                        $("[name='need_message']:eq("+$index +")").show()
+                        $(".required:eq("+$index +")").parent().addClass("custom-error")
+                        firstFlag=true
+                        return
+                    }
                 }
             })
             if($("#select2_tags").val().split(",").length <2){

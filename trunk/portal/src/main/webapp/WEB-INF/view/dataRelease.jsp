@@ -41,7 +41,7 @@
                 <form class="form-inline" style="margin-bottom: 0px">
                     <div class="form-group">
                         <label>数据集名称</label>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" id="resourceName">
                     </div>
                     <div class="form-group">
                         <label>数据类型</label>
@@ -435,8 +435,9 @@
     <script type="text/javascript">
         var publicType = ""
         var resourceState = ""
+        var resourceName=""
         $(function(){
-            tableConfiguration2(1,"","")
+            tableConfiguration2(1,"","","")
         });
         $("#resourcePublicType").on("change", function () {
             publicType = $("#resourcePublicType option:selected").val();
@@ -445,7 +446,8 @@
             resourceState = $("#resourceState option:selected").val();
         });
         $("#seachResource").click(function () {
-            tableConfiguration2(1,publicType,resourceState);
+            resourceName = $("#resourceName").val()
+            tableConfiguration2(1,publicType,resourceState,resourceName);
         })
         $("#bd-data").delegate(".upload-data","click",function () {
             var id = $(this).attr("keyIdTd");
@@ -562,13 +564,13 @@
             window.location.href = "${ctx}/dataSourceDescribe"
         }
 
-        function tableConfiguration2(num,publicType,resourceState) {
+        function tableConfiguration2(num,publicType,resourceState,resourceName) {
             $.ajax({
                 url: "${ctx}/resource/getPageData",
                 type: "GET",
                 data: {
                     pageNo: num,
-                    title: "",
+                    title: resourceName,
                     publicType: publicType,
                     pageSize: 10,
                     status: resourceState
@@ -612,7 +614,7 @@
                         lastClass: 'last',
                         firstClass: 'first'
                     }).on('page', function (event, num) {
-                        tableConfiguration2(num,publicType,resourceState);
+                        tableConfiguration2(num,publicType,resourceState,resourceName);
                     });
                 },
                 error: function () {
@@ -634,7 +636,7 @@
                         },*/
                         success:function (data) {
                             toastr["success"]("删除成功");
-                            tableConfiguration2(1,"","");
+                            tableConfiguration2(1,"","","");
                         },
                         error:function () {
                             toastr["error"]("删除失败");
