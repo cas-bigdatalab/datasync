@@ -13,7 +13,6 @@
 
 <html>
 <head>
-    <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/css/default.css"/>--%>
     <style type="text/css">
         td {
             text-align: center;
@@ -21,6 +20,10 @@
 
         th {
             text-align: center;
+        }
+
+        .error-message {
+            color: red;
         }
     </style>
 </head>
@@ -86,13 +89,9 @@
             <td style="text-align: center">{{$value.contact}}</td>
             <td style="text-align: center">{{$value.phone}}</td>
             <td id="{{$value.id}}">
-                <a title="修改" class="updateSubjectBtn" data-target="#updateSubjectDialog" data-toggle="modal">
-                    <span class="btn default btn-xs purple"><i class="fa fa-edit"></i>&nbsp;&nbsp;修改</span>
-                </a>
-                &nbsp;&nbsp;
-                <a title="删除"  class="deleteSubjectBtn" data-target="#deleteSubjectDialog" data-toggle="modal">
-                    <span class="btn default btn-xs red"><i class="fa fa-trash"></i>&nbsp;&nbsp;删除</span>
-                </a>
+                <button class="btn default btn-xs red updateSubjectBtn" data-target="#updateSubjectDialog" data-toggle="modal" onclick="(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>
+                &nbsp;
+                <button class="btn default btn-xs green deleteSubjectBtn" onclick="deleteSubject(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>
             </td>
         </tr>
         {{/each}}
@@ -109,7 +108,8 @@
 
                 <!--subject info input form-->
                 <div class="modal-body">
-                    <form id="addSubjectForm" class="form-horizontal" role="form">
+                    <form id="addSubjectForm" class="form-horizontal" role="form" method="post" enctype="multipart/form-data" accept-charset="utf-8" onfocusout="true">
+
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectName">
                                 专题库名称<span style="color: red;">*</span>
@@ -377,7 +377,37 @@
 
         $(function () {
             getSubject(1);
-            console.log("进入到jquery的初始化函数中了");
+
+            var subjectValid = {
+                errorElement: 'span',
+                errorClass: 'error-message',
+                focusInvalid: false,
+                rules: {
+                    subjectName: "required",
+                    subjectCode: "required",
+                    image: "required",
+                    admin: "required",
+                    adminPasswd: "required",
+                    contact: "required",
+                    phone: "required",
+                    email: "required",
+                    serialNo: "required"
+                },
+                messages: {
+                    subjectName: "请输入专题库名称",
+                    subjectCode: "请输入专题库代码",
+                    image: "请选择一个图片",
+                    admin: "请输入专题库管理员账号",
+                    adminPasswd: "请输入专题库管理密码",
+                    contact: "请输入专题库联系人",
+                    phone: "请输入专题库联系人电话",
+                    email: "请输入专题库联系人email",
+                    serialNo: "请输入专题库的序号"
+                }
+            };
+
+            $("#addSubjectForm").validate(subjectValid);
+            $("#updateSubjectForm").validate(subjectValid);
         });
 
         //获得专题库
@@ -433,60 +463,49 @@
         }
 
         //添加专题库
-        function addSubject()
+        function agreeAddSubject()
         {
+            if (!$("#addSubjectForm").valid()) {
+                return;
+            }
 
-        }
+            var formData = new FormData();
 
-        function agreeDeleteSubject(agreeDeleteBtn)
-        {
-           var id = $(agreeDeleteBtn).parrent().attr("id");
-            var deleteUrl = "${ctx}/subjectMgmt/deleteSubject?id=" + idOfSubjectToBeDeleted + "&currentPage=" + ${currentPage};
+            formData.append("subjectName", $("#subjectCode").val());
+            formData.append("subjectCode", $("#subjectCode").val());
+            formData.append('image', $('#image').get(0).files[0]);
+            formData.append('brief', $("#brief").val());
+            formData.append("admin", $("#admin").val());
+            formData.append("adminPasswd", $("#adminPasswd").val());
+            formData.append("contact", $("#contact").val());
+            formData.append("phone", $("#phone").val());
+            formData.append("email", $("#email").val());
+            formData.append("serialNo", $("#serialNo").val());
+
             $.ajax({
-                type: "GET",
-                url: deleteUrl,
-                dataType: "text",
+                url: "${ctx}/subjectMgmt/addSubject",
+                type: "post",
+                contentType:false,
+                processData:false,
+                data: formData,
+                dataType: "json",
                 success: function (data) {
                     console.log(data);
-                    $("#" + data).parent().remove();
+                    $("#addSubjectDialog").modal("hide");
+                    getSubject(1); //没有搜索条件的情况下，显示第一页
+                    location.reload();
                 },
-                error: function(data)
-                {
-                    console.log(data);
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    console.log("textStatus = " + textStatus);
+                    console.log("errorThrown = " + errorThrown);
                 }
             });
+
         }
 
-        $(".deleteSubjectBtn").click(
-            function ()
-            {
-                idOfSubjectToBeDeleted = $(this).parent().attr("id");
-                $("#agreeDeleteBtn").click(
-                    function ()
-                    {
-                        var deleteUrl = "${ctx}/subjectMgmt/deleteSubject?id=" + idOfSubjectToBeDeleted + "&currentPage=" + ${currentPage};
-                        $.ajax({
-                            type: "GET",
-                            url: deleteUrl,
-                            dataType: "text",
-                            success: function (data) {
-                                console.log(data);
-                                $("#" + data).parent().remove();
-                            },
-                            error: function(data)
-                            {
-                                console.log(data);
-                            }
-                        });
-                    }
-                );
-            }
-        );
-
         //更新专题库
-        $(".updateSubjectBtn").click(
-            function () {
-                $.ajax({
+        function updateSubject() {
+            $.ajax({
                     type: "GET",
                     async: false,
                     url: '${ctx}/subjectMgmt/querySubjectById',
@@ -508,8 +527,47 @@
                         console.log(data);
                     }
                 });
+        }
+        function agreeUpdateSubject()
+        {
+            if (!$("#updateSubjectForm").valid()) {
+                return;
             }
-        );
+        }
+
+        //删除专题库
+        function deleteSubject(deleteBtn)
+        {
+            $("#deleteSubjectDialog").modal("show");
+            idOfSubjectToBeDeleted = $(deleteBtn).parent().attr("id");
+
+            console.log("idOfSubjectToBeDeleted = " + idOfSubjectToBeDeleted);
+
+            $("#agreeDeleteBtn").click(
+                agreeDeleteSubject(idOfSubjectToBeDeleted)
+            );
+        };
+        function agreeDeleteSubject(id)
+        {
+            $("#deleteUserDialog").modal("hide");
+
+            var deleteUrl = "${ctx}/subjectMgmt/deleteSubject?id=" + id + "&pageNum=" + 1;
+            $.ajax({
+                type: "GET",
+                url: deleteUrl,
+                dataType: "text",
+                success: function (data) {
+                    console.log(data);
+                    getSubject(1);
+                },
+                error: function(data)
+                {
+                    console.log(data);
+                }
+            });
+        }
+
+
 
         //subjectCode唯一性
         $("#subjectCode").blur(function() {

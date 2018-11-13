@@ -34,10 +34,10 @@ public class SubjectMgmtController {
      * Function Description: add subject to db
      *
      * @param subject, the wrapped object which contains information of the subject ot be added
-     * @param image,   the image field of input form
      * @return redirectStr, the request is redirected to querySubject interface
      */
     @RequestMapping(value = "/addSubject", method = RequestMethod.POST)
+    @ResponseBody
     public String addSubject(HttpServletRequest request, Subject subject, @RequestParam("image") MultipartFile image) {
         //input parameter check
         logger.info("enterring subjectMgmt-addSubject.");
@@ -57,10 +57,10 @@ public class SubjectMgmtController {
         String addSubjectNotice = subjectService.addSubject(subject);
         logger.info("subject added, addSubjectNotice : " + addSubjectNotice);
 
-        long totalPages = subjectService.getTotalPages();
+      /*  long totalPages = subjectService.getTotalPages();
         String redirectStr = "redirect:/subjectMgmt/querySubject?pageNum=" + totalPages;
-        logger.info("redirect request to querySubject : " + redirectStr);
-        return redirectStr;
+        logger.info("redirect request to querySubject : " + redirectStr);*/
+        return addSubjectNotice;
     }
 
     /**
@@ -119,17 +119,18 @@ public class SubjectMgmtController {
      * Function Description:
      *
      * @param id, the id of Subject to be deleted
-     * @param currentPage, the page which contains the deleted subject, this parameter is designed for request redirect
+     * @param pageNum, the page which contains the deleted subject, this parameter is designed for request redirect
      * @return redirectStr, the request is redirected to querySubject interface
      */
     @RequestMapping(value = "/deleteSubject")
     @ResponseBody
-    public String deleteSubject(HttpServletRequest request, @RequestParam(required = true) String id, @RequestParam(required = true) int currentPage) {
-        logger.info("SubjectMgmtController-deleteSubject, id = " + id + ", currentPage = " + currentPage);
+    public String deleteSubject(HttpServletRequest request, @RequestParam(required = true) String id, @RequestParam(required = true) int pageNum) {
+        logger.info("SubjectMgmtController-deleteSubject, id = " + id + ", currentPage = " + pageNum);
 
         int deletedRowCnt = subjectService.deleteSubject(id);
         logger.info("SubjectMgmtController-deleteSubject，deletedRowCnt = " + deletedRowCnt);
 
+        //返回要删除的subject的id
         return id;
     }
 
