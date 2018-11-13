@@ -247,7 +247,7 @@
     <div class="page-container" style="min-height: 550px;width: 90%;margin: 0 auto">
         <!-- BEGIN SIDEBAR -->
         <div class="page-sidebar-wrapper">
-            <div class="page-sidebar navbar-collapse">
+            <div class="page-sidebar navbar-collapse" style="min-height: 500px">
                 <!-- BEGIN SIDEBAR MENU -->
                 <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
                 <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
@@ -416,7 +416,7 @@
         var date = new Date(mil);
         return date.Format("yyyy-MM-dd");
     }
-    $("#cus_User_id").toggle(
+/*    $("#cus_User_id").toggle(
         function () {
             $(".cus_drop").show();
             $("#cus_User_id").css("background-color","#eee")
@@ -425,11 +425,16 @@
             $(".cus_drop").show();
             $("#cus_User_id").css("background-color","#eee")
         }
-    )
-    /*$("#cus_User_id").click(function () {
-        $(".cus_drop").show();
+    )*/
+    $("#cus_User_id").click(function (ev) {
+        if($(".cus_drop").is(":hidden")){
+            $(".cus_drop").show();
+        }else {
+            $(".cus_drop").hide();
+        }
         $("#cus_User_id").css("background-color","#eee")
-    })*/
+        ev.stopPropagation()
+    })
     $("body:not(.cus_ul)").click(function () {
         $(".cus_drop").hide();
         $("#cus_User_id").css("background-color","")
