@@ -185,7 +185,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" >选择时间<span class="norequired">
+                                            <label class="control-label col-md-3" >选择时间<span class="required">
                                                     * </span></label>
                                             <div class="col-md-6"  style="padding-top:14px">
                                                 <div class="input-group input-daterange">
@@ -229,38 +229,19 @@
 
                                 </div>
                                 <div class="tab-pane" id="tab2">
-                                    <h3>
+                                    <div style="font-size: 18px">
                                         <span>数据源:</span>
                                         <input name="ways" type="radio" checked="checked" value="DB" id="aaa"/>
                                         <label for="aaa" style="font-size: 18px;color: #1CA04C">数据库表</label>
                                         <input name="ways" type="radio" value="LH" id="bbb"/>
                                         <label for="bbb" style="font-size: 18px;color: #1CA04C">文件型数据</label>
-                                    </h3>
+                                    </div>
                                     <div style="overflow: hidden" class="select-database" >
-                                        <div class="col-md-3" style="font-size: 18px;text-align:right ">
+                                        <div class="col-md-2" style="font-size: 18px;text-align:left;margin: 0 -15px ">
                                             <span>选择表资源</span>
                                         </div>
                                         <div class="col-md-9" >
                                             <div class="row undeslist" >
-                                                <div class="col-md-4">
-                                                    <label>
-                                                        <input type="checkbox">
-                                                        <span>dictionay</span>
-                                                    </label>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label>
-                                                        <input type="checkbox">
-                                                        <span>dictionay</span>
-                                                    </label>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label>
-                                                        <input type="checkbox">
-                                                        <span>dictionay</span>
-                                                    </label>
-                                                </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -335,8 +316,8 @@
     {{each list as value i}}
     <div class="col-md-4">
         <label>
-            <input type="checkbox" name="resTable"  valName="{{value}}" keyval="{{value}}">
-            <span style="word-break: break-all" keyval="{{value}}">{{value}}</span>
+            <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="resTable"  keyval="{{value}}"></div>
+            <div style="padding-left: 20px;word-break: break-all;cursor: pointer" keyval="{{value}}"> {{value}}</div>
         </label>
     </div>
     {{/each}}
@@ -902,7 +883,7 @@
                 type:"POST",
                 data:{
                     resourceId:resourceId,
-                    title:$("#task_title").val(),
+                    title:$("#Task_dataName").val(),
                     imagePath:$("#imgPath").val(),
                     introduction:$("#dataDescribeID").val(),
                     keyword:keywordStr,
@@ -910,8 +891,8 @@
                     createdByOrganization:$("#dataSourceDesID").val(),
                     startTime:$('.selectData:eq(0)').val(),
                     endTime:$('.selectData:eq(1)').val(),
-                    email:$("#task_email").val(),
-                    phoneNum:$("#task_phone").val()
+                    email:$("#Task_email").val(),
+                    phoneNum:$("#Task_phone").val()
                 },
                 success:function (data) {
                 },

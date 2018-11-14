@@ -23,7 +23,7 @@
         <%--<span>确定数据对象范围，上传数据</span>--%>
         <form class="form-inline">
             <div class="form-group">
-                <label for="dataTaskName"  >创建任务名</label>
+                <label for="dataTaskName" style="font-size: 18px">创建任务名</label>
                 <input type="text" class="form-control" id="dataTaskName" >
             </div>
         </form>
@@ -48,8 +48,8 @@
                 <div class="row">
                     <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
                     <div class="col-md-9 dataHead2" id="resTitle" style="display: none"></div>
-                    <div class="col-md-12">
-                        <div class="col-md-2">选择表资源</div>
+                    <div class="col-md-12" style="margin: 0 -15px">
+                        <div class="col-md-2" style="margin: 0 -15px">选择表资源</div>
                         <div class="col-md-10" >
                             <div class="row" id="db-table" style="margin-top: 6px"></div>
                         </div>
@@ -91,8 +91,8 @@
                     <div class="row">
                         <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
                         <div class="col-md-9 dataHead2" id="fileTitle" style="display: none"></div>
-                        <div class="col-md-12">
-                            <div class="col-md-2">选择文件</div>
+                        <div class="col-md-12" style="margin: 0 -15px">
+                            <div class="col-md-2" style="margin: 0 -15px">选择文件</div>
                             <div class="col-md-10" style="margin-top: 6px">
                                 <div class="row" id="file-table"></div>
                             </div>
@@ -205,7 +205,7 @@
     {{each list as value i}}
     <div class="col-md-4">
         <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="relationBox" value="{{value}}" style="line-height: normal"></div>
-        <div style="padding-left: 20px;word-break: break-all"> {{value}}</div>
+        <div style="padding-left: 20px;word-break: break-all ;cursor: pointer"> {{value}}</div>
     </div>
     {{/each}}
 </script>
@@ -237,7 +237,7 @@
     <div class="col-md-4">
         <label>
             <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="fileTable" value="{{value.id}}" style="line-height: normal"></div>
-            <div style="padding-left: 20px;word-break: break-all"> {{value.text}}</div>
+            <div style="padding-left: 20px;word-break: break-all;cursor: pointer"> {{value.text}}</div>
         </label>
     </div>
     {{/each}}
