@@ -81,7 +81,7 @@
 </div>
 
 <script type="text/html" id="resourceTmpl">
-    {{each list}}
+    {{each resourceList}}
     <tr>
         <td style="text-align: center">{{(currentPage-1)*pageSize+$index+1}}</td>
         <td><a href="javascript:editData('{{$value.id}}');">{{$value.title}}</a>
@@ -103,11 +103,13 @@
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
     <script src="${ctx}/resources/bundles/rateit/src/jquery.rateit.js" type="text/javascript"></script>
-    <script src="${ctx}/resources/bundles/artTemplate/template.js"></script>
     <script src="${ctx}/resources/js/subStrLength.js"></script>
     <script src="${ctx}/resources/js/regex.js"></script>
+    <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
     <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
+    <script src="${ctx}/resources/bundles/artTemplate/template.js"></script>
+
     <script type="text/javascript">
         var ctx = '${ctx}';
         var currentPageNo = 1;
@@ -155,7 +157,9 @@
                     "pageSize": 10
                 },
                 success: function (data) {
+                    console.log(data);
                     var html = template("resourceTmpl", data);
+                    console.log(html);
                     $("#resourceList").empty();
                     $("#resourceList").append(html);
                     $("#currentPageNo").html(data.currentPage);
