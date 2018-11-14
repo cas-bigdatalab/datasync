@@ -9,6 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -47,7 +48,7 @@
         <dd class="pwd_icon">
             <input type="password" id="password" name="password" placeholder="密码" class="login_txtbx"/>
         </dd>
-        <dd>
+        <dd <%--style="display: none"--%>>
             <font color="red">${errorMsg }</font>
         </dd>
     <%--<dd class="val_icon">
