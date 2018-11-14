@@ -534,6 +534,10 @@
         }
         function agreeUpdateSubject()
         {
+            if (!$("#updateSubjectForm").valid()) {
+                return;
+            }
+
             var formData = new FormData();
             formData.append("subjectName", $("#subjectNameM").val());
             formData.append("subjectCode", $("#subjectCodeM").val());

@@ -17,6 +17,11 @@
     <link href="${ctx}/resources/bundles/rateit/src/rateit.css" rel="stylesheet" type="text/css">
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css">
     <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+        .error-message {
+            color: red;
+        }
+    </style>
 </head>
 
 <body>
@@ -343,7 +348,7 @@
                                 用&nbsp;户&nbsp;名<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入用户名称" id="userName" name="userName" required="required"/>
+                                <input type="text" class="form-control" placeholder="请输入用户名称" id="userName" name="userName"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -446,9 +451,6 @@
                                 专题库代码<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-<%--
-                                <input type="text" class="form-control" placeholder="请输入专题库代码"  id="subjectCodeForUpdateUserDialog" name="subjectCodeForUpdateUserDialog" required="required">
---%>
                                 <select class='form-control select2me' name='subjectCodeForUpdateUserDialog' id='subjectCodeForUpdateUserDialog' multiple="multiple">
                                     <c:forEach  var="subject"  items="${subjectList}">
                                         <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectCode}</option>
@@ -635,6 +637,48 @@
                 placeholder: "请选择用户组",
                 allowClear: true
             });
+
+
+            var addUserValid = {
+                errorElement: 'span',
+                errorClass: 'error-message',
+                focusInvalid: false,
+                rules: {
+                    userName: "required",
+                    loginId: "required",
+                    password: "required",
+                    subjectCodeForAddUserDialog: "required",
+                    groupsForAddUserDialog: "required",
+                },
+                messages: {
+                    userName: "请输入用户名",
+                    loginId: "请输入用户账号",
+                    password: "请输入密码",
+                    subjectCodeForAddUserDialog: "请输入专题库代码",
+                    groupsForAddUserDialog: "请输入用户组",
+                }
+            };
+            var updateUserValid = {
+                errorElement: 'span',
+                errorClass: 'error-message',
+                focusInvalid: false,
+                rules: {
+                    userNameForUpdate: "required",
+                    loginIdForUpdate: "required",
+                    passwordForUpdate: "required",
+                    subjectCodeForUpdateUserDialog: "required",
+                    groupsForUpdateUserDialog: "required",
+                },
+                messages: {
+                    userNameForUpdate: "请输入用户名",
+                    loginIdForUpdate: "请输入用户账号",
+                    passwordForUpdate: "请输入密码",
+                    subjectCodeForUpdateUserDialog: "请输入专题库代码",
+                    groupsForUpdateUserDialog: "请输入用户组",
+                }
+            };
+            $("#addUserForm").validate(addUserValid);
+            $("#updateUserForm").validate(updateUserValid);
         });
 
         function search() {
@@ -847,6 +891,10 @@
         //添加用户 对话框的保存
         function addUser()
         {
+            if (!$("#addUserForm").valid()) {
+                return;
+            }
+
             console.log("adduser\n" + (typeof $("#groupsForAddUserDialog").val()) + "\nadduser");
 
             $.ajax({
@@ -1005,6 +1053,10 @@
 
         function agreeUpdateUser()
         {
+            if (!$("#updateUserForm").valid()) {
+                return;
+            }
+
             $.ajax({
                 url: "${ctx}/user/updateUser",
                 type: "get",
@@ -1036,9 +1088,11 @@
                 var loginId = $(this).val();
 
             }
-        )
+        );
+
         $("#loginId").blur(
-            function() {
+            function()
+            {
                 $.ajax({
                     type: "GET",
                     async: false,
@@ -1055,8 +1109,9 @@
                     error: function(data) {
                         console.log(data);
                     }
-            });
-        });
+                });
+            }
+        );
     </script>
 </div>
 
