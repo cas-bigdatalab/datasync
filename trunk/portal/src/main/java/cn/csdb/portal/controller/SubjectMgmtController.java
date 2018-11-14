@@ -46,7 +46,7 @@ public class SubjectMgmtController {
 
         //save image
         logger.info("saving image");
-        String imagePath = saveImage(image);
+        String imagePath = saveImage(request, image);
         subject.setImagePath(imagePath);
         logger.info("image saved");
 
@@ -83,9 +83,14 @@ public class SubjectMgmtController {
      * @param image， the image to be stored
      * @return imageFilePath, the absolute local filesystem path of the image, may be a path like {portalRoot}/SubjectImages/img1.jpg, here {portalRoot} represent the root of the web app
      */
-    private String saveImage(MultipartFile image) {
+    private String saveImage(HttpServletRequest request, MultipartFile image) {
         logger.info("save image file, image = " + image);
-        String imagesPath = "/SubjectImages/";
+        String imagesPath = request.getSession().getServletContext().getRealPath("/SubjectImage/");
+        if (!(new File(imagesPath).exists()))
+        {
+            new File(imagesPath).mkdir();
+        }
+
         String fileName = image.getOriginalFilename();
 
         // check the input file's path to ensure user input a real image
@@ -143,14 +148,13 @@ public class SubjectMgmtController {
      */
     @RequestMapping(value = "/updateSubject", method = RequestMethod.POST)
     @ResponseBody
-    public String updateSubject(HttpServletRequest request, Subject subject, @RequestParam("image") MultipartFile image) {
+    public String updateSubject(HttpServletRequest request, Subject subject, @RequestParam(name="image", required = false) MultipartFile image) {
         logger.info("SubjectMgmtController-updateSubject");
         logger.info("SubjectMgmtController-updateSubject -" + subject);
-        logger.info("SubjectMgmtController-updateSubject - MultiparFile = " + image + ", fileName = " + image.getOriginalFilename());
         logger.info("updating image");
         String newImagePath = "";
         try {
-            newImagePath = updateImage(subject, image);
+            newImagePath = updateImage(request, subject, image);
         }
         catch (Exception e)
         {
@@ -171,7 +175,7 @@ public class SubjectMgmtController {
      * @param image the image to be saved
      * @return imagePath the absolute local filesystem path of the image
      */
-    private String updateImage(Subject subject, MultipartFile image) {
+    private String updateImage(HttpServletRequest request, Subject subject, MultipartFile image) {
         logger.info("updating image");
 
         String imagePath = "";
@@ -179,10 +183,10 @@ public class SubjectMgmtController {
         Subject tmpSubject = subjectService.findSubjectById(subject.getId());
         if ((image != null) && (image.getOriginalFilename() != "")) {
             deleteImage(tmpSubject.getImagePath());
-            imagePath = saveImage(image);
+            imagePath = saveImage(request, image);
         }
         else if ((image != null) && (image.getOriginalFilename() == null)){
-            imagePath = saveImage(image);
+            imagePath = saveImage(request,image);
         }
         else {
             imagePath = tmpSubject.getImagePath();

@@ -254,7 +254,7 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                图片<span style="color: red;">*</span>
+                                图片
                             </label>
                             <div class="col-md-9">
                                 <input type="file" id="imageM" name="image" class="form-control file" placeholder="请选择一个本地图片" accept="image/gif, image/jpeg, image/png, image/jpg">
@@ -378,7 +378,7 @@
         $(function () {
             getSubject(1);
 
-            var subjectValid = {
+            var addSubjectValid = {
                 errorElement: 'span',
                 errorClass: 'error-message',
                 focusInvalid: false,
@@ -405,9 +405,34 @@
                     serialNo: "请输入专题库的序号"
                 }
             };
+            var updateSubjectValid = {
+                errorElement: 'span',
+                errorClass: 'error-message',
+                focusInvalid: false,
+                rules: {
+                    subjectName: "required",
+                    subjectCode: "required",
+                    admin: "required",
+                    adminPasswd: "required",
+                    contact: "required",
+                    phone: "required",
+                    email: "required",
+                    serialNo: "required"
+                },
+                messages: {
+                    subjectName: "请输入专题库名称",
+                    subjectCode: "请输入专题库代码",
+                    admin: "请输入专题库管理员账号",
+                    adminPasswd: "请输入专题库管理密码",
+                    contact: "请输入专题库联系人",
+                    phone: "请输入专题库联系人电话",
+                    email: "请输入专题库联系人email",
+                    serialNo: "请输入专题库的序号"
+                }
+            };
 
-            $("#addSubjectForm").validate(subjectValid);
-            $("#updateSubjectForm").validate(subjectValid);
+            $("#addSubjectForm").validate(addSubjectValid);
+            $("#updateSubjectForm").validate(updateSubjectValid);
         });
 
         //获得专题库
@@ -515,6 +540,7 @@
                         $("#idM").val(data.id);
                         $("#subjectNameM").val(data.subjectName);
                         $("#subjectCodeM").val(data.subjectCode);
+                        $("#imageM").attr("src", data.imagePath)
                         $("#briefM").val(data.brief);
                         $("#adminM").val(data.admin);
                         $("#adminPasswdM").val(data.adminPasswd);
@@ -529,9 +555,8 @@
                         console.log(data);
                     }
                 });
-
-            $("#agreeUpdateSubjectBtn").click(agreeUpdateSubject());
         }
+
         function agreeUpdateSubject()
         {
             if (!$("#updateSubjectForm").valid()) {
@@ -539,21 +564,10 @@
             }
 
             var formData = new FormData();
+            formData.append("id", $("#idM").val());
             formData.append("subjectName", $("#subjectNameM").val());
             formData.append("subjectCode", $("#subjectCodeM").val());
-
-
-            console.log($('#imageM').get(0).files);
-
-            if ($('#imageM').get(0).files.length == 0)
-            {
-                console.log("$('#imageM').get(0).files.length == 0 : ");
-                formData.append('image', null);
-            }
-            else
-            {
-                formData.append('image', $('#imageM').get(0).files[0]);
-            }
+            formData.append('image', $('#imageM').get(0).files[0]);
             formData.append('brief', $("#briefM").val());
             formData.append("admin", $("#adminM").val());
             formData.append("adminPasswd", $("#adminPasswdM").val());
