@@ -253,13 +253,11 @@
         //导出SQL文件
         $("#upload-list").delegate(".exportSql","click",function () {
             var souceID = $(this).attr("keyIdTd");
-            //var keyID = souceID + new Date().getTime();
             $.ajax({
                 url:"${ctx}/datatask/" + souceID,
                 type:"POST",
                 dataType:"JSON",
                 success:function (data) {
-                    console.log(data.result);
                     if (data.result == 'true') {
                         toastr.success("导出SQL文件成功!");
                     }else {
@@ -295,7 +293,6 @@
                 data:{dataTaskId:souceID,processId:keyID},
                 success:function (data) {
                     var data =JSON.parse(data)
-                    console.log(data)
                     if(data =="1"){
                         $("."+souceID).text("导入完成")
                         return
@@ -347,9 +344,7 @@
                 type:"POST",
                 data:{datataskId:id},
                 success:function (data) {
-                    console.log(JSON.parse(data))
                     var datatask = JSON.parse(data).datatask
-                    console.log(datatask)
                     if(type=="mysql"){
                         $("#pre-dataTaskName").html(datatask.dataTaskName)
                         $("#pre-dataSourceId").html(datatask.dataSourceId)
@@ -378,7 +373,8 @@
                         $("#file-sqlString").html(datatask.sqlString)
                         $("#file-sqlTableNameEn").html(datatask.sqlTableNameEn)*/
                         var $filePath=$("#file-filePath")
-                        listSpan(datatask.filePath,";",$filePath)
+                        var str = datatask.filePath.replace(/%_%/g, "/");
+                        listSpan(str,";",$filePath)
                         /*$("#file-filePath").html(datatask.filePath)*/
                         $("#file-createTime").html(convertMilsToDateString(datatask.createTime))
                         $("#file-creator").html(datatask.creator)
@@ -387,7 +383,7 @@
                         }else {
                             $("#file-status").html("未导入完成")
                         }
-                        $("#relModal").modal('show');
+                        $("#fileModal").modal('show');
                     }
                 },
                 error:function () {
@@ -427,9 +423,7 @@
                 type:"POST",
                 dataType:"JSON",
                 success:function (data) {
-                    console.log(data.result);
                     if (data.result == 'true') {
-                        console.log("aaaaaaa")
                         alert("导出SQL文件成功!");
                     }
                 },
@@ -447,7 +441,6 @@
                         processId:keyID
                     },
                     success:function (data) {
-                        console.log(data)
                         if(data == "100"){
                             $("#"+souceID).text(data+"%");
                             $("."+souceID).text("上传完成")
@@ -465,55 +458,6 @@
             },1000)
 
         }
-        function tableConfiguration(num,data) {
-            data.pageNum=num;
-            var conData = data;
-            $.ajax({
-                url:"${ctx}/datatask/getAll",
-                type:"GET",
-                data:conData,
-                success:function (data) {
-                    $(".data-table").html("");
-                    var DataList = JSON.parse(data);
-                    if(DataList=="{}"){
-                        $(".table-message").html("暂时没有数据");
-                        $(".page-message").html("");
-                        $(".page-list").html("");
-                        return
-                    }
-                    $(".table-message").hide();
-                    /*
-                    * 创建table
-                    * */
-                    if ($(".page-list .bootpag").length != 0) {
-                        $(".page-list").off();
-                        $('.page-list').empty();
-                    }
-                    $(".page-message").html("当前第"+DataList.pageNum +"页,共"+DataList.pageSize +"页,共"+DataList.totalCount+"条数据");
-                    $('#page-list').bootpag({
-                        total: DataList.pageSize,
-                        page: DataList.pageNum,
-                        maxVisible: 6,
-                        leaps: true,
-                        firstLastUse: true,
-                        first: '首页',
-                        last: '尾页',
-                        wrapClass: 'pagination',
-                        activeClass: 'active',
-                        disabledClass: 'disabled',
-                        nextClass: 'next',
-                        prevClass: 'prev',
-                        lastClass: 'last',
-                        firstClass: 'first'
-                    }).on('page', function (event, num) {
-                        tableConfiguration(num,conData);
-                    });
-                },
-                error:function () {
-                    $(".table-message").html("请求失败");
-                }
-            })
-        }
         function tableConfiguration2(num,datataskType,status) {
             $.ajax({
                 url:"${ctx}/datatask/list",
@@ -524,7 +468,6 @@
                     status:status
                 },
                 success:function (data) {
-                    console.log(data)
                     $(".table-message").hide();
                     $("#bd-data").html("");
                     var DataList = JSON.parse(data);
@@ -546,11 +489,12 @@
                         $(".page-list").off();
                         $('.page-list').empty();
                     }
-                    $(".page-message").html("当前第"+DataList.pageNum +"页,共"+DataList.pageSize +"页,共"+DataList.totalCount+"条数据");
+                    var totalpage = Math.ceil(DataList.totalCount/DataList.pageSize)
+                    $(".page-message").html("当前第"+DataList.pageNum +"页,共"+totalpage +"页,共"+DataList.totalCount+"条数据");
                     $('.page-list').bootpag({
-                        total: DataList.pageSize,
+                        total: totalpage,
                         page:DataList.pageNo,
-                        maxVisible: 6,
+                        maxVisible: DataList.pageSize,
                         leaps: true,
                         firstLastUse: true,
                         first: '首页',
