@@ -13,6 +13,15 @@
     <title>DataSync</title>
     <link href="${ctx}/resources/css/dataUpload.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+        .arrListSty{
+            display: inline-block;
+            margin-right: 5px;
+            background-color: #aaaaaa;
+            padding: 3px 6px;
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
 <div class="page-content">
@@ -71,7 +80,7 @@
         </div>
     </div>
 </div>
-<div id="EModal" class="modal fade" tabindex="-1" data-width="400">
+<div id="relModal" class="modal fade" tabindex="-1" data-width="400">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -100,10 +109,10 @@
                         <label  class="col-sm-3 control-label">逻辑表名:</label>
                         <div class="col-sm-8 modediv" id="pre-sqlTableNameEn"></div>
                     </div>
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label  class="col-sm-3 control-label">文件路径:</label>
                         <div class="col-sm-8 modediv" id="pre-filePath"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">创建时间:</label>
                         <div class="col-sm-8 modediv" id="pre-createTime"></div>
@@ -119,6 +128,66 @@
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务状态:</label>
                         <div class="col-sm-8" id="pre-status"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn green" data-dismiss="modal" ><i
+                        class="glyphicon glyphicon-ok"></i>确认
+                </button>
+                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="fileModal" class="modal fade" tabindex="-1" data-width="400">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">任务详情查看</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">任务标识:</label>
+                        <div class="col-sm-8 modediv" id="file-dataTaskName"></div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">数据源ID:</label>
+                        <div class="col-sm-8 modediv" id="file-dataSourceId"></div>
+                    </div>
+                    <%--<div class="form-group">
+                        <label  class="col-sm-3 control-label">表名:</label>
+                        <div class="col-sm-8 modediv" id="file-tableName"></div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">SQL语句:</label>
+                        <div class="col-sm-8 modediv" id="file-sqlString"></div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">逻辑表名:</label>
+                        <div class="col-sm-8 modediv" id="file-sqlTableNameEn"></div>
+                    </div>--%>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">文件路径:</label>
+                        <div class="col-sm-8 modediv" id="file-filePath"></div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">创建时间:</label>
+                        <div class="col-sm-8 modediv" id="file-createTime"></div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">创建者:</label>
+                        <div class="col-sm-8 modediv" id="file-creator"></div>
+                    </div>
+                    <%--<div class="form-group">
+                        <label  class="col-sm-3 control-label">上传进度:</label>
+                        <div class="col-sm-8"></div>
+                    </div>--%>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">任务状态:</label>
+                        <div class="col-sm-8" id="file-status"></div>
                     </div>
                 </form>
             </div>
@@ -150,7 +219,7 @@
             {{else if value.status  == 0}}
             <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}">&nbsp;&nbsp;&nbsp;上传&nbsp;&nbsp;&nbsp;</button>
             {{/if}}
-            <button type="button" class="btn  edit-data btn-xs blue" keyIdTd="{{value.dataTaskId}}" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+            <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
             <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
 
         </td>
@@ -168,9 +237,6 @@
         }
         $(function(){
             tableConfiguration2(1,"","")
-            /*$.ajax({
-                url:
-            })*/
         });
         $("#dataSourceList").on("change",function () {
             dataSourceName= $("#dataSourceList option:selected").val();
@@ -206,16 +272,6 @@
                 }
             })
         });
-        /* localStorage.setItem("uploadTask",uploadTasks)*/
-        /*template.helper("uploadName",function (num) {
-            var name=""
-            if(num ==0){
-                name="未上传"
-            }else {
-                name="上传成功"
-            }
-            return name
-        })*/
         template.helper("upStatusName",function (num) {
             var name=""
             if(num ==0){
@@ -259,37 +315,6 @@
 
             getProcess(keyID,souceID);
         })
-        $("#upload-list").delegate(".edit-data","click",function () {
-            /*send request*/
-            var souceID = $(this).attr("keyIdTd");
-            $.ajax({
-                url:"${ctx}/datatask/detail",
-                type:"POST",
-                data:{datataskId:souceID},
-                success:function (data) {
-                   var datatask = JSON.parse(data).datatask
-
-                    $("#pre-dataTaskName").html(datatask.dataTaskName)
-                    $("#pre-dataSourceId").html(datatask.dataSourceId)
-                    $("#pre-tableName").html(datatask.tableName)
-                    $("#pre-sqlString").html(datatask.sqlString)
-                    $("#pre-sqlTableNameEn").html(datatask.sqlTableNameEn)
-                    $("#pre-filePath").html(datatask.filePath)
-                    $("#pre-createTime").html(datatask.createTime)
-                    $("#pre-creator").html(datatask.creator)
-                    if(datatask.status == 1){
-                        $("#pre-").html("导入完成")
-                    }else {
-                        $("#pre-").html("未导入完成")
-                    }
-
-                },
-                error:function () {
-                    console.log("请求失败")
-                }
-            })
-            $("#EModal").modal('show');
-        })
         <!-- remove dataTask-->
         function removeData(id){
             bootbox.confirm("确认删除",function (r) {
@@ -316,6 +341,60 @@
 
 
         }
+        function showData(id,type) {
+            $.ajax({
+                url:"${ctx}/datatask/detail",
+                type:"POST",
+                data:{datataskId:id},
+                success:function (data) {
+                    console.log(JSON.parse(data))
+                    var datatask = JSON.parse(data).datatask
+                    console.log(datatask)
+                    if(type=="mysql"){
+                        $("#pre-dataTaskName").html(datatask.dataTaskName)
+                        $("#pre-dataSourceId").html(datatask.dataSourceId)
+                        var $tableName=$("#pre-tableName")
+                        listSpan(datatask.tableName,";",$tableName)
+                        /*$("#pre-tableName").html(datatask.tableName)*/
+                        var $sqlString=$("#pre-sqlString")
+                        listSpan(datatask.sqlString,";",$sqlString)
+                        /*$("#pre-sqlString").html(datatask.sqlString)*/
+                        var $sqlTableNameEn=$("#pre-sqlTableNameEn")
+                        listSpan(datatask.sqlTableNameEn,";",$sqlTableNameEn)
+                        /*$("#pre-sqlTableNameEn").html(datatask.sqlTableNameEn)*/
+                       /* $("#pre-filePath").html(datatask.filePath)*/
+                        $("#pre-createTime").html(convertMilsToDateString(datatask.createTime))
+                        $("#pre-creator").html(datatask.creator)
+                        if(datatask.status == 1){
+                            $("#pre-status").html("导入完成")
+                        }else {
+                            $("#pre-status").html("未导入完成")
+                        }
+                        $("#relModal").modal('show');
+                    }else {
+                        $("#file-dataTaskName").html(datatask.dataTaskName)
+                        $("#file-dataSourceId").html(datatask.dataSourceId)
+                        /*$("#file-tableName").html(datatask.tableName)
+                        $("#file-sqlString").html(datatask.sqlString)
+                        $("#file-sqlTableNameEn").html(datatask.sqlTableNameEn)*/
+                        var $filePath=$("#file-filePath")
+                        listSpan(datatask.filePath,";",$filePath)
+                        /*$("#file-filePath").html(datatask.filePath)*/
+                        $("#file-createTime").html(convertMilsToDateString(datatask.createTime))
+                        $("#file-creator").html(datatask.creator)
+                        if(datatask.status == 1){
+                            $("#file-status").html("导入完成")
+                        }else {
+                            $("#file-status").html("未导入完成")
+                        }
+                        $("#relModal").modal('show');
+                    }
+                },
+                error:function () {
+                    console.log("请求失败")
+                }
+            })
+        }
         var arr = []
        /* var json = {
                         name:"caocao",
@@ -330,7 +409,6 @@
        }
         arr.push(new ObjStory("1","2"))
         arr.push(new ObjStory("3","4"))
-        console.log(JSON.stringify(arr))
 
 
 
@@ -340,7 +418,7 @@
             var uploadTasks=JSON.parse(localStorage.getItem("uploadList"));
         }
 
-        /*//导出SQL文件
+        //导出SQL文件
         $("#upload-list").delegate(".exportSql","click",function () {
             var souceID = $(this).attr("keyIdTd");
             //var keyID = souceID + new Date().getTime();
@@ -359,7 +437,7 @@
                     console.log("请求失败")
                 }
             })
-        });*/
+        });
         function getProcess(keyID,souceID) {
            var setout= setInterval(function () {
                 $.ajax({
@@ -446,6 +524,7 @@
                     status:status
                 },
                 success:function (data) {
+                    console.log(data)
                     $(".table-message").hide();
                     $("#bd-data").html("");
                     var DataList = JSON.parse(data);
@@ -493,7 +572,15 @@
             })
         }
 
-
+        function listSpan(arrStr,spl,ele){
+            var newStr = arrStr.substr(0, arrStr.length - 1);
+            var arrList =  newStr.split(spl);
+            var arrListStr = ""
+            for(var i=0;i<arrList.length;i++){
+                arrListStr+="<span class='arrListSty'>"+arrList[i]+"</span>"
+            }
+            ele.append(arrListStr)
+        }
 
     </script>
 </div>

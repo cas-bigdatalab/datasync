@@ -20,18 +20,17 @@
         <span>DataSync / 数据范围</span>
     </div>
     <div class="task-title">
-        <span>确定数据对象范围，上传数据</span>
+        <%--<span>确定数据对象范围，上传数据</span>--%>
         <form class="form-inline">
             <div class="form-group">
-                <label for="dataTaskName" style="font-size: 18px;font-weight: 700;color: #000000" >创建任务名</label>
+                <label for="dataTaskName"  >创建任务名</label>
                 <input type="text" class="form-control" id="dataTaskName" >
             </div>
         </form>
     </div>
 
     <div class="select-way">
-
-        <span>数据源:</span>
+        <span>数据源</span>
         <input name="ways" type="radio" checked="checked" value="DB" id="aaa"/>
         <label for="aaa">数据库</label>
         <input name="ways" type="radio" value="LH" id="bbb"/>
@@ -41,14 +40,14 @@
         <div class="select-database ">
             <form class="form-inline">
                 <div class="form-group">
-                    <label>选择数据源</label>
+                    <label >选择数据源</label>
                     <select  id="DBchange" class="form-control"></select>
                 </div>
             </form>
             <div class="database-con-rel container-fluid" style="display: none">
                 <div class="row">
-                    <div class="col-md-3 dataHead1">数据源名称：</div>
-                    <div class="col-md-9 dataHead2" id="resTitle"></div>
+                    <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
+                    <div class="col-md-9 dataHead2" id="resTitle" style="display: none"></div>
                     <div class="col-md-12">
                         <div class="col-md-2">选择表资源</div>
                         <div class="col-md-10" >
@@ -62,7 +61,7 @@
                                 <input type="text" class="form-control sqlStatements">
                             </div>
                             <div class="col-md-2" style="margin: 0 -15px">
-                                <input type="text" class="form-control" placeholder="请输入一个表名" name="sqlTableName">
+                                <input type="text" class="form-control" placeholder="新表名" name="sqlTableName">
                             </div>
                             <div class="col-md-4">
                                 <button type="button" class="btn blue preview">预览</button>
@@ -90,8 +89,8 @@
 
                 <div class="database-con-file container-fluid" style="display: none;">
                     <div class="row">
-                        <div class="col-md-3 dataHead1">数据源名称：</div>
-                        <div class="col-md-9 dataHead2" id="fileTitle"></div>
+                        <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
+                        <div class="col-md-9 dataHead2" id="fileTitle" style="display: none"></div>
                         <div class="col-md-12">
                             <div class="col-md-2">选择文件</div>
                             <div class="col-md-10" >
@@ -120,10 +119,10 @@
     <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
         <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-primary">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                             id="editTableFieldComsCloseId"></button>
-                    <h4 class="modal-title" id="relationalDatabaseModalTitle">编辑表字段注释</h4>
+                    <h4 class="modal-title" id="relationalDatabaseModalTitle">预览表</h4>
                 </div>
                 <%--<div class="form">--%>
                 <%--<form class="form-horizontal" role="form" action="addRelationalDatabase" method="post"--%>
@@ -132,7 +131,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="portlet box green-haze" style="border:0;">
-                                <div class="portlet-title">
+                                <div class="portlet-title" style="display: none">
                                    <%-- <ul class="nav nav-tabs" style="float:left;">
                                        &lt;%&ndash; <li class="active">
                                             <a href="#editTableFieldComsId" data-toggle="tab"
@@ -229,7 +228,7 @@
             <input type="text" class="form-control sqlStatements" >
         </div>
         <div class="col-md-2" style="margin: 0 -15px">
-            <input type="text" class="form-control" placeholder="请输入一个表名" name="sqlTableName">
+            <input type="text" class="form-control" placeholder="新表名 " name="sqlTableName">
         </div>
         <div class="col-md-4">
             <button type="button" class="btn blue preview">预览</button>
@@ -297,7 +296,6 @@
                 success:function (data) {
                     $("#db-table").empty();
                     var List =JSON.parse(data);
-                    console.log(List)
                     var tabCon = template("dataRelationshipList2", List);
                     $("#db-table").append(tabCon);
 
@@ -326,7 +324,6 @@
                 success:function (data) {
                     $("#file-table").empty();
                     var List =JSON.parse(data)
-                    console.log(List)
                     var data={
                         data:List
                     }
@@ -365,6 +362,7 @@
                 }
                 dataRelSqlTableList+=$(this).val()+";"
             })
+
             var numChecked = $eleChecked.size();
 
             if (numChecked == 0) {
@@ -437,7 +435,6 @@
                 type:"GET",
                 success:function (data) {
                     var list =JSON.parse(data)
-                    console.log(list)
                     var data={
                         data:list
                     }
@@ -453,7 +450,6 @@
                 type:"GET",
                 success:function (data) {
                     var list =JSON.parse(data)
-                    console.log(list)
                     var data={
                         data:list
                     }
@@ -481,7 +477,6 @@
                 },
                 dataType: "json",
                 success: function (data) {
-                    console.log(data)
                     for(var key in data.maps){
                         var sqlName = key
                     }

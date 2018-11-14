@@ -41,15 +41,15 @@
         <em>Management System</em>
     </dt>
     <form action="${pageContext.request.contextPath}/login" method="post">
-    <dd class="user_icon">
-        <input type="text" id="loginId" name="loginId" placeholder="用户名" class="login_txtbx"/>
-    </dd>
-    <dd class="pwd_icon">
-        <input type="password" id="password" name="password" placeholder="密码" class="login_txtbx"/>
-    </dd>
-    <dd>
-        <font color="red">${errorMsg }</font>
-    </dd>
+        <dd class="user_icon">
+            <input type="text" id="loginId" name="loginId" placeholder="用户名" class="login_txtbx"/>
+        </dd>
+        <dd class="pwd_icon">
+            <input type="password" id="password" name="password" placeholder="密码" class="login_txtbx"/>
+        </dd>
+        <dd>
+            <font color="red">${errorMsg }</font>
+        </dd>
     <%--<dd class="val_icon">
         <div class="checkcode">
             <input type="text" id="J_codetext" placeholder="验证码" maxlength="4" class="login_txtbx">
@@ -57,10 +57,10 @@
         </div>
         <input type="button" value="验证码核验" class="ver_btn" onClick="validate();">
     </dd>--%>
-    <dd>
-        <input type="submit" id="loginButton" value="立即登陆" class="submit_btn"/>
-    </dd>
-        </form>
+        <dd>
+            <input type="submit" id="loginButton" value="立即登陆" class="submit_btn"/>
+        </dd>
+    </form>
     <dd>
         <p>2018-2020 &copy;</p>
         <p>中国科学院计算机网络信息中心.版权所有.</p>

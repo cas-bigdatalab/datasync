@@ -8,34 +8,32 @@
     height: 50px;
     line-height: 50px;
     padding: 0 33px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
-.task-title span{
+/*.task-title span{
     font-family: 'Arial Normal', 'Arial';
     font-weight: 400;
     font-style: normal;
     font-size: 28px;
     color: #000000;
-}
+}*/
 .select-way{
-    margin-top: 60px;
-    font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
-    font-weight: 700;
+    /*font-weight: 700;*/
     font-style: normal;
-    font-size: 18px;
+    /*font-size: 18px;*/
     padding: 0 33px;
     color: #1CA04C;
 }
-.select-way label{
+/*.select-way label{
     font-weight: 800;
-}
+}*/
 .select-way span{
     color: #000000;
-    margin-right: 30px;
+    margin-right: 28px;
 }
 .select-ways{
-    padding: 0 70px;
-    margin-top: 50px;
+    padding: 0 33px;
+    margin-top: 20px;
 }
 .database-con-rel,.database-con-file{
     margin-top: 20px;
