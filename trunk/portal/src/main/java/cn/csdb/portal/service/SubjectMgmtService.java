@@ -158,4 +158,9 @@ public class SubjectMgmtService {
         return subjectMgmtDao.getTotalSubject();
     }
 
+
+    public List<Subject> getSubjectCodeList()
+    {
+        return subjectMgmtDao.getSubjectCodeList();
+    }
 }

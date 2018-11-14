@@ -141,22 +141,27 @@ public class SubjectMgmtController {
      * @param image the image field
      * @return redirectStr, the request is redirected to querySubject interface
      */
-    @RequestMapping(value = "/updateSubject")
+    @RequestMapping(value = "/updateSubject", method = RequestMethod.POST)
+    @ResponseBody
     public String updateSubject(HttpServletRequest request, Subject subject, @RequestParam("image") MultipartFile image) {
         logger.info("SubjectMgmtController-updateSubject");
         logger.info("SubjectMgmtController-updateSubject -" + subject);
         logger.info("SubjectMgmtController-updateSubject - MultiparFile = " + image + ", fileName = " + image.getOriginalFilename());
         logger.info("updating image");
-        String newImagePath  = updateImage(subject, image);
+        String newImagePath = "";
+        try {
+            newImagePath = updateImage(subject, image);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         subject.setImagePath(newImagePath);
         logger.info("updated image");
         String updateSubjectNotice = subjectService.updateSubject(subject);
         logger.info("update subject completed. updateSubjectNotice = " + updateSubjectNotice);
 
-        String redirectStr = "redirect:/subjectMgmt/querySubject?pageNum=1";
-        logger.info("redirect request to querySubject : " + redirectStr);
-
-        return redirectStr;
+        return updateSubjectNotice;
     }
 
     /**

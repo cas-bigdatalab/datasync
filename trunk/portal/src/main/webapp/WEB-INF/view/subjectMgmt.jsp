@@ -89,7 +89,7 @@
             <td style="text-align: center">{{$value.contact}}</td>
             <td style="text-align: center">{{$value.phone}}</td>
             <td id="{{$value.id}}">
-                <button class="btn default btn-xs red updateSubjectBtn" data-target="#updateSubjectDialog" data-toggle="modal" onclick="(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>
+                <button class="btn default btn-xs red updateSubjectBtn"onclick="updateSubject(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>
                 &nbsp;
                 <button class="btn default btn-xs green deleteSubjectBtn" onclick="deleteSubject(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>
             </td>
@@ -254,10 +254,10 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                图片<span>*</span>
+                                图片<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="file" id="imagePathM" name="image" class="form-control file" placeholder="请选择一个本地图片" accept="image/gif, image/jpeg, image/png, image/jpg">
+                                <input type="file" id="imageM" name="image" class="form-control file" placeholder="请选择一个本地图片" accept="image/gif, image/jpeg, image/png, image/jpg">
                             </div>
                         </div>
 
@@ -327,10 +327,10 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button id="saveSubjectModifyBtn" class="btn green" onclick="agreeUpdateSubject();">
+                    <button id="agreeUpdateSubjectBtn" class="btn green" onclick="agreeUpdateSubject();">
                         保存
                     </button>
-                    <button id="cancelSubjectModifyBtn" class="btn default"  data-dismiss="modal">
+                    <button id="cancelUpdateSubjectBtn" class="btn default"  data-dismiss="modal">
                         取消
                     </button>
                 </div>
@@ -504,12 +504,12 @@
         }
 
         //更新专题库
-        function updateSubject() {
+        function updateSubject(updateBtn) {
             $.ajax({
                     type: "GET",
                     async: false,
                     url: '${ctx}/subjectMgmt/querySubjectById',
-                    data: {id: $(this).parent().attr("id")},
+                    data: {id: $(updateBtn).parent().attr("id")},
                     dataType: "json",
                     success: function (data){
                         $("#idM").val(data.id);
@@ -522,18 +522,63 @@
                         $("#phoneM").val(data.phone);
                         $("#emailM").val(data.email);
                         $("#serialNoM").val(data.serialNo);
+
+                        $("#updateSubjectDialog").modal("show");
                     },
                     error: function(data) {
                         console.log(data);
                     }
                 });
+
+            $("#agreeUpdateSubjectBtn").click(agreeUpdateSubject());
         }
         function agreeUpdateSubject()
         {
-            if (!$("#updateSubjectForm").valid()) {
-                return;
+            var formData = new FormData();
+            formData.append("subjectName", $("#subjectNameM").val());
+            formData.append("subjectCode", $("#subjectCodeM").val());
+
+
+            console.log($('#imageM').get(0).files);
+
+            if ($('#imageM').get(0).files.length == 0)
+            {
+                console.log("$('#imageM').get(0).files.length == 0 : ");
+                formData.append('image', null);
             }
+            else
+            {
+                formData.append('image', $('#imageM').get(0).files[0]);
+            }
+            formData.append('brief', $("#briefM").val());
+            formData.append("admin", $("#adminM").val());
+            formData.append("adminPasswd", $("#adminPasswdM").val());
+            formData.append("contact", $("#contactM").val());
+            formData.append("phone", $("#phoneM").val());
+            formData.append("email", $("#emailM").val());
+            formData.append("serialNo", $("#serialNoM").val());
+
+            console.log("agreeUpdateSubject - formData = " + formData);
+
+            $.ajax({
+                url: "${ctx}/subjectMgmt/updateSubject",
+                type: "post",
+                contentType:false,
+                processData:false,
+                data: formData,
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    $("#updateSubjectDialog").modal("hide");
+                    getSubject(1); //没有搜索条件的情况下，显示第一页
+                    location.reload();
+                },
+                error: function(data) {
+
+                }
+            });
         }
+
 
         //删除专题库
         function deleteSubject(deleteBtn)
@@ -566,8 +611,6 @@
                 }
             });
         }
-
-
 
         //subjectCode唯一性
         $("#subjectCode").blur(function() {

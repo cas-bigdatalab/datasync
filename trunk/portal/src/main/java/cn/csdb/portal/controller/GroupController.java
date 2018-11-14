@@ -1,9 +1,10 @@
 package cn.csdb.portal.controller;
 
 import cn.csdb.portal.model.Group;
+import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.model.User;
 import cn.csdb.portal.service.GroupService;
-import cn.csdb.portal.service.ResourceService;
+import cn.csdb.portal.service.SubjectMgmtService;
 import cn.csdb.portal.service.UserService;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
@@ -33,6 +34,9 @@ public class GroupController {
     @Resource
     private UserService userService;
 
+    @Resource
+    private SubjectMgmtService subjectMgmtService;
+
     private Logger logger= LoggerFactory.getLogger(GroupController.class);
 
     @RequestMapping("/list")
@@ -44,7 +48,10 @@ public class GroupController {
 
         List<Group> groupList = groupService.getGroupList();
         model.addAttribute("groupList", groupList);
-        logger.info("groupList : " + groupList);
+
+        List<Subject> subjectList = subjectMgmtService.getSubjectCodeList();
+        model.addAttribute("subjectList", subjectList);
+
 
         return "group";
     }
