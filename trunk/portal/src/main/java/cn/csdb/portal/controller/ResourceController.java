@@ -520,7 +520,7 @@ public class ResourceController {
         System.out.println("==========Start=============");
         String saveName = "";
         String realPath = request.getSession().getServletContext().getRealPath("/");
-        String resourcePath = "resources\\img\\images\\";
+        String resourcePath = "resources"+File.separator+"img"+File.separator+"images"+File.separator;
         if(imageFile!=null){
             if(FileUploadUtil.allowUpload(imageFile.getContentType())){
                 String fileName = FileUploadUtil.rename(imageFile.getOriginalFilename());
