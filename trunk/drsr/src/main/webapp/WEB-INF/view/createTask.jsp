@@ -51,7 +51,7 @@
                     <div class="col-md-12">
                         <div class="col-md-2">选择表资源</div>
                         <div class="col-md-10" >
-                            <div class="row" id="db-table"></div>
+                            <div class="row" id="db-table" style="margin-top: 6px"></div>
                         </div>
                     </div>
                     <div id="totalList">
@@ -93,7 +93,7 @@
                         <div class="col-md-9 dataHead2" id="fileTitle" style="display: none"></div>
                         <div class="col-md-12">
                             <div class="col-md-2">选择文件</div>
-                            <div class="col-md-10" >
+                            <div class="col-md-10" style="margin-top: 6px">
                                 <div class="row" id="file-table"></div>
                             </div>
                         </div>
@@ -204,21 +204,9 @@
 <script type="text/html" id="dataRelationshipList2">
     {{each list as value i}}
     <div class="col-md-4">
-        <%--<label>
-            <input type="checkbox" name="relationBox" value="{{value}}"> {{value}}
-        </label>--%>
         <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="relationBox" value="{{value}}" style="line-height: normal"></div>
         <div style="padding-left: 20px;word-break: break-all"> {{value}}</div>
     </div>
-    <%--<div class="col-md-4">
-        <label>
-            <div class="checker">
-                <span>
-                    <input type="checkbox" name="relationCheck" value="{{value}}">
-                </span>
-            </div> {{value}}
-        </label>
-    </div>--%>
     {{/each}}
 </script>
 <script type="text/html" id="addSql">
@@ -248,8 +236,8 @@
     {{each data as value i}}
     <div class="col-md-4">
         <label>
-            <input type="checkbox" name="fileTable" value="{{value.id}}">
-            <span style="word-break: break-all">{{value.text}}</span>
+            <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="fileTable" value="{{value.id}}" style="line-height: normal"></div>
+            <div style="padding-left: 20px;word-break: break-all"> {{value.text}}</div>
         </label>
     </div>
     {{/each}}
@@ -267,6 +255,7 @@
 
         var dataFileSrcId;
         var dataFilePathList;
+        var flag =false;
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
                 $(".select-database").show();
@@ -344,6 +333,22 @@
             previewSqlDataAndComs(dataRelSrcId,$Str)
         })
         function addSql() {
+            var result = true;
+            $(":input[name^='sqlStr']").each(function () {
+                if (!$(this).val() || !$(this).val().trim()) {
+                    toastr["error"]("错误！", "请先完成当前sql编辑");
+                    result = false;
+                    return;
+                }
+            });
+            if (!result) {
+                return;
+            }
+            if (!validSqlStrResult) {
+                toastr["error"]("错误！", "请先通过当前sql校验");
+                return;
+            }
+            <!-- 第一个校验完成才能添加-->
             var tabCon = template("addSql");
             $("#sqlList").append(tabCon);
         }
@@ -351,8 +356,37 @@
         function sendRelationTask() {
             var dataRelSqlTableList="";
             var $eleChecked = $("[name='relationBox']:checked")
-            if($("#dataTaskName").val() ==""){
+            var numChecked = $eleChecked.size();
+
+            if($("#dataTaskName").val() =="" || $("#dataTaskName").val().trim() == ""){
                 toastr["error"]("提示！", "请创建任务名");
+                return
+            }
+            if (numChecked == 0) {
+                toastr["error"]("最少选择一个表资源");
+                return
+            }
+
+            $(".sqlStatements").each(function (index) {
+                //判断是否为空 空跳过
+                if(flag){
+                    return
+                }
+                if($(this).val() =="" || $(this).val().trim() == ""){
+                    flag=true
+                    return
+                }
+                //校验sql语句
+
+                var sqlNameStr = $("[name='sqlTableName']:eq("+ index+")").val();
+                if(sqlNameStr =="" || sqlNameStr.trim() == ""){
+                    flag=true
+                    return
+                }
+            })
+
+            if(flag){
+                toastr["error"]("最少选择一个表资源");
                 return
             }
             $("[name='sqlTableName']").each(function () {
@@ -363,12 +397,6 @@
                 dataRelSqlTableList+=$(this).val()+";"
             })
 
-            var numChecked = $eleChecked.size();
-
-            if (numChecked == 0) {
-                toastr["error"]("最少选择一个表资源");
-                return
-            }
             var relTabStr = "";
             $eleChecked.each(function () {
                 relTabStr+=$(this).val()+";"

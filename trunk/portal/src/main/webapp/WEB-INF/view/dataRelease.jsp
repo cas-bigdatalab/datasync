@@ -74,10 +74,10 @@
                     <th>编号</th>
                     <th>数据集名称</th>
                     <th>类型</th>
-                    <th width="40%">来源位置</th>
+                    <th width="30%">来源位置</th>
                     <th>发布时间</th>
                     <th>状态</th>
-                    <th>操作</th>
+                    <th width="25%">操作</th>
                 </tr>
                 </thead>
                 <tbody id="bd-data">
@@ -388,7 +388,7 @@
         <td>{{i + 1}}</td>
         <td>{{value.title}}</td>
         <td>{{value.publicType}}</td>
-        <td>{{value.createdByOrganization}}</td>
+        <td style="word-break: break-all">{{value.createdByOrganization}}</td>
         <td>{{dateFormat(value.creationDate)}}</td>
         <td id="{{value.dataTaskId}}">{{value.resState}}</td>
         <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>

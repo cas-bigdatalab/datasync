@@ -54,6 +54,11 @@
             font-size:16px;
             margin-top:2px;
         }
+        .control-label .norequired {
+            color: #e02222;
+            font-size: 12px;
+            padding-left: 2px;
+        }
 
     </style>
 </head>
@@ -105,45 +110,40 @@
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab1">
-                                    <form class="form-horizontal" id="submit_form"
+                                    <form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"  onfocusout="true"
                                           method="POST">
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" >数据集名称 <span class="required">
+                                            <label class="control-label col-md-3" for="Task_dataName" >数据集名称 <span class="required">
                                                     * </span>
                                             </label>
                                             <div class="col-md-4" style="padding-top:14px">
-                                                <input type="text" class="form-control" name="need_checked"
-                                                       id="task_title" style="border: 1px solid rgb(169, 169, 169)">
-                                                <div class="custom-error" name="need_message" style="display: none">请输入数据集名称</div>
+                                                <input type="text" class="form-control" name="Task_dataName" required="required"
+                                                       id="Task_dataName" >
                                             </div>
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" >邮箱号<span >
+                                            <label class="control-label col-md-3" for="Task_email">邮箱号<span class="required">
                                                     * </span>
                                             </label>
                                             <div class="col-md-4" style="padding-top:14px">
                                                 <input type="email" class="form-control"
-                                                       id="task_email" style="border: 1px solid rgb(169, 169, 169)">
-                                                <div class="custom-error" name="data_email" style="display: none">请输入正确的邮箱地址</div>
+                                                       id="Task_email" name="Task_email" required="required">
                                             </div>
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" >电话号码 <span >
+                                            <label class="control-label col-md-3" for="Task_phone">电话号码 <span class="norequired">
                                                     * </span>
                                             </label>
                                             <div class="col-md-4" style="padding-top:14px">
-                                                <input type="text" class="form-control"
-                                                       id="task_phone" style="border: 1px solid rgb(169, 169, 169)">
-                                                <div class="custom-error" name="data_phone" style="display: none">请输入正确的手机号</div>
+                                                <input type="text" class="form-control" name="Task_phone" required="required"
+                                                       id="Task_phone" >
                                             </div>
 
                                         </div>
-                                    </form>
-                                    <div style="overflow: hidden" class="row">
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" style="text-align: right">图片<span >
+                                            <label class="control-label col-md-3" style="text-align: right">图片<span  class="required">
                                                     * </span>
                                             </label>
                                             <div class="col-md-9">
@@ -157,12 +157,12 @@
                                                             <input type="hidden" id="h" name="h" />
                                                             <input type="hidden" id="tag" name="tag" val=""/>
                                                         </div>
-                                                            <span class="btn default btn-file" id="checkPicture">
+                                                        <span class="btn default btn-file" id="checkPicture">
                                                             <span class="fileinput-new">
                                                             选择一个图片</span>
                                                             <input class="photo-file" id="fcupload" type="file" name="imgFile" onchange="readURL(this);">
                                                             </span>
-                                                            <span id="uploadSpan" class="btn default btn-file" style="display: none">
+                                                        <span id="uploadSpan" class="btn default btn-file" style="display: none">
                                                                 <span class="fileinput-new">
                                                             上传</span>
                                                                 <input type="button" onclick="doUpload();"/>
@@ -177,20 +177,20 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <form class="form-horizontal">
+                                    </form>
+                                    <form class="form-horizontal" id="submit_form2" method="POST" accept-charset="utf-8" role="form"  onfocusout="true">
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">资源目录<span  >
+                                            <label class="control-label col-md-3" for="centerCatalogId">资源目录<span class="norequired" >
                                                     * </span>
                                             </label>
                                             <div class="col-md-4" id="cemterCatalogDiv" style="padding-top:14px" >
-                                                <input type="hidden"  id="centerCatalogId">
+
                                                 <div id="jstree-demo"></div>
-                                                <div class="custom-error" style="display: none" id="file_dir">请选择目录</div>
+                                                <input type="text"  id="centerCatalogId" name="centerCatalogId" required="required" style="display: none">
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">选择时间<span >
+                                            <label class="control-label col-md-3" >选择时间<span class="norequired">
                                                     * </span></label>
                                             <div class="col-md-6"  style="padding-top:14px">
                                                 <div class="input-group input-daterange">
@@ -200,41 +200,33 @@
                                                     <input type="text" class="form-control selectData"
                                                            data-date-format="yyyy-mm-dd" placeholder="起始时间" readonly>
                                                 </div>
-                                                <div class="custom-error" id="data_time" style="display: none">请添正确选择日期</div>
                                             </div>
                                         </div>
-                                        <div class="form-group dataLicenseInputGroup">
-                                            <label class="control-label col-md-3">描述 <span class="required">
+                                        <div class="form-group ">
+                                            <label class="control-label col-md-3" for="dataDescribeID">描述 <span class="required">
                                                     * </span>
                                             </label>
                                             <div class="col-md-6" style="padding-top:14px">
-                                                <textarea name="need_checked" id="dataDescribeID" style=" height: 96px; width: 412px;resize: none;border:1px solid rgb(169, 169, 169)"></textarea>
-                                                <div class="custom-error" name="need_message" style="display: none">请输入描述信息,不得少于50字</div>
-                                            </div>
+                                                <%--<textarea type="text"  id="dataDescribeID" name="dataDescribeID" required="required"
+                                                          style=" height: 96px; width: 412px;resize: none;"></textarea>--%>
 
+                                                <textarea  type="text" class="form-control" cols="30" rows="5" id="dataDescribeID" name="dataDescribeID"  required="required"></textarea>
+
+                                            </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" id="lab_key">关键词<span class="required">
+                                            <label class="control-label col-md-3" for="select2_tags">关键词<span class="required">
                                                     * </span></label>
                                             <div class="checkbox-list col-md-5" style="padding-top:14px">
-                                                <%--<div style="margin-bottom: 3px;line-height: 24px">
-                                                    <input type="text" style="font-size: 16px" id="addWorkStr">
-                                                    <button class="btn green" type="button" onclick="addKeyWords()">添加关键词</button>
-                                                </div>--%>
-                                                    <input type="hidden" class="form-control" id="select2_tags" value="" name="need_checked">
-
-                                                <%--
-                                                <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden;padding-left: 3px" class="key-wrap"></div>
---%>
-                                                <div class="custom-error" name="need_message" id="key_work" style="display: none">请添加至少两个关键词</div>
+                                                    <input type="text" class="form-control" id="select2_tags" value="" name="select2_tags" required="required" >
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3">来源<span  class="required">
+                                            <label class="control-label col-md-3" for="dataSourceDesID">来源<span  class="required">
                                                     * </span></label>
                                             <div class="col-md-6" id="dataSourceDes" style="padding-top:14px">
-                                                <textarea name="need_checked" id="dataSourceDesID" style=" height: 96px; width: 412px;resize: none;border:1px solid rgb(169, 169, 169)"></textarea>
-                                                <div class="custom-error" name="need_message" style="display: none">请输入来源，不得少于50字</div>
+                                                <textarea  type="text" class="form-control" cols="30" rows="5" id="dataSourceDesID" name="dataSourceDesID"  required="required"></textarea>
+
                                             </div>
 
                                         </div>
@@ -406,14 +398,14 @@
         var firstTime = 0;
         var lastTime = 0;
         var api = null;
-        var testEmail =/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/
-        /*var tagNames=new Array();*/
         //将图片截图并上传功能
         $('.selectData').datepicker({
             language:'zh-CN'
         });
         $('.selectData').each(function() {
-            $(this).datepicker('clearDates');
+            $(this).datepicker({
+                autoclose: true
+            });
         });
         $('.selectData:eq(0)').datepicker().on("changeDate",function (ev) {
             firstTime = new Date(ev.date).getTime()
@@ -425,13 +417,137 @@
             console.log(lastTime)
             $("#data_time").hide()
         })
-
         $("#select2_tags").select2({
             tags: true,
             multiple: true,
             tags:[""],
         });
+        var validData = {
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block help-block-error', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "", // validate all fields including form hidden input
+            rules: {
+                Task_dataName: {
+                    required: true
+                },
+                Task_email: {
+                    required: true,
+                    isEmail:true
+                },
+                Task_phone: {
+                    required: true,
+                    isPhone:true
+                }
+            },
+            messages: {
+                Task_dataName: {
+                    required: "请输入数据集名称"
+                },
+                Task_email: {
+                    required: "请输入邮箱地址"
+                },
+                Task_phone: {
+                    required: "请输入电话号码"
+                }
+            },
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.parent(".input-group").size() > 0) {
+                    error.insertAfter(element.parent(".input-group"));
+                } else {
+                    error.insertAfter(element); // for other inputs, just perform default behavior
+                }
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
 
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element)
+                    .closest('.form-group').removeClass('has-error'); // set error class to the control group
+            }
+        };
+        var validData2 = {
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block help-block-error', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "", // validate all fields including form hidden input
+            rules: {
+                centerCatalogId: {
+                    required: true
+                },
+                dataDescribeID: {
+                    required: true,
+                    minWords:true
+                },
+                select2_tags: {
+                    required: true,
+                    minTwoKey:true
+                },
+                dataSourceDesID: {
+                    required: true
+                }
+            },
+            messages: {
+                centerCatalogId: {
+                    required: "请选择目录文件"
+                },
+                dataDescribeID: {
+                    required: "请输入用户组描述信息"
+                },
+                select2_tags: {
+                    required: "至少添加两个关键词"
+                },
+                dataSourceDesID: {
+                    required: "请输入来源"
+                }
+            },
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.parent(".input-group").size() > 0) {
+                    error.insertAfter(element.parent(".input-group"));
+                } else {
+                    error.insertAfter(element); // for other inputs, just perform default behavior
+                }
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element)
+                    .closest('.form-group').removeClass('has-error'); // set error class to the control group
+            },
+
+        };
+
+        jQuery.validator.addMethod("isPhone", function (value, element) {
+            var winPath = /^1[34578]\d{9}$/;
+            return this.optional(element) || winPath.test(value);
+        }, "请输入正确电话号码");
+
+        jQuery.validator.addMethod("isEmail", function (value, element) {
+            var winPath = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+            return this.optional(element) || winPath.test(value);
+        }, "请输入正确邮箱地址");
+
+        jQuery.validator.addMethod("minTwoKey", function (value, element) {
+            var keyFlag = $("#select2_tags").val().split(",").length <2?false:true
+            return keyFlag;
+        }, "至少输入两个关键词");
+
+        jQuery.validator.addMethod("minWords", function (value, element) {
+            var workFlag = $("#dataDescribeID").val().length <50 ?false:true
+            return this.optional(element)||($("#dataDescribeID").val()==""|| workFlag);
+        }, "最少输入50个字符");
+
+        $("#select2_tags").change(function () {
+            $("#submit_form2").validate(validData2).element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
+        })
+
+        $("#submit_form1").validate(validData)
+        $("#submit_form2").validate(validData2)
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -643,48 +759,8 @@
 
         function addResourceFirstStep() {
             firstFlag=false
-            $("[name='need_checked']").each(function () {
-                var $index = $("[name='need_checked']").index($(this))
-                if($(this).val() == "" ||$(this).val().trim()==""){
-                    $("[name='need_checked']:eq("+$index +")").addClass("custom-error")
-                    $("[name='need_message']:eq("+$index +")").show()
-                    $(".required:eq("+$index +")").parent().addClass("custom-error")
-                    firstFlag=true
-                    return
-                }
-                if($index==1 || $index==3){
-                    if($(this).val().length <=50 ){
-                        $("[name='need_checked']:eq("+$index +")").addClass("custom-error")
-                        $("[name='need_message']:eq("+$index +")").show()
-                        $(".required:eq("+$index +")").parent().addClass("custom-error")
-                        firstFlag=true
-                        return
-                    }
-                }
-            })
-
-            if($("#select2_tags").val().split(",").length <2){
-                $("#lab_key").addClass("custom-error")
-                $("#key_work").show()
+            if(!$("#submit_form1").valid() || !$("#submit_form2").valid()){
                 firstFlag=true
-            }
-            if($("#centerCatalogId").val() ==""){
-                $("#file_dir").show();
-                firstFlag=true
-            }
-            if(firstTime ==0 || lastTime ==0|| firstTime>lastTime){
-                $("#data_time").show();
-                firstFlag=true
-            }
-            if(!(/^1[34578]\d{9}$/.test($("#task_phone").val()))){
-                $("[name='data_phone']").show()
-                firstFlag=true
-            }
-            if(!testEmail.test($("#task_email").val())){
-                $("[name='data_email']").show()
-                firstFlag=true
-            }
-            if(firstFlag){
                 return
             }
             var keywordStr = $("#select2_tags").val()
@@ -692,7 +768,7 @@
                 url:ctx+"/resource/addResourceFirstStep",
                 type:"POST",
                 data:{
-                    title:$("#task_title").val(),
+                    title:$("#Task_dataName").val(),
                     imagePath:$("#imgPath").val(),
                     introduction:$("#dataDescribeID").val(),
                     keyword:keywordStr,
@@ -700,8 +776,8 @@
                     createdByOrganization:$("#dataSourceDesID").val(),
                     startTime:$('.selectData:eq(0)').val(),
                     endTime:$('.selectData:eq(1)').val(),
-                    email:$("#task_email").val(),
-                    phoneNum:$("#task_phone").val()
+                    email:$("#Task_email").val(),
+                    phoneNum:$("#Task_phone").val()
                 },
                 success:function (data) {
                     var data = JSON.parse(data)
@@ -775,59 +851,18 @@
         }
         function editResourceFirstStep() {
             firstFlag=false
-            $("[name='need_checked']").each(function () {
-                var $index = $("[name='need_checked']").index($(this))
-                if($(this).val() == "" ||$(this).val().trim()==""){
-                    $("[name='need_checked']:eq("+$index +")").addClass("custom-error")
-                    $("[name='need_message']:eq("+$index +")").addClass("custom-error")
-                    $("[name='need_message']:eq("+$index +")").show()
-                    $(".required:eq("+$index +")").parent().addClass("custom-error")
-                    firstFlag=true
-                    return
-                }
-                if($index==1 || $index==3){
-                    if($(this).val().length <=50 ){
-                        $("[name='need_checked']:eq("+$index +")").addClass("custom-error")
-                        $("[name='need_message']:eq("+$index +")").show()
-                        $(".required:eq("+$index +")").parent().addClass("custom-error")
-                        firstFlag=true
-                        return
-                    }
-                }
-            })
-            if($("#select2_tags").val() ==""){
-                $("#key_work").show()
+            if(!$("#submit_form1").valid() || !$("#submit_form2").valid()){
                 firstFlag=true
-            }
-            if($("#centerCatalogId").val() ==""){
-                $("#file_dir").show();
-                firstFlag=true
-            }
-            if(firstTime ==0 || lastTime ==0|| firstTime>lastTime){
-                $("#data_time").show();
-                firstFlag=true
-            }
-            if(!(/^1[34578]\d{9}$/.test($("#task_phone").val()))){
-                $("[name='data_phone']").show()
-                firstFlag=true
-            }
-            if(!testEmail.test($("#task_email").val())){
-                $("[name='data_email']").show()
-                firstFlag=true
-            }
-            if(firstFlag){
                 return
             }
             var keywordStr = $("#select2_tags").val()
-            /*for(var i=0;i<tagNames.length;i++){
-                keywordStr+=tagNames[i]+";"
-            }*/
+
             $.ajax({
                 url:ctx+"/resource/editResourceFirstStep",
                 type:"POST",
                 data:{
                     resourceId:resourceId,
-                    title:$("#task_title").val(),
+                    title:$("#Task_dataName").val(),
                     imagePath:$("#imgPath").val(),
                     introduction:$("#dataDescribeID").val(),
                     keyword:keywordStr,
@@ -835,8 +870,8 @@
                     createdByOrganization:$("#dataSourceDesID").val(),
                     startTime:$('.selectData:eq(0)').val(),
                     endTime:$('.selectData:eq(1)').val(),
-                    email:$("#task_email").val(),
-                    phoneNum:$("#task_phone").val()
+                    email:$("#Task_email").val(),
+                    phoneNum:$("#Task_phone").val()
                 },
                 success:function (data) {
                 },
