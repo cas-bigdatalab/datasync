@@ -4,10 +4,13 @@ import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
 import cn.csdb.drsr.repository.DataSrcDao;
 import cn.csdb.drsr.repository.DataTaskDao;
+import cn.csdb.drsr.utils.ZipUtils;
 import cn.csdb.drsr.utils.dataSrc.DDL2SQLUtils;
 import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
 import cn.csdb.drsr.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.io.Files;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.List;
 
@@ -100,6 +104,7 @@ public class DataTaskService {
             boolean result = dataTaskDao.update(dataTask);
             logger.info("result=" + result);
             jsonObject.put("result", "true");
+            jsonObject.put("filePath", filePath.getPath());
         } catch (Exception ex) {
             jsonObject.put("result", "false");
         }
@@ -135,6 +140,49 @@ public class DataTaskService {
     }
 
     public int insertDatatask(DataTask datatask) {
+
+
         return dataTaskDao.insertDatatask(datatask);
+    }
+
+    public String packDataResource(final String fileName ,final List<String> filePaths) {
+//        dbFlag.await();
+//        String zipFilePath = "zipFile";
+//        File dir  = new File(System.getProperty("drsr.framework.root") + zipFilePath );
+//        if(!dir.exists()){
+//            dir.mkdirs();
+//        }
+//        String zipFile = System.getProperty("drsr.framework.root") + zipFilePath + File.separator + fileName + ".zip";
+        ZipArchiveOutputStream outputStream = null;
+        try {
+//            if (new File(dirName).exists()) {
+//                new File(dirName).delete();
+//            }
+            Files.createParentDirs(new File(fileName));
+            outputStream = new ZipArchiveOutputStream(new File(fileName));
+            outputStream.setEncoding("utf-8"); //23412
+            outputStream.setCreateUnicodeExtraFields(ZipArchiveOutputStream.UnicodeExtraFieldPolicy.ALWAYS);
+            outputStream.setFallbackToUTF8(true);
+            logger.info(".zip:文件数据源,开始打包文件...");
+            for (String filePath : filePaths) {
+                filePath = filePath.replace("%_%",File.separator);
+                File file = new File(filePath);
+                if (!file.exists()) {
+                    continue;
+                }
+                ZipUtils.zipDirectory(file, "", outputStream);
+            }
+        } catch (Exception e) {
+            logger.error("打包失败", e);
+            return "error";
+        } finally {
+            try {
+                outputStream.finish();
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "ok";
     }
 }

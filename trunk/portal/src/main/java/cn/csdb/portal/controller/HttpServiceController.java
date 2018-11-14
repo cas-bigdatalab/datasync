@@ -42,7 +42,6 @@ public class HttpServiceController {
     @ResponseBody
     @RequestMapping(value = "getDataTask", method = {RequestMethod.POST,RequestMethod.GET})
     public int getDataTask(@RequestBody String requestString){
-        System.out.println("===========33333333333333333");
         JSONObject requestJson = JSON.parseObject(requestString);
         String subjectCode = requestJson.get("subjectCode").toString();
         String dataTaskString = requestJson.get("dataTask").toString();
@@ -74,6 +73,20 @@ public class HttpServiceController {
             }
             sqlfilePathBuffer.append(siteFtpPath+fileName+";");
             if(dataTask.getDataTaskType().equals("mysql")){
+                String sqlZip = dataTask.getFilePath();
+                if (sqlZip.indexOf("/")>0){
+                    sqlZip = sqlZip.substring(sqlZip.lastIndexOf("/")+1);
+                }else if(sqlZip.indexOf("\\")>0){
+                    sqlZip = sqlZip.substring(sqlZip.lastIndexOf("\\")+1);
+                }
+                sqlZip = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+sqlZip;
+                File sqlfiles = new File(sqlZip);
+                ZipUtil zipUtil = new ZipUtil();
+                try {
+                    zipUtil.unZip(sqlfiles,siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 if(fileName.contains("data")){
                     dataDBFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+fileName;
                     System.out.println("dataDBFile---------"+dataDBFile);
