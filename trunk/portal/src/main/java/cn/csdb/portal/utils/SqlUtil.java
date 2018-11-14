@@ -43,13 +43,13 @@ public class SqlUtil {
 
         Exception error = null;
         Connection conn = null;
-        FileWriter fw = null;
-        PrintWriter pw = null;
+//        FileWriter fw = null;
+//        PrintWriter pw = null;
         try {
             Class.forName(driver);
             conn = DriverManager.getConnection(url, username, password);
 
-            File dir = new File(System.getProperty("portal.framework.root") + "RunScriptLog");
+            /*File dir = new File(System.getProperty("portal.framework.root") + "RunScriptLog");
             if (!dir.exists()) {
                 dir.mkdir();
             }
@@ -57,7 +57,7 @@ public class SqlUtil {
             if (!file.exists()) {
                 file.createNewFile();
             }
-            fw = new FileWriter("newPoem.txt");
+            fw = new FileWriter(file.getName());*/
 
             /*if (org.apache.log4j.Logger.getRootLogger().getAppender("LogFile") instanceof DailyRollingFileAppender) {
                 DailyRollingFileAppender apen = (DailyRollingFileAppender) org.apache.log4j.Logger
@@ -65,7 +65,7 @@ public class SqlUtil {
                 try {
                     fw = new FileWriter(apen.getFile(), true);//apen.getFile()取得文件路径，封装成FileWriter是为了日志信息不被覆盖，而是追加写入
             */
-            pw = new PrintWriter(fw);
+//            pw = new PrintWriter(fw);
 
 
             ScriptRunner runner = new ScriptRunner(conn);
@@ -75,21 +75,23 @@ public class SqlUtil {
             runner.setDelimiter(";");////每条命令间的分隔符
             runner.setSendFullScript(false);
             runner.setStopOnError(false);
-
-            runner.setErrorLogWriter(pw);//设置是否输出日志
+            System.out.println("begin run-----------");
+//            runner.setErrorLogWriter(pw);//设置是否输出日志
 //            runner.setLogWriter(pw);//设置是否输出日志
             //如果又多个sql文件，可以写多个runner.runScript(xxx),
             runner.runScript(new InputStreamReader(new FileInputStream(structImportPath), "utf-8"));
             runner.runScript(new InputStreamReader(new FileInputStream(dataImportPath), "utf-8"));
             close(conn);
+            System.out.println("end run-----------");
         } catch (Exception e) {
             error = e;
+            e.printStackTrace();
         } finally {
             close(conn);
-            if (pw != null) {
+            /*if (pw != null) {
                 pw.close();
             }
-
+*/
         }
         if (error != null) {
             throw error;

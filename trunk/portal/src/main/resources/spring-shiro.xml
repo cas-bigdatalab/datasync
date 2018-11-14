@@ -50,6 +50,7 @@
                 /key/**=anon
                 /v1/sync/**=anon
                 /api/**=anon
+                /service/**=anon
 <!--
                 /** = authc,roles[管理员,系统管理员]
 -->

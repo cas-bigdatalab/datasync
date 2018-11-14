@@ -23,13 +23,13 @@ import java.util.Map;
  **/
 public class FtpClass {
     String filePath = "/";
-//    String host = "10.0.86.77";
-    String host = "159.226.30.10";
+    String host = "10.0.86.77";
+//    String host = "159.226.30.10";
     String port = "21";
-//    String userName = "ftpUsercode2";
-    String userName = "sdcbackup";
-//    String password = "ftpPasswordcode2";
-    String password = "sdcfilecopy03";
+    String userName = "ftpUsercode2";
+//    String userName = "sdcbackup";
+    String password = "ftpPasswordcode2";
+//    String password = "sdcfilecopy03";
 
 
     public List<JSONObject> downloadFtpFile() {
@@ -104,6 +104,7 @@ public class FtpClass {
     public boolean connect(String hostname, int port, String username, String password) throws IOException {
         ftpClient.connect(hostname, port);
         ftpClient.setControlEncoding("GBK");
+        System.out.println(ftpClient.getReplyCode());
         if (FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
             if (ftpClient.login(username, password)) {
                 return true;
