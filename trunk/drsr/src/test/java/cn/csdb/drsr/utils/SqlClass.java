@@ -17,10 +17,10 @@ public class SqlClass {
 
     String host = "10.0.86.77";
     String username = "root";
-    String password = "";
+    String password = "123456";
     String importDatabaseName = "sdc";
-    String dataImportPath = "c:\\data\\25\\data.sql";
-    String structImportPath = "c:\\data\\25\\struct.sql";
+    String dataImportPath = "c:\\data\\4\\data.sql";
+    String structImportPath = "c:\\data\\4\\struct.sql";
 
 
     /*public void importSql() throws IOException {

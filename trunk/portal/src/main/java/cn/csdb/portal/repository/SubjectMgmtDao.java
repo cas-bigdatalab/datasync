@@ -1,6 +1,7 @@
 package cn.csdb.portal.repository;
 
 import cn.csdb.portal.controller.SubjectMgmtController;
+import cn.csdb.portal.model.Group;
 import cn.csdb.portal.model.Subject;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
@@ -433,5 +434,11 @@ public class SubjectMgmtDao {
             return subjects.get(0);
         } else
             return null;
+    }
+
+
+    public List<Subject> getSubjectCodeList()
+    {
+        return mongoTemplate.findAll(Subject.class);
     }
 }

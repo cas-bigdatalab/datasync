@@ -42,6 +42,7 @@ public class HttpServiceController {
     @ResponseBody
     @RequestMapping(value = "getDataTask", method = {RequestMethod.POST,RequestMethod.GET})
     public int getDataTask(@RequestBody String requestString){
+        System.out.println("===========33333333333333333");
         JSONObject requestJson = JSON.parseObject(requestString);
         String subjectCode = requestJson.get("subjectCode").toString();
         String dataTaskString = requestJson.get("dataTask").toString();
@@ -60,6 +61,7 @@ public class HttpServiceController {
         String dataDBFile = "";
         String zipFile="";
         String unZipPath = "";
+        System.out.println("222222222222");
         for(String fp : sqlfilePathList){
             if(fp.equals("")){
                 continue;
@@ -94,7 +96,7 @@ public class HttpServiceController {
 //            filepath = filepath.substring(filepath.lastIndexOf("\\")+1);
 //        }
 //        dataTask.setFilePath(siteFtpPath+filepath);
-
+        System.out.println("11111111111111");
         if(dataTask.getDataTaskType().equals("mysql")){
             String username = configPropertyService.getProperty("db.username");
             String password = configPropertyService.getProperty("db.password");
@@ -102,6 +104,7 @@ public class HttpServiceController {
 
             SqlUtil sqlUtil = new SqlUtil();
             try {
+                System.out.println("passwprd------"+password);
                 sqlUtil.importSql("localhost",username,password,dbName,structDBFile,dataDBFile);
             } catch (Exception e) {
                 e.printStackTrace();
