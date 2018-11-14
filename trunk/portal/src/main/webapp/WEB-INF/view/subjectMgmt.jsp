@@ -496,7 +496,7 @@
 
             var formData = new FormData();
 
-            formData.append("subjectName", $("#subjectCode").val());
+            formData.append("subjectName", $("#subjectName").val());
             formData.append("subjectCode", $("#subjectCode").val());
             formData.append('image', $('#image').get(0).files[0]);
             formData.append('brief', $("#brief").val());

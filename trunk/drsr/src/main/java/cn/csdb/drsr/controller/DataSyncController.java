@@ -82,7 +82,7 @@ public class DataSyncController {
                 }
             }else if(dataTask.getDataTaskType().equals("mysql")){
                 remoteFilepath = remoteFilepath+subjectCode+"_"+dataTask.getDataTaskId()+"/";
-                String[] localFileList = dataTask.getSqlFilePath().split(";");
+                String[] localFileList = {dataTask.getFilePath()};
                 result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath).toString();
                 if(localFileList.length == 0){
                     return 0;
