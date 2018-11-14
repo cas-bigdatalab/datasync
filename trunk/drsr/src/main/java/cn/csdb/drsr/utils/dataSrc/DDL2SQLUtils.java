@@ -80,6 +80,9 @@ public class DDL2SQLUtils {
             return "";
         }
         sb.append(generatePKsDdl(jdbcConnection, catalog, schema, table));
+        if (sb.toString().endsWith(",")){
+            sb.replace(sb.length()-1,sb.length()," ");
+        }
         sb.append("\n);");
         sb.append("\n\n");
         return sb.toString();
@@ -94,7 +97,7 @@ public class DDL2SQLUtils {
             List<String> pks = getPKs(jdbcConnection, catalog, schema, table);
             DatabaseMetaData meta = jdbcConnection.getMetaData();
             ResultSet res = meta.getColumns(catalog, schema, table, null);
-            sb.append("   PRIMARY KEY (");
+            sb.append("PRIMARY KEY(");
             int n = pks.size();
             while ((n > 0) && (res.next())) {
                 String name = res.getString("COLUMN_NAME");
@@ -113,6 +116,9 @@ public class DDL2SQLUtils {
                     "Error: could not retrieve column PK metadata for the table '" + table + "' from the backend.");
             e.printStackTrace();
             return sb.toString();
+        }
+        if (sb.toString().equals("PRIMARY KEY()")){
+            return "";
         }
         return sb.toString();
     }
