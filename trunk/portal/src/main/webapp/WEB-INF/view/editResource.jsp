@@ -328,16 +328,16 @@
 <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
     <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                         id="editTableFieldComsCloseId"></button>
-                <h4 class="modal-title" id="relationalDatabaseModalTitle">编辑表字段注释</h4>
+                <h4 class="modal-title" id="relationalDatabaseModalTitle">预览数据</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="portlet box green-haze" style="border:0;">
-                            <div class="portlet-title">
+                            <div class="portlet-title " style="display: none">
                                 <ul class="nav nav-tabs" style="float:left;">
                                     <li class="active" style="display: none">
                                         <a href="#editTableFieldComsId" data-toggle="tab"

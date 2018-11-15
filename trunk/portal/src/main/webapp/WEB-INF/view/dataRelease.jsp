@@ -50,8 +50,8 @@
                         <label>数据类型</label>
                         <select id="resourcePublicType" class="form-control" style="width: 150px">
                             <option value="">全部</option>
-                            <option value="mysql">关系数据库</option>
-                            <option value="file">文件数据库</option>
+                            <option value="mysql">mysql</option>
+                            <option value="file">file</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -80,7 +80,7 @@
                     <th width="30%">来源位置</th>
                     <th>发布时间</th>
                     <th>状态</th>
-                    <th width="25%">操作</th>
+                    <th width="26%">操作</th>
                 </tr>
                 </thead>
                 <tbody id="bd-data">
@@ -414,11 +414,10 @@
             </button>--%>
             {{if value.resState == '待审核'}}
             <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.id}}"
-                    value="{{value.id}}">审核
+                    value="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;审核
             </button>
             {{/if}}
-            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.id}}"
-                    style="background-color: dimgrey">编辑
+            <button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;编辑
             </button>
             <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.resState}}')"><i
                     class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
@@ -639,7 +638,7 @@
                         },*/
                         success:function (data) {
                             toastr["success"]("删除成功");
-                            tableConfiguration2(1,"","","");
+                            tableConfiguration2(1,publicType,resourceState,resourceName);
                         },
                         error:function () {
                             toastr["error"]("删除失败");

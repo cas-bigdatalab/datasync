@@ -122,7 +122,7 @@
                 <div class="modal-header bg-primary">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                             id="editTableFieldComsCloseId"></button>
-                    <h4 class="modal-title" id="relationalDatabaseModalTitle">预览表</h4>
+                    <h4 class="modal-title" id="relationalDatabaseModalTitle">预览数据</h4>
                 </div>
                 <%--<div class="form">--%>
                 <%--<form class="form-horizontal" role="form" action="addRelationalDatabase" method="post"--%>
