@@ -24,8 +24,6 @@ public class SubjectMgmtService {
      *
      * @param subject, the wrapped object which contains information of the subject ot be added
      * @return  addSubjectNotice, a notice inform user if create subject success or not
-     * @author zzl
-     * @date 2018/10/23
      */
     @Transactional
     public String addSubject(Subject subject)
@@ -40,12 +38,12 @@ public class SubjectMgmtService {
         {
             addSubjectNotice = "添加专题库：失败！";
         }
-        Runtime runtime = Runtime.getRuntime();
+        /*Runtime runtime = Runtime.getRuntime();
         try {
             Process process = runtime.exec(new String[]{"bash", "-c", "./etc/vsftpd/vftpuseradd "+subject.getFtpUser()+" "+subject.getFtpPassword()});
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         return addSubjectNotice;
     }
