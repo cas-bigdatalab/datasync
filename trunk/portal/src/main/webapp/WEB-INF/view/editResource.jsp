@@ -923,6 +923,7 @@
                     $('.selectData:eq(0)').val(convertMilsToDateString(firstTime))
                     $('.selectData:eq(1)').val(convertMilsToDateString(lastTime))
                     $("#dataDescribeID").val(totalList.introduction)
+                    $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
                     var path = "${ctx}/"+totalList.imagePath+"_cut.jpg";
                     $('#cutimg').attr('src',path);
                     $('#imgPath').val(totalList.imagePath);
