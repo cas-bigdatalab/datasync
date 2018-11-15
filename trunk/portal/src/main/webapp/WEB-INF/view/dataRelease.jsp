@@ -524,7 +524,9 @@
                         listSpan(dataList.publicContent,";",$publicContent)
                         /*$("#file-publicContent").html(dataList.publicContent)*/
                         var $filePath=$("#file-filePath")
-                        var filrStr = dataList.filePath.substr(0, dataList.filePath.length - 1);
+
+                        var str = dataList.filePath.replace(/%_%/g, "/");
+                        var filrStr = str.substr(0, str.length - 1);
                         listSpan(filrStr,";",$filePath)
                         /*$("#file-filePath").html(dataList.filePath)*/
                         $("#file-fileName").html(dataList.fileName)

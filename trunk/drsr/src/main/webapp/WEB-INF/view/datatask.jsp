@@ -133,7 +133,7 @@
                     </div>--%>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务状态:</label>
-                        <div class="col-sm-8" id="pre-status"></div>
+                        <div class="col-sm-8 modediv" id="pre-status"></div>
                     </div>
                 </form>
             </div>
@@ -193,7 +193,7 @@
                     </div>--%>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务状态:</label>
-                        <div class="col-sm-8" id="file-status"></div>
+                        <div class="col-sm-8 modediv" id="file-status"></div>
                     </div>
                 </form>
             </div>
