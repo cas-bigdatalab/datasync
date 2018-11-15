@@ -1,7 +1,6 @@
 package cn.csdb.portal.repository;
 
 import cn.csdb.portal.controller.SubjectMgmtController;
-import cn.csdb.portal.model.Group;
 import cn.csdb.portal.model.Subject;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
@@ -64,8 +63,6 @@ public class SubjectMgmtDao {
      *
      * @param subject, the wrapped object which contains information of the subject ot be added
      * @return  retValue, retValue inform user if create db info success or not
-     * @author zzl
-     * @date 2018/10/23
      */
     public int addSubject(Subject subject) {
         logger.info("enterring SubjectMgmtDao-addSubject");
@@ -81,7 +78,7 @@ public class SubjectMgmtDao {
 
         //create db and ftp
         createDb(subject.getSubjectCode());
-        createFtp(subject.getFtpUser(), subject.getFtpPassword());
+        createFtpUser(subject.getFtpUser(), subject.getFtpPassword());
         createFtpPath(subject.getFtpUser(), subject.getFtpPassword());
 
         logger.info("create db, ftp user, ftp path completed!");
@@ -98,18 +95,18 @@ public class SubjectMgmtDao {
      *
      * @param dbName, the db'name to be created
      * @return  retValue, retValue inform user if create db info success or not
-     * @author zzl
-     * @date 2018/10/23
      */
     private boolean createDb(String dbName) {
-        logger.info("enterring SubjectMgmtDao-createDb, createDB = " + dbName);
+        logger.info("enterring SubjectMgmtDao-createDb, dbName = " + dbName);
 
         boolean retValue = false;
         String createDB = " create database " + " if not exists " + dbName;
         try {
             jdbcTemplate.execute(createDB);
+            logger.info("createDB success!");
             retValue = true;
         } catch (Exception e) {
+            logger.info("createDB failed!");
             e.printStackTrace();
         }
 
@@ -124,48 +121,67 @@ public class SubjectMgmtDao {
      * @param ftpUser
      * @param ftpPassword
      * @return retValue, retValue inform user if create ftp info success or not
-     * @author zzl
-     * @date 2018/10/23
      */
-    private boolean createFtp(String ftpUser, String ftpPassword) {
+    private boolean createFtpUser(String ftpUser, String ftpPassword) {
         logger.info("create ftp user and password.");
         String insertSql = "insert into vu_list.vuser(name, password) values(?, ?)";
         Object[] args = new Object[]{ftpUser, ftpPassword};
+
         int insertedRows = 0;
+        boolean retValue = false;
+
         try {
             insertedRows = jdbcTemplate.update(insertSql, args);
+            if (insertedRows == 1) {
+                logger.info("create ftp user and password success!");
+                retValue = true;
+            }
+            else
+            {
+                logger.info("create ftp user and password failed!");
+                retValue = false;
+            }
         } catch (Exception e) {
+            logger.info("create ftp user and password failed!");
+            retValue = false;
+
             e.printStackTrace();
         }
 
-        boolean retValue = false;
-        if (insertedRows == 1) {
-            retValue = true;
-        }
-
-        logger.info("createFtp completed!");
+        logger.info("create ftp user and password completed!");
 
         return retValue;
     }
 
     private boolean createFtpPath(String ftpUser, String ftpPassword)
     {
-        logger.info("enterring SubjectMgmtDao-createFtpPath");
+        logger.info("create ftp path");
+        logger.info("ftpServerAddr = " + ftpServerAddr + ", ftpServerPort = " + ftpServerPort);
         boolean retValue = false;
-
         try {
             FTPClient ftpClient = new FTPClient();
             ftpClient.connect(ftpServerAddr, ftpServerPort);
             ftpClient.login(ftpUser, ftpPassword);
-            ftpClient.mkd(ftpUser);
-            retValue = true;
-            logger.info("create ftp path success!");
+            String ftpDirName = ftpUser;
+            logger.info("create ftp path, ftpDirName = " + ftpDirName);
+            boolean isCreated = ftpClient.makeDirectory(ftpDirName);
+            if (isCreated) {
+                retValue = true;
+                logger.info("create ftp path success!");
+            }
+            else
+            {
+                retValue = false;
+                logger.info("create ftp path failed!");
+            }
         }
         catch (Exception e)
         {
             logger.info("failed to create ftp path!");
             e.printStackTrace();
         }
+
+        logger.info("create ftp path completed!");
 
         return retValue;
     }
@@ -175,29 +191,31 @@ public class SubjectMgmtDao {
      *
      * @param id, the id of Subject to be deleted
      * @return  deletedRowCnt, the count of rows deleted
-     * @author zzl
-     * @date 2018/10/23
      */
     public int deleteSubject(String id) {
-        logger.info("subject id to be deleted : " + id);
+        logger.info("Delete Subject: subject id to be deleted : " + id);
 
         //delete db and ftp info， and image
         Subject subject = findSubjectById(id);
-        logger.info("delete db info.");
+        logger.info("Delete Subject: delete db info.");
         deleteDb(subject.getSubjectCode());
-        logger.info("db info completed.");
-        logger.info("delete ftp info.");
-        deleteFtp(subject.getFtpUser(), subject.getFtpPassword());
-        logger.info("ftp info completed.");
-        logger.info("delete subject'image");
+        logger.info("Delete Subject: db info completed.");
+        logger.info("Delete Subject: delete ftp info.");
+        deleteFtpUser(subject.getFtpUser(), subject.getFtpPassword());
+        logger.info("Delete Subject: ftp info completed.");
+        logger.info("Delete Subject: delete subject'image");
         deleteImage(subject.getImagePath());
-        logger.info("delete subject'image completed.");
+        logger.info("Delete Subject: delete subject'image completed.");
 
-        logger.info("deleting subject");
+        logger.info("Delete Subject: delete ftp directory");
+        deleteFtpDir(subject.getFtpUser(), subject.getFtpPassword());
+        logger.info("Delete Subject: delete ftp directory completed.");
+
+        logger.info("Delete Subject: delete subject db record");
         int deletedRowCnt = 0;
         WriteResult wr = mongoTemplate.remove(subject, "t_subject");
         deletedRowCnt = wr.getN();
-        logger.info("delete subject completed.");
+        logger.info("Delete Subject: delete subject db record completed.");
 
         return deletedRowCnt;
     }
@@ -206,21 +224,26 @@ public class SubjectMgmtDao {
      * Function Description:
      *
      * @param dbName, the name of database to be deleted
-     * @author zzl
-     * @date 2018/10/23
      */
     private void deleteDb(String dbName) {
-        logger.info("deleting db info, dbName = " + dbName);
+        logger.info("Delete Db: deleting db info, dbName = " + dbName);
         String deleteDbSql = "drop database " + dbName;
         /*Object[] args = new Object[]{dbName};*/
         try {
-            jdbcTemplate.update(deleteDbSql);
-            logger.info("delete db success!");
+            int deleteDbCnt = jdbcTemplate.update(deleteDbSql);
+            if (deleteDbCnt == 1) {
+                logger.info("Delete Db: elete db success!");
+            }
+            else
+            {
+                logger.info("Delete Db: delete db failed!");
+            }
         } catch (Exception e) {
             e.printStackTrace();
-            logger.info("delete db failed!");
+            logger.info("Delete Db: delete db failed!");
         }
-        logger.info("delete db info completed!");
+
+        logger.info("Delete Db: delete db info completed!");
     }
 
     /**
@@ -231,7 +254,7 @@ public class SubjectMgmtDao {
      * @author zzl
      * @date 2018/10/23
      */
-    private void deleteFtp(String ftpUser, String ftpPassword) {
+    private void deleteFtpUser(String ftpUser, String ftpPassword) {
         logger.info("deleting ftp info, ftpUser = " + ftpUser + ", ftpPassword = " + ftpPassword);
         String deleteFtpInfo = "delete from vu_list.vuser where name = ? and password=?";
         Object[] objs = new Object[]{ftpUser, ftpPassword};
@@ -249,8 +272,6 @@ public class SubjectMgmtDao {
      * Function Description:
      *
      * @param imagePath, the image' path which is about to be deleted
-     * @author zzl
-     * @date 2018/10/23
      */
     private void deleteImage(String imagePath) {
         logger.info("image path to be deleted : " + imagePath);
@@ -262,6 +283,35 @@ public class SubjectMgmtDao {
         }
 
         logger.info("delete image completed!");
+    }
+
+    private void deleteFtpDir(String ftpUser, String ftpPassword)
+    {
+        logger.info("delete ftp path");
+        logger.info("ftpServerAddr = " + ftpServerAddr + ", ftpServerPort = " + ftpServerPort);
+        try {
+            FTPClient ftpClient = new FTPClient();
+            ftpClient.connect(ftpServerAddr, ftpServerPort);
+            ftpClient.login(ftpUser, ftpPassword);
+            String ftpDirName = ftpUser;
+            logger.info("delete ftp path, ftpDirName = " + ftpDirName);
+            boolean isDeleted = ftpClient.removeDirectory(ftpDirName);
+            if (isDeleted) {
+                logger.info("delete ftp path success!");
+            }
+            else
+            {
+                logger.info("delete ftp path failed!");
+            }
+        }
+        catch (Exception e)
+        {
+            logger.info("delete ftp path failed!");
+            e.printStackTrace();
+        }
+
+        logger.info("delete ftp path completed!");
+
     }
 
     /**

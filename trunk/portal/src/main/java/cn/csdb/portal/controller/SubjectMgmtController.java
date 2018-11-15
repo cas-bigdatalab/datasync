@@ -50,6 +50,7 @@ public class SubjectMgmtController {
         subject.setImagePath(imagePath);
         logger.info("image saved");
 
+        //generate ftp user account and password
         logger.info("generate ftp user and password for the subject");
         generateFtpInfo(subject);
         logger.info("generate ftp user and password completed!");

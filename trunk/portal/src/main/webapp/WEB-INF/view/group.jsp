@@ -924,9 +924,22 @@
         //查询 按钮
         function searchUser()
         {
-            var loginId = $("#loginIdFilter").val();
-            var userName = $("#userNameFilter").val();
-            var groups = $("#groupsFilter").val().toString();
+            var loginId = $("#loginIdFilter").val().trim();
+            var userName = $("#userNameFilter").val().trim();
+            var groups = $("#groupsFilter").val();
+            if(groups == null)
+            {
+                groups = "";
+            }
+            else
+            {
+                groups = groups.toString();
+            }
+
+            console.log("searchUser - parameters - loginId = " + loginId);
+            console.log("searchUser - parameters - userName = " + userName);
+            console.log("searchUser - parameters - groups = " + groups);
+
             queryUser(loginId, userName, groups, 1);
         }
 
@@ -1029,9 +1042,7 @@
                         $("#userNameForUpdate").val(data.userName);
                         $("#loginIdForUpdate").val(data.loginId);
                         $("#passwordForUpdate").val(data.password);
-/*
-                        $("#subjectCodeForUpdate").val(data.subjectCode);
-*/
+
                         var subjectCodeArr = data.subjectCode.split(",");
                         console.log("getUserById - subjectCodeArr - " + subjectCodeArr);
                         $("#subjectCodeForUpdateUserDialog").select2().val(subjectCodeArr).trigger("change");
@@ -1065,7 +1076,7 @@
                     "userName": $("#userNameForUpdate").val(),
                     "loginId": $("#loginIdForUpdate").val(),
                     "password": $("#passwordForUpdate").val(),
-                    "subjectCode": $("#subjectCodeForUpdate").val(),
+                    "subjectCode": $("#subjectCodeForUpdate").val().toString(),
                     "groups": $("#groupsForUpdateUserDialog").val().toString()
                 },
                 dataType: "text",

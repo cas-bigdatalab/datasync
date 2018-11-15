@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Repository
 public class UserDao {
@@ -50,39 +51,43 @@ public class UserDao {
             groups = null;
         }
 
+        QueryBuilder queryBuilder = null;
+
         if (loginId != null && userName != null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("loginId").is(loginId).and("userName").is(userName).and("groups").is(groups).get();
+            queryBuilder = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$"));
         }
         else if (loginId != null && userName != null && groups == null)
         {
-            dbObject = QueryBuilder.start().and("loginId").is(loginId).and("userName").is(userName).get();
+            queryBuilder = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("userName").regex(Pattern.compile("^.*" + userName + ".*$"));
         }
         else if (loginId != null && userName == null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("loginId").is(loginId).and("groups").is(groups).get();
+            queryBuilder = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$"));
         }
         else if (loginId == null && userName != null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("userName").is(userName).and("groups").is(groups).get();
+
+            queryBuilder = QueryBuilder.start().and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$"));;
         }
         else if (loginId != null && userName == null && groups == null)
         {
-            dbObject = QueryBuilder.start().and("loginId").is(loginId).get();
+            queryBuilder = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$"));
         }
         else if (loginId == null && userName != null && groups == null)
         {
-            dbObject = QueryBuilder.start().and("userName").is(userName).get();
+            queryBuilder = QueryBuilder.start().and("userName").regex(Pattern.compile("^.*" + userName + ".*$"));
         }
         else if (loginId == null && userName == null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("groups").is(groups).get();
+            queryBuilder = QueryBuilder.start().and("groups").regex(Pattern.compile("^.*" + groups + ".*$"));
         }
         else
         {
-            dbObject = QueryBuilder.start().get();
+            queryBuilder = QueryBuilder.start();
         }
 
+        dbObject = queryBuilder.get();
         Query query = new BasicQuery(dbObject).skip(start).limit(pageSize);
         List<User> users = mongoTemplate.find(query, User.class);
 
