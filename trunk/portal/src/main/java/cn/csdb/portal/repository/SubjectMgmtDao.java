@@ -78,8 +78,8 @@ public class SubjectMgmtDao {
 
         //create db and ftp
         createDb(subject.getSubjectCode());
-        createFtpUser(subject.getFtpUser(), subject.getFtpPassword());
-        createFtpPath(subject.getFtpUser(), subject.getFtpPassword());
+//        createFtpUser(subject.getFtpUser(), subject.getFtpPassword());
+//        createFtpPath(subject.getFtpUser(), subject.getFtpPassword());
 
         logger.info("create db, ftp user, ftp path completed!");
 
