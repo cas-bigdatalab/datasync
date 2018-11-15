@@ -292,6 +292,7 @@
                 type:"POST",
                 data:{dataTaskId:souceID,processId:keyID},
                 success:function (data) {
+                    console.log(data)
                     var data =JSON.parse(data)
                     if(data =="1"){
                         $("."+souceID).text("导入完成")
@@ -441,6 +442,7 @@
                         processId:keyID
                     },
                     success:function (data) {
+                        console.log(data)
                         if(data == "100"){
                             $("#"+souceID).text(data+"%");
                             $("."+souceID).text("上传完成")
@@ -523,6 +525,7 @@
             for(var i=0;i<arrList.length;i++){
                 arrListStr+="<span class='arrListSty'>"+arrList[i]+"</span>"
             }
+            ele.empty()
             ele.append(arrListStr)
         }
 

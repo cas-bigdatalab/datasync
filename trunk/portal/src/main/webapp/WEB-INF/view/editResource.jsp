@@ -936,7 +936,7 @@
                     $("[name='ways']:eq("+ typeNum+")").prop("checked",true)
                     if(typeNum ==0){
                         for(var i=0;i<publicContentList.length;i++){
-                            $("[valName='"+publicContentList[i] +"']").prop("checked",true)
+                            $("[keyval='"+publicContentList[i] +"']").prop("checked",true)
                         }
                     }else {
                         var fileId=totalList.filePath
