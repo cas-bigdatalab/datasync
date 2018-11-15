@@ -272,7 +272,7 @@
                     </li>
                     <%-- <shiro:hasRole name="Register">--%>
                     <li>
-                        <a href="${ctx}/dataUpload">
+                        <a href="${ctx}/resCatalog">
                             <i class="icon-settings"></i>
                             <span class="title">数据类型注册</span>
                             <span class="arrow "></span>
