@@ -280,6 +280,9 @@ public class FtpUtil {
             }*/
             if (finishedSize / step != process) {
                 process = finishedSize / step;
+                if(process>100){
+                    process = 100;
+                }
                 System.out.println("上传进度:" + process);
                 progressMap.put(processId, process);
             }

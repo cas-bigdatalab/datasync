@@ -23,6 +23,7 @@
     /*font-size: 18px;*/
     padding: 0 33px;
     color: #1CA04C;
+    font-size: 18px;
 }
 /*.select-way label{
     font-weight: 800;
@@ -34,6 +35,7 @@
 .select-ways{
     padding: 0 33px;
     margin-top: 20px;
+    font-size: 18px;
 }
 .database-con-rel,.database-con-file{
     margin-top: 20px;

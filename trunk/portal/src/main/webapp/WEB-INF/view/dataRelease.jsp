@@ -25,6 +25,9 @@
             padding: 3px 6px;
             margin-bottom: 5px;
         }
+        #relModal .form-group div,#fileModal .form-group div{
+            word-break: break-all;
+        }
     </style>
 </head>
 
@@ -152,7 +155,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">简介:</label>
-                        <div class="col-sm-8 modediv" id="rel-introduction"></div>
+                        <div class="col-sm-8 modediv" id="rel-introduction" style="work-break:break-all"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">资源关键词:</label>
@@ -299,7 +302,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">简介:</label>
-                        <div class="col-sm-8 modediv" id="file-introduction"></div>
+                        <div class="col-sm-8 modediv" id="file-introduction"style="work-break:break-all"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">资源关键词:</label>
@@ -656,6 +659,7 @@
             for(var i=0;i<arrList.length;i++){
                 arrListStr+="<span class='arrListSty'>"+arrList[i]+"</span>"
             }
+            ele.empty()
             ele.append(arrListStr)
         }
     </script>
