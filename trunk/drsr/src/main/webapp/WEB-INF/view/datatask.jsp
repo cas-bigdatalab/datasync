@@ -21,6 +21,9 @@
             padding: 3px 6px;
             margin-bottom: 5px;
         }
+        #relModal .form-group div,#fileModal .form-group div{
+            word-break: break-all;
+        }
     </style>
 </head>
 <body>

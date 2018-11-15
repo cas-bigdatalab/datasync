@@ -137,6 +137,9 @@
                                             </div>
 
                                         </div>
+
+                                    </form>
+                                    <div style="overflow: hidden">
                                         <div class="form-group">
                                             <label class="control-label col-md-3" style="text-align: right">图片<span  class="required">
                                                     * </span>
@@ -172,7 +175,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
                                     <form class="form-horizontal" id="submit_form2" method="POST" accept-charset="utf-8" role="form"  onfocusout="true">
                                         <div class="form-group">
                                             <label class="control-label col-md-3" for="centerCatalogId">资源目录<span class="norequired" >
