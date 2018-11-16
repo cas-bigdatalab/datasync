@@ -36,9 +36,11 @@ public class CheckUserController {
                     User u = checkUserService.getByUserName(user.getLoginId());
                     boolean flag = false;
                     boolean status = u.getGroups().contains(",");
+                    Set<String> roles = new HashSet<>();
                     if(status){
                         String[] group = u.getGroups().split(",");
                         for(String str : group) {
+                            roles.add(str);
                             if (str.equals("系统管理员")) {
                                 flag = true;
                                 break;
@@ -49,6 +51,7 @@ public class CheckUserController {
                             }
                         }
                     }else{
+                        roles.add(u.getGroups());
                         if (u.getGroups().equals("系统管理员")) {
                             flag = true;
                         } else if (u.getGroups().equals("主题库管理员")) {
@@ -60,11 +63,6 @@ public class CheckUserController {
                     if(!flag){
                         request.setAttribute("errorMsg", "请为账号赋予角色！");
                         return "loginNew";
-                    }
-                    String[] group = user.getGroups().split(",");
-                    Set<String> roles = new HashSet<>();
-                    for(String str : group) {
-                        roles.add(str);
                     }
                     if (u.getSubjectCode() != null) {
                         cn.csdb.portal.model.Subject sub = checkUserService.getSubjectByCode(u.getSubjectCode());
