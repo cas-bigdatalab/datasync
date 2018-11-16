@@ -67,8 +67,8 @@ public class SubjectMgmtDao {
     public int addSubject(Subject subject) {
         logger.info("enterring SubjectMgmtDao-addSubject");
         logger.info("ftpRootPath = " + ftpRootPath);
-        String ftpFilePath = ftpRootPath + subject.getFtpUser();
-        logger.info("ftpFilePath = " + ftpFilePath);
+        String ftpFilePath = ftpRootPath + subject.getFtpUser()+File.separator;
+        logger.info("ftpFilePath = " + ftpFilePath+File.separator);
         subject.setFtpFilePath(ftpFilePath);
         subject.setDbName(subject.getSubjectCode());
         subject.setDbUserName(dbUserName);
