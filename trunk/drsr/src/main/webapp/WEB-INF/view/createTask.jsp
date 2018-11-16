@@ -58,10 +58,10 @@
                         <div class="col-md-12" style="margin-bottom: 10px" >
                             <div class="col-md-2" style="text-align: right">sql查询</div>
                             <div class="col-md-4">
-                                <input type="text" class="form-control sqlStatements">
+                                <input type="text" class="form-control sqlStatements inputVili" >
                             </div>
                             <div class="col-md-2" style="margin: 0 -15px">
-                                <input type="text" class="form-control" placeholder="新表名" name="sqlTableName">
+                                <input type="text" class="form-control inputVili" placeholder="新表名" name="sqlTableName">
                             </div>
                             <div class="col-md-4">
                                 <button type="button" class="btn blue preview">预览</button>
@@ -122,7 +122,7 @@
                 <div class="modal-header bg-primary">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                             id="editTableFieldComsCloseId"></button>
-                    <h4 class="modal-title" id="relationalDatabaseModalTitle">预览表</h4>
+                    <h4 class="modal-title" id="relationalDatabaseModalTitle">预览数据</h4>
                 </div>
                 <%--<div class="form">--%>
                 <%--<form class="form-horizontal" role="form" action="addRelationalDatabase" method="post"--%>
@@ -213,10 +213,10 @@
     <div class="col-md-12" style="margin-bottom: 10px" name="aaaa">
         <div class="col-md-2" style="text-align: right">sql查询</div>
         <div class="col-md-4">
-            <input type="text" class="form-control sqlStatements" >
+            <input type="text" class="form-control sqlStatements inputVili" >
         </div>
         <div class="col-md-2" style="margin: 0 -15px">
-            <input type="text" class="form-control" placeholder="新表名 " name="sqlTableName">
+            <input type="text" class="form-control inputVili" placeholder="新表名 " name="sqlTableName">
         </div>
         <div class="col-md-4">
             <button type="button" class="btn blue preview">预览</button>
@@ -255,7 +255,7 @@
 
         var dataFileSrcId;
         var dataFilePathList;
-        var flag =false;
+
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
                 $(".select-database").show();
@@ -334,9 +334,9 @@
         })
         function addSql() {
             var result = true;
-            $(":input[name^='sqlStr']").each(function () {
+            $(".sqlStatements").each(function () {
                 if (!$(this).val() || !$(this).val().trim()) {
-                    toastr["error"]("错误！", "请先完成当前sql编辑");
+                    toastr["error"]("错误！", "请先完成当前编辑");
                     result = false;
                     return;
                 }
@@ -344,10 +344,10 @@
             if (!result) {
                 return;
             }
-            if (!validSqlStrResult) {
+            /*if (!validSqlStrResult) {
                 toastr["error"]("错误！", "请先通过当前sql校验");
                 return;
-            }
+            }*/
             <!-- 第一个校验完成才能添加-->
             var tabCon = template("addSql");
             $("#sqlList").append(tabCon);
@@ -357,21 +357,72 @@
             var dataRelSqlTableList="";
             var $eleChecked = $("[name='relationBox']:checked")
             var numChecked = $eleChecked.size();
+            var sqlNum =0;
+            $(".inputVili").each(function () {
+                if(!$(this).val()=="" &&!$(this).val().trim()==""){
+                    sqlNum++
+                }
+            })
 
             if($("#dataTaskName").val() =="" || $("#dataTaskName").val().trim() == ""){
                 toastr["error"]("提示！", "请创建任务名");
                 return
             }
-            if (numChecked == 0) {
-                toastr["error"]("最少选择一个表资源");
-                return
-            }
+            if(numChecked ==0){
+                if(sqlNum >=2 && sqlNum%2 ==0){
 
-            $(".sqlStatements").each(function (index) {
-                //判断是否为空 空跳过
-                if(flag){
+                }else {
+                    if(sqlNum ==0){
+                        toastr["error"]("表资源与sql查询至少选择添加一个");
+                        return
+                    }
+                    toastr["error"]("sql语句和新建表名不能为空");
                     return
                 }
+            }else {
+                if((sqlNum<2 ||sqlNum%2 !=0) && sqlNum!=0 ){
+                    toastr["error"]("sql语句和新建表名不能为空");
+                    return
+                }
+            }
+
+
+
+
+            /*if(numChecked>=1){
+                flag=true;
+            }
+            if(flag){
+
+            }*/
+
+            /*if (numChecked == 0) {
+                toastr["error"]("最少选择一个表资源");
+                return
+            }*/
+
+           /* if($(".sqlStatements").size() ==1){
+                $(".sqlStatements").each(function (index) {
+                    //判断是否为空 空跳过
+                    if($(this).val() =="" || $(this).val().trim() == ""){
+                        flag=true
+                        return
+                    }
+                    //校验sql语句
+
+                    var sqlNameStr = $("[name='sqlTableName']:eq("+ index+")").val();
+                    if(sqlNameStr =="" || sqlNameStr.trim() == ""){
+                        flag=true
+                        return
+                    }
+                })
+            }*/
+
+
+
+
+        /*    $(".sqlStatements").each(function (index) {
+                //判断是否为空 空跳过
                 if($(this).val() =="" || $(this).val().trim() == ""){
                     flag=true
                     return
@@ -383,17 +434,10 @@
                     flag=true
                     return
                 }
-            })
+            })*/
 
-            if(flag){
-                toastr["error"]("最少选择一个表资源");
-                return
-            }
+
             $("[name='sqlTableName']").each(function () {
-                if($(this).val() == ""){
-                    toastr["error"]("提示！", "请为预览sql编辑一个表名");
-                    return
-                }
                 dataRelSqlTableList+=$(this).val()+";"
             })
 

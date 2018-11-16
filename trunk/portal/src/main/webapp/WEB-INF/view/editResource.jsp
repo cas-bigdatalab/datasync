@@ -178,17 +178,18 @@
                                     </div>
                                     <form class="form-horizontal" id="submit_form2" method="POST" accept-charset="utf-8" role="form"  onfocusout="true">
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" for="centerCatalogId">资源目录<span class="norequired" >
+                                            <label class="control-label col-md-3 timeVili2" for="centerCatalogId">资源目录<span class="norequired" >
                                                     * </span>
                                             </label>
                                             <div class="col-md-4" id="cemterCatalogDiv" style="padding-top:14px" >
 
                                                 <div id="jstree-demo"></div>
                                                 <input type="text"  id="centerCatalogId" name="centerCatalogId" required="required" style="display: none">
+                                                <div class="timeVili2" style="display: none">请正确选择时间</div>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" >选择时间<span class="required">
+                                            <label class="control-label col-md-3 timeVili" >选择时间<span class="required">
                                                     * </span></label>
                                             <div class="col-md-6"  style="padding-top:14px">
                                                 <div class="input-group input-daterange">
@@ -198,6 +199,7 @@
                                                     <input type="text" class="form-control selectData"
                                                            data-date-format="yyyy-mm-dd" placeholder="起始时间" readonly>
                                                 </div>
+                                                <div class="timeVili" style="display: none">请正确选择时间</div>
                                             </div>
                                         </div>
                                         <div class="form-group ">
@@ -250,7 +252,7 @@
                                     </div>
                                     <div style="overflow: hidden;display: none" class="select-local">
                                         <div class="col-md-4 col-md-offset-2" style="font-size: 18px" id="fileContainerTree"></div>
-                                        <div id="fileDescribeDiv" class="col-md-5 tagsinput" style="border: 1px solid black">
+                                        <div id="fileDescribeDiv" class="col-md-5 tagsinput" style="border: 1px solid grey">
 
 
                                         </div>
@@ -328,16 +330,16 @@
 <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
     <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                         id="editTableFieldComsCloseId"></button>
-                <h4 class="modal-title" id="relationalDatabaseModalTitle">编辑表字段注释</h4>
+                <h4 class="modal-title" id="relationalDatabaseModalTitle">预览数据</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="portlet box green-haze" style="border:0;">
-                            <div class="portlet-title">
+                            <div class="portlet-title " style="display: none">
                                 <ul class="nav nav-tabs" style="float:left;">
                                     <li class="active" style="display: none">
                                         <a href="#editTableFieldComsId" data-toggle="tab"
@@ -410,11 +412,13 @@
         });
         $('.selectData:eq(0)').datepicker().on("changeDate",function (ev) {
             firstTime = new Date(ev.date).getTime()
-            $("#data_time").hide()
+            $(".timeVili").removeClass("custom-error")
+            $(".timeVili:eq(1)").hide()
         })
         $('.selectData:eq(1)').datepicker().on("changeDate",function (ev) {
             lastTime =new Date(ev.date).getTime()
-            $("#data_time").hide()
+            $(".timeVili").removeClass("custom-error")
+            $(".timeVili:eq(1)").hide()
         })
 
         var validData = {
@@ -709,7 +713,8 @@
                     $(container).jstree(data).bind("select_node.jstree", function (event, selected) {
                         /*$(".button-save").removeAttr("disabled");*/
                         $("#centerCatalogId").val(selected.node.id);
-                        $("#file_dir").hide();
+                        $(".timeVili2").removeClass("custom-error")
+                        $(".timeVili2:eq(1)").hide()
                     })
                 }
             })
@@ -806,7 +811,7 @@
             })
         }
         function addResourceSecondStep() {
-
+            secondFlag = false
             var dataList=""
             if(publicType =="mysql"){
                 var $ele = $("[name='resTable']:checked")
@@ -822,8 +827,7 @@
             }
             if($ele.size() ==0 ){
                 secondFlag = true
-            }else {
-                secondFlag = false
+                return
             }
             dataList = dataList.substr(0, dataList.length - 1);
             console.log(dataList)
@@ -875,8 +879,21 @@
         }
         function editResourceFirstStep() {
             firstFlag=false
+            if(firstTime ==0 || lastTime==0|| firstTime>lastTime){
+                $(".timeVili").addClass("custom-error")
+                $(".timeVili:eq(1)").show()
+                firstFlag=true
+            }
+            if($("#centerCatalogId").val()==""){
+                $(".timeVili2").addClass("custom-error")
+                $(".timeVili2:eq(1)").show()
+                firstFlag=true
+            }
             if(!$("#submit_form1").valid() || !$("#submit_form2").valid()){
                 firstFlag=true
+                return
+            }
+            if(firstFlag){
                 return
             }
             var keywordStr = $("#select2_tags").val()

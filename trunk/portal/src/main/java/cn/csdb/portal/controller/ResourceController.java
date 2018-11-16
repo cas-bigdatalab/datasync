@@ -27,6 +27,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -578,5 +579,23 @@ public class ResourceController {
         jsonObject.put("groupList",groupList);
         return jsonObject;
     }
+
+    /*@RequestMapping(value="testftp")
+    public String testftp(String s1,String s2){
+        Runtime runtime = Runtime.getRuntime();
+        try {
+
+            System.out.println("-----------------------");
+            String command1 = "chmod 777 /etc/vsftpd/vftpuseradd";
+            Runtime.getRuntime().exec(command1).waitFor();
+            Process process = runtime.exec("vftpuseradd "+s1+" "+s2);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "111";
+    }*/
 
 }

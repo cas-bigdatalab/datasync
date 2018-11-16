@@ -44,8 +44,8 @@
                         <label >数据类型</label>
                         <select  id="dataSourceList" class="form-control" style="width: 150px">
                             <option value="">全部</option>
-                            <option value="db">关系数据库</option>
-                            <option value="file">文件数据库</option>
+                            <option value="mysql">mysql</option>
+                            <option value="file">file</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -80,6 +80,9 @@
             </table>
             <div class="page-message" style="float: left;line-height: 56px" ></div>
             <div class="page-list" style="float: right"></div>
+        </div>
+        <div style="display: none" id="uploadListFlag">
+            <span name="" valFlag="false"></span>
         </div>
     </div>
 </div>
@@ -130,7 +133,7 @@
                     </div>--%>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务状态:</label>
-                        <div class="col-sm-8" id="pre-status"></div>
+                        <div class="col-sm-8 modediv" id="pre-status"></div>
                     </div>
                 </form>
             </div>
@@ -190,7 +193,7 @@
                     </div>--%>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">任务状态:</label>
-                        <div class="col-sm-8" id="file-status"></div>
+                        <div class="col-sm-8 modediv" id="file-status"></div>
                     </div>
                 </form>
             </div>
@@ -211,16 +214,19 @@
         <td>{{value.dataTaskType}}</td>
         <td>{{value.dataSrc.dataSourceName}}</td>
         <td>{{dateFormat(value.createTime)}}</td>
+        {{if value.status  == "1"}}
+        <td >100%</td>
+        {{else if value.status  == "0"}}
         <td  id="{{value.dataTaskId}}">--</td>
+        {{/if}}
+
         <td  class="{{value.dataTaskId}}">{{upStatusName(value.status)}}</td>
         <td>
             {{if value.dataTaskType  == "mysql"}}
-            <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" >&nbsp;&nbsp;&nbsp;导出&nbsp;&nbsp;&nbsp;</button>
+            <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" ><i class="glyphicon glyphicon-share"></i>&nbsp;导出</button>
             {{/if}}
-            {{if value.status  == 1}}
-            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" disabled style="background-color: dimgrey">上传</button>
-            {{else if value.status  == 0}}
-            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}">&nbsp;&nbsp;&nbsp;上传&nbsp;&nbsp;&nbsp;</button>
+            {{if value.status  == 0}}
+            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
             {{/if}}
             <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
             <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
@@ -235,6 +241,7 @@
     <script>
         var dataSourceName=""
         var dataSourceStatus=""
+        var uploadListFlag = $("#uploadListFlag")
         function relCreateTask(){
             window.location.href="${ctx}/createTask";
         }
@@ -287,7 +294,8 @@
             $(this).attr("disabled","disabled");
             var souceID = $(this).attr("keyIdTd");
             var keyID = souceID + new Date().getTime();
-
+            var keyType=$(this).attr("keyDataType");
+            uploadListFlag.append("<span name="+keyID+" valFlag='false'></span>")
             /*uploadTasks.push(new ObjStory(keyID,souceID));
             localStorage.setItem("uploadList",JSON.stringify(uploadTasks));*/
             $.ajax({
@@ -295,17 +303,27 @@
                 type:"POST",
                 data:{dataTaskId:souceID,processId:keyID},
                 success:function (data) {
-                    console.log(data)
+                    console.log("return="+data)
                     var data =JSON.parse(data)
-                    if(data =="1"){
-                        $("."+souceID).text("导入完成")
-                        return
+                    $("[name="+keyID+"]").attr("valFlag","true")
+                    if(keyType == "mysql"){
+                        if(data =="1"){
+                            $("."+souceID).text("已导入")
+                            return
+                        }else {
+                            $("."+souceID).text("导入失败")
+                            return
+                        }
                     }else {
-                        $("."+souceID).text("导入失败")
-                        return
+                        if(data =="1"){
+                            $("."+souceID).text("已上传")
+                            return
+                        }else {
+                            $("."+souceID).text("上传失败")
+                            return
+                        }
                     }
 
-                    /*send request get Process */
 
                 },
                 error:function () {
@@ -313,7 +331,6 @@
                 }
             })
             $("."+souceID).text("正在上传");
-
             getProcess(keyID,souceID);
         })
         <!-- remove dataTask-->
@@ -328,7 +345,7 @@
                         },
                         success:function (data) {
                             toastr["success"]("删除成功");
-                            tableConfiguration2(1,"","");
+                            tableConfiguration2(1,dataSourceName,dataSourceStatus);
                         },
                         error:function () {
                             toastr["error"]("删除失败");
@@ -438,6 +455,21 @@
         });
         function getProcess(keyID,souceID) {
            var setout= setInterval(function () {
+               if($("[name="+keyID+"]").attr("valFlag") == "true"){
+                   if($("."+souceID).text() == "导入失败" ||$("."+souceID).text() == "上传失败"){
+                       $("#"+souceID).text("--")
+                       clearInterval(setout)
+                       $("[name="+keyID+"]").remove()
+                       return
+                   }else {
+                       $("#"+souceID).text(100+"%");
+                       clearInterval(setout)
+                       $("[name="+keyID+"]").remove()
+                       return
+                   }
+
+               }
+
                 $.ajax({
                     url:"${ctx}/ftpUploadProcess",
                     type:"POST",
@@ -445,14 +477,14 @@
                         processId:keyID
                     },
                     success:function (data) {
-                        console.log(data)
-                        if(data == "100"){
-                            $("#"+souceID).text(data+"%");
+                        console.log("process="+data)
+                        if(data >= "100"){
+                            $("#"+souceID).text(100+"%");
                             $("."+souceID).text("上传完成")
                             clearInterval(setout)
                             return
                         }
-                        if($("."+souceID).text() == "导入失败"){
+                        if($("."+souceID).text() == "导入失败" ||$("."+souceID).text() == "上传失败"){
                             $("#"+souceID).text("--")
                             clearInterval(setout)
                             return
