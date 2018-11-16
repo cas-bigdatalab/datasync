@@ -61,6 +61,11 @@ public class CheckUserController {
                         request.setAttribute("errorMsg", "请为账号赋予角色！");
                         return "loginNew";
                     }
+                    String[] group = user.getGroups().split(",");
+                    Set<String> roles = new HashSet<>();
+                    for(String str : group) {
+                        roles.add(str);
+                    }
                     if (u.getSubjectCode() != null) {
                         cn.csdb.portal.model.Subject sub = checkUserService.getSubjectByCode(u.getSubjectCode());
                         request.getSession().setAttribute("DbName", sub.getDbName());
@@ -69,6 +74,7 @@ public class CheckUserController {
                         request.getSession().setAttribute("FtpFilePath", sub.getFtpFilePath());
                         request.getSession().setAttribute("userName", u.getUserName());
                         request.getSession().setAttribute("LoginId", u.getLoginId());
+                        request.getSession().setAttribute("roles", roles);
                     }else{
                         request.getSession().setAttribute("userName", u.getUserName());
                         request.getSession().setAttribute("LoginId", u.getLoginId());
