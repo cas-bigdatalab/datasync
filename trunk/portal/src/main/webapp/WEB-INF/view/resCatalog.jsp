@@ -155,9 +155,17 @@
              if(sel[0].indexOf("_")<0){
              deleteNodeArray.push(sel[0]);
              }*/
-            $("#deleteContent").attr("nodeid", sel[0]);
+            /*$("#deleteContent").attr("nodeid", sel[0]);
             $("#deleteNodeModal").modal('show');
-            $("#deleteContent").html('<div align="center">确认删除' + ref.get_node(sel).text + '节点？</div>')
+            $("#deleteContent").html('<div align="center">确认删除' + ref.get_node(sel).text + '节点？</div>')*/
+            $("#deleteContent").attr("nodeid", sel[0]);
+            bootbox.confirm("确认删除",function (r) {
+                if(r){
+                    confirmDeleteNode();
+                }else{
+
+                }
+            })
         }
         ;
 
