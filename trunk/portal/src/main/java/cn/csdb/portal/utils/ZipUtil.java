@@ -22,11 +22,14 @@ public class ZipUtil {
     public List<String> unZip(File zipFile, String destDir) throws Exception {
         // 如果 destDir 为 null, 空字符串, 或者全是空格, 则解压到压缩文件所在目录
 
+
+
         if(StringUtils.isBlank(destDir)) {
             destDir = zipFile.getParent();
         }
         destDir = destDir.endsWith(File.separator) ? destDir : destDir + File.separator;
         System.out.println("---------"+destDir);
+        System.out.println("++++++++++++++++++++"+zipFile);
         File dirFile = new File(destDir);
         if(!dirFile.exists()){
             dirFile.mkdirs();

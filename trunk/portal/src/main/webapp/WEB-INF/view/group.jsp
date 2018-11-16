@@ -1076,7 +1076,7 @@
                     "userName": $("#userNameForUpdate").val(),
                     "loginId": $("#loginIdForUpdate").val(),
                     "password": $("#passwordForUpdate").val(),
-                    "subjectCode": $("#subjectCodeForUpdate").val().toString(),
+                    "subjectCode": $("#subjectCodeForUpdateUserDialog").val().toString(),
                     "groups": $("#groupsForUpdateUserDialog").val().toString()
                 },
                 dataType: "text",

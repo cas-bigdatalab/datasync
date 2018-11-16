@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -39,6 +40,21 @@ public class SubjectMgmtController {
     @RequestMapping(value = "/addSubject", method = RequestMethod.POST)
     @ResponseBody
     public String addSubject(HttpServletRequest request, Subject subject, @RequestParam("image") MultipartFile image) {
+
+        Runtime runtime = Runtime.getRuntime();
+        try {
+
+            System.out.println("-----------------------");
+            String command1 = "chmod 777 /etc/vsftpd/vftpuseradd";
+            Runtime.getRuntime().exec(command1).waitFor();
+            Process process = runtime.exec("vftpuseradd "+subject.getFtpUser()+" "+subject.getFtpPassword());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //input parameter check
         logger.info("enterring subjectMgmt-addSubject.");
         logger.info(subject);
@@ -222,12 +238,12 @@ public class SubjectMgmtController {
 
     @ResponseBody
     @RequestMapping(value = "/querySubject")
-    public JSONObject querySubject(HttpServletRequest request, @RequestParam(value="pageNum",required = true) int currentPage) {
+    public JSONObject querySubject(HttpServletRequest request, @RequestParam(value="subjectNameFilter") String subjectNameFilter, @RequestParam(value="pageNum",required = true) int currentPage) {
         logger.info("enterring SubjectMgmtController-querySubject[currentPage = " + currentPage + "]");
 
         long totalPages = 0;
         totalPages = subjectService.getTotalPages();
-        List<Subject> subjectsOfThisPage = subjectService.querySubject(currentPage);
+        List<Subject> subjectsOfThisPage = subjectService.querySubject(subjectNameFilter, currentPage);
 
         logger.info("queried subject - " + subjectsOfThisPage);
 

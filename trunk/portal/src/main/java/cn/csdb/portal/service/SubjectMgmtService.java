@@ -38,12 +38,13 @@ public class SubjectMgmtService {
         {
             addSubjectNotice = "添加专题库：失败！";
         }
-        /*Runtime runtime = Runtime.getRuntime();
+
+        Runtime runtime = Runtime.getRuntime();
         try {
             Process process = runtime.exec(new String[]{"bash", "-c", "./etc/vsftpd/vftpuseradd "+subject.getFtpUser()+" "+subject.getFtpPassword()});
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
 
         return addSubjectNotice;
     }
@@ -99,9 +100,9 @@ public class SubjectMgmtService {
      * @author zzl
      * @date 2018/10/23
      */
-    public List<Subject> querySubject(int requestedPage)
+    public List<Subject> querySubject(String subjectNameFilter, int requestedPage)
     {
-        return subjectMgmtDao.querySubject(requestedPage);
+        return subjectMgmtDao.querySubject(subjectNameFilter, requestedPage);
     }
 
     /**

@@ -27,6 +27,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -73,13 +74,14 @@ public class ResourceController {
 
     @ResponseBody
     @RequestMapping("/getPageData")
-    public JSONObject getPageData(HttpServletRequest request, @RequestParam(value = "subjectCode", required = false) String subjectCode,
+    public JSONObject getPageData(@RequestParam(value = "subjectCode", required = false) String subjectCode,
                                   @RequestParam(value = "title", required = false) String title,
                                   @RequestParam(value = "publicType", required = false) String publicType,
                                   @RequestParam(value = "status", required = false) String resState,
                                   @RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
-                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-
+                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                  HttpSession session) {
+//        String subjectCode = session.getAttribute("SubjectCode").toString();
         List<cn.csdb.portal.model.Resource> list = resourceService.getListByPage(subjectCode, title, publicType, resState, pageNo, pageSize);
         long count = resourceService.countByPage(subjectCode, title, publicType, resState);
         JSONObject json = new JSONObject();
@@ -578,5 +580,24 @@ public class ResourceController {
         jsonObject.put("groupList",groupList);
         return jsonObject;
     }
+
+    /*@RequestMapping(value="testftp")
+    public String testftp(String s1,String s2){
+        Runtime runtime = Runtime.getRuntime();
+        try {
+
+            System.out.println("-----------------------");
+            String command1 = "chmod 777 /etc/vsftpd/vftpuseradd";
+            Runtime.getRuntime().exec(command1).waitFor();
+            Process process = runtime.exec("vftpuseradd "+s1+" "+s2);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "111";
+    }*/
+
 
 }
