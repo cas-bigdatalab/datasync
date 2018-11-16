@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.io.File;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Repository
 public class SubjectMgmtDao {
@@ -395,7 +396,7 @@ public class SubjectMgmtDao {
      * @author zzl
      * @date 2018/10/23
      */
-    public List<Subject> querySubject(int pageNumber) {
+    public List<Subject> querySubject(String subjectNameFilter, int pageNumber) {
         //input parameter check， including lower bound and upper bound
         if (pageNumber < 1) {
             return null;
@@ -410,7 +411,15 @@ public class SubjectMgmtDao {
         int startRowNum = 0;
         startRowNum = (pageNumber - 1) * rowsPerPage;
 
-        DBObject dbObject = QueryBuilder.start().get();
+        DBObject dbObject = null;
+        if (!(subjectNameFilter.equals("")))
+        {
+            dbObject = QueryBuilder.start().and("subjectName").regex(Pattern.compile("^.*" + subjectNameFilter + ".*$")).get();
+        }
+        else
+        {
+            dbObject = QueryBuilder.start().get();
+        }
         Query query = new BasicQuery(dbObject).skip(startRowNum).limit(rowsPerPage);
         List<Subject> subjectsOfThisPage = mongoTemplate.find(query, Subject.class);
         logger.info(subjectsOfThisPage);

@@ -238,12 +238,12 @@ public class SubjectMgmtController {
 
     @ResponseBody
     @RequestMapping(value = "/querySubject")
-    public JSONObject querySubject(HttpServletRequest request, @RequestParam(value="pageNum",required = true) int currentPage) {
+    public JSONObject querySubject(HttpServletRequest request, @RequestParam(value="subjectNameFilter") String subjectNameFilter, @RequestParam(value="pageNum",required = true) int currentPage) {
         logger.info("enterring SubjectMgmtController-querySubject[currentPage = " + currentPage + "]");
 
         long totalPages = 0;
         totalPages = subjectService.getTotalPages();
-        List<Subject> subjectsOfThisPage = subjectService.querySubject(currentPage);
+        List<Subject> subjectsOfThisPage = subjectService.querySubject(subjectNameFilter, currentPage);
 
         logger.info("queried subject - " + subjectsOfThisPage);
 

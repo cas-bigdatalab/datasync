@@ -100,9 +100,9 @@ public class SubjectMgmtService {
      * @author zzl
      * @date 2018/10/23
      */
-    public List<Subject> querySubject(int requestedPage)
+    public List<Subject> querySubject(String subjectNameFilter, int requestedPage)
     {
-        return subjectMgmtDao.querySubject(requestedPage);
+        return subjectMgmtDao.querySubject(subjectNameFilter, requestedPage);
     }
 
     /**

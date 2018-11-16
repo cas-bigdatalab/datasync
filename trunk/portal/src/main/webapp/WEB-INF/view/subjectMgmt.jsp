@@ -20,6 +20,8 @@
 
         th {
             text-align: center;
+            color: #FFF;
+            font-weight: bold;
         }
 
         .error-message {
@@ -29,35 +31,39 @@
 </head>
 <body>
     <div class="page-content">
-        <h3>欢迎来到专题库注册页面</h3>
+        <h3>欢迎来到主题库注册页面</h3>
 
         <hr />
 
-        <!--the page to add subject-->
-        <a title="添加专题库" id="showAddSubjectDialog" data-target="#addSubjectDialog" data-toggle="modal" >
-            <span class="btn green btn-sm">
-                <i class="glyphicon glyphicon-plus"></i>
-                添加专题库
-            </span>
-        </a>
+        <!--主题库筛选条件-->
+        <div class="alert alert-info" role="alert">
+            <div class="row">
+                <div class="col-md-12">
+                    <label class="control-label">主题库名称:</label>
+                    <input type="text" id="subjectNameFilter" name="subjectNameFilter" placeholder="主题库名称" class="input-small" style="height: 30px;" />
 
-        <br />
-        <br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+
+                    <button id="searchSubjectBtn" name="searchSubjectBtn" onclick="searchSubject();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button id="addSubjectBtn" name="addSubjectBtn" class="btn info green btn-sm" data-target="#addSubjectDialog" data-toggle="modal" ><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建主题库</button>
+                </div>
+            </div>
+        </div>
 
         <div class="table-scrollable">
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
-                <tr>
-                    <th style="display:none;">专题库ID</th>
-                    <th>编号</th>
-                    <th>专题库名称</th>
-                    <th>专题库代码</th>
-                    <th>管理员账号</th>
-                    <th>管理员密码</th>
-                    <th>负责人</th>
-                    <th>电话</th>
-                    <th>操作</th>
-                </tr>
+                    <tr>
+                        <th style="display:none;">专题库ID</th>
+                        <th style="width: 3%;background: #64aed9;">编号</th>
+                        <th style="width: 5%;background: #64aed9;">专题库名称</th>
+                        <th style="width: 5%;background: #64aed9;">专题库代码</th>
+                        <th style="width: 5%;background: #64aed9;">管理员账号</th>
+                        <th style="width: 5%;background: #64aed9;">负责人</th>
+                        <th style="width: 5%;background: #64aed9;">电话</th>
+                        <th style="width: 10%;background: #64aed9;">操作</th>
+                    </tr>
                 </thead>
                 <tbody id="subjectList">
                 </tbody>
@@ -85,7 +91,6 @@
             <td style="text-align: center">{{$value.subjectName}}</td>
             <td style="text-align: center">{{$value.subjectCode}}</td>
             <td style="text-align: center">{{$value.admin}}</td>
-            <td style="text-align: center">{{$value.adminPasswd}}</td>
             <td style="text-align: center">{{$value.contact}}</td>
             <td style="text-align: center">{{$value.phone}}</td>
             <td id="{{$value.id}}">
@@ -435,12 +440,18 @@
             $("#updateSubjectForm").validate(updateSubjectValid);
         });
 
+        function searchSubject()
+        {
+            getSubject(1);
+        }
+
         //获得专题库
         function getSubject(pageNum) {
             $.ajax({
                 url: "${ctx}/subjectMgmt/querySubject",
                 type: "get",
                 data: {
+                    "subjectNameFilter": $("#subjectNameFilter").val().trim(),
                     "pageNum": pageNum
                 },
                 dataType: "json",
