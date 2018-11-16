@@ -289,8 +289,10 @@ public class SubjectMgmtDao {
     {
         logger.info("delete ftp path");
         logger.info("ftpServerAddr = " + ftpServerAddr + ", ftpServerPort = " + ftpServerPort);
+
+        FTPClient ftpClient = null;
         try {
-            FTPClient ftpClient = new FTPClient();
+            ftpClient = new FTPClient();
             ftpClient.connect(ftpServerAddr, ftpServerPort);
             ftpClient.login(ftpUser, ftpPassword);
             String ftpDirName = ftpUser;
@@ -309,9 +311,20 @@ public class SubjectMgmtDao {
             logger.info("delete ftp path failed!");
             e.printStackTrace();
         }
+        finally {
+            if (ftpClient.isConnected())
+            {
+                try {
+                    ftpClient.disconnect();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         logger.info("delete ftp path completed!");
-
     }
 
     /**
