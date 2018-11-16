@@ -42,6 +42,7 @@ public class HttpServiceController {
     @ResponseBody
     @RequestMapping(value = "getDataTask", method = {RequestMethod.POST,RequestMethod.GET})
     public int getDataTask(@RequestBody String requestString){
+        System.out.println("000000000000000000000");
         JSONObject requestJson = JSON.parseObject(requestString);
         String subjectCode = requestJson.get("subjectCode").toString();
         String dataTaskString = requestJson.get("dataTask").toString();

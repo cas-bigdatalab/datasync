@@ -74,13 +74,14 @@ public class ResourceController {
 
     @ResponseBody
     @RequestMapping("/getPageData")
-    public JSONObject getPageData(HttpServletRequest request, @RequestParam(value = "subjectCode", required = false) String subjectCode,
+    public JSONObject getPageData(@RequestParam(value = "subjectCode", required = false) String subjectCode,
                                   @RequestParam(value = "title", required = false) String title,
                                   @RequestParam(value = "publicType", required = false) String publicType,
                                   @RequestParam(value = "status", required = false) String resState,
                                   @RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
-                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-
+                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                                  HttpSession session) {
+//        String subjectCode = session.getAttribute("SubjectCode").toString();
         List<cn.csdb.portal.model.Resource> list = resourceService.getListByPage(subjectCode, title, publicType, resState, pageNo, pageSize);
         long count = resourceService.countByPage(subjectCode, title, publicType, resState);
         JSONObject json = new JSONObject();
@@ -597,5 +598,6 @@ public class ResourceController {
         }
         return "111";
     }*/
+
 
 }
