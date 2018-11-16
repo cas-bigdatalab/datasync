@@ -101,10 +101,10 @@
             </div>
             <div class="modal-body" style="max-height: 500px;overflow: auto">
                 <form class="form-horizontal">
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label class="col-sm-3 control-label">数据源ID:</label>
                         <div class="col-sm-8 modediv" id="rel-dataSourceId"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">分类ID:</label>
                         <div class="col-sm-8 modediv" id="rel-catalogId"></div>
@@ -248,10 +248,10 @@
             </div>
             <div class="modal-body" style="max-height: 500px;overflow: auto">
                 <form class="form-horizontal">
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label class="col-sm-3 control-label">数据源ID:</label>
                         <div class="col-sm-8 modediv" id="file-dataSourceId"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">分类ID:</label>
                         <div class="col-sm-8 modediv" id="file-catalogId"></div>
@@ -468,6 +468,7 @@
                     resourceId:id
                 },
                 success: function (data) {
+                    console.log(JSON.parse(data))
                     var dataList = JSON.parse(data).resource;
                     if(type == "mysql"){
                         $("#rel-dataSourceId").html(dataList.dataSourceId)

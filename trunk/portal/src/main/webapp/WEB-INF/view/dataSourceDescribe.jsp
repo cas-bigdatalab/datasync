@@ -146,7 +146,7 @@
                                     </form>
                                     <div style="overflow: hidden">
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" style="text-align: right">图片<span  class="required">
+                                            <label class="control-label col-md-3 timeVili3" style="text-align: right">图片<span  class="required">
                                                     * </span>
                                             </label>
                                             <div class="col-md-9">
@@ -159,6 +159,7 @@
                                                             <input type="hidden" id="w" name="w" />
                                                             <input type="hidden" id="h" name="h" />
                                                             <input type="hidden" id="tag" name="tag" val=""/>
+                                                            <input type="hidden" id="imgFlagNum" val=""/>
                                                         </div>
                                                         <span class="btn default btn-file" id="checkPicture">
                                                             <span class="fileinput-new">
@@ -171,6 +172,7 @@
                                                                 <input type="button" onclick="doUpload();"/>
                                                         </span>
                                                     </form>
+                                                    <div class="timeVili3" style="display: none">请上传选择图片</div>
                                                     <div class="clearfix margin-top-10">
                                                     <span class="label label-danger">
                                                 注意! </span>
@@ -566,6 +568,7 @@
                         $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
                         $("#tag").val("1");
                     }
+                    $("#imgFlagNum").val("1")
                     $('#cutimg').removeAttr('src');
                     $('#cutimg').attr('src', event.target.result);
                     $("#checkPicture").hide();
@@ -616,6 +619,12 @@
                     $("#uploadSpan").hide();
                     $('#cutimg').attr('src',filePath+'_cut.jpg');
                     $('#cutimg').show();
+                    var tagNum = $("#imgFlagNum").val();
+                    if(tagNum=="1") {
+                        $("#imgFlagNum").val("2");
+                        $(".timeVili3").removeClass("custom-error")
+                        $(".timeVili3:eq(1)").hide()
+                    }
                 },
                 error: function (returndata) {
                     alert(returndata);
@@ -779,6 +788,11 @@
             if($("#centerCatalogId").val()==""){
                 $(".timeVili2").addClass("custom-error")
                 $(".timeVili2:eq(1)").show()
+                firstFlag=true
+            }
+            if($("#imgFlagNum").val() !="2"){
+                $(".timeVili3").addClass("custom-error")
+                $(".timeVili3:eq(1)").show()
                 firstFlag=true
             }
             if(!$("#submit_form1").valid() || !$("#submit_form2").valid()){

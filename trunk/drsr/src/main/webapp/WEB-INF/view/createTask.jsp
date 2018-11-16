@@ -32,7 +32,7 @@
     <div class="select-way">
         <span>数据源</span>
         <input name="ways" type="radio" checked="checked" value="DB" id="aaa"/>
-        <label for="aaa">数据库</label>
+        <label for="aaa">数据库上传</label>
         <input name="ways" type="radio" value="LH" id="bbb"/>
         <label for="bbb">本地上传</label>
     </div>
@@ -205,7 +205,7 @@
     {{each list as value i}}
     <div class="col-md-4">
         <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="relationBox" value="{{value}}" style="line-height: normal"></div>
-        <div style="padding-left: 20px;word-break: break-all ;cursor: pointer"> {{value}}</div>
+        <div style="padding-left: 20px;word-break: break-all ;"> {{value}}</div>
     </div>
     {{/each}}
 </script>
@@ -237,7 +237,7 @@
     <div class="col-md-4">
         <label>
             <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="fileTable" value="{{value.id}}" style="line-height: normal"></div>
-            <div style="padding-left: 20px;word-break: break-all;cursor: pointer"> {{value.text}}</div>
+            <div style="padding-left: 20px;word-break: break-all;"> {{value.text}}</div>
         </label>
     </div>
     {{/each}}
