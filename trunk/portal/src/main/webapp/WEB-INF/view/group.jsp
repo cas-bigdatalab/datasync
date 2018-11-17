@@ -831,7 +831,6 @@
         $("#btnAdd").click(function () {
             $("#groupNameAdd").val("");
             $("#descAdd").val("");
-            $("#addModal").validate().resetForm();
             resetData();
             $("#addModal").modal('show');
         });
