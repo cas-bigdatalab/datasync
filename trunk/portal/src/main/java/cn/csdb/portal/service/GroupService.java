@@ -4,10 +4,13 @@ import cn.csdb.portal.model.Group;
 import cn.csdb.portal.model.User;
 import cn.csdb.portal.repository.GroupDao;
 import cn.csdb.portal.repository.UserDao;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -44,10 +47,13 @@ public class GroupService {
      */
     @Transactional
     public void delete(Group group){
-        //1 删除组
+        //1 删除用户表中存属于此组的组名
+        List<User> list = userDao.queryByGroupName(group.getGroupName());
+        for (User user : list){
+            updateUserGroupName(user,group.getGroupName());
+        }
+        //2 删除组
         groupDao.delete(group);
-        //2 删除用户表中存属于此组的组名
-        //List<User> list = userDao.queryUser()
     }
 
     /**
@@ -110,4 +116,50 @@ public class GroupService {
     public boolean exist(String groupName){
         return groupDao.exist(groupName);
     }
+
+    /**
+     * Function Description: 更新用户的用户组名称
+     *
+     * @param:
+     * @return:
+     * @auther: xiajl
+     * @date:   2018/11/17 12:26
+     */
+    public void updateUserGroupName(User user, String groupName){
+        String[] groups = user.getGroups().split(",");
+        List<String> list = Arrays.asList(groups);
+        List<String> newlist = new ArrayList<String>();
+        for (String str : list){
+            if (!str.equals(groupName)) {
+                newlist.add(str);
+            }
+        }
+
+        if (newlist.size() >0){
+            String newGroups = StringUtils.join(newlist,",");
+            user.setGroups(newGroups);
+        }
+        else
+        {
+            user.setGroups(null);
+        }
+        userDao.updateUser(user);
+    }
+
+
+    /**
+     * Function Description: 是否存在此用户组
+     *
+     * @param:
+     * @return:
+     * @auther: xiajl
+     * @date:   2018/11/17 22:09
+     */
+
+    public boolean isExist(String groupName)
+    {
+        return groupDao.exist(groupName);
+    }
+
+
 }

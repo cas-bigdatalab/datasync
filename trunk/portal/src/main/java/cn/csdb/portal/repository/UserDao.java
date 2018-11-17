@@ -4,6 +4,7 @@ import cn.csdb.portal.model.User;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteResult;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -11,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -202,6 +204,28 @@ public class UserDao {
     public List<User> getAll(){
         return mongoTemplate.findAll(User.class);
     }
+
+    /**
+     * Function Description: 根据用户组名称获取此组中的所有用户
+     *
+     * @param:
+     * @return:
+     * @auther: xiajl
+     * @date:   2018/11/17 12:09
+     */
+    public List<User> queryByGroupName(String groupName){
+        QueryBuilder queryBuilder = QueryBuilder.start();
+
+        if (StringUtils.isNotEmpty(groupName)){
+            queryBuilder = queryBuilder.and("groups").regex(Pattern.compile("^.*"+groupName+".*$"));;
+        }
+
+        DBObject dbObject = queryBuilder.get();
+        BasicQuery basicQuery = new BasicQuery(dbObject);
+        List<User> list = mongoTemplate.find(basicQuery,User.class);
+        return list;
+    }
+
 
     public long queryLoginId(String loginId)
     {
