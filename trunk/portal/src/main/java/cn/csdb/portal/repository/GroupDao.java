@@ -52,16 +52,14 @@ public class GroupDao {
      * @date:   2018/10/30 10:58
      */
     public void delete(String id){
+
         DBObject query = QueryBuilder.start().and("_id").is(id).get();
         BasicQuery basicQuery = new BasicQuery(query);
         mongoTemplate.remove(basicQuery, Group.class);
     }
 
     public void delete(Group group){
-        //1 删除组
         mongoTemplate.remove(group);
-
-        //2 删除用户表中存属于此组的组名
     }
 
     /**
@@ -132,5 +130,26 @@ public class GroupDao {
         List<Sort.Order> orders = Lists.newArrayList(order);
         List<Group> list = mongoTemplate.find(basicQuery, Group.class);
         return list;
+    }
+
+    /**
+     * 是否存在同名的用户组(唯一性判断)
+     * @param groupName
+     * @return
+     */
+    public boolean exist(String groupName){
+        boolean result = false;
+        QueryBuilder queryBuilder = QueryBuilder.start();
+
+        if (StringUtils.isNotEmpty(groupName)){
+            queryBuilder = queryBuilder.and("groupName").is(groupName);
+        }
+
+        DBObject dbObject = queryBuilder.get();
+        BasicQuery basicQuery = new BasicQuery(dbObject);
+        List<Group> list = mongoTemplate.find(basicQuery,Group.class);
+        if (list.size() > 0)
+            result = true;
+        return result;
     }
 }

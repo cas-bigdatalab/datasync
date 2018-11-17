@@ -1,7 +1,9 @@
 package cn.csdb.portal.service;
 
 import cn.csdb.portal.model.Group;
+import cn.csdb.portal.model.User;
 import cn.csdb.portal.repository.GroupDao;
+import cn.csdb.portal.repository.UserDao;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,9 @@ import java.util.List;
 public class GroupService {
     @Resource
     private GroupDao groupDao;
+
+    @Resource
+    private UserDao userDao;
 
     @Transactional
     public void add(Group group){
@@ -39,7 +44,10 @@ public class GroupService {
      */
     @Transactional
     public void delete(Group group){
+        //1 删除组
         groupDao.delete(group);
+        //2 删除用户表中存属于此组的组名
+        //List<User> list = userDao.queryUser()
     }
 
     /**
@@ -88,5 +96,18 @@ public class GroupService {
      */
     public List<Group> getAll(){
         return groupDao.getAll();
+    }
+
+
+    /**
+     * Function Description: 是否己存在同名的用户组
+     *
+     * @param:groupName:用户组名称
+     * @return:
+     * @auther: xiajl
+     * @date:   2018/11/17 10:44
+     */
+    public boolean exist(String groupName){
+        return groupDao.exist(groupName);
     }
 }

@@ -122,10 +122,10 @@
                             <div class="alert alert-info" role="alert">
                                 <!--查询条件 -->
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-12 form-inline">
 
                                         <label class="control-label">用户组名:</label>
-                                        <input type="text" id="groupName" name="groupName" class="input-small search-text">
+                                        <input type="text" id="groupName" name="groupName" class="form-control search-text ">
                                         &nbsp;&nbsp;&nbsp;&nbsp;
 
                                         <button id="btnSearch" name="btnSearch" onclick="search();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查询</button>
@@ -140,11 +140,11 @@
                                     <thead>
                                     <tr>
                                         <th style="width: 5%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编号</th>
-                                        <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">
+                                        <th style="width: 15%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">
                                             用户组名
                                         </th>
-                                        <th style="width: 25%;text-align: left;background: #64aed9;color: #FFF;font-weight: bold">描述</th>
-                                        <th style="width: 10%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">创建时间</th>
+                                        <th style="width: 30%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">描述</th>
+                                        <th style="width: 17%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">创建时间</th>
                                         <th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">操作</th>
                                     </tr>
                                     </thead>
@@ -300,12 +300,12 @@
         <td style="display:table-cell; vertical-align:middle ; text-align: center;" >{{(currentPage-1)*pageSize+$index+1}}</td>
         <td style="display:table-cell; vertical-align:middle" ><a href="javascript:editData('{{$value.id}}');">{{$value.groupName}}</a>
         </td>
-        <td style="display:table-cell; vertical-align:middle ;text-align: left">{{$value.desc}}</td>
-        <td style="display:table-cell; vertical-align:middle ;text-align: center">{{dateFormat($value.createTime)}}</td>
-        <td style="display:table-cell; vertical-align:middle" id="a{{$value.id}}" style="text-align: center">
+        <td style="display:table-cell; vertical-align:middle ;text-align: left;">{{$value.desc}}</td>
+        <td style="display:table-cell; vertical-align:middle ;text-align: center;">{{dateFormat($value.createTime)}}</td>
+        <td style="display:table-cell; vertical-align:middle;text-align: center;" id="a{{$value.id}}" >
             <%--<button class="btn default btn-xs green-stripe" onclick="viewData()">查看</button>&nbsp;&nbsp;--%>
-            <button class="btn default btn-xs purple updateButton" onclick="editData('{{$value.id}}')"><i class="fa fa-edit"></i>修改</button>&nbsp;&nbsp;
-            <button class="btn default btn-xs red" onclick="deleteData('{{$value.id}}')"><i class="fa fa-trash"></i>删除</button>&nbsp;&nbsp;
+            <button class="btn default btn-xs purple updateButton" onclick="editData('{{$value.id}}')"><i class="fa fa-edit"></i>修改</button>&nbsp;
+            <button class="btn default btn-xs red" onclick="deleteData('{{$value.id}}')"><i class="fa fa-trash"></i>删除</button>&nbsp;
             <button class="btn default btn-xs green" onclick="addUserData('{{$value.id}}')"><i class="fa fa-user"></i>添加用户</button>
         </td>
     </tr>
