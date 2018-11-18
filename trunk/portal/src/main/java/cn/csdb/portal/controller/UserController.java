@@ -47,9 +47,18 @@ public class UserController {
         userQueryResult.put("list", users);
         userQueryResult.put("curUserPageNum", curUserPageNum);
         userQueryResult.put("pageSize", 10);
-        long totalUsers = userService.getTotalUsers(loginId, userName, groups);
+        long totalUsers = 0;
+        try {
+            totalUsers = userService.getTotalUsers(loginId, userName, groups);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         userQueryResult.put("totalUsers", totalUsers);
-        userQueryResult.put("totalUserPages", (totalUsers / pageSize + (totalUsers % pageSize == 0 ? 0 : 1)));
+        long totalUserPages =  (totalUsers / pageSize + (totalUsers % pageSize == 0 ? 0 : 1));
+        userQueryResult.put("totalUserPages", totalUserPages);
+        logger.info("totalUsers = " + totalUsers + ", totalUserPages = " + totalUserPages);
 
         //设置http响应的编码
         response.setCharacterEncoding("utf-8");

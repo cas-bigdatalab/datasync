@@ -400,27 +400,85 @@
                     focusInvalid: false,
                     rules: {
                         subjectName: "required",
-                        subjectCode: "required",
+                        subjectCode: {
+                            required: true,
+                            remote:
+                                {
+                                    url: "${ctx}/subjectMgmt/querySubjectCode",
+                                    type: "get",
+                                    data:
+                                        {
+                                            'subjectCode': function()
+                                            {
+                                                return $("#subjectCode").val();
+                                            }
+                                        },
+                                    dataType: "json"
+                                }
+                        },
                         image: "required",
-                        admin: "required",
+                        admin: {
+                            required: true,
+                            remote:
+                                {
+                                    url: "${ctx}/subjectMgmt/queryAdmin",
+                                    type: "get",
+                                    data:
+                                        {
+                                            'admin': function()
+                                            {
+                                                return $("#admin").val();
+                                            }
+                                        },
+                                    dataType: "json"
+                                }
+                        },
                         adminPasswd: "required",
                         contact: "required",
-                        phone: "required",
-                        email: "required",
+                        phone:
+                        {
+                            required: true,
+                            maxlength:11,
+                            maxlength:11,
+                            isphoneNum:true
+                        },
+                        email: {
+                            required: false,
+                            email: true
+                        },
                         serialNo: "required"
                     },
                     messages: {
                         subjectName: "请输入专题库名称",
-                        subjectCode: "请输入专题库代码",
+                        subjectCode: {
+                            required: "请输入专题库代码",
+                            remote: "此主题库代码已经存在！"
+                        },
                         image: "请选择一个图片",
-                        admin: "请输入专题库管理员账号",
+                        admin: {
+                            required: "请输入专题库管理员账号",
+                            remote: "此专题库管理员账号已经存在！"
+                        },
                         adminPasswd: "请输入专题库管理密码",
                         contact: "请输入专题库联系人",
-                        phone: "请输入专题库联系人电话",
-                        email: "请输入专题库联系人email",
+                        phone: {
+                            required:"请输入手机号",
+                            maxlength:"请填写11位的手机号",
+                            minlength:"请填写11位的手机号",
+                            isphoneNum:"请填写正确的手机号码"
+                        },
+                        email: "请输入一个正确的email",
                         serialNo: "请输入专题库的序号"
                     }
                 };
+
+                jQuery.validator.addMethod("isphoneNum", function(value, element) {
+                    debugger
+                    var length = value.length;
+                    var mobile = /^1[0-9]{1}[0-9]{9}$/;
+                    return this.optional(element) || (length == 11 && mobile.test(value));
+                }, "请填写正确的手机号码");
+
                 var updateSubjectValid = {
                     errorElement: 'span',
                     errorClass: 'error-message',
@@ -431,8 +489,17 @@
                         admin: "required",
                         adminPasswd: "required",
                         contact: "required",
-                        phone: "required",
-                        email: "required",
+                        phone:
+                            {
+                                required: true,
+                                maxlength:11,
+                                maxlength:11,
+                                isphoneNum:true
+                            },
+                        email: {
+                            required: false,
+                            email: true
+                        },
                         serialNo: "required"
                     },
                     messages: {
@@ -441,8 +508,13 @@
                         admin: "请输入专题库管理员账号",
                         adminPasswd: "请输入专题库管理密码",
                         contact: "请输入专题库联系人",
-                        phone: "请输入专题库联系人电话",
-                        email: "请输入专题库联系人email",
+                        phone: {
+                            required:"请输入手机号",
+                            maxlength:"请填写11位的手机号",
+                            minlength:"请填写11位的手机号",
+                            isphoneNum:"请填写正确的手机号码"
+                        },
+                        email: "请输入一个正确的email",
                         serialNo: "请输入专题库的序号"
                     }
                 };
@@ -658,47 +730,6 @@
                     }
                 );
             }
-            //subjectCode唯一性
-            $("#subjectCode").blur(function() {
-                $.ajax({
-                    type: "GET",
-                    async: false,
-                    url: '${ctx}/subjectMgmt/querySubjectCode',
-                    data: {code: $(this).val()},
-                    dataType: "text",
-                    success: function (data){
-                        var cntOfSubjectCode = parseInt(data);
-                        if (cntOfSubjectCode > 0)
-                        {
-                            alert("subjectCode已经存在，请另外选择一个！")
-                        }
-                    },
-                    error: function(data) {
-                        console.log(data);
-                    }
-                });
-            });
-
-            //用户名唯一性
-            $("#admin").blur(function() {
-                $.ajax({
-                    type: "GET",
-                    async: false,
-                    url: '${ctx}/subjectMgmt/queryAdmin',
-                    data: {admin: $(this).val()},
-                    dataType: "text",
-                    success: function (data){
-                        var cntOfAdmin = parseInt(data);
-                        if (cntOfAdmin > 0)
-                        {
-                            alert("admin已经存在，请另外选择一个！")
-                        }
-                    },
-                    error: function(data) {
-                        console.log(data);
-                    }
-                });
-            });
 
         </script>
     </div>

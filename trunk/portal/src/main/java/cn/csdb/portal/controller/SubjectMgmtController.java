@@ -284,13 +284,22 @@ public class SubjectMgmtController {
      */
     @RequestMapping(value = "/querySubjectCode")
     @ResponseBody
-    public long querySubjectCode(HttpServletRequest request, @RequestParam(name="code", required = true) String subjectCode) {
+    public boolean querySubjectCode(HttpServletRequest request, @RequestParam(required = true) String subjectCode) {
         logger.info("enterring SubjectMgmtController-querySubjectCode");
         logger.info("subjectCode = " + subjectCode);
         long cntOfTheCode = subjectService.querySubjectCode(subjectCode);
         logger.info("queried subjectCodeCnt - cntOfTheCode = " + cntOfTheCode);
 
-        return cntOfTheCode;
+        boolean retValue = false;
+        if (cntOfTheCode > 0)
+        {
+            retValue = false;
+        }
+        else
+        {
+            retValue = true;
+        }
+        return retValue;
     }
 
     /**
@@ -300,12 +309,21 @@ public class SubjectMgmtController {
      */
     @RequestMapping(value = "/queryAdmin")
     @ResponseBody
-    public long queryAdmin(HttpServletRequest request, @RequestParam(name="admin", required = true) String admin) {
+    public boolean queryAdmin(HttpServletRequest request, @RequestParam(required = true) String admin) {
         logger.info("enterring SubjectMgmtController-queryUserName");
         logger.info("admin = " + admin);
         long cntOfAdmin = subjectService.queryAdmin(admin);
         logger.info("queried userNameCnt - cntOfUserName = " + cntOfAdmin);
 
-        return cntOfAdmin;
+        boolean retValue = false;
+        if (cntOfAdmin > 0)
+        {
+            retValue = false;
+        }
+        else
+        {
+            retValue = true;
+        }
+        return retValue;
     }
 }

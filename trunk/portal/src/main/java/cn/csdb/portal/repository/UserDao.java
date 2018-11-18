@@ -118,31 +118,31 @@ public class UserDao {
 
         if (loginId != null && userName != null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("loginId").is(loginId).and("userName").is(userName).and("groups").is(groups).get();
+            dbObject = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$")).get();
         }
         else if (loginId != null && userName != null && groups == null)
         {
-            dbObject = QueryBuilder.start().and("loginId").is(loginId).and("userName").is(userName).get();
+            dbObject = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).get();
         }
         else if (loginId != null && userName == null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("loginId").is(loginId).and("groups").is(groups).get();
+            dbObject = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$")).get();
         }
         else if (loginId == null && userName != null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("userName").is(userName).and("groups").is(groups).get();
+            dbObject = QueryBuilder.start().and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$")).get();
         }
         else if (loginId != null && userName == null && groups == null)
         {
-            dbObject = QueryBuilder.start().and("loginId").is(loginId).get();
+            dbObject = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).get();
         }
         else if (loginId == null && userName != null && groups == null)
         {
-            dbObject = QueryBuilder.start().and("userName").is(userName).get();
+            dbObject = QueryBuilder.start().and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).get();
         }
         else if (loginId == null && userName == null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("groups").is(groups).get();
+            dbObject = QueryBuilder.start().and("groups").regex(Pattern.compile("^.*" + groups + ".*$")).get();
         }
         else
         {
