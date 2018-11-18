@@ -557,12 +557,6 @@
                 }
 
             });
-
-            function cancelButton() {
-                formValid.resetForm();
-            }
-
-
         };
         function dbSelect(){
             var db = $("#dataBaseType option:selected").val();
@@ -587,6 +581,11 @@
             }else{
                 $("#portE").val("3306");
             }
+        }
+        function cancelButton() {
+            $("#relationalSourceForm").validate().resetForm();
+            $("#relationalSourceForm").validate().clean();
+            $('.form-group').removeClass('has-error');
         }
         /*jQuery.validator.addMethod("isFilePath", function (value, element) {
          var winPath = /^[a-zA-Z]:(((\/(?! )[^/:*?<>\""|\/]+)+\/?)|(\/)?)\s*$/g;
