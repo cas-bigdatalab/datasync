@@ -14,7 +14,7 @@
 <html>
 
 <head>
-    <title>DataSync专题库门户管理系统</title>
+    <title>DataSync主题库门户管理系统</title>
     <link href="${ctx}/resources/css/dataUpload.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
     <style type="text/css">
@@ -36,35 +36,35 @@
 <div class="page-content">
     <div>
         <div class="uplod-head">
-            <span>DataSync / 传输信息</span>
+            <span>数据发布管理</span>
         </div>
         <div class="alert alert-info" role="alert">
             <!--查询条件 -->
             <div class="row">
                 <form class="form-inline" style="margin-bottom: 0px">
                     <div class="form-group">
-                        <label>数据集名称</label>
+                        <label style="padding-left: 10px;">数据集名称:</label>
                         <input type="text" class="form-control" id="resourceName">
                     </div>
                     <div class="form-group">
-                        <label>数据类型</label>
-                        <select id="resourcePublicType" class="form-control" style="width: 150px">
+                        <label style="padding-left: 10px;">数据类型:</label>
+                        <select id="resourcePublicType" class="form-control" style="width: 120px">
                             <option value="">全部</option>
                             <option value="mysql">mysql</option>
                             <option value="file">file</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>状态</label>
-                        <select id="resourceState" class="form-control" style="width: 150px">
+                        <label style="padding-left: 10px;">状态:</label>
+                        <select id="resourceState" class="form-control" style="width: 120px">
                             <option value="">全部</option>
                             <option value="未完成">未完成</option>
                             <option value="待审核">待审核</option>
                             <option value="已审核">已审核</option>
                         </select>
                     </div>
-                    <button type="button" class="btn blue" style="margin-left: 49px" id="seachResource">查询</button>
-                    <button type="button" class="btn green" style="margin-left: 49px" onclick="newRelease()">新建发布
+                    <button type="button" class="btn blue" style="margin-left: 20px" id="seachResource">查询</button>
+                    <button type="button" class="btn green" style="margin-left: 20px" onclick="newRelease()">新建发布
                     </button>
                 </form>
             </div>
@@ -74,20 +74,23 @@
             <table class="table table-bordered data-table" id="upload-list">
                 <thead>
                 <tr>
-                    <th>编号</th>
-                    <th>数据集名称</th>
-                    <th>类型</th>
-                    <th width="30%">来源位置</th>
-                    <th>发布时间</th>
-                    <th>状态</th>
-                    <th width="26%">操作</th>
+                    <th width="7%">编号</th>
+                    <th width="20%">数据集名称</th>
+                    <th width="10%">类型</th>
+                   <%-- <th width="10%">来源位置</th>--%>
+                    <th width="17%">发布时间</th>
+                    <th width="10%">状态</th>
+                    <th width="28%">操作</th>
                 </tr>
                 </thead>
                 <tbody id="bd-data">
                 </tbody>
             </table>
-            <div class="page-message" style="float: left;line-height: 56px"></div>
-            <div class="page-list" style="float: right"></div>
+
+            <div class="row margin-top-20 ">
+                <div class="page-message" style="float: left;padding-left: 20px; line-height: 56px"></div>
+                <div class="page-list" style="float: right; padding-right: 15px;"></div>
+            </div>
         </div>
     </div>
 </div>
@@ -391,7 +394,7 @@
         <td>{{i + 1}}</td>
         <td>{{value.title}}</td>
         <td>{{value.publicType}}</td>
-        <td style="word-break: break-all">{{value.createdByOrganization}}</td>
+       <%-- <td style="word-break: break-all">{{value.createdByOrganization}}</td>--%>
         <td>{{dateFormat(value.creationDate)}}</td>
         <td id="{{value.dataTaskId}}">{{value.resState}}</td>
         <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>
@@ -439,6 +442,7 @@
         var resourceState = ""
         var resourceName=""
         $(function(){
+            template.helper("dateFormat", formatDate);
             tableConfiguration2(1,"","","")
         });
         $("#resourcePublicType").on("change", function () {
