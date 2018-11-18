@@ -336,7 +336,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <div class="modal-header">
+            <div class="modal-header  bg-primary">
                 <h4 id="titleForAddUserDialog" class="modal-title" >添加用户</h4>
             </div>
 
@@ -370,11 +370,11 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectCodeForAddUserDialog">
-                                专题库代码<span style="color: red;">*</span>
+                                专题库代码
                             </label>
                             <div class="col-md-9">
                                 <%--<input type="text" class="form-control" placeholder="请输入专题库代码"  id="subjectCode" name="subjectCode" required="required">--%>
-                                    <select class='form-control select2me' name='subjectCodeForAddUserDialog' id='subjectCodeForAddUserDialog' multiple="multiple">
+                                    <select class='form-control select2me' name='subjectCodeForAddUserDialog' id='subjectCodeForAddUserDialog'>
                                         <c:forEach  var="subject"  items="${subjectList}">
                                             <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectCode}</option>
                                         </c:forEach>
@@ -414,7 +414,7 @@
 <div id="updateUserDialog" class="modal fade" tabindex="-1"  role="dialog" aria-hidden="true" data-width="400">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header bg-primary">
                 <h4 id="titleForUpdateUserDialog" class="modal-title" >修改用户</h4>
             </div>
 
@@ -451,7 +451,7 @@
                                 专题库代码<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <select class='form-control select2me' name='subjectCodeForUpdateUserDialog' id='subjectCodeForUpdateUserDialog' multiple="multiple">
+                                <select class='form-control select2me' name='subjectCodeForUpdateUserDialog' id='subjectCodeForUpdateUserDialog'>
                                     <c:forEach  var="subject"  items="${subjectList}">
                                         <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectCode}</option>
                                     </c:forEach>
@@ -647,14 +647,12 @@
                     userName: "required",
                     loginId: "required",
                     password: "required",
-                    subjectCodeForAddUserDialog: "required",
                     groupsForAddUserDialog: "required",
                 },
                 messages: {
                     userName: "请输入用户名",
                     loginId: "请输入用户账号",
                     password: "请输入密码",
-                    subjectCodeForAddUserDialog: "请输入专题库代码",
                     groupsForAddUserDialog: "请输入用户组",
                 }
             };
@@ -666,14 +664,12 @@
                     userNameForUpdate: "required",
                     loginIdForUpdate: "required",
                     passwordForUpdate: "required",
-                    subjectCodeForUpdateUserDialog: "required",
                     groupsForUpdateUserDialog: "required",
                 },
                 messages: {
                     userNameForUpdate: "请输入用户名",
                     loginIdForUpdate: "请输入用户账号",
                     passwordForUpdate: "请输入密码",
-                    subjectCodeForUpdateUserDialog: "请输入专题库代码",
                     groupsForUpdateUserDialog: "请输入用户组",
                 }
             };

@@ -402,7 +402,7 @@ public class SubjectMgmtDao {
             return null;
         }
         long totalPages = 1;
-        totalPages = getTotalPages();
+        totalPages = getTotalPages(subjectNameFilter);
         if (pageNumber > totalPages) {
             return null;
         }
@@ -432,9 +432,9 @@ public class SubjectMgmtDao {
      *
      * @return totalPages
      */
-    public long getTotalPages() {
+    public long getTotalPages(String subjectNameFilter) {
         //query the count of all documents in t_subject collection
-        DBObject dbObject = QueryBuilder.start().get();
+        DBObject dbObject = QueryBuilder.start().and("subjectName").regex(Pattern.compile("^.*" + subjectNameFilter + ".*$")).get();
         Query query = new BasicQuery(dbObject);
         long totalRows = mongoTemplate.count(query, "t_subject");
         long totalPages = 0;
@@ -443,9 +443,9 @@ public class SubjectMgmtDao {
         return totalPages;
     }
 
-    public long getTotalSubject()
+    public long getTotalSubject(String subjectNameFilter)
     {
-        DBObject dbObject = QueryBuilder.start().get();
+        DBObject dbObject = QueryBuilder.start().and("subjectName").regex(Pattern.compile("^.*" + subjectNameFilter + ".*$")).get();
         Query query = new BasicQuery(dbObject);
         long totalRows = mongoTemplate.count(query, "t_subject");
 

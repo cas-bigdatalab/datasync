@@ -146,14 +146,14 @@ public class SubjectMgmtController {
      */
     @RequestMapping(value = "/deleteSubject")
     @ResponseBody
-    public String deleteSubject(HttpServletRequest request, @RequestParam(required = true) String id, @RequestParam(required = true) int pageNum) {
+    public int deleteSubject(HttpServletRequest request, @RequestParam(required = true) String id, @RequestParam(required = true) int pageNum) {
         logger.info("SubjectMgmtController-deleteSubject, id = " + id + ", currentPage = " + pageNum);
 
         int deletedRowCnt = subjectService.deleteSubject(id);
         logger.info("SubjectMgmtController-deleteSubject，deletedRowCnt = " + deletedRowCnt);
 
         //返回要删除的subject的id
-        return id;
+        return deletedRowCnt;
     }
 
     /**
@@ -242,7 +242,7 @@ public class SubjectMgmtController {
         logger.info("enterring SubjectMgmtController-querySubject[currentPage = " + currentPage + "]");
 
         long totalPages = 0;
-        totalPages = subjectService.getTotalPages();
+        totalPages = subjectService.getTotalPages(subjectNameFilter);
         List<Subject> subjectsOfThisPage = subjectService.querySubject(subjectNameFilter, currentPage);
 
         logger.info("queried subject - " + subjectsOfThisPage);
@@ -251,7 +251,7 @@ public class SubjectMgmtController {
         jsonObject.put("totalPages", totalPages);
         jsonObject.put("pageNum", currentPage);
         jsonObject.put("pageSize", 10);
-        jsonObject.put("total", subjectService.getTotalSubject());
+        jsonObject.put("total", subjectService.getTotalSubject(subjectNameFilter));
         jsonObject.put("list", subjectsOfThisPage);
 
         logger.info("jsonObject = " + jsonObject);

@@ -112,9 +112,9 @@ public class SubjectMgmtService {
      * @author zzl
      * @date 2018/10/23
      */
-    public long getTotalPages()
+    public long getTotalPages(String subjectNameFilter)
     {
-        return subjectMgmtDao.getTotalPages();
+        return subjectMgmtDao.getTotalPages(subjectNameFilter);
     }
 
     /**
@@ -159,11 +159,10 @@ public class SubjectMgmtService {
         return subjectMgmtDao.queryAdmin(userName);
     }
 
-    public long getTotalSubject()
+    public long getTotalSubject(String subjectNameFilter)
     {
-        return subjectMgmtDao.getTotalSubject();
+        return subjectMgmtDao.getTotalSubject(subjectNameFilter);
     }
-
 
     public List<Subject> getSubjectCodeList()
     {
