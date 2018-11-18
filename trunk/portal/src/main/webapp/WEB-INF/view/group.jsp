@@ -122,10 +122,10 @@
                             <div class="alert alert-info" role="alert">
                                 <!--查询条件 -->
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-12 form-inline">
 
                                         <label class="control-label">用户组名:</label>
-                                        <input type="text" id="groupName" name="groupName" class="input-small search-text">
+                                        <input type="text" id="groupName" name="groupName" class="form-control search-text ">
                                         &nbsp;&nbsp;&nbsp;&nbsp;
 
                                         <button id="btnSearch" name="btnSearch" onclick="search();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查询</button>
@@ -140,11 +140,11 @@
                                     <thead>
                                     <tr>
                                         <th style="width: 5%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编号</th>
-                                        <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">
+                                        <th style="width: 15%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">
                                             用户组名
                                         </th>
-                                        <th style="width: 25%;text-align: left;background: #64aed9;color: #FFF;font-weight: bold">描述</th>
-                                        <th style="width: 10%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">创建时间</th>
+                                        <th style="width: 30%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">描述</th>
+                                        <th style="width: 17%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">创建时间</th>
                                         <th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">操作</th>
                                     </tr>
                                     </thead>
@@ -226,7 +226,7 @@
                         <label for="groupNameEdit" class="col-sm-3 control-label">用户组名称<span class="required">
 													*</span></label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="groupNameEdit" name="groupName" placeholder="请输入用户组名称"  required="required" >
+                            <input type="text" class="form-control" id="groupNameEdit" name="groupName" placeholder="请输入用户组名称" readonly  required="required" >
                         </div>
                     </div>
                     <div class="form-group">
@@ -300,12 +300,12 @@
         <td style="display:table-cell; vertical-align:middle ; text-align: center;" >{{(currentPage-1)*pageSize+$index+1}}</td>
         <td style="display:table-cell; vertical-align:middle" ><a href="javascript:editData('{{$value.id}}');">{{$value.groupName}}</a>
         </td>
-        <td style="display:table-cell; vertical-align:middle ;text-align: left">{{$value.desc}}</td>
-        <td style="display:table-cell; vertical-align:middle ;text-align: center">{{dateFormat($value.createTime)}}</td>
-        <td style="display:table-cell; vertical-align:middle" id="a{{$value.id}}" style="text-align: center">
+        <td style="display:table-cell; vertical-align:middle ;text-align: left;">{{$value.desc}}</td>
+        <td style="display:table-cell; vertical-align:middle ;text-align: center;">{{dateFormat($value.createTime)}}</td>
+        <td style="display:table-cell; vertical-align:middle;text-align: center;" id="a{{$value.id}}" >
             <%--<button class="btn default btn-xs green-stripe" onclick="viewData()">查看</button>&nbsp;&nbsp;--%>
-            <button class="btn default btn-xs purple updateButton" onclick="editData('{{$value.id}}')"><i class="fa fa-edit"></i>修改</button>&nbsp;&nbsp;
-            <button class="btn default btn-xs red" onclick="deleteData('{{$value.id}}')"><i class="fa fa-trash"></i>删除</button>&nbsp;&nbsp;
+            <button class="btn default btn-xs purple updateButton" onclick="editData('{{$value.id}}')"><i class="fa fa-edit"></i>修改</button>&nbsp;
+            <button class="btn default btn-xs red" onclick="deleteData('{{$value.id}}')"><i class="fa fa-trash"></i>删除</button>&nbsp;
             <button class="btn default btn-xs green" onclick="addUserData('{{$value.id}}')"><i class="fa fa-user"></i>添加用户</button>
         </td>
     </tr>
@@ -532,6 +532,9 @@
         var currentPageNo = 1;
         var validatorAdd;
         var groupUsersSelect2;
+        var validAddData;
+        var validEditData;
+
         $(function () {
             template.helper("dateFormat", formatDate);
             getData(1);
@@ -557,7 +560,60 @@
                 "hideMethod": "fadeOut"
             };
 
-            var validData = {
+            validAddData = {
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block help-block-error', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "", // validate all fields including form hidden input
+                rules: {
+                    groupName: {
+                        required: true,
+                        remote:
+                            {
+                                url: "isExist",
+                                type: "get",
+                                dataType: "json",
+                                data:
+                                    {
+                                        'groupName': function()
+                                        {
+                                            return $("#groupNameAdd").val();
+                                        }
+                                    }
+                            }
+                    },
+                    desc: {
+                        required: true
+                    }
+                },
+                messages: {
+                    groupName: {
+                        required: "请输入用户组名称",
+                        remote :"此用户组名称己存在"
+                    },
+                    desc: {
+                        required: "请输入用户组描述信息"
+                    }
+                },
+                errorPlacement: function (error, element) { // render error placement for each input type
+                    if (element.parent(".input-group").size() > 0) {
+                        error.insertAfter(element.parent(".input-group"));
+                    } else {
+                        error.insertAfter(element); // for other inputs, just perform default behavior
+                    }
+                },
+                highlight: function (element) { // hightlight error inputs
+                    $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                unhighlight: function (element) { // revert the change done by hightlight
+                    $(element)
+                        .closest('.form-group').removeClass('has-error'); // set error class to the control group
+                }
+            };
+
+            validEditData = {
                 errorElement: 'span', //default input error message container
                 errorClass: 'help-block help-block-error', // default input error message class
                 focusInvalid: false, // do not focus the last invalid input
@@ -595,8 +651,9 @@
                         .closest('.form-group').removeClass('has-error'); // set error class to the control group
                 }
             };
-            $("#addGroupForm").validate(validData);
-            $("#editGroupForm").validate(validData);
+
+            $("#addGroupForm").validate(validAddData);
+            $("#editGroupForm").validate(validEditData);
 
             //getAllUserList();
             groupUsersSelect2 = $('#users').select2({
@@ -752,6 +809,8 @@
                             if (data.result == 'ok') {
                                 toastr["success"]("删除成功！", "数据删除");
                                 getData(currentPageNo);
+                                //删除用户组的同时,刷新用户列表信息
+                                searchUser();
                             }
                             else {
                                 toastr["error"]("删除失败！", "数据删除");
@@ -766,11 +825,17 @@
         }
 
         $("#btnAdd").click(function () {
+            $("#groupNameAdd").val("");
+            $("#descAdd").val("");
+            resetData();
             $("#addModal").modal('show');
         });
 
+        //重置校验窗体xiajl20181117
         function resetData() {
-            validatorAdd.resetForm();
+            $("#addGroupForm").validate().resetForm();
+            $("#addGroupForm").validate().clean();
+            $('.form-group').removeClass('has-error');
         }
 
         function submitAddData() {

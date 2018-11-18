@@ -140,4 +140,12 @@ public class GroupController {
         return jsonObject;
     }
 
+
+    @ResponseBody
+    @RequestMapping(value = "isExist",method = RequestMethod.GET)
+    public boolean isExist(@RequestParam("groupName") String groupName)
+    {
+        return !(groupService.isExist(groupName));
+    }
+
 }

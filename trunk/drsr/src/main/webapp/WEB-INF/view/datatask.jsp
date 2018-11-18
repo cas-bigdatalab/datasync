@@ -80,6 +80,7 @@
             </table>
             <div class="page-message" style="float: left;line-height: 56px" ></div>
             <div class="page-list" style="float: right"></div>
+            <div></div>
         </div>
         <div style="display: none" id="uploadListFlag">
             <span name="" valFlag="false"></span>

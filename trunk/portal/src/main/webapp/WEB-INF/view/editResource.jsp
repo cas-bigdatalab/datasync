@@ -1010,7 +1010,6 @@
         }).bind("deselect_node.jstree", function (e, data) {
             var fileId = data.node.id;
             var fileName = data.node.text;
-            $("span[name='" + fileId + "']").remove();
             /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
         });
 
