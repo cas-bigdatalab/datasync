@@ -146,7 +146,7 @@ public class FileResourceService {
                 File roots = new File("/usr");
                 logger.info("服务器盘符为："+roots);
                 String root = roots.toString();
-                String rootName= root.substring(0, root.indexOf("\\"));
+                String rootName= root.substring(0, root.indexOf("\\\\"));
                 JSONObject jsonObject = new JSONObject();
                 if (roots.isDirectory()) {
                     File file1 = roots;
