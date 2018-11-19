@@ -1004,12 +1004,15 @@
         //添加用户按钮
         function addUser()
         {
-            resetAddUserDialog();
-            $("#addUserDialog").modal("show");
-            console.log("进入到增加用户对话框中了");
-            //$("#subjectCodeForAddUserDialog").val("请选择主题库");
+            $("#userName").val("");
+            $("#loginId").val("");
+            $("#password").val("");
+            $("#subjectCodeForAddUserDialog").val("");
+            $("#groupsForAddUserDialog").select2("val", "");
 
-            console.log("subjectCode = " + $("#subjectCodeForAddUserDialog").val());
+            resetAddUserDialog();
+
+            $("#addUserDialog").modal("show");
         }
 
         function resetAddUserDialog()

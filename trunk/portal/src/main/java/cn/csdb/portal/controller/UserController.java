@@ -130,14 +130,25 @@ public class UserController {
 
     @RequestMapping(value = "/queryLoginId")
     @ResponseBody
-    public long queryLoginId(HttpServletRequest request, @RequestParam(name="loginId", required = true) String loginId) {
+    public boolean queryLoginId(HttpServletRequest request, @RequestParam(name="loginId", required = true) String loginId) {
         logger.info("enterring UserController-queryLoginId");
         logger.info("loginId = " + loginId);
         long loginIdCnt = userService.queryLoginId(loginId.trim());
         logger.info("queried loginIdCnt - loginIdCnt = " + loginIdCnt);
 
-        return loginIdCnt;
+        boolean retValue = false;
+        if (loginIdCnt > 0)
+        {
+            retValue = false;
+        }
+        else
+        {
+            retValue = true;
+        }
+
+        return retValue;
     }
+
 
 
 }
