@@ -73,7 +73,7 @@ public class UserController {
     public String addUser(HttpServletRequest request, User user)
     {
         logger.info("enter addUser - parameters[user = " + user + "]");
-        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyy年MM月dd  HH:mm:ss");
         user.setCreateTime(sdf.format(new Date()));
         user.setStat(1);
         logger.info("user to be added = " + user);
