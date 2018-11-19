@@ -366,7 +366,7 @@
                                 密&nbsp;&nbsp;&nbsp;&nbsp;码<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入密码"  id="password" name="password" required="required">
+                                <input type="text" class="form-control" placeholder="请输入密码,至少为6位"  id="password" name="password" required="required">
                             </div>
                         </div>
 

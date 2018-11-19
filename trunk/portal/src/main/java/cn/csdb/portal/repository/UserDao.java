@@ -95,8 +95,9 @@ public class UserDao {
 
         //排序
         Sort.Direction direction = false ? Sort.Direction.ASC : Sort.Direction.DESC;
-        query.with(new Sort(direction, "_id"));
-        
+        //query.with(new Sort(direction, "_id"));
+        query.with(new Sort(direction, "createTime"));
+
         List<User> users = mongoTemplate.find(query, User.class);
 
         return users;
