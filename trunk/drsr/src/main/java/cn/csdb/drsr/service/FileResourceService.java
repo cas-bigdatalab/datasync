@@ -103,11 +103,14 @@ public class FileResourceService {
     }
 
     public List<JSONObject> fileTreeLoading(String data) {
+        String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
         File file;
         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
         if ("#".equals(data)) {
             //获取服务器盘符
             File[] roots = File.listRoots();
+            logger.info("服务器盘符为："+roots);
+            logger.info("子目录个数为："+roots.length);
             for (int i =0; i < roots.length; i++) {
                 String root = roots[i].toString();
                 String rootName= root.substring(0, root.indexOf("\\"));
