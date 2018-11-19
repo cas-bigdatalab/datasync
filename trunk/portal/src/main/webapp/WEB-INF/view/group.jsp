@@ -58,18 +58,16 @@
                             <!--用户管理标签页: 用户筛选条件-->
                             <div class="alert alert-info" role="alert">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-12 form-inline">
                                             <label class="control-label">用户账号:</label>
-                                            <input type="text" id="loginIdFilter" name="loginIdFilter" placeholder="用户账号" class="input-small" style="height: 30px;" />
-                                            &nbsp;&nbsp;&nbsp;&nbsp;
-
+                                            <input type="text" id="loginIdFilter" name="loginIdFilter" placeholder="用户账号" class="form-control search-text" />
+                                            &nbsp;&nbsp;
                                             <label class="control-label">用户名:</label>
-                                            <input type="text" id="userNameFilter" name="userNameFilter" placeholder="用户名" class="input-small" style="height: 30px;" />
-                                            &nbsp;&nbsp;&nbsp;&nbsp;
-
+                                            <input type="text" id="userNameFilter" name="userNameFilter" placeholder="用户名" class="form-control search-text" />
+                                            &nbsp;&nbsp;
                                             <label class="control-label">用户组:</label>
 
-                                            <select name='groupsFilter' id='groupsFilter' multiple="multiple" class="form-control select2me" style="width: 300px; height: 30px;" >
+                                            <select name='groupsFilter' id='groupsFilter' multiple="multiple" class="form-control select2me" style="width: 200px;" >
                                                 <c:forEach  var="group"  items="${groupList}">
                                                     <option value="${group.groupName}" id="${group.id}" style="width: 150px; height: 30px;">${group.groupName}</option>
                                                 </c:forEach>
@@ -79,7 +77,7 @@
 
                                             <button id="searchUserBtn" name="searchUserBtn" onclick="searchUser();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                                             &nbsp;&nbsp;&nbsp;&nbsp;
-                                            <button id="addUserBtn" name="addUserBtn" class="btn info green btn-sm" data-target="#addUserDialog" data-toggle="modal" ><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建用户</button>
+                                            <button id="addUserBtn" name="addUserBtn" class="btn info green btn-sm" onclick="addUser()" ><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建用户</button>
                                      </div>
                                 </div>
                             </div>
@@ -327,17 +325,17 @@
         <%--<td style="text-align: center">{{$value.stat}}</td>--%>
         <td style="text-align: center">{{$value.groups}}</td>
         <td style="text-align: center" id = "{{$value.id}}">
-            <button class="btn default btn-xs red updateUserButton" data-target="#updateUserDialog" data-toggle="modal" onclick="updateUser(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>
+            <button class="btn default btn-xs purple updateUserButton" data-target="#updateUserDialog" data-toggle="modal" onclick="updateUser(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>
             &nbsp;
-            <button class="btn default btn-xs green updateUserGroupButton" onclick="deleteUser(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>
+            <button class="btn default btn-xs red updateUserGroupButton" onclick="deleteUser(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>
         </td>
     </tr>
     {{/each}}
 </script>
 
 <!--用户管理标签页：新建用户对话框-->
-<div id="addUserDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-width="400">
-    <div class="modal-dialog">
+<div id="addUserDialog" class="modal fade"  role="dialog"  tabindex="-1" role="dialog" aria-hidden="true" data-width="400">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
 
             <div class="modal-header  bg-primary">
@@ -368,19 +366,20 @@
                                 密&nbsp;&nbsp;&nbsp;&nbsp;码<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入密码"  id="password" name="password" required="required">
+                                <input type="text" class="form-control" placeholder="请输入密码,至少为6位"  id="password" name="password" required="required">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectCodeForAddUserDialog">
-                                专题库代码
+                                主题库
                             </label>
                             <div class="col-md-9">
                                 <%--<input type="text" class="form-control" placeholder="请输入专题库代码"  id="subjectCode" name="subjectCode" required="required">--%>
-                                    <select class='form-control select2me' name='subjectCodeForAddUserDialog' id='subjectCodeForAddUserDialog'>
+                                    <select class='form-control' name='subjectCodeForAddUserDialog' id='subjectCodeForAddUserDialog' placeholder="请选择主题库">
+                                        <option value="" disabled selected>请选择主题库</option>
                                         <c:forEach  var="subject"  items="${subjectList}">
-                                            <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectCode}</option>
+                                            <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectName}</option>
                                         </c:forEach>
                                     </select>
                             </div>
@@ -388,10 +387,10 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="groupsForAddUserDialog">
-                                角&nbsp;&nbsp;&nbsp;&nbsp;色<span style="color: red;">*</span>
+                                用户组<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <select class='form-control select2me' name='groupsForAddUserDialog' id='groupsForAddUserDialog' multiple="multiple">
+                                <select class='form-control select2me' name='groupsForAddUserDialog' id='groupsForAddUserDialog' multiple="multiple" placeholder="请选择用户组">
                                     <c:forEach  var="group"  items="${groupList}">
                                         <option value="${group.groupName}" id="${group.id}" >${group.groupName}</option>
                                     </c:forEach>
@@ -403,7 +402,7 @@
             </div>
 
             <div class="modal-footer">
-                <button id="saveUserAddBtn" class="btn green" onclick="addUser();">
+                <button id="saveUserAddBtn" class="btn green" onclick="agreeAddUser();">
                     保存
                 </button>
                 <button id="cancelUserAddBtn" class="btn default"  data-dismiss="modal">
@@ -415,7 +414,7 @@
 </div>
 
 <!--用户管理标签页：修改用户对话框-->
-<div id="updateUserDialog" class="modal fade" tabindex="-1"  role="dialog" aria-hidden="true" data-width="400">
+<div id="updateUserDialog" class="modal fade"  role="dialog" tabindex="-1"  role="dialog" aria-hidden="true" data-width="400">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -452,19 +451,19 @@
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectCodeForUpdateUserDialog">
-                                专题库代码<span style="color: red;">*</span>
+                                主题库
                             </label>
                             <div class="col-md-9">
-                                <select class='form-control select2me' name='subjectCodeForUpdateUserDialog' id='subjectCodeForUpdateUserDialog'>
+                                <select class='form-control' name='subjectCodeForUpdateUserDialog' id='subjectCodeForUpdateUserDialog'>
                                     <c:forEach  var="subject"  items="${subjectList}">
-                                        <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectCode}</option>
+                                        <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectName}</option>
                                     </c:forEach>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="groupsForUpdateUserDialog">
-                                角&nbsp;&nbsp;&nbsp;&nbsp;色<span style="color: red;">*</span>
+                                用户组<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
                                 <select class='form-control select2me' name='groupsForUpdateUserDialog' id='groupsForUpdateUserDialog' multiple="multiple">
@@ -690,14 +689,14 @@
                 allowClear: true
             });
             //添加、更新用户对话框中， 选择subjectCode
-            var subjectCodeForAddUserDialogSelect2 = $('#subjectCodeForAddUserDialog').select2({
+            /*var subjectCodeForAddUserDialogSelect2 = $('#subjectCodeForAddUserDialog').select2({
                 placeholder: "请选择用户组",
                 allowClear: true
-            });
-            var subjectCodeForUpdateUserDialogSelect2 = $('#subjectCodeForUpdateUserDialog').select2({
+            });*/
+            /*var subjectCodeForUpdateUserDialogSelect2 = $('#subjectCodeForUpdateUserDialog').select2({
                 placeholder: "请选择用户组",
                 allowClear: true
-            });
+            });*/
 
 
             var addUserValid = {
@@ -706,14 +705,38 @@
                 focusInvalid: false,
                 rules: {
                     userName: "required",
-                    loginId: "required",
-                    password: "required",
+                    loginId: {
+                        required: true,
+                        remote:
+                            {
+                                url: "${ctx}/user/queryLoginId",
+                                type: "get",
+                                data:
+                                    {
+                                        'loginId': function()
+                                        {
+                                            return $("#loginId").val();
+                                        }
+                                    },
+                                dataType: "json"
+                            }
+                    },
+                    password: {
+                        required: true,
+                        minlength: 6
+                    },
                     groupsForAddUserDialog: "required",
                 },
                 messages: {
                     userName: "请输入用户名",
-                    loginId: "请输入用户账号",
-                    password: "请输入密码",
+                    loginId: {
+                        required: "请输入用户账号",
+                        remote: "此用户账号已经存在！"
+                    },
+                    password: {
+                        required: "请输入密码",
+                        minlength: "密码至少为6位"
+                    },
                     groupsForAddUserDialog: "请输入用户组",
                 }
             };
@@ -723,14 +746,39 @@
                 focusInvalid: false,
                 rules: {
                     userNameForUpdate: "required",
-                    loginIdForUpdate: "required",
-                    passwordForUpdate: "required",
+
+                    loginIdForUpdate: {
+                        required: true,
+                        remote:
+                            {
+                                url: "${ctx}/user/queryLoginId",
+                                type: "get",
+                                data:
+                                    {
+                                        'loginId': function()
+                                        {
+                                            return $("#loginId").val();
+                                        }
+                                    },
+                                dataType: "json"
+                            }
+                    },
+                    passwordForUpdate: {
+                        required: true,
+                        minlength: 6
+                    },
                     groupsForUpdateUserDialog: "required",
                 },
                 messages: {
                     userNameForUpdate: "请输入用户名",
-                    loginIdForUpdate: "请输入用户账号",
-                    passwordForUpdate: "请输入密码",
+                    loginIdForUpdate: {
+                        required: "请输入用户账号",
+                        remote: "此用户账号已经存在！"
+                    },
+                    passwordForUpdate: {
+                        required: "请输入密码",
+                        minlength: "密码至少为6位"
+                    },
                     groupsForUpdateUserDialog: "请输入用户组",
                 }
             };
@@ -952,9 +1000,31 @@
     //
     //////////////////////////////////////////////////////////////////////////////////////////////////--%>
     <script type="text/javascript">
+        var currentPage = 1;
 
-        //添加用户 对话框的保存
+        //添加用户按钮
         function addUser()
+        {
+            $("#userName").val("");
+            $("#loginId").val("");
+            $("#password").val("");
+            $("#subjectCodeForAddUserDialog").val("");
+            $("#groupsForAddUserDialog").select2("val", "");
+
+            resetAddUserDialog();
+
+            $("#addUserDialog").modal("show");
+        }
+
+        function resetAddUserDialog()
+        {
+            $("#addUserForm").validate().resetForm();
+            $("#addUserForm").validate().clean();
+            $(".form-group").removeClass("has-error");
+        }
+
+        //添加用户对话框的保存
+        function agreeAddUser()
         {
             if (!$("#addUserForm").valid()) {
                 return;
@@ -1030,6 +1100,7 @@
                     $("#userList").append(html);
 
                     $("#curUserPageNum").html(data.curUserPageNum);
+                    currentPage = data.curUserPageNum;
                     $("#totalUserPages").html(data.totalUserPages);
                     $("#totalUsers").html(data.totalUsers);
 
@@ -1055,6 +1126,7 @@
                         firstClass: 'first'
                     }).on('page', function (event, toNum) {
                         queryUser(loginId, userName, groups, toNum);
+                        currentPage = toNum;
                     });
                 }
             });
@@ -1065,8 +1137,38 @@
         {
             var idOfUser = $(deleteBtn).parent().attr("id");
 
-            $("#deleteUserDialog").modal("show");
-            $("#idOfUserToBeDeleted").html(idOfUser);
+            bootbox.confirm("确定要删除用户信息吗？",
+                function (result)
+                {
+                    if (result) {
+                        var deleteUrl = "${ctx}/user/deleteUser";
+                        $.ajax({
+                            url: deleteUrl,
+                            type: "get",
+                            data: {
+                                id: idOfUser
+                            },
+                            dataType: "text",
+                            success: function (data) {
+                                console.log(data);
+                                console.log("typeof data = " + (typeof data));
+                                if (data.trim() == "1") {
+                                    queryUser(null, null, null, currentPage);
+                                    toastr["success"]("删除成功！", "数据删除");
+                                }
+                                else {
+                                    toastr["error"]("删除失败！", "数据删除");
+                                }
+                            },
+                            error: function(data)
+                            {
+                                console.log(data);
+                                toastr["error"]("删除失败！", "数据删除");
+                            }
+                        });
+                    }
+                }
+            );
         }
 
         function agreeDeleteUser(agreeDeleteBtn)
@@ -1110,7 +1212,10 @@
 
                         var subjectCodeArr = data.subjectCode.split(",");
                         console.log("getUserById - subjectCodeArr - " + subjectCodeArr);
+/*
                         $("#subjectCodeForUpdateUserDialog").select2().val(subjectCodeArr).trigger("change");
+*/
+                        $("#subjectCodeForUpdateUserDialog").val(subjectCodeArr);
 
                         var groupArr = data.groups.split(",");
                         console.log("getUserById - groupArr - " + groupArr);
@@ -1133,61 +1238,63 @@
                 return;
             }
 
-            $.ajax({
-                url: "${ctx}/user/updateUser",
-                type: "get",
-                data: {
-                    "id": $("#idForUpdate").html(),
-                    "userName": $("#userNameForUpdate").val(),
-                    "loginId": $("#loginIdForUpdate").val(),
-                    "password": $("#passwordForUpdate").val(),
-                    "subjectCode": $("#subjectCodeForUpdateUserDialog").val().toString(),
-                    "groups": $("#groupsForUpdateUserDialog").val().toString()
-                },
-                dataType: "text",
-                success: function (data) {
-                    console.log(data);
-                    $("#updateUserDialog").modal("hide");
-                    queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
-                    location.reload();
-                },
-                error: function(data) {
-
+            $.ajax(
+                {
+                    url: "${ctx}/user/updateUser",
+                    type: "get",
+                    data: {
+                        "id": $("#idForUpdate").html(),
+                        "userName": $("#userNameForUpdate").val(),
+                        "loginId": $("#loginIdForUpdate").val(),
+                        "password": $("#passwordForUpdate").val(),
+                        "subjectCode": $("#subjectCodeForUpdateUserDialog").val().toString(),
+                        "groups": $("#groupsForUpdateUserDialog").val().toString()
+                    },
+                    dataType: "text",
+                    success: function (data) {
+                        console.log(data);
+                        $("#updateUserDialog").modal("hide");
+                        queryUser(null, null, null, 1); //没有搜索条件的情况下，显示第一页
+                        location.reload();
+                    },
+                    error: function(data) {
+                        console.log(data);
+                    }
                 }
-            });
+            );
         }
 
-        //subjectCode唯一性
+        /*//subjectCode唯一性
         $("#loginId").change(
             function()
             {
                 var loginId = $(this).val();
 
             }
-        );
+        );*/
 
-        $("#loginId").blur(
-            function()
-            {
-                $.ajax({
-                    type: "GET",
-                    async: false,
-                    url: '${ctx}/user/queryLoginId',
-                    data: {loginId: $(this).val()},
-                    dataType: "text",
-                    success: function (data){
-                        var cntOfLoginId = parseInt(data);
-                        if (cntOfLoginId > 0)
-                        {
-                            alert("loginId已经存在，请另外选择一个！")
-                        }
-                    },
-                    error: function(data) {
-                        console.log(data);
-                    }
-                });
-            }
-        );
+        <%--$("#loginId").blur(--%>
+            <%--function()--%>
+            <%--{--%>
+                <%--$.ajax({--%>
+                    <%--type: "GET",--%>
+                    <%--async: false,--%>
+                    <%--url: '${ctx}/user/queryLoginId',--%>
+                    <%--data: {loginId: $(this).val()},--%>
+                    <%--dataType: "text",--%>
+                    <%--success: function (data){--%>
+                        <%--var cntOfLoginId = parseInt(data);--%>
+                        <%--if (cntOfLoginId > 0)--%>
+                        <%--{--%>
+                            <%--alert("loginId已经存在，请另外选择一个！")--%>
+                        <%--}--%>
+                    <%--},--%>
+                    <%--error: function(data) {--%>
+                        <%--console.log(data);--%>
+                    <%--}--%>
+                <%--});--%>
+            <%--}--%>
+
     </script>
 </div>
 

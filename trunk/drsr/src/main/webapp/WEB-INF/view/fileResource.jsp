@@ -265,7 +265,6 @@
                         var children;
                         if (obj != '#') {
                             var str = obj.id;
-                            var str1 = str.replace(/%_%/g, "/");
                         }
                         $.ajax({
                             type: "GET",
@@ -405,7 +404,7 @@
                                $("#dataBaseTypeE").val(jsonData[index][key]);
                            }
                            if (key == 'filePath') {
-                               var filepath = (jsonData[index][key]).replace(/%_%/g, "/").split(";");
+                               var filepath = (jsonData[index][key]).replace(/%_%/g, "/").replace(/%_%/g, "\\\\").split(";");
                                var path = "";
                                for(var i = 0;i<filepath.length-1;i++){
                                    path += '<span class="tag" style="display: inline-block">' +

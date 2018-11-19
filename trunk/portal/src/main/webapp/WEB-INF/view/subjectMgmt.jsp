@@ -30,15 +30,15 @@
         <!--主题库筛选条件-->
         <div class="alert alert-info" role="alert">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 form-inline">
                     <label class="control-label">主题库名称:</label>
-                    <input type="text" id="subjectNameFilter" name="subjectNameFilter" placeholder="主题库名称" class="input-small search-text"/>
+                    <input type="text" id="subjectNameFilter" name="subjectNameFilter" placeholder="主题库名称" class="form-control search-text" style="width: 300px;" />
 
                     &nbsp;&nbsp;&nbsp;&nbsp;
 
                     <button id="searchSubjectBtn" name="searchSubjectBtn" onclick="searchSubject();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <button id="addSubjectBtn" name="addSubjectBtn" class="btn info green btn-sm" data-target="#addSubjectDialog" data-toggle="modal" ><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建主题库</button>
+                    <button id="addSubjectBtn" name="addSubjectBtn" class="btn info green btn-sm" onclick="addSubject()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建主题库</button>
                 </div>
             </div>
         </div>
@@ -86,9 +86,9 @@
             <td style="text-align: center">{{$value.contact}}</td>
             <td style="text-align: center">{{$value.phone}}</td>
             <td id="{{$value.id}}">
-                <button class="btn default btn-xs red updateSubjectBtn"onclick="updateSubject(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>
+                <button class="btn default btn-xs purple updateSubjectBtn"onclick="updateSubject(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>
                 &nbsp;
-                <button class="btn default btn-xs green deleteSubjectBtn" onclick="deleteSubject(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>
+                <button class="btn default btn-xs red deleteSubjectBtn" onclick="deleteSubject(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>
             </td>
         </tr>
         {{/each}}
@@ -193,7 +193,7 @@
                                 序号<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入序号" id="serialNo" name="serialNo" required="required" />
+                                <input type="text" class="form-control" placeholder="请输入序号，只能输入数字" id="serialNo" name="serialNo" required="required" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" />
                             </div>
                         </div>
                     </form>
@@ -313,10 +313,10 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                序号<span style="color: red;">*</span>
+                                序号
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入序号" id="serialNoM" name="serialNo" required="required" />
+                                <input type="text" class="form-control" placeholder="请输入序号，只能输入数字" id="serialNoM" name="serialNo" readonly="readonly" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" />
                             </div>
                         </div>
 
@@ -371,6 +371,7 @@
         <script type="text/javascript" src="${ctx}/resources/bundles/artTemplate/template.js"></script>
         <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
         <script type="text/javascript">
+            var nextSerialNo = 1;
             var currentPage = 1;
 
             //初始化
@@ -576,6 +577,24 @@
                             getSubject(num);
                             currentPage = num;
                         });
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown){
+                        console.log("textStatus = " + textStatus);
+                        console.log("errorThrown = " + errorThrown);
+                    }
+                });
+            }
+
+            function addSubject()
+            {
+                $.ajax({
+                    url: "${ctx}/subjectMgmt/getNextSerialNo",
+                    type: "get",
+                    data: {},
+                    dataType: "json",
+                    success: function (data) {
+                        $("#serialNo").val(data);
+                        $("#addSubjectDialog").modal("show");
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown){
                         console.log("textStatus = " + textStatus);

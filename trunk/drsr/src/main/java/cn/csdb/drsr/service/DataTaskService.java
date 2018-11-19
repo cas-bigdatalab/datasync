@@ -39,8 +39,8 @@ public class DataTaskService {
     @Resource
     private DataSrcDao dataSrcDao;
 
-    @Value("#{prop['SqlFilePath']}")
-    private String sqlFilePath;
+//    @Value("#{prop['SqlFilePath']}")
+//    private String sqlFilePath;
 
     private Logger logger = LoggerFactory.getLogger(DataTaskService.class);
 
@@ -89,7 +89,12 @@ public class DataTaskService {
             logger.info("\n\n=========================SQL数据表结构:========================\n" + sqlSb.toString() + "\n");
             logger.info("\n\n=========================SQL数据内容:==========================\n" + dataSb.toString() + "\n");
 
+            File sqlFilePath  = new File(System.getProperty("drsr.framework.root")+"exportSql");
+            if(!sqlFilePath.exists()){
+                sqlFilePath.mkdirs();
+            }
             File filePath = new File(sqlFilePath + File.separator + dataTask.getDataTaskId());
+
             if (!filePath.exists() || !filePath.isDirectory()) {
                 filePath.mkdirs();
             }

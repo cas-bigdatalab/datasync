@@ -73,7 +73,7 @@ public class UserController {
     public String addUser(HttpServletRequest request, User user)
     {
         logger.info("enter addUser - parameters[user = " + user + "]");
-        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyy年MM月dd日  HH:mm:ss");
         user.setCreateTime(sdf.format(new Date()));
         user.setStat(1);
         logger.info("user to be added = " + user);
@@ -85,12 +85,12 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "/deleteUser")
-    public String deleteUser(HttpServletRequest request, String id)
+    public int deleteUser(HttpServletRequest request, String id)
     {
         logger.info("enterring deleteUser - id = " + id);
         int deletedUserCnt = userService.deleteUser(id);
         logger.info("deletedUserCnt = " + deletedUserCnt);
-        return "删除用户：删除成功";
+        return deletedUserCnt;
     }
 
     @RequestMapping(value="/updateGroup")
@@ -119,7 +119,7 @@ public class UserController {
     public int updateUser(HttpServletRequest request, User user)
     {
         logger.info("enterring updateUser - user = " + user);
-        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyy年MM月dd日  HH:mm:ss");
         user.setCreateTime(sdf.format(new Date()));
         user.setStat(1);
         int updatedUserCnt = userService.updateUser(user);
@@ -130,14 +130,25 @@ public class UserController {
 
     @RequestMapping(value = "/queryLoginId")
     @ResponseBody
-    public long queryLoginId(HttpServletRequest request, @RequestParam(name="loginId", required = true) String loginId) {
+    public boolean queryLoginId(HttpServletRequest request, @RequestParam(name="loginId", required = true) String loginId) {
         logger.info("enterring UserController-queryLoginId");
         logger.info("loginId = " + loginId);
         long loginIdCnt = userService.queryLoginId(loginId.trim());
         logger.info("queried loginIdCnt - loginIdCnt = " + loginIdCnt);
 
-        return loginIdCnt;
+        boolean retValue = false;
+        if (loginIdCnt > 0)
+        {
+            retValue = false;
+        }
+        else
+        {
+            retValue = true;
+        }
+
+        return retValue;
     }
+
 
 
 }

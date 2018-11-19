@@ -10,12 +10,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -66,7 +68,7 @@ public class SubjectMgmtDao {
         logger.info("enterring SubjectMgmtDao-addSubject");
         logger.info("ftpRootPath = " + ftpRootPath);
         String ftpFilePath = ftpRootPath + subject.getFtpUser()+File.separator;
-        logger.info("ftpFilePath = " + ftpFilePath+File.separator);
+        logger.info("ftpFilePath = " + ftpFilePath);
         subject.setFtpFilePath(ftpFilePath);
         subject.setDbName(subject.getSubjectCode());
         subject.setDbUserName(dbUserName);
@@ -78,6 +80,20 @@ public class SubjectMgmtDao {
         createDb(subject.getSubjectCode());
         //createFtpUser(subject.getFtpUser(), subject.getFtpPassword());
         //createFtpPath(subject.getFtpUser(), subject.getFtpPassword());
+
+        Runtime runtime = Runtime.getRuntime();
+        try {
+
+            System.out.println("-----------------------");
+            String command1 = "chmod 777 /etc/vsftpd/vftpuseradd";
+            runtime.exec(command1).waitFor();
+            Process process = runtime.exec("vftpuseradd "+subject.getFtpUser()+" "+subject.getFtpPassword());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         logger.info("create db, ftp user, ftp path completed!");
 
@@ -417,7 +433,11 @@ public class SubjectMgmtDao {
         {
             dbObject = QueryBuilder.start().get();
         }
-        Query query = new BasicQuery(dbObject).skip(startRowNum).limit(rowsPerPage);
+        Query query = new BasicQuery(dbObject).skip(startRowNum).limit(rowsPerPage); // paging
+
+        Sort.Direction direction = false ? Sort.Direction.ASC : Sort.Direction.DESC; // sort by _id desc, that is , reverse order by insert time
+        query.with(new Sort(direction, "_id"));
+
         List<Subject> subjectsOfThisPage = mongoTemplate.find(query, Subject.class);
         logger.info(subjectsOfThisPage);
 
@@ -509,5 +529,22 @@ public class SubjectMgmtDao {
     public List<Subject> getSubjectCodeList()
     {
         return mongoTemplate.findAll(Subject.class);
+    }
+
+    /**
+     * Function Description : this function is designed to get default value for serialNo field in addSubjectDialog
+     *
+     * @return retValue, next serial no after last inserted record, the last inserted record's serialNo plus 1,
+     */
+    public String getLastSerialNo()
+    {
+        DBObject dbObject = QueryBuilder.start().get();
+        BasicQuery query = new BasicQuery(dbObject);
+        Sort.Direction direction = false ? Sort.Direction.ASC : Sort.Direction.DESC;
+        query.with(new Sort(direction, "_id"));
+
+        List<Subject> subjects = mongoTemplate.find(query, Subject.class);
+
+        return subjects.get(0).getSerialNo();
     }
 }
