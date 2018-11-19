@@ -79,7 +79,7 @@
 
                                             <button id="searchUserBtn" name="searchUserBtn" onclick="searchUser();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                                             &nbsp;&nbsp;&nbsp;&nbsp;
-                                            <button id="addUserBtn" name="addUserBtn" class="btn info green btn-sm" data-target="#addUserDialog" data-toggle="modal" ><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建用户</button>
+                                            <button id="addUserBtn" name="addUserBtn" class="btn info green btn-sm" onclick="addUser()" ><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建用户</button>
                                      </div>
                                 </div>
                             </div>
@@ -374,7 +374,7 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectCodeForAddUserDialog">
-                                专题库代码
+                                主题库
                             </label>
                             <div class="col-md-9">
                                 <%--<input type="text" class="form-control" placeholder="请输入专题库代码"  id="subjectCode" name="subjectCode" required="required">--%>
@@ -403,7 +403,7 @@
             </div>
 
             <div class="modal-footer">
-                <button id="saveUserAddBtn" class="btn green" onclick="addUser();">
+                <button id="saveUserAddBtn" class="btn green" onclick="agreeAddUser();">
                     保存
                 </button>
                 <button id="cancelUserAddBtn" class="btn default"  data-dismiss="modal">
@@ -452,7 +452,7 @@
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectCodeForUpdateUserDialog">
-                                专题库代码<span style="color: red;">*</span>
+                                主题库
                             </label>
                             <div class="col-md-9">
                                 <select class='form-control' name='subjectCodeForUpdateUserDialog' id='subjectCodeForUpdateUserDialog'>
@@ -953,8 +953,17 @@
     //////////////////////////////////////////////////////////////////////////////////////////////////--%>
     <script type="text/javascript">
 
-        //添加用户 对话框的保存
+        //添加用户按钮
         function addUser()
+        {
+            $("#addUserDialog").modal("show");
+            console.log("进入到增加用户对话框中了");
+            $("#subjectCodeForAddUserDialog").val("");
+            console.log("subjectCode = " + $("#subjectCodeForAddUserDialog").val());
+        }
+
+        //添加用户对话框的保存
+        function agreeAddUser()
         {
             if (!$("#addUserForm").valid()) {
                 return;
