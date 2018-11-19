@@ -515,6 +515,9 @@
                         var dataSourceId = $("#idHidden").val();
                         var dataSourceName = $("#dataSourceNameE").val();
                         var filePath = $("#filePathE").val();
+                        filePath= filePath.replace("\/", "%_%");
+                        filePath= filePath.replace("\\", "%_%");
+
                         var dataSourceType = 'file';
                         var fileType = '本地文件';
                         /*var nodes = $('#jstree_show_edit').jstree("get_checked");
@@ -569,6 +572,8 @@
                         var dataSourceType = 'file';
                         var fileType = "本地文件";
                         var filePath = $("#filePath").val();
+                        filePath= filePath.replace("\/", "%_%");
+                        filePath= filePath.replace("\\", "%_%");
                         /*if(nodes.length==0){
                             toastr["error"]("您尚未选取文件");
                         }else{*/
@@ -610,6 +615,8 @@
         }
         function filePathCheck(){
             var filePath = $("#filePath").val();
+            filePath= filePath.replace("\/", "%_%");
+            filePath= filePath.replace("\\", "%_%");
             $.ajax({
                 type: "GET",
                 url: "${ctx}/fileResource/check",

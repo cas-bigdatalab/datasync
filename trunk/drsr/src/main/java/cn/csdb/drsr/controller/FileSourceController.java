@@ -50,7 +50,7 @@ public class FileSourceController {
         datasrc.setDataSourceType(dataSourceType);
         datasrc.setFileType(fileType);
         datasrc.setCreateTime(currentTime);
-        datasrc.setFilePath(filePath);
+        datasrc.setFilePath(filePath.replace("%_%",File.separator));
         return fileResourceService.addData(datasrc);
 
     }
@@ -97,7 +97,7 @@ public class FileSourceController {
         datasrc.setDataSourceType(dataSourceType);
         datasrc.setCreateTime(currentTime);
         datasrc.setFileType(fileType);
-        datasrc.setFilePath(filePath);
+        datasrc.setFilePath(filePath.replace("%_%",File.separator));
         datasrc.setDataSourceId(Integer.valueOf(dataSourceId));
         return fileResourceService.editData(datasrc);
     }
@@ -203,7 +203,7 @@ public class FileSourceController {
     @ResponseBody
     Boolean check(String filePath) {
         logger.info("校验文件路径是否正确");
-        boolean flag  = fileResourceService.checkFilePath(filePath);
+        boolean flag  = fileResourceService.checkFilePath(filePath.replace("%_%",File.separator));
         return flag;
     }
 
