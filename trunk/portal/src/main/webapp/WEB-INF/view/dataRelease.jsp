@@ -76,11 +76,11 @@
                 <tr>
                     <th width="7%">编号</th>
                     <th width="20%">数据集名称</th>
-                    <th width="10%">类型</th>
+                    <th width="13%">类型</th>
                    <%-- <th width="10%">来源位置</th>--%>
-                    <th width="17%">发布时间</th>
+                    <th width="20%">发布时间</th>
                     <th width="10%">状态</th>
-                    <th width="28%">操作</th>
+                    <th width="22%">操作</th>
                 </tr>
                 </thead>
                 <tbody id="bd-data">
@@ -415,11 +415,11 @@
             <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i
                     class="glyphicon glyphicon-trash"></i>&nbsp;删除
             </button>--%>
-            {{if value.resState == '待审核'}}
+            <%--{{if value.resState == '待审核'}}
             <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.id}}"
                     value="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;审核
             </button>
-            {{/if}}
+            {{/if}}--%>
             <button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;编辑
             </button>
             <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.resState}}')"><i

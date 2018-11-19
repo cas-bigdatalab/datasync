@@ -169,7 +169,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="editTableFieldComsSaveId" data-dismiss="modal" class="btn green">保存
+                    <button type="button" id="editTableFieldComsSaveId" data-dismiss="modal" class="btn green">确认
                     </button>
                     <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
                 </div>
