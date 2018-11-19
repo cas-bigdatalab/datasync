@@ -70,7 +70,7 @@
             </div>
         </div>
         <div class="upload-table">
-            <h2 class="table-message">列表加载中......</h2>
+            <div class="table-message">列表加载中......</div>
             <table class="table table-bordered data-table" id="upload-list">
                 <thead>
                 <tr>
@@ -585,14 +585,13 @@
                     status: resourceState
                 },
                 success: function (data) {
-                    $(".table-message").hide();
                     $("#bd-data").html("");
                     var DataList = JSON.parse(data);
                     console.log(DataList)
                     var tabCon = template("resourceTmp1", DataList);
                     $("#bd-data").append(tabCon);
 
-                    if (DataList == "{}") {
+                    if (DataList.resourceList.length == 0) {
                         $(".table-message").html("暂时没有数据");
                         $(".page-message").html("");
                         $(".page-list").html("");

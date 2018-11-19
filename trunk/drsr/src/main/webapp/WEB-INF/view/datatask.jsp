@@ -78,10 +78,15 @@
                 </thead>
                 <tbody id="bd-data"></tbody>
             </table>
-            <div class="page-message" style="float: left;line-height: 56px" ></div>
-            <div class="page-list" style="float: right"></div>
-            <div></div>
+
+           <%-- <div class="page-message" style="float: left;line-height: 56px" ></div>
+            <div id="pagination" style="float: right"></div>--%>
+            <div class="row margin-top-20 ">
+                <div class="page-message" style="float: left;padding-left: 20px; line-height: 56px"></div>
+                <div id="pagination" style="float: right; padding-right: 15px;"></div>
+            </div>
         </div>
+
         <div style="display: none" id="uploadListFlag">
             <span name="" valFlag="false"></span>
         </div>
@@ -220,17 +225,17 @@
         {{else if value.status  == "0"}}
         <td  id="{{value.dataTaskId}}">--</td>
         {{/if}}
-
         <td  class="{{value.dataTaskId}}">{{upStatusName(value.status)}}</td>
-        <td>
-            {{if value.dataTaskType  == "mysql"}}
-            <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" ><i class="glyphicon glyphicon-share"></i>&nbsp;导出</button>
-            {{/if}}
-            {{if value.status  == 0}}
-            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
-            {{/if}}
-            <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-            <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+        <td style="text-align: right">
+
+                {{if value.dataTaskType  == "mysql"}}
+                <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" ><i class="glyphicon glyphicon-share"></i>&nbsp;导出</button>
+                {{/if}}
+                {{if value.status  == 0}}
+                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
+                {{/if}}
+                <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
 
         </td>
     </tr>
@@ -239,7 +244,8 @@
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
-    <script>
+
+    <script type="text/javascript">
         var dataSourceName=""
         var dataSourceStatus=""
         var uploadListFlag = $("#uploadListFlag")
@@ -367,6 +373,7 @@
                 data:{datataskId:id},
                 success:function (data) {
                     var datatask = JSON.parse(data).datatask
+                    console.log(datatask)
                     if(type=="mysql"){
                         $("#pre-dataTaskName").html(datatask.dataTaskName)
                         $("#pre-dataSourceId").html(datatask.dataSourceId)
@@ -506,30 +513,31 @@
                     status:status
                 },
                 success:function (data) {
-                    $(".table-message").hide();
+                   /* $(".table-message").hide();*/
                     $("#bd-data").html("");
                     var DataList = JSON.parse(data);
                     console.log(DataList)
+
                     var tabCon = template("resourceTmp1", DataList);
                     $("#bd-data").append(tabCon);
 
-                    if(DataList=="{}"){
+                    if(DataList.dataTasks.length == 0){
                         $(".table-message").html("暂时没有数据");
                         $(".page-message").html("");
-                        $(".page-list").html("");
+                        $("#pagination").html("");
                         return
                     }
                     $(".table-message").hide();
                     /*
                     * 创建table
                     * */
-                    if ($(".page-list .bootpag").length != 0) {
-                        $(".page-list").off();
-                        $('.page-list').empty();
+                    if ($("#pagination .bootpag").length != 0) {
+                        $("#pagination").off();
+                        $('#pagination').empty();
                     }
                     var totalpage = Math.ceil(DataList.totalCount/DataList.pageSize)
                     $(".page-message").html("当前第"+DataList.pageNum +"页,共"+totalpage +"页,共"+DataList.totalCount+"条数据");
-                    $('.page-list').bootpag({
+                    $('#pagination').bootpag({
                         total: totalpage,
                         page:DataList.pageNo,
                         maxVisible: DataList.pageSize,
@@ -557,6 +565,10 @@
         function listSpan(arrStr,spl,ele){
             var newStr = arrStr.substr(0, arrStr.length - 1);
             var arrList =  newStr.split(spl);
+            if(arrList[0] ==""){
+                ele.empty()
+                return
+            }
             var arrListStr = ""
             for(var i=0;i<arrList.length;i++){
                 arrListStr+="<span class='arrListSty'>"+arrList[i]+"</span>"

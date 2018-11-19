@@ -402,7 +402,7 @@
 <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.min.js"></script>
 <script src="${ctx}/resources/bundles/jquery-validation/js/additional-methods.min.js"></script>
 <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
-<script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
+<script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
 
 
 <script type="text/javascript">

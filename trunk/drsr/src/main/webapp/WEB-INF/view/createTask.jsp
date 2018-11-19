@@ -65,7 +65,7 @@
                             </div>
                             <div class="col-md-4">
                                 <button type="button" class="btn blue preview">预览</button>
-                                <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>sql查询</button>
+                                <%--<button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>sql查询</button>--%>
                             </div>
                             <div class="col-md-2" style="text-align: left">
                             </div>
@@ -357,6 +357,7 @@
             var dataRelSqlTableList="";
             var $eleChecked = $("[name='relationBox']:checked")
             var numChecked = $eleChecked.size();
+
             var sqlNum =0;
             $(".inputVili").each(function () {
                 if(!$(this).val()=="" &&!$(this).val().trim()==""){
@@ -386,55 +387,6 @@
                 }
             }
 
-
-
-
-            /*if(numChecked>=1){
-                flag=true;
-            }
-            if(flag){
-
-            }*/
-
-            /*if (numChecked == 0) {
-                toastr["error"]("最少选择一个表资源");
-                return
-            }*/
-
-           /* if($(".sqlStatements").size() ==1){
-                $(".sqlStatements").each(function (index) {
-                    //判断是否为空 空跳过
-                    if($(this).val() =="" || $(this).val().trim() == ""){
-                        flag=true
-                        return
-                    }
-                    //校验sql语句
-
-                    var sqlNameStr = $("[name='sqlTableName']:eq("+ index+")").val();
-                    if(sqlNameStr =="" || sqlNameStr.trim() == ""){
-                        flag=true
-                        return
-                    }
-                })
-            }*/
-
-
-
-
-        /*    $(".sqlStatements").each(function (index) {
-                //判断是否为空 空跳过
-                if($(this).val() =="" || $(this).val().trim() == ""){
-                    flag=true
-                    return
-                }
-                //校验sql语句
-
-                var sqlNameStr = $("[name='sqlTableName']:eq("+ index+")").val();
-                if(sqlNameStr =="" || sqlNameStr.trim() == ""){
-                    flag=true
-                    return
-                }
-            })*/
 
 
             $("[name='sqlTableName']").each(function () {

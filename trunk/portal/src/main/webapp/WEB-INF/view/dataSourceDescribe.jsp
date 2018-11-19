@@ -259,7 +259,10 @@
                                         </div>
                                     </div>
                                     <div style="overflow: hidden;display: none" class="select-local">
-                                        <div class="col-md-6 col-md-offset-3" style="font-size: 18px" id="fileContainerTree"></div>
+                                        <div class="col-md-2" style="font-size: 18px;text-align:left;margin: 0 -15px ">
+                                            <span>选择文件资源</span>
+                                        </div>
+                                        <div class="col-md-6 col-md-offset-1" style="font-size: 18px" id="fileContainerTree"></div>
                                         <div id="fileDescribeDiv" style="display: none">
 
                                         </div>
