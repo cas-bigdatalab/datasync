@@ -21,12 +21,16 @@
         .error-message {
             color: red;
         }
+        .page-content {
+            height: 830px;
+            min-height: 830px;
+        }
     </style>
 </head>
 
 <body>
 
-<div class="page-content" style="min-height: 650px;">
+<div style="height: 850px;min-height: 850px;" class="page-content" >
     <h3>&nbsp;&nbsp;用户管理</h3>
     <hr />
 

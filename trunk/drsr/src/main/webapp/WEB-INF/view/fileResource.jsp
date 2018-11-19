@@ -567,13 +567,12 @@
                 }
 
             });
-
-            function cancelButton() {
-                formValid.resetForm();
-            }
-
-
         };
+        function cancelButton() {
+            $("#fileSourceForm").validate().resetForm();
+            $("#fileSourceForm").validate().clean();
+            $('.form-group').removeClass('has-error');
+        }
     </script>
 </div>
 
