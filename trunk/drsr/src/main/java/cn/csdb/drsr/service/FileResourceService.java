@@ -258,7 +258,7 @@ public class FileResourceService {
     }
 
     public Boolean checkFilePath(String filePath){
-        File file = new File("filePath");
+        File file = new File(filePath);
         boolean flag = file.exists();
         return flag;
     }
