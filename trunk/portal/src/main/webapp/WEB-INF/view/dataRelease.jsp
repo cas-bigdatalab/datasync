@@ -398,7 +398,7 @@
         <td>{{dateFormat(value.creationDate)}}</td>
         <td id="{{value.dataTaskId}}">{{value.resState}}</td>
         <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>
-        <td>
+        <td style="text-align: right">
             <%--<button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.id}}"
                     value="{{value.id}}">&nbsp;&nbsp;&nbsp;导出&nbsp;&nbsp;&nbsp;
             </button>
