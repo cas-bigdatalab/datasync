@@ -103,6 +103,7 @@ public class FileResourceService {
     }
 
     public List<JSONObject> fileTreeLoading(String data) {
+        String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
         File file;
         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
         if ("#".equals(data)) {
@@ -256,7 +257,11 @@ public class FileResourceService {
         return set.toArray(result);
     }
 
-
+    public Boolean checkFilePath(String filePath){
+        File file = new File("filePath");
+        boolean flag = file.exists();
+        return flag;
+    }
     /**
      * Function Description:
      *
