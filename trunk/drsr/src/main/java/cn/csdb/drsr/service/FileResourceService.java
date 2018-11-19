@@ -108,15 +108,48 @@ public class FileResourceService {
         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
         if ("#".equals(data)) {
             //获取服务器盘符
-            File[] roots = File.listRoots();
-            logger.info("服务器盘符为："+roots);
-            logger.info("子目录个数为："+roots.length);
-            for (int i =0; i < roots.length; i++) {
-                String root = roots[i].toString();
+            String os = System.getProperty("os.name");
+            if(os.toLowerCase().startsWith("win")){
+                File[] roots = File.listRoots();
+                logger.info("服务器盘符为："+roots);
+                logger.info("子目录个数为："+roots.length);
+                for (int i =0; i < roots.length; i++) {
+                    String root = roots[i].toString();
+                    String rootName= root.substring(0, root.indexOf("\\"));
+                    JSONObject jsonObject = new JSONObject();
+                    if (roots[i].isDirectory()) {
+                        File file1 = roots[i];
+                        File[] rootNode = file1.listFiles();
+                        if (rootNode != null) {
+                            if (rootNode.length == 0) {
+                                jsonObject.put("children", false);
+                            } else {
+                                jsonObject.put("children", true);
+                            }
+                        } else {
+                            jsonObject.put("children", false);
+                        }
+                        jsonObject.put("type", "directory");
+                        JSONObject jo = new JSONObject();
+                        jo.put("disabled", "true");
+                        jsonObject.put("state", jo);
+                        jsonObject.put("id", root.replaceAll("\\\\", "%_%"));
+                        jsonObject.put("name", rootName);
+                    } else {
+                        jsonObject.put("type", "file");
+                        jsonObject.put("id", root.replaceAll("\\\\", "%_%"));
+                        jsonObject.put("name", rootName);
+                    }
+                    jsonObjects.add(jsonObject);
+                }
+            }else{
+                File roots = new File("/usr");
+                logger.info("服务器盘符为："+roots);
+                String root = roots.toString();
                 String rootName= root.substring(0, root.indexOf("\\"));
                 JSONObject jsonObject = new JSONObject();
-                if (roots[i].isDirectory()) {
-                    File file1 = roots[i];
+                if (roots.isDirectory()) {
+                    File file1 = roots;
                     File[] rootNode = file1.listFiles();
                     if (rootNode != null) {
                         if (rootNode.length == 0) {
