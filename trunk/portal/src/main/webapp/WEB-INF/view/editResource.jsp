@@ -1006,7 +1006,7 @@
             var fileId = data.node.id;
             var str = fileId.replace(/%_%/g, "/");
             /*var isContain = false;*/
-            $("#fileDescribeDiv").append("<span class='tag fileTag' style='display: inline-block;margin-right: 5px;display: none' nameid="+ fileId+"><span class='filePathClass'>"+str +"</span> &nbsp;&nbsp; <a href='javascript:void(0)' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
+            $("#fileDescribeDiv").append("<span class='tag fileTag' style='display: inline-block;margin-right: 5px;display: none' nameid="+ fileId+" name="+fileId +"><span class='filePathClass'>"+str +"</span> &nbsp;&nbsp; <a href='javascript:void(0)' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
         }).bind("deselect_node.jstree", function (e, data) {
             var fileId = data.node.id;
             var fileName = data.node.text;
