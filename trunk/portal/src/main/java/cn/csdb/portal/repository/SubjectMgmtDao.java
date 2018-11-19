@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -417,7 +418,11 @@ public class SubjectMgmtDao {
         {
             dbObject = QueryBuilder.start().get();
         }
-        Query query = new BasicQuery(dbObject).skip(startRowNum).limit(rowsPerPage);
+        Query query = new BasicQuery(dbObject).skip(startRowNum).limit(rowsPerPage); // paging
+
+        Sort.Direction direction = false ? Sort.Direction.ASC : Sort.Direction.DESC; // sort by _id desc, that is , reverse order by insert time
+        query.with(new Sort(direction, "_id"));
+
         List<Subject> subjectsOfThisPage = mongoTemplate.find(query, Subject.class);
         logger.info(subjectsOfThisPage);
 
@@ -511,10 +516,20 @@ public class SubjectMgmtDao {
         return mongoTemplate.findAll(Subject.class);
     }
 
-    public String getNextSerialNo()
+    /**
+     * Function Description : this function is designed to get default value for serialNo field in addSubjectDialog
+     *
+     * @return retValue, next serial no after last inserted record, the last inserted record's serialNo plus 1,
+     */
+    public String getLastSerialNo()
     {
-        String retValue = "";
+        DBObject dbObject = QueryBuilder.start().get();
+        BasicQuery query = new BasicQuery(dbObject);
+        Sort.Direction direction = false ? Sort.Direction.ASC : Sort.Direction.DESC;
+        query.with(new Sort(direction, "_id"));
 
-        return retValue;
+        List<Subject> subjects = mongoTemplate.find(query, Subject.class);
+
+        return subjects.get(0).getSerialNo();
     }
 }

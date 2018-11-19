@@ -331,6 +331,14 @@ public class SubjectMgmtController {
     @ResponseBody
     public String getNextSerialNo(HttpServletRequest request)
     {
-        return subjectMgmtService.getNextSerialNo();
+        String nextSerialNo = "";
+        String lastSerialNo = "";
+        lastSerialNo = subjectMgmtService.getLastSerialNo();
+        nextSerialNo = Integer.parseInt(lastSerialNo) + 1 + "";
+
+        logger.info("lastSerialNo = " + lastSerialNo);
+        logger.info("nextSerialNo = " + nextSerialNo);
+
+        return nextSerialNo;
     }
 }

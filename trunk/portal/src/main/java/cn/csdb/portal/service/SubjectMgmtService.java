@@ -169,8 +169,8 @@ public class SubjectMgmtService {
         return subjectMgmtDao.getSubjectCodeList();
     }
 
-    public String getNextSerialNo()
+    public String getLastSerialNo()
     {
-        return subjectMgmtDao.getNextSerialNo();
+        return subjectMgmtDao.getLastSerialNo();
     }
 }

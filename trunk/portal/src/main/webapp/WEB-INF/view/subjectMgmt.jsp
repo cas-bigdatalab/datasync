@@ -38,7 +38,7 @@
 
                     <button id="searchSubjectBtn" name="searchSubjectBtn" onclick="searchSubject();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <button id="addSubjectBtn" name="addSubjectBtn" class="btn info green btn-sm" data-target="#addSubjectDialog" data-toggle="modal" ><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建主题库</button>
+                    <button id="addSubjectBtn" name="addSubjectBtn" class="btn info green btn-sm" onclick="addSubject()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建主题库</button>
                 </div>
             </div>
         </div>
@@ -587,8 +587,6 @@
 
             function addSubject()
             {
-
-
                 $.ajax({
                     url: "${ctx}/subjectMgmt/getNextSerialNo",
                     type: "get",
@@ -597,15 +595,12 @@
                     success: function (data) {
                         $("#serialNo").val(data);
                         $("#addSubjectDialog").modal("show");
-
-                        location.reload();
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown){
                         console.log("textStatus = " + textStatus);
                         console.log("errorThrown = " + errorThrown);
                     }
                 });
-
             }
 
             //添加主题库
