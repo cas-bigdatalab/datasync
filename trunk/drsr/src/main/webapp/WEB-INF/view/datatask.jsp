@@ -32,10 +32,10 @@
         <div class="uplod-head">
             <span>DataSync / 传输信息</span>
         </div>
-        <div class="upload-title">
+        <%--<div class="upload-title">
             <span>数据上传任务列表</span>
-            <%--<a href="${ctx}/createTask">新建任务</a>--%>
-        </div>
+            &lt;%&ndash;<a href="${ctx}/createTask">新建任务</a>&ndash;%&gt;
+        </div>--%>
         <div class="alert alert-info" role="alert" style="margin:0  33px">
             <!--查询条件 -->
             <div class="row">
@@ -226,11 +226,11 @@
         <td  id="{{value.dataTaskId}}">--</td>
         {{/if}}
         <td  class="{{value.dataTaskId}}">{{upStatusName(value.status)}}</td>
-        <td style="text-align: right">
+        <td style="text-align: center">
 
-                {{if value.dataTaskType  == "mysql"}}
+                <%--{{if value.dataTaskType  == "mysql"}}
                 <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" ><i class="glyphicon glyphicon-share"></i>&nbsp;导出</button>
-                {{/if}}
+                {{/if}}--%>
                 {{if value.status  == 0}}
                 <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
                 {{/if}}

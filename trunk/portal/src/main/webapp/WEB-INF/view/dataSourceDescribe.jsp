@@ -118,7 +118,7 @@
                                             </label>
                                             <div class="col-md-4" style="padding-top:14px">
                                                 <input type="text" class="form-control" name="Task_dataName" required="required"
-                                                       id="Task_dataName" >
+                                                       id="Task_dataName" placeholder="请输入名称">
                                             </div>
 
                                         </div>
@@ -128,7 +128,7 @@
                                             </label>
                                             <div class="col-md-4" style="padding-top:14px">
                                                 <input type="text" class="form-control"
-                                                       id="Task_email" name="Task_email" required="required">
+                                                       id="Task_email" name="Task_email" required="required" placeholder="请输入邮箱号">
                                             </div>
 
                                         </div>
@@ -137,7 +137,7 @@
                                                     * </span>
                                             </label>
                                             <div class="col-md-4" style="padding-top:14px">
-                                                <input type="text" class="form-control" name="Task_phone" required="required"
+                                                <input type="text" class="form-control" name="Task_phone" required="required" placeholder="请输入电话号码"
                                                        id="Task_phone" >
                                             </div>
 
@@ -191,8 +191,8 @@
                                             <div class="col-md-4" id="cemterCatalogDiv" style="padding-top:14px" >
 
                                                 <div id="jstree-demo"></div>
-                                                <input type="text"  id="centerCatalogId" name="centerCatalogId" required="required" style="display: none">
-                                                <div class="timeVili2" style="display: none">请正确选择时间</div>
+                                                <input type="text"  id="centerCatalogId" name="centerCatalogId"  style="display: none">
+                                                <div class="timeVili2" style="display: none">请选择目录</div>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -217,7 +217,8 @@
                                                 <%--<textarea type="text"  id="dataDescribeID" name="dataDescribeID" required="required"
                                                           style=" height: 96px; width: 412px;resize: none;"></textarea>--%>
 
-                                                <textarea  type="text" class="form-control" cols="30" rows="5" id="dataDescribeID" name="dataDescribeID"  required="required"></textarea>
+                                                <textarea  type="text" class="form-control" cols="30" rows="5"  placeholder="不少于50字"
+                                                           id="dataDescribeID" name="dataDescribeID"  required="required" ></textarea>
 
                                             </div>
                                         </div>
@@ -225,14 +226,15 @@
                                             <label class="control-label col-md-3" for="select2_tags">关键词<span class="required">
                                                     * </span></label>
                                             <div class="checkbox-list col-md-5" style="padding-top:14px">
-                                                    <input type="text" class="form-control" id="select2_tags" value="" name="select2_tags" required="required" >
+                                                    <input type="text" class="form-control" id="select2_tags" value="" name="select2_tags" required="required"  placeholder="至少两个关键词">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3" for="dataSourceDesID">来源<span  class="required">
                                                     * </span></label>
                                             <div class="col-md-6" id="dataSourceDes" style="padding-top:14px">
-                                                <textarea  type="text" class="form-control" cols="30" rows="5" id="dataSourceDesID" name="dataSourceDesID"  required="required"></textarea>
+                                                <textarea  type="text" class="form-control" cols="30" rows="5" placeholder="请输入来源信息"
+                                                           id="dataSourceDesID" name="dataSourceDesID"  required="required"></textarea>
 
                                             </div>
 
@@ -486,9 +488,6 @@
             focusInvalid: false, // do not focus the last invalid input
             ignore: "", // validate all fields including form hidden input
             rules: {
-                centerCatalogId: {
-                    required: true
-                },
                 dataDescribeID: {
                     required: true,
                     minWords:true
@@ -502,9 +501,6 @@
                 }
             },
             messages: {
-                centerCatalogId: {
-                    required: "请选择目录文件"
-                },
                 dataDescribeID: {
                     required: "请输入用户组描述信息"
                 },
