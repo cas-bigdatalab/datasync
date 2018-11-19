@@ -5,6 +5,7 @@ import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteResult;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -91,6 +92,11 @@ public class UserDao {
 
         dbObject = queryBuilder.get();
         Query query = new BasicQuery(dbObject).skip(start).limit(pageSize);
+
+        //排序
+        Sort.Direction direction = false ? Sort.Direction.ASC : Sort.Direction.DESC;
+        query.with(new Sort(direction, "_id"));
+        
         List<User> users = mongoTemplate.find(query, User.class);
 
         return users;

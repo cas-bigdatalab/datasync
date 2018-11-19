@@ -327,9 +327,9 @@
         <%--<td style="text-align: center">{{$value.stat}}</td>--%>
         <td style="text-align: center">{{$value.groups}}</td>
         <td style="text-align: center" id = "{{$value.id}}">
-            <button class="btn default btn-xs red updateUserButton" data-target="#updateUserDialog" data-toggle="modal" onclick="updateUser(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>
+            <button class="btn default btn-xs purple updateUserButton" data-target="#updateUserDialog" data-toggle="modal" onclick="updateUser(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>
             &nbsp;
-            <button class="btn default btn-xs green updateUserGroupButton" onclick="deleteUser(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>
+            <button class="btn default btn-xs red updateUserGroupButton" onclick="deleteUser(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>
         </td>
     </tr>
     {{/each}}
@@ -378,7 +378,7 @@
                             </label>
                             <div class="col-md-9">
                                 <%--<input type="text" class="form-control" placeholder="请输入专题库代码"  id="subjectCode" name="subjectCode" required="required">--%>
-                                    <select class='form-control' name='subjectCodeForAddUserDialog' id='subjectCodeForAddUserDialog'>
+                                    <select class='form-control' name='subjectCodeForAddUserDialog' id='subjectCodeForAddUserDialog' placeholder="请选择主题库">
                                         <c:forEach  var="subject"  items="${subjectList}">
                                             <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectName}</option>
                                         </c:forEach>
@@ -388,10 +388,10 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="groupsForAddUserDialog">
-                                角&nbsp;&nbsp;&nbsp;&nbsp;色<span style="color: red;">*</span>
+                                用户组<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <select class='form-control select2me' name='groupsForAddUserDialog' id='groupsForAddUserDialog' multiple="multiple">
+                                <select class='form-control select2me' name='groupsForAddUserDialog' id='groupsForAddUserDialog' multiple="multiple" placeholder="请选择用户组">
                                     <c:forEach  var="group"  items="${groupList}">
                                         <option value="${group.groupName}" id="${group.id}" >${group.groupName}</option>
                                     </c:forEach>
@@ -464,7 +464,7 @@
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="groupsForUpdateUserDialog">
-                                角&nbsp;&nbsp;&nbsp;&nbsp;色<span style="color: red;">*</span>
+                                用户组<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
                                 <select class='form-control select2me' name='groupsForUpdateUserDialog' id='groupsForUpdateUserDialog' multiple="multiple">
@@ -958,7 +958,8 @@
         {
             $("#addUserDialog").modal("show");
             console.log("进入到增加用户对话框中了");
-            $("#subjectCodeForAddUserDialog").val("");
+            $("#subjectCodeForAddUserDialog").val("请选择主题库");
+
             console.log("subjectCode = " + $("#subjectCodeForAddUserDialog").val());
         }
 
