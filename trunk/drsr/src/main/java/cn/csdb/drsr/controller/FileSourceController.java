@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +24,6 @@ import java.util.Map;
 @RequestMapping("/fileResource")
 public class FileSourceController {
     private Logger logger = LoggerFactory.getLogger(FileSourceController.class);
-    final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
     @Resource
     private FileResourceService fileResourceService;
 
@@ -35,8 +35,26 @@ public class FileSourceController {
         String flag = fileResourceService.deleteRelation(Integer.valueOf(dataId));
         return flag;
     }
-
     @RequestMapping("/add")
+    public
+    @ResponseBody
+    String add(String dataSourceName, String dataSourceType, String fileType, String filePath) {
+        logger.debug("新增功能开始");
+        Date current_date = new Date();
+        //设置日期格式化样式为：yyyy-MM-dd
+        SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //格式化当前日期
+        String currentTime = SimpleDateFormat.format(current_date.getTime());
+        DataSrc datasrc = new DataSrc();
+        datasrc.setDataSourceName(dataSourceName);
+        datasrc.setDataSourceType(dataSourceType);
+        datasrc.setFileType(fileType);
+        datasrc.setCreateTime(currentTime);
+        datasrc.setFilePath(filePath);
+        return fileResourceService.addData(datasrc);
+
+    }
+    /*@RequestMapping("/add")
     public
     @ResponseBody
     String add(String dataSourceName, String dataSourceType, String fileType, String[] data) {
@@ -61,9 +79,29 @@ public class FileSourceController {
         logger.info("最终拼接的filePath为{}"+filePath.toString());
         return fileResourceService.addData(datasrc);
 
-    }
+    }*/
 
     @RequestMapping("/edit")
+    public
+    @ResponseBody
+    String edit(String dataSourceId, String dataSourceName, String dataSourceType,
+                String fileType,String filePath) {
+        logger.debug("编辑功能开始,开始插入");
+        Date current_date = new Date();
+        //设置日期格式化样式为：yyyy-MM-dd
+        SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //格式化当前日期
+        String currentTime = SimpleDateFormat.format(current_date.getTime());
+        DataSrc datasrc = new DataSrc();
+        datasrc.setDataSourceName(dataSourceName);
+        datasrc.setDataSourceType(dataSourceType);
+        datasrc.setCreateTime(currentTime);
+        datasrc.setFileType(fileType);
+        datasrc.setFilePath(filePath);
+        datasrc.setDataSourceId(Integer.valueOf(dataSourceId));
+        return fileResourceService.editData(datasrc);
+    }
+    /*@RequestMapping("/edit")
     public
     @ResponseBody
     String edit(String dataSourceId, String dataSourceName, String dataSourceType,
@@ -83,7 +121,7 @@ public class FileSourceController {
             if(attr!=null) {
                 String nodePath = "";
                 for (String nodeId : nodes) {
-                    String str = nodeId.replaceAll("%_%", FILE_SEPARATOR);
+                    String str = nodeId.replaceAll("%_%", "/");
                     String str1 = fileResourceService.traversingFiles(str);
                     nodePath += str1;
                 }
@@ -97,7 +135,7 @@ public class FileSourceController {
             }else{
                 String nodePath = "";
                 for (String nodeId : nodes) {
-                    String str = nodeId.replaceAll("%_%", FILE_SEPARATOR);
+                    String str = nodeId.replaceAll("%_%", "/");
                     String str1 = fileResourceService.traversingFiles(str);
                     nodePath += str1;
                 }
@@ -117,7 +155,7 @@ public class FileSourceController {
         }
         datasrc.setDataSourceId(Integer.valueOf(dataSourceId));
         return fileResourceService.editData(datasrc);
-    }
+    }*/
     @RequestMapping("/queryData")
     public
     @ResponseBody
@@ -160,6 +198,16 @@ public class FileSourceController {
         return jsonObjects;
     }
 
+    @RequestMapping("/check")
+    public
+    @ResponseBody
+    Boolean check(String filePath) {
+        logger.info("校验文件路径是否正确");
+        boolean flag  = fileResourceService.checkFilePath(filePath);
+        return flag;
+    }
+
+
     /**
      *
      * Function Description: 
@@ -191,5 +239,11 @@ public class FileSourceController {
         DataSrc dataSrc = fileResourceService.findById(dataSourceId);
         List<JSONObject> jsonObjects = fileResourceService.fileSourceFileList(dataSrc.getFilePath());
         return jsonObjects;
+    }
+
+    public static void main(String[]args){
+        File file = new File("D:\\data");
+        boolean flag = file.exists();
+        System.out.print(flag);
     }
 }
