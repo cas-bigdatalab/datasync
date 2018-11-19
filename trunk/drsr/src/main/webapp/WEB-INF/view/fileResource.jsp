@@ -266,7 +266,6 @@
                         if (obj != '#') {
                             var str = obj.id;
                             var str1 = str.replace(/%_%/g, "/");
-                            str1 = str1.replace(/%_%/g, "\\\\");
                         }
                         $.ajax({
                             type: "GET",
@@ -342,6 +341,7 @@
                    if (obj != '#') {
                        var str = obj.id;
                        var str1 = str.replace(/%_%/g, "/");
+                       str1 = str1.replace(/%_%/g, "\\\\");
                    }
                    $.ajax({
                        type: "GET",
