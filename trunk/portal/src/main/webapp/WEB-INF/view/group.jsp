@@ -1000,6 +1000,7 @@
     //
     //////////////////////////////////////////////////////////////////////////////////////////////////--%>
     <script type="text/javascript">
+        var currentPage = 1;
 
         //添加用户按钮
         function addUser()
@@ -1099,6 +1100,7 @@
                     $("#userList").append(html);
 
                     $("#curUserPageNum").html(data.curUserPageNum);
+                    currentPage = data.curUserPageNum;
                     $("#totalUserPages").html(data.totalUserPages);
                     $("#totalUsers").html(data.totalUsers);
 
@@ -1124,6 +1126,7 @@
                         firstClass: 'first'
                     }).on('page', function (event, toNum) {
                         queryUser(loginId, userName, groups, toNum);
+                        currentPage = toNum;
                     });
                 }
             });
@@ -1134,8 +1137,38 @@
         {
             var idOfUser = $(deleteBtn).parent().attr("id");
 
-            $("#deleteUserDialog").modal("show");
-            $("#idOfUserToBeDeleted").html(idOfUser);
+            bootbox.confirm("确定要删除用户信息吗？",
+                function (result)
+                {
+                    if (result) {
+                        var deleteUrl = "${ctx}/user/deleteUser";
+                        $.ajax({
+                            url: deleteUrl,
+                            type: "get",
+                            data: {
+                                id: idOfUser
+                            },
+                            dataType: "text",
+                            success: function (data) {
+                                console.log(data);
+                                console.log("typeof data = " + (typeof data));
+                                if (data.trim() == "1") {
+                                    toastr["success"]("删除成功！", "数据删除");
+                                    queryUser(currentPage);
+                                }
+                                else {
+                                    toastr["error"]("删除失败！", "数据删除");
+                                }
+                            },
+                            error: function(data)
+                            {
+                                console.log(data);
+                                toastr["error"]("删除失败！", "数据删除");
+                            }
+                        });
+                    }
+                }
+            );
         }
 
         function agreeDeleteUser(agreeDeleteBtn)

@@ -30,9 +30,9 @@
         <!--主题库筛选条件-->
         <div class="alert alert-info" role="alert">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-12 form-inline">
                     <label class="control-label">主题库名称:</label>
-                    <input type="text" id="subjectNameFilter" name="subjectNameFilter" placeholder="主题库名称" class="input-small search-text"/>
+                    <input type="text" id="subjectNameFilter" name="subjectNameFilter" placeholder="主题库名称" class="form-control search-text" style="width: 300px;" />
 
                     &nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -86,9 +86,9 @@
             <td style="text-align: center">{{$value.contact}}</td>
             <td style="text-align: center">{{$value.phone}}</td>
             <td id="{{$value.id}}">
-                <button class="btn default btn-xs red updateSubjectBtn"onclick="updateSubject(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>
+                <button class="btn default btn-xs purple updateSubjectBtn"onclick="updateSubject(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>
                 &nbsp;
-                <button class="btn default btn-xs green deleteSubjectBtn" onclick="deleteSubject(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>
+                <button class="btn default btn-xs red deleteSubjectBtn" onclick="deleteSubject(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>
             </td>
         </tr>
         {{/each}}

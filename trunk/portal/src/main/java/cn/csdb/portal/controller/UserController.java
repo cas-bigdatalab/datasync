@@ -85,12 +85,12 @@ public class UserController {
 
     @ResponseBody
     @RequestMapping(value = "/deleteUser")
-    public String deleteUser(HttpServletRequest request, String id)
+    public int deleteUser(HttpServletRequest request, String id)
     {
         logger.info("enterring deleteUser - id = " + id);
         int deletedUserCnt = userService.deleteUser(id);
         logger.info("deletedUserCnt = " + deletedUserCnt);
-        return "删除用户：删除成功";
+        return deletedUserCnt;
     }
 
     @RequestMapping(value="/updateGroup")
