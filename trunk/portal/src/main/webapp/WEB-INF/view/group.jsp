@@ -332,8 +332,8 @@
 </script>
 
 <!--用户管理标签页：新建用户对话框-->
-<div id="addUserDialog" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-width="400">
-    <div class="modal-dialog">
+<div id="addUserDialog" class="modal fade"  role="dialog"  tabindex="-1" role="dialog" aria-hidden="true" data-width="400">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
 
             <div class="modal-header  bg-primary">
@@ -374,7 +374,7 @@
                             </label>
                             <div class="col-md-9">
                                 <%--<input type="text" class="form-control" placeholder="请输入专题库代码"  id="subjectCode" name="subjectCode" required="required">--%>
-                                    <select class='form-control select2me' name='subjectCodeForAddUserDialog' id='subjectCodeForAddUserDialog'>
+                                    <select class='form-control' name='subjectCodeForAddUserDialog' id='subjectCodeForAddUserDialog'>
                                         <c:forEach  var="subject"  items="${subjectList}">
                                             <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectCode}</option>
                                         </c:forEach>
@@ -411,7 +411,7 @@
 </div>
 
 <!--用户管理标签页：修改用户对话框-->
-<div id="updateUserDialog" class="modal fade" tabindex="-1"  role="dialog" aria-hidden="true" data-width="400">
+<div id="updateUserDialog" class="modal fade"  role="dialog" tabindex="-1"  role="dialog" aria-hidden="true" data-width="400">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -451,7 +451,7 @@
                                 专题库代码<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <select class='form-control select2me' name='subjectCodeForUpdateUserDialog' id='subjectCodeForUpdateUserDialog'>
+                                <select class='form-control' name='subjectCodeForUpdateUserDialog' id='subjectCodeForUpdateUserDialog'>
                                     <c:forEach  var="subject"  items="${subjectList}">
                                         <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectCode}</option>
                                     </c:forEach>

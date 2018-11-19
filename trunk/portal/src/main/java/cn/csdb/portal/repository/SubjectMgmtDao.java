@@ -510,4 +510,11 @@ public class SubjectMgmtDao {
     {
         return mongoTemplate.findAll(Subject.class);
     }
+
+    public String getNextSerialNo()
+    {
+        String retValue = "";
+
+        return retValue;
+    }
 }

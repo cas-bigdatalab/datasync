@@ -193,7 +193,7 @@
                                 序号<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入序号" id="serialNo" name="serialNo" required="required" />
+                                <input type="text" class="form-control" placeholder="请输入序号，只能输入数字" id="serialNo" name="serialNo" required="required" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" />
                             </div>
                         </div>
                     </form>
@@ -313,10 +313,10 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                序号<span style="color: red;">*</span>
+                                序号
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入序号" id="serialNoM" name="serialNo" required="required" />
+                                <input type="text" class="form-control" placeholder="请输入序号，只能输入数字" id="serialNoM" name="serialNo" readonly="readonly" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" />
                             </div>
                         </div>
 
@@ -371,6 +371,7 @@
         <script type="text/javascript" src="${ctx}/resources/bundles/artTemplate/template.js"></script>
         <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
         <script type="text/javascript">
+            var nextSerialNo = 1;
             var currentPage = 1;
 
             //初始化
@@ -582,6 +583,29 @@
                         console.log("errorThrown = " + errorThrown);
                     }
                 });
+            }
+
+            function addSubject()
+            {
+
+
+                $.ajax({
+                    url: "${ctx}/subjectMgmt/getNextSerialNo",
+                    type: "get",
+                    data: {},
+                    dataType: "json",
+                    success: function (data) {
+                        $("#serialNo").val(data);
+                        $("#addSubjectDialog").modal("show");
+
+                        location.reload();
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown){
+                        console.log("textStatus = " + textStatus);
+                        console.log("errorThrown = " + errorThrown);
+                    }
+                });
+
             }
 
             //添加主题库

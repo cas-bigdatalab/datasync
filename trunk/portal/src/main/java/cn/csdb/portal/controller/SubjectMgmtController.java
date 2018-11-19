@@ -23,12 +23,12 @@ import java.util.List;
 @Controller
 @RequestMapping("/subjectMgmt")
 public class SubjectMgmtController {
-    private SubjectMgmtService subjectService;
+    private SubjectMgmtService subjectMgmtService;
     private static final Logger logger = LogManager.getLogger(SubjectMgmtController.class);
 
     @Autowired
     public void setProjectLibService(SubjectMgmtService subjectService) {
-        this.subjectService = subjectService;
+        this.subjectMgmtService = subjectService;
     }
 
     /**
@@ -71,10 +71,10 @@ public class SubjectMgmtController {
         generateFtpInfo(subject);
         logger.info("generate ftp user and password completed!");
 
-        String addSubjectNotice = subjectService.addSubject(subject);
+        String addSubjectNotice = subjectMgmtService.addSubject(subject);
         logger.info("subject added, addSubjectNotice : " + addSubjectNotice);
 
-      /*  long totalPages = subjectService.getTotalPages();
+      /*  long totalPages = subjectMgmtService.getTotalPages();
         String redirectStr = "redirect:/subjectMgmt/querySubject?pageNum=" + totalPages;
         logger.info("redirect request to querySubject : " + redirectStr);*/
         return addSubjectNotice;
@@ -149,7 +149,7 @@ public class SubjectMgmtController {
     public int deleteSubject(HttpServletRequest request, @RequestParam(required = true) String id, @RequestParam(required = true) int pageNum) {
         logger.info("SubjectMgmtController-deleteSubject, id = " + id + ", currentPage = " + pageNum);
 
-        int deletedRowCnt = subjectService.deleteSubject(id);
+        int deletedRowCnt = subjectMgmtService.deleteSubject(id);
         logger.info("SubjectMgmtController-deleteSubject，deletedRowCnt = " + deletedRowCnt);
 
         //返回要删除的subject的id
@@ -179,7 +179,7 @@ public class SubjectMgmtController {
         }
         subject.setImagePath(newImagePath);
         logger.info("updated image");
-        String updateSubjectNotice = subjectService.updateSubject(subject);
+        String updateSubjectNotice = subjectMgmtService.updateSubject(subject);
         logger.info("update subject completed. updateSubjectNotice = " + updateSubjectNotice);
 
         return updateSubjectNotice;
@@ -197,7 +197,7 @@ public class SubjectMgmtController {
 
         String imagePath = "";
 
-        Subject tmpSubject = subjectService.findSubjectById(subject.getId());
+        Subject tmpSubject = subjectMgmtService.findSubjectById(subject.getId());
         if ((image != null) && (image.getOriginalFilename() != "")) {
             deleteImage(tmpSubject.getImagePath());
             imagePath = saveImage(request, image);
@@ -242,8 +242,8 @@ public class SubjectMgmtController {
         logger.info("enterring SubjectMgmtController-querySubject[currentPage = " + currentPage + "]");
 
         long totalPages = 0;
-        totalPages = subjectService.getTotalPages(subjectNameFilter);
-        List<Subject> subjectsOfThisPage = subjectService.querySubject(subjectNameFilter, currentPage);
+        totalPages = subjectMgmtService.getTotalPages(subjectNameFilter);
+        List<Subject> subjectsOfThisPage = subjectMgmtService.querySubject(subjectNameFilter, currentPage);
 
         logger.info("queried subject - " + subjectsOfThisPage);
 
@@ -251,7 +251,7 @@ public class SubjectMgmtController {
         jsonObject.put("totalPages", totalPages);
         jsonObject.put("pageNum", currentPage);
         jsonObject.put("pageSize", 10);
-        jsonObject.put("total", subjectService.getTotalSubject(subjectNameFilter));
+        jsonObject.put("total", subjectMgmtService.getTotalSubject(subjectNameFilter));
         jsonObject.put("list", subjectsOfThisPage);
 
         logger.info("jsonObject = " + jsonObject);
@@ -271,7 +271,7 @@ public class SubjectMgmtController {
     public JSONObject querySubjectById(HttpServletRequest request, @RequestParam(required = true) String id) {
         logger.info("enterring SubjectMgmtController-querySubjectById");
         logger.info("id = " + id);
-        Subject subject = subjectService.findSubjectById(id);
+        Subject subject = subjectMgmtService.findSubjectById(id);
         logger.info("queried subject - " + subject);
 
         return (JSONObject) JSON.toJSON(subject);
@@ -287,7 +287,7 @@ public class SubjectMgmtController {
     public boolean querySubjectCode(HttpServletRequest request, @RequestParam(required = true) String subjectCode) {
         logger.info("enterring SubjectMgmtController-querySubjectCode");
         logger.info("subjectCode = " + subjectCode);
-        long cntOfTheCode = subjectService.querySubjectCode(subjectCode);
+        long cntOfTheCode = subjectMgmtService.querySubjectCode(subjectCode);
         logger.info("queried subjectCodeCnt - cntOfTheCode = " + cntOfTheCode);
 
         boolean retValue = false;
@@ -312,7 +312,7 @@ public class SubjectMgmtController {
     public boolean queryAdmin(HttpServletRequest request, @RequestParam(required = true) String admin) {
         logger.info("enterring SubjectMgmtController-queryUserName");
         logger.info("admin = " + admin);
-        long cntOfAdmin = subjectService.queryAdmin(admin);
+        long cntOfAdmin = subjectMgmtService.queryAdmin(admin);
         logger.info("queried userNameCnt - cntOfUserName = " + cntOfAdmin);
 
         boolean retValue = false;
@@ -325,5 +325,12 @@ public class SubjectMgmtController {
             retValue = true;
         }
         return retValue;
+    }
+
+    @RequestMapping(value = "/getNextSerialNo")
+    @ResponseBody
+    public String getNextSerialNo(HttpServletRequest request)
+    {
+        return subjectMgmtService.getNextSerialNo();
     }
 }
