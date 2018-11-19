@@ -103,7 +103,6 @@ public class FileResourceService {
     }
 
     public List<JSONObject> fileTreeLoading(String data) {
-        String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
         File file;
         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
         if ("#".equals(data)) {
@@ -146,7 +145,9 @@ public class FileResourceService {
                 File roots = new File("/usr");
                 logger.info("服务器盘符为："+roots);
                 String root = roots.toString();
-                String rootName= root.substring(0, root.indexOf("\\"));
+                logger.info("root为："+root);
+                String rootName= root.substring(1);
+                logger.info("rootName为："+rootName);
                 JSONObject jsonObject = new JSONObject();
                 if (roots.isDirectory()) {
                     File file1 = roots;

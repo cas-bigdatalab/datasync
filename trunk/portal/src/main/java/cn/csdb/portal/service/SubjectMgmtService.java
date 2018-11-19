@@ -38,14 +38,6 @@ public class SubjectMgmtService {
         {
             addSubjectNotice = "添加专题库：失败！";
         }
-
-        Runtime runtime = Runtime.getRuntime();
-        try {
-            Process process = runtime.exec(new String[]{"bash", "-c", "./etc/vsftpd/vftpuseradd "+subject.getFtpUser()+" "+subject.getFtpPassword()});
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         return addSubjectNotice;
     }
 

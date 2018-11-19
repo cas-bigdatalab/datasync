@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -67,7 +68,7 @@ public class SubjectMgmtDao {
         logger.info("enterring SubjectMgmtDao-addSubject");
         logger.info("ftpRootPath = " + ftpRootPath);
         String ftpFilePath = ftpRootPath + subject.getFtpUser()+File.separator;
-        logger.info("ftpFilePath = " + ftpFilePath+File.separator);
+        logger.info("ftpFilePath = " + ftpFilePath);
         subject.setFtpFilePath(ftpFilePath);
         subject.setDbName(subject.getSubjectCode());
         subject.setDbUserName(dbUserName);
@@ -79,6 +80,20 @@ public class SubjectMgmtDao {
         createDb(subject.getSubjectCode());
         //createFtpUser(subject.getFtpUser(), subject.getFtpPassword());
         //createFtpPath(subject.getFtpUser(), subject.getFtpPassword());
+
+        Runtime runtime = Runtime.getRuntime();
+        try {
+
+            System.out.println("-----------------------");
+            String command1 = "chmod 777 /etc/vsftpd/vftpuseradd";
+            runtime.exec(command1).waitFor();
+            Process process = runtime.exec("vftpuseradd "+subject.getFtpUser()+" "+subject.getFtpPassword());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         logger.info("create db, ftp user, ftp path completed!");
 

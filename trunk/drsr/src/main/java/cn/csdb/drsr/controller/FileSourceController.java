@@ -23,6 +23,7 @@ import java.util.Map;
 @RequestMapping("/fileResource")
 public class FileSourceController {
     private Logger logger = LoggerFactory.getLogger(FileSourceController.class);
+    final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
     @Resource
     private FileResourceService fileResourceService;
 
@@ -82,7 +83,7 @@ public class FileSourceController {
             if(attr!=null) {
                 String nodePath = "";
                 for (String nodeId : nodes) {
-                    String str = nodeId.replaceAll("%_%", "/");
+                    String str = nodeId.replaceAll("%_%", FILE_SEPARATOR);
                     String str1 = fileResourceService.traversingFiles(str);
                     nodePath += str1;
                 }
@@ -96,7 +97,7 @@ public class FileSourceController {
             }else{
                 String nodePath = "";
                 for (String nodeId : nodes) {
-                    String str = nodeId.replaceAll("%_%", "/");
+                    String str = nodeId.replaceAll("%_%", FILE_SEPARATOR);
                     String str1 = fileResourceService.traversingFiles(str);
                     nodePath += str1;
                 }
