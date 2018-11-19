@@ -380,7 +380,7 @@
                                 <%--<input type="text" class="form-control" placeholder="请输入专题库代码"  id="subjectCode" name="subjectCode" required="required">--%>
                                     <select class='form-control' name='subjectCodeForAddUserDialog' id='subjectCodeForAddUserDialog'>
                                         <c:forEach  var="subject"  items="${subjectList}">
-                                            <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectCode}</option>
+                                            <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectName}</option>
                                         </c:forEach>
                                     </select>
                             </div>
@@ -457,7 +457,7 @@
                             <div class="col-md-9">
                                 <select class='form-control' name='subjectCodeForUpdateUserDialog' id='subjectCodeForUpdateUserDialog'>
                                     <c:forEach  var="subject"  items="${subjectList}">
-                                        <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectCode}</option>
+                                        <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectName}</option>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -690,14 +690,14 @@
                 allowClear: true
             });
             //添加、更新用户对话框中， 选择subjectCode
-            var subjectCodeForAddUserDialogSelect2 = $('#subjectCodeForAddUserDialog').select2({
+            /*var subjectCodeForAddUserDialogSelect2 = $('#subjectCodeForAddUserDialog').select2({
                 placeholder: "请选择用户组",
                 allowClear: true
-            });
-            var subjectCodeForUpdateUserDialogSelect2 = $('#subjectCodeForUpdateUserDialog').select2({
+            });*/
+            /*var subjectCodeForUpdateUserDialogSelect2 = $('#subjectCodeForUpdateUserDialog').select2({
                 placeholder: "请选择用户组",
                 allowClear: true
-            });
+            });*/
 
 
             var addUserValid = {
@@ -1110,7 +1110,10 @@
 
                         var subjectCodeArr = data.subjectCode.split(",");
                         console.log("getUserById - subjectCodeArr - " + subjectCodeArr);
+/*
                         $("#subjectCodeForUpdateUserDialog").select2().val(subjectCodeArr).trigger("change");
+*/
+                        $("#subjectCodeForUpdateUserDialog").val(subjectCodeArr);
 
                         var groupArr = data.groups.split(",");
                         console.log("getUserById - groupArr - " + groupArr);
