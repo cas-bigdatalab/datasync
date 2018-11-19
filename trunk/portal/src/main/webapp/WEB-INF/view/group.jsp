@@ -1153,8 +1153,8 @@
                                 console.log(data);
                                 console.log("typeof data = " + (typeof data));
                                 if (data.trim() == "1") {
+                                    queryUser(null, null, null, currentPage);
                                     toastr["success"]("删除成功！", "数据删除");
-                                    queryUser(currentPage);
                                 }
                                 else {
                                     toastr["error"]("删除失败！", "数据删除");
