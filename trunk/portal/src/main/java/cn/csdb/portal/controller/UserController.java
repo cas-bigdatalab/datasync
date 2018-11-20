@@ -73,9 +73,10 @@ public class UserController {
     public String addUser(HttpServletRequest request, User user)
     {
         logger.info("enter addUser - parameters[user = " + user + "]");
-        SimpleDateFormat sdf =new SimpleDateFormat("yyyy年MM月dd日  HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
         user.setCreateTime(sdf.format(new Date()));
         user.setStat(1);
+        user.setRole("普通用户");
         logger.info("user to be added = " + user);
         int addedUserCnt = userService.addUser(user);
         logger.info("after addUser - addedUserCnt = " + addedUserCnt);
@@ -119,7 +120,7 @@ public class UserController {
     public int updateUser(HttpServletRequest request, User user)
     {
         logger.info("enterring updateUser - user = " + user);
-        SimpleDateFormat sdf =new SimpleDateFormat("yyyy年MM月dd日  HH:mm:ss");
+        SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
         user.setCreateTime(sdf.format(new Date()));
         user.setStat(1);
         int updatedUserCnt = userService.updateUser(user);

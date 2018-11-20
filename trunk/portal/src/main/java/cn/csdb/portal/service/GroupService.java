@@ -37,6 +37,43 @@ public class GroupService {
         groupDao.update(group);
     }
 
+
+    @Transactional
+    public void updateUsersAndGroups(List<String> oldUsers, List<String> newUsers,Group group){
+        //1 在用户表中先更新用户的组信息
+        //a 删除用户表中的组信息，b 增加新用户的用户组信息
+        if (oldUsers != null){
+            for (String s : oldUsers){
+                System.out.println("s:=" +s);
+                if (newUsers != null) {
+                    if (!newUsers.contains(s)) {
+                        userDao.deleteGroupName(s, group.getGroupName());
+                    }
+                }else
+                {
+                    userDao.deleteGroupName(s, group.getGroupName());
+                }
+            }
+        }
+        if (newUsers != null){
+            for (String s : newUsers){
+                if (oldUsers != null){
+                    if (!oldUsers.contains(s)){
+                        userDao.addGroupName(s,group.getGroupName());
+                    }
+                }
+                else
+                {
+                    userDao.addGroupName(s,group.getGroupName());
+                }
+            }
+        }
+        //userDao.updateGroups();
+        //2 保存用户组表信息
+        groupDao.update(group);
+    }
+
+
     /**
      * Function Description: 删除用户组
      *

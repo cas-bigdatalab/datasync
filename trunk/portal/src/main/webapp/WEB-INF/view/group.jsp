@@ -77,7 +77,7 @@
 
                                             <button id="searchUserBtn" name="searchUserBtn" onclick="searchUser();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                                             &nbsp;&nbsp;&nbsp;&nbsp;
-                                            <button id="addUserBtn" name="addUserBtn" class="btn info green btn-sm" onclick="addUser()" ><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建用户</button>
+                                            <button id="addUserBtn" name="addUserBtn" class="btn info green btn-sm" onclick="addUser()" ><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增用户</button>
                                      </div>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                                             <th style="width: 5%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编号</th>
                                             <th style="width: 12%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户名 </th>
                                             <th style="width: 12%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">账号 </th>
-                                            <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">创建时间</th>
+                                            <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编辑时间</th>
                                             <%--<th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">状态</th>--%>
                                             <th style="width: 30%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户组</th>
                                             <th style="text-align: center;background: #64aed9;color: #FFF;font-weight: bold">操作</th>
@@ -132,7 +132,7 @@
 
                                         <button id="btnSearch" name="btnSearch" onclick="search();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查询</button>
                                         &nbsp;&nbsp;
-                                        <button id="btnAdd" name="btnAdd" onclick="" class="btn info green btn-sm"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建用户组</button>
+                                        <button id="btnAdd" name="btnAdd" onclick="" class="btn info green btn-sm"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增用户组</button>
                                     </div>
                                 </div>
 
@@ -339,7 +339,8 @@
         <div class="modal-content">
 
             <div class="modal-header  bg-primary">
-                <h4 id="titleForAddUserDialog" class="modal-title" >添加用户</h4>
+                <button class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button>
+                <h4 id="titleForAddUserDialog" class="modal-title">新增用户</h4>
             </div>
 
             <div class="modal-body">
@@ -988,6 +989,8 @@
                     if (data.result == 'ok') {
                         toastr["success"]("用户组增加用户成功！", "用户组编辑");
                         $("#groupModalForAddUser").modal("hide");
+                        //同时更新用户信息
+                        queryUser(null, null, null, 1);
                     } else {
                         toastr["error"]("用户组增加用户失败！", "用户组编辑");
                     }
@@ -1003,7 +1006,7 @@
     //
     //////////////////////////////////////////////////////////////////////////////////////////////////--%>
     <script type="text/javascript">
-        var currentPage = 1;
+        var currentUserPage = 1;
 
         //添加用户按钮
         function addUser()
@@ -1103,7 +1106,7 @@
                     $("#userList").append(html);
 
                     $("#curUserPageNum").html(data.curUserPageNum);
-                    currentPage = data.curUserPageNum;
+                    currentUserPage = data.curUserPageNum;
                     $("#totalUserPages").html(data.totalUserPages);
                     $("#totalUsers").html(data.totalUsers);
 
@@ -1129,7 +1132,7 @@
                         firstClass: 'first'
                     }).on('page', function (event, toNum) {
                         queryUser(loginId, userName, groups, toNum);
-                        currentPage = toNum;
+                        currentUserPage = toNum;
                     });
                 }
             });
@@ -1140,7 +1143,7 @@
         {
             var idOfUser = $(deleteBtn).parent().attr("id");
 
-            bootbox.confirm("确定要删除用户信息吗？",
+            bootbox.confirm("确定要删除此条记录吗？",
                 function (result)
                 {
                     if (result) {
@@ -1156,8 +1159,9 @@
                                 console.log(data);
                                 console.log("typeof data = " + (typeof data));
                                 if (data.trim() == "1") {
-                                    queryUser(null, null, null, currentPage);
+                                    queryUser(null, null, null, currentUserPage);
                                     toastr["success"]("删除成功！", "数据删除");
+                                    //location.reload();
                                 }
                                 else {
                                     toastr["error"]("删除失败！", "数据删除");

@@ -1,23 +1,31 @@
 package cn.csdb.portal.service;
 
 import cn.csdb.portal.model.Subject;
+import cn.csdb.portal.model.User;
 import cn.csdb.portal.repository.SubjectMgmtDao;
+import cn.csdb.portal.repository.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class SubjectMgmtService {
+    @Resource
     private SubjectMgmtDao subjectMgmtDao;
+    @Resource
+    private UserDao userDao;
 
-    @Autowired
+    /*@Autowired
     public void setSubjectMgmtDao(SubjectMgmtDao subjectMgmtDao)
     {
         this.subjectMgmtDao = subjectMgmtDao;
-    }
+    }*/
 
     /**
      * Function Description:
@@ -29,6 +37,23 @@ public class SubjectMgmtService {
     public String addSubject(Subject subject)
     {
         String addSubjectNotice = "";
+
+        //添加 专题库管理员 账号
+        String admin = subject.getAdmin();
+        String adminPasswd = subject.getAdminPasswd();
+        User subjectUser = new User();
+        subjectUser.setUserName(admin);
+        subjectUser.setLoginId(admin);
+        subjectUser.setPassword(adminPasswd);
+        subjectUser.setSubjectCode(subject.getSubjectCode());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+        subjectUser.setCreateTime(sdf.format(new Date()));
+        subjectUser.setRole("数据节点管理员");
+        subjectUser.setStat(0); //0：数据有效，1：数据无效
+        subjectUser.setGroups("");
+        userDao.addUser(subjectUser);
+
+        // 添加 专题库
         int addedRowCnt = subjectMgmtDao.addSubject(subject);
         if (addedRowCnt == 1)
         {

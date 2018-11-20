@@ -24,34 +24,34 @@
 
 <body>
     <div class="page-content">
-        <h3>主题库管理</h3>
+        <h3>数据节点管理</h3>
         <hr />
 
-        <!--主题库筛选条件-->
+        <!--数据节点筛选条件-->
         <div class="alert alert-info" role="alert">
             <div class="row">
                 <div class="col-md-12 form-inline">
-                    <label class="control-label">主题库名称:</label>
-                    <input type="text" id="subjectNameFilter" name="subjectNameFilter" placeholder="主题库名称" class="form-control search-text" style="width: 300px;" />
+                    <label class="control-label">数据节点名称:</label>
+                    <input type="text" id="subjectNameFilter" name="subjectNameFilter" placeholder="数据节点名称" class="form-control search-text" style="width: 300px;" />
 
                     &nbsp;&nbsp;&nbsp;&nbsp;
 
                     <button id="searchSubjectBtn" name="searchSubjectBtn" onclick="searchSubject();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <button id="addSubjectBtn" name="addSubjectBtn" class="btn info green btn-sm" onclick="addSubject()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建主题库</button>
+                    <button id="addSubjectBtn" name="addSubjectBtn" class="btn info green btn-sm" onclick="addSubject()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据节点</button>
                 </div>
             </div>
         </div>
 
-        <!--主题库列表页面-->
+        <!--数据节点列表页面-->
         <div class="table-scrollable">
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
                     <tr>
-                        <th style="display:none;">主题库ID</th>
+                        <th style="display:none;">数据节点ID</th>
                         <th style="width: 3%;background: #64aed9;">编号</th>
-                        <th style="width: 5%;background: #64aed9;">主题库名称</th>
-                        <th style="width: 5%;background: #64aed9;">主题库代码</th>
+                        <th style="width: 5%;background: #64aed9;">数据节点名称</th>
+                        <th style="width: 5%;background: #64aed9;">数据节点代码</th>
                         <th style="width: 5%;background: #64aed9;">管理员账号</th>
                         <th style="width: 5%;background: #64aed9;">负责人</th>
                         <th style="width: 5%;background: #64aed9;">电话</th>
@@ -63,7 +63,7 @@
             </table>
         </div>
 
-        <!--主题库分页插件-->
+        <!--数据节点分页插件-->
         <div class="row margin-top-20">
             <div class="col-md-6 margin-top-10">
                 当前第<span style="color:blue;" id="pageNum"></span>页,共<span style="color:blue;" id="totalPages"></span>页, 共<span style="color:blue;" id="total"></span>条数据
@@ -99,7 +99,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-primary">
                     <button class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button>
-                    <h4 id="titleForAddSubjectDialog" class="modal-title" >添加主题库</h4>
+                    <h4 id="titleForAddSubjectDialog" class="modal-title" >新增数据节点</h4>
                 </div>
 
                 <!--subject info input form-->
@@ -108,20 +108,20 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectName">
-                                主题库名称<span style="color: red;">*</span>
+                                数据节点名称<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入专题库名称" id="subjectName" name="subjectName" required="required"/>
+                                <input type="text" class="form-control" placeholder="请输入数据节点名称" id="subjectName" name="subjectName" required="required"/>
                             </div>
                         </div>
 
                         <!--SubjectCode需要保证唯一性，为了保证唯一，需要通过后端数据库交互验证是否已经存在-->
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                主题库代码<span style="color: red;">*</span>
+                                数据节点代码<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入专题库代码" id="subjectCode" name="subjectCode"  required="required" />
+                                <input type="text" class="form-control" placeholder="请输入数据节点代码" id="subjectCode" name="subjectCode"  required="required" />
                             </div>
                         </div>
 
@@ -136,10 +136,10 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                主题库简介
+                                数据节点简介
                             </label>
                             <div class="col-md-9">
-                                <textarea class="form-control" placeholder="请输入专题库简介" id="brief" name="brief"></textarea>
+                                <textarea class="form-control" placeholder="请输入数据节点简介" id="brief" name="brief"></textarea>
                             </div>
                         </div>
 
@@ -217,13 +217,13 @@
             <div class="modal-content">
                 <div class="modal-header bg-primary">
                     <button class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button>
-                    <h4 id="titleForUpdateSubjectDialog" class="modal-title" >修改主题库</h4>
+                    <h4 id="titleForUpdateSubjectDialog" class="modal-title" >修改数据节点</h4>
                 </div>
                 <div class="modal-body">
                     <form id="updateSubjectForm" class="form-horizontal" role="form" method="post">
                         <div class="form-group">
                                 <label class="col-md-3 control-label" for="subjectName" style="display:none;">
-                                    主题库id（不显示）
+                                    数据节点id（不显示）
                                 </label>
                                 <div style="display:none;">
                                     <input type="text" class="form-control" id="idM" name="id" />
@@ -232,19 +232,19 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectName">
-                                主题库名称<span style="color: red;">*</span>
+                                数据节点名称<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入专题库名称" id="subjectNameM" name="subjectName" required="required"/>
+                                <input type="text" class="form-control" placeholder="请输入数据节点名称" id="subjectNameM" name="subjectName" required="required"/>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                主题库代码<span style="color: red;">*</span>
+                                数据节点代码<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入专题库代码" id="subjectCodeM" name="subjectCode"  required="required" readonly="readonly"/>
+                                <input type="text" class="form-control" placeholder="请输入数据节点代码" id="subjectCodeM" name="subjectCode"  required="required" readonly="readonly"/>
                             </div>
                         </div>
 
@@ -259,10 +259,10 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                主题库简介
+                                数据节点简介
                             </label>
                             <div class="col-md-9">
-                                <textarea class="form-control" placeholder="请输入专题库简介" id="briefM" name="brief"></textarea>
+                                <textarea class="form-control" placeholder="请输入数据节点简介" id="briefM" name="brief"></textarea>
                             </div>
                         </div>
 
@@ -343,12 +343,12 @@
                     </button>
 
                     <h5 class="modal-title">
-                        删除主题库
+                        删除数据节点
                     </h5>
                 </div>
 
                 <div class="modal-body">
-                    <h5>确认删除该主题库？</h5>
+                    <h5>确认删除该数据节点？</h5>
                 </div>
 
                 <div class="modal-footer">
@@ -376,7 +376,7 @@
 
             //初始化
             $(function () {
-                console.log("主题库页面初始化");
+                console.log("数据节点页面初始化");
                 getSubject(1);
 
                 toastr.options = {
@@ -394,7 +394,7 @@
                     "hideMethod": "fadeOut"
                 };
 
-                //新建、修改主题库对话框的验证
+                //新建、修改数据节点对话框的验证
                 var addSubjectValid = {
                     errorElement: "span",
                     errorClass: "error-message",
@@ -450,18 +450,18 @@
                         serialNo: "required"
                     },
                     messages: {
-                        subjectName: "请输入专题库名称",
+                        subjectName: "请输入数据节点名称",
                         subjectCode: {
-                            required: "请输入专题库代码",
-                            remote: "此主题库代码已经存在！"
+                            required: "请输入数据节点代码",
+                            remote: "此数据节点代码已经存在！"
                         },
                         image: "请选择一个图片",
                         admin: {
-                            required: "请输入专题库管理员账号",
-                            remote: "此专题库管理员账号已经存在！"
+                            required: "请输入数据节点管理员账号",
+                            remote: "此数据节点管理员账号已经存在！"
                         },
-                        adminPasswd: "请输入专题库管理密码",
-                        contact: "请输入专题库联系人",
+                        adminPasswd: "请输入数据节点管理密码",
+                        contact: "请输入数据节点联系人",
                         phone: {
                             required:"请输入手机号",
                             maxlength:"请填写11位的手机号",
@@ -469,7 +469,7 @@
                             isphoneNum:"请填写正确的手机号码"
                         },
                         email: "请输入一个正确的email",
-                        serialNo: "请输入专题库的序号"
+                        serialNo: "请输入数据节点的序号"
                     }
                 };
 
@@ -504,11 +504,11 @@
                         serialNo: "required"
                     },
                     messages: {
-                        subjectName: "请输入专题库名称",
-                        subjectCode: "请输入专题库代码",
-                        admin: "请输入专题库管理员账号",
-                        adminPasswd: "请输入专题库管理密码",
-                        contact: "请输入专题库联系人",
+                        subjectName: "请输入数据节点名称",
+                        subjectCode: "请输入数据节点代码",
+                        admin: "请输入数据节点管理员账号",
+                        adminPasswd: "请输入数据节点管理密码",
+                        contact: "请输入数据节点联系人",
                         phone: {
                             required:"请输入手机号",
                             maxlength:"请填写11位的手机号",
@@ -516,20 +516,20 @@
                             isphoneNum:"请填写正确的手机号码"
                         },
                         email: "请输入一个正确的email",
-                        serialNo: "请输入专题库的序号"
+                        serialNo: "请输入数据节点的序号"
                     }
                 };
                 $("#addSubjectForm").validate(addSubjectValid);
                 $("#updateSubjectForm").validate(updateSubjectValid);
             });
 
-            //主题库名称的模糊搜索
+            //数据节点名称的模糊搜索
             function searchSubject()
             {
                 getSubject(1);
             }
 
-            //查询专题库
+            //查询数据节点
             function getSubject(pageNum) {
                 console.log("getSubject请求已经发送了");
                 $.ajax({
@@ -603,7 +603,7 @@
                 });
             }
 
-            //添加主题库
+            //添加数据节点
             function agreeAddSubject()
             {
                 if (!$("#addSubjectForm").valid()) {
@@ -644,7 +644,7 @@
 
             }
 
-            //更新主题库
+            //更新数据节点
             function updateSubject(updateBtn) {
                 $.ajax({
                     type: "GET",
@@ -712,14 +712,14 @@
                 });
             }
 
-            //删除专题库
+            //删除数据节点
             function deleteSubject(deleteBtn)
             {
                 var id = $(deleteBtn).parent().attr("id");
 
                 console.log("idOfSubjectToBeDeleted = " + id);
 
-                bootbox.confirm("确定要删除此主题库吗？",
+                bootbox.confirm("确定要删除此条记录吗？",
                     function (result)
                     {
                         if (result) {

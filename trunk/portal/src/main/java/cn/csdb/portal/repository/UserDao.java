@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -90,6 +91,7 @@ public class UserDao {
             queryBuilder = QueryBuilder.start();
         }
 
+        //dbObject = queryBuilder.and("role").is("普通用户").get();
         dbObject = queryBuilder.get();
         Query query = new BasicQuery(dbObject).skip(start).limit(pageSize);
 
@@ -123,38 +125,44 @@ public class UserDao {
             groups = null;
         }
 
+        QueryBuilder queryBuilder = null;
+
         if (loginId != null && userName != null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$")).get();
+            queryBuilder = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$"));
         }
         else if (loginId != null && userName != null && groups == null)
         {
-            dbObject = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).get();
+            queryBuilder = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("userName").regex(Pattern.compile("^.*" + userName + ".*$"));
         }
         else if (loginId != null && userName == null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$")).get();
+            queryBuilder = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$"));
         }
         else if (loginId == null && userName != null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$")).get();
+
+            queryBuilder = QueryBuilder.start().and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$"));;
         }
         else if (loginId != null && userName == null && groups == null)
         {
-            dbObject = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).get();
+            queryBuilder = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$"));
         }
         else if (loginId == null && userName != null && groups == null)
         {
-            dbObject = QueryBuilder.start().and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).get();
+            queryBuilder = QueryBuilder.start().and("userName").regex(Pattern.compile("^.*" + userName + ".*$"));
         }
         else if (loginId == null && userName == null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("groups").regex(Pattern.compile("^.*" + groups + ".*$")).get();
+            queryBuilder = QueryBuilder.start().and("groups").regex(Pattern.compile("^.*" + groups + ".*$"));
         }
         else
         {
-            dbObject = QueryBuilder.start().get();
+            queryBuilder = QueryBuilder.start();
         }
+
+        //dbObject = queryBuilder.and("role").is("普通用户").get();
+        dbObject = queryBuilder.get();
 
         Query query = new BasicQuery(dbObject);
         long totalUsers = mongoTemplate.count(query, "t_user");
@@ -242,4 +250,48 @@ public class UserDao {
 
         return loginIdCnt;
     }
+
+
+    /**
+     * Function Description: 从此用户的用户组中删除groupName
+     *
+     * @param:
+     * @return:
+     * @auther: xiajl
+     * @date:   2018/11/20 15:08
+     */
+    public void deleteGroupName(String userid, String groupName){
+        String id = userid.replace("[","").replace("]","").replace("\"","");
+        User user = getUserById(id);
+        String groups = user.getGroups();
+        List<String> list = Arrays.asList(org.apache.commons.lang3.StringUtils.split(groups,","));
+        ArrayList<String> result = new ArrayList<String>(list);
+        if (result.contains(groupName))
+            result.remove(groupName);
+        String str = org.apache.commons.lang3.StringUtils.join(result,",");
+        user.setGroups(str);
+        updateUser(user);
+    }
+
+    /**
+     * Function Description: 从此用户的用户组中增加groupName
+     *
+     * @param:
+     * @return:
+     * @auther: xiajl
+     * @date:   2018/11/20 15:10
+     */
+    public void addGroupName(String userid, String groupName){
+        String id = userid.replace("[","").replace("]","").replace("\"","");
+        User user = getUserById(id);
+        String groups = user.getGroups();
+        List<String> list = Arrays.asList(org.apache.commons.lang3.StringUtils.split(groups,","));
+        ArrayList<String> result = new ArrayList<String>(list);
+        if (!result.contains(groupName))
+            result.add(groupName);
+        String str = org.apache.commons.lang3.StringUtils.join(result,",");
+        user.setGroups(str);
+        updateUser(user);
+    }
+
 }
