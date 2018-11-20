@@ -90,6 +90,7 @@ public class UserDao {
             queryBuilder = QueryBuilder.start();
         }
 
+        //dbObject = queryBuilder.and("role").is("普通用户").get();
         dbObject = queryBuilder.get();
         Query query = new BasicQuery(dbObject).skip(start).limit(pageSize);
 
@@ -123,38 +124,44 @@ public class UserDao {
             groups = null;
         }
 
+        QueryBuilder queryBuilder = null;
+
         if (loginId != null && userName != null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$")).get();
+            queryBuilder = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$"));
         }
         else if (loginId != null && userName != null && groups == null)
         {
-            dbObject = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).get();
+            queryBuilder = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("userName").regex(Pattern.compile("^.*" + userName + ".*$"));
         }
         else if (loginId != null && userName == null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$")).get();
+            queryBuilder = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$"));
         }
         else if (loginId == null && userName != null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$")).get();
+
+            queryBuilder = QueryBuilder.start().and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).and("groups").regex(Pattern.compile("^.*" + groups + ".*$"));;
         }
         else if (loginId != null && userName == null && groups == null)
         {
-            dbObject = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$")).get();
+            queryBuilder = QueryBuilder.start().and("loginId").regex(Pattern.compile("^.*" + loginId + ".*$"));
         }
         else if (loginId == null && userName != null && groups == null)
         {
-            dbObject = QueryBuilder.start().and("userName").regex(Pattern.compile("^.*" + userName + ".*$")).get();
+            queryBuilder = QueryBuilder.start().and("userName").regex(Pattern.compile("^.*" + userName + ".*$"));
         }
         else if (loginId == null && userName == null && groups != null)
         {
-            dbObject = QueryBuilder.start().and("groups").regex(Pattern.compile("^.*" + groups + ".*$")).get();
+            queryBuilder = QueryBuilder.start().and("groups").regex(Pattern.compile("^.*" + groups + ".*$"));
         }
         else
         {
-            dbObject = QueryBuilder.start().get();
+            queryBuilder = QueryBuilder.start();
         }
+
+        //dbObject = queryBuilder.and("role").is("普通用户").get();
+        dbObject = queryBuilder.get();
 
         Query query = new BasicQuery(dbObject);
         long totalUsers = mongoTemplate.count(query, "t_user");

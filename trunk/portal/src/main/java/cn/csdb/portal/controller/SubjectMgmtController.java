@@ -40,9 +40,6 @@ public class SubjectMgmtController {
     @RequestMapping(value = "/addSubject", method = RequestMethod.POST)
     @ResponseBody
     public String addSubject(HttpServletRequest request, Subject subject, @RequestParam("image") MultipartFile image) {
-
-
-
         //input parameter check
         logger.info("enterring subjectMgmt-addSubject.");
         logger.info(subject);

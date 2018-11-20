@@ -20,6 +20,8 @@ public class User {
     private String subjectCode;
     @Field("createTime")
     private String createTime;
+    @Field("role")
+    private String role;
     @Field("stat")
     private int stat;  //0：数据有效，1：数据无效
     @Field("groups")
@@ -88,6 +90,14 @@ public class User {
 
     public void setSubjectCode(String subjectCode) {
         this.subjectCode = subjectCode;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override

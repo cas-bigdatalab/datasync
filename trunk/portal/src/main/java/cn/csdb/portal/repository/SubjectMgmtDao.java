@@ -502,9 +502,10 @@ public class SubjectMgmtDao {
     {
         DBObject dbObject = QueryBuilder.start().and("admin").is(admin).get();
         Query query = new BasicQuery(dbObject);
-        long cntOfAdmin = mongoTemplate.count(query, "t_subject");
+        //long cntOfAdminInSubject = mongoTemplate.count(query, "t_subject");
+        long cntOfAdminInUser = mongoTemplate.count(query, "t_user");
 
-        return cntOfAdmin;
+        return cntOfAdminInUser;
     }
 
     /**
