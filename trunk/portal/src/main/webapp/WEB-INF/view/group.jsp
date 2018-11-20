@@ -822,6 +822,9 @@
                     currentPageNo = data.currentPage;
                     $("#totalPages").html(data.totalPages);
                     $("#totalCount").html(data.totalCount);
+                    if (data.totalCount == 0){
+                        $("#currentPageNo").html("0");
+                    }
 
                     if ($("#pagination .bootpag").length != 0) {
                         $("#pagination").off();

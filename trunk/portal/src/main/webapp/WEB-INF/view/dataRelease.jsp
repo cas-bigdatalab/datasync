@@ -35,9 +35,11 @@
 
 <div class="page-content">
     <div>
-        <div class="uplod-head">
+        <%--<div class="uplod-head">
             <span>数据发布管理</span>
-        </div>
+        </div>--%>
+        <h3>数据发布管理</h3>
+            <hr>
         <div class="alert alert-info" role="alert">
             <!--查询条件 -->
             <div class="row">
@@ -70,17 +72,17 @@
             </div>
         </div>
         <div class="upload-table">
-            <h2 class="table-message">列表加载中......</h2>
+            <div class="table-message">列表加载中......</div>
             <table class="table table-bordered data-table" id="upload-list">
                 <thead>
                 <tr>
                     <th width="7%">编号</th>
                     <th width="20%">数据集名称</th>
-                    <th width="10%">类型</th>
+                    <th width="13%">类型</th>
                    <%-- <th width="10%">来源位置</th>--%>
-                    <th width="17%">发布时间</th>
+                    <th width="20%">发布时间</th>
                     <th width="10%">状态</th>
-                    <th width="28%">操作</th>
+                    <th width="22%">操作</th>
                 </tr>
                 </thead>
                 <tbody id="bd-data">
@@ -398,7 +400,7 @@
         <td>{{dateFormat(value.creationDate)}}</td>
         <td id="{{value.dataTaskId}}">{{value.resState}}</td>
         <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>
-        <td>
+        <td style="text-align: right">
             <%--<button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.id}}"
                     value="{{value.id}}">&nbsp;&nbsp;&nbsp;导出&nbsp;&nbsp;&nbsp;
             </button>
@@ -415,11 +417,11 @@
             <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i
                     class="glyphicon glyphicon-trash"></i>&nbsp;删除
             </button>--%>
-            {{if value.resState == '待审核'}}
+            <%--{{if value.resState == '待审核'}}
             <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.id}}"
                     value="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;审核
             </button>
-            {{/if}}
+            {{/if}}--%>
             <button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;编辑
             </button>
             <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.resState}}')"><i
@@ -585,14 +587,13 @@
                     status: resourceState
                 },
                 success: function (data) {
-                    $(".table-message").hide();
                     $("#bd-data").html("");
                     var DataList = JSON.parse(data);
                     console.log(DataList)
                     var tabCon = template("resourceTmp1", DataList);
                     $("#bd-data").append(tabCon);
 
-                    if (DataList == "{}") {
+                    if (DataList.resourceList.length == 0) {
                         $(".table-message").html("暂时没有数据");
                         $(".page-message").html("");
                         $(".page-list").html("");

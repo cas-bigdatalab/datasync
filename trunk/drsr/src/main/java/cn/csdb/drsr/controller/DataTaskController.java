@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.regex.Matcher;
 
 
 /**
@@ -193,14 +194,18 @@ public class DataTaskController {
 
     @ResponseBody
     @RequestMapping(value="saveFileDatatask",method = RequestMethod.POST)
-    public JSONObject saveFileDatatask(int dataSourceId,
-                                       String datataskName,
-                                       String filePathList){
+    public JSONObject saveFileDatatask(int dataSourceId, String datataskName,String[] nodes){
 
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);
-        datatask.setFilePath(filePathList);
+        StringBuffer filePath = new StringBuffer("");
+        for (String nodeId : nodes){
+            String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
+            String str1 = fileResourceService.traversingFiles(str);
+            filePath.append(str1);
+        }
+        datatask.setFilePath(filePath.toString());
         datatask.setDataTaskName(datataskName);
         datatask.setCreateTime(new Date());
         datatask.setDataTaskType("file");
@@ -210,7 +215,7 @@ public class DataTaskController {
             jsonObject.put("result",false);
             return  jsonObject;
         }
-        List<String> filepaths = Arrays.asList(filePathList.split(";"));
+        List<String> filepaths = Arrays.asList(filePath.toString().split(";"));
         String subjectCode = configPropertyService.getProperty("SubjectCode");
         String fileName = subjectCode+"_"+datataskId;
         fileResourceService.packDataResource(fileName,filepaths);

@@ -11,10 +11,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 /**
  * Created by shiba on 2018/10/8.
@@ -23,7 +30,6 @@ import java.util.Map;
 @RequestMapping("/fileResource")
 public class FileSourceController {
     private Logger logger = LoggerFactory.getLogger(FileSourceController.class);
-    final String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
     @Resource
     private FileResourceService fileResourceService;
 
@@ -35,8 +41,26 @@ public class FileSourceController {
         String flag = fileResourceService.deleteRelation(Integer.valueOf(dataId));
         return flag;
     }
-
     @RequestMapping("/add")
+    public
+    @ResponseBody
+    String add(String dataSourceName, String dataSourceType, String fileType, String filePath) {
+        logger.debug("新增功能开始");
+        Date current_date = new Date();
+        //设置日期格式化样式为：yyyy-MM-dd
+        SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //格式化当前日期
+        String currentTime = SimpleDateFormat.format(current_date.getTime());
+        DataSrc datasrc = new DataSrc();
+        datasrc.setDataSourceName(dataSourceName);
+        datasrc.setDataSourceType(dataSourceType);
+        datasrc.setFileType(fileType);
+        datasrc.setCreateTime(currentTime);
+        datasrc.setFilePath(filePath.replace("%_%",File.separator));
+        return fileResourceService.addData(datasrc);
+
+    }
+    @RequestMapping("/addTask")
     public
     @ResponseBody
     String add(String dataSourceName, String dataSourceType, String fileType, String[] data) {
@@ -53,7 +77,7 @@ public class FileSourceController {
         datasrc.setCreateTime(currentTime);
         StringBuffer filePath = new StringBuffer("");
         for (String nodeId : data){
-            String str = nodeId.replaceAll("%_%","\\\\");
+            String str = nodeId.replaceAll("%_%",Matcher.quoteReplacement(File.separator));
             String str1 = fileResourceService.traversingFiles(str);
             filePath.append(str1);
         }
@@ -64,6 +88,26 @@ public class FileSourceController {
     }
 
     @RequestMapping("/edit")
+    public
+    @ResponseBody
+    String edit(String dataSourceId, String dataSourceName, String dataSourceType,
+                String fileType,String filePath) {
+        logger.debug("编辑功能开始,开始插入");
+        Date current_date = new Date();
+        //设置日期格式化样式为：yyyy-MM-dd
+        SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //格式化当前日期
+        String currentTime = SimpleDateFormat.format(current_date.getTime());
+        DataSrc datasrc = new DataSrc();
+        datasrc.setDataSourceName(dataSourceName);
+        datasrc.setDataSourceType(dataSourceType);
+        datasrc.setCreateTime(currentTime);
+        datasrc.setFileType(fileType);
+        datasrc.setFilePath(filePath.replace("%_%",File.separator));
+        datasrc.setDataSourceId(Integer.valueOf(dataSourceId));
+        return fileResourceService.editData(datasrc);
+    }
+    /*@RequestMapping("/edit")
     public
     @ResponseBody
     String edit(String dataSourceId, String dataSourceName, String dataSourceType,
@@ -83,7 +127,7 @@ public class FileSourceController {
             if(attr!=null) {
                 String nodePath = "";
                 for (String nodeId : nodes) {
-                    String str = nodeId.replaceAll("%_%", FILE_SEPARATOR);
+                    String str = nodeId.replaceAll("%_%", "/");
                     String str1 = fileResourceService.traversingFiles(str);
                     nodePath += str1;
                 }
@@ -97,7 +141,7 @@ public class FileSourceController {
             }else{
                 String nodePath = "";
                 for (String nodeId : nodes) {
-                    String str = nodeId.replaceAll("%_%", FILE_SEPARATOR);
+                    String str = nodeId.replaceAll("%_%", "/");
                     String str1 = fileResourceService.traversingFiles(str);
                     nodePath += str1;
                 }
@@ -117,7 +161,7 @@ public class FileSourceController {
         }
         datasrc.setDataSourceId(Integer.valueOf(dataSourceId));
         return fileResourceService.editData(datasrc);
-    }
+    }*/
     @RequestMapping("/queryData")
     public
     @ResponseBody
@@ -151,13 +195,52 @@ public class FileSourceController {
         return jsonObject;
     }
 
-    @RequestMapping("/resCatalogTest")
+    @RequestMapping("/resCatalog")
     public
     @ResponseBody
-    List<JSONObject> showResCatalog(String data) {
+    List<JSONObject> showResCatalog(String data,Integer dataSourceId) {
+
         logger.info("加载文件树");
-        List<JSONObject> jsonObjects = fileResourceService.fileTreeLoading(data);
+        String filePath = fileSourceFileList(dataSourceId);
+        List<JSONObject> jsonObjects = fileResourceService.fileTreeLoading(data,filePath);
         return jsonObjects;
+    }
+
+    @RequestMapping("/check")
+    public
+    @ResponseBody
+    Boolean check(String filePath) {
+        logger.info("校验文件路径是否正确");
+        boolean flag  = fileResourceService.checkFilePath(filePath.replace("%_%", Matcher.quoteReplacement(File.separator)));
+        return flag;
+    }
+
+    @RequestMapping(value="/downloadFile")
+    public String downloads(HttpServletResponse response) throws Exception{
+        String	path = "/logs/";
+        String  fileName = "drsr.log";
+        //1、设置response 响应头
+        response.reset();
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("multipart/form-data");
+        response.setHeader("Content-Disposition",
+                "attachment;fileName="+ URLEncoder.encode(fileName, "UTF-8"));
+
+        File file = new File(path,fileName);
+        //2、 读取文件--输入流
+        InputStream input=new FileInputStream(file);
+        //3、 写出文件--输出流
+        OutputStream out = response.getOutputStream();
+        byte[] buff =new byte[1024];
+        int index=0;
+        //4、执行 写出操作
+        while((index= input.read(buff))!= -1){
+            out.write(buff, 0, index);
+            out.flush();
+        }
+        out.close();
+        input.close();
+        return null;
     }
 
     /**
@@ -174,7 +257,6 @@ public class FileSourceController {
         return fileResourceService.findAll();
     }
 
-
     /**
      *
      * Function Description: 
@@ -184,12 +266,13 @@ public class FileSourceController {
      * @auther: hw
      * @date: 2018/10/23 10:06
      */
-    @ResponseBody
-    @RequestMapping(value="fileSourceFileList")
-    public List<JSONObject> fileSourceFileList(int dataSourceId) {
+
+    public String fileSourceFileList(int dataSourceId) {
 
         DataSrc dataSrc = fileResourceService.findById(dataSourceId);
-        List<JSONObject> jsonObjects = fileResourceService.fileSourceFileList(dataSrc.getFilePath());
-        return jsonObjects;
+        return dataSrc.getFilePath();
+        /*List<JSONObject> jsonObjects = fileResourceService.fileSourceFileList(dataSrc.getFilePath());
+        return jsonObjects;*/
     }
+
 }

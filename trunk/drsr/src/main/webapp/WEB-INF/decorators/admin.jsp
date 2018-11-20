@@ -49,6 +49,9 @@
         a, a:hover, a:link  ,a:visited, a:active, a:hover{
             text-decoration: none !important;
         }
+        body{
+            font-size: 14px;
+        }
     </style>
 </head>
 <body class="page-quick-sidebar-over-content page-style-square">
@@ -236,8 +239,8 @@
 <script src="${ctx}/resources/bundles/jquery-validation/js/additional-methods.min.js"></script>
 <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
 <script src="${ctx}/resources/bundles/bootbox/bootbox.min.js"></script>
-<script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
 <script src="${ctx}/resources/js/regex.js"></script>
+<script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
     jQuery(document).ready(function () {

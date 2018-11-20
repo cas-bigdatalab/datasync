@@ -20,9 +20,9 @@
     <div class="source-head">
         <span>DataSync / 数据源</span>
     </div>
-    <div class="source-title">
+    <%--<div class="source-title">
         <span>文件数据源信息管理</span>
-    </div>
+    </div>--%>
     <div class="alert alert-info" role="alert" style="margin:0  33px">
         <!--查询条件 -->
         <div class="row">
@@ -87,7 +87,13 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div id="jstree_show"></div>
+                                        <label for="filePath" class="col-md-3 control-label"><span class="required">
+													* </span>文件路径</label>
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control" placeholder="请输入文件路径"
+                                                   id="filePath"
+                                                   name="filePath" onblur="filePathCheck();"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -134,12 +140,21 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label for = "filePathE" class="col-md-3 control-label"><span class="required">
+													* </span>文件地址</label>
+                                        <div class="col-md-9">
+                                            <input type="text" class="form-control"
+                                                   id="filePathE"
+                                                   name="filePathE"/>
+                                        </div>
+                                    </div>
+                                    <%--<div class="form-group">
                                         <label  class="col-sm-3 control-label"><font color='red'>*</font>文件地址</label>
                                         <div class="col-sm-9">
                                             <div id="tags_tagsinput" class="tagsinput" style="border: 1px solid black" ></div>
                                             <div id="jstree_show_edit"></div>
                                         </div>
-                                    </div>
+                                    </div>--%>
                                 </div>
                             </div>
                         </div>
@@ -252,7 +267,7 @@
 
         $("#addFileSource").click(function () {
             $("#fileSourceModal").modal('show');
-            $('#jstree_show').jstree({
+            /*$('#jstree_show').jstree({
                 "core": {
                     "themes": {
                         "responsive": false,
@@ -265,6 +280,7 @@
                         var children;
                         if (obj != '#') {
                             var str = obj.id;
+                            var str1 = str.replace(/%_%/g, "/");
                         }
                         $.ajax({
                             type: "GET",
@@ -291,9 +307,9 @@
                         });
                         generateChildJson(children);
                         callback.call(this, children);
-                        /*else{
+                        /!*else{
                          callback.call(this,);
-                         }*/
+                         }*!/
                     }
                 },
                 "types": {
@@ -304,8 +320,8 @@
                         "icon": "glyphicon glyphicon-ok"
                     }
                 },
-                "plugins": ["dnd"/*, "state"*/, "types", "checkbox", "wholerow"]
-            })
+                "plugins": ["dnd"/!*, "state"*!/, "types", "checkbox", "wholerow"]
+            })*/
             var $sqlFrom =$('#fileSourceForm')
             handleValidation($sqlFrom);
         })
@@ -404,13 +420,14 @@
                                $("#dataBaseTypeE").val(jsonData[index][key]);
                            }
                            if (key == 'filePath') {
-                               var filepath = (jsonData[index][key]).replace(/%_%/g, "/").replace(/%_%/g, "\\\\").split(";");
+                               $("#filePathE").val(jsonData[index][key]);
+                               /*var filepath = (jsonData[index][key]).replace(/%_%/g, "/").split(";");
                                var path = "";
                                for(var i = 0;i<filepath.length-1;i++){
                                    path += '<span class="tag" style="display: inline-block">' +
                                            '<span class="filePathClass">'+filepath[i]+'</span>'+'&nbsp;&nbsp;<a href="#" title="Removing tag" onclick="tagClick(this)">x</a> </span>'
                                }
-                               $("#tags_tagsinput").html(path);
+                               $("#tags_tagsinput").html(path);*/
                            }
                            if (key == 'dataSourceId') {
                                $("#idHidden").val(jsonData[index][key]);
@@ -466,6 +483,12 @@
                     dataSourceName: {
                         required: true
                     },
+                    filePath: {
+                        required: true
+                    },
+                    filePathE: {
+                        required: true
+                    },
                     dataSourceNameE: {
                         required: true
                     }
@@ -491,9 +514,19 @@
                     if (formName == 'fileSourceEditForm') {
                         var dataSourceId = $("#idHidden").val();
                         var dataSourceName = $("#dataSourceNameE").val();
+                        var filePath = $("#filePathE").val();
+                        filePath= filePath.replace("\/", "%_%");
+                        filePath= filePath.replace("\\", "%_%");
+
                         var dataSourceType = 'file';
                         var fileType = '本地文件';
-                        var nodes = $('#jstree_show_edit').jstree("get_checked");
+                        /*var nodes = $('#jstree_show_edit').jstree("get_checked");
+                        for (var index in jsonData) {
+                            for (var key in jsonData[index]) {
+
+                            }
+                        }
+                        nodes.replaceAll("/","%_%");
                         var tags_tagsinput = $("#tags_tagsinput").text();
                         if((nodes.length==0)&&(tags_tagsinput.length==0)){
                             toastr["error"]("您尚未选取文件");
@@ -503,7 +536,7 @@
                             if($(this).attr('class')=='filePathClass'){
                                 attr.push($(this).text());
                             }
-                        })
+                        })*/
                         $.ajax({
                             type: 'post',
                             url: "${ctx}/fileResource/edit",
@@ -514,8 +547,9 @@
                                 "dataSourceName": dataSourceName,
                                 "dataSourceType": dataSourceType,
                                 "fileType": fileType,
-                                "attr": attr,
-                                "nodes":nodes
+                                "filePath":filePath
+                                /*"attr": attr,
+                                "nodes":nodes*/
                             },
                             success: function (result) {
                                 var jsonData = JSON.parse(result);
@@ -530,14 +564,19 @@
                             }
                         })
                         }
-                    } else {
+                    else {
+/*
                         var nodes = $('#jstree_show').jstree("get_checked");
+*/
                         var dataSourceName = $("#dataSourceName").val();
                         var dataSourceType = 'file';
                         var fileType = "本地文件";
-                        if(nodes.length==0){
+                        var filePath = $("#filePath").val();
+                        filePath= filePath.replace("\/", "%_%");
+                        filePath= filePath.replace("\\", "%_%");
+                        /*if(nodes.length==0){
                             toastr["error"]("您尚未选取文件");
-                        }else{
+                        }else{*/
                         $.ajax({
                             type: 'post',
                             url: "${ctx}/fileResource/add",
@@ -547,7 +586,10 @@
                                 "dataSourceName": dataSourceName,
                                 "dataSourceType": dataSourceType,
                                 "fileType": fileType,
+                                "filePath":filePath
+/*
                                 "data": nodes
+*/
                             },
                             success: function (result) {
                                 var jsonData = JSON.parse(result);
@@ -561,7 +603,6 @@
                                 }
                             }
                         })
-                        }
                     }
                 }
 
@@ -571,6 +612,26 @@
             $("#fileSourceForm").validate().resetForm();
             $("#fileSourceForm").validate().clean();
             $('.form-group').removeClass('has-error');
+        }
+        function filePathCheck(){
+            var filePath = $("#filePath").val();
+            filePath= filePath.replace("/\//g", "%_%");
+            filePath= filePath.replace("/\\/g", "%_%");
+            $.ajax({
+                type: "GET",
+                url: "${ctx}/fileResource/check",
+                dataType: "json",
+                data: {"filePath": filePath},
+                async: false,
+                success: function (result) {
+                    if(result){
+
+                    }else{
+
+                    }
+                }
+
+            });
         }
     </script>
 </div>

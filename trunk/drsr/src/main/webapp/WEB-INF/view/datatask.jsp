@@ -32,10 +32,10 @@
         <div class="uplod-head">
             <span>DataSync / 传输信息</span>
         </div>
-        <div class="upload-title">
+        <%--<div class="upload-title">
             <span>数据上传任务列表</span>
-            <%--<a href="${ctx}/createTask">新建任务</a>--%>
-        </div>
+            &lt;%&ndash;<a href="${ctx}/createTask">新建任务</a>&ndash;%&gt;
+        </div>--%>
         <div class="alert alert-info" role="alert" style="margin:0  33px">
             <!--查询条件 -->
             <div class="row">
@@ -78,10 +78,15 @@
                 </thead>
                 <tbody id="bd-data"></tbody>
             </table>
-            <div class="page-message" style="float: left;line-height: 56px" ></div>
-            <div class="page-list" style="float: right"></div>
-            <div></div>
+
+           <%-- <div class="page-message" style="float: left;line-height: 56px" ></div>
+            <div id="pagination" style="float: right"></div>--%>
+            <div class="row margin-top-20 ">
+                <div class="page-message" style="float: left;padding-left: 20px; line-height: 56px"></div>
+                <div id="pagination" style="float: right; padding-right: 15px;"></div>
+            </div>
         </div>
+
         <div style="display: none" id="uploadListFlag">
             <span name="" valFlag="false"></span>
         </div>
@@ -220,17 +225,17 @@
         {{else if value.status  == "0"}}
         <td  id="{{value.dataTaskId}}">--</td>
         {{/if}}
-
         <td  class="{{value.dataTaskId}}">{{upStatusName(value.status)}}</td>
-        <td>
-            {{if value.dataTaskType  == "mysql"}}
-            <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" ><i class="glyphicon glyphicon-share"></i>&nbsp;导出</button>
-            {{/if}}
-            {{if value.status  == 0}}
-            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
-            {{/if}}
-            <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-            <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+        <td style="text-align: center">
+
+                <%--{{if value.dataTaskType  == "mysql"}}
+                <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.dataTaskId}}"  value="{{value.dataTaskId}}" ><i class="glyphicon glyphicon-share"></i>&nbsp;导出</button>
+                {{/if}}--%>
+                {{if value.status  == 0}}
+                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
+                {{/if}}
+                <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
 
         </td>
     </tr>
@@ -239,7 +244,8 @@
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
-    <script>
+
+    <script type="text/javascript">
         var dataSourceName=""
         var dataSourceStatus=""
         var uploadListFlag = $("#uploadListFlag")
@@ -299,40 +305,103 @@
             uploadListFlag.append("<span name="+keyID+" valFlag='false'></span>")
             /*uploadTasks.push(new ObjStory(keyID,souceID));
             localStorage.setItem("uploadList",JSON.stringify(uploadTasks));*/
-            $.ajax({
-                url:"${ctx}/ftpUpload",
-                type:"POST",
-                data:{dataTaskId:souceID,processId:keyID},
-                success:function (data) {
-                    console.log("return="+data)
-                    var data =JSON.parse(data)
-                    $("[name="+keyID+"]").attr("valFlag","true")
-                    if(keyType == "mysql"){
-                        if(data =="1"){
-                            $("."+souceID).text("已导入")
-                            return
+            if(keyType =="mysql"){
+                $.ajax({
+                    url:"${ctx}/datatask/" + souceID,
+                    type:"POST",
+                    dataType:"JSON",
+                    success:function (data) {
+                        if (data.result == 'true') {
+
+                            $.ajax({
+                                url:"${ctx}/ftpUpload",
+                                type:"POST",
+                                data:{dataTaskId:souceID,processId:keyID},
+                                success:function (data) {
+                                    var data =JSON.parse(data)
+                                    $("[name="+keyID+"]").attr("valFlag","true")
+                                    if(keyType == "mysql"){
+                                        if(data =="1"){
+                                            $("."+souceID).text("已导入")
+                                            return
+                                        }else {
+                                            $("."+souceID).text("导入失败")
+                                            return
+                                        }
+                                    }else {
+                                        if(data =="1"){
+                                            $("."+souceID).text("已上传")
+                                            return
+                                        }else {
+                                            $("."+souceID).text("上传失败")
+                                            return
+                                        }
+                                    }
+
+
+                                },
+                                error:function () {
+                                    console.log("请求失败")
+                                }
+                            })
+                            $("."+souceID).text("正在上传");
+                            getProcess(keyID,souceID);
+
                         }else {
-                            $("."+souceID).text("导入失败")
                             return
                         }
-                    }else {
-                        if(data =="1"){
-                            $("."+souceID).text("已上传")
-                            return
-                        }else {
-                            $("."+souceID).text("上传失败")
-                            return
-                        }
+                    },
+                    error:function () {
+                        console.log("请求失败")
                     }
+                })
+            }else{
+                $.ajax({
+                    url:"${ctx}/ftpUpload",
+                    type:"POST",
+                    data:{dataTaskId:souceID,processId:keyID},
+                    success:function (data) {
+                        console.log("return="+data)
+                        var data =JSON.parse(data)
+                        $("[name="+keyID+"]").attr("valFlag","true")
+                        if(keyType == "mysql"){
+                            if(data =="1"){
+                                $("."+souceID).text("已导入")
+                                return
+                            }else {
+                                $("."+souceID).text("导入失败")
+                                return
+                            }
+                        }else {
+                            if(data =="1"){
+                                $("."+souceID).text("已上传")
+                                return
+                            }else {
+                                $("."+souceID).text("上传失败")
+                                return
+                            }
+                        }
 
 
-                },
-                error:function () {
-                    console.log("请求失败")
-                }
-            })
-            $("."+souceID).text("正在上传");
-            getProcess(keyID,souceID);
+                    },
+                    error:function () {
+                        console.log("请求失败")
+                    }
+                })
+                $("."+souceID).text("正在上传");
+                getProcess(keyID,souceID);
+            }
+
+
+
+
+
+
+
+
+
+
+
         })
         <!-- remove dataTask-->
         function removeData(id){
@@ -367,6 +436,7 @@
                 data:{datataskId:id},
                 success:function (data) {
                     var datatask = JSON.parse(data).datatask
+                    console.log(datatask)
                     if(type=="mysql"){
                         $("#pre-dataTaskName").html(datatask.dataTaskName)
                         $("#pre-dataSourceId").html(datatask.dataSourceId)
@@ -437,23 +507,11 @@
         }
 
         //导出SQL文件
-        $("#upload-list").delegate(".exportSql","click",function () {
+        /*$("#upload-list").delegate(".exportSql","click",function () {
             var souceID = $(this).attr("keyIdTd");
             //var keyID = souceID + new Date().getTime();
-            $.ajax({
-                url:"${ctx}/task/" + souceID,
-                type:"POST",
-                dataType:"JSON",
-                success:function (data) {
-                    if (data.result == 'true') {
-                        alert("导出SQL文件成功!");
-                    }
-                },
-                error:function () {
-                    console.log("请求失败")
-                }
-            })
-        });
+
+        });*/
         function getProcess(keyID,souceID) {
            var setout= setInterval(function () {
                if($("[name="+keyID+"]").attr("valFlag") == "true"){
@@ -506,30 +564,31 @@
                     status:status
                 },
                 success:function (data) {
-                    $(".table-message").hide();
+                   /* $(".table-message").hide();*/
                     $("#bd-data").html("");
                     var DataList = JSON.parse(data);
                     console.log(DataList)
+
                     var tabCon = template("resourceTmp1", DataList);
                     $("#bd-data").append(tabCon);
 
-                    if(DataList=="{}"){
+                    if(DataList.dataTasks.length == 0){
                         $(".table-message").html("暂时没有数据");
                         $(".page-message").html("");
-                        $(".page-list").html("");
+                        $("#pagination").html("");
                         return
                     }
                     $(".table-message").hide();
                     /*
                     * 创建table
                     * */
-                    if ($(".page-list .bootpag").length != 0) {
-                        $(".page-list").off();
-                        $('.page-list').empty();
+                    if ($("#pagination .bootpag").length != 0) {
+                        $("#pagination").off();
+                        $('#pagination').empty();
                     }
                     var totalpage = Math.ceil(DataList.totalCount/DataList.pageSize)
                     $(".page-message").html("当前第"+DataList.pageNum +"页,共"+totalpage +"页,共"+DataList.totalCount+"条数据");
-                    $('.page-list').bootpag({
+                    $('#pagination').bootpag({
                         total: totalpage,
                         page:DataList.pageNo,
                         maxVisible: DataList.pageSize,
@@ -557,6 +616,10 @@
         function listSpan(arrStr,spl,ele){
             var newStr = arrStr.substr(0, arrStr.length - 1);
             var arrList =  newStr.split(spl);
+            if(arrList[0] ==""){
+                ele.empty()
+                return
+            }
             var arrListStr = ""
             for(var i=0;i<arrList.length;i++){
                 arrListStr+="<span class='arrListSty'>"+arrList[i]+"</span>"

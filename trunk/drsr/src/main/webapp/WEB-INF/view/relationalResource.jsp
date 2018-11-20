@@ -18,9 +18,9 @@
     <div class="source-head">
         <span>DataSync / 数据源</span>
     </div>
-    <div class="source-title">
+    <%--<div class="source-title">
         <span>关系数据源信息管理</span>
-    </div>
+    </div>--%>
     <div class="alert alert-info" role="alert" style="margin:0  33px">
         <!--查询条件 -->
         <div class="row">
