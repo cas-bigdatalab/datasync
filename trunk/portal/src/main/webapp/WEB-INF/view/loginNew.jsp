@@ -59,7 +59,7 @@
         <input type="button" value="验证码核验" class="ver_btn" onClick="validate();">
     </dd>--%>
         <dd>
-            <input type="submit" id="loginButton" value="立即登陆" class="submit_btn"/>
+            <input type="submit" id="loginButton" value="登录" class="submit_btn"/>
         </dd>
     </form>
     <dd>
