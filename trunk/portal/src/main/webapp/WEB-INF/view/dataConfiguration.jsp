@@ -191,7 +191,9 @@
     <script src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
     <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
+<%--
     <script src="${ctx}/resources/js/metaTemplate.js"></script>
+--%>
     <script>
         var ctx = '${ctx}', edit = false;
         var sub = '${sessionScope.SubjectCode}'
