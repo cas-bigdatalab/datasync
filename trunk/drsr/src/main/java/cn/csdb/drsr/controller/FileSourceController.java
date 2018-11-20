@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 /**
  * Created by shiba on 2018/10/8.
@@ -54,7 +55,7 @@ public class FileSourceController {
         return fileResourceService.addData(datasrc);
 
     }
-    /*@RequestMapping("/add")
+    @RequestMapping("/addTask")
     public
     @ResponseBody
     String add(String dataSourceName, String dataSourceType, String fileType, String[] data) {
@@ -71,7 +72,7 @@ public class FileSourceController {
         datasrc.setCreateTime(currentTime);
         StringBuffer filePath = new StringBuffer("");
         for (String nodeId : data){
-            String str = nodeId.replaceAll("%_%","\\\\");
+            String str = nodeId.replaceAll("%_%",Matcher.quoteReplacement(File.separator));
             String str1 = fileResourceService.traversingFiles(str);
             filePath.append(str1);
         }
@@ -79,7 +80,7 @@ public class FileSourceController {
         logger.info("最终拼接的filePath为{}"+filePath.toString());
         return fileResourceService.addData(datasrc);
 
-    }*/
+    }
 
     @RequestMapping("/edit")
     public
@@ -189,12 +190,14 @@ public class FileSourceController {
         return jsonObject;
     }
 
-    @RequestMapping("/resCatalogTest")
+    @RequestMapping("/resCatalog")
     public
     @ResponseBody
-    List<JSONObject> showResCatalog(String data) {
+    List<JSONObject> showResCatalog(String data,Integer dataSourceId) {
+
         logger.info("加载文件树");
-        List<JSONObject> jsonObjects = fileResourceService.fileTreeLoading(data);
+        String filePath = fileSourceFileList(dataSourceId);
+        List<JSONObject> jsonObjects = fileResourceService.fileTreeLoading(data,filePath);
         return jsonObjects;
     }
 
@@ -203,7 +206,7 @@ public class FileSourceController {
     @ResponseBody
     Boolean check(String filePath) {
         logger.info("校验文件路径是否正确");
-        boolean flag  = fileResourceService.checkFilePath(filePath.replace("%_%",File.separator));
+        boolean flag  = fileResourceService.checkFilePath(filePath.replace("%_%", Matcher.quoteReplacement(File.separator)));
         return flag;
     }
 
@@ -232,13 +235,13 @@ public class FileSourceController {
      * @auther: hw
      * @date: 2018/10/23 10:06
      */
-    @ResponseBody
-    @RequestMapping(value="fileSourceFileList")
-    public List<JSONObject> fileSourceFileList(int dataSourceId) {
+
+    public String fileSourceFileList(int dataSourceId) {
 
         DataSrc dataSrc = fileResourceService.findById(dataSourceId);
-        List<JSONObject> jsonObjects = fileResourceService.fileSourceFileList(dataSrc.getFilePath());
-        return jsonObjects;
+        return dataSrc.getFilePath();
+        /*List<JSONObject> jsonObjects = fileResourceService.fileSourceFileList(dataSrc.getFilePath());
+        return jsonObjects;*/
     }
 
     public static void main(String[]args){

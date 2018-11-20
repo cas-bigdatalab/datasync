@@ -27,6 +27,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
 
 /**
  * @program: DataSync
@@ -102,12 +103,14 @@ public class FileResourceService {
         return fileResourceDao.queryPage(requestedPage);
     }
 
-    public List<JSONObject> fileTreeLoading(String data) {
+    public List<JSONObject> fileTreeLoading(String data,String filePath) {
         String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
         File file;
+        data = data.replaceAll("%_%",Matcher.quoteReplacement(File.separator));
+        filePath = filePath.replaceAll("%_%",Matcher.quoteReplacement(File.separator));
         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
         if ("#".equals(data)) {
-            //获取服务器盘符
+            /*//获取服务器盘符
             String os = System.getProperty("os.name");
             if(os.toLowerCase().startsWith("win")){
                 File[] roots = File.listRoots();
@@ -142,13 +145,17 @@ public class FileResourceService {
                     }
                     jsonObjects.add(jsonObject);
                 }
-            }else{
-                File roots = new File("/usr");
+            }else{*/
+                File roots = new File(filePath);
                 logger.info("服务器盘符为："+roots);
                 String root = roots.toString();
                 logger.info("root为："+root);
-                String rootName= root.substring(1);
+/*
+                String rootName= root.substring(0, root.indexOf("\\"));
+*/
+/*
                 logger.info("rootName为："+rootName);
+*/
                 JSONObject jsonObject = new JSONObject();
                 if (roots.isDirectory()) {
                     File file1 = roots;
@@ -166,16 +173,15 @@ public class FileResourceService {
                     JSONObject jo = new JSONObject();
                     jo.put("disabled", "true");
                     jsonObject.put("state", jo);
-                    jsonObject.put("id", root.replaceAll("\\\\", "%_%"));
-                    jsonObject.put("name", rootName);
+                    jsonObject.put("id", root.replaceAll(Matcher.quoteReplacement(File.separator), "%_%"));
+                    jsonObject.put("name", root);
                 } else {
                     jsonObject.put("type", "file");
-                    jsonObject.put("id", root.replaceAll("\\\\", "%_%"));
-                    jsonObject.put("name", rootName);
+                    jsonObject.put("id", root.replaceAll(Matcher.quoteReplacement(File.separator), "%_%"));
+                    jsonObject.put("name", root);
                 }
                 jsonObjects.add(jsonObject);
-            }
-            return jsonObjects;
+                return jsonObjects;
         } else {
             file = new File(data);
             if (!file.exists() || !file.isDirectory()) {
@@ -184,8 +190,8 @@ public class FileResourceService {
                 File[] fileList = file.listFiles();
                 for (int i = 0; i < fileList.length; i++) {
                     JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("id", fileList[i].getPath().replaceAll("\\\\", "%_%"));
-                    jsonObject.put("name", fileList[i].getName().replaceAll("\\\\", "%_%"));
+                    jsonObject.put("id", fileList[i].getPath().replaceAll(Matcher.quoteReplacement(File.separator), "%_%"));
+                    jsonObject.put("name", fileList[i].getName().replaceAll(Matcher.quoteReplacement(File.separator), "%_%"));
                     if (fileList[i].isDirectory()) {
                         File file1 = fileList[i];
                         File[] fileNode = file1.listFiles();
