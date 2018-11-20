@@ -13,7 +13,7 @@
 <html>
 
 <head>
-    <title>用户管理</title>
+    <title>用户与组管理</title>
     <link href="${ctx}/resources/bundles/rateit/src/rateit.css" rel="stylesheet" type="text/css">
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css">
     <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
@@ -31,7 +31,7 @@
 <body>
 
 <div style="height: 850px;min-height: 850px;" class="page-content" >
-    <h3>&nbsp;&nbsp;用户管理</h3>
+    <h3>&nbsp;&nbsp;用户与组管理</h3>
     <hr />
 
     <div class="col-md-12">
