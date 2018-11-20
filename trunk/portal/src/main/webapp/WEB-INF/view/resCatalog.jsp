@@ -19,7 +19,9 @@
 </head>
 <body>
 <div class="page-content" style="min-height: 700px;">
-    <div class="col-md-4">
+    <h3>数据目录管理</h3>
+    <hr>
+    <div class="col-md-4" >
             <button type="button" class="btn btn-success btn-sm" style="margin-bottom:5px" onclick="editTree();"><i
                     class="glyphicon glyphicon-pencil"></i> 修改
             </button>

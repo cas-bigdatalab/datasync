@@ -19,31 +19,28 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/dataConfig.css">
     <style type="text/css">
         .nav-tabs li a{
-            font-size: 22px;
+            font-size: 16px;
             background-color: gainsboro;
         }
-        .nav-tabs>li.active>a{
+     /*   .nav-tabs>li.active>a{
             background-color: #28a4a4!important;
             border: 1px solid black!important;
             border-bottom-color:transparent!important;
         }
         .nav-tabs>li.active>a:hover{
             background-color: #28a4a4!important;
-        }
-        .undeslist label{
-            font-size: 18px;
-            word-break: break-all;
-        }
+        }*/
     </style>
 </head>
 
 <body>
 
 <div class="page-content">
-    <h3><b>数据配置</b></h3>
-    <div class="config-head">
+    <h3>数据配置</h3>
+    <hr>
+   <%-- <div class="config-head">
         <span>DataSync / 传输信息</span>
-    </div>
+    </div>--%>
     <div>
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist" id="tabDescribe">

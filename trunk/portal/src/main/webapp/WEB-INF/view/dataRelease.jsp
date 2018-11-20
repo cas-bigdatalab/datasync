@@ -35,9 +35,11 @@
 
 <div class="page-content">
     <div>
-        <div class="uplod-head">
+        <%--<div class="uplod-head">
             <span>数据发布管理</span>
-        </div>
+        </div>--%>
+        <h3>数据发布管理</h3>
+            <hr>
         <div class="alert alert-info" role="alert">
             <!--查询条件 -->
             <div class="row">
