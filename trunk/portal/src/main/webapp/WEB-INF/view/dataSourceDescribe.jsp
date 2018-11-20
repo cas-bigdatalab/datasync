@@ -353,12 +353,12 @@
 
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-md-3" for="create_institutions">创建者机构 <span class="required">
+                                                <label class="control-label col-md-3" for="create_Organization">创建者机构 <span class="required">
                                                     * </span>
                                                 </label>
                                                 <div class="col-md-5" style="padding-top:13px">
-                                                    <input type="text" class="form-control" name="create_institutions" required="required" placeholder="请输入机构名"
-                                                           id="create_institutions" >
+                                                    <input type="text" class="form-control" name="create_Organization" required="required" placeholder="请输入机构名"
+                                                           id="create_Organization" >
                                                 </div>
 
                                             </div>
@@ -377,18 +377,18 @@
                                                     * </span></label>
                                                 <div class="col-md-5"  style="padding-top:13px">
                                                     <div class="input-group input-daterange">
-                                                        <input type="text" class="form-control selectData"
+                                                        <input type="text" class="form-control selectData" id="createTime"
                                                                data-date-format="yyyy-mm-dd" placeholder="创建日期" readonly>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-md-3" for="publishe_Organization">发布者机构 <span class="required">
+                                                <label class="control-label col-md-3" for="publish_Organization">发布者机构 <span class="required">
                                                     * </span>
                                                 </label>
                                                 <div class="col-md-5" style="padding-top:13px">
-                                                    <input type="text" class="form-control" name="publishe_Organization" required="required" placeholder="请输入发布者机构"
-                                                           id="publishe_Organization" >
+                                                    <input type="text" class="form-control"  required="required" placeholder="请输入发布者机构"
+                                                           id="publish_Organization" name="publish_Organization">
                                                 </div>
 
                                             </div>
@@ -661,15 +661,14 @@
             focusInvalid: false, // do not focus the last invalid input
             ignore: "", // validate all fields including form hidden input
             rules: {
-
                 select2_tags: {
                     required: true,
                     minTwoKey:true
                 },
-                create_institutions:{
+                create_Organization:{
                     required: true,
                 },
-                publishe_Organization:{
+                publish_Organization:{
                     required: true,
                 },
                 Task_phone: {
@@ -684,10 +683,10 @@
                 select2_tags: {
                     required: "至少添加两个关键词"
                 },
-                create_institutions:{
+                create_Organization:{
                     required: "请输入机构名",
                 },
-                publishe_Organization:{
+                publish_Organization:{
                     required: "请输入发布者机构",
                 },
                 Task_email: {
@@ -977,9 +976,11 @@
                 $(".timeVili3:eq(1)").show()
                 firstFlag=true
             }
-            if(!$("#submit_form1").valid() || !$("#submit_form2").valid()){
+            if(!$("#submit_form1").valid() ){
                 firstFlag=true
-                return
+            }
+            if(!$("#submit_form2").valid()){
+                firstFlag=true
             }
             if(firstFlag){
                 return
@@ -999,7 +1000,11 @@
                     startTime:$('.selectData:eq(0)').val(),
                     endTime:$('.selectData:eq(1)').val(),
                     email:$("#Task_email").val(),
-                    phoneNum:$("#Task_phone").val()
+                    phoneNum:$("#Task_phone").val(),
+                    createTime:$("#createTime").val(),
+                    publishOrganzition:$("#publish_Organization").val(),
+                    createOrganization:$("#create_Organization").val(),
+                    createPerson:$("#create_person").val()
                 },
                 success:function (data) {
                     var data = JSON.parse(data)
@@ -1082,9 +1087,11 @@
                 $(".timeVili2:eq(1)").show()
                 firstFlag=true
             }
-            if(!$("#submit_form1").valid() || !$("#submit_form2").valid()){
+            if(!$("#submit_form1").valid() ){
                 firstFlag=true
-                return
+            }
+            if(!$("#submit_form2").valid()){
+                firstFlag=true
             }
             if(firstFlag){
                 return
@@ -1105,7 +1112,11 @@
                     startTime:$('.selectData:eq(0)').val(),
                     endTime:$('.selectData:eq(1)').val(),
                     email:$("#Task_email").val(),
-                    phoneNum:$("#Task_phone").val()
+                    phoneNum:$("#Task_phone").val(),
+                    createTime:$("#createTime").val(),
+                    publishOrganzition:$("#publish_Organization").val(),
+                    createOrganization:$("#create_Organization").val(),
+                    createPerson:$("#create_person").val()
                 },
                 success:function (data) {
                 },
