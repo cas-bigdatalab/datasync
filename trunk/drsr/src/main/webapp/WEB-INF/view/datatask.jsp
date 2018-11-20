@@ -307,11 +307,10 @@
             localStorage.setItem("uploadList",JSON.stringify(uploadTasks));*/
             if(keyType =="mysql"){
                 $.ajax({
-                    url:"${ctx}/task/" + souceID,
+                    url:"${ctx}/datatask/" + souceID,
                     type:"POST",
                     dataType:"JSON",
                     success:function (data) {
-                        alert("daaaaaaa")
                         if (data.result == 'true') {
 
                             $.ajax({
