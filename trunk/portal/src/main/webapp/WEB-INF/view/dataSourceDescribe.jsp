@@ -713,8 +713,9 @@
         };
 
         jQuery.validator.addMethod("isPhone", function (value, element) {
-            var winPath = /^1[34578]\d{9}$/;
-            return this.optional(element) || winPath.test(value);
+            var isPhone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;
+            var isMob = /^((\+?86)|(\(\+86\)))?(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;
+            return this.optional(element) || isMob.test(value)||isPhone.test(value) ;
         }, "请输入正确电话号码");
 
         jQuery.validator.addMethod("isEmail", function (value, element) {

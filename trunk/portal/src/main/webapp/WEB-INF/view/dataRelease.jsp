@@ -134,14 +134,6 @@
                         <label class="col-sm-3 control-label">发布内容:</label>
                         <div class="col-sm-8 modediv" id="rel-publicContent"></div>
                     </div>
-                    <%--<div class="form-group">
-                        <label class="col-sm-3 control-label">文件路径:</label>
-                        <div class="col-sm-8 modediv" id="rel-filePath"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">文件名称:</label>
-                        <div class="col-sm-8 modediv" id="rel-fileName"></div>
-                    </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">字段注释:</label>
                         <div class="col-sm-8 modediv" id="rel-fieldComs"></div>
@@ -474,7 +466,6 @@
                     resourceId:id
                 },
                 success: function (data) {
-                    console.log(JSON.parse(data))
                     var dataList = JSON.parse(data).resource;
                     if(type == "mysql"){
                         $("#rel-dataSourceId").html(dataList.dataSourceId)
@@ -485,22 +476,17 @@
                         $("#rel-publicType").html(dataList.publicType)
                         var $publicContent=$("#rel-publicContent")
                         listSpan(dataList.publicContent,";",$publicContent)
-                       /* $("#rel-publicContent").html(dataList.publicContent)*/
                         var $filePath=$("#rel-filePath")
                         var filrStr = dataList.filePath.substr(0, dataList.filePath.length - 1);
                         listSpan(filrStr,";",$filePath)
-                        /*$("#rel-filePath").html(dataList.filePath)*/
-
                         $("#rel-fileName").html(dataList.fileName)
                         $("#rel-fieldComs").html(dataList.fieldComs)
                         $("#rel-subjectCode").html(dataList.subjectCode)
                         $("#rel-pid").html(dataList.pid)
                         $("#rel-title").html(dataList.title)
                         $("#rel-introduction").html(dataList.introduction)
-
                         var $keyword=$("#rel-keyword")
                         listSpan(dataList.keyword,",",$keyword)
-                        /*$("#rel-keyword").html(dataList.keyword)*/
                         $("#rel-taxonomy").html(dataList.taxonomy)
                         $("#rel-dataFormat").html(dataList.dataFormat)
                         $("#rel-startTime").html(convertMilsToDateString(dataList.startTime))
@@ -529,13 +515,10 @@
                         $("#file-publicType").html(dataList.publicType)
                         var $publicContent=$("#file-publicContent")
                         listSpan(dataList.publicContent,";",$publicContent)
-                        /*$("#file-publicContent").html(dataList.publicContent)*/
                         var $filePath=$("#file-filePath")
-
                         var str = dataList.filePath.replace(/%_%/g, "/");
                         var filrStr = str.substr(0, str.length - 1);
                         listSpan(filrStr,";",$filePath)
-                        /*$("#file-filePath").html(dataList.filePath)*/
                         $("#file-fileName").html(dataList.fileName)
                         $("#file-fieldComs").html(dataList.fieldComs)
                         $("#file-subjectCode").html(dataList.subjectCode)
@@ -544,7 +527,6 @@
                         $("#file-introduction").html(dataList.introduction)
                         var $keyword=$("#file-keyword")
                         listSpan(dataList.keyword,",",$keyword)
-                        /*$("#file-keyword").html(dataList.keyword)*/
                         $("#file-taxonomy").html(dataList.taxonomy)
                         $("#file-dataFormat").html(dataList.dataFormat)
                         $("#file-startTime").html(convertMilsToDateString(dataList.startTime))
@@ -562,7 +544,6 @@
                         $("#file-toRecordNumber").html(dataList.toRecordNumber)
                         var $userGroupId=$("#file-userGroupId")
                         listSpan(dataList.userGroupId,",",$userGroupId)
-                       /* $("#file-userGroupId").html(dataList.userGroupId)*/
                         $("#fileModal").modal("show")
                     }
                 },

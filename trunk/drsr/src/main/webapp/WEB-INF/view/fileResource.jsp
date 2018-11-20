@@ -18,7 +18,8 @@
 <body>
 <div class="page-content">
     <div class="source-head">
-        <span>DataSync / 数据源</span>
+        <h3>文件数据源</h3>
+        <hr>
     </div>
     <%--<div class="source-title">
         <span>文件数据源信息管理</span>

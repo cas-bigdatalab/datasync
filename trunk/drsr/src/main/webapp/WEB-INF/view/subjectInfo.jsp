@@ -14,6 +14,11 @@
 <head>
     <title>系统</title>
     <link href="${ctx}/resources/css/projectMessage.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+        .form-group div{
+            font-size: 18px;
+        }
+    </style>
 </head>
 
 <body>

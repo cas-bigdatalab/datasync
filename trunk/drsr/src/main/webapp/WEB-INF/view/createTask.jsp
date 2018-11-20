@@ -17,7 +17,8 @@
 <body>
 <div class="page-content">
     <div class="task-head">
-        <span>DataSync / 数据范围</span>
+       <h3>数据范围</h3>
+        <hr>
     </div>
     <div class="task-title">
         <%--<span>确定数据对象范围，上传数据</span>--%>

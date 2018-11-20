@@ -16,7 +16,8 @@
 <body>
 <div class="page-content">
     <div class="source-head">
-        <span>DataSync / 数据源</span>
+        <h3>关系数据源</h3>
+        <hr>
     </div>
     <%--<div class="source-title">
         <span>关系数据源信息管理</span>

@@ -4,10 +4,7 @@
     word-break: break-all;
 }
 .uplod-head{
-    height: 50px;
-    line-height: 50px;
-    font-size: 18px;
-    color: #999999;
+    padding: 0 33px;
 }
 .upload-title{
     height: 50px;
