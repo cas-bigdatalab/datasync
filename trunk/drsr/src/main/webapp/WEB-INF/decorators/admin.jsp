@@ -37,7 +37,7 @@
           id="style_color"/>
     <link href="${ctx}/resources/bundles/metronic/css/custom.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/css/globle.css" rel="stylesheet" type="text/css"/>
-    <link href="${ctx}/resources/css/reset.css" rel="stylesheet" type="text/css"/>
+  <%--  <link href="${ctx}/resources/css/reset.css" rel="stylesheet" type="text/css"/>--%>
     <link href="${ctx}/resources/css/main.css" rel="stylesheet" type="text/css"/>
 
     <!-- END THEME STYLES -->
@@ -49,7 +49,7 @@
         a, a:hover, a:link  ,a:visited, a:active, a:hover{
             text-decoration: none !important;
         }
-        body{
+        body table{
             font-size: 14px;
         }
     </style>

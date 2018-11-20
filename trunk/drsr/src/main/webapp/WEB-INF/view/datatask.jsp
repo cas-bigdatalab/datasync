@@ -30,7 +30,10 @@
 <div class="page-content">
     <div>
         <div class="uplod-head">
-            <span>DataSync / 传输信息</span>
+            <h3>
+                传输信息
+            </h3>
+            <hr>
         </div>
         <%--<div class="upload-title">
             <span>数据上传任务列表</span>

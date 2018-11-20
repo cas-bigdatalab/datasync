@@ -5,6 +5,7 @@ import cn.csdb.portal.model.User;
 import cn.csdb.portal.repository.CheckUserDao;
 import cn.csdb.portal.repository.GroupDao;
 import cn.csdb.portal.repository.UserDao;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -14,6 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -76,4 +79,20 @@ public class GroupServiceTest {
         if (subject != null)
             logger.info(subject.getSubjectName() + ":" + subject.getSubjectCode());
     }
+
+    @Test
+    public void testDeleteGroupName(){
+        String groups ="test";  //烟叶质量组,烟叶质量组2,系统管理员,烟叶质量组3,
+        //String s = StringUtils.remove(groups,"test");
+        List<String> list = Arrays.asList(StringUtils.split(groups,","));
+        ArrayList<String> result = new ArrayList<String>(list);
+        logger.info("\n\n==================================");
+        logger.info(String.valueOf(result.size()));
+
+        result.remove("test");
+        logger.info(String.valueOf(result.size()));
+
+        logger.info(StringUtils.join(result,","));
+    }
+
 }

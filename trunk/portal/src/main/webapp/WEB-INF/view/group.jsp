@@ -132,7 +132,7 @@
 
                                         <button id="btnSearch" name="btnSearch" onclick="search();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查询</button>
                                         &nbsp;&nbsp;
-                                        <button id="btnAdd" name="btnAdd" onclick="" class="btn info green btn-sm"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新建用户组</button>
+                                        <button id="btnAdd" name="btnAdd" onclick="" class="btn info green btn-sm"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增用户组</button>
                                     </div>
                                 </div>
 
@@ -989,6 +989,8 @@
                     if (data.result == 'ok') {
                         toastr["success"]("用户组增加用户成功！", "用户组编辑");
                         $("#groupModalForAddUser").modal("hide");
+                        //同时更新用户信息
+                        queryUser(null, null, null, 1);
                     } else {
                         toastr["error"]("用户组增加用户失败！", "用户组编辑");
                     }

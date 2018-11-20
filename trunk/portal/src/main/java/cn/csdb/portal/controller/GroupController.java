@@ -132,9 +132,14 @@ public class GroupController {
     @ResponseBody
     public JSONObject updateUsers(String id, String[] users) {
         Group group = groupService.get(id);
+        //此用户组中原有用户列表
+        List<String> oldUsers = group.getUsers();
         List<String> list = Arrays.asList(users);
+        if (list.contains("null"))
+            list = null;
         group.setUsers(list);
-        groupService.update(group);
+        //groupService.update(group);
+        groupService.updateUsersAndGroups(oldUsers,list,group);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("result", "ok");
         return jsonObject;

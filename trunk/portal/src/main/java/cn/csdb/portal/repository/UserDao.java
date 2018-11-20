@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -249,4 +250,48 @@ public class UserDao {
 
         return loginIdCnt;
     }
+
+
+    /**
+     * Function Description: 从此用户的用户组中删除groupName
+     *
+     * @param:
+     * @return:
+     * @auther: xiajl
+     * @date:   2018/11/20 15:08
+     */
+    public void deleteGroupName(String userid, String groupName){
+        String id = userid.replace("[","").replace("]","").replace("\"","");
+        User user = getUserById(id);
+        String groups = user.getGroups();
+        List<String> list = Arrays.asList(org.apache.commons.lang3.StringUtils.split(groups,","));
+        ArrayList<String> result = new ArrayList<String>(list);
+        if (result.contains(groupName))
+            result.remove(groupName);
+        String str = org.apache.commons.lang3.StringUtils.join(result,",");
+        user.setGroups(str);
+        updateUser(user);
+    }
+
+    /**
+     * Function Description: 从此用户的用户组中增加groupName
+     *
+     * @param:
+     * @return:
+     * @auther: xiajl
+     * @date:   2018/11/20 15:10
+     */
+    public void addGroupName(String userid, String groupName){
+        String id = userid.replace("[","").replace("]","").replace("\"","");
+        User user = getUserById(id);
+        String groups = user.getGroups();
+        List<String> list = Arrays.asList(org.apache.commons.lang3.StringUtils.split(groups,","));
+        ArrayList<String> result = new ArrayList<String>(list);
+        if (!result.contains(groupName))
+            result.add(groupName);
+        String str = org.apache.commons.lang3.StringUtils.join(result,",");
+        user.setGroups(str);
+        updateUser(user);
+    }
+
 }
