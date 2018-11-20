@@ -59,6 +59,9 @@
             font-size: 12px;
             padding-left: 2px;
         }
+        #tab1 .form-group{
+            margin-bottom: 0px;
+        }
 
     </style>
 </head>
@@ -110,7 +113,7 @@
                             </div>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab1">
-                                    <form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"  onfocusout="true"
+                                    <%--<form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"  onfocusout="true"
                                           method="POST">
                                         <div class="form-group">
                                             <label class="control-label col-md-3" for="Task_dataName" >数据集名称 <span class="required">
@@ -153,7 +156,7 @@
                                                 <div class=" margin-top-10">
                                                     <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
                                                         <div id="cutDiv" style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
-                                                            <%--<img alt="" src="" id="cutimg" style="height: 150px; width: 200px;"/>--%>
+                                                            &lt;%&ndash;<img alt="" src="" id="cutimg" style="height: 150px; width: 200px;"/>&ndash;%&gt;
                                                             <input type="hidden" id="x" name="x" />
                                                             <input type="hidden" id="y" name="y" />
                                                             <input type="hidden" id="w" name="w" />
@@ -214,8 +217,8 @@
                                                     * </span>
                                             </label>
                                             <div class="col-md-6" style="padding-top:14px">
-                                                <%--<textarea type="text"  id="dataDescribeID" name="dataDescribeID" required="required"
-                                                          style=" height: 96px; width: 412px;resize: none;"></textarea>--%>
+                                                &lt;%&ndash;<textarea type="text"  id="dataDescribeID" name="dataDescribeID" required="required"
+                                                          style=" height: 96px; width: 412px;resize: none;"></textarea>&ndash;%&gt;
 
                                                 <textarea  type="text" class="form-control" cols="30" rows="5"  placeholder="不少于50字"
                                                            id="dataDescribeID" name="dataDescribeID"  required="required" ></textarea>
@@ -240,6 +243,182 @@
 
                                         </div>
                                     </form>
+--%>
+                                        <form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"  onfocusout="true"
+                                              method="POST">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" for="Task_dataName" >数据集名称 <span class="required">
+                                                    * </span>
+                                                </label>
+                                                <div class="col-md-5" style="padding-top:13px">
+                                                    <input type="text" class="form-control" name="Task_dataName" required="required"
+                                                           id="Task_dataName" placeholder="请输入名称">
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group ">
+                                                <label class="control-label col-md-3" for="dataDescribeID">简介 <span class="required">
+                                                    * </span>
+                                                </label>
+                                                <div class="col-md-5" style="padding-top:13px">
+
+
+                                                    <textarea  type="text" class="form-control" cols="30" rows="4"  placeholder="不少于50字"
+                                                               id="dataDescribeID" name="dataDescribeID"  required="required" ></textarea>
+
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <div style="overflow: hidden;margin: 0 -15px">
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 timeVili3" style="text-align: right">图片<span  class="required">
+                                                    * </span>
+                                                </label>
+                                                <div class="col-md-9">
+                                                    <div class=" margin-top-10">
+                                                        <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
+                                                            <div id="cutDiv" style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
+                                                                <%--<img alt="" src="" id="cutimg" style="height: 150px; width: 200px;"/>--%>
+                                                                <input type="hidden" id="x" name="x" />
+                                                                <input type="hidden" id="y" name="y" />
+                                                                <input type="hidden" id="w" name="w" />
+                                                                <input type="hidden" id="h" name="h" />
+                                                                <input type="hidden" id="tag" name="tag" val=""/>
+                                                                <input type="hidden" id="imgFlagNum" val=""/>
+                                                            </div>
+                                                            <span class="btn default btn-file" id="checkPicture">
+                                                            <span class="fileinput-new">
+                                                            选择一个图片</span>
+                                                            <input class="photo-file" id="fcupload" type="file" name="imgFile" onchange="readURL(this);">
+                                                            </span>
+                                                            <span id="uploadSpan" class="btn default btn-file" style="display: none">
+                                                                <span class="fileinput-new">
+                                                            上传</span>
+                                                                <input type="button" onclick="doUpload();"/>
+                                                        </span>
+                                                        </form>
+                                                        <div class="timeVili3" style="display: none">请上传选择图片</div>
+                                                        <div class="clearfix margin-top-10">
+                                                 <%--   <span class="label label-danger">
+                                                注意! </span>
+                                                            图片只能在 IE10+, FF3.6+, Safari6.0+, Chrome6.0+ 和
+                                                            Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。--%>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <form class="form-horizontal" id="submit_form2" method="POST" accept-charset="utf-8" role="form"  onfocusout="true">
+
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" for="select2_tags">关键词<span class="required">
+                                                    * </span></label>
+                                                <div class="checkbox-list col-md-5" style="padding-top:13px">
+                                                    <input type="text" class="form-control" id="select2_tags" value="" name="select2_tags" required="required"  placeholder="至少两个关键词">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 timeVili2" for="centerCatalogId">资源目录<span class="norequired" >
+                                                    * </span>
+                                                </label>
+                                                <div class="col-md-5" id="cemterCatalogDiv" style="padding-top:13px" >
+
+                                                    <div id="jstree-demo"></div>
+                                                    <input type="text"  id="centerCatalogId" name="centerCatalogId"  style="display: none">
+                                                    <div class="timeVili2" style="display: none">请选择目录</div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 timeVili" >选择时间<span >
+                                                    * </span></label>
+                                                <div class="col-md-5"  style="padding-top:13px">
+                                                    <div class="input-group input-daterange">
+                                                        <input type="text" class="form-control selectData"
+                                                               data-date-format="yyyy-mm-dd" placeholder="起始时间" readonly>
+                                                        <div class="input-group-addon">to</div>
+                                                        <input type="text" class="form-control selectData"
+                                                               data-date-format="yyyy-mm-dd" placeholder="起始时间" readonly>
+                                                    </div>
+                                                    <div class="timeVili" style="display: none">请正确选择时间</div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" for="dataSourceDesID">版权声明<span >
+                                                    * </span></label>
+                                                <div class="col-md-5" id="dataSourceDes" style="padding-top:13px">
+                                                <textarea  type="text" class="form-control" cols="30" rows="4" placeholder="请输入来源信息"
+                                                           id="dataSourceDesID" name="dataSourceDesID" ></textarea>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" for="create_institutions">创建者机构 <span class="required">
+                                                    * </span>
+                                                </label>
+                                                <div class="col-md-5" style="padding-top:13px">
+                                                    <input type="text" class="form-control" name="create_institutions" required="required" placeholder="请输入机构名"
+                                                           id="create_institutions" >
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" for="create_person">创建人员<span>
+                                                    * </span>
+                                                </label>
+                                                <div class="col-md-5" style="padding-top:13px">
+                                                    <input type="text" class="form-control"
+                                                           id="create_person" name="create_person" placeholder="请输入创建人员">
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" >创建日期<span >
+                                                    * </span></label>
+                                                <div class="col-md-5"  style="padding-top:13px">
+                                                    <div class="input-group input-daterange">
+                                                        <input type="text" class="form-control selectData"
+                                                               data-date-format="yyyy-mm-dd" placeholder="创建日期" readonly>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" for="publishe_Organization">发布者机构 <span class="required">
+                                                    * </span>
+                                                </label>
+                                                <div class="col-md-5" style="padding-top:13px">
+                                                    <input type="text" class="form-control" name="publishe_Organization" required="required" placeholder="请输入发布者机构"
+                                                           id="publishe_Organization" >
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" for="Task_email">发布者邮箱号<span class="required">
+                                                    * </span>
+                                                </label>
+                                                <div class="col-md-5" style="padding-top:13px">
+                                                    <input type="text" class="form-control"
+                                                           id="Task_email" name="Task_email" required="required" placeholder="请输入邮箱号">
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3" for="Task_phone">发布者电话号码 <span>
+                                                    * </span>
+                                                </label>
+                                                <div class="col-md-5" style="padding-top:13px">
+                                                    <input type="text" class="form-control" name="Task_phone" placeholder="请输入电话号码"
+                                                           id="Task_phone" >
+                                                </div>
+
+                                            </div>
+
+
+
+
+
+
+                                        </form>
 
                                 </div>
                                 <div class="tab-pane" id="tab2">
@@ -445,25 +624,19 @@
                 Task_dataName: {
                     required: true
                 },
-                Task_email: {
+                dataDescribeID: {
                     required: true,
-                    isEmail:true
-                },
-                Task_phone: {
-                    required: true,
-                    isPhone:true
+                    minWords:true
                 }
             },
             messages: {
                 Task_dataName: {
                     required: "请输入数据集名称"
                 },
-                Task_email: {
-                    required: "请输入邮箱地址"
+
+                dataDescribeID: {
+                    required: "请输入简介信息"
                 },
-                Task_phone: {
-                    required: "请输入电话号码"
-                }
             },
             errorPlacement: function (error, element) { // render error placement for each input type
                 if (element.parent(".input-group").size() > 0) {
@@ -488,28 +661,38 @@
             focusInvalid: false, // do not focus the last invalid input
             ignore: "", // validate all fields including form hidden input
             rules: {
-                dataDescribeID: {
-                    required: true,
-                    minWords:true
-                },
+
                 select2_tags: {
                     required: true,
                     minTwoKey:true
                 },
-                dataSourceDesID: {
-                    required: true
-                }
+                create_institutions:{
+                    required: true,
+                },
+                publishe_Organization:{
+                    required: true,
+                },
+                Task_phone: {
+                    isPhone:true
+                },
+                Task_email: {
+                    required: true,
+                    isEmail:true
+                },
             },
             messages: {
-                dataDescribeID: {
-                    required: "请输入用户组描述信息"
-                },
                 select2_tags: {
                     required: "至少添加两个关键词"
                 },
-                dataSourceDesID: {
-                    required: "请输入来源"
-                }
+                create_institutions:{
+                    required: "请输入机构名",
+                },
+                publishe_Organization:{
+                    required: "请输入发布者机构",
+                },
+                Task_email: {
+                    required: "请输入发布者邮箱地址"
+                },
             },
             errorPlacement: function (error, element) { // render error placement for each input type
                 if (element.parent(".input-group").size() > 0) {

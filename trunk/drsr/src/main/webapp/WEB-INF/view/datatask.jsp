@@ -305,40 +305,104 @@
             uploadListFlag.append("<span name="+keyID+" valFlag='false'></span>")
             /*uploadTasks.push(new ObjStory(keyID,souceID));
             localStorage.setItem("uploadList",JSON.stringify(uploadTasks));*/
-            $.ajax({
-                url:"${ctx}/ftpUpload",
-                type:"POST",
-                data:{dataTaskId:souceID,processId:keyID},
-                success:function (data) {
-                    console.log("return="+data)
-                    var data =JSON.parse(data)
-                    $("[name="+keyID+"]").attr("valFlag","true")
-                    if(keyType == "mysql"){
-                        if(data =="1"){
-                            $("."+souceID).text("已导入")
-                            return
+            if(keyType =="mysql"){
+                $.ajax({
+                    url:"${ctx}/task/" + souceID,
+                    type:"POST",
+                    dataType:"JSON",
+                    success:function (data) {
+                        alert("daaaaaaa")
+                        if (data.result == 'true') {
+
+                            $.ajax({
+                                url:"${ctx}/ftpUpload",
+                                type:"POST",
+                                data:{dataTaskId:souceID,processId:keyID},
+                                success:function (data) {
+                                    var data =JSON.parse(data)
+                                    $("[name="+keyID+"]").attr("valFlag","true")
+                                    if(keyType == "mysql"){
+                                        if(data =="1"){
+                                            $("."+souceID).text("已导入")
+                                            return
+                                        }else {
+                                            $("."+souceID).text("导入失败")
+                                            return
+                                        }
+                                    }else {
+                                        if(data =="1"){
+                                            $("."+souceID).text("已上传")
+                                            return
+                                        }else {
+                                            $("."+souceID).text("上传失败")
+                                            return
+                                        }
+                                    }
+
+
+                                },
+                                error:function () {
+                                    console.log("请求失败")
+                                }
+                            })
+                            $("."+souceID).text("正在上传");
+                            getProcess(keyID,souceID);
+
                         }else {
-                            $("."+souceID).text("导入失败")
                             return
                         }
-                    }else {
-                        if(data =="1"){
-                            $("."+souceID).text("已上传")
-                            return
-                        }else {
-                            $("."+souceID).text("上传失败")
-                            return
-                        }
+                    },
+                    error:function () {
+                        console.log("请求失败")
                     }
+                })
+            }else{
+                $.ajax({
+                    url:"${ctx}/ftpUpload",
+                    type:"POST",
+                    data:{dataTaskId:souceID,processId:keyID},
+                    success:function (data) {
+                        console.log("return="+data)
+                        var data =JSON.parse(data)
+                        $("[name="+keyID+"]").attr("valFlag","true")
+                        if(keyType == "mysql"){
+                            if(data =="1"){
+                                $("."+souceID).text("已导入")
+                                return
+                            }else {
+                                $("."+souceID).text("导入失败")
+                                return
+                            }
+                        }else {
+                            if(data =="1"){
+                                $("."+souceID).text("已上传")
+                                return
+                            }else {
+                                $("."+souceID).text("上传失败")
+                                return
+                            }
+                        }
 
 
-                },
-                error:function () {
-                    console.log("请求失败")
-                }
-            })
-            $("."+souceID).text("正在上传");
-            getProcess(keyID,souceID);
+                    },
+                    error:function () {
+                        console.log("请求失败")
+                    }
+                })
+                $("."+souceID).text("正在上传");
+                getProcess(keyID,souceID);
+            }
+
+
+
+
+
+
+
+
+
+
+
         })
         <!-- remove dataTask-->
         function removeData(id){
@@ -444,23 +508,11 @@
         }
 
         //导出SQL文件
-        $("#upload-list").delegate(".exportSql","click",function () {
+        /*$("#upload-list").delegate(".exportSql","click",function () {
             var souceID = $(this).attr("keyIdTd");
             //var keyID = souceID + new Date().getTime();
-            $.ajax({
-                url:"${ctx}/task/" + souceID,
-                type:"POST",
-                dataType:"JSON",
-                success:function (data) {
-                    if (data.result == 'true') {
-                        alert("导出SQL文件成功!");
-                    }
-                },
-                error:function () {
-                    console.log("请求失败")
-                }
-            })
-        });
+
+        });*/
         function getProcess(keyID,souceID) {
            var setout= setInterval(function () {
                if($("[name="+keyID+"]").attr("valFlag") == "true"){

@@ -266,7 +266,7 @@
                     <li class="start">
                         <a href="${ctx}/subjectMgmt/subjectIndex">
                             <i class="icon-user"></i>
-                            <span class="title">专题库</span>
+                            <span class="title">数据节点管理</span>
                             <span class="arrow"></span>
                         </a>
                     </li>
@@ -274,7 +274,7 @@
                     <li>
                         <a href="${ctx}/resCatalog">
                             <i class="icon-settings"></i>
-                            <span class="title">数据类型注册</span>
+                            <span class="title">数据目录管理</span>
                             <span class="arrow "></span>
                         </a>
                     </li>
@@ -288,7 +288,7 @@
                     <li>
                         <a href="${ctx}/group/list">
                             <i class="icon-user"></i>
-                            <span class="title">用户管理</span>
+                            <span class="title">用户与组管理</span>
                             <span class="arrow "></span>
                         </a>
                     </li>
@@ -296,7 +296,7 @@
                     <li>
                         <a href="javascript:;">
                             <i class=" icon-drawer"></i>
-                            <span class="title">统计管理</span>
+                            <span class="title">数据统计管理</span>
                             <span class="arrow "></span>
                         </a>
                         <ul class="sub-menu">
@@ -341,7 +341,7 @@
                     <li>
                         <a href="${ctx}/dataConfiguration">
                             <i class="icon-wrench"></i>
-                            <span class="title">数据配置</span>
+                            <span class="title">数据配置管理</span>
                             <span class="arrow "></span>
                         </a>
                     </li>
