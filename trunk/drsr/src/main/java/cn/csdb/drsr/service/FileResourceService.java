@@ -150,7 +150,9 @@ public class FileResourceService {
                 logger.info("服务器盘符为："+roots);
                 String root = roots.toString();
                 logger.info("root为："+root);
+/*
                 String rootName= root.substring(0, root.indexOf("\\"));
+*/
 /*
                 logger.info("rootName为："+rootName);
 */
@@ -176,7 +178,7 @@ public class FileResourceService {
                 } else {
                     jsonObject.put("type", "file");
                     jsonObject.put("id", root.replaceAll(Matcher.quoteReplacement(File.separator), "%_%"));
-                    jsonObject.put("name", rootName);
+                    jsonObject.put("name", root);
                 }
                 jsonObjects.add(jsonObject);
                 return jsonObjects;

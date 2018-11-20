@@ -193,8 +193,10 @@ public class FileSourceController {
     @RequestMapping("/resCatalog")
     public
     @ResponseBody
-    List<JSONObject> showResCatalog(String data,String filePath) {
+    List<JSONObject> showResCatalog(String data,Integer dataSourceId) {
+
         logger.info("加载文件树");
+        String filePath = fileSourceFileList(dataSourceId);
         List<JSONObject> jsonObjects = fileResourceService.fileTreeLoading(data,filePath);
         return jsonObjects;
     }
@@ -233,8 +235,7 @@ public class FileSourceController {
      * @auther: hw
      * @date: 2018/10/23 10:06
      */
-    @ResponseBody
-    @RequestMapping(value="fileSourceFileList")
+
     public String fileSourceFileList(int dataSourceId) {
 
         DataSrc dataSrc = fileResourceService.findById(dataSourceId);
