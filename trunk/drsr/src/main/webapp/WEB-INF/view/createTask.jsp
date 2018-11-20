@@ -94,7 +94,10 @@
                         <div class="col-md-12" style="margin: 0 -15px">
                             <div class="col-md-2" style="margin: 0 -15px">选择文件</div>
                             <div class="col-md-10" style="margin-top: 6px">
+                                <div id="jstree_show_edit"></div>
+                            <%--
                                 <div class="row" id="file-table"></div>
+--%>
                             </div>
                         </div>
                         <div class="col-md-12 ">
@@ -311,19 +314,92 @@
                     dataSourceId:id
                 },
                 success:function (data) {
-                    $("#file-table").empty();
+                    var jsonData = JSON.parse(data);
+                    jsonData = jsonData.replace(/\//g,"%_%");
+                    jsonData = jsonData.replace(/\\/g, "%_%");
+                    /*$("#file-table").empty();
                     var List =JSON.parse(data)
                     var data={
                         data:List
                     }
                     var tabCon = template("dataFileshipList2", data);
-                    $("#file-table").append(tabCon);
+                    $("#file-table").append(tabCon);*/
+                    $('#jstree_show_edit').jstree({
+                        "core": {
+                            "themes": {
+                                "responsive": false,
+                            },
+                            // so that create works
+                            "check_callback": true,
+                            'data': function (obj, callback) {
+                                var jsonstr = "[]";
+                                var jsonarray = eval('(' + jsonstr + ')');
+                                var children;
+                                if (obj != '#') {
+                                    var str = obj.id;
+                                    /*var str1 = str.replace("\/","%_%");
+                                    str1 = str1.replace("\\", "%_%");*/
+                                }
+                                $.ajax({
+                                    type: "GET",
+                                    url: "${ctx}/fileResource/resCatalog",
+                                    dataType: "json",
+                                    data: {"data": str,"filePath":jsonData},
+                                    async: false,
+                                    success: function (result) {
+                                        var arrays = result;
+                                        for (var i = 0; i < arrays.length; i++) {
+                                            console.log(arrays[i])
+                                            var arr = {
+                                                "id": arrays[i].id,
+                                                "parent": arrays[i].parentId == "root" ? "#" : arrays[i].parentId,
+                                                "text": arrays[i].name,
+                                                "type": arrays[i].type,
+                                                "children":arrays[i].children
+                                            }
+                                            jsonarray.push(arr);
+                                            children = jsonarray;
+                                        }
+                                    }
+
+                                });
+                                generateChildJson(children);
+                                callback.call(this, children);
+                                /*else{
+                                 callback.call(this,);
+                                 }*/
+                            }
+                        },
+                        "types": {
+                            "default": {
+                                "icon": "glyphicon glyphicon-flash"
+                            },
+                            "file": {
+                                "icon": "glyphicon glyphicon-ok"
+                            }
+                        },
+                        "plugins": ["dnd"/*, "state"*/, "types", "checkbox", "wholerow"]
+                    })
                 },
                 error:function () {
                     console.log("请求失败")
                 }
             })
         })
+        function generateChildJson(childArray) {
+            for (var i = 0; i < childArray.length; i++) {
+                var child = childArray[i];
+                if (child.type == 'directory') {
+                    /*
+                     child.children = true;
+                     */
+                    child.icon = "jstree-folder";
+                } else {
+                    child.icon = "jstree-file";
+                }
+            }
+        }
+
         $("#sqlList").delegate(".removeSql","click",function () {
             $(this).parent().parent().remove();
         })
@@ -423,15 +499,20 @@
         }
         function sendFileTask(){
             var $eleChecked = $("[name='fileTable']:checked")
+            var nodes = $('#jstree_show_edit').jstree("get_checked");
             var numChecked = $eleChecked.size();
             if($("#dataTaskName").val() ==""){
                 toastr["error"]("提示！", "请创建任务名");
                 return
             }
-            if (numChecked == 0) {
+            /*if (numChecked == 0) {
                 toastr["error"]("最少选择一个文件资源");
                 return
-            }
+            }*/
+            if(nodes.length==0){
+                toastr["error"]("您尚未选取文件");
+                return
+            }else{
             var fileTabStr = "";
             $eleChecked.each(function () {
                 fileTabStr+=$(this).val()+";"
@@ -440,10 +521,10 @@
             $.ajax({
                 url:"${ctx}/datatask/saveFileDatatask",
                 type:"POST",
-                data:{
-                    dataSourceId:dataFileSrcId,
-                    datataskName:$("#dataTaskName").val(),
-                    filePathList:dataFilePathList,
+                traditional: true,
+                data:{"dataSourceId":dataFileSrcId,
+                    "datataskName":$("#dataTaskName").val(),
+                    "nodes":nodes,
                 },
                 success:function (data) {
                     window.location.href="${ctx}/dataUpload"
@@ -452,7 +533,7 @@
                 }
             })
         }
-
+        }
         $(function(){
             $.ajax({
                 url:"${ctx}/relationship/findAllDBSrc",

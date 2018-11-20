@@ -615,8 +615,8 @@
         }
         function filePathCheck(){
             var filePath = $("#filePath").val();
-            filePath= filePath.replace("\/", "%_%");
-            filePath= filePath.replace("\\", "%_%");
+            filePath= filePath.replace("/\//g", "%_%");
+            filePath= filePath.replace("/\\/g", "%_%");
             $.ajax({
                 type: "GET",
                 url: "${ctx}/fileResource/check",
