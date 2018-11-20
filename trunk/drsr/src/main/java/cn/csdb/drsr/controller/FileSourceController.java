@@ -11,7 +11,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -210,6 +215,33 @@ public class FileSourceController {
         return flag;
     }
 
+    @RequestMapping(value="/downloadFile")
+    public String downloads(HttpServletResponse response) throws Exception{
+        String	path = "/logs/";
+        String  fileName = "drsr.log";
+        //1、设置response 响应头
+        response.reset();
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("multipart/form-data");
+        response.setHeader("Content-Disposition",
+                "attachment;fileName="+ URLEncoder.encode(fileName, "UTF-8"));
+
+        File file = new File(path,fileName);
+        //2、 读取文件--输入流
+        InputStream input=new FileInputStream(file);
+        //3、 写出文件--输出流
+        OutputStream out = response.getOutputStream();
+        byte[] buff =new byte[1024];
+        int index=0;
+        //4、执行 写出操作
+        while((index= input.read(buff))!= -1){
+            out.write(buff, 0, index);
+            out.flush();
+        }
+        out.close();
+        input.close();
+        return null;
+    }
 
     /**
      *
@@ -224,7 +256,6 @@ public class FileSourceController {
     public @ResponseBody List<DataSrc> findAllFileSrc(){
         return fileResourceService.findAll();
     }
-
 
     /**
      *
@@ -244,9 +275,4 @@ public class FileSourceController {
         return jsonObjects;*/
     }
 
-    public static void main(String[]args){
-        File file = new File("D:\\data");
-        boolean flag = file.exists();
-        System.out.print(flag);
-    }
 }
