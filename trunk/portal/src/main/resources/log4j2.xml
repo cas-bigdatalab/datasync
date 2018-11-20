@@ -22,12 +22,32 @@
             </Policies>
             <DefaultRolloverStrategy max="20"/>
         </Appender>
+        <!--日志输出到文件，当日志大小超过250MB时，将其压缩；如果压缩包超过20个，将删除旧的压缩包-->
+        <Appender type="RollingRandomAccessFile" name="MyFile" fileName="/logs/portalUpload.log"
+                  filePattern="/logs/$${date:yyyy-MM}/portal-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%level]%class{36} %L %M-%msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="20"/>
+        </Appender>
         <Appender type="ASYNC" name="async" includeLocation="true">
             <AppenderRef ref="RollingRandomAccessFile"/>
         </Appender>
     </Appenders>
 
     <Loggers>
+        <!--将导出上传流程日志单独输出到特定文件-->
+        <logger name="cn.csdb.portal.controller.ResourceController" level="info">
+            <AppenderRef ref="MyFile"/>
+        </logger>
+        <!--将导出上传流程日志单独输出到文件-->
+        <logger name="cn.csdb.portal.controller.HttpServiceController" level="info">
+            <AppenderRef ref="MyFile"/>
+        </logger>
         <!--这里写自定义日志输出级别，只输出到控制台-->
         <logger name="cn.csdb.portal" level="debug">
             <appender-ref ref="STDOUT"/>
