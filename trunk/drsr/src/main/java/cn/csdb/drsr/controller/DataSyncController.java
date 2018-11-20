@@ -76,14 +76,14 @@ public class DataSyncController {
             String result = "";
             if(dataTask.getDataTaskType().equals("file")){
                 String[] localFileList = {dataTask.getSqlFilePath()};
-                result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath).toString();
+                result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath,dataTask).toString();
                 if(localFileList.length == 0){
                     return 0;
                 }
             }else if(dataTask.getDataTaskType().equals("mysql")){
                 remoteFilepath = remoteFilepath+subjectCode+"_"+dataTask.getDataTaskId()+"/";
                 String[] localFileList = {dataTask.getFilePath()};
-                result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath).toString();
+                result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath,dataTask).toString();
                 if(localFileList.length == 0){
                     return 0;
                 }
@@ -126,9 +126,12 @@ public class DataSyncController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }else{
+                return 0;
             }
         } catch (IOException e) {
             System.out.println("连接FTP出错：" + e.getMessage());
+            return 0;
         }
         return 1;
     }

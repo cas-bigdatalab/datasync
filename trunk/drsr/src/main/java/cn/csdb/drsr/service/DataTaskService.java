@@ -105,7 +105,7 @@ public class DataTaskService {
 
             //保存 sql文件路径到datatask表中的sqlfilePath路径中，用分号隔开
             String sqlFilePathStr = filePath.getPath() + File.separator + "struct.sql;" + filePath.getPath() + File.separator + "data.sql";
-            dataTask.setSqlFilePath(sqlFilePathStr);
+            dataTask.setSqlFilePath(sqlFilePathStr.replace(File.separator,"%_%"));
             boolean result = dataTaskDao.update(dataTask);
             logger.info("result=" + result);
             jsonObject.put("result", "true");

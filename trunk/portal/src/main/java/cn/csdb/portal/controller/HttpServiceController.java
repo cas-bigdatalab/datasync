@@ -42,7 +42,6 @@ public class HttpServiceController {
     @ResponseBody
     @RequestMapping(value = "getDataTask", method = {RequestMethod.POST,RequestMethod.GET})
     public int getDataTask(@RequestBody String requestString){
-        System.out.println("000000000000000000000");
         System.out.println(requestString);
         JSONObject requestJson = JSON.parseObject(requestString);
         String subjectCode = requestJson.get("subjectCode").toString();
@@ -54,6 +53,7 @@ public class HttpServiceController {
         dataTask.setSubjectCode(subject.getSubjectCode());
         String sqlFilePath = dataTask.getSqlFilePath();
         sqlFilePath = sqlFilePath.replaceAll("%_%",File.separator);
+        System.out.println("sqlFilePath========"+sqlFilePath);
         String[] sqlfilePathList = sqlFilePath.split(";");
         String filepath = dataTask.getFilePath();
         StringBuffer sqlfilePathBuffer = new StringBuffer();
@@ -62,7 +62,6 @@ public class HttpServiceController {
         String dataDBFile = "";
         String zipFile="";
         String unZipPath = "";
-        System.out.println("222222222222");
         for(String fp : sqlfilePathList){
             if(fp.equals("")){
                 continue;
@@ -75,13 +74,20 @@ public class HttpServiceController {
             }
             sqlfilePathBuffer.append(siteFtpPath+fileName+";");
             if(dataTask.getDataTaskType().equals("mysql")){
-                String sqlZip = dataTask.getFilePath();
-                if (sqlZip.indexOf("/")>0){
+                String sqlZip = filepath;
+//                System.out.println("-------sqlZip"+sqlZip);
+                /*if (sqlZip.indexOf("/")>0){
                     sqlZip = sqlZip.substring(sqlZip.lastIndexOf("/")+1);
                 }else if(sqlZip.indexOf("\\")>0){
                     sqlZip = sqlZip.substring(sqlZip.lastIndexOf("\\")+1);
-                }
+                }else if(sqlZip.indexOf("%_%")>0){
+                    sqlZip = sqlZip.substring(sqlZip.lastIndexOf("%_%")+3);
+                    sqlZip = sqlZip.replaceAll("%_%",File.separator);
+
+                }*/
+                sqlZip = dataTask.getDataTaskId()+".zip";
                 sqlZip = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+sqlZip;
+//                System.out.println("-------sqlZip"+sqlZip);
                 File sqlfiles = new File(sqlZip);
                 ZipUtil zipUtil = new ZipUtil();
                 try {
@@ -89,12 +95,17 @@ public class HttpServiceController {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if(fileName.contains("data")){
-                    dataDBFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+fileName;
+                dataDBFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+"data.sql";
+                structDBFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+"struct.sql";
+                System.out.println("dataDBFile---------"+dataDBFile);
+                System.out.println("structDBFile---------"+structDBFile);
+
+                /*if(fileName.contains("data")){
+                    dataDBFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+"struct.sql";
                     System.out.println("dataDBFile---------"+dataDBFile);
                 }else if(fileName.contains("struct")){
-                    structDBFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+fileName;
-                }
+                    structDBFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+"data.sql";
+                }*/
             }else if(dataTask.getDataTaskType().equals("file")){
                 zipFile = siteFtpPath+fileName;
                 System.out.println("+++++++++"+zipFile);
@@ -111,7 +122,6 @@ public class HttpServiceController {
 //            filepath = filepath.substring(filepath.lastIndexOf("\\")+1);
 //        }
 //        dataTask.setFilePath(siteFtpPath+filepath);
-        System.out.println("11111111111111");
         if(dataTask.getDataTaskType().equals("mysql")){
             String username = configPropertyService.getProperty("db.username");
             String password = configPropertyService.getProperty("db.password");
