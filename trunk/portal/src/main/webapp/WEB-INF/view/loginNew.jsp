@@ -38,7 +38,7 @@
 <body>
 <dl class="admin_login">
     <dt>
-        <strong>DataSync专题库门户管理系统</strong>
+        <strong>数据发布管理系统</strong>
         <em>Management System</em>
     </dt>
     <form action="${pageContext.request.contextPath}/login" method="post">

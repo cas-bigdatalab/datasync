@@ -59,7 +59,8 @@ public class DataTaskController {
         DataTask dataTask = dataTaskService.get(Integer.parseInt(id));
         jsonObject = dataTaskService.executeTask(dataTask);
         dataTaskService.packDataResource(jsonObject.get("filePath").toString()+File.separator+dataTask.getDataTaskId()+".zip",Arrays.asList(dataTask.getSqlFilePath().split(";")));
-        dataTask.setFilePath(jsonObject.get("filePath").toString()+File.separator+dataTask.getDataTaskId()+".zip");
+        String fp = jsonObject.get("filePath").toString()+File.separator+dataTask.getDataTaskId()+".zip";
+        dataTask.setFilePath(fp.replace(File.separator,"%_%"));
         dataTaskService.update(dataTask);
         return jsonObject;
     }

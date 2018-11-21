@@ -370,6 +370,7 @@
         <script type="text/javascript" src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.js"></script>
         <script type="text/javascript" src="${ctx}/resources/bundles/artTemplate/template.js"></script>
         <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
+        <script type="text/javascript" src="${ctx}/resources/bundles/bootbox/bootbox.min.js"></script>
         <script type="text/javascript">
             var nextSerialNo = 1;
             var currentPage = 1;
@@ -719,32 +720,40 @@
 
                 console.log("idOfSubjectToBeDeleted = " + id);
 
-                bootbox.confirm("确定要删除此条记录吗？",
+                bootbox.confirm("是否确认删除该专题库及相关信息？",
                     function (result)
                     {
-                        if (result) {
-                            var deleteUrl = "${ctx}/subjectMgmt/deleteSubject?id=" + id + "&pageNum=" + 1;
-                            $.ajax({
-                                url: deleteUrl,
-                                type: "get",
-                                dataType: "text",
-                                success: function (data) {
-                                    console.log(data);
-                                    console.log("typeof data = " + (typeof data));
-                                    if (data.trim() == "1") {
-                                        toastr["success"]("删除成功！", "数据删除");
-                                        getSubject(currentPage);
-                                    }
-                                    else {
-                                        toastr["error"]("删除失败！", "数据删除");
-                                    }
-                                },
-                                error: function(data)
+                        if (result)
+                        {
+                            bootbox.confirm("专题库相关信息很重要，请再次确认要删除吗？", function(result)
                                 {
-                                    console.log(data);
-                                    toastr["error"]("删除失败！", "数据删除");
+                                    if (result)
+                                    {
+                                        var deleteUrl = "${ctx}/subjectMgmt/deleteSubject?id=" + id + "&pageNum=" + 1;
+                                        $.ajax({
+                                            url: deleteUrl,
+                                            type: "get",
+                                            dataType: "text",
+                                            success: function (data) {
+                                                console.log(data);
+                                                console.log("typeof data = " + (typeof data));
+                                                if (data.trim() == "1") {
+                                                    toastr["success"]("删除成功！", "数据删除");
+                                                    getSubject(currentPage);
+                                                }
+                                                else {
+                                                    toastr["error"]("删除失败！", "数据删除");
+                                                }
+                                            },
+                                            error: function(data)
+                                            {
+                                                console.log(data);
+                                                toastr["error"]("删除失败！", "数据删除");
+                                            }
+                                        });
+                                    }
                                 }
-                            });
+                            );
                         }
                     }
                 );

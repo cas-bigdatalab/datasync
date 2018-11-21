@@ -14,7 +14,7 @@
 <html>
 
 <head>
-    <title>DataSync专题库门户管理系统</title>
+    <title>数据发布管理系统</title>
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
@@ -78,7 +78,7 @@
     <div class="page-body">
         <div class="body-left">
             <ul class="list-ul center1" style="display: none">
-                <li><a href="${ctx}/ccc">专题库管理</a></li>
+                <li><a href="${ctx}/ccc">数据节点管理</a></li>
                 <li><a href="${ctx}/subjectMgmt/sdgsdfs?currentPage=1">用户组管理</a></li>
                 <li><a href="${ctx}/subjectMgmt/sdgsdfs?currentPage=1">资源分类管理</a></li>
                 <li><a href="${ctx}/subjectMgmt/zasda?currentPage=1">数据发布管理</a></li>
@@ -237,7 +237,7 @@
 <div class="con_div">
 
     <div class=" container tatle_div">
-        DataSync专题库门户管理系统
+        数据发布管理系统
 <%--
         <button class="btn blue" style="float: right;margin-top: 28px;" ><i class="icon-user"></i>登录</button>
 --%>
@@ -374,7 +374,7 @@
                     <td><a href="${ctx}/resource/resourcesList">资源与服务</a></td>
                     <td><a href="${ctx}/demcons/main/list/all">需求与咨询</a></td>
                     <td><a href="${ctx}/person/myApplyPage">个人中心</a></td>
-                    <td><a href="${ctx}/subjectMgmt/querySubject?currentPage=1">专题库注册</a></td>
+                    <td><a href="${ctx}/subjectMgmt/querySubject?currentPage=1">数据节点注册</a></td>
                 </tr>
             </table>
         </div>

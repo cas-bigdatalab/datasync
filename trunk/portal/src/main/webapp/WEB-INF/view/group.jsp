@@ -13,7 +13,7 @@
 <html>
 
 <head>
-    <title>用户管理</title>
+    <title>用户与组管理</title>
     <link href="${ctx}/resources/bundles/rateit/src/rateit.css" rel="stylesheet" type="text/css">
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css">
     <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
@@ -31,7 +31,7 @@
 <body>
 
 <div style="height: 850px;min-height: 850px;" class="page-content" >
-    <h3>&nbsp;&nbsp;用户管理</h3>
+    <h3>&nbsp;&nbsp;用户与组管理</h3>
     <hr />
 
     <div class="col-md-12">
@@ -377,8 +377,8 @@
                             </label>
                             <div class="col-md-9">
                                 <%--<input type="text" class="form-control" placeholder="请输入专题库代码"  id="subjectCode" name="subjectCode" required="required">--%>
-                                    <select class='form-control' name='subjectCodeForAddUserDialog' id='subjectCodeForAddUserDialog' placeholder="请选择主题库">
-                                        <option value="" disabled selected>请选择主题库</option>
+                                    <select class='form-control' name='subjectCodeForAddUserDialog' id='subjectCodeForAddUserDialog' placeholder="请选择数据节点">
+                                        <option value="" disabled selected>请选择数据节点</option>
                                         <c:forEach  var="subject"  items="${subjectList}">
                                             <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectName}</option>
                                         </c:forEach>
@@ -436,10 +436,10 @@
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="loginIdForUpdate">
-                                用户账号<span style="color: red;">*</span>
+                                用户账号
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入用户账号" id="loginIdForUpdate" name="loginIdForUpdate"  required="required" />
+                                <input type="text" class="form-control" placeholder="请输入用户账号" id="loginIdForUpdate" name="loginIdForUpdate" readonly="readonly" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -464,7 +464,7 @@
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="groupsForUpdateUserDialog">
-                                用户组<span style="color: red;">*</span>
+                                用户组
                             </label>
                             <div class="col-md-9">
                                 <select class='form-control select2me' name='groupsForUpdateUserDialog' id='groupsForUpdateUserDialog' multiple="multiple">
@@ -750,7 +750,7 @@
 
                     loginIdForUpdate: {
                         required: true,
-                        remote:
+                        /*remote:
                             {
                                 url: "${ctx}/user/queryLoginId",
                                 type: "get",
@@ -762,25 +762,25 @@
                                         }
                                     },
                                 dataType: "json"
-                            }
+                            }*/
                     },
                     passwordForUpdate: {
                         required: true,
                         minlength: 6
                     },
-                    groupsForUpdateUserDialog: "required",
+                    /*groupsForUpdateUserDialog: "required",*/
                 },
                 messages: {
                     userNameForUpdate: "请输入用户名",
                     loginIdForUpdate: {
                         required: "请输入用户账号",
-                        remote: "此用户账号已经存在！"
+                        /*remote: "此用户账号已经存在！"*/
                     },
                     passwordForUpdate: {
                         required: "请输入密码",
                         minlength: "密码至少为6位"
                     },
-                    groupsForUpdateUserDialog: "请输入用户组",
+                    /*groupsForUpdateUserDialog: "请输入用户组"*/
                 }
             };
             $("#addUserForm").validate(addUserValid);

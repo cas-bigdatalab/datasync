@@ -14,7 +14,7 @@
 <html>
 
 <head>
-    <title>DataSync专题库门户管理系统</title>
+    <title>数据发布管理系统</title>
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jstree/dist/themes/default/style.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/dataConfig.css">
     <style type="text/css">

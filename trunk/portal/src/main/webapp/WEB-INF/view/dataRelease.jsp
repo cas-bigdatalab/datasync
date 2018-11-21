@@ -14,7 +14,7 @@
 <html>
 
 <head>
-    <title>DataSync主题库门户管理系统</title>
+    <title>数据发布管理系统</title>
     <link href="${ctx}/resources/css/dataUpload.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
     <style type="text/css">
@@ -139,7 +139,7 @@
                         <div class="col-sm-8 modediv" id="rel-fieldComs"></div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">主题库代码:</label>
+                        <label class="col-sm-3 control-label">数据节点代码:</label>
                         <div class="col-sm-8 modediv" id="rel-subjectCode"></div>
                     </div>
                     <div class="form-group">
@@ -286,7 +286,7 @@
                         <div class="col-sm-8 modediv" id="file-fieldComs"></div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">主题库代码:</label>
+                        <label class="col-sm-3 control-label">数据节点代码:</label>
                         <div class="col-sm-8 modediv" id="file-subjectCode"></div>
                     </div>
                     <div class="form-group">
