@@ -183,7 +183,7 @@
                         <div class="col-sm-8 modediv" id="rel-creationDate"></div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">创建机构:</label>
+                        <label class="col-sm-3 control-label">版权声明:</label>
                         <div class="col-sm-8 modediv" id="rel-createdByOrganization"></div>
                     </div>
                     <div class="form-group">
@@ -196,11 +196,11 @@
                         <div class="col-sm-8 modediv" id="rel-organizationName"></div>
                     </div>--%>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">邮件:</label>
+                        <label class="col-sm-3 control-label">发布者邮件:</label>
                         <div class="col-sm-8 modediv" id="rel-email"></div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">电话:</label>
+                        <label class="col-sm-3 control-label">发布者电话:</label>
                         <div class="col-sm-8 modediv" id="rel-phoneNum"></div>
                     </div>
 
@@ -330,7 +330,7 @@
                         <div class="col-sm-8 modediv" id="file-creationDate"></div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">创建机构:</label>
+                        <label class="col-sm-3 control-label">版权声明:</label>
                         <div class="col-sm-8 modediv" id="file-createdByOrganization"></div>
                     </div>
                     <div class="form-group">
@@ -343,11 +343,11 @@
                         <div class="col-sm-8 modediv" id="file-organizationName"></div>
                     </div>--%>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">邮件:</label>
+                        <label class="col-sm-3 control-label">发布者邮件:</label>
                         <div class="col-sm-8 modediv" id="file-email"></div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">电话:</label>
+                        <label class="col-sm-3 control-label">发布者电话:</label>
                         <div class="col-sm-8 modediv" id="file-phoneNum"></div>
                     </div>
 
@@ -466,9 +466,12 @@
                     resourceId:id
                 },
                 success: function (data) {
+
                     var dataList = JSON.parse(data).resource;
+                    console.log(dataList)
                     if(type == "mysql"){
                         $("#rel-dataSourceId").html(dataList.dataSourceId)
+                        $("#rel-email").html(dataList.email)
                         $("#rel-catalogId").html(dataList.catalogId)
                         $("#rel-imagePath").html(dataList.imagePath)
                         $("#rel-status").html(tabStatus)
@@ -492,7 +495,7 @@
                         $("#rel-startTime").html(convertMilsToDateString(dataList.startTime))
                         $("#rel-endTime").html(convertMilsToDateString(dataList.endTime))
                         $("#rel-createdByOrganization").html(dataList.createdByOrganization)
-                        $("#rel-createdBy").html(dataList.createdBy)
+                        $("#rel-createdBy").html(dataList.createPerson)
                         $("#rel-creationDate").html(convertMilsToDateString(dataList.creationDate))
                         $("#rel-organizationName").html(dataList.organizationName)
                         $("#rel-mail").html(dataList.mail)
@@ -508,6 +511,7 @@
                         $("#relModal").modal("show")
                     }else {
                         $("#file-dataSourceId").html(dataList.dataSourceId)
+                        $("#file-email").html(dataList.email)
                         $("#file-catalogId").html(dataList.catalogId)
                         $("#file-imagePath").html(dataList.imagePath)
                         $("#file-status").html(tabStatus)
@@ -532,7 +536,7 @@
                         $("#file-startTime").html(convertMilsToDateString(dataList.startTime))
                         $("#file-endTime").html(convertMilsToDateString(dataList.endTime))
                         $("#file-createdByOrganization").html(dataList.createdByOrganization)
-                        $("#file-createdBy").html(dataList.createdBy)
+                        $("#file-createdBy").html(dataList.createPerson)
                         $("#file-creationDate").html(convertMilsToDateString(dataList.creationDate))
                         $("#file-organizationName").html(dataList.organizationName)
                         $("#file-mail").html(dataList.mail)
