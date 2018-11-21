@@ -1,3 +1,4 @@
+
 <%--
   Created by IntelliJ IDEA.
   User: shibaoping
@@ -144,7 +145,7 @@
                                         <div class="col-md-9">
                                             <input type="text" class="form-control"
                                                    id="dataSourceNameE"
-                                                   name="dataSourceNameE"/>
+                                                   name="dataSourceNameE" placeholder="请输入数据源名称"/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -155,11 +156,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label for = "filePathE" class="col-md-3 control-label timeVili"><span class="required">
-													* </span>文件地址</label>
+													* </span>文件路径</label>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control timeVili"
                                                    id="filePathE"
-                                                   name="filePathE" onblur="filePathCheck(2);"/>
+                                                   name="filePathE" onblur="filePathCheck(2);" placeholder="请输入文件路径"/>
                                             <div class="timeVili custom-error" style="display: none">请输入正确的文件路径</div>
                                         </div>
                                     </div>
@@ -191,7 +192,7 @@
         <td>{{i + 1}}</td>
         <td>{{value.dataSourceName}}</td>
         <td>{{value.fileType}}</td>
-        <td>{{value.filePath}}</td>
+        <td style="word-break: break-all">{{value.filePath}}</td>
     <%--<td style="text-align: left">
             <div style="white-space:pre-line;">
                 {{splStr(value.filePath)}}
