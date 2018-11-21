@@ -25,6 +25,15 @@
             height: 830px;
             min-height: 830px;
         }
+        #table_List1 th,#table_List2 th{
+            background-color: #64aed9;
+            text-align: center;
+            font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
+            font-weight: 700;
+            font-style: normal;
+            font-size: 18px;
+            color: #FFFFFF;
+        }
     </style>
 </head>
 
@@ -86,14 +95,14 @@
                             <div class="table-scrollable">
                                 <table class="table table-striped table-bordered table-advance table-hover">
                                     <thead>
-                                        <tr>
-                                            <th style="width: 5%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编号</th>
-                                            <th style="width: 12%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户名 </th>
-                                            <th style="width: 12%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">账号 </th>
-                                            <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编辑时间</th>
+                                        <tr id="table_List1">
+                                            <th style="width: 5%;">编号</th>
+                                            <th style="width: 12%;">用户名 </th>
+                                            <th style="width: 12%;">账号 </th>
+                                            <th style="width: 20%;">编辑时间</th>
                                             <%--<th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">状态</th>--%>
-                                            <th style="width: 30%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户组</th>
-                                            <th style="text-align: center;background: #64aed9;color: #FFF;font-weight: bold">操作</th>
+                                            <th style="width: 30%;">用户组</th>
+                                            <th >操作</th>
                                         </tr>
                                     </thead>
 
@@ -140,14 +149,14 @@
                             <div class="table-scrollable">
                                 <table class="table table-striped table-bordered table-advance table-hover">
                                     <thead>
-                                    <tr>
-                                        <th style="width: 5%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编号</th>
-                                        <th style="width: 15%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">
+                                    <tr id="table_List2">
+                                        <th style="width: 5%;">编号</th>
+                                        <th style="width: 15%;">
                                             用户组名
                                         </th>
-                                        <th style="width: 30%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">描述</th>
-                                        <th style="width: 17%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">创建时间</th>
-                                        <th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">操作</th>
+                                        <th style="width: 30%;">描述</th>
+                                        <th style="width: 17%;">创建时间</th>
+                                        <th style="width: 25%;">操作</th>
                                     </tr>
                                     </thead>
                                     <tbody id="groupList"></tbody>

@@ -1116,7 +1116,7 @@
                     email:$("#Task_email").val(),
                     phoneNum:$("#Task_phone").val(),
                     createTime:$("#createTime").val(),
-                    publishOrganzition:$("#publish_Organization").val(),
+                    publishOrganization:$("#publish_Organization").val(),
                     createOrganization:$("#create_Organization").val(),
                     createPerson:$("#create_person").val()
                 },

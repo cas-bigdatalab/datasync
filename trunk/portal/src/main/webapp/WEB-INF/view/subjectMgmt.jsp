@@ -10,10 +10,14 @@
             text-align: center;
         }
 
-        th {
+       #dataList  th {
+            background-color: #64aed9;
             text-align: center;
-            color: #FFF;
-            font-weight: bold;
+            font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
+            font-weight: 700;
+            font-style: normal;
+            font-size: 18px;
+            color: #FFFFFF;
         }
 
         .error-message {
@@ -47,15 +51,15 @@
         <div class="table-scrollable">
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
-                    <tr>
+                    <tr id="dataList">
                         <th style="display:none;">数据节点ID</th>
-                        <th style="width: 3%;background: #64aed9;">编号</th>
-                        <th style="width: 5%;background: #64aed9;">数据节点名称</th>
-                        <th style="width: 5%;background: #64aed9;">数据节点代码</th>
-                        <th style="width: 5%;background: #64aed9;">管理员账号</th>
-                        <th style="width: 5%;background: #64aed9;">负责人</th>
-                        <th style="width: 5%;background: #64aed9;">电话</th>
-                        <th style="width: 10%;background: #64aed9;">操作</th>
+                        <th style="width: 3%;">编号</th>
+                        <th style="width: 5%;">数据节点名称</th>
+                        <th style="width: 5%;">数据节点代码</th>
+                        <th style="width: 5%;">管理员账号</th>
+                        <th style="width: 5%;">负责人</th>
+                        <th style="width: 5%;">电话</th>
+                        <th style="width: 10%;">操作</th>
                     </tr>
                 </thead>
                 <tbody id="subjectList">
