@@ -980,6 +980,7 @@
             if(!$("#submit_form1").valid() ){
                 firstFlag=true
             }
+
             if(!$("#submit_form2").valid()){
                 firstFlag=true
             }
