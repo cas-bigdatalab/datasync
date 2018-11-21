@@ -14,7 +14,14 @@
 <html>
 
 <head>
-    <title>数据发布管理系统</title>
+    <title>
+        <shiro:hasRole name="root">
+            支撑数据管理系统
+        </shiro:hasRole>
+        <shiro:hasRole name="admin">
+            数据发布管理系统
+        </shiro:hasRole>
+    </title>
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
@@ -237,7 +244,12 @@
 <div class="con_div">
 
     <div class=" container tatle_div">
-        数据发布管理系统
+        <shiro:hasRole name="root">
+            支撑数据管理系统
+        </shiro:hasRole>
+        <shiro:hasRole name="admin">
+            数据发布管理系统
+        </shiro:hasRole>
 <%--
         <button class="btn blue" style="float: right;margin-top: 28px;" ><i class="icon-user"></i>登录</button>
 --%>
@@ -292,7 +304,13 @@
                             <span class="arrow "></span>
                         </a>
                     </li>
-
+                    <li>
+                        <a href="${ctx}/dataRelease">
+                            <i class="icon-layers"></i>
+                            <span class="title">数据发布管理</span>
+                            <span class="arrow "></span>
+                        </a>
+                    </li>
                     <li>
                         <a href="javascript:;">
                             <i class=" icon-drawer"></i>
