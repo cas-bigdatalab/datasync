@@ -59,8 +59,9 @@
                             <option value="0">未上传</option>
                         </select>
                     </div>
-                    <button type="button" class="btn blue" style="margin-left: 49px" id="seachTaskSource">查询</button>
-                    <button type="button" class="btn green" style="margin-left: 49px" onclick="relCreateTask()">新建任务</button>
+
+                    <button type="button" class="btn blue" style="margin-left: 49px" id="seachTaskSource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
+                    <button type="button" class="btn green" style="margin-left: 49px" onclick="relCreateTask()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据任务</button>
                 </form>
             </div>
         </div>

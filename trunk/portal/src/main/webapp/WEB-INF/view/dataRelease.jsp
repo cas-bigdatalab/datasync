@@ -65,8 +65,8 @@
                             <option value="已审核">已审核</option>
                         </select>
                     </div>
-                    <button type="button" class="btn blue" style="margin-left: 20px" id="seachResource">查询</button>
-                    <button type="button" class="btn green" style="margin-left: 20px" onclick="newRelease()">新建发布
+                    <button type="button" class="btn blue" style="margin-left: 20px" id="seachResource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
+                    <button type="button" class="btn green" style="margin-left: 20px" onclick="newRelease()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据发布
                     </button>
                 </form>
             </div>

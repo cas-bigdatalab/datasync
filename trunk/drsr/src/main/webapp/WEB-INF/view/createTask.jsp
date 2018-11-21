@@ -259,7 +259,9 @@
 
         var dataFileSrcId;
         var dataFilePathList;
-
+        var dateDef = new Date();
+        dateDef = dateDef.Format("yyyyMMdd");
+        $("#dataTaskName").val("name"+dateDef)
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
                 $(".select-database").show();
