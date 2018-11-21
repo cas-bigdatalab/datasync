@@ -26,7 +26,7 @@
         <!--查询条件 -->
         <div class="row">
             <div class="col-md-12">
-                <button type="button" class="btn  btn-sm green pull-right" id="addSqlSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;添加SQL数据源</button>
+                <button type="button" class="btn  btn-sm green pull-right" id="addSqlSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;新增关系型数据源</button>
             </div>
             <%--<div class="col-md-2">
                 <button type="button" class="btn  btn-sm green pull-right" id="addFileSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;添加文件型数据源</button>
@@ -62,7 +62,7 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title" id="relationalSourceModalTitle">添加SQL数据源</h4>
+                <h4 class="modal-title" id="relationalSourceModalTitle">新增关系型数据源</h4>
             </div>
             <div class="form">
                 <form class="form-horizontal" role="form" action="" method="post"
@@ -147,7 +147,7 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title">编辑SQL数据源</h4>
+                <h4 class="modal-title">编辑关系型数据源</h4>
             </div>
             <div class="form">
                 <form class="form-horizontal" role="form" action="" method="post"
