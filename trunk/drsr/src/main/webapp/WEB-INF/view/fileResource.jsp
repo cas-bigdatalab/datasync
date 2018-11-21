@@ -768,6 +768,11 @@
             $(".timeVili:eq(4)").removeClass("custom-error2")
             $(".timeVili:eq(5)").hide()
         })
+        function cancelButton() {
+            $("#fileSourceForm").validate().resetForm();
+            $("#fileSourceForm").validate().clean();
+            $('.form-group').removeClass('has-error');
+        }
     </script>
 </div>
 
