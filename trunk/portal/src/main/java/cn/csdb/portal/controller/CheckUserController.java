@@ -35,31 +35,15 @@ public class CheckUserController {
                     subject.login(token);
                     User u = checkUserService.getByUserName(user.getLoginId());
                     boolean flag = false;
-                    boolean status = u.getGroups().contains(",");
                     Set<String> roles = new HashSet<>();
-                    if(status){
-                        String[] group = u.getGroups().split(",");
-                        for(String str : group) {
-                            roles.add(str);
-                            if (str.equals("系统管理员")) {
-                                flag = true;
-                                break;
-                            } else if (str.equals("主题库管理员")) {
-                                flag = true;
-                            } else {
-
-                            }
-                        }
-                    }else{
-                        roles.add(u.getGroups());
-                        if (u.getGroups().equals("系统管理员")) {
+                        roles.add(u.getRole());
+                        if (u.getRole().equals("系统管理员")) {
                             flag = true;
-                        } else if (u.getGroups().equals("主题库管理员")) {
+                        } else if (u.getRole().equals("数据节点管理员")) {
                             flag = true;
                         } else {
 
                         }
-                    }
                     if(!flag){
                         request.setAttribute("errorMsg", "请为账号赋予角色！");
                         return "loginNew";
@@ -79,7 +63,6 @@ public class CheckUserController {
                     }
                     return "redirect:/loginSuccess";
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
                 request.setAttribute("user", user);
