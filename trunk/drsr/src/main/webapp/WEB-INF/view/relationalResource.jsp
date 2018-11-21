@@ -110,7 +110,7 @@
                                         <label for="port" class="col-sm-3 control-label">端口<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" id="port" name="port" value="5000" placeholder="请输入端口号">
+                                            <input type="text" class="form-control" id="port" name="port" value="3306" placeholder="请输入端口号">
                                         </div>
                                     </div>
                                     <div class="form-group">
