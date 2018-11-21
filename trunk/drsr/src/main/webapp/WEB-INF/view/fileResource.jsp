@@ -74,11 +74,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="cancelButton();"></button>
                 <h4 class="modal-title" id="fileSourceModalTitle">新增文件型数据源</h4>
             </div>
             <div class="form">
-                <form class="form-horizontal" role="form" action="" method="post"
+                <form class="form-horizontal formClass" role="form" action="" method="post"
                       accept-charset="utf-8" id="fileSourceForm">
                     <div class="modal-body">
                         <div class="row">
@@ -105,8 +105,8 @@
                                         <div class="col-md-9">
                                             <input type="text" class="form-control timeVili" placeholder="请输入文件路径"
                                                    id="filePath"
-                                                   name="filePath" onblur="filePathCheck();"/>
-                                            <div class="timeVili custom-error" style="display: none">请选择目录</div>
+                                                   name="filePath" onblur="filePathCheck(1);"/>
+                                            <div class="timeVili custom-error" style="display: none">请输入正确的文件路径</div>
                                         </div>
                                     </div>
                                 </div>
@@ -114,7 +114,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn green" onclick="viliFileRes()">
+                        <button type="button" class="btn green" onclick="viliFileRes(this)">
                             <i class="glyphicon glyphicon-ok"></i>保存</button>
                         <button type="button" data-dismiss="modal" class="btn btn-danger" onclick="cancelButton();">取消</button>
                     </div>
@@ -128,11 +128,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="cancelButton();"></button>
                 <h4 class="modal-title">编辑文件型数据源</h4>
             </div>
             <div class="form">
-                <form class="form-horizontal" role="form" action="" method="post"
+                <form class="form-horizontal formClass" role="form" action="" method="post"
                       accept-charset="utf-8" id="fileSourceEditForm">
                     <div class="modal-body">
                         <div class="row">
@@ -154,12 +154,13 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for = "filePathE" class="col-md-3 control-label"><span class="required">
+                                        <label for = "filePathE" class="col-md-3 control-label timeVili"><span class="required">
 													* </span>文件地址</label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control"
+                                            <input type="text" class="form-control timeVili"
                                                    id="filePathE"
-                                                   name="filePathE"/>
+                                                   name="filePathE" onblur="filePathCheck(2);"/>
+                                            <div class="timeVili custom-error" style="display: none">请输入正确的文件路径</div>
                                         </div>
                                     </div>
                                     <%--<div class="form-group">
@@ -174,7 +175,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn green">
+                        <button type="button" class="btn green" onclick="viliFileRes(this)">
                             <i class="glyphicon glyphicon-ok"></i>保存</button>
                         <button type="button" data-dismiss="modal" class="btn btn-danger" onclick="cancelButton();">取消</button>
                     </div>
@@ -322,15 +323,23 @@
         }
         $("#fileSourceForm").validate(validData)
 
-        function viliFileRes(){
-            var filePath =$("#filePath").val()
-            filePath= filePath.replace("\/", "%_%");
-            filePath= filePath.replace("\\", "%_%");
-
-            var flag = false
-            if(!$("#fileSourceForm").valid()){
-                flag=true
-                return
+        function viliFileRes(obj){
+            var filePath =$("#filePath").val();
+            var filePathE =$("#filePathE").val();
+            var formId = $(obj).parent().parent().attr("id");
+            if(formId=="fileSourceForm"){
+                if(!$("#fileSourceForm").valid()){
+                    return
+                }
+                filePath = filePath.replace("\/", "%_%");
+                filePath = filePath.replace("\\", "%_%");
+            }else {
+                if(!$("#fileSourceEditForm").valid()){
+                    return
+                }
+                filePathE = filePathE.replace("\/", "%_%");
+                filePathE = filePathE.replace("\\", "%_%");
+                filePath = filePathE;
             }
             $.ajax({
                 url:"${ctx}/fileResource/check",
@@ -339,16 +348,14 @@
                     filePath:filePath
                 },
                 success:function (data) {
-
-                    flag=!data
-
-                    if(flag){
+                    var jsonData = JSON.parse(data)
+                    if(jsonData==false){
                         $(".timeVili:eq(0)").addClass("custom-error1")
                         $(".timeVili:eq(1)").addClass("custom-error2")
                         $(".timeVili:eq(2)").show()
                         return
                     }else {
-                        var formName = $(form).attr('id');
+                        var formName = formId;
                         if (formName == 'fileSourceEditForm') {
                             var dataSourceId = $("#idHidden").val();
                             var dataSourceName = $("#dataSourceNameE").val();
@@ -394,7 +401,9 @@
                                     if (jsonData == '1') {
                                         toastr["success"]("编辑成功");
                                         $('#fileSourceEditModal').modal('hide');
+/*
                                         formValid.resetForm();
+*/
                                         tableConfiguration();
                                     } else {
                                         toastr["error"]("编辑失败");
@@ -431,7 +440,9 @@
                                     if (jsonData == '1') {
                                         toastr["success"]("新增成功");
                                         $('#fileSourceModal').modal('hide');
+/*
                                         formValid.resetForm();
+*/
                                         tableConfiguration();
                                     } else {
                                         toastr["error"]("新增失败");
@@ -703,10 +714,17 @@
             $("#fileSourceForm").validate().clean();
             $('.form-group').removeClass('has-error');
         }
-        function filePathCheck(){
-            var filePath = $("#filePath").val();
-            filePath= filePath.replace("/\//g", "%_%");
-            filePath= filePath.replace("/\\/g", "%_%");
+        function filePathCheck(id){
+            var filePath;
+            if(id=="1") {
+                filePath = $("#filePath").val();
+                filePath = filePath.replace("/\//g", "%_%");
+                filePath = filePath.replace("/\\/g", "%_%");
+            }else{
+                filePath = $("#filePathE").val();
+                filePath = filePath.replace("/\//g", "%_%");
+                filePath = filePath.replace("/\\/g", "%_%");
+            }
             $.ajax({
                 type: "GET",
                 url: "${ctx}/fileResource/check",
@@ -715,13 +733,25 @@
                 async: false,
                 success: function (result) {
                     if(result){
-                        $(".timeVili:eq(0)").removeClass("custom-error1")
-                        $(".timeVili:eq(1)").removeClass("custom-error2")
-                        $(".timeVili:eq(2)").hide()
+                        if(id=="1") {
+                            $(".timeVili:eq(0)").removeClass("custom-error1")
+                            $(".timeVili:eq(1)").removeClass("custom-error2")
+                            $(".timeVili:eq(2)").hide()
+                        }else{
+                            $(".timeVili:eq(3)").removeClass("custom-error1")
+                            $(".timeVili:eq(4)").removeClass("custom-error2")
+                            $(".timeVili:eq(5)").hide()
+                        }
                     }else{
-                        $(".timeVili:eq(0)").addClass("custom-error1")
-                        $(".timeVili:eq(1)").addClass("custom-error2")
-                        $(".timeVili:eq(2)").show()
+                        if(id=="1") {
+                            $(".timeVili:eq(0)").addClass("custom-error1")
+                            $(".timeVili:eq(1)").addClass("custom-error2")
+                            $(".timeVili:eq(2)").show()
+                        }else{
+                            $(".timeVili:eq(3)").addClass("custom-error1")
+                            $(".timeVili:eq(4)").addClass("custom-error2")
+                            $(".timeVili:eq(5)").show()
+                        }
                     }
                 }
 
@@ -731,6 +761,11 @@
             $(".timeVili:eq(0)").removeClass("custom-error1")
             $(".timeVili:eq(1)").removeClass("custom-error2")
             $(".timeVili:eq(2)").hide()
+        })
+        $("#filePathE").on("focus",function () {
+            $(".timeVili:eq(3)").removeClass("custom-error1")
+            $(".timeVili:eq(4)").removeClass("custom-error2")
+            $(".timeVili:eq(5)").hide()
         })
     </script>
 </div>

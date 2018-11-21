@@ -61,7 +61,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="cancelButton();"></button>
                 <h4 class="modal-title" id="relationalSourceModalTitle">新增关系型数据源</h4>
             </div>
             <div class="form">
@@ -85,9 +85,9 @@
 													* </span></label></label>
                                         <div class="col-md-9">
                                             <select name="dataBaseType" id="dataBaseType" class="form-control" onchange="dbSelect();">
-                                                <option value="DB2">DB2</option>
+                                                <%--<option value="DB2">DB2</option>
                                                 <option value="Oracle">Oracle</option>
-                                                <option value="SqlServer">SqlServer</option>
+                                                <option value="SqlServer">SqlServer</option>--%>
                                                 <option value="mysql">MySql</option>
                                             </select>
                                         </div>
@@ -146,7 +146,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="cancelButton();"></button>
                 <h4 class="modal-title">编辑关系型数据源</h4>
             </div>
             <div class="form">
@@ -170,9 +170,9 @@
 													* </span></label></label>
                                         <div class="col-md-9">
                                             <select name="dataBaseTypeE" id="dataBaseTypeE" class="form-control" onchange="dbSelectE();">
-                                                <option value="DB2">DB2</option>
+                                                <%--<option value="DB2">DB2</option>
                                                 <option value="Oracle">Oracle</option>
-                                                <option value="SqlServer">SqlServer</option>
+                                                <option value="SqlServer">SqlServer</option>--%>
                                                 <option value="mysql">MySql</option>
                                             </select>
                                         </div>
