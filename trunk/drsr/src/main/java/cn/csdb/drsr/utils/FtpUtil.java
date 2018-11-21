@@ -1,5 +1,6 @@
 package cn.csdb.drsr.utils;
 
+import cn.csdb.drsr.model.DataTask;
 import cn.csdb.drsr.service.ConfigPropertyService;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.net.ftp.FTP;
@@ -173,31 +174,40 @@ public class FtpUtil {
         return result;
     }
 
-    public UploadStatus upload(String host, String username, String password, String port, String[] localFileList, String processId,String remoteFilepath) throws IOException {
-        ftpClient.enterLocalPassiveMode();
+    public UploadStatus upload(String host, String username, String password, String port, String[] localFileList, String processId,String remoteFilepath,DataTask dataTask) throws IOException {
+//        ftpClient.enterLocalPassiveMode();
+//        ftpClient.enterRemotePassiveMode();
         ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
         ftpClient.setControlEncoding("GBK");
+        System.out.println(ftpClient.getStatus());
         UploadStatus result;
         Map resultmap;
         Long fileTotalSize = 0L;
         Long finishedSize = 0L;
         for (String s : localFileList) {
-            s = s.replace("%_%",File.separator);
-            File file = new File(s);
+//            s = s.replace("%_%",File.separator);
+            File file = new File(s.replace("%_%",File.separator));
             fileTotalSize += file.length();
+            System.out.println("-------fileTotalSize"+fileTotalSize);
         }
 
         for (String localFilepath : localFileList) {
-            localFilepath = localFilepath.replace("%_%",File.separator);
+            String newlocalFilepath = localFilepath.replace("%_%",File.separator);
             String fileName = "";
-            if(localFilepath.indexOf("/")>0){
-                fileName = localFilepath.substring(localFilepath.lastIndexOf("/")+1);
-            }else if(localFilepath.indexOf("\\")>0){
-                fileName = localFilepath.substring(localFilepath.lastIndexOf("\\")+1);
+            System.out.println("-------localFilepath"+localFilepath);
+            System.out.println("-------localFilepath.indexOf(%_%)>0-----"+(localFilepath.indexOf("%_%")>0));
+            System.out.println("-------localFilepath.indexOf(File.separator)>0"+(localFilepath.indexOf(File.separator)>0));
+            if(localFilepath.indexOf("%_%")>0){
+                fileName = localFilepath.substring(localFilepath.lastIndexOf("%_%")+3);
+                System.out.println("-------fileName"+fileName);
+            }
+            if(dataTask.getDataTaskType().equals("mysql")){
+                fileName = dataTask.getDataTaskId()+".zip";
             }
 
             //对远程目录的处理
-            String remoteFileName = fileName;
+            String remoteFileName = fileName.replace("%_%",File.separator);
+            System.out.println("-------------remoteFileName"+remoteFileName);
             if (remoteFilepath.contains("/")) {
 //                remoteFileName = remoteFilepath.substring(remoteFilepath.lastIndexOf("/") + 1);
                 //创建服务器远程目录结构，创建失败直接返回
@@ -211,7 +221,7 @@ public class FtpUtil {
             FTPFile[] files = ftpClient.listFiles(new String(remoteFileName.getBytes("GBK"), "iso-8859-1"));
             if (files.length == 1) {
                 long remoteSize = files[0].getSize();
-                File f = new File(localFilepath);
+                File f = new File(newlocalFilepath);
                 long localSize = f.length();
                 if (remoteSize == localSize) {
                     return UploadStatus.File_Exits;
@@ -234,7 +244,7 @@ public class FtpUtil {
                     finishedSize = (Long)(resultmap.get("finishedSize"));
                 }
             } else {
-                resultmap = uploadFile(fileTotalSize, finishedSize, processId, remoteFileName, new File(localFilepath), ftpClient, 0);
+                resultmap = uploadFile(fileTotalSize, finishedSize, processId, remoteFileName, new File(newlocalFilepath), ftpClient, 0);
                 result = (UploadStatus)(resultmap.get("status"));
                 finishedSize = (Long)(resultmap.get("finishedSize"));
             }
@@ -253,7 +263,13 @@ public class FtpUtil {
         long process = progressMap.get(processId)==null?0:progressMap.put(processId,0L);
         long localreadbytes = 0L;
         RandomAccessFile raf = new RandomAccessFile(localFile, "r");
+        System.out.println("------------remoteFile.getBytes(\"GBK\")="+remoteFile.getBytes("GBK"));
+        String testtring = new String(remoteFile.getBytes("GBK"), "iso-8859-1");
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!"+testtring);
         OutputStream out = ftpClient.appendFileStream(new String(remoteFile.getBytes("GBK"), "iso-8859-1"));
+        if(out == null){
+            System.out.println("=============null out");
+        }
         //断点续传
         if (remoteSize > 0) {
             /*ftpClient.setRestartOffset(remoteSize);

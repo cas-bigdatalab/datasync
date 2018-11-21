@@ -14,7 +14,7 @@
 <html>
 
 <head>
-    <title>DataSync数据节点门户管理系统</title>
+    <title>数据发布管理系统</title>
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
@@ -237,7 +237,7 @@
 <div class="con_div">
 
     <div class=" container tatle_div">
-        DataSync数据节点门户管理系统
+        数据发布管理系统
 <%--
         <button class="btn blue" style="float: right;margin-top: 28px;" ><i class="icon-user"></i>登录</button>
 --%>

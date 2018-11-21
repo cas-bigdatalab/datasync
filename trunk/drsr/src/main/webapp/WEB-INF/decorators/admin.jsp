@@ -12,7 +12,7 @@
 
 <html>
 <head>
-    <title>DataSync烟草专题库客户端</title>
+    <title>分布式数据汇交管理系统</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
@@ -62,7 +62,7 @@
         <!-- BEGIN LOGO -->
         <div class="page-logo" style="width: auto;">
             <a href="${ctx}/index">
-                <h4 style="margin-top:14px ">DataSync烟草专题库客户端</h4>
+                <h4 style="margin-top:14px ">分布式数据汇交管理系统</h4>
             </a>
         </div>
 
@@ -104,13 +104,13 @@
                 <li>
                     <div style="height: 70px"></div>
                 </li>
-                <li class="start">
+               <%-- <li class="start">
                     <a href="${ctx}/index">
                         <i class="icon-home"></i>
                         <span class="title">首页</span>
                         <span class="arrow"></span>
                     </a>
-                </li>
+                </li>--%>
                 <%-- <shiro:hasRole name="Register">--%>
                 <li>
                     <a href="javascript:;">
@@ -133,14 +133,14 @@
                 <li>
                     <a href="${ctx}/dataUpload">
                         <i class="icon-wrench"></i>
-                        <span class="title">数据任务</span>
+                        <span class="title">数据任务管理</span>
                         <span class="arrow "></span>
                     </a>
                 </li>
                 <li>
                     <a href="${ctx}/createTask">
                         <i class="icon-wrench"></i>
-                        <span class="title">设置任务</span>
+                        <span class="title">设置数据任务</span>
                         <span class="arrow "></span>
                     </a>
                 </li>
