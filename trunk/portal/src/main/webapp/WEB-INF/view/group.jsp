@@ -436,10 +436,10 @@
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="loginIdForUpdate">
-                                用户账号<span style="color: red;">*</span>
+                                用户账号
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入用户账号" id="loginIdForUpdate" name="loginIdForUpdate"  required="required" />
+                                <input type="text" class="form-control" placeholder="请输入用户账号" id="loginIdForUpdate" name="loginIdForUpdate" readonly="readonly" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -464,7 +464,7 @@
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="groupsForUpdateUserDialog">
-                                用户组<span style="color: red;">*</span>
+                                用户组
                             </label>
                             <div class="col-md-9">
                                 <select class='form-control select2me' name='groupsForUpdateUserDialog' id='groupsForUpdateUserDialog' multiple="multiple">
@@ -750,7 +750,7 @@
 
                     loginIdForUpdate: {
                         required: true,
-                        remote:
+                        /*remote:
                             {
                                 url: "${ctx}/user/queryLoginId",
                                 type: "get",
@@ -762,25 +762,25 @@
                                         }
                                     },
                                 dataType: "json"
-                            }
+                            }*/
                     },
                     passwordForUpdate: {
                         required: true,
                         minlength: 6
                     },
-                    groupsForUpdateUserDialog: "required",
+                    /*groupsForUpdateUserDialog: "required",*/
                 },
                 messages: {
                     userNameForUpdate: "请输入用户名",
                     loginIdForUpdate: {
                         required: "请输入用户账号",
-                        remote: "此用户账号已经存在！"
+                        /*remote: "此用户账号已经存在！"*/
                     },
                     passwordForUpdate: {
                         required: "请输入密码",
                         minlength: "密码至少为6位"
                     },
-                    groupsForUpdateUserDialog: "请输入用户组",
+                    /*groupsForUpdateUserDialog: "请输入用户组"*/
                 }
             };
             $("#addUserForm").validate(addUserValid);
