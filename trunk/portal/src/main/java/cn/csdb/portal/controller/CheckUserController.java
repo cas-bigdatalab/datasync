@@ -35,6 +35,10 @@ public class CheckUserController {
                     subject.login(token);
                     User u = checkUserService.getByUserName(user.getLoginId());
                     boolean flag = false;
+                    if(u.getRole()==""||u.getRole()==null){
+                        request.setAttribute("errorMsg", "请为该账号赋予可用角色！");
+                        return "loginNew";
+                    }
                     Set<String> roles = new HashSet<>();
                         roles.add(u.getRole());
                         if (u.getRole().equals("系统管理员")) {
@@ -45,7 +49,7 @@ public class CheckUserController {
 
                         }
                     if(!flag){
-                        request.setAttribute("errorMsg", "请为账号赋予角色！");
+                        request.setAttribute("errorMsg", "请为该账号赋予可用角色！");
                         return "loginNew";
                     }
                     if (u.getSubjectCode() != null) {
