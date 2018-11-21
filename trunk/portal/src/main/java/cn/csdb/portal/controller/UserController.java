@@ -78,7 +78,15 @@ public class UserController {
         user.setStat(1);
         user.setRole("普通用户");
         logger.info("user to be added = " + user);
-        int addedUserCnt = userService.addUser(user);
+
+        int addedUserCnt = 0;
+        try {
+            addedUserCnt = userService.addUser(user);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         logger.info("after addUser - addedUserCnt = " + addedUserCnt);
 
         return "addUserNotice： add user successfully.";
@@ -94,7 +102,7 @@ public class UserController {
         return deletedUserCnt;
     }
 
-    @RequestMapping(value="/updateGroup")
+    /*@RequestMapping(value="/updateGroup")
     public String updateGroups(HttpServletRequest request, @RequestParam(value = "loginId") String loginId, @RequestParam(value = "group") String group)
     {
         logger.info("enter updateGroups - parameters[loginId = " + loginId + ", group = " + group);
@@ -102,7 +110,7 @@ public class UserController {
         logger.info("after updateGroups - updatedUserCnt = " + updatedUserCnt);
 
         return "updateGroupsNotice： update groups successfully.";
-    }
+    }*/
 
     @ResponseBody
     @RequestMapping(value = "/getUserById")
@@ -149,7 +157,4 @@ public class UserController {
 
         return retValue;
     }
-
-
-
 }

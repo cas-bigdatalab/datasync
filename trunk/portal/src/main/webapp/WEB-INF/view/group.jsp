@@ -97,11 +97,10 @@
                                     <thead>
                                         <tr id="table_List1">
                                             <th style="width: 5%;">编号</th>
-                                            <th style="width: 12%;">用户名 </th>
-                                            <th style="width: 12%;">账号 </th>
-                                            <th style="width: 20%;">编辑时间</th>
-                                            <%--<th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">状态</th>--%>
-                                            <th style="width: 30%;">用户组</th>
+                                            <th style="width: 15%;">用户名 </th>
+                                            <th style="width: 15%;">账号 </th>
+                                            <th style="width: 15%;">编辑时间</th>
+                                            <th style="width: 25%;">用户组</th>
                                             <th >操作</th>
                                         </tr>
                                     </thead>
