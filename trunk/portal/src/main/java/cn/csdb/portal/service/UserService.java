@@ -32,10 +32,10 @@ public class UserService {
         return userDao.getTotalUsers(loginId, userName, groups);
     }
 
-    @Transactional
+    /*@Transactional
     public int updateGroups(String loginId, String group) {
         return userDao.updateGroups(loginId, group);
-    }
+    }*/
 
 
     @Transactional

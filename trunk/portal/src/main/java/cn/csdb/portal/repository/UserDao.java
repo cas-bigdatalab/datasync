@@ -1,16 +1,18 @@
 package cn.csdb.portal.repository;
 
+import cn.csdb.portal.model.Group;
 import cn.csdb.portal.model.User;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteResult;
 import org.apache.commons.lang.StringUtils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -20,15 +22,70 @@ import java.util.regex.Pattern;
 
 @Repository
 public class UserDao {
+    private Logger logger = LoggerFactory.getLogger(UserDao.class);
+
     @Resource
     MongoTemplate mongoTemplate;
 
     public int addUser(User user)
     {
         int addedUserCnt = 1;
+
         mongoTemplate.insert(user);
 
+        DBObject dBObject = QueryBuilder.start().and("userName").is(user.getUserName()).get();
+        Query query = new BasicQuery(dBObject);
+        User theUser = mongoTemplate.findOne(query, User.class);
+        String userId = theUser.getId();
+
+        //为用户组增加用户
+        String[] groupArr = user.getGroups().split(",");
+        for (String groupName : groupArr)
+        {
+            addUserToGroup(userId, groupName);
+        }
+
         return addedUserCnt;
+    }
+
+    /**
+     * Function Description ： 这个函数的目的是讲userName存放到它对应的group的user数组中
+     *  因为一个userName可能对应多个组，所以在每一个组中检查此用户是否在组中，如果在，就不更新，如果不在则添加
+     * @param userId
+     * @param groupName
+     */
+    private void addUserToGroup(String userId, String groupName)
+    {
+        //从t_group表中查找出名字为groupName的group，加入userName到它的users中去，之后把group再写入t_group表中
+        DBObject dBObject = QueryBuilder.start().and("groupName").is(groupName).get();
+        Query query = new BasicQuery(dBObject);
+        Group group = mongoTemplate.findOne(query, Group.class);
+        List<String> users = group.getUsers();
+        if (users == null)
+        {
+            users = new ArrayList<String>();
+        }
+        logger.info("groupName = " + groupName + ", users = " + users);
+        users.add(userId);
+        group.setUsers(users);
+        mongoTemplate.save(group);
+    }
+
+    /**
+     * Function Description ： 这个函数的目的是将userName从group的user数组中删掉
+     * @param userId
+     * @param groupName
+     */
+    private void dropUserFromGroup(String userId, String groupName)
+    {
+        //从t_group表中查找出名字为groupName的group，加入userName到它的users中去，之后把group再写入t_group表中
+        DBObject dBObject = QueryBuilder.start().and("groupName").is(groupName).get();
+        Query query = new BasicQuery(dBObject);
+        Group group = mongoTemplate.findOne(query, Group.class);
+        List<String> users = group.getUsers();
+        users.remove(userId);
+        group.setUsers(users);
+        mongoTemplate.save(group);
     }
 
     public List<User> queryUser(String loginId, String userName, String groups, int curUserPageNum, int pageSize)
@@ -169,7 +226,7 @@ public class UserDao {
         return totalUsers;
     }
 
-    public int updateGroups(String loginId, String group) {
+    /*public int updateGroups(String loginId, String group) {
         int updatedUserCnt = 1;
 
         Query query = new Query();
@@ -178,7 +235,7 @@ public class UserDao {
         mongoTemplate.upsert(query, update, "t_user");
 
         return updatedUserCnt;
-    }
+    }*/
 
     public int deleteUser(String id)
     {
@@ -203,9 +260,58 @@ public class UserDao {
     public int updateUser(User user)
     {
         int updatedUserCnt = 1;
+
+        String userName = user.getUserName();
+        String[] groupArr = user.getGroups().split(",");
+        updateUserGroup(user);
+
         mongoTemplate.save(user);
 
         return updatedUserCnt;
+    }
+
+    private void updateUserGroup(User user)
+    {
+        String userId = user.getId();
+        String groupsBeforeUpdate = mongoTemplate.findById(userId, User.class).getGroups();
+        String[] groupsBeforeUpdateArr = groupsBeforeUpdate.split(",");
+        String[] updatedGroupsArr = user.getGroups().split(",");
+
+        //如果有新增的用户组，则把用户加入到新增的用户组中去
+        for (int i = 0; i < updatedGroupsArr.length; i++)
+        {
+            int j = 0;
+            for (j = 0; j < groupsBeforeUpdateArr.length; j++)
+            {
+                if (updatedGroupsArr[i].equals(groupsBeforeUpdateArr[j]))
+                {
+                    break;
+                }
+            }
+
+            if (j >= groupsBeforeUpdateArr.length)
+            {
+                addUserToGroup(userId, updatedGroupsArr[i]);
+            }
+        }
+
+        //如果有删掉的用户组，则把用户从这些用户组中删去
+        for (int i = 0; i < groupsBeforeUpdateArr.length; i++)
+        {
+            int j = 0;
+            for (j = 0; j < updatedGroupsArr.length; j++)
+            {
+                if (groupsBeforeUpdateArr[i].equals(updatedGroupsArr[j]))
+                {
+                    break;
+                }
+            }
+
+            if (j >= updatedGroupsArr.length)
+            {
+                dropUserFromGroup(userId, groupsBeforeUpdateArr[i]);
+            }
+        }
     }
 
     /**
@@ -293,5 +399,4 @@ public class UserDao {
         user.setGroups(str);
         updateUser(user);
     }
-
 }

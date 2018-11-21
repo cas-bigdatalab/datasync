@@ -88,11 +88,11 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 5%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编号</th>
-                                            <th style="width: 12%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户名 </th>
-                                            <th style="width: 12%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">账号 </th>
-                                            <th style="width: 20%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编辑时间</th>
+                                            <th style="width: 15%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户名 </th>
+                                            <th style="width: 15%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">账号 </th>
+                                            <th style="width: 15%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">编辑时间</th>
                                             <%--<th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">状态</th>--%>
-                                            <th style="width: 30%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户组</th>
+                                            <th style="width: 25%;text-align: center;background: #64aed9;color: #FFF;font-weight: bold">用户组</th>
                                             <th style="text-align: center;background: #64aed9;color: #FFF;font-weight: bold">操作</th>
                                         </tr>
                                     </thead>
