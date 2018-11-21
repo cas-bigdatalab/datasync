@@ -134,10 +134,10 @@
                         <label class="col-sm-3 control-label">发布内容:</label>
                         <div class="col-sm-8 modediv" id="rel-publicContent"></div>
                     </div>
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label class="col-sm-3 control-label">字段注释:</label>
                         <div class="col-sm-8 modediv" id="rel-fieldComs"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">数据节点代码:</label>
                         <div class="col-sm-8 modediv" id="rel-subjectCode"></div>
@@ -158,14 +158,14 @@
                         <label class="col-sm-3 control-label">资源关键词:</label>
                         <div class="col-sm-8 modediv" id="rel-keyword"></div>
                     </div>
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label class="col-sm-3 control-label">分类:</label>
                         <div class="col-sm-8 modediv" id="rel-taxonomy"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">格式:</label>
                         <div class="col-sm-8 modediv" id="rel-dataFormat"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">开始时间:</label>
                         <div class="col-sm-8 modediv" id="rel-startTime"></div>
@@ -204,10 +204,10 @@
                         <div class="col-sm-8 modediv" id="rel-phoneNum"></div>
                     </div>
 
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label class="col-sm-3 control-label">引用格式:</label>
                         <div class="col-sm-8 modediv" id="rel-citation"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">总存储量:</label>
                         <div class="col-sm-8 modediv" id="rel-toMemorySize"></div>
@@ -281,10 +281,10 @@
                         <label class="col-sm-3 control-label">文件名称:</label>
                         <div class="col-sm-8 modediv" id="file-fileName"></div>
                     </div>
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label class="col-sm-3 control-label">字段注释:</label>
                         <div class="col-sm-8 modediv" id="file-fieldComs"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">数据节点代码:</label>
                         <div class="col-sm-8 modediv" id="file-subjectCode"></div>
@@ -305,14 +305,14 @@
                         <label class="col-sm-3 control-label">资源关键词:</label>
                         <div class="col-sm-8 modediv" id="file-keyword"></div>
                     </div>
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label class="col-sm-3 control-label">分类:</label>
                         <div class="col-sm-8 modediv" id="file-taxonomy"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">格式:</label>
                         <div class="col-sm-8 modediv" id="file-dataFormat"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">开始时间:</label>
                         <div class="col-sm-8 modediv" id="file-startTime"></div>
@@ -351,10 +351,10 @@
                         <div class="col-sm-8 modediv" id="file-phoneNum"></div>
                     </div>
 
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label class="col-sm-3 control-label">引用格式:</label>
                         <div class="col-sm-8 modediv" id="file-citation"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">总存储量:</label>
                         <div class="col-sm-8 modediv" id="file-toMemorySize"></div>
@@ -393,22 +393,6 @@
         <td id="{{value.dataTaskId}}">{{value.resState}}</td>
         <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>
         <td style="text-align: right">
-            <%--<button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.id}}"
-                    value="{{value.id}}">&nbsp;&nbsp;&nbsp;导出&nbsp;&nbsp;&nbsp;
-            </button>
-            {{if value.status == 1}}
-            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" disabled
-                    style="background-color: dimgrey">重新上传
-            </button>
-            {{else if value.status == 0}}
-            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}">&nbsp;&nbsp;&nbsp;上传&nbsp;&nbsp;&nbsp;</button>
-            {{/if}}
-            <button type="button" class="btn  edit-data btn-xs blue" keyIdTd="{{value.dataTaskId}}"><i
-                    class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
-            </button>
-            <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i
-                    class="glyphicon glyphicon-trash"></i>&nbsp;删除
-            </button>--%>
             <%--{{if value.resState == '待审核'}}
             <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.id}}"
                     value="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;审核
@@ -469,14 +453,14 @@
 
                     var dataList = JSON.parse(data).resource;
                     console.log(dataList)
-                    if(type == "mysql"){
+                    if(type == "mysql" || type =="" ){
                         $("#rel-dataSourceId").html(dataList.dataSourceId)
                         $("#rel-email").html(dataList.email)
                         $("#rel-catalogId").html(dataList.catalogId)
                         $("#rel-imagePath").html(dataList.imagePath)
                         $("#rel-status").html(tabStatus)
                         $("#rel-resState").html(dataList.resState)
-                        $("#rel-publicType").html(dataList.publicType)
+                        $("#rel-publicType").html("mysql")
                         var $publicContent=$("#rel-publicContent")
                         listSpan(dataList.publicContent,";",$publicContent)
                         var $filePath=$("#rel-filePath")
@@ -500,7 +484,7 @@
                         $("#rel-organizationName").html(dataList.organizationName)
                         $("#rel-mail").html(dataList.mail)
                         $("#rel-phoneNum").html(dataList.phoneNum)
-                        $("#rel-updateDate").html(convertMilsToDateString(dataList.updateDate))
+                        $("#rel-updateDate").html(convertMilsToDateTimeString(dataList.updateDate))
                         $("#rel-citation").html(dataList.citation)
                         $("#rel-toMemorySize").html(dataList.toMemorySize)
                         $("#rel-toFilesNumber").html(dataList.toFilesNumber)
@@ -516,7 +500,7 @@
                         $("#file-imagePath").html(dataList.imagePath)
                         $("#file-status").html(tabStatus)
                         $("#file-resState").html(dataList.resState)
-                        $("#file-publicType").html(dataList.publicType)
+                        $("#file-publicType").html("file")
                         var $publicContent=$("#file-publicContent")
                         listSpan(dataList.publicContent,";",$publicContent)
                         var $filePath=$("#file-filePath")
@@ -541,7 +525,7 @@
                         $("#file-organizationName").html(dataList.organizationName)
                         $("#file-mail").html(dataList.mail)
                         $("#file-phoneNum").html(dataList.phoneNum)
-                        $("#file-updateDate").html(convertMilsToDateString(dataList.updateDate))
+                        $("#file-updateDate").html(convertMilsToDateTimeString(dataList.updateDate))
                         $("#file-citation").html(dataList.citation)
                         $("#file-toMemorySize").html(dataList.toMemorySize)
                         $("#file-toFilesNumber").html(dataList.toFilesNumber)
@@ -592,7 +576,7 @@
                         $(".page-list").off();
                         $('.page-list').empty();
                     }
-                    $(".page-message").html("当前第" + DataList.currentPage + "页,共" + DataList.totalPages + "页,共" + DataList.totalCount + "条数据");
+                    $(".page-message").html("当前第<span style='color:blue'>" + DataList.currentPage + "</span>页,共<span style='color:blue'>" + DataList.totalPages + "</span>页,共<span style='color:blue'>" + DataList.totalCount + "</span>条数据");
                     $('.page-list').bootpag({
                         total: DataList.totalPages,
                         page: DataList.currentPage,

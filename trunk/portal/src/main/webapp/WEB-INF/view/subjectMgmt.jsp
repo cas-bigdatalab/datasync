@@ -568,7 +568,7 @@
                             page: data.pageNum,
                             maxVisible: 5,
                             leaps: true,
-                            firstLastUse: true,
+                           /* firstLastUse: true,
                             first: '首页',
                             last: '尾页',
                             wrapClass: 'pagination',
@@ -577,7 +577,7 @@
                             nextClass: 'next',
                             prevClass: 'prev',
                             lastClass: 'last',
-                            firstClass: 'first'
+                            firstClass: 'first'*/
                         }).on('page', function (event, num) {
                             getSubject(num);
                             currentPage = num;

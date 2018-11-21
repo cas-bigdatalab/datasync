@@ -297,7 +297,7 @@
                         $(".page-list").off();
                         $('.page-list').empty();
                     }
-                    $(".page-message").html("当前第"+DataList.currentPage +"页,共"+DataList.totalPage +"页,共"+DataList.totalNum+"条数据");
+                    $(".page-message").html("当前第<span style='color:blue'>"+DataList.currentPage +"</span>页,共<span style='color:blue'>"+DataList.totalPage +"</span>页,共<span style='color:blue'>"+DataList.totalNum+"</span>条数据");
                     $('.page-list').bootpag({
                         total: DataList.totalPage,
                         page: DataList.currentPage,

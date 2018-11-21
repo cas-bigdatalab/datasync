@@ -314,9 +314,9 @@
         <td style="display:table-cell; vertical-align:middle ;text-align: center;">{{dateFormat($value.createTime)}}</td>
         <td style="display:table-cell; vertical-align:middle;text-align: center;" id="a{{$value.id}}" >
             <%--<button class="btn default btn-xs green-stripe" onclick="viewData()">查看</button>&nbsp;&nbsp;--%>
-            <button class="btn default btn-xs purple updateButton" onclick="editData('{{$value.id}}')"><i class="fa fa-edit"></i>修改</button>&nbsp;
+                <button class="btn default btn-xs green" onclick="addUserData('{{$value.id}}')"><i class="fa fa-user"></i>添加用户</button>
+                <button class="btn default btn-xs purple updateButton" onclick="editData('{{$value.id}}')"><i class="fa fa-edit"></i>修改</button>&nbsp;
             <button class="btn default btn-xs red" onclick="deleteData('{{$value.id}}')"><i class="fa fa-trash"></i>删除</button>&nbsp;
-            <button class="btn default btn-xs green" onclick="addUserData('{{$value.id}}')"><i class="fa fa-user"></i>添加用户</button>
         </td>
     </tr>
     {{/each}}
@@ -531,7 +531,7 @@
     <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
     <script src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.min.js"></script>
 
-    <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
+    <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
     <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.min.js"></script>
     <script src="${ctx}/resources/bundles/jquery-validation/js/additional-methods.min.js"></script>
