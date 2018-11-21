@@ -96,35 +96,35 @@
                                         <label for="databaseName" class="col-sm-3 control-label">数据库名称<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" id="databaseName" name="databaseName">
+                                            <input type="text" class="form-control" id="databaseName" name="databaseName" placeholder="请输入数据库名称">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="host" class="col-sm-3 control-label">主机<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" id="host" name="host">
+                                            <input type="text" class="form-control" id="host" name="host" placeholder="请输入主机名称">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="port" class="col-sm-3 control-label">端口<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" id="port" name="port" value="5000">
+                                            <input type="text" class="form-control" id="port" name="port" value="5000" placeholder="请输入端口号">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="userName" class="col-sm-3 control-label">用户名<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" id="userName" name="userName">
+                                            <input type="text" class="form-control" id="userName" name="userName" placeholder="请输入用户名">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="password" class="col-sm-3 control-label">密码<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
-                                            <input type="password" class="form-control" id="password" name="password">
+                                            <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码">
                                         </div>
                                     </div>
                                 </div>
@@ -181,35 +181,35 @@
                                         <label for="databaseNameE" class="col-sm-3 control-label">数据库名称<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" id="databaseNameE" name="databaseNameE">
+                                            <input type="text" class="form-control" id="databaseNameE" name="databaseNameE" placeholder="请输入数据库名称">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="hostE" class="col-sm-3 control-label">主机<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" id="hostE" name="hostE">
+                                            <input type="text" class="form-control" id="hostE" name="hostE" placeholder="请输入主机名称">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="portE" class="col-sm-3 control-label">端口<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" id="portE" name="portE">
+                                            <input type="text" class="form-control" id="portE" name="portE" placeholder="请输入端口号">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="userNameE" class="col-sm-3 control-label">用户名<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" id="userNameE" name="userNameE">
+                                            <input type="text" class="form-control" id="userNameE" name="userNameE" placeholder="请输入用户名">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="passwordE" class="col-sm-3 control-label">密码<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
-                                            <input type="password" class="form-control" id="passwordE" name="passwordE">
+                                            <input type="password" class="form-control" id="passwordE" name="passwordE" placeholder="请输入密码">
                                         </div>
                                     </div>
                                 </div>

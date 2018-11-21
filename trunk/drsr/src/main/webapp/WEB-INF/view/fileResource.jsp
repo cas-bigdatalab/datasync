@@ -177,11 +177,12 @@
         <td>{{i + 1}}</td>
         <td>{{value.dataSourceName}}</td>
         <td>{{value.fileType}}</td>
-        <td style="text-align: left">
+        <td>{{value.filePath}}</td>
+    <%--<td style="text-align: left">
             <div style="white-space:pre-line;">
                 {{splStr(value.filePath)}}
             </div>
-        </td>
+        </td>--%>
         <td>{{value.createTime}}</td>
         <td>
             <button type="button" class="btn btn-success btn-xs purple " onclick="editData('{{value.dataSourceId}}');"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
