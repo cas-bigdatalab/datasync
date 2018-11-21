@@ -18,10 +18,10 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jstree/dist/themes/default/style.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/dataConfig.css">
     <style type="text/css">
-        .nav-tabs li a{
+       /* .nav-tabs li a{
             font-size: 16px;
             background-color: gainsboro;
-        }
+        }*/
      /*   .nav-tabs>li.active>a{
             background-color: #28a4a4!important;
             border: 1px solid black!important;
@@ -43,15 +43,15 @@
     </div>--%>
     <div>
         <!-- Nav tabs -->
-        <ul class="nav nav-tabs" role="tablist" id="tabDescribe">
+        <%--<ul class="nav nav-tabs" role="tablist" id="tabDescribe">
             <li role="presentation" class="active" value="0"><a href="#undescribe" aria-controls="undescribe" role="tab" data-toggle="tab">待描述数据表</a></li>
             <li role="presentation" value="1"><a href="#isdescribe" aria-controls="isdescribe" role="tab" data-toggle="tab">已描述数据表</a></li>
             <li role="presentation" value="2"><a href="#filedata" aria-controls="filedata" role="tab" data-toggle="tab">文件数据</a></li>
-        </ul>
+        </ul>--%>
         <!-- Tab panes -->
-        <div class="tab-content">
+        <%--<div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="undescribe">
-                <%--<div class="col-md-3" style="font-size: 18px">
+                &lt;%&ndash;<div class="col-md-3" style="font-size: 18px">
                     <span>选择表资源进行描述</span>
                 </div>
                 <div class="col-md-9" >
@@ -76,10 +76,10 @@
                         </div>
 
                     </div>
-                </div>--%>
+                </div>&ndash;%&gt;
             </div>
             <div role="tabpanel" class="tab-pane" id="isdescribe">
-                <%--<div class="col-md-3" style="font-size: 18px">
+                &lt;%&ndash;<div class="col-md-3" style="font-size: 18px">
                     <span>选择表资源查看/修改描述</span>
                 </div>
                 <div class="col-md-9" >
@@ -104,12 +104,55 @@
                         </div>
 
                     </div>
-                </div>--%>
+                </div>&ndash;%&gt;
             </div>
             <div role="tabpanel" class="tab-pane" id="filedata">
                 <div id="jstree_show"></div>
             </div>
+        </div>--%>
+
+        <div class="col-md-12">
+            <div class="tabbable-custom ">
+                <!-- tab header --->
+                <ul class="nav nav-tabs " id="tabDescribe">
+                    <li class="active" value="0">
+                        <a href="#undescribe" data-toggle="tab">
+                            待描述数据表 </a>
+                    </li>
+                    <li value="1">
+                        <a href="#isdescribe" data-toggle="tab">
+                            已描述数据表</a>
+                    </li>
+                    <li value="2">
+                        <a href="#filedata" data-toggle="tab">
+                            文件数据</a>
+                    </li>
+                </ul>
+                <!--tab content-->
+                <div class="tab-content">
+
+                    <!--用户管理标签页-->
+                    <div class="tab-pane active" id="undescribe" style="min-height: 400px">
+
+                    </div>
+
+                    <!--group tab-->
+                    <div class="tab-pane" id="isdescribe" style="min-height: 400px">
+
+                    </div>
+                    <div class="tab-pane active" id="filedata" style="min-height: 400px">
+                        <div id="jstree_show"></div>
+                    </div>
+                    <%--<div class="tab-pane active" id="undescribe" style="min-height: 400px">
+                        <div class="row">
+
+                        </div>
+                    </div>--%>
+                </div>
+            </div>
         </div>
+
+
         <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
             <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
                 <div class="modal-content">
