@@ -80,6 +80,46 @@ public class Resource {
     private long toRecordNumber; //总记录数
     @Field("userGroupId")
     private String userGroupId;
+    @Field("publishOrgnization")
+    private String publishOrgnization;//发布机构
+    @Field("createOrgnization")
+    private String createOrgnization;
+    @Field("createPerson")
+    private String createPerson;
+    @Field("createTime")
+    private Date createTime;
+
+    public String getPublishOrgnization() {
+        return publishOrgnization;
+    }
+
+    public void setPublishOrgnization(String publishOrgnization) {
+        this.publishOrgnization = publishOrgnization;
+    }
+
+    public String getCreateOrgnization() {
+        return createOrgnization;
+    }
+
+    public void setCreateOrgnization(String createOrgnization) {
+        this.createOrgnization = createOrgnization;
+    }
+
+    public String getCreatePerson() {
+        return createPerson;
+    }
+
+    public void setCreatePerson(String createPerson) {
+        this.createPerson = createPerson;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
     public String getId() {
         return id;
