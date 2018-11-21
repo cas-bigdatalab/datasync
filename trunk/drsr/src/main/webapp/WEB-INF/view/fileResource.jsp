@@ -116,7 +116,7 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title">编辑文件数据源</h4>
+                <h4 class="modal-title">编辑文件型数据源</h4>
             </div>
             <div class="form">
                 <form class="form-horizontal" role="form" action="" method="post"
