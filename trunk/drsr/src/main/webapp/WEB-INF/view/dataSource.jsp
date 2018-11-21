@@ -16,7 +16,7 @@
 <body>
 <div class="page-content">
     <div class="source-head">
-        <span>DataSync / 数据源</span>
+        <span>分布式数据汇交管理系统/数据源</span>
     </div>
     <%--<div class="source-title">
         <span>数据源信息管理</span>

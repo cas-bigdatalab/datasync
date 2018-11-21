@@ -14,13 +14,13 @@
 <html>
 
 <head>
-    <title>DataSync专题库门户管理系统</title>
+    <title>数据发布管理系统</title>
 </head>
 
 <body>
 
 <div class="page-content">
-    <h3><b>欢迎使用DataSync专题库门户管理系统</b></h3>
+    <h3><b>欢迎使用数据发布管理系统</b></h3>
     <shiro:hasRole name="root">
         系统管理员才可以看见
     </shiro:hasRole>

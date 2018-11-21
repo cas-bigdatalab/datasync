@@ -13,7 +13,7 @@
 <html>
 
 <head>
-    <title>DataSync专题库门户管理系统</title>
+    <title>数据发布管理系统</title>
     <link href="${ctx}/resources/bundles/rateit/src/rateit.css" rel="stylesheet" type="text/css">
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css">
 </head>

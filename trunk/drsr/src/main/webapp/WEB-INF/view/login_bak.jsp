@@ -13,7 +13,7 @@
 <html>
 
 <head>
-    <title>客户端首页</title>
+    <title>分布式数据汇交管理系统</title>
 
     <link href="${ctx}/resources/bundles/metronic/global/css/components.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css"/>
@@ -35,7 +35,7 @@
     <div class="page-header-inner">
         <div class="page-logo" style="width: auto;">
             <a href="${ctx}/">
-                <h4 style="margin-top:14px ">DataSync烟草专题库客户端</h4>
+                <h4 style="margin-top:14px ">分布式数据汇交管理系统</h4>
             </a>
         </div>
     </div>
@@ -49,7 +49,7 @@
     </div>
 
     <div class="source-title" style="text-align: center; font-size: x-large;">
-        <span>客户端登录</span>
+        <span>分布式数据汇交管理系统登录</span>
         <br />
         <br />
     </div>

@@ -14,7 +14,7 @@
 <html>
 
 <head>
-    <title>DataSync专题库门户管理系统</title>
+    <title>数据发布管理系统</title>
 </head>
 
 <body>
