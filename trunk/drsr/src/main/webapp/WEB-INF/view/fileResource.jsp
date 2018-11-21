@@ -43,7 +43,7 @@
                 <button type="button" class="btn  btn-sm green pull-right" id="addSqlSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;添加SQL数据源</button>
             </div>--%>
             <div class="col-md-12">
-                <button type="button" class="btn  btn-sm green pull-right" id="addFileSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;添加文件型数据源</button>
+                <button type="button" class="btn  btn-sm green pull-right" id="addFileSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;新增文件型数据源</button>
             </div>
         </div>
     </div>
@@ -75,7 +75,7 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title" id="fileSourceModalTitle">添加文件数据源</h4>
+                <h4 class="modal-title" id="fileSourceModalTitle">新增文件型数据源</h4>
             </div>
             <div class="form">
                 <form class="form-horizontal" role="form" action="" method="post"
@@ -129,7 +129,7 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title">编辑文件数据源</h4>
+                <h4 class="modal-title">编辑文件型数据源</h4>
             </div>
             <div class="form">
                 <form class="form-horizontal" role="form" action="" method="post"
@@ -190,11 +190,12 @@
         <td>{{i + 1}}</td>
         <td>{{value.dataSourceName}}</td>
         <td>{{value.fileType}}</td>
-        <td style="text-align: left">
+        <td>{{value.filePath}}</td>
+    <%--<td style="text-align: left">
             <div style="white-space:pre-line;">
                 {{splStr(value.filePath)}}
             </div>
-        </td>
+        </td>--%>
         <td>{{value.createTime}}</td>
         <td>
             <button type="button" class="btn btn-success btn-xs purple " onclick="editData('{{value.dataSourceId}}');"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
