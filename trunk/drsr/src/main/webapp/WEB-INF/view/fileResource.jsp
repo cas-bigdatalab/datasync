@@ -14,6 +14,18 @@
     <link href="${ctx}/resources/bundles/rateit/src/rateit.css" rel="stylesheet" type="text/css">
     <link href="${ctx}/resources/bundles/jstree/dist/themes/default/style.css" rel="stylesheet" type="text/css">
     <link href="${ctx}/resources/css/dataSource.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+        .custom-error{
+            color:#a94442!important;
+            border-color:#a94442!important;
+        }
+        .custom-error1{
+            color:#a94442!important;
+        }
+        .custom-error2{
+            border-color:#a94442!important;
+        }
+    </style>
 </head>
 <body>
 <div class="page-content">
@@ -31,7 +43,7 @@
                 <button type="button" class="btn  btn-sm green pull-right" id="addSqlSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;添加SQL数据源</button>
             </div>--%>
             <div class="col-md-12">
-                <button type="button" class="btn  btn-sm green pull-right" id="addFileSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;添加文件型数据源</button>
+                <button type="button" class="btn  btn-sm green pull-right" id="addFileSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;新增文件型数据源</button>
             </div>
         </div>
     </div>
@@ -62,11 +74,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title" id="fileSourceModalTitle">添加文件数据源</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="cancelButton();"></button>
+                <h4 class="modal-title" id="fileSourceModalTitle">新增文件型数据源</h4>
             </div>
             <div class="form">
-                <form class="form-horizontal" role="form" action="" method="post"
+                <form class="form-horizontal formClass" role="form" action="" method="post"
                       accept-charset="utf-8" id="fileSourceForm">
                     <div class="modal-body">
                         <div class="row">
@@ -88,12 +100,13 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="filePath" class="col-md-3 control-label"><span class="required">
+                                        <label for="filePath" class="col-md-3 control-label timeVili"><span class="required">
 													* </span>文件路径</label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control" placeholder="请输入文件路径"
+                                            <input type="text" class="form-control timeVili" placeholder="请输入文件路径"
                                                    id="filePath"
-                                                   name="filePath" onblur="filePathCheck();"/>
+                                                   name="filePath" onblur="filePathCheck(1);"/>
+                                            <div class="timeVili custom-error" style="display: none">请输入正确的文件路径</div>
                                         </div>
                                     </div>
                                 </div>
@@ -101,7 +114,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn green">
+                        <button type="button" class="btn green" onclick="viliFileRes(this)">
                             <i class="glyphicon glyphicon-ok"></i>保存</button>
                         <button type="button" data-dismiss="modal" class="btn btn-danger" onclick="cancelButton();">取消</button>
                     </div>
@@ -115,11 +128,11 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title">编辑文件数据源</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="cancelButton();"></button>
+                <h4 class="modal-title">编辑文件型数据源</h4>
             </div>
             <div class="form">
-                <form class="form-horizontal" role="form" action="" method="post"
+                <form class="form-horizontal formClass" role="form" action="" method="post"
                       accept-charset="utf-8" id="fileSourceEditForm">
                     <div class="modal-body">
                         <div class="row">
@@ -141,12 +154,13 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for = "filePathE" class="col-md-3 control-label"><span class="required">
+                                        <label for = "filePathE" class="col-md-3 control-label timeVili"><span class="required">
 													* </span>文件地址</label>
                                         <div class="col-md-9">
-                                            <input type="text" class="form-control"
+                                            <input type="text" class="form-control timeVili"
                                                    id="filePathE"
-                                                   name="filePathE"/>
+                                                   name="filePathE" onblur="filePathCheck(2);"/>
+                                            <div class="timeVili custom-error" style="display: none">请输入正确的文件路径</div>
                                         </div>
                                     </div>
                                     <%--<div class="form-group">
@@ -161,7 +175,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn green">
+                        <button type="button" class="btn green" onclick="viliFileRes(this)">
                             <i class="glyphicon glyphicon-ok"></i>保存</button>
                         <button type="button" data-dismiss="modal" class="btn btn-danger" onclick="cancelButton();">取消</button>
                     </div>
@@ -177,11 +191,12 @@
         <td>{{i + 1}}</td>
         <td>{{value.dataSourceName}}</td>
         <td>{{value.fileType}}</td>
-        <td style="text-align: left">
+        <td>{{value.filePath}}</td>
+    <%--<td style="text-align: left">
             <div style="white-space:pre-line;">
                 {{splStr(value.filePath)}}
             </div>
-        </td>
+        </td>--%>
         <td>{{value.createTime}}</td>
         <td>
             <button type="button" class="btn btn-success btn-xs purple " onclick="editData('{{value.dataSourceId}}');"><i class="glyphicon glyphicon-edit"></i>&nbsp;编辑</button>
@@ -207,6 +222,9 @@
             tableConfiguration();
         });
         /*get data table*/
+
+
+
         function tableConfiguration(num) {
             $.ajax({
                 url:"${ctx}/fileResource/indexPages",
@@ -265,6 +283,181 @@
             var str1 = str.replace(/;/g,"\n");
             return str1;
         })
+        var validData ={
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block help-block-error', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "", // validate all fields including form hidden input
+            rules: {
+                dataSourceName: {
+                    required: true
+                },
+                filePath: {
+                    required: true
+                },
+                filePathE: {
+                    required: true
+                },
+                dataSourceNameE: {
+                    required: true
+                }
+            },
+
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.parent(".input-group").size() > 0) {
+                    error.insertAfter(element.parent(".input-group"));
+                } else {
+                    error.insertAfter(element); // for other inputs, just perform default behavior
+                }
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element)
+                    .closest('.form-group').removeClass('has-error'); // set error class to the control group
+            }
+
+        }
+        $("#fileSourceForm").validate(validData)
+
+        function viliFileRes(obj){
+            var filePath =$("#filePath").val();
+            var filePathE =$("#filePathE").val();
+            var formId = $(obj).parent().parent().attr("id");
+            if(formId=="fileSourceForm"){
+                if(!$("#fileSourceForm").valid()){
+                    return
+                }
+                filePath = filePath.replace("\/", "%_%");
+                filePath = filePath.replace("\\", "%_%");
+            }else {
+                if(!$("#fileSourceEditForm").valid()){
+                    return
+                }
+                filePathE = filePathE.replace("\/", "%_%");
+                filePathE = filePathE.replace("\\", "%_%");
+                filePath = filePathE;
+            }
+            $.ajax({
+                url:"${ctx}/fileResource/check",
+                type:"post",
+                data:{
+                    filePath:filePath
+                },
+                success:function (data) {
+                    var jsonData = JSON.parse(data)
+                    if(jsonData==false){
+                        $(".timeVili:eq(0)").addClass("custom-error1")
+                        $(".timeVili:eq(1)").addClass("custom-error2")
+                        $(".timeVili:eq(2)").show()
+                        return
+                    }else {
+                        var formName = formId;
+                        if (formName == 'fileSourceEditForm') {
+                            var dataSourceId = $("#idHidden").val();
+                            var dataSourceName = $("#dataSourceNameE").val();
+                            var filePath = $("#filePathE").val();
+                            filePath= filePath.replace("\/", "%_%");
+                            filePath= filePath.replace("\\", "%_%");
+
+                            var dataSourceType = 'file';
+                            var fileType = '本地文件';
+                            /*var nodes = $('#jstree_show_edit').jstree("get_checked");
+                            for (var index in jsonData) {
+                                for (var key in jsonData[index]) {
+
+                                }
+                            }
+                            nodes.replaceAll("/","%_%");
+                            var tags_tagsinput = $("#tags_tagsinput").text();
+                            if((nodes.length==0)&&(tags_tagsinput.length==0)){
+                                toastr["error"]("您尚未选取文件");
+                            }else{
+                            var attr = [];
+                            $("#tags_tagsinput span").each(function (i) {
+                                if($(this).attr('class')=='filePathClass'){
+                                    attr.push($(this).text());
+                                }
+                            })*/
+                            $.ajax({
+                                type: 'post',
+                                url: "${ctx}/fileResource/edit",
+                                async: true,
+                                traditional: true,
+                                data: {
+                                    "dataSourceId": dataSourceId,
+                                    "dataSourceName": dataSourceName,
+                                    "dataSourceType": dataSourceType,
+                                    "fileType": fileType,
+                                    "filePath":filePath
+                                    /*"attr": attr,
+                                    "nodes":nodes*/
+                                },
+                                success: function (result) {
+                                    var jsonData = JSON.parse(result);
+                                    if (jsonData == '1') {
+                                        toastr["success"]("编辑成功");
+                                        $('#fileSourceEditModal').modal('hide');
+/*
+                                        formValid.resetForm();
+*/
+                                        tableConfiguration();
+                                    } else {
+                                        toastr["error"]("编辑失败");
+                                    }
+                                }
+                            })
+                        }
+                        else {
+                            var dataSourceName = $("#dataSourceName").val();
+                            var dataSourceType = 'file';
+                            var fileType = "本地文件";
+                            var filePath = $("#filePath").val();
+                            filePath= filePath.replace("\/", "%_%");
+                            filePath= filePath.replace("\\", "%_%");
+                            /*if(nodes.length==0){
+                                toastr["error"]("您尚未选取文件");
+                            }else{*/
+                            $.ajax({
+                                type: 'post',
+                                url: "${ctx}/fileResource/add",
+                                async: true,
+                                traditional: true,
+                                data: {
+                                    "dataSourceName": dataSourceName,
+                                    "dataSourceType": dataSourceType,
+                                    "fileType": fileType,
+                                    "filePath":filePath
+                                    /*
+                                                                    "data": nodes
+                                    */
+                                },
+                                success: function (result) {
+                                    var jsonData = JSON.parse(result);
+                                    if (jsonData == '1') {
+                                        toastr["success"]("新增成功");
+                                        $('#fileSourceModal').modal('hide');
+/*
+                                        formValid.resetForm();
+*/
+                                        tableConfiguration();
+                                    } else {
+                                        toastr["error"]("新增失败");
+                                    }
+                                }
+                            })
+                        }
+                    }
+
+                }
+            })
+
+
+
+        }
 
         $("#addFileSource").click(function () {
             $("#fileSourceModal").modal('show');
@@ -323,8 +516,8 @@
                 },
                 "plugins": ["dnd"/!*, "state"*!/, "types", "checkbox", "wholerow"]
             })*/
-            var $sqlFrom =$('#fileSourceForm')
-            handleValidation($sqlFrom);
+            /*var $sqlFrom =$('#fileSourceForm')
+            handleValidation($sqlFrom);*/
         })
 
         function generateChildJson(childArray) {
@@ -439,7 +632,7 @@
            })
             $("#fileSourceEditModal").modal('show');
             var $fileFrom =$('#fileSourceEditForm');
-            handleValidation($fileFrom);
+            /*handleValidation($fileFrom);*/
         }
 
         //删除文件数据源
@@ -471,7 +664,7 @@
             $(obj).parent().text("");
         }
 
-        function handleValidation(element) {
+       /* function handleValidation(element) {
             // for more info visit the official plugin documentation:
             // http://docs.jquery.com/Plugins/Validation
             var formValid;
@@ -511,113 +704,27 @@
                 },
 
                 submitHandler: function (form) {
-                    var formName = $(form).attr('id');
-                    if (formName == 'fileSourceEditForm') {
-                        var dataSourceId = $("#idHidden").val();
-                        var dataSourceName = $("#dataSourceNameE").val();
-                        var filePath = $("#filePathE").val();
-                        filePath= filePath.replace("\/", "%_%");
-                        filePath= filePath.replace("\\", "%_%");
 
-                        var dataSourceType = 'file';
-                        var fileType = '本地文件';
-                        /*var nodes = $('#jstree_show_edit').jstree("get_checked");
-                        for (var index in jsonData) {
-                            for (var key in jsonData[index]) {
-
-                            }
-                        }
-                        nodes.replaceAll("/","%_%");
-                        var tags_tagsinput = $("#tags_tagsinput").text();
-                        if((nodes.length==0)&&(tags_tagsinput.length==0)){
-                            toastr["error"]("您尚未选取文件");
-                        }else{
-                        var attr = [];
-                        $("#tags_tagsinput span").each(function (i) {
-                            if($(this).attr('class')=='filePathClass'){
-                                attr.push($(this).text());
-                            }
-                        })*/
-                        $.ajax({
-                            type: 'post',
-                            url: "${ctx}/fileResource/edit",
-                            async: true,
-                            traditional: true,
-                            data: {
-                                "dataSourceId": dataSourceId,
-                                "dataSourceName": dataSourceName,
-                                "dataSourceType": dataSourceType,
-                                "fileType": fileType,
-                                "filePath":filePath
-                                /*"attr": attr,
-                                "nodes":nodes*/
-                            },
-                            success: function (result) {
-                                var jsonData = JSON.parse(result);
-                                if (jsonData == '1') {
-                                    toastr["success"]("编辑成功");
-                                    $('#fileSourceEditModal').modal('hide');
-                                    formValid.resetForm();
-                                    tableConfiguration();
-                                } else {
-                                    toastr["error"]("编辑失败");
-                                }
-                            }
-                        })
-                        }
-                    else {
-/*
-                        var nodes = $('#jstree_show').jstree("get_checked");
-*/
-                        var dataSourceName = $("#dataSourceName").val();
-                        var dataSourceType = 'file';
-                        var fileType = "本地文件";
-                        var filePath = $("#filePath").val();
-                        filePath= filePath.replace("\/", "%_%");
-                        filePath= filePath.replace("\\", "%_%");
-                        /*if(nodes.length==0){
-                            toastr["error"]("您尚未选取文件");
-                        }else{*/
-                        $.ajax({
-                            type: 'post',
-                            url: "${ctx}/fileResource/add",
-                            async: true,
-                            traditional: true,
-                            data: {
-                                "dataSourceName": dataSourceName,
-                                "dataSourceType": dataSourceType,
-                                "fileType": fileType,
-                                "filePath":filePath
-/*
-                                "data": nodes
-*/
-                            },
-                            success: function (result) {
-                                var jsonData = JSON.parse(result);
-                                if (jsonData == '1') {
-                                    toastr["success"]("新增成功");
-                                    $('#fileSourceModal').modal('hide');
-                                    formValid.resetForm();
-                                    tableConfiguration();
-                                } else {
-                                    toastr["error"]("新增失败");
-                                }
-                            }
-                        })
-                    }
                 }
 
             });
-        };
+        };*/
         function cancelButton() {
             $("#fileSourceForm").validate().resetForm();
             $("#fileSourceForm").validate().clean();
             $('.form-group').removeClass('has-error');
         }
-        function filePathCheck(){
-            var filePath = $("#filePath").val();
-            filePath= filePath.replace("/\//g", "%_%");
-            filePath= filePath.replace("/\\/g", "%_%");
+        function filePathCheck(id){
+            var filePath;
+            if(id=="1") {
+                filePath = $("#filePath").val();
+                filePath = filePath.replace("/\//g", "%_%");
+                filePath = filePath.replace("/\\/g", "%_%");
+            }else{
+                filePath = $("#filePathE").val();
+                filePath = filePath.replace("/\//g", "%_%");
+                filePath = filePath.replace("/\\/g", "%_%");
+            }
             $.ajax({
                 type: "GET",
                 url: "${ctx}/fileResource/check",
@@ -626,14 +733,40 @@
                 async: false,
                 success: function (result) {
                     if(result){
-
+                        if(id=="1") {
+                            $(".timeVili:eq(0)").removeClass("custom-error1")
+                            $(".timeVili:eq(1)").removeClass("custom-error2")
+                            $(".timeVili:eq(2)").hide()
+                        }else{
+                            $(".timeVili:eq(3)").removeClass("custom-error1")
+                            $(".timeVili:eq(4)").removeClass("custom-error2")
+                            $(".timeVili:eq(5)").hide()
+                        }
                     }else{
-
+                        if(id=="1") {
+                            $(".timeVili:eq(0)").addClass("custom-error1")
+                            $(".timeVili:eq(1)").addClass("custom-error2")
+                            $(".timeVili:eq(2)").show()
+                        }else{
+                            $(".timeVili:eq(3)").addClass("custom-error1")
+                            $(".timeVili:eq(4)").addClass("custom-error2")
+                            $(".timeVili:eq(5)").show()
+                        }
                     }
                 }
 
             });
         }
+        $("#filePath").on("focus",function () {
+            $(".timeVili:eq(0)").removeClass("custom-error1")
+            $(".timeVili:eq(1)").removeClass("custom-error2")
+            $(".timeVili:eq(2)").hide()
+        })
+        $("#filePathE").on("focus",function () {
+            $(".timeVili:eq(3)").removeClass("custom-error1")
+            $(".timeVili:eq(4)").removeClass("custom-error2")
+            $(".timeVili:eq(5)").hide()
+        })
     </script>
 </div>
 

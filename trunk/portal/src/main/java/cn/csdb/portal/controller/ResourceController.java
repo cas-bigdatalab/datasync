@@ -254,7 +254,11 @@ public class ResourceController {
                                             @RequestParam(name = "startTime") String startTime,
                                             @RequestParam(name = "endTime") String endTime,
                                             @RequestParam(name = "email") String email,
-                                            @RequestParam(name = "phoneNum") String phoneNum
+                                            @RequestParam(name = "phoneNum") String phoneNum,
+                                            @RequestParam(name = "createTime") String createTime,
+                                            @RequestParam(name = "publishOrganization") String publishOrganization,
+                                            @RequestParam(name = "createOrganization") String createOrganization,
+                                            @RequestParam(name = "createPerson") String createPerson
     ) {
         String subjectCode = session.getAttribute("SubjectCode").toString();
         Subject subject = subjectService.findBySubjectCode(subjectCode);
@@ -269,16 +273,22 @@ public class ResourceController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         ParsePosition pos1 = new ParsePosition(0);
         ParsePosition pos2 = new ParsePosition(0);
+        ParsePosition pos3 = new ParsePosition(0);
         Date startDate = formatter.parse(startTime, pos1);
         Date endDate = formatter.parse(endTime, pos2);
+        Date createDate = formatter.parse(createTime,pos3);
         resource.setStartTime(startDate);
         resource.setEndTime(endDate);
+        resource.setCreateTime(createDate);
         resource.setEmail(email);
         resource.setPhoneNum(phoneNum);
         resource.setSubjectCode(subject.getSubjectCode());
         resource.setResState("未完成");
         resource.setCreationDate(new Date());
         resource.setUpdateDate(new Date());
+        resource.setPublishOrgnization(publishOrganization);
+        resource.setCreateOrgnization(createOrganization);
+        resource.setCreatePerson(createPerson);
         String resourceId = resourceService.save(resource);
         jsonObject.put("resourceId", resourceId);
         return jsonObject;
@@ -405,7 +415,11 @@ public class ResourceController {
                                             @RequestParam(name = "startTime") String startTime,
                                             @RequestParam(name = "endTime") String endTime,
                                             @RequestParam(name = "email") String email,
-                                            @RequestParam(name = "phoneNum") String phoneNum) {
+                                            @RequestParam(name = "phoneNum") String phoneNum,
+                                            @RequestParam(name = "createTime") String createTime,
+                                            @RequestParam(name = "publishOrganization") String publishOrganization,
+                                            @RequestParam(name = "createOrganization") String createOrganization,
+                                            @RequestParam(name = "createPerson") String createPerson) {
         String subjectCode = session.getAttribute("SubjectCode").toString();
         Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
@@ -419,15 +433,21 @@ public class ResourceController {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         ParsePosition pos1 = new ParsePosition(0);
         ParsePosition pos2 = new ParsePosition(0);
+        ParsePosition pos3 = new ParsePosition(0);
         Date startDate = formatter.parse(startTime, pos1);
         Date endDate = formatter.parse(endTime, pos2);
+        Date createDate = formatter.parse(endTime, pos3);
         resource.setStartTime(startDate);
         resource.setEndTime(endDate);
+        resource.setCreateTime(createDate);
         resource.setEmail(email);
         resource.setPhoneNum(phoneNum);
         resource.setSubjectCode(subject.getSubjectCode());
         resource.setResState("未完成");
         resource.setUpdateDate(new Date());
+        resource.setPublishOrgnization(publishOrganization);
+        resource.setCreateOrgnization(createOrganization);
+        resource.setCreatePerson(createPerson);
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;

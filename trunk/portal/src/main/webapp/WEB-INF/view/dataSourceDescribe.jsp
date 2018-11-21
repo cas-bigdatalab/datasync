@@ -980,6 +980,7 @@
             if(!$("#submit_form1").valid() ){
                 firstFlag=true
             }
+
             if(!$("#submit_form2").valid()){
                 firstFlag=true
             }
@@ -1003,7 +1004,7 @@
                     email:$("#Task_email").val(),
                     phoneNum:$("#Task_phone").val(),
                     createTime:$("#createTime").val(),
-                    publishOrganzition:$("#publish_Organization").val(),
+                    publishOrganization:$("#publish_Organization").val(),
                     createOrganization:$("#create_Organization").val(),
                     createPerson:$("#create_person").val()
                 },
@@ -1115,7 +1116,7 @@
                     email:$("#Task_email").val(),
                     phoneNum:$("#Task_phone").val(),
                     createTime:$("#createTime").val(),
-                    publishOrganzition:$("#publish_Organization").val(),
+                    publishOrganization:$("#publish_Organization").val(),
                     createOrganization:$("#create_Organization").val(),
                     createPerson:$("#create_person").val()
                 },

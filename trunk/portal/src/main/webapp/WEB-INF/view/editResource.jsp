@@ -691,7 +691,7 @@
         $(".button-submit").click(function () {
             addResourceThirdStep()
         })
-        initCenterResourceCatalogTree($("#jstree-demo"));
+
         relationalDatabaseTableList();
         userGroupList()
         function fromAction(flag) {
@@ -749,13 +749,21 @@
                 }
             }
         }
-        function initCenterResourceCatalogTree(container) {
+        function initCenterResourceCatalogTree(container,index) {
             $.ajax({
                 url: ctx + "/getLocalResCatalog",
                 type: "get",
                 dataType: "json",
                 data: {editable: false},
                 success: function (data) {
+                    console.log(data)
+                    console.log(index)
+                    var listPar = data.core.data
+                    if(data.id == index){
+                        data.state.selected =true
+                    }else {
+
+                    }
                     $(container).jstree(data).bind("select_node.jstree", function (event, selected) {
                         /*$(".button-save").removeAttr("disabled");*/
                         $("#centerCatalogId").val(selected.node.id);
@@ -962,7 +970,7 @@
                     email:$("#Task_email").val(),
                     phoneNum:$("#Task_phone").val(),
                     createTime:$("#createTime").val(),
-                    publishOrganzition:$("#publish_Organization").val(),
+                    publishOrganization:$("#publish_Organization").val(),
                     createOrganization:$("#create_Organization").val(),
                     createPerson:$("#create_person").val()
                 },
@@ -984,6 +992,7 @@
                 success:function (data) {
                     var totalList = JSON.parse(data).resource
                     console.log(JSON.parse(data));
+                    initCenterResourceCatalogTree($("#jstree-demo"),totalList.catalogId);
                     $("#Task_dataName").val(totalList.title)
                     $("#Task_email").val(totalList.email)
                     $("#Task_phone").val(totalList.phoneNum)
