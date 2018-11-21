@@ -408,7 +408,7 @@
         })
         <!-- remove dataTask-->
         function removeData(id){
-            bootbox.confirm("确认删除",function (r) {
+            bootbox.confirm("<span style='font-size: 16px'>确认要删除此条记录吗</span>",function (r) {
                 if(r){
                     $.ajax({
                         url:"${ctx}/datatask/delete",

@@ -724,12 +724,12 @@
 
                 console.log("idOfSubjectToBeDeleted = " + id);
 
-                bootbox.confirm("是否确认删除该专题库及相关信息？",
+                bootbox.confirm("<span style='font-size: 16px'>是否确认删除该专题库及相关信息?</span>",
                     function (result)
                     {
                         if (result)
                         {
-                            bootbox.confirm("专题库相关信息很重要，请再次确认要删除吗？", function(result)
+                            bootbox.confirm("<span style='font-size: 16px'>专题库相关信息很重要，请再次确认要删除吗?</span>", function(result)
                                 {
                                     if (result)
                                     {

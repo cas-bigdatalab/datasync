@@ -237,7 +237,7 @@
                                                     * </span></label>
                                             <div class="col-md-5"  style="padding-top:13px">
                                                 <div class="input-group input-daterange">
-                                                    <input type="text" class="form-control selectData"
+                                                    <input type="text" class="form-control selectData" id="createTime"
                                                            data-date-format="yyyy-mm-dd" placeholder="创建日期" readonly>
                                                 </div>
                                             </div>
@@ -1000,6 +1000,10 @@
                     lastTime =totalList.endTime
                     $('.selectData:eq(0)').val(convertMilsToDateString(firstTime))
                     $('.selectData:eq(1)').val(convertMilsToDateString(lastTime))
+                    $("#createTime").val(convertMilsToDateString(totalList.createTime)),
+                    $("#publish_Organization").val(totalList.publishOrgnization)
+                    $("#create_Organization").val(totalList.createOrgnization)
+                    $("#create_person").val(totalList.createPerson)
                     $("#dataDescribeID").val(totalList.introduction)
                     $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
                     var path = "${ctx}/"+totalList.imagePath+"_cut.jpg";
