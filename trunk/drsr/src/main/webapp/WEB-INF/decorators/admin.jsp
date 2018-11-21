@@ -113,6 +113,13 @@
                 </li>--%>
                 <%-- <shiro:hasRole name="Register">--%>
                 <li>
+                    <a href="${ctx}/subjectInfo">
+                        <i class="icon-wrench"></i>
+                        <span class="title">数据节点信息</span>
+                        <span class="arrow "></span>
+                    </a>
+                </li>
+                <li>
                     <a href="javascript:;">
                         <i class=" icon-drawer"></i>
                         <span class="title">数据源管理</span>
@@ -151,13 +158,7 @@
                         <span class="arrow "></span>
                     </a>
                 </li>--%>
-                <li>
-                    <a href="${ctx}/subjectInfo">
-                        <i class="icon-wrench"></i>
-                        <span class="title">数据节点信息</span>
-                        <span class="arrow "></span>
-                    </a>
-                </li>
+
                 <%-- </shiro:hasRole>
                  <shiro:hasRole name="管理员">--%>
                 <%--<li>

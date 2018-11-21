@@ -26,7 +26,7 @@
 <div class="page-content">
 
     <div class="task-head">
-        <span>数据节点信息</span>
+
     </div>
 
     <div class="task-title">
