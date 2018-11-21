@@ -864,7 +864,8 @@
         }
 
         function deleteData(id) {
-            bootbox.confirm("确定要删除此条记录吗？", function (r) {
+
+            bootbox.confirm("<span style='font-size:16px;'>确定要删除此条记录吗？</span>", function (r) {
                 if (r) {
                     $.ajax({
                         url: ctx + "/group/delete/" + id,
