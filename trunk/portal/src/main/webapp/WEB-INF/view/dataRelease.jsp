@@ -9,6 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <c:set value="${pageContext.request.contextPath}" var="ctx"/>
 
 <html>
@@ -81,7 +82,7 @@
                     <th width="13%">类型</th>
                    <%-- <th width="10%">来源位置</th>--%>
                     <th width="15%">发布时间</th>
-                    <th width="7%">状态</th>
+                    <th width="10%">状态</th>
                     <th >操作</th>
                 </tr>
                 </thead>
@@ -415,15 +416,9 @@
             </div>
             <div class="modal-body" style="max-height: 500px;overflow: auto">
                 <div id="AuditMessageList">
-                    <div class="form-group ">
-                        <div class="control-label col-md-3" for="audit_content">
-
-                        </div>
-                        <div class="col-md-7" style="padding-top:13px">
-                                                    <textarea  type="text" class="form-control" cols="30" rows="4"  placeholder="请输入审核结果理由，不少于20字"
-                                                               id="audit_content2" name="audit_content"  required="required" ></textarea>
-
-                        </div>
+                    <div class="form-group" style="padding:0 15px">
+                        <div class="control-label col-md-3"></div>
+                        <div class="col-md-7" style="padding-top:13px"></div>
                     </div>
 
                 </div>
@@ -475,6 +470,7 @@
         <td>{{value.publicType}}</td>
        <%-- <td style="word-break: break-all">{{value.createdByOrganization}}</td>--%>
         <td>{{dateFormat(value.creationDate)}}</td>
+
         {{if value.status == '1'}}
         <td id="{{value.dataTaskId}}">待审核</td>
         {{else if value.status == '0'}}
@@ -482,25 +478,31 @@
         {{else if value.status == '2'}}
         <td id="{{value.dataTaskId}}">审核通过</td>
         {{/if}}
-        <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>
-        <td style="text-align: right">
 
-            <button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;编辑
-            </button>
+        <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>
+        <td>
             <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.resState}}')"><i
                     class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
             </button>
+<shiro:hasRole name="admin">
+            <button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;编辑
+            </button>
+</shiro:hasRole>
+
+    <shiro:hasRole name="admin">
             <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.id}}');"><i
                     class="glyphicon glyphicon-trash"></i>&nbsp;删除
             </button>
+    </shiro:hasRole>
+<shiro:hasRole name="root">
             {{if value.status == '1'}}
                 <button type="button" class="btn green btn-xs exportSql"
                        onclick="auditRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;审核
                 </button>
             {{/if}}
             {{if value.status == '0'}}
-            <button type="button" class="btn red btn-xs exportSql"
-                    onclick="disableRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;停用
+            <button type="button" class="btn green btn-xs exportSql"
+                    onclick="auditRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;审核
             </button>
             {{/if}}
             {{if value.status == '2'}}
@@ -508,7 +510,7 @@
                     onclick="disableRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;停用
             </button>
             {{/if}}
-
+</shiro:hasRole>
         </td>
     </tr>
     {{/each}}
@@ -597,6 +599,7 @@
             $("#submit_form1").validate().resetForm();
             $(".has-error").removeClass("has-error")
             $('#auditModal').modal('hide')
+
         }
         function auditRelease(id) {
             $("#auditId").attr("auditId",id)
@@ -635,6 +638,7 @@
                 },
                 success:function (data) {
                     $('#auditModal').modal('hide')
+                    tableConfiguration2(1,"","","")
                 },
                 error:function () {
                     console.log("请求出错")
@@ -650,6 +654,7 @@
                     resourceId:id,
                 },
                 success:function (data) {
+                    tableConfiguration2(1,"","","")
                 },
                 error:function () {
                     console.log("请求出错")
