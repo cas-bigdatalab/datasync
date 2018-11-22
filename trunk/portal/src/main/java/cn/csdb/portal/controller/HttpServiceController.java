@@ -110,8 +110,8 @@ public class HttpServiceController {
 //                zipFile = siteFtpPath+fileName;
                 zipFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+".zip";
                 System.out.println("+++++++++"+zipFile);
-                System.out.println("=========="+fileName);
-                unZipPath = siteFtpPath+fileName.substring(0,fileName.lastIndexOf("."));
+//                System.out.println("=========="+fileName);
+                unZipPath = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId();
 
             }
 

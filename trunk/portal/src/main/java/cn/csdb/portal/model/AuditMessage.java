@@ -18,8 +18,8 @@ public class AuditMessage {
     private String id;
     @Field("resourceId")
     private String resourceId;
-    @Field("auditContent")
-    private String auditContent;
+    @Field("auditCom")
+    private String auditCom;
     @Field("auditTime")
     private Date auditTime;
 
@@ -39,12 +39,12 @@ public class AuditMessage {
         this.resourceId = resourceId;
     }
 
-    public String audAtContent() {
-        return auditContent;
+    public String getAuditCom() {
+        return auditCom;
     }
 
-    public void setAuditContent(String auditContent) {
-        this.auditContent = auditContent;
+    public void setAuditCom(String auditCom) {
+        this.auditCom = auditCom;
     }
 
     public Date getAuditTime() {
