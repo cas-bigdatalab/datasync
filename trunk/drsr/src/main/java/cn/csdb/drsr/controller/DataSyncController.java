@@ -125,27 +125,27 @@ public class DataSyncController {
                         dataTask.setStatus("1");
                         dataTaskService.update(dataTask);
                         logger.info("导入成功"+ "\n");
-                        logger.info("=========================上传流程结束========================" + "\n\n\n");
+                        logger.info("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
                         return 1;
                     }else{
                         logger.info("导入失败"+ "\n");
-                        logger.info("=========================上传流程结束========================" + "\n\n\n");
+                        logger.info("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
                         return 0;
                     }
                 } catch (IOException e) {
                     logger.info("导入失败"+ "\n");
                     logger.error("导入异常IOException:"+e+ "\n");
-                    logger.info("=========================上传流程结束========================" + "\n\n\n");
+                    logger.info("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
                     e.printStackTrace();
                 }
             }else{
                 logger.info("导入失败"+ "\n");
-                logger.info("=========================上传流程结束========================" + "\n\n\n");
+                logger.info("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
                 return 0;
             }
         } catch (IOException e) {
             logger.error("连接FTP出错:"+e+ "\n");
-            logger.info("=========================上传流程结束========================" + "\n\n\n");
+            logger.info("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
             System.out.println("连接FTP出错：" + e.getMessage());
             return 0;
         }
