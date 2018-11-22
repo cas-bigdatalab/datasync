@@ -80,9 +80,9 @@
                     <th width="20%">数据集名称</th>
                     <th width="13%">类型</th>
                    <%-- <th width="10%">来源位置</th>--%>
-                    <th width="20%">发布时间</th>
-                    <th width="10%">状态</th>
-                    <th width="22%">操作</th>
+                    <th width="15%">发布时间</th>
+                    <th width="7%">状态</th>
+                    <th >操作</th>
                 </tr>
                 </thead>
                 <tbody id="bd-data">
@@ -405,6 +405,29 @@
         </div>
     </div>
 </div>
+<div id="auditModal" class="modal fade" tabindex="-1" data-width="400">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">任务详情查看</h4>
+            </div>
+            <div class="modal-body" style="max-height: 500px;overflow: auto">
+                <div id="AuditMessageList"></div>
+                <div id="AuditMessage">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn green" data-dismiss="modal"><i
+                        class="glyphicon glyphicon-ok"></i>确认
+                </button>
+                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/html" id="resourceTmp1">
     {{each resourceList as value i}}
     <tr keyIdTr="{{value.id}}">
@@ -416,11 +439,7 @@
         <td id="{{value.dataTaskId}}">{{value.resState}}</td>
         <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>
         <td style="text-align: right">
-            <%--{{if value.resState == '待审核'}}
-            <button type="button" class="btn green btn-xs exportSql" keyIdTd="{{value.id}}"
-                    value="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;审核
-            </button>
-            {{/if}}--%>
+
             <button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;编辑
             </button>
             <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.resState}}')"><i
@@ -429,6 +448,22 @@
             <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.id}}');"><i
                     class="glyphicon glyphicon-trash"></i>&nbsp;删除
             </button>
+            {{if value.resState == '待审核'}}
+                <button type="button" class="btn green btn-xs exportSql"
+                       onclick="auditRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;审核
+                </button>
+            {{/if}}
+            {{if value.resState == '审核未通过'}}
+            <button type="button" class="btn red btn-xs exportSql"
+                    onclick="disableRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;停用
+            </button>
+            {{/if}}
+            {{if value.resState == '审核通过'}}
+            <button type="button" class="btn red btn-xs exportSql"
+                    onclick="disableRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;停用
+            </button>
+            {{/if}}
+
         </td>
     </tr>
     {{/each}}
@@ -461,7 +496,13 @@
             console.log(id)
             window.location.href="${ctx}/resource/editResource?resourceId="+id;
         })
+        function auditRelease(id) {
+            $("#auditModal").modal("show")
 
+        }
+        function disableRelease(id) {
+            
+        }
         function resSend() {
             window.location.href = "${ctx}/dataSourceDescribeEdit"
         }
