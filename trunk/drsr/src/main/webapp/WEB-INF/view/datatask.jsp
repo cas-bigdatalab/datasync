@@ -216,6 +216,25 @@
         </div>
     </div>
 </div>
+<div id="logModal" class="modal fade" tabindex="-1" data-width="400">
+    <div class="modal-dialog">
+        <div class="modal-content ">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">任务详情查看</h4>
+            </div>
+            <div class="modal-body">
+                <h1>日志</h1>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn green" data-dismiss="modal" ><i
+                        class="glyphicon glyphicon-ok"></i>确认
+                </button>
+                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/html" id="resourceTmp1">
     {{each dataTasks as value i}}
     <tr keyIdTr="{{value.dataTaskId}}">
@@ -240,6 +259,7 @@
                 {{/if}}
                 <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                 <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+                <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="showLog();"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
 
         </td>
     </tr>
@@ -486,6 +506,9 @@
                     console.log("请求失败")
                 }
             })
+        }
+        function showLog() {
+            $("#logModal").modal('show');
         }
         var arr = []
        /* var json = {
