@@ -463,7 +463,13 @@
         <td>{{value.publicType}}</td>
        <%-- <td style="word-break: break-all">{{value.createdByOrganization}}</td>--%>
         <td>{{dateFormat(value.creationDate)}}</td>
-        <td id="{{value.dataTaskId}}">{{value.resState}}</td>
+        {{if value.status == '1'}}
+        <td id="{{value.dataTaskId}}">待审核</td>
+        {{else if value.status == '0'}}
+        <td id="{{value.dataTaskId}}">审核未通过</td>
+        {{else if value.status == '2'}}
+        <td id="{{value.dataTaskId}}">审核通过</td>
+        {{/if}}
         <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>
         <td style="text-align: right">
 
@@ -475,17 +481,17 @@
             <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.id}}');"><i
                     class="glyphicon glyphicon-trash"></i>&nbsp;删除
             </button>
-            {{if value.resState == '待审核'}}
+            {{if value.status == '1'}}
                 <button type="button" class="btn green btn-xs exportSql"
                        onclick="auditRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;审核
                 </button>
             {{/if}}
-            {{if value.resState == '审核未通过'}}
+            {{if value.status == '0'}}
             <button type="button" class="btn red btn-xs exportSql"
                     onclick="disableRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;停用
             </button>
             {{/if}}
-            {{if value.resState == '审核通过'}}
+            {{if value.status == '2'}}
             <button type="button" class="btn red btn-xs exportSql"
                     onclick="disableRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;停用
             </button>
