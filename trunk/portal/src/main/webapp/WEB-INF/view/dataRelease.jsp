@@ -414,7 +414,19 @@
                 <h4 class="modal-title">任务详情查看</h4>
             </div>
             <div class="modal-body" style="max-height: 500px;overflow: auto">
-                <div id="AuditMessageList"></div>
+                <div id="AuditMessageList">
+                    <div class="form-group ">
+                        <div class="control-label col-md-3" for="audit_content">
+
+                        </div>
+                        <div class="col-md-7" style="padding-top:13px">
+                                                    <textarea  type="text" class="form-control" cols="30" rows="4"  placeholder="请输入审核结果理由，不少于20字"
+                                                               id="audit_content2" name="audit_content"  required="required" ></textarea>
+
+                        </div>
+                    </div>
+
+                </div>
                 <div id="AuditMessage">
                     <form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"  onfocusout="true"
                           method="POST">
@@ -427,8 +439,8 @@
                                        id="Task_dataName" placeholder="请输入名称">--%>
                                     <select id="audit_status" class="form-control" name="audit_status">
                                         <option value="">请选择审核结果</option>
-                                        <option value="审核通过">审核通过</option>
-                                        <option value="审核未通过">审核未通过</option>
+                                        <option value="2">审核通过</option>
+                                        <option value="0">审核未通过</option>
                                     </select>
                             </div>
 
@@ -498,6 +510,13 @@
             {{/if}}
 
         </td>
+    </tr>
+    {{/each}}
+</script>
+<script type="text/html" id="resourceTmp2">
+    {{each resourceList as value i}}
+    <tr keyIdTr="{{value.id}}">
+
     </tr>
     {{/each}}
 </script>
