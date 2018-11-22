@@ -710,11 +710,11 @@
 
             });
         };*/
-        function cancelButton() {
+        /*function cancelButton() {
             $("#fileSourceForm").validate().resetForm();
             $("#fileSourceForm").validate().clean();
             $('.form-group').removeClass('has-error');
-        }
+        }*/
         function filePathCheck(id){
             var filePath;
             if(id=="1") {
@@ -772,6 +772,12 @@
             $("#fileSourceForm").validate().resetForm();
             $("#fileSourceForm").validate().clean();
             $('.form-group').removeClass('has-error');
+            $(".timeVili:eq(0)").removeClass("custom-error1")
+            $(".timeVili:eq(1)").removeClass("custom-error2")
+            $(".timeVili:eq(2)").hide()
+            $(".timeVili:eq(3)").removeClass("custom-error1")
+            $(".timeVili:eq(4)").removeClass("custom-error2")
+            $(".timeVili:eq(5)").hide()
         }
     </script>
 </div>
