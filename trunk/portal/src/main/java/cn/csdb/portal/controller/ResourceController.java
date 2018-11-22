@@ -606,6 +606,15 @@ public class ResourceController {
         return jsonObject;
     }
 
+    /**
+     *
+     * Function Description: 审核资源
+     *
+     * @param: [resourceId, status, auditContent]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/22 11:15
+     */
     @ResponseBody
     @RequestMapping(value="audit")
     public JSONObject audit(String resourceId,String status,String auditContent){
@@ -626,6 +635,15 @@ public class ResourceController {
         return jo;
     }
 
+    /**
+     *
+     * Function Description: 资源审核信息列表
+     *
+     * @param: [resourceId]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/22 11:15
+     */
     @ResponseBody
     @RequestMapping("getAuditMessage")
     public JSONObject getAuditMessage(String resourceId){
