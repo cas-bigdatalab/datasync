@@ -218,7 +218,7 @@ public class FileSourceController {
     @RequestMapping(value="/downloadFile")
     public String downloads(HttpServletResponse response) throws Exception{
         String	path = "/logs/";
-        String  fileName = "drsr.log";
+        String  fileName = "drsrUpload.log";
         //1、设置response 响应头
         response.reset();
         response.setCharacterEncoding("UTF-8");

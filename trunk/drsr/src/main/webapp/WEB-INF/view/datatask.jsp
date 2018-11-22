@@ -259,7 +259,7 @@
                 {{/if}}
                 <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                 <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
-                <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="showLog();"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
+                <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="window.location.href='${ctx}/fileResource/downloadFile'"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
 
         </td>
     </tr>
