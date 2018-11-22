@@ -140,7 +140,7 @@
                     <div class="tab-pane" id="isdescribe" style="min-height: 400px">
 
                     </div>
-                    <div class="tab-pane active" id="filedata" style="min-height: 400px">
+                    <div class="tab-pane" id="filedata" style="min-height: 400px">
                         <div id="jstree_show"></div>
                     </div>
                     <%--<div class="tab-pane active" id="undescribe" style="min-height: 400px">
