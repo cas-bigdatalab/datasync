@@ -1,12 +1,10 @@
 package cn.csdb.portal.controller;
 
+import cn.csdb.portal.model.AuditMessage;
 import cn.csdb.portal.model.Group;
 import cn.csdb.portal.model.ResCatalog_Mongo;
 import cn.csdb.portal.model.Subject;
-import cn.csdb.portal.service.GroupService;
-import cn.csdb.portal.service.ResCatalogService;
-import cn.csdb.portal.service.ResourceService;
-import cn.csdb.portal.service.SubjectService;
+import cn.csdb.portal.service.*;
 import cn.csdb.portal.utils.FileUploadUtil;
 import cn.csdb.portal.utils.ImgCut;
 import cn.csdb.portal.utils.SqlUtil;
@@ -51,6 +49,8 @@ public class ResourceController {
 
     @Resource
     private SubjectService subjectService;
+    @Resource
+    private AuditMessageService auditMessageService;
 
     private Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
@@ -289,6 +289,7 @@ public class ResourceController {
         resource.setPublishOrgnization(publishOrganization);
         resource.setCreateOrgnization(createOrganization);
         resource.setCreatePerson(createPerson);
+        resource.setStatus("1");
         String resourceId = resourceService.save(resource);
         jsonObject.put("resourceId", resourceId);
         return jsonObject;
@@ -448,6 +449,7 @@ public class ResourceController {
         resource.setPublishOrgnization(publishOrganization);
         resource.setCreateOrgnization(createOrganization);
         resource.setCreatePerson(createPerson);
+        resource.setStatus("1");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -602,6 +604,35 @@ public class ResourceController {
         List<Group> groupList = groupService.getAll();
         jsonObject.put("groupList",groupList);
         return jsonObject;
+    }
+
+    @ResponseBody
+    @RequestMapping(value="audit")
+    public JSONObject audit(String resourceId,String status,String auditContent){
+        JSONObject jo = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        resource.setStatus(status);
+        AuditMessage auditMessage = new AuditMessage();
+        auditMessage.setAuditTime(new Date());
+        auditMessage.setAuditContent(auditContent);
+        auditMessage.setResourceId(resourceId);
+        auditMessageService.save(auditMessage);
+        String returnId = resourceService.save(resource);
+        if(StringUtils.isNotBlank(resourceId)){
+            jo.put("result","success");
+        }else{
+            jo.put("result","fail");
+        }
+        return jo;
+    }
+
+    @ResponseBody
+    @RequestMapping("getAuditMessage")
+    public JSONObject getAuditMessage(String resourceId){
+        JSONObject jo = new JSONObject();
+        List auditMessageList = auditMessageService.getAuditMessageListByResourceId(resourceId);
+        jo.put("auditMessageList",auditMessageList);
+        return jo;
     }
 
 

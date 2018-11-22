@@ -19,7 +19,7 @@ public class Resource {
     @Field("imagePath")
     private String imagePath; //图片地址
     @Field("status")
-    private String status; //状态
+    private String status; //状态 删除 -1 审核未通过 0 待审核 1 审核通过 2
     @Field("dataSourceId")
     private String dataSourceId; //数据源
     @Field("catalogId")
