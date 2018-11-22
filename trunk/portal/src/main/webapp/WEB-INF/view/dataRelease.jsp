@@ -110,54 +110,64 @@
                         <label class="col-sm-3 control-label">数据源ID:</label>
                         <div class="col-sm-8 modediv" id="rel-dataSourceId"></div>
                     </div>--%>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">分类ID:</label>
-                        <div class="col-sm-8 modediv" id="rel-catalogId"></div>
-                    </div>
-                    <%--<div class="form-group">
-                        <label class="col-sm-3 control-label">图片地址:</label>
-                        <div class="col-sm-8 modediv" id="rel-imagePath"></div>
-                    </div>--%>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">状态:</label>
-                        <div class="col-sm-8 modediv" id="rel-status"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">资源填写状态:</label>
-                        <div class="col-sm-8 modediv" id="rel-resState"></div>
-                    </div>
-                    <div class="form-group" style="word-break: break-all">
-                        <label class="col-sm-3 control-label">发布类型:</label>
-                        <div class="col-sm-8 modediv" id="rel-publicType"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">发布内容:</label>
-                        <div class="col-sm-8 modediv" id="rel-publicContent"></div>
-                    </div>
-                    <%--<div class="form-group">
-                        <label class="col-sm-3 control-label">字段注释:</label>
-                        <div class="col-sm-8 modediv" id="rel-fieldComs"></div>
-                    </div>--%>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">数据节点代码:</label>
-                        <div class="col-sm-8 modediv" id="rel-subjectCode"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">数据集标识:</label>
-                        <div class="col-sm-8 modediv" id="rel-pid"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">数据集名称:</label>
-                        <div class="col-sm-8 modediv" id="rel-title"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">简介:</label>
-                        <div class="col-sm-8 modediv" id="rel-introduction" style="work-break:break-all"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">资源关键词:</label>
-                        <div class="col-sm-8 modediv" id="rel-keyword"></div>
-                    </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">数据集标识:</label>
+                            <div class="col-sm-8 modediv" id="rel-pid"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">数据集名称:</label>
+                            <div class="col-sm-8 modediv" id="rel-title"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">简介:</label>
+                            <div class="col-sm-8 modediv" id="rel-introduction" style="work-break:break-all"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">图片地址:</label>
+                            <div class="col-sm-8 modediv" id="rel-imagePath"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">资源关键词:</label>
+                            <div class="col-sm-8 modediv" id="rel-keyword"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">分类目录ID:</label>
+                            <div class="col-sm-8 modediv" id="rel-catalogId"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">状态:</label>
+                            <div class="col-sm-8 modediv" id="rel-status"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">资源填写状态:</label>
+                            <div class="col-sm-8 modediv" id="rel-resState"></div>
+                        </div>
+                        <div class="form-group" style="word-break: break-all">
+                            <label class="col-sm-3 control-label">发布类型:</label>
+                            <div class="col-sm-8 modediv" id="rel-publicType"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">发布内容:</label>
+                            <div class="col-sm-8 modediv" id="rel-publicContent"></div>
+                        </div>
+                        <%--<div class="form-group">
+                            <label class="col-sm-3 control-label">字段注释:</label>
+                            <div class="col-sm-8 modediv" id="rel-fieldComs"></div>
+                        </div>--%>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">数据节点代码:</label>
+                            <div class="col-sm-8 modediv" id="rel-subjectCode"></div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">创建者机构:</label>
+                            <div class="col-sm-8 modediv" id="rel-createOrgnization"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">发布者机构:</label>
+                            <div class="col-sm-8 modediv" id="rel-publishOrgnization"></div>
+                        </div>
+
                     <%--<div class="form-group">
                         <label class="col-sm-3 control-label">分类:</label>
                         <div class="col-sm-8 modediv" id="rel-taxonomy"></div>
@@ -191,10 +201,7 @@
                         <div class="col-sm-8 modediv" id="rel-createdBy"></div>
                     </div>
 
-                    <%--<div class="form-group">
-                        <label class="col-sm-3 control-label">机构:</label>
-                        <div class="col-sm-8 modediv" id="rel-organizationName"></div>
-                    </div>--%>
+
                     <div class="form-group">
                         <label class="col-sm-3 control-label">发布者邮件:</label>
                         <div class="col-sm-8 modediv" id="rel-email"></div>
@@ -208,6 +215,7 @@
                         <label class="col-sm-3 control-label">引用格式:</label>
                         <div class="col-sm-8 modediv" id="rel-citation"></div>
                     </div>--%>
+                        <hr>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">总存储量:</label>
                         <div class="col-sm-8 modediv" id="rel-toMemorySize"></div>
@@ -249,62 +257,76 @@
                         <label class="col-sm-3 control-label">数据源ID:</label>
                         <div class="col-sm-8 modediv" id="file-dataSourceId"></div>
                     </div>--%>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">数据集标识:</label>
+                            <div class="col-sm-8 modediv" id="file-pid"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">数据集名称:</label>
+                            <div class="col-sm-8 modediv" id="file-title"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">简介:</label>
+                            <div class="col-sm-8 modediv" id="file-introduction"style="work-break:break-all"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">图片地址:</label>
+                            <div class="col-sm-8 modediv" id="file-imagePath"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">资源关键词:</label>
+                            <div class="col-sm-8 modediv" id="file-keyword"></div>
+                        </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">分类ID:</label>
+                        <label class="col-sm-3 control-label">分类目录ID:</label>
                         <div class="col-sm-8 modediv" id="file-catalogId"></div>
                     </div>
-                    <%--<div class="form-group">
-                        <label class="col-sm-3 control-label">图片地址:</label>
-                        <div class="col-sm-8 modediv" id="file-imagePath"></div>
-                    </div>--%>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">状态:</label>
-                        <div class="col-sm-8 modediv" id="file-status"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">资源填写状态:</label>
-                        <div class="col-sm-8 modediv" id="file-resState"></div>
-                    </div>
-                    <div class="form-group" style="word-break: break-all">
-                        <label class="col-sm-3 control-label">发布类型:</label>
-                        <div class="col-sm-8 modediv" id="file-publicType"></div>
-                    </div>
-                    <%--<div class="form-group">
-                        <label class="col-sm-3 control-label">发布内容:</label>
-                        <div class="col-sm-8 modediv" id="file-publicContent"></div>
-                    </div>--%>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">文件路径:</label>
-                        <div class="col-sm-8 modediv" id="file-filePath"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">文件名称:</label>
-                        <div class="col-sm-8 modediv" id="file-fileName"></div>
-                    </div>
-                    <%--<div class="form-group">
-                        <label class="col-sm-3 control-label">字段注释:</label>
-                        <div class="col-sm-8 modediv" id="file-fieldComs"></div>
-                    </div>--%>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">数据节点代码:</label>
-                        <div class="col-sm-8 modediv" id="file-subjectCode"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">数据集标识:</label>
-                        <div class="col-sm-8 modediv" id="file-pid"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">数据集名称:</label>
-                        <div class="col-sm-8 modediv" id="file-title"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">简介:</label>
-                        <div class="col-sm-8 modediv" id="file-introduction"style="work-break:break-all"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">资源关键词:</label>
-                        <div class="col-sm-8 modediv" id="file-keyword"></div>
-                    </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">状态:</label>
+                            <div class="col-sm-8 modediv" id="file-status"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">资源填写状态:</label>
+                            <div class="col-sm-8 modediv" id="file-resState"></div>
+                        </div>
+                        <div class="form-group" style="word-break: break-all">
+                            <label class="col-sm-3 control-label">发布类型:</label>
+                            <div class="col-sm-8 modediv" id="file-publicType"></div>
+                        </div>
+                        <%--<div class="form-group">
+                            <label class="col-sm-3 control-label">发布内容:</label>
+                            <div class="col-sm-8 modediv" id="file-publicContent"></div>
+                        </div>--%>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">文件路径:</label>
+                            <div class="col-sm-8 modediv" id="file-filePath"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">文件名称:</label>
+                            <div class="col-sm-8 modediv" id="file-fileName"></div>
+                        </div>
+                        <%--<div class="form-group">
+                            <label class="col-sm-3 control-label">字段注释:</label>
+                            <div class="col-sm-8 modediv" id="file-fieldComs"></div>
+                        </div>--%>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">数据节点代码:</label>
+                            <div class="col-sm-8 modediv" id="file-subjectCode"></div>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">创建者机构:</label>
+                            <div class="col-sm-8 modediv" id="file-createOrgnization"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">发布者机构:</label>
+                            <div class="col-sm-8 modediv" id="file-publishOrgnization"></div>
+                        </div>
+
+
+
+
+
                     <%--<div class="form-group">
                         <label class="col-sm-3 control-label">分类:</label>
                         <div class="col-sm-8 modediv" id="file-taxonomy"></div>
@@ -355,6 +377,7 @@
                         <label class="col-sm-3 control-label">引用格式:</label>
                         <div class="col-sm-8 modediv" id="file-citation"></div>
                     </div>--%>
+                        <hr>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">总存储量:</label>
                         <div class="col-sm-8 modediv" id="file-toMemorySize"></div>
@@ -454,28 +477,65 @@
                     var dataList = JSON.parse(data).resource;
                     console.log(dataList)
                     if(type == "mysql" || type =="" ){
-                        $("#rel-dataSourceId").html(dataList.dataSourceId)
+                        $("#rel-dataSourceId").html(id)
                         $("#rel-email").html(dataList.email)
                         $("#rel-catalogId").html(dataList.catalogId)
                         $("#rel-imagePath").html(dataList.imagePath)
                         $("#rel-status").html(tabStatus)
                         $("#rel-resState").html(dataList.resState)
                         $("#rel-publicType").html("mysql")
+                        $("#rel-publishOrgnization").html(dataList.publishOrgnization)
+                        $("#rel-createOrgnization").html(dataList.createOrgnization)
                         var $publicContent=$("#rel-publicContent")
                         listSpan(dataList.publicContent,";",$publicContent)
                         var $filePath=$("#rel-filePath")
-                        var filrStr = dataList.filePath.substr(0, dataList.filePath.length - 1);
-                        listSpan(filrStr,";",$filePath)
+                        /*var filrStr = dataList.filePath.substr(0, dataList.filePath.length - 1);
+                        listSpan(filrStr,";",$filePath)*/
                         $("#rel-fileName").html(dataList.fileName)
                         $("#rel-fieldComs").html(dataList.fieldComs)
                         $("#rel-subjectCode").html(dataList.subjectCode)
-                        $("#rel-pid").html(dataList.pid)
+                        $("#rel-pid").html(id)
                         $("#rel-title").html(dataList.title)
                         $("#rel-introduction").html(dataList.introduction)
                         var $keyword=$("#rel-keyword")
                         listSpan(dataList.keyword,",",$keyword)
                         $("#rel-taxonomy").html(dataList.taxonomy)
                         $("#rel-dataFormat").html(dataList.dataFormat)
+                        if(dataList.startTime ==null){
+                            $("#rel-startTime").parent().hide()
+                        }else {
+                            $("#rel-startTime").parent().show()
+                        }
+                        if(dataList.endTime==null){
+                            $("#rel-endTime").parent().hide()
+                        }else {
+                            $("#rel-endTime").parent().show()
+                        }
+                        if(dataList.createdByOrganization==""){
+                            $("#rel-createdByOrganization").parent().hide()
+                        }else {
+                            $("#rel-createdByOrganization").parent().show()
+                        }
+                        if(dataList.createPerson==""){
+                            $("#rel-createPerson").parent().hide()
+                        }else {
+                            $("#rel-createPerson").parent().show()
+                        }
+                        if(dataList.creationDate==null){
+                            $("#rel-creationDate").parent().hide()
+                        }else {
+                            $("#rel-creationDate").parent().show()
+                        }
+                        if(dataList.phoneNum==""){
+                            $("#rel-phoneNum").parent().hide()
+                        }else {
+                            $("#rel-phoneNum").parent().show()
+                        }
+                        if(dataList.toMemorySize==""){
+                            $("#rel-toMemorySize").parent().hide()
+                        }else {
+                            $("#rel-toMemorySize").parent().show()
+                        }
                         $("#rel-startTime").html(convertMilsToDateString(dataList.startTime))
                         $("#rel-endTime").html(convertMilsToDateString(dataList.endTime))
                         $("#rel-createdByOrganization").html(dataList.createdByOrganization)
@@ -494,12 +554,14 @@
                        /* $("#rel-userGroupId").html(dataList.userGroupId)*/
                         $("#relModal").modal("show")
                     }else {
-                        $("#file-dataSourceId").html(dataList.dataSourceId)
+                        $("#file-dataSourceId").html(id)
                         $("#file-email").html(dataList.email)
                         $("#file-catalogId").html(dataList.catalogId)
                         $("#file-imagePath").html(dataList.imagePath)
                         $("#file-status").html(tabStatus)
                         $("#file-resState").html(dataList.resState)
+                        $("#file-publishOrgnization").html(dataList.publishOrgnization)
+                        $("#file-createOrgnization").html(dataList.createOrgnization)
                         $("#file-publicType").html("file")
                         var $publicContent=$("#file-publicContent")
                         listSpan(dataList.publicContent,";",$publicContent)
@@ -510,13 +572,48 @@
                         $("#file-fileName").html(dataList.fileName)
                         $("#file-fieldComs").html(dataList.fieldComs)
                         $("#file-subjectCode").html(dataList.subjectCode)
-                        $("#file-pid").html(dataList.pid)
+                        $("#file-pid").html(id)
                         $("#file-title").html(dataList.title)
                         $("#file-introduction").html(dataList.introduction)
                         var $keyword=$("#file-keyword")
                         listSpan(dataList.keyword,",",$keyword)
                         $("#file-taxonomy").html(dataList.taxonomy)
                         $("#file-dataFormat").html(dataList.dataFormat)
+                        if(dataList.startTime ==null){
+                            $("#file-startTime").parent().hide()
+                        }else {
+                            $("#file-startTime").parent().show()
+                        }
+                        if(dataList.endTime==null){
+                            $("#file-endTime").parent().hide()
+                        }else {
+                            $("#file-endTime").parent().show()
+                        }
+                        if(dataList.createdByOrganization==""){
+                            $("#file-createdByOrganization").parent().hide()
+                        }else {
+                            $("#file-createdByOrganization").parent().show()
+                        }
+                        if(dataList.createPerson==""){
+                            $("#file-createPerson").parent().hide()
+                        }else {
+                            $("#file-createPerson").parent().show()
+                        }
+                        if(dataList.creationDate==null){
+                            $("#file-creationDate").parent().hide()
+                        }else {
+                            $("#file-creationDate").parent().show()
+                        }
+                        if(dataList.phoneNum==""){
+                            $("#file-phoneNum").parent().hide()
+                        }else {
+                            $("#file-phoneNum").parent().show()
+                        }
+                        if(dataList.toMemorySize==""){
+                            $("#file-toMemorySize").parent().hide()
+                        }else {
+                            $("#file-toMemorySize").parent().show()
+                        }
                         $("#file-startTime").html(convertMilsToDateString(dataList.startTime))
                         $("#file-endTime").html(convertMilsToDateString(dataList.endTime))
                         $("#file-createdByOrganization").html(dataList.createdByOrganization)
@@ -631,6 +728,13 @@
         }
         function listSpan(arrStr,spl,ele){
             var arrList =  arrStr.split(spl);
+            if(arrList.length ==1 &&arrList[0] ==""){
+                ele.parent().hide()
+                ele.empty()
+                return
+            }else {
+                ele.parent().show()
+            }
             var arrListStr = ""
             for(var i=0;i<arrList.length;i++){
                 arrListStr+="<span class='arrListSty'>"+arrList[i]+"</span>"
