@@ -20,6 +20,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +48,8 @@ public class DataSyncController {
     private DataSrcService dataSrcService;
     @Autowired
     private ConfigPropertyService configPropertyService;
+
+    private Logger logger = LoggerFactory.getLogger(DataSyncController.class);
 
 
 
@@ -76,18 +80,19 @@ public class DataSyncController {
             String result = "";
             if(dataTask.getDataTaskType().equals("file")){
                 String[] localFileList = {dataTask.getSqlFilePath()};
-                result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath,dataTask).toString();
+                result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
                 if(localFileList.length == 0){
                     return 0;
                 }
             }else if(dataTask.getDataTaskType().equals("mysql")){
                 remoteFilepath = remoteFilepath+subjectCode+"_"+dataTask.getDataTaskId()+"/";
                 String[] localFileList = {dataTask.getFilePath()};
-                result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath,dataTask).toString();
+                result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
                 if(localFileList.length == 0){
                     return 0;
                 }
             }
+            logger.info("ftpDataTaskId"+dataTask.getDataTaskId()+"上传状态:" + result + "\n");
             ftpUtil.disconnect();
             if(result.equals("Upload_New_File_Success")||result.equals("Upload_From_Break_Succes")){
                 String dataTaskString = JSONObject.toJSONString(dataTask);
@@ -119,17 +124,28 @@ public class DataSyncController {
                     if(reponseContent.equals("1")){
                         dataTask.setStatus("1");
                         dataTaskService.update(dataTask);
+                        logger.info("导入成功"+ "\n");
+                        logger.info("=========================上传流程结束========================" + "\n\n\n");
                         return 1;
                     }else{
+                        logger.info("导入失败"+ "\n");
+                        logger.info("=========================上传流程结束========================" + "\n\n\n");
                         return 0;
                     }
                 } catch (IOException e) {
+                    logger.info("导入失败"+ "\n");
+                    logger.error("导入异常IOException:"+e+ "\n");
+                    logger.info("=========================上传流程结束========================" + "\n\n\n");
                     e.printStackTrace();
                 }
             }else{
+                logger.info("导入失败"+ "\n");
+                logger.info("=========================上传流程结束========================" + "\n\n\n");
                 return 0;
             }
         } catch (IOException e) {
+            logger.error("连接FTP出错:"+e+ "\n");
+            logger.info("=========================上传流程结束========================" + "\n\n\n");
             System.out.println("连接FTP出错：" + e.getMessage());
             return 0;
         }

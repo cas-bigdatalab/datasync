@@ -51,6 +51,7 @@ public class DataTaskService {
 
 
     public JSONObject executeTask(DataTask dataTask) {
+        logger.info("=========================上传流程开始========================" + "\n");
         JSONObject jsonObject = new JSONObject();
         try {
             DataSrc dataSrc = dataSrcDao.findById(dataTask.getDataSourceId());
@@ -86,8 +87,8 @@ public class DataTaskService {
                 dataSb.append(DDL2SQLUtils.generateInsertSqlFromSQL(connection, sqlString, sqlTableNameEn));
             }
 
-            logger.info("\n\n=========================SQL数据表结构:========================\n" + sqlSb.toString() + "\n");
-            logger.info("\n\n=========================SQL数据内容:==========================\n" + dataSb.toString() + "\n");
+            logger.info("=========================SQL数据表结构:========================\n" + sqlSb.toString() + "\n");
+            logger.info("=========================SQL数据内容:==========================\n" + dataSb.toString() + "\n");
 
             File sqlFilePath  = new File(System.getProperty("drsr.framework.root")+"exportSql");
             if(!sqlFilePath.exists()){

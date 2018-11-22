@@ -46,7 +46,7 @@ public class AuditMessageDao {
      * @param: [resourceId]
      * @return: java.util.List<cn.csdb.portal.model.AuditMessage>
      * @auther: hw
-     * @date: 2018/11/22 11:11
+     * @date: 2018/11/22 16:02
      */
     public List<AuditMessage> getAuditMessageListByResourceId(String resourceId){
         QueryBuilder queryBuilder = QueryBuilder.start();
