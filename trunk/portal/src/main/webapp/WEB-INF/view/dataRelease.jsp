@@ -60,9 +60,9 @@
                         <label style="padding-left: 10px;">状态:</label>
                         <select id="resourceState" class="form-control" style="width: 120px">
                             <option value="">全部</option>
-                            <option value="未完成">未完成</option>
+                            <option value="审核通过">审核通过</option>
                             <option value="待审核">待审核</option>
-                            <option value="已审核">已审核</option>
+                            <option value="审核未通过">审核未通过</option>
                         </select>
                     </div>
                     <button type="button" class="btn blue" style="margin-left: 20px" id="seachResource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
@@ -416,14 +416,41 @@
             <div class="modal-body" style="max-height: 500px;overflow: auto">
                 <div id="AuditMessageList"></div>
                 <div id="AuditMessage">
+                    <form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"  onfocusout="true"
+                          method="POST">
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="audit_status" >数据集名称 <span class="required">
+                                                    * </span>
+                            </label>
+                            <div class="col-md-7" style="padding-top:13px">
+                                <%--<input type="text" class="form-control" name="Task_dataName" required="required"
+                                       id="Task_dataName" placeholder="请输入名称">--%>
+                                    <select id="audit_status" class="form-control" name="audit_status">
+                                        <option value="">请选择审核结果</option>
+                                        <option value="审核通过">审核通过</option>
+                                        <option value="审核未通过">审核未通过</option>
+                                    </select>
+                            </div>
 
+                        </div>
+                        <div class="form-group ">
+                            <label class="control-label col-md-3" for="audit_content">审核结果<span class="required">
+                                                    * </span>
+                            </label>
+                            <div class="col-md-7" style="padding-top:13px">
+                                                    <textarea  type="text" class="form-control" cols="30" rows="4"  placeholder="请输入审核结果理由，不少于20字"
+                                                               id="audit_content" name="audit_content"  required="required" ></textarea>
+
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn green" data-dismiss="modal"><i
+                <button type="button" class="btn green"  auditId=""  id="auditId" ><i
                         class="glyphicon glyphicon-ok"></i>确认
                 </button>
-                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+                <button type="button"  class="btn  btn-danger" onclick="remValidate()">取消</button>
             </div>
         </div>
     </div>
@@ -496,12 +523,113 @@
             console.log(id)
             window.location.href="${ctx}/resource/editResource?resourceId="+id;
         })
+        var validData = {
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block help-block-error', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "", // validate all fields including form hidden input
+            rules: {
+                audit_status: {
+                    required: true
+                },
+                audit_content: {
+                    required: true,
+                    minWords:true
+                }
+            },
+            messages: {
+                audit_status: {
+                    required: "请输入数据集名称"
+                },
+                audit_content: {
+                    required: "请输入审核具体信息"
+                },
+            },
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.parent(".input-group").size() > 0) {
+                    error.insertAfter(element.parent(".input-group"));
+                } else {
+                    error.insertAfter(element); // for other inputs, just perform default behavior
+                }
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element)
+                    .closest('.form-group').removeClass('has-error'); // set error class to the control group
+            }
+        };
+        jQuery.validator.addMethod("minWords", function (value, element) {
+            var workFlag = $("#audit_content").val().length <50 ?false:true
+            return this.optional(element)||($("#dataDescribeID").val()==""|| workFlag);
+        }, "最少输入50个字符");
+        $("#submit_form1").validate(validData)
+
+        function remValidate() {
+            $("#submit_form1").validate().resetForm();
+            $(".has-error").removeClass("has-error")
+            $('#auditModal').modal('hide')
+        }
         function auditRelease(id) {
-            $("#auditModal").modal("show")
+            $("#auditId").attr("auditId",id)
+            $("#audit_status option:eq(0)").prop("selected",true)
+            $("#audit_content").val("")
+            $.ajax({
+                url:"${ctx}/resource/getAuditMessage",
+                type:"GET",
+                data:{
+                    resourceId:id
+                },
+                success:function (data) {
+                    console.log(JSON.parse(data))
+                    $("#auditModal").modal("show")
+                },
+                error:function () {
+                    console.log("请求出错")
+                }
+            })
 
         }
+        $("#auditId").click(function () {
+            if(!$("#submit_form1").valid()){
+                return
+            }
+            var id = $(this).attr("auditId")
+            var status=$("#audit_status").val()
+            var auditContent = $("#audit_content").val()
+            $.ajax({
+                url:"${ctx}/resource/audit",
+                type:"POST",
+                data:{
+                    resourceId:id,
+                    status:status,
+                    auditContent:auditContent
+                },
+                success:function (data) {
+                    $('#auditModal').modal('hide')
+                },
+                error:function () {
+                    console.log("请求出错")
+                }
+            })
+
+        })
         function disableRelease(id) {
-            
+            $.ajax({
+                url:"${ctx}/resource/stopResource",
+                type:"POST",
+                data:{
+                    resourceId:id,
+                },
+                success:function (data) {
+                },
+                error:function () {
+                    console.log("请求出错")
+                }
+            })
         }
         function resSend() {
             window.location.href = "${ctx}/dataSourceDescribeEdit"
