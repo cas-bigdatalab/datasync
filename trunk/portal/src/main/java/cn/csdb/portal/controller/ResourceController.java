@@ -283,7 +283,7 @@ public class ResourceController {
         resource.setEmail(email);
         resource.setPhoneNum(phoneNum);
         resource.setSubjectCode(subject.getSubjectCode());
-        resource.setResState("未完成");
+//        resource.setResState("未完成");
         resource.setCreationDate(new Date());
         resource.setUpdateDate(new Date());
         resource.setPublishOrgnization(publishOrganization);
@@ -346,7 +346,7 @@ public class ResourceController {
             resource.setFilePath(sb.toString().replace("/", "%_%"));
             resource.setToMemorySize(String.valueOf(size));
         }
-        resource.setResState("未完成");
+//        resource.setResState("未完成");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -371,7 +371,7 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setUserGroupId(userGroupIdList);
-        resource.setResState("待审核");
+//        resource.setResState("待审核");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -444,7 +444,7 @@ public class ResourceController {
         resource.setEmail(email);
         resource.setPhoneNum(phoneNum);
         resource.setSubjectCode(subject.getSubjectCode());
-        resource.setResState("未完成");
+//        resource.setResState("未完成");
         resource.setUpdateDate(new Date());
         resource.setPublishOrgnization(publishOrganization);
         resource.setCreateOrgnization(createOrganization);
@@ -503,7 +503,7 @@ public class ResourceController {
             resource.setFilePath(sb.toString().replace("/", "%_%"));
             resource.setToMemorySize(String.valueOf(size));
         }
-        resource.setResState("未完成");
+//        resource.setResState("未完成");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -528,7 +528,7 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setUserGroupId(userGroupIdList);
-        resource.setResState("待审核");
+//        resource.setResState("待审核");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -650,6 +650,30 @@ public class ResourceController {
         JSONObject jo = new JSONObject();
         List auditMessageList = auditMessageService.getAuditMessageListByResourceId(resourceId);
         jo.put("auditMessageList",auditMessageList);
+        return jo;
+    }
+
+    /**
+     *
+     * Function Description: 停用
+     *
+     * @param: [resourceId]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/22 14:27
+     */
+    @ResponseBody
+    @RequestMapping("stopResource")
+    public JSONObject stopResource(String resourceId){
+        JSONObject jo = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        resource.setStatus("0");
+        String newresourceId = resourceService.save(resource);
+        if(StringUtils.isNotBlank(newresourceId)){
+            jo.put("result","success");
+        }else{
+            jo.put("result","fail");
+        }
         return jo;
     }
 
