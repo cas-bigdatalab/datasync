@@ -48,8 +48,7 @@ public class SubjectMgmtDao {
 
     @Value("#{systemPro['dbPort']}")
     private String dbPort;
-
-
+    
     @Resource
     private MongoTemplate mongoTemplate;
 
