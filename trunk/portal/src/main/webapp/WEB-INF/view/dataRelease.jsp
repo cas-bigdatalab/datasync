@@ -415,11 +415,8 @@
                 <h4 class="modal-title">任务详情查看</h4>
             </div>
             <div class="modal-body" style="max-height: 500px;overflow: auto">
-                <div id="AuditMessageList">
-                    <div class="form-group" style="padding:0 15px">
-                        <div class="control-label col-md-3"></div>
-                        <div class="col-md-7" style="padding-top:13px"></div>
-                    </div>
+                <div id="AuditMessageList" style="overflow: hidden">
+
 
                 </div>
                 <div id="AuditMessage">
@@ -516,10 +513,15 @@
     {{/each}}
 </script>
 <script type="text/html" id="resourceTmp2">
-    {{each resourceList as value i}}
-    <tr keyIdTr="{{value.id}}">
-
-    </tr>
+    {{each auditMessageList as value i}}
+    <div class="row" style="border: 1px solid grey;margin-bottom: 2px">
+        <div class="control-label col-md-3" style="text-align: right">
+            {{dateFormat(value.auditTime)}}
+        </div>
+        <div class="col-md-7">
+            {{value.auditCom}}
+        </div>
+    </div>
     {{/each}}
 </script>
 </body>
@@ -590,7 +592,7 @@
             }
         };
         jQuery.validator.addMethod("minWords", function (value, element) {
-            var workFlag = $("#audit_content").val().length <50 ?false:true
+            var workFlag = $("#audit_content").val().length <20 ?false:true
             return this.optional(element)||($("#dataDescribeID").val()==""|| workFlag);
         }, "最少输入50个字符");
         $("#submit_form1").validate(validData)
@@ -605,6 +607,7 @@
             $("#auditId").attr("auditId",id)
             $("#audit_status option:eq(0)").prop("selected",true)
             $("#audit_content").val("")
+            $("#AuditMessageList").empty()
             $.ajax({
                 url:"${ctx}/resource/getAuditMessage",
                 type:"GET",
@@ -612,7 +615,9 @@
                     resourceId:id
                 },
                 success:function (data) {
-                    console.log(JSON.parse(data))
+                    var list = JSON.parse(data)
+                    var tabCon = template("resourceTmp2", list);
+                    $("#AuditMessageList").append(tabCon);
                     $("#auditModal").modal("show")
                 },
                 error:function () {
