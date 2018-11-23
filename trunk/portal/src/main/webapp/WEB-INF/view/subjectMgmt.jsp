@@ -48,6 +48,7 @@
         </div>
 
         <!--数据节点列表页面-->
+        <div class="table-message">列表加载中......</div>
         <div class="table-scrollable">
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
@@ -69,10 +70,10 @@
 
         <!--数据节点分页插件-->
         <div class="row margin-top-20">
-            <div class="col-md-6 margin-top-10">
+            <div class="page-message col-md-6 margin-top-10">
                 当前第<span style="color:blue;" id="pageNum"></span>页,共<span style="color:blue;" id="totalPages"></span>页, 共<span style="color:blue;" id="total"></span>条数据
             </div>
-            <div class="col-md-6">
+            <div class="page-list col-md-6">
                 <div id="pagination" style="float: right"></div>
             </div>
         </div>
@@ -549,39 +550,51 @@
                         console.log("获得subject成功！");
                         console.log("success - data = " + data);
 
-                        var html = template("subjectListTable", data);
-                        $("#subjectList").empty();
-                        $("#subjectList").append(html);
-
-                        $("#pageNum").html(data.pageNum);
-                        currentPage = pageNum;
-                        $("#totalPages").html(data.totalPages);
-                        $("#total").html(data.total);
-
-                        //分页
-                        if ($("#pagination .bootpag").length != 0) {
-                            $("#pagination").off();
-                            $('#pagination').empty();
+                        var totalSubject = data.total;
+                        if (totalSubject == 0)
+                        {
+                            $("#paginationForUser").off();
+                            $(".table-message").html("暂时没有数据");
+                            $(".page-message").html("");
+                            $(".page-list").html("");
                         }
-                        $('#pagination').bootpag({
-                            total: data.totalPages,
-                            page: data.pageNum,
-                            maxVisible: 5,
-                            leaps: true,
-                           /* firstLastUse: true,
-                            first: '首页',
-                            last: '尾页',
-                            wrapClass: 'pagination',
-                            activeClass: 'active',
-                            disabledClass: 'disabled',
-                            nextClass: 'next',
-                            prevClass: 'prev',
-                            lastClass: 'last',
-                            firstClass: 'first'*/
-                        }).on('page', function (event, num) {
-                            getSubject(num);
-                            currentPage = num;
-                        });
+                        else
+                        {
+                            $(".table-message").hide();
+                            var html = template("subjectListTable", data);
+                            $("#subjectList").empty();
+                            $("#subjectList").append(html);
+
+                            $("#pageNum").html(data.pageNum);
+                            currentPage = pageNum;
+                            $("#totalPages").html(data.totalPages);
+                            $("#total").html(data.total);
+
+                            //分页
+                            if ($("#pagination .bootpag").length != 0) {
+                                $("#pagination").off();
+                                $('#pagination').empty();
+                            }
+                            $('#pagination').bootpag({
+                                total: data.totalPages,
+                                page: data.pageNum,
+                                maxVisible: 5,
+                                leaps: true,
+                                /* firstLastUse: true,
+                                 first: '首页',
+                                 last: '尾页',
+                                 wrapClass: 'pagination',
+                                 activeClass: 'active',
+                                 disabledClass: 'disabled',
+                                 nextClass: 'next',
+                                 prevClass: 'prev',
+                                 lastClass: 'last',
+                                 firstClass: 'first'*/
+                            }).on('page', function (event, num) {
+                                getSubject(num);
+                                currentPage = num;
+                            });
+                        }
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown){
                         console.log("textStatus = " + textStatus);

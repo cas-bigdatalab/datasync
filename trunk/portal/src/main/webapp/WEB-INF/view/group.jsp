@@ -92,6 +92,7 @@
                             </div>
 
                             <!--用户管理标签页: 用户列表-->
+                            <div class="table-message">列表加载中......</div>
                             <div class="table-scrollable">
                                 <table class="table table-striped table-bordered table-advance table-hover">
                                     <thead>
@@ -114,10 +115,10 @@
 
                             <!--用户管理标签页: 分页-->
                             <div class="row margin-top-20">
-                                <div class="col-md-6 margin-top-10">
+                                <div class="page-message col-md-6 margin-top-10">
                                     当前第<span style="color:blue;" id="curUserPageNum"></span>页,共<span style="color:blue;" id="totalUserPages"></span>页, 共<span style="color:blue;" id="totalUsers"></span>条数据
                                 </div>
-                                <div class="col-md-6">
+                                <div class="page-list col-md-6">
                                     <div id="paginationForUser" style="float: right"></div>
                                 </div>
                             </div>
@@ -1109,40 +1110,55 @@
                 success: function (data) {
                     console.log(data);
 
-                    var html = template("userListTable", data);
-
-                    $("#userList").empty();
-                    $("#userList").append(html);
-
-                    $("#curUserPageNum").html(data.curUserPageNum);
-                    currentUserPage = data.curUserPageNum;
-                    $("#totalUserPages").html(data.totalUserPages);
-                    $("#totalUsers").html(data.totalUsers);
-
-                    if ($("#paginationForUser .bootpag").length != 0) {
+                    var userSize = data.totalUsers;
+                    if (userSize == 0)
+                    {
                         $("#paginationForUser").off();
-                        $('#paginationForUser').empty();
+                        $(".table-message").html("暂时没有数据");
+                        $(".page-message").html("");
+                        $(".page-list").html("");
                     }
+                    else
+                    {
+                        $(".table-message").hide();
 
-                    $('#paginationForUser').bootpag({
-                        total: data.totalUserPages,
-                        page: data.curUserPageNum,
-                        maxVisible: 5,
-                        leaps: true,
-                        firstLastUse: true,
-                        first: '首页',
-                        last: '尾页',
-                        wrapClass: 'pagination',
-                        activeClass: 'active',
-                        disabledClass: 'disabled',
-                        nextClass: 'next',
-                        prevClass: 'prev',
-                        lastClass: 'last',
-                        firstClass: 'first'
-                    }).on('page', function (event, toNum) {
-                        queryUser(loginId, userName, groups, toNum);
-                        currentUserPage = toNum;
-                    });
+                        var html = template("userListTable", data);
+
+                        $("#userList").empty();
+                        $("#userList").append(html);
+
+                        $(".table-message").html("列表加载中......")
+                        $("#curUserPageNum").html(data.curUserPageNum);
+                        currentUserPage = data.curUserPageNum;
+                        $("#totalUserPages").html(data.totalUserPages);
+                        $("#totalUsers").html(data.totalUsers);
+
+
+                        if ($("#paginationForUser .bootpag").length != 0) {
+                            $("#paginationForUser").off();
+                            $('#paginationForUser').empty();
+                        }
+
+                        $('#paginationForUser').bootpag({
+                            total: data.totalUserPages,
+                            page: data.curUserPageNum,
+                            maxVisible: 5,
+                            leaps: true,
+                            firstLastUse: true,
+                            first: '首页',
+                            last: '尾页',
+                            wrapClass: 'pagination',
+                            activeClass: 'active',
+                            disabledClass: 'disabled',
+                            nextClass: 'next',
+                            prevClass: 'prev',
+                            lastClass: 'last',
+                            firstClass: 'first'
+                        }).on('page', function (event, toNum) {
+                            queryUser(loginId, userName, groups, toNum);
+                            currentUserPage = toNum;
+                        });
+                    }
                 }
             });
         }
