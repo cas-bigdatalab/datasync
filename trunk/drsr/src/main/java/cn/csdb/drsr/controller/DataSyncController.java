@@ -75,7 +75,7 @@ public class DataSyncController {
         String subjectCode = configPropertyService.getProperty("SubjectCode");
         FtpUtil ftpUtil = new FtpUtil();
         DataTask dataTask = dataTaskService.get(dataTaskId);
-
+        logger.info("数据任务名称为：" + dataTask.getDataTaskName() +"\n");
         try {
             ftpUtil.connect(host, Integer.parseInt(port), userName, password);
             String result = "";
