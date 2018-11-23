@@ -536,7 +536,6 @@
 <div id="siteMeshJavaScript">
 
     <script type="text/javascript">
-        console.log(userName)
         var publicType = ""
         var resourceState = ""
         var resourceName=""
