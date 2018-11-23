@@ -108,11 +108,14 @@ public class DataTaskService {
             String sqlFilePathStr = filePath.getPath() + File.separator + "struct.sql;" + filePath.getPath() + File.separator + "data.sql";
             dataTask.setSqlFilePath(sqlFilePathStr.replace(File.separator,"%_%"));
             boolean result = dataTaskDao.update(dataTask);
-            logger.info("result=" + result);
             jsonObject.put("result", "true");
             jsonObject.put("filePath", filePath.getPath());
+            logger.info("导出成功，result = " + result+ "\n");
+            logger.info("=========================导出流程结束========================" + "\n");
         } catch (Exception ex) {
             jsonObject.put("result", "false");
+            logger.error("导出失败，result = false" + "\n");
+            logger.info("=========================导出流程结束========================" + "\n");
         }
         return jsonObject;
     }
@@ -169,7 +172,8 @@ public class DataTaskService {
             outputStream.setEncoding("utf-8"); //23412
             outputStream.setCreateUnicodeExtraFields(ZipArchiveOutputStream.UnicodeExtraFieldPolicy.ALWAYS);
             outputStream.setFallbackToUTF8(true);
-            logger.info(".zip:文件数据源,开始打包文件...");
+            logger.info("=========================打包流程开始========================" + "\n");
+            logger.info(".zip:文件数据源,开始打包文件..."+ "\n");
             for (String filePath : filePaths) {
                 filePath = filePath.replace("%_%",File.separator);
                 File file = new File(filePath);
@@ -178,10 +182,12 @@ public class DataTaskService {
                 }
                 ZipUtils.zipDirectory(file, "", outputStream);
             }
+            logger.info("打包成功" + "\n");
         } catch (Exception e) {
-            logger.error("打包失败", e);
+            logger.error("打包失败", e+ "\n");
             return "error";
         } finally {
+            logger.info("=========================打包流程结束========================" + "\n");
             try {
                 outputStream.finish();
                 outputStream.close();
