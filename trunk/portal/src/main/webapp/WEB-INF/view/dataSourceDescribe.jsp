@@ -329,8 +329,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-md-3 timeVili" >选择时间<span >
-                                                    * </span></label>
+                                                <label class="control-label col-md-3 timeVili" >选择时间<span style="margin-left: 13px">
+                                                    </span></label>
                                                 <div class="col-md-5"  style="padding-top:13px">
                                                     <div class="input-group input-daterange">
                                                         <input type="text" class="form-control selectData"
@@ -343,8 +343,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-md-3" for="dataSourceDesID">版权声明<span >
-                                                    * </span></label>
+                                                <label class="control-label col-md-3" for="dataSourceDesID">版权声明<span style="margin-left: 13px">
+                                                     </span></label>
                                                 <div class="col-md-5" id="dataSourceDes" style="padding-top:13px">
                                                 <textarea  type="text" class="form-control" cols="30" rows="4" placeholder="请输入来源信息"
                                                            id="dataSourceDesID" name="dataSourceDesID" ></textarea>
@@ -363,8 +363,8 @@
 
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-md-3" for="create_person">创建人员<span>
-                                                    * </span>
+                                                <label class="control-label col-md-3" for="create_person">创建人员<span style="margin-left: 13px">
+                                                     </span>
                                                 </label>
                                                 <div class="col-md-5" style="padding-top:13px">
                                                     <input type="text" class="form-control"
@@ -373,8 +373,8 @@
 
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-md-3" >创建日期<span >
-                                                    * </span></label>
+                                                <label class="control-label col-md-3" >创建日期<span style="margin-left: 13px">
+                                                     </span></label>
                                                 <div class="col-md-5"  style="padding-top:13px">
                                                     <div class="input-group input-daterange">
                                                         <input type="text" class="form-control selectData" id="createTime"
@@ -400,24 +400,15 @@
                                                     <input type="text" class="form-control"
                                                            id="Task_email" name="Task_email" required="required" placeholder="请输入邮箱号">
                                                 </div>
-
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-md-3" for="Task_phone">发布者电话号码 <span>
-                                                    * </span>
+                                                <label class="control-label col-md-3" for="Task_phone">发布者电话号码 <span style="margin-left: 13px"></span>
                                                 </label>
                                                 <div class="col-md-5" style="padding-top:13px">
                                                     <input type="text" class="form-control" name="Task_phone" placeholder="请输入电话号码"
                                                            id="Task_phone" >
                                                 </div>
-
                                             </div>
-
-
-
-
-
-
                                         </form>
 
                                 </div>
@@ -586,8 +577,8 @@
         var secondFlag=false;
         var resourceId="";
         var publicType="mysql";
-        var firstTime = 0;
-        var lastTime = 0;
+        var firstTime ;
+        var lastTime ;
         var api = null;
         //将图片截图并上传功能
         $('.selectData').datepicker({
@@ -600,13 +591,11 @@
         });
         $('.selectData:eq(0)').datepicker().on("changeDate",function (ev) {
             firstTime = new Date(ev.date).getTime()
-            console.log(firstTime)
             $(".timeVili").removeClass("custom-error")
             $(".timeVili:eq(1)").hide()
         })
         $('.selectData:eq(1)').datepicker().on("changeDate",function (ev) {
             lastTime =new Date(ev.date).getTime()
-            console.log(lastTime)
             $(".timeVili").removeClass("custom-error")
             $(".timeVili:eq(1)").hide()
         })
@@ -962,11 +951,14 @@
 
         function addResourceFirstStep() {
             firstFlag=false
-            if(firstTime ==0 || lastTime==0|| firstTime>lastTime){
+            if((firstTime ==null && lastTime !=null)||(firstTime !=null && lastTime ==null)||(firstTime>lastTime)){
                 $(".timeVili").addClass("custom-error")
                 $(".timeVili:eq(1)").show()
                 firstFlag=true
             }
+            /*if(firstTime ==null || lastTime==0|| firstTime>lastTime){
+
+            }*/
             if($("#centerCatalogId").val()==""){
                 $(".timeVili2").addClass("custom-error")
                 $(".timeVili2:eq(1)").show()
@@ -1079,7 +1071,12 @@
         }
         function editResourceFirstStep() {
             firstFlag=false
-            if(firstTime ==0 || lastTime==0|| firstTime>lastTime){
+            /*if(firstTime ==0 || lastTime==0|| firstTime>lastTime){
+                $(".timeVili").addClass("custom-error")
+                $(".timeVili:eq(1)").show()
+                firstFlag=true
+            }*/
+            if((firstTime ==null && lastTime !=null)||(firstTime !=null && lastTime ==null)||(firstTime>lastTime)){
                 $(".timeVili").addClass("custom-error")
                 $(".timeVili:eq(1)").show()
                 firstFlag=true

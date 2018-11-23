@@ -424,6 +424,7 @@
 
 
 <script type="text/javascript">
+    var userName="${sessionScope.userName}";
     template.helper("dateFormat", convertMilsToDateString);
     template.helper("dateTimeFormat", convertMilsToDateTimeString);
     function convertMilsToDateTimeString(mil) {

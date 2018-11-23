@@ -464,7 +464,11 @@
     <tr keyIdTr="{{value.id}}">
         <td>{{i + 1}}</td>
         <td>{{value.title}}</td>
-        <td>{{value.publicType}}</td>
+        {{if value.publicType == 'mysql' ||value.publicType == '' }}
+        <td>mysql</td>
+        {{else if value.publicType == 'file'}}
+        <td>file</td>
+        {{/if}}
        <%-- <td style="word-break: break-all">{{value.createdByOrganization}}</td>--%>
         <td>{{dateFormat(value.creationDate)}}</td>
 
@@ -478,7 +482,7 @@
 
         <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>
         <td>
-            <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.resState}}')"><i
+            <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')"><i
                     class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
             </button>
 <shiro:hasRole name="admin">
@@ -530,6 +534,7 @@
 <div id="siteMeshJavaScript">
 
     <script type="text/javascript">
+        console.log(userName)
         var publicType = ""
         var resourceState = ""
         var resourceName=""
@@ -616,6 +621,7 @@
                 },
                 success:function (data) {
                     var list = JSON.parse(data)
+                    console.log(list)
                     var tabCon = template("resourceTmp2", list);
                     $("#AuditMessageList").append(tabCon);
                     $("#auditModal").modal("show")
@@ -670,6 +676,7 @@
             window.location.href = "${ctx}/dataSourceDescribeEdit"
         }
         function showData(id,type,tabStatus) {
+            tabStatus = tabStatus ==0?"审核未通过":tabStatus ==1?"未审核":"审核通过"
             $.ajax({
                 url: "${ctx}/resource/resourceDetail",
                 type: "GET",
@@ -720,10 +727,10 @@
                         }else {
                             $("#rel-createdByOrganization").parent().show()
                         }
-                        if(dataList.createPerson==""){
-                            $("#rel-createPerson").parent().hide()
+                        if(dataList.createPerson == ""){
+                            $("#rel-createdBy").parent().hide()
                         }else {
-                            $("#rel-createPerson").parent().show()
+                            $("#rel-createdBy").parent().show()
                         }
                         if(dataList.creationDate==null){
                             $("#rel-creationDate").parent().hide()
@@ -799,9 +806,9 @@
                             $("#file-createdByOrganization").parent().show()
                         }
                         if(dataList.createPerson==""){
-                            $("#file-createPerson").parent().hide()
+                            $("#file-createdBy").parent().hide()
                         }else {
-                            $("#file-createPerson").parent().show()
+                            $("#file-createdBy").parent().show()
                         }
                         if(dataList.creationDate==null){
                             $("#file-creationDate").parent().hide()
