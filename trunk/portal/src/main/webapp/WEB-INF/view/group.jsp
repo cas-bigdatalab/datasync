@@ -146,7 +146,9 @@
                                 </div>
 
                             </div>
+                            <div class="table-message-group">列表加载中......</div>
                             <div class="table-scrollable">
+
                                 <table class="table table-striped table-bordered table-advance table-hover">
                                     <thead>
                                     <tr id="table_List2">
@@ -163,11 +165,11 @@
                                 </table>
                             </div>
                             <div class="row margin-top-20">
-                                <div class="col-md-6 margin-top-10">
+                                <div class="col-md-6 margin-top-10" id="message-group1">
                                     当前第<span style="color:blue;" id="currentPageNo"></span>页,共<span style="color:blue;" id="totalPages"></span>页,<span style="color:blue;" id="totalCount"></span>条数据
                                 </div>
-                                <div class="col-md-6">
-                                    <div id="pagination" style="float: right"></div>
+                                <div class="col-md-6" id="message-group2">
+                                    <div id="pagination" style="float: right" ></div>
                                 </div>
                             </div>
                         </div>
@@ -532,7 +534,7 @@
     <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
     <script src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.min.js"></script>
 
-    <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
+    <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
     <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.min.js"></script>
     <script src="${ctx}/resources/bundles/jquery-validation/js/additional-methods.min.js"></script>
@@ -823,10 +825,21 @@
                     "pageSize": 10
                 },
                 success: function (data) {
+                    console.log("-----------------")
+                    console.log(data)
 
                     var html = template("groupTmpl", data);
                     $("#groupList").empty();
                     $("#groupList").append(html);
+                    if(data.list.length ==0){
+                        $(".table-message-group").html("暂时没有数据")
+                        $("#message-group1").hide()
+                        $("#message-group2").hide()
+                        return
+                    }
+                    $(".table-message-group").html("")
+                    $("#message-group1").show()
+                    $("#message-group2").show()
                     $("#currentPageNo").html(data.currentPage);
                     currentPageNo = data.currentPage;
                     $("#totalPages").html(data.totalPages);

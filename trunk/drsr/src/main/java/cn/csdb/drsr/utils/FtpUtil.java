@@ -3,6 +3,7 @@ package cn.csdb.drsr.utils;
 import cn.csdb.drsr.model.DataTask;
 import cn.csdb.drsr.service.ConfigPropertyService;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -174,7 +175,7 @@ public class FtpUtil {
         return result;
     }
 
-    public UploadStatus upload(String host, String username, String password, String port, String[] localFileList, String processId,String remoteFilepath,DataTask dataTask) throws IOException {
+    public UploadStatus upload(String host, String username, String password, String port, String[] localFileList, String processId,String remoteFilepath,DataTask dataTask,String subjectCode) throws IOException {
 //        ftpClient.enterLocalPassiveMode();
 //        ftpClient.enterRemotePassiveMode();
         ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
@@ -196,13 +197,15 @@ public class FtpUtil {
             String fileName = "";
             System.out.println("-------localFilepath"+localFilepath);
             System.out.println("-------localFilepath.indexOf(%_%)>0-----"+(localFilepath.indexOf("%_%")>0));
-            System.out.println("-------localFilepath.indexOf(File.separator)>0"+(localFilepath.indexOf(File.separator)>0));
+            /*System.out.println("-------localFilepath.indexOf(File.separator)>0"+(localFilepath.indexOf(File.separator)>0));
             if(localFilepath.indexOf("%_%")>0){
                 fileName = localFilepath.substring(localFilepath.lastIndexOf("%_%")+3);
                 System.out.println("-------fileName"+fileName);
-            }
+            }*/
             if(dataTask.getDataTaskType().equals("mysql")){
                 fileName = dataTask.getDataTaskId()+".zip";
+            }else{
+                fileName = subjectCode + "_" +dataTask.getDataTaskId()+".zip";
             }
 
             //对远程目录的处理

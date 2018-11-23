@@ -9,6 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <c:set value="${pageContext.request.contextPath}" var="ctx"/>
 
 <html>
@@ -46,7 +47,7 @@
                 <form class="form-inline" style="margin-bottom: 0px">
                     <div class="form-group">
                         <label style="padding-left: 10px;">数据集名称:</label>
-                        <input type="text" class="form-control" id="resourceName">
+                        <input type="text" class="form-control" id="resourceName" placeholder="请输入数据集名称">
                     </div>
                     <div class="form-group">
                         <label style="padding-left: 10px;">数据类型:</label>
@@ -60,9 +61,9 @@
                         <label style="padding-left: 10px;">状态:</label>
                         <select id="resourceState" class="form-control" style="width: 120px">
                             <option value="">全部</option>
-                            <option value="未完成">未完成</option>
+                            <option value="审核通过">审核通过</option>
                             <option value="待审核">待审核</option>
-                            <option value="已审核">已审核</option>
+                            <option value="审核未通过">审核未通过</option>
                         </select>
                     </div>
                     <button type="button" class="btn blue" style="margin-left: 20px" id="seachResource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
@@ -80,9 +81,9 @@
                     <th width="20%">数据集名称</th>
                     <th width="13%">类型</th>
                    <%-- <th width="10%">来源位置</th>--%>
-                    <th width="15%">发布时间</th>
-                    <th width="7%">状态</th>
-                    <th >操作</th>
+                    <th width="18%">发布时间</th>
+                    <th width="14%">状态</th>
+                    <th width="28%">操作</th>
                 </tr>
                 </thead>
                 <tbody id="bd-data">
@@ -414,16 +415,46 @@
                 <h4 class="modal-title">任务详情查看</h4>
             </div>
             <div class="modal-body" style="max-height: 500px;overflow: auto">
-                <div id="AuditMessageList"></div>
-                <div id="AuditMessage">
+                <div id="AuditMessageList" style="overflow: hidden">
 
+
+                </div>
+                <div id="AuditMessage">
+                    <form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"  onfocusout="true"
+                          method="POST">
+                        <div class="form-group">
+                            <label class="control-label col-md-3" for="audit_status" >数据集名称 <span class="required">
+                                                    * </span>
+                            </label>
+                            <div class="col-md-7" style="padding-top:13px">
+                                <%--<input type="text" class="form-control" name="Task_dataName" required="required"
+                                       id="Task_dataName" placeholder="请输入名称">--%>
+                                    <select id="audit_status" class="form-control" name="audit_status">
+                                        <option value="">请选择审核结果</option>
+                                        <option value="2">审核通过</option>
+                                        <option value="0">审核未通过</option>
+                                    </select>
+                            </div>
+
+                        </div>
+                        <div class="form-group ">
+                            <label class="control-label col-md-3" for="audit_content">审核结果<span class="required">
+                                                    * </span>
+                            </label>
+                            <div class="col-md-7" style="padding-top:13px">
+                                                    <textarea  type="text" class="form-control" cols="30" rows="4"  placeholder="请输入审核结果理由，不少于20字"
+                                                               id="audit_content" name="audit_content"  required="required" ></textarea>
+
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn green" data-dismiss="modal"><i
+                <button type="button" class="btn green"  auditId=""  id="auditId" ><i
                         class="glyphicon glyphicon-ok"></i>确认
                 </button>
-                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+                <button type="button"  class="btn  btn-danger" onclick="remValidate()">取消</button>
             </div>
         </div>
     </div>
@@ -436,36 +467,61 @@
         <td>{{value.publicType}}</td>
        <%-- <td style="word-break: break-all">{{value.createdByOrganization}}</td>--%>
         <td>{{dateFormat(value.creationDate)}}</td>
-        <td id="{{value.dataTaskId}}">{{value.resState}}</td>
-        <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>
-        <td style="text-align: right">
 
-            <button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;编辑
-            </button>
+        {{if value.status == '1'}}
+        <td id="{{value.dataTaskId}}">待审核</td>
+        {{else if value.status == '0'}}
+        <td id="{{value.dataTaskId}}">审核未通过</td>
+        {{else if value.status == '2'}}
+        <td id="{{value.dataTaskId}}">审核通过</td>
+        {{/if}}
+
+        <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>
+        <td>
             <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.resState}}')"><i
                     class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
             </button>
+<shiro:hasRole name="admin">
+            <button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;编辑
+            </button>
+</shiro:hasRole>
+
+    <shiro:hasRole name="admin">
             <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.id}}');"><i
                     class="glyphicon glyphicon-trash"></i>&nbsp;删除
             </button>
-            {{if value.resState == '待审核'}}
+    </shiro:hasRole>
+<shiro:hasRole name="root">
+            {{if value.status == '1'}}
                 <button type="button" class="btn green btn-xs exportSql"
                        onclick="auditRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;审核
                 </button>
             {{/if}}
-            {{if value.resState == '审核未通过'}}
+            {{if value.status == '0'}}
+            <button type="button" class="btn green btn-xs exportSql"
+                    onclick="auditRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;审核
+            </button>
+            {{/if}}
+            {{if value.status == '2'}}
             <button type="button" class="btn red btn-xs exportSql"
                     onclick="disableRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;停用
             </button>
             {{/if}}
-            {{if value.resState == '审核通过'}}
-            <button type="button" class="btn red btn-xs exportSql"
-                    onclick="disableRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;停用
-            </button>
-            {{/if}}
-
+</shiro:hasRole>
         </td>
     </tr>
+    {{/each}}
+</script>
+<script type="text/html" id="resourceTmp2">
+    {{each auditMessageList as value i}}
+    <div class="row" style="border: 1px solid grey;margin-bottom: 2px">
+        <div class="control-label col-md-3" style="text-align: right">
+            {{dateFormat(value.auditTime)}}
+        </div>
+        <div class="col-md-7">
+            {{value.auditCom}}
+        </div>
+    </div>
     {{/each}}
 </script>
 </body>
@@ -496,12 +552,119 @@
             console.log(id)
             window.location.href="${ctx}/resource/editResource?resourceId="+id;
         })
-        function auditRelease(id) {
-            $("#auditModal").modal("show")
+        var validData = {
+            errorElement: 'span', //default input error message container
+            errorClass: 'help-block help-block-error', // default input error message class
+            focusInvalid: false, // do not focus the last invalid input
+            ignore: "", // validate all fields including form hidden input
+            rules: {
+                audit_status: {
+                    required: true
+                },
+                audit_content: {
+                    required: true,
+                    minWords:true
+                }
+            },
+            messages: {
+                audit_status: {
+                    required: "请输入数据集名称"
+                },
+                audit_content: {
+                    required: "请输入审核具体信息"
+                },
+            },
+            errorPlacement: function (error, element) { // render error placement for each input type
+                if (element.parent(".input-group").size() > 0) {
+                    error.insertAfter(element.parent(".input-group"));
+                } else {
+                    error.insertAfter(element); // for other inputs, just perform default behavior
+                }
+            },
+            highlight: function (element) { // hightlight error inputs
+                $(element)
+                    .closest('.form-group').addClass('has-error'); // set error class to the control group
+            },
+
+            unhighlight: function (element) { // revert the change done by hightlight
+                $(element)
+                    .closest('.form-group').removeClass('has-error'); // set error class to the control group
+            }
+        };
+        jQuery.validator.addMethod("minWords", function (value, element) {
+            var workFlag = $("#audit_content").val().length <20 ?false:true
+            return this.optional(element)||($("#dataDescribeID").val()==""|| workFlag);
+        }, "最少输入50个字符");
+        $("#submit_form1").validate(validData)
+
+        function remValidate() {
+            $("#submit_form1").validate().resetForm();
+            $(".has-error").removeClass("has-error")
+            $('#auditModal').modal('hide')
 
         }
+        function auditRelease(id) {
+            $("#auditId").attr("auditId",id)
+            $("#audit_status option:eq(0)").prop("selected",true)
+            $("#audit_content").val("")
+            $("#AuditMessageList").empty()
+            $.ajax({
+                url:"${ctx}/resource/getAuditMessage",
+                type:"GET",
+                data:{
+                    resourceId:id
+                },
+                success:function (data) {
+                    var list = JSON.parse(data)
+                    var tabCon = template("resourceTmp2", list);
+                    $("#AuditMessageList").append(tabCon);
+                    $("#auditModal").modal("show")
+                },
+                error:function () {
+                    console.log("请求出错")
+                }
+            })
+
+        }
+        $("#auditId").click(function () {
+            if(!$("#submit_form1").valid()){
+                return
+            }
+            var id = $(this).attr("auditId")
+            var status=$("#audit_status").val()
+            var auditContent = $("#audit_content").val()
+            $.ajax({
+                url:"${ctx}/resource/audit",
+                type:"POST",
+                data:{
+                    resourceId:id,
+                    status:status,
+                    auditContent:auditContent
+                },
+                success:function (data) {
+                    $('#auditModal').modal('hide')
+                    tableConfiguration2(1,"","","")
+                },
+                error:function () {
+                    console.log("请求出错")
+                }
+            })
+
+        })
         function disableRelease(id) {
-            
+            $.ajax({
+                url:"${ctx}/resource/stopResource",
+                type:"POST",
+                data:{
+                    resourceId:id,
+                },
+                success:function (data) {
+                    tableConfiguration2(1,"","","")
+                },
+                error:function () {
+                    console.log("请求出错")
+                }
+            })
         }
         function resSend() {
             window.location.href = "${ctx}/dataSourceDescribeEdit"
@@ -706,7 +869,7 @@
                         $(".page-list").html("");
                         return
                     }
-                    $(".table-message").hide();
+                    $(".table-message").html("");
                     /*
                     * 创建table
                     * */
@@ -735,7 +898,7 @@
                     });
                 },
                 error: function () {
-                    $(".table-message").html("请求失败");
+                    console.log("请求失败")
                 }
             })
 

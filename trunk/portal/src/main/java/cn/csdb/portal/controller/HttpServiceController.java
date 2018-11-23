@@ -107,10 +107,11 @@ public class HttpServiceController {
                     structDBFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+"data.sql";
                 }*/
             }else if(dataTask.getDataTaskType().equals("file")){
-                zipFile = siteFtpPath+fileName;
+//                zipFile = siteFtpPath+fileName;
+                zipFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+".zip";
                 System.out.println("+++++++++"+zipFile);
-                System.out.println("=========="+fileName);
-                unZipPath = siteFtpPath+fileName.substring(0,fileName.lastIndexOf("."));
+//                System.out.println("=========="+fileName);
+                unZipPath = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId();
 
             }
 

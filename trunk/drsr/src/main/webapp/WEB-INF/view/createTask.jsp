@@ -25,7 +25,7 @@
         <form class="form-inline">
             <div class="form-group">
                 <label for="dataTaskName" style="font-size: 18px">创建任务名</label>
-                <input type="text" class="form-control" id="dataTaskName" >
+                <input type="text" class="form-control" id="dataTaskName" style="width: 250px" >
             </div>
         </form>
     </div>
@@ -260,8 +260,8 @@
         var dataFileSrcId;
         var dataFilePathList;
         var dateDef = new Date();
-        dateDef = dateDef.Format("yyyyMMdd");
-        $("#dataTaskName").val("name"+dateDef)
+        dateDef = dateDef.Format("yyyyMMddhhmmss");
+        $("#dataTaskName").val("数据任务"+dateDef)
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
                 $(".select-database").show();

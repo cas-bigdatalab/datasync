@@ -623,7 +623,7 @@ public class ResourceController {
         resource.setStatus(status);
         AuditMessage auditMessage = new AuditMessage();
         auditMessage.setAuditTime(new Date());
-        auditMessage.setAuditContent(auditContent);
+        auditMessage.setAuditCom(auditContent);
         auditMessage.setResourceId(resourceId);
         auditMessageService.save(auditMessage);
         String returnId = resourceService.save(resource);
@@ -648,7 +648,7 @@ public class ResourceController {
     @RequestMapping("getAuditMessage")
     public JSONObject getAuditMessage(String resourceId){
         JSONObject jo = new JSONObject();
-        List auditMessageList = auditMessageService.getAuditMessageListByResourceId(resourceId);
+        List<AuditMessage> auditMessageList = auditMessageService.getAuditMessageListByResourceId(resourceId);
         jo.put("auditMessageList",auditMessageList);
         return jo;
     }
@@ -667,7 +667,7 @@ public class ResourceController {
     public JSONObject stopResource(String resourceId){
         JSONObject jo = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
-        resource.setStatus("0");
+        resource.setStatus("1");
         String newresourceId = resourceService.save(resource);
         if(StringUtils.isNotBlank(newresourceId)){
             jo.put("result","success");
