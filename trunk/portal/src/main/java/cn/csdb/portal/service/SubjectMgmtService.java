@@ -38,7 +38,7 @@ public class SubjectMgmtService {
     {
         String addSubjectNotice = "";
 
-        //添加 专题库管理员 账号
+        //添加 数据节点管理员 账号
         String admin = subject.getAdmin();
         String adminPasswd = subject.getAdminPasswd();
         User subjectUser = new User();
@@ -53,15 +53,15 @@ public class SubjectMgmtService {
         subjectUser.setGroups("");
         userDao.addUser(subjectUser);
 
-        // 添加 专题库
+        // 添加 数据节点
         int addedRowCnt = subjectMgmtDao.addSubject(subject);
         if (addedRowCnt == 1)
         {
-            addSubjectNotice = "添加专题库：成功！";
+            addSubjectNotice = "添加数据节点：成功！";
         }
         else
         {
-            addSubjectNotice = "添加专题库：失败！";
+            addSubjectNotice = "添加数据节点：失败！";
         }
         return addSubjectNotice;
     }
@@ -99,11 +99,11 @@ public class SubjectMgmtService {
         int modifiedRowCnt = subjectMgmtDao.updateSubject(subject);
         if (modifiedRowCnt == 1)
         {
-            updatedSubjectNotice = "修改专题库：成功！";
+            updatedSubjectNotice = "修改数据节点：成功！";
         }
         else
         {
-            updatedSubjectNotice = "修改专题库：失败！";
+            updatedSubjectNotice = "修改数据节点：失败！";
         }
 
         return updatedSubjectNotice;

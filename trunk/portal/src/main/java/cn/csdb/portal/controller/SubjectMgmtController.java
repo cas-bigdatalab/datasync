@@ -137,7 +137,7 @@ public class SubjectMgmtController {
         int deletedRowCnt = subjectMgmtService.deleteSubject(id);
         logger.info("SubjectMgmtController-deleteSubject，deletedRowCnt = " + deletedRowCnt);
 
-        //返回要删除的subject的id
+        //return the count of subject already deleted
         return deletedRowCnt;
     }
 
