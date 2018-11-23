@@ -47,7 +47,7 @@
                 <form class="form-inline" style="margin-bottom: 0px">
                     <div class="form-group">
                         <label style="padding-left: 10px;">数据集名称:</label>
-                        <input type="text" class="form-control" id="resourceName">
+                        <input type="text" class="form-control" id="resourceName" placeholder="请输入数据集名称">
                     </div>
                     <div class="form-group">
                         <label style="padding-left: 10px;">数据类型:</label>
@@ -869,7 +869,7 @@
                         $(".page-list").html("");
                         return
                     }
-                    $(".table-message").hide();
+                    $(".table-message").html("");
                     /*
                     * 创建table
                     * */
@@ -898,7 +898,7 @@
                     });
                 },
                 error: function () {
-                    $(".table-message").html("请求失败");
+                    console.log("请求失败")
                 }
             })
 

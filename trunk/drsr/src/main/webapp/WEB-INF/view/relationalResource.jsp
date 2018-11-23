@@ -289,7 +289,7 @@
                         $(".page-list").html("");
                         return
                     }
-                    $(".table-message").hide();
+                    $(".table-message").html("");
                     /*
                      * 创建table
                      * */
