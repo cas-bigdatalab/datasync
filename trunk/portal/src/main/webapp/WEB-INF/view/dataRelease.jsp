@@ -67,8 +67,10 @@
                         </select>
                     </div>
                     <button type="button" class="btn blue" style="margin-left: 20px" id="seachResource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
+                    <shiro:hasRole name="admin">
                     <button type="button" class="btn green" style="margin-left: 20px" onclick="newRelease()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据发布
                     </button>
+                    </shiro:hasRole>
                 </form>
             </div>
         </div>
