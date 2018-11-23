@@ -259,7 +259,7 @@
         <script src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.min.js"></script>
         <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.js"></script>
         <script src="${ctx}/resources/bundles/jquery-validation/js/localization/messages_zh.min.js"></script>
-        <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.js"></script>
+        <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
     <script>
         $(function(){
             tableConfiguration();
