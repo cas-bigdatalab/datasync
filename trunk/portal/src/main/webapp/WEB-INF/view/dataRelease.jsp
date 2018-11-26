@@ -29,6 +29,18 @@
         #relModal .form-group div,#fileModal .form-group div{
             word-break: break-all;
         }
+        .commentsList{
+            border:1px solid darkgray;
+            margin-bottom: 5px;
+            background-color: #7ad588;
+            border-radius:7px!important;
+        }
+        .commentsList .form-group{
+            margin-bottom: 0px!important;
+        }
+        .commentsList label{
+            padding-top: 0px!important;
+        }
     </style>
 </head>
 
@@ -80,12 +92,12 @@
                 <thead>
                 <tr>
                     <th width="7%">编号</th>
-                    <th width="20%">数据集名称</th>
+                    <th width="22%">数据集名称</th>
                     <th width="13%">类型</th>
                    <%-- <th width="10%">来源位置</th>--%>
-                    <th width="18%">发布时间</th>
-                    <th width="14%">状态</th>
-                    <th width="28%">操作</th>
+                    <th width="20%">发布时间</th>
+                    <th width="16%">状态</th>
+                    <th width="22%">操作</th>
                 </tr>
                 </thead>
                 <tbody id="bd-data">
@@ -416,10 +428,8 @@
                 </button>
                 <h4 class="modal-title">任务详情查看</h4>
             </div>
-            <div class="modal-body" style="max-height: 500px;overflow: auto">
-                <div id="AuditMessageList" style="overflow: hidden">
-
-
+            <div class="modal-body" style="overflow: auto">
+                <div id="AuditMessageList">
                 </div>
                 <div id="AuditMessage">
                     <form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"  onfocusout="true"
@@ -520,13 +530,21 @@
 </script>
 <script type="text/html" id="resourceTmp2">
     {{each auditMessageList as value i}}
-    <div class="row" style="border: 1px solid grey;margin-bottom: 2px">
-        <div class="control-label col-md-3" style="text-align: right">
-            {{dateFormat(value.auditTime)}}
-        </div>
-        <div class="col-md-7">
-            {{value.auditCom}}
-        </div>
+    <div class="commentsList">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">审核人姓名&nbsp;&nbsp;:</label>
+                <div class="col-sm-9">aaaa</div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">审核时间&nbsp;&nbsp;:</label>
+                <div class="col-sm-9">{{dateFormat(value.auditTime)}}</div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">审核内容&nbsp;&nbsp;:</label>
+                <div class="col-sm-9">{{value.auditCom}}</div>
+            </div>
+        </form>
     </div>
     {{/each}}
 </script>
@@ -628,7 +646,7 @@
                     $("#auditModal").modal("show")
                 },
                 error:function () {
-                    console.log("请求出错")
+                    console.log("请求失败")
                 }
             })
 
@@ -653,7 +671,7 @@
                     tableConfiguration2(1,"","","")
                 },
                 error:function () {
-                    console.log("请求出错")
+                    console.log("请求失败")
                 }
             })
 
@@ -669,7 +687,7 @@
                     tableConfiguration2(1,"","","")
                 },
                 error:function () {
-                    console.log("请求出错")
+                    console.log("请求失败")
                 }
             })
         }
@@ -678,6 +696,25 @@
         }
         function showData(id,type,tabStatus) {
             tabStatus = tabStatus ==0?"审核未通过":tabStatus ==1?"未审核":"审核通过"
+            /*if(tabStatus ==0){
+                $.ajax({
+                    url:"${ctx}/resource/getAuditMessage",
+                    type:"GET",
+                    data:{
+                        resourceId:id
+                    },
+                    success:function (data) {
+                        var list = JSON.parse(data)
+                        console.log(list)
+                        var tabCon = template("resourceTmp2", list);
+                        $("#AuditMessageList").append(tabCon);
+                        $("#auditModal").modal("show")
+                    },
+                    error:function () {
+                        console.log("请求失败")
+                    }
+                })
+            }*/
             $.ajax({
                 url: "${ctx}/resource/resourceDetail",
                 type: "GET",
@@ -914,7 +951,7 @@
         }
 
         function removeData(id){
-            bootbox.confirm("<span style='font-size: 16px'>确认要删除此条记录吗</span>",function (r) {
+            bootbox.confirm("<span style='font-size: 16px'>确认要删除此条记录吗?</span>",function (r) {
                 if(r){
                     $.ajax({
                         url:"${ctx}/resource/delete/"+id,
@@ -927,7 +964,6 @@
                             tableConfiguration2(1,publicType,resourceState,resourceName);
                         },
                         error:function () {
-                            toastr["error"]("删除失败");
                             console.log("请求失败");
                         }
                     })
