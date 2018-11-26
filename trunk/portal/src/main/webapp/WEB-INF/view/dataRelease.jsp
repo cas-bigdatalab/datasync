@@ -696,7 +696,7 @@
         }
         function showData(id,type,tabStatus) {
             tabStatus = tabStatus ==0?"审核未通过":tabStatus ==1?"未审核":"审核通过"
-            if(tabStatus ==0){
+            /*if(tabStatus ==0){
                 $.ajax({
                     url:"${ctx}/resource/getAuditMessage",
                     type:"GET",
@@ -714,7 +714,7 @@
                         console.log("请求失败")
                     }
                 })
-            }
+            }*/
             $.ajax({
                 url: "${ctx}/resource/resourceDetail",
                 type: "GET",
