@@ -289,7 +289,7 @@ public class ResourceController {
         resource.setPublishOrgnization(publishOrganization);
         resource.setCreateOrgnization(createOrganization);
         resource.setCreatePerson(createPerson);
-        resource.setStatus("1");
+        resource.setStatus("-1");
         String resourceId = resourceService.save(resource);
         jsonObject.put("resourceId", resourceId);
         return jsonObject;
@@ -346,7 +346,7 @@ public class ResourceController {
             resource.setFilePath(sb.toString().replace("/", "%_%"));
             resource.setToMemorySize(String.valueOf(size));
         }
-//        resource.setResState("未完成");
+        resource.setStatus("-1");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -371,7 +371,7 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setUserGroupId(userGroupIdList);
-//        resource.setResState("待审核");
+        resource.setStatus("1");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -449,7 +449,12 @@ public class ResourceController {
         resource.setPublishOrgnization(publishOrganization);
         resource.setCreateOrgnization(createOrganization);
         resource.setCreatePerson(createPerson);
-        resource.setStatus("1");
+        if(StringUtils.isNotBlank(resource.getUserGroupId())){
+            resource.setStatus("1");
+        }else{
+            resource.setStatus("-1");
+        }
+
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -503,7 +508,11 @@ public class ResourceController {
             resource.setFilePath(sb.toString().replace("/", "%_%"));
             resource.setToMemorySize(String.valueOf(size));
         }
-//        resource.setResState("未完成");
+        if(StringUtils.isNotBlank(resource.getUserGroupId())){
+            resource.setStatus("1");
+        }else{
+            resource.setStatus("-1");
+        }
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -528,7 +537,7 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setUserGroupId(userGroupIdList);
-//        resource.setResState("待审核");
+        resource.setStatus("1");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -617,7 +626,8 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping(value="audit")
-    public JSONObject audit(String resourceId,String status,String auditContent){
+    public JSONObject audit(HttpSession session,String resourceId,String status,String auditContent){
+        String auditPerson = session.getAttribute("userName").toString();
         JSONObject jo = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setStatus(status);
@@ -625,6 +635,7 @@ public class ResourceController {
         auditMessage.setAuditTime(new Date());
         auditMessage.setAuditCom(auditContent);
         auditMessage.setResourceId(resourceId);
+        auditMessage.setAuditPerson(auditPerson);
         auditMessageService.save(auditMessage);
         String returnId = resourceService.save(resource);
         if(StringUtils.isNotBlank(resourceId)){
