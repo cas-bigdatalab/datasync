@@ -737,7 +737,7 @@
 
                 console.log("idOfSubjectToBeDeleted = " + id);
 
-                bootbox.confirm("<span style='font-size: 16px'>是否确认删除该专题库及相关信息?</span>",
+                bootbox.confirm("<span style='font-size: 16px'>确认要删除此条记录吗?</span>",
                     function (result)
                     {
                         if (result)

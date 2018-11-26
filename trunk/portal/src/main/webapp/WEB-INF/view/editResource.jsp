@@ -189,8 +189,8 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3 timeVili" >选择时间<span >
-                                                    * </span></label>
+                                            <label class="control-label col-md-3 timeVili" >选择时间<span style="margin-left: 13px">
+                                                     </span></label>
                                             <div class="col-md-5"  style="padding-top:13px">
                                                 <div class="input-group input-daterange">
                                                     <input type="text" class="form-control selectData"
@@ -203,8 +203,8 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" for="dataSourceDesID">版权声明<span >
-                                                    * </span></label>
+                                            <label class="control-label col-md-3" for="dataSourceDesID">版权声明<span style="margin-left: 13px">
+                                                     </span></label>
                                             <div class="col-md-5" id="dataSourceDes" style="padding-top:13px">
                                                 <textarea  type="text" class="form-control" cols="30" rows="4" placeholder="请输入来源信息"
                                                            id="dataSourceDesID" name="dataSourceDesID" ></textarea>
@@ -223,8 +223,8 @@
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" for="create_person">创建人员<span>
-                                                    * </span>
+                                            <label class="control-label col-md-3" for="create_person">创建人员<span style="margin-left: 13px">
+                                                     </span>
                                             </label>
                                             <div class="col-md-5" style="padding-top:13px">
                                                 <input type="text" class="form-control"
@@ -233,8 +233,8 @@
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" >创建日期<span >
-                                                    * </span></label>
+                                            <label class="control-label col-md-3" >创建日期<span style="margin-left: 13px">
+                                                    </span></label>
                                             <div class="col-md-5"  style="padding-top:13px">
                                                 <div class="input-group input-daterange">
                                                     <input type="text" class="form-control selectData" id="createTime"
@@ -263,8 +263,8 @@
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" for="Task_phone">发布者电话号码 <span>
-                                                    * </span>
+                                            <label class="control-label col-md-3" for="Task_phone">发布者电话号码 <span style="margin-left: 13px">
+                                                     </span>
                                             </label>
                                             <div class="col-md-5" style="padding-top:13px">
                                                 <input type="text" class="form-control" name="Task_phone" placeholder="请输入电话号码"
@@ -300,7 +300,7 @@
                                     </div>
                                     <div style="overflow: hidden;display: none" class="select-local">
                                         <div class="col-md-4 col-md-offset-2" style="font-size: 18px" id="fileContainerTree"></div>
-                                        <div id="fileDescribeDiv" class="col-md-5 tagsinput" style="border: 1px solid grey">
+                                        <div id="fileDescribeDiv" class="col-md-5 tagsinput" style="border: 1px solid grey;display: none" >
 
 
                                         </div>
@@ -447,9 +447,9 @@
         var firstFlag=false;
         var secondFlag=false;
         var resourceId=sdoId;
-        var publicType="";
-        var firstTime = 0;
-        var lastTime = 0;
+        var publicType="mysql";
+        var firstTime;
+        var lastTime;
 
         /*var tagNames=new Array();*/
         $('.selectData').datepicker({
@@ -814,62 +814,6 @@
                 }
             })
         }
-        function addResourceFirstStep() {
-            firstFlag=false
-            $("[name='need_checked']").each(function () {
-                var $index = $("[name='need_checked']").index($(this))
-                if($(this).val() == "" ||$(this).val().trim()==""){
-                    $("[name='need_checked']:eq("+$index +")").addClass("custom-error")
-                    $("[name='need_message']:eq("+$index +")").addClass("custom-error")
-                    $("[name='need_message']:eq("+$index +")").show()
-                    $(".required:eq("+$index +")").parent().addClass("custom-error")
-                    firstFlag=true
-                    return
-                }
-            })
-            if(firstFlag){
-                return
-            }
-            if($("#select2_tags").val() ==""){
-                $("#key_work").show()
-                firstFlag=true
-                return
-            }
-            if($("#centerCatalogId").val() ==""){
-                $("#file_dir").show();
-                firstFlag=true
-                return
-            }
-            if(firstTime ==0 || lastTime ==0|| firstTime>lastTime){
-                $("#data_time").show();
-                firstFlag=true
-                return
-            }
-            firstFlag=false
-            var keywordStr = $("#select2_tags").val()
-            /*for(var i=0;i<tagNames.length;i++){
-                keywordStr+=tagNames[i]+";"
-            }*/
-            $.ajax({
-                url:ctx+"/resource/addResourceFirstStep",
-                type:"POST",
-                data:{
-                    title:$("#task_title").val(),
-                    imagePath:$("#imgPath").val(),
-                    introduction:$("#dataDescribeID").val(),
-                    keyword:keywordStr,
-                    catalogId:$("#centerCatalogId").val(),
-                    createdByOrganization:$("#dataSourceDesID").val()
-                },
-                success:function (data) {
-                    var data = JSON.parse(data)
-                    resourceId = data.resourceId
-                },
-                error:function (data) {
-                    console.log("请求失败")
-                }
-            })
-        }
         function addResourceSecondStep() {
             secondFlag = false
             var dataList=""
@@ -939,7 +883,7 @@
         }
         function editResourceFirstStep() {
             firstFlag=false
-            if(firstTime ==0 || lastTime==0|| firstTime>lastTime){
+            if((firstTime ==null && lastTime !=null)||(firstTime !=null && lastTime ==null)||(firstTime>lastTime)){
                 $(".timeVili").addClass("custom-error")
                 $(".timeVili:eq(1)").show()
                 firstFlag=true
@@ -1004,9 +948,15 @@
                     $("#Task_phone").val(totalList.phoneNum)
                     firstTime = totalList.startTime
                     lastTime =totalList.endTime
-                    $('.selectData:eq(0)').val(convertMilsToDateString(firstTime))
-                    $('.selectData:eq(1)').val(convertMilsToDateString(lastTime))
-                    $("#createTime").val(convertMilsToDateString(totalList.createTime)),
+                    if(firstTime !=null){
+                        $('.selectData:eq(0)').val(convertMilsToDateString(firstTime))
+                    }
+                    if(lastTime !=null){
+                        $('.selectData:eq(1)').val(convertMilsToDateString(lastTime))
+                    }
+                    if(totalList.createTime !=null){
+                        $("#createTime").val(convertMilsToDateString(totalList.createTime))
+                    }
                     $("#publish_Organization").val(totalList.publishOrgnization)
                     $("#create_Organization").val(totalList.createOrgnization)
                     $("#create_person").val(totalList.createPerson)
@@ -1015,7 +965,7 @@
                     var path = "${ctx}/"+totalList.imagePath+"_cut.jpg";
                     $('#cutimg').attr('src',path);
                     $('#imgPath').val(totalList.imagePath);
-                    publicType =  totalList.publicType
+                    publicType =  totalList.publicType==""?"mysql":totalList.publicType=="mysql"?"mysql":"file"
                     $("#select2_tags").val(totalList.keyword)
                     $("#select2_tags").select2({
                         tags: true,
@@ -1024,7 +974,7 @@
                     });
                     $("#dataSourceDesID").val(totalList.createdByOrganization)
                     var publicContentList = totalList.publicContent.split(";")
-                    var typeNum = totalList.publicType=="mysql"?0:1;
+                    var typeNum = (totalList.publicType=="mysql"||totalList.publicType=="")?0:1;
                     $("[name='ways']:eq("+ typeNum+")").prop("checked",true)
                     if(typeNum ==0){
                         for(var i=0;i<publicContentList.length;i++){
@@ -1040,6 +990,7 @@
                         for (var i=0;i<filePathList.length;i++){
                             $("#fileDescribeDiv").append("<span class='tag fileTag' style='display: inline-block;margin-right: 5px' name="+ filePathList[i]+"><span class='filePathClass'>"+filePathList[i] +"</span> &nbsp;&nbsp; <a href='javascript:void(0)' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
                         }
+                        $("#fileDescribeDiv").show();
                         $(".select-database").hide();
                         $(".select-local").show();
 
