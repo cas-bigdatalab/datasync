@@ -148,8 +148,8 @@ public class UserDao {
             queryBuilder = QueryBuilder.start();
         }
 
-        //dbObject = queryBuilder.and("role").is("普通用户").get();
-        dbObject = queryBuilder.get();
+        dbObject = queryBuilder.and("role").is("普通用户").get();
+        //dbObject = queryBuilder.get();
         Query query = new BasicQuery(dbObject).skip(start).limit(pageSize);
 
         //排序
