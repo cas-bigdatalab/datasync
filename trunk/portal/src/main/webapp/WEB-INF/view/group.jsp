@@ -965,12 +965,16 @@
                 data: {"id": id},
                 dataType: "json",
                 success: function (data) {
+                    console.log(data);
                     $("#groupModalForAddUser").modal("show");
                     $("#spanGroupName").html(data.group.groupName);
                     $("#spanDesc").html(data.group.desc);
                     $("#spanGroupId").val(data.group.id);
                     //编辑显示己增加的用户
                     //编辑显示己增加的用户
+                    console.log(data.group.users);
+                    console.log(JSON.stringify(data.group.users));
+
                     $("#users").select2().val(JSON.parse(data.group.users)).trigger("change");
 
                 }
