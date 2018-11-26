@@ -329,6 +329,7 @@
         $("#upload-list").delegate(".upload-data","click",function () {
             $(this).css("background-color","dimgrey");
             $(this).attr("disabled","disabled");
+
             var souceID = $(this).attr("keyIdTd");
             var keyID = souceID + new Date().getTime();
             var keyType=$(this).attr("keyDataType");
@@ -353,6 +354,7 @@
                                     if(keyType == "mysql"){
                                         if(data =="1"){
                                             $("."+souceID).text("已导入")
+
                                             return
                                         }else {
                                             $("."+souceID).text("导入失败")
@@ -361,6 +363,7 @@
                                     }else {
                                         if(data =="1"){
                                             $("."+souceID).text("已上传")
+
                                             return
                                         }else {
                                             $("."+souceID).text("上传失败")

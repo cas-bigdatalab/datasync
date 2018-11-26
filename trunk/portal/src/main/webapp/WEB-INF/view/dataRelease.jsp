@@ -29,6 +29,18 @@
         #relModal .form-group div,#fileModal .form-group div{
             word-break: break-all;
         }
+        .commentsList{
+            border:1px solid darkgray;
+            margin-bottom: 5px;
+            background-color: #7ad588;
+            border-radius:7px!important;
+        }
+        .commentsList .form-group{
+            margin-bottom: 0px!important;
+        }
+        .commentsList label{
+            padding-top: 0px!important;
+        }
     </style>
 </head>
 
@@ -416,10 +428,8 @@
                 </button>
                 <h4 class="modal-title">任务详情查看</h4>
             </div>
-            <div class="modal-body" style="max-height: 500px;overflow: auto">
-                <div id="AuditMessageList" style="overflow: hidden">
-
-
+            <div class="modal-body" style="overflow: auto">
+                <div id="AuditMessageList">
                 </div>
                 <div id="AuditMessage">
                     <form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"  onfocusout="true"
@@ -520,13 +530,21 @@
 </script>
 <script type="text/html" id="resourceTmp2">
     {{each auditMessageList as value i}}
-    <div class="row" style="border: 1px solid grey;margin-bottom: 2px">
-        <div class="control-label col-md-3" style="text-align: right">
-            {{dateFormat(value.auditTime)}}
-        </div>
-        <div class="col-md-7">
-            {{value.auditCom}}
-        </div>
+    <div class="commentsList">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">审核人姓名&nbsp;&nbsp;:</label>
+                <div class="col-sm-9">aaaa</div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">审核时间&nbsp;&nbsp;:</label>
+                <div class="col-sm-9">{{dateFormat(value.auditTime)}}</div>
+            </div>
+            <div class="form-group">
+                <label  class="col-sm-3 control-label">审核内容&nbsp;&nbsp;:</label>
+                <div class="col-sm-9">{{value.auditCom}}</div>
+            </div>
+        </form>
     </div>
     {{/each}}
 </script>
@@ -678,6 +696,25 @@
         }
         function showData(id,type,tabStatus) {
             tabStatus = tabStatus ==0?"审核未通过":tabStatus ==1?"未审核":"审核通过"
+            if(tabStatus ==0){
+                $.ajax({
+                    url:"${ctx}/resource/getAuditMessage",
+                    type:"GET",
+                    data:{
+                        resourceId:id
+                    },
+                    success:function (data) {
+                        var list = JSON.parse(data)
+                        console.log(list)
+                        var tabCon = template("resourceTmp2", list);
+                        $("#AuditMessageList").append(tabCon);
+                        $("#auditModal").modal("show")
+                    },
+                    error:function () {
+                        console.log("请求失败")
+                    }
+                })
+            }
             $.ajax({
                 url: "${ctx}/resource/resourceDetail",
                 type: "GET",
