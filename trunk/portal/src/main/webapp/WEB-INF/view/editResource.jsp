@@ -300,7 +300,7 @@
                                     </div>
                                     <div style="overflow: hidden;display: none" class="select-local">
                                         <div class="col-md-4 col-md-offset-2" style="font-size: 18px" id="fileContainerTree"></div>
-                                        <div id="fileDescribeDiv" class="col-md-5 tagsinput" style="border: 1px solid grey">
+                                        <div id="fileDescribeDiv" class="col-md-5 tagsinput" style="border: 1px solid grey;display: none" >
 
 
                                         </div>
@@ -990,6 +990,7 @@
                         for (var i=0;i<filePathList.length;i++){
                             $("#fileDescribeDiv").append("<span class='tag fileTag' style='display: inline-block;margin-right: 5px' name="+ filePathList[i]+"><span class='filePathClass'>"+filePathList[i] +"</span> &nbsp;&nbsp; <a href='javascript:void(0)' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
                         }
+                        $("#fileDescribeDiv").show();
                         $(".select-database").hide();
                         $(".select-local").show();
 

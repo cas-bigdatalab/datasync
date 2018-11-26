@@ -638,7 +638,7 @@
 
         //删除文件数据源
         function deleteData(dataId) {
-            bootbox.confirm("<span style='font-size: 16px'>确认要删除此条记录吗</span>",function (r) {
+            bootbox.confirm("<span style='font-size: 16px'>确认要删除此条记录吗?</span>",function (r) {
                 if(r){
                     $.ajax({
                         type: 'post',
