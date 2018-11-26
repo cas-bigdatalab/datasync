@@ -22,6 +22,16 @@ public class AuditMessage {
     private String auditCom;
     @Field("auditTime")
     private Date auditTime;
+    @Field("auditPerson")
+    private String auditPerson;
+
+    public String getAuditPerson() {
+        return auditPerson;
+    }
+
+    public void setAuditPerson(String auditPerson) {
+        this.auditPerson = auditPerson;
+    }
 
     public String getId() {
         return id;

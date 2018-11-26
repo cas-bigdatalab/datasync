@@ -626,7 +626,8 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping(value="audit")
-    public JSONObject audit(String resourceId,String status,String auditContent){
+    public JSONObject audit(HttpSession session,String resourceId,String status,String auditContent){
+        String auditPerson = session.getAttribute("userName").toString();
         JSONObject jo = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setStatus(status);
@@ -634,6 +635,7 @@ public class ResourceController {
         auditMessage.setAuditTime(new Date());
         auditMessage.setAuditCom(auditContent);
         auditMessage.setResourceId(resourceId);
+        auditMessage.setAuditPerson(auditPerson);
         auditMessageService.save(auditMessage);
         String returnId = resourceService.save(resource);
         if(StringUtils.isNotBlank(resourceId)){
