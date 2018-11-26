@@ -384,10 +384,9 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectCodeForAddUserDialog">
-                                主题库
+                                数据节点
                             </label>
                             <div class="col-md-9">
-                                <%--<input type="text" class="form-control" placeholder="请输入专题库代码"  id="subjectCode" name="subjectCode" required="required">--%>
                                     <select class='form-control' name='subjectCodeForAddUserDialog' id='subjectCodeForAddUserDialog' placeholder="请选择数据节点">
                                         <option value="" disabled selected>请选择数据节点</option>
                                         <c:forEach  var="subject"  items="${subjectList}">
@@ -463,7 +462,7 @@
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectCodeForUpdateUserDialog">
-                                主题库
+                                数据节点
                             </label>
                             <div class="col-md-9">
                                 <select class='form-control' name='subjectCodeForUpdateUserDialog' id='subjectCodeForUpdateUserDialog'>
