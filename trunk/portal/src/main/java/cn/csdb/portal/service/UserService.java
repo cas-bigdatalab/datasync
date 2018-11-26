@@ -61,7 +61,7 @@ public class UserService {
      *
      * @param:
      * @return:
-     * @auther: Administrator
+     * @auther: xiajl
      * @date:   2018/11/5 15:16
      */
     @Transactional(readOnly = true)
@@ -69,6 +69,19 @@ public class UserService {
         return userDao.getAll();
     }
 
+
+    /**
+     * Function Description: 获取指定角色的所有的用户
+     *
+     * @param:
+     * @return:
+     * @auther: xiajl
+     * @date:   2018/11/26 14:09
+     */
+    @Transactional(readOnly = true)
+    public List<User> getAllByRole(String role){
+        return userDao.getAllbyRole(role);
+    }
 
     public long queryLoginId(String loginId)
     {

@@ -506,6 +506,7 @@
                     window.location.href="${ctx}/dataUpload"
                 },
                 error:function () {
+                    console.log("请求失败")
                 }
             })
 
@@ -543,6 +544,7 @@
                     window.location.href="${ctx}/dataUpload"
                 },
                 error:function () {
+                    console.log("请求失败")
                 }
             })
         }

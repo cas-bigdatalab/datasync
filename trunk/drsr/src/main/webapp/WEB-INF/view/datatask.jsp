@@ -260,7 +260,7 @@
                     {{if value.status  == 0}}
                      <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                     {{else if value.status  != 0}}
-                    <button type="button" class="btn  edit-data btn-xs blue" style="margin-left: 57px"
+                    <button type="button" class="btn  edit-data btn-xs blue" style="margin-left: 59px"
                             onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                     {{/if}}
 
@@ -329,6 +329,7 @@
         $("#upload-list").delegate(".upload-data","click",function () {
             $(this).css("background-color","dimgrey");
             $(this).attr("disabled","disabled");
+
             var souceID = $(this).attr("keyIdTd");
             var keyID = souceID + new Date().getTime();
             var keyType=$(this).attr("keyDataType");
@@ -353,6 +354,7 @@
                                     if(keyType == "mysql"){
                                         if(data =="1"){
                                             $("."+souceID).text("已导入")
+
                                             return
                                         }else {
                                             $("."+souceID).text("导入失败")
@@ -361,6 +363,7 @@
                                     }else {
                                         if(data =="1"){
                                             $("."+souceID).text("已上传")
+
                                             return
                                         }else {
                                             $("."+souceID).text("上传失败")
@@ -448,7 +451,6 @@
                             tableConfiguration2(1,dataSourceName,dataSourceStatus);
                         },
                         error:function () {
-                            toastr["error"]("删除失败");
                             console.log("请求失败");
                         }
                     })
@@ -641,7 +643,7 @@
                     });
                 },
                 error:function () {
-                    $(".table-message").html("请求失败");
+                    console.log("请求失败")
                 }
             })
         }

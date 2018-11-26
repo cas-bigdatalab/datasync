@@ -95,4 +95,15 @@ public class GroupServiceTest {
         logger.info(StringUtils.join(result,","));
     }
 
+
+    @Test
+    public void testFindAllByRole(){
+        String role ="普通用户";
+        List<User> list = userDao.getAllbyRole(role);
+        logger.info("\n\n==================================");
+        logger.info(String.valueOf(list.size()));
+        for (User user : list ){
+            logger.info(user.getUserName() +"--"  +user.getRole() +"--" +user.getGroups());
+        }
+    }
 }
