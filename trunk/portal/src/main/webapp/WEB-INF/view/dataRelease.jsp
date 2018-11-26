@@ -80,12 +80,12 @@
                 <thead>
                 <tr>
                     <th width="7%">编号</th>
-                    <th width="20%">数据集名称</th>
+                    <th width="22%">数据集名称</th>
                     <th width="13%">类型</th>
                    <%-- <th width="10%">来源位置</th>--%>
-                    <th width="18%">发布时间</th>
-                    <th width="14%">状态</th>
-                    <th width="28%">操作</th>
+                    <th width="20%">发布时间</th>
+                    <th width="16%">状态</th>
+                    <th width="22%">操作</th>
                 </tr>
                 </thead>
                 <tbody id="bd-data">
@@ -628,7 +628,7 @@
                     $("#auditModal").modal("show")
                 },
                 error:function () {
-                    console.log("请求出错")
+                    console.log("请求失败")
                 }
             })
 
@@ -653,7 +653,7 @@
                     tableConfiguration2(1,"","","")
                 },
                 error:function () {
-                    console.log("请求出错")
+                    console.log("请求失败")
                 }
             })
 
@@ -669,7 +669,7 @@
                     tableConfiguration2(1,"","","")
                 },
                 error:function () {
-                    console.log("请求出错")
+                    console.log("请求失败")
                 }
             })
         }
@@ -927,7 +927,6 @@
                             tableConfiguration2(1,publicType,resourceState,resourceName);
                         },
                         error:function () {
-                            toastr["error"]("删除失败");
                             console.log("请求失败");
                         }
                     })

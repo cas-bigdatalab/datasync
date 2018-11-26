@@ -260,7 +260,7 @@
                     {{if value.status  == 0}}
                      <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                     {{else if value.status  != 0}}
-                    <button type="button" class="btn  edit-data btn-xs blue" style="margin-left: 57px"
+                    <button type="button" class="btn  edit-data btn-xs blue" style="margin-left: 59px"
                             onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                     {{/if}}
 
@@ -448,7 +448,6 @@
                             tableConfiguration2(1,dataSourceName,dataSourceStatus);
                         },
                         error:function () {
-                            toastr["error"]("删除失败");
                             console.log("请求失败");
                         }
                     })
@@ -641,7 +640,7 @@
                     });
                 },
                 error:function () {
-                    $(".table-message").html("请求失败");
+                    console.log("请求失败")
                 }
             })
         }
