@@ -43,7 +43,7 @@ public class GroupController {
     public String list(HttpServletRequest request, Model model){
         logger.info("进入用户组列表页面");
 
-        List<User> list = userService.getAll();
+        List<User> list = userService.getAllByRole("普通用户");
         model.addAttribute("list",list);
 
         List<Group> groupList = groupService.getGroupList();
@@ -51,7 +51,6 @@ public class GroupController {
 
         List<Subject> subjectList = subjectMgmtService.getSubjectCodeList();
         model.addAttribute("subjectList", subjectList);
-
 
         return "group";
     }

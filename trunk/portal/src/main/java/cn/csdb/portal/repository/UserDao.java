@@ -57,6 +57,7 @@ public class UserDao {
     private void addUserToGroup(String userId, String groupName)
     {
         //从t_group表中查找出名字为groupName的group，加入userName到它的users中去，之后把group再写入t_group表中
+        logger.info("userId = " + userId + ", groupName = " + groupName);
         DBObject dBObject = QueryBuilder.start().and("groupName").is(groupName).get();
         Query query = new BasicQuery(dBObject);
         Group group = mongoTemplate.findOne(query, Group.class);
@@ -65,8 +66,9 @@ public class UserDao {
         {
             users = new ArrayList<String>();
         }
-        logger.info("groupName = " + groupName + ", users = " + users);
+        logger.info("groupName = " + groupName + ", users before add new user, users = " + users);
         users.add(userId);
+        logger.info("groupName = " + groupName + ", users after added new user, users = " + users);
         group.setUsers(users);
         mongoTemplate.save(group);
     }
@@ -79,11 +81,16 @@ public class UserDao {
     private void dropUserFromGroup(String userId, String groupName)
     {
         //从t_group表中查找出名字为groupName的group，加入userName到它的users中去，之后把group再写入t_group表中
+        logger.info("userId = " + userId + ", groupName = " + groupName);
         DBObject dBObject = QueryBuilder.start().and("groupName").is(groupName).get();
         Query query = new BasicQuery(dBObject);
         Group group = mongoTemplate.findOne(query, Group.class);
         List<String> users = group.getUsers();
-        users.remove(userId);
+        logger.info("groupName = " + groupName + ", users before remove new user, users = " + users);
+        if (users != null) {
+            users.remove(userId);
+        }
+        logger.info("groupName = " + groupName + ", users after removed new user, users = " + users);
         group.setUsers(users);
         mongoTemplate.save(group);
     }
@@ -218,8 +225,8 @@ public class UserDao {
             queryBuilder = QueryBuilder.start();
         }
 
-        //dbObject = queryBuilder.and("role").is("普通用户").get();
-        dbObject = queryBuilder.get();
+        dbObject = queryBuilder.and("role").is("普通用户").get();
+        //dbObject = queryBuilder.get();
 
         Query query = new BasicQuery(dbObject);
         long totalUsers = mongoTemplate.count(query, "t_user");
@@ -242,6 +249,15 @@ public class UserDao {
         int deletedUserCnt = 0;
         DBObject dbObject = QueryBuilder.start().and("_id").is(id).get();
         Query query = new BasicQuery(dbObject);
+
+        User user = mongoTemplate.findOne(query, User.class);
+        String[] groupArr = user.getGroups().split(",");
+        String userId = user.getId();
+        for (String groupName : groupArr)
+        {
+            dropUserFromGroup(userId, groupName);
+        }
+
         WriteResult writeResult = mongoTemplate.remove(query, "t_user");
         deletedUserCnt = writeResult.getN();
 
@@ -327,6 +343,29 @@ public class UserDao {
     }
 
     /**
+     * Function Description: 获取某指定角色类的所有用户
+     *
+     * @param:
+     * @return:
+     * @auther: xiajl
+     * @date:   2018/11/26 13:51
+     */
+
+    public List<User> getAllbyRole(String roleName){
+        QueryBuilder queryBuilder = QueryBuilder.start();
+
+        if (StringUtils.isNotEmpty(roleName)){
+            queryBuilder = queryBuilder.and("role").is(roleName);
+        }
+        DBObject dbObject = queryBuilder.get();
+        BasicQuery basicQuery = new BasicQuery(dbObject);
+        List<User> list = mongoTemplate.find(basicQuery,User.class);
+        return list;
+    }
+
+
+
+    /**
      * Function Description: 根据用户组名称获取此组中的所有用户
      *
      * @param:
@@ -369,14 +408,16 @@ public class UserDao {
     public void deleteGroupName(String userid, String groupName){
         String id = userid.replace("[","").replace("]","").replace("\"","");
         User user = getUserById(id);
-        String groups = user.getGroups();
-        List<String> list = Arrays.asList(org.apache.commons.lang3.StringUtils.split(groups,","));
-        ArrayList<String> result = new ArrayList<String>(list);
-        if (result.contains(groupName))
-            result.remove(groupName);
-        String str = org.apache.commons.lang3.StringUtils.join(result,",");
-        user.setGroups(str);
-        updateUser(user);
+        if (user != null) {
+            String groups = user.getGroups();
+            List<String> list = Arrays.asList(org.apache.commons.lang3.StringUtils.split(groups, ","));
+            ArrayList<String> result = new ArrayList<String>(list);
+            if (result.contains(groupName))
+                result.remove(groupName);
+            String str = org.apache.commons.lang3.StringUtils.join(result, ",");
+            user.setGroups(str);
+            updateOnlyUser(user);
+        }
     }
 
     /**
@@ -397,6 +438,22 @@ public class UserDao {
             result.add(groupName);
         String str = org.apache.commons.lang3.StringUtils.join(result,",");
         user.setGroups(str);
-        updateUser(user);
+        updateOnlyUser(user);
     }
+
+    /**
+     * Function Description: 只更新用户表信息，不修改组信息
+     *
+     * @param:
+     * @return:
+     * @auther: xiajl
+     * @date:   2018/11/26 15:31
+     */
+    public int updateOnlyUser(User user)
+    {
+        int updatedUserCnt = 1;
+        mongoTemplate.save(user);
+        return updatedUserCnt;
+    }
+
 }

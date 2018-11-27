@@ -131,6 +131,7 @@ public class UserController {
         SimpleDateFormat sdf =new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
         user.setCreateTime(sdf.format(new Date()));
         user.setStat(1);
+        user.setRole("普通用户");
         int updatedUserCnt = userService.updateUser(user);
         logger.info("user cnt updated : updatedUserCnt = " + updatedUserCnt);
 
