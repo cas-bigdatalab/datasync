@@ -61,6 +61,12 @@ public class DataTaskService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else{
+            try {
+                fw = new FileWriter(file, true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         PrintWriter pw = new PrintWriter(fw);
         pw.println("=========================导出流程开始========================");
@@ -136,13 +142,14 @@ public class DataTaskService {
             logger.error("导出失败，result = false" + "\n");
             pw.println("=========================导出流程结束========================" + "\n");
             logger.info("=========================导出流程结束========================" + "\n");
-        }
-        try {
-            fw.flush();
-            pw.close();
-            fw.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        }finally {
+            try {
+                fw.flush();
+                pw.close();
+                fw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return jsonObject;
     }
@@ -200,6 +207,12 @@ public class DataTaskService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else{
+            try{
+                fw = new FileWriter(file1, true);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
         PrintWriter pw = new PrintWriter(fw);
         ZipArchiveOutputStream outputStream = null;
@@ -237,10 +250,6 @@ public class DataTaskService {
             try {
                 outputStream.finish();
                 outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
                 fw.flush();
                 pw.close();
                 fw.close();

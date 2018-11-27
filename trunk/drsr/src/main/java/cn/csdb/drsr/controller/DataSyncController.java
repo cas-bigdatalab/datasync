@@ -79,6 +79,12 @@ public class DataSyncController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }else{
+            try{
+                fw = new FileWriter(file, true);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
         PrintWriter pw = new PrintWriter(fw);
         pw.println("=========================上传流程开始========================" + "\n");
