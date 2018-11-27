@@ -24,7 +24,7 @@ public class DataTaskServiceTest {
 
     @Test
     public void test(){
-        DataTask task = dataTaskService.get(1);
+        DataTask task = dataTaskService.get("1");
         JSONObject jsonObject = new JSONObject();
         jsonObject = dataTaskService.executeTask(task);
         logger.info("\n\njsonObject= " +jsonObject +  "\n");
