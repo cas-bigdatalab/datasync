@@ -57,30 +57,31 @@
             <!--查询条件 -->
             <div class="row">
                 <form class="form-inline" style="margin-bottom: 0px">
-                    <div class="form-group">
+
                         <label style="padding-left: 10px;">数据集名称:</label>
                         <input type="text" class="form-control" id="resourceName" placeholder="请输入数据集名称">
-                    </div>
-                    <div class="form-group">
+
+
                         <label style="padding-left: 10px;">数据类型:</label>
                         <select id="resourcePublicType" class="form-control" style="width: 120px">
                             <option value="">全部</option>
                             <option value="mysql">mysql</option>
                             <option value="file">file</option>
                         </select>
-                    </div>
-                    <div class="form-group">
+
+
                         <label style="padding-left: 10px;">状态:</label>
                         <select id="resourceState" class="form-control" style="width: 120px">
                             <option value="">全部</option>
-                            <option value="审核通过">审核通过</option>
                             <option value="待审核">待审核</option>
+                            <option value="未完成">未完成</option>
+                            <option value="审核通过">审核通过</option>
                             <option value="审核未通过">审核未通过</option>
                         </select>
-                    </div>
+
                     <button type="button" class="btn blue" style="margin-left: 20px" id="seachResource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                     <shiro:hasRole name="admin">
-                    <button type="button" class="btn green" style="margin-left: 20px" onclick="newRelease()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据发布
+                    <button type="button" class="btn green" style="float: right;margin-right: 15px" onclick="newRelease()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据发布
                     </button>
                     </shiro:hasRole>
                 </form>
@@ -133,13 +134,19 @@
                             <label class="col-sm-3 control-label">数据集名称:</label>
                             <div class="col-sm-8 modediv" id="rel-title"></div>
                         </div>
+                        <div class="form-group" style="word-break: break-all">
+                            <label class="col-sm-3 control-label">发布类型:</label>
+                            <div class="col-sm-8 modediv" id="rel-publicType"></div>
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">简介:</label>
                             <div class="col-sm-8 modediv" id="rel-introduction" style="work-break:break-all"></div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">图片地址:</label>
-                            <div class="col-sm-8 modediv" id="rel-imagePath"></div>
+                            <label class="col-sm-3 control-label">发布图片:</label>
+                            <div class="col-sm-8 modediv" id="rel-imagePath">
+                                <img src="" alt="">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">资源关键词:</label>
@@ -150,37 +157,59 @@
                             <div class="col-sm-8 modediv" id="rel-catalogId"></div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-3 control-label">开始时间:</label>
+                            <div class="col-sm-8 modediv" id="rel-startTime"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">结束时间:</label>
+                            <div class="col-sm-8 modediv" id="rel-endTime"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">版权声明:</label>
+                            <div class="col-sm-8 modediv" id="rel-createdByOrganization"></div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-3 control-label">状态:</label>
                             <div class="col-sm-8 modediv" id="rel-status"></div>
                         </div>
-                        <div class="form-group">
+                       <%-- <div class="form-group">
                             <label class="col-sm-3 control-label">资源填写状态:</label>
                             <div class="col-sm-8 modediv" id="rel-resState"></div>
-                        </div>
-                        <div class="form-group" style="word-break: break-all">
-                            <label class="col-sm-3 control-label">发布类型:</label>
-                            <div class="col-sm-8 modediv" id="rel-publicType"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">发布内容:</label>
-                            <div class="col-sm-8 modediv" id="rel-publicContent"></div>
-                        </div>
+                        </div>--%>
+
+
                         <%--<div class="form-group">
                             <label class="col-sm-3 control-label">字段注释:</label>
                             <div class="col-sm-8 modediv" id="rel-fieldComs"></div>
                         </div>--%>
-                        <div class="form-group">
+                        <%--<div class="form-group">
                             <label class="col-sm-3 control-label">数据节点代码:</label>
                             <div class="col-sm-8 modediv" id="rel-subjectCode"></div>
+                        </div>--%>
+                        <hr style="border-bottom:1px dashed #111;">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">创建人员:</label>
+                            <div class="col-sm-8 modediv" id="rel-createdBy"></div>
                         </div>
-                        <hr>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">创建者机构:</label>
                             <div class="col-sm-8 modediv" id="rel-createOrgnization"></div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-3 control-label">创建日期:</label>
+                            <div class="col-sm-8 modediv" id="rel-creationDate"></div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-3 control-label">发布者机构:</label>
                             <div class="col-sm-8 modediv" id="rel-publishOrgnization"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">发布者邮件:</label>
+                            <div class="col-sm-8 modediv" id="rel-email"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">发布者电话:</label>
+                            <div class="col-sm-8 modediv" id="rel-phoneNum"></div>
                         </div>
 
                     <%--<div class="form-group">
@@ -191,46 +220,21 @@
                         <label class="col-sm-3 control-label">格式:</label>
                         <div class="col-sm-8 modediv" id="rel-dataFormat"></div>
                     </div>--%>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">开始时间:</label>
-                        <div class="col-sm-8 modediv" id="rel-startTime"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">结束时间:</label>
-                        <div class="col-sm-8 modediv" id="rel-endTime"></div>
-                    </div>
+
                     <div class="form-group">
                         <label class="col-sm-3 control-label">最新发布日期:</label>
                         <div class="col-sm-8 modediv" id="rel-updateDate"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">创建日期:</label>
-                        <div class="col-sm-8 modediv" id="rel-creationDate"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">版权声明:</label>
-                        <div class="col-sm-8 modediv" id="rel-createdByOrganization"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">创建人员:</label>
-                        <div class="col-sm-8 modediv" id="rel-createdBy"></div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">发布者邮件:</label>
-                        <div class="col-sm-8 modediv" id="rel-email"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">发布者电话:</label>
-                        <div class="col-sm-8 modediv" id="rel-phoneNum"></div>
                     </div>
 
                     <%--<div class="form-group">
                         <label class="col-sm-3 control-label">引用格式:</label>
                         <div class="col-sm-8 modediv" id="rel-citation"></div>
                     </div>--%>
-                        <hr>
+                        <hr style="border-bottom:1px dashed #111;">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">实体表名:</label>
+                            <div class="col-sm-8 modediv" id="rel-publicContent"></div>
+                        </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">总存储量:</label>
                         <div class="col-sm-8 modediv" id="rel-toMemorySize"></div>
@@ -280,68 +284,86 @@
                             <label class="col-sm-3 control-label">数据集名称:</label>
                             <div class="col-sm-8 modediv" id="file-title"></div>
                         </div>
+                        <div class="form-group" style="word-break: break-all">
+                            <label class="col-sm-3 control-label">发布类型:</label>
+                            <div class="col-sm-8 modediv" id="file-publicType"></div>
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">简介:</label>
                             <div class="col-sm-8 modediv" id="file-introduction"style="work-break:break-all"></div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">图片地址:</label>
+                            <label class="col-sm-3 control-label">发布图片:</label>
                             <div class="col-sm-8 modediv" id="file-imagePath"></div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">资源关键词:</label>
                             <div class="col-sm-8 modediv" id="file-keyword"></div>
                         </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">分类目录ID:</label>
-                        <div class="col-sm-8 modediv" id="file-catalogId"></div>
-                    </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">分类目录ID:</label>
+                            <div class="col-sm-8 modediv" id="file-catalogId"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">开始时间:</label>
+                            <div class="col-sm-8 modediv" id="file-startTime"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">结束时间:</label>
+                            <div class="col-sm-8 modediv" id="file-endTime"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">版权声明:</label>
+                            <div class="col-sm-8 modediv" id="file-createdByOrganization"></div>
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">状态:</label>
                             <div class="col-sm-8 modediv" id="file-status"></div>
                         </div>
-                        <div class="form-group">
+                        <%--<div class="form-group">
                             <label class="col-sm-3 control-label">资源填写状态:</label>
                             <div class="col-sm-8 modediv" id="file-resState"></div>
-                        </div>
-                        <div class="form-group" style="word-break: break-all">
-                            <label class="col-sm-3 control-label">发布类型:</label>
-                            <div class="col-sm-8 modediv" id="file-publicType"></div>
-                        </div>
+                        </div>--%>
+
                         <%--<div class="form-group">
                             <label class="col-sm-3 control-label">发布内容:</label>
                             <div class="col-sm-8 modediv" id="file-publicContent"></div>
                         </div>--%>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">文件路径:</label>
-                            <div class="col-sm-8 modediv" id="file-filePath"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">文件名称:</label>
-                            <div class="col-sm-8 modediv" id="file-fileName"></div>
-                        </div>
+
                         <%--<div class="form-group">
                             <label class="col-sm-3 control-label">字段注释:</label>
                             <div class="col-sm-8 modediv" id="file-fieldComs"></div>
                         </div>--%>
-                        <div class="form-group">
+                        <%--<div class="form-group">
                             <label class="col-sm-3 control-label">数据节点代码:</label>
                             <div class="col-sm-8 modediv" id="file-subjectCode"></div>
+                        </div>--%>
+                        <hr style="border-bottom:1px dashed #111;">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">创建人员:</label>
+                            <div class="col-sm-8 modediv" id="file-createdBy"></div>
                         </div>
-                        <hr>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">创建者机构:</label>
                             <div class="col-sm-8 modediv" id="file-createOrgnization"></div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-3 control-label">创建日期:</label>
+                            <div class="col-sm-8 modediv" id="file-creationDate"></div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-3 control-label">发布者机构:</label>
                             <div class="col-sm-8 modediv" id="file-publishOrgnization"></div>
                         </div>
-
-
-
-
-
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">发布者邮件:</label>
+                            <div class="col-sm-8 modediv" id="file-email"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">发布者电话:</label>
+                            <div class="col-sm-8 modediv" id="file-phoneNum"></div>
+                        </div>
                     <%--<div class="form-group">
                         <label class="col-sm-3 control-label">分类:</label>
                         <div class="col-sm-8 modediv" id="file-taxonomy"></div>
@@ -350,49 +372,28 @@
                         <label class="col-sm-3 control-label">格式:</label>
                         <div class="col-sm-8 modediv" id="file-dataFormat"></div>
                     </div>--%>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">开始时间:</label>
-                        <div class="col-sm-8 modediv" id="file-startTime"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">结束时间:</label>
-                        <div class="col-sm-8 modediv" id="file-endTime"></div>
-                    </div>
+
                     <div class="form-group">
                         <label class="col-sm-3 control-label">最新发布日期:</label>
                         <div class="col-sm-8 modediv" id="file-updateDate"></div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">创建日期:</label>
-                        <div class="col-sm-8 modediv" id="file-creationDate"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">版权声明:</label>
-                        <div class="col-sm-8 modediv" id="file-createdByOrganization"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">创建人员:</label>
-                        <div class="col-sm-8 modediv" id="file-createdBy"></div>
-                    </div>
-
                     <%--<div class="form-group">
                         <label class="col-sm-3 control-label">机构:</label>
                         <div class="col-sm-8 modediv" id="file-organizationName"></div>
                     </div>--%>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">发布者邮件:</label>
-                        <div class="col-sm-8 modediv" id="file-email"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">发布者电话:</label>
-                        <div class="col-sm-8 modediv" id="file-phoneNum"></div>
-                    </div>
-
                     <%--<div class="form-group">
                         <label class="col-sm-3 control-label">引用格式:</label>
                         <div class="col-sm-8 modediv" id="file-citation"></div>
                     </div>--%>
-                        <hr>
+                        <hr style="border-bottom:1px dashed #111;">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">实体文件路径:</label>
+                            <div class="col-sm-8 modediv" id="file-filePath"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">实体文件名称:</label>
+                            <div class="col-sm-8 modediv" id="file-fileName"></div>
+                        </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">总存储量:</label>
                         <div class="col-sm-8 modediv" id="file-toMemorySize"></div>
@@ -490,40 +491,65 @@
         <td id="{{value.dataTaskId}}">审核未通过</td>
         {{else if value.status == '2'}}
         <td id="{{value.dataTaskId}}">审核通过</td>
+        {{else if value.status == '-1'}}
+        <td id="{{value.dataTaskId}}">未完成</td>
         {{/if}}
 
         <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>
         <td>
-            <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')"><i
+            <%--{{if value.status == '-1'}}
+            <button type="button" class="btn  edit-data btn-xs blue" style="margin-right: 66px"
+                    onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')"><i
                     class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
             </button>
-<shiro:hasRole name="admin">
-            <button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;编辑
+            {{else if value.status != '-1'}}
+            <button type="button" class="btn  edit-data btn-xs blue"
+                    onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')"><i
+                    class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
             </button>
-</shiro:hasRole>
+            {{/if}}--%>
+            <shiro:hasRole name="admin">
+                    <button type="button" class="btn  edit-data btn-xs blue"
+                            onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')"><i
+                            class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
+                    </button>
+                        <button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;编辑
+                        </button>
+            </shiro:hasRole>
 
-    <shiro:hasRole name="admin">
-            <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.id}}');"><i
-                    class="glyphicon glyphicon-trash"></i>&nbsp;删除
-            </button>
-    </shiro:hasRole>
-<shiro:hasRole name="root">
-            {{if value.status == '1'}}
-                <button type="button" class="btn green btn-xs exportSql"
-                       onclick="auditRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;审核
-                </button>
-            {{/if}}
-            {{if value.status == '0'}}
-            <button type="button" class="btn green btn-xs exportSql"
-                    onclick="auditRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;审核
-            </button>
-            {{/if}}
-            {{if value.status == '2'}}
-            <button type="button" class="btn red btn-xs exportSql"
-                    onclick="disableRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;停用
-            </button>
-            {{/if}}
-</shiro:hasRole>
+            <shiro:hasRole name="admin">
+                    <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.id}}');"><i
+                            class="glyphicon glyphicon-trash"></i>&nbsp;删除
+                    </button>
+            </shiro:hasRole>
+            <shiro:hasRole name="root">
+                {{if value.status == '-1'}}
+                        <button type="button" class="btn  edit-data btn-xs blue" style="margin-right: 66px"
+                                onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')"><i
+                                class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
+                        </button>
+                        {{else if value.status != '-1'}}
+                        <button type="button" class="btn  edit-data btn-xs blue"
+                                onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')"><i
+                                class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
+                        </button>
+                        {{/if}}
+                        {{if value.status == '1'}}
+                            <button type="button" class="btn green btn-xs exportSql"
+                                   onclick="auditRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;审核
+                            </button>
+                        {{/if}}
+                        {{if value.status == '0'}}
+                        <button type="button" class="btn green btn-xs exportSql"
+                                onclick="auditRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;审核
+                        </button>
+                        {{/if}}
+                        {{if value.status == '2'}}
+                        <button type="button" class="btn red btn-xs exportSql"
+                                onclick="disableRelease('{{value.id}}')" ><i class="fa fa-edit"></i>&nbsp;停用
+                        </button>
+                        {{/if}}
+            </shiro:hasRole>
         </td>
     </tr>
     {{/each}}
@@ -534,7 +560,7 @@
         <form class="form-horizontal">
             <div class="form-group">
                 <label  class="col-sm-3 control-label">审核人姓名&nbsp;&nbsp;:</label>
-                <div class="col-sm-9">aaaa</div>
+                <div class="col-sm-9">{{value.auditPerson}}</div>
             </div>
             <div class="form-group">
                 <label  class="col-sm-3 control-label">审核时间&nbsp;&nbsp;:</label>
@@ -722,14 +748,14 @@
                     resourceId:id
                 },
                 success: function (data) {
-
+                    console.log(JSON.parse(data))
                     var dataList = JSON.parse(data).resource;
                     console.log(dataList)
                     if(type == "mysql" || type =="" ){
                         $("#rel-dataSourceId").html(id)
                         $("#rel-email").html(dataList.email)
                         $("#rel-catalogId").html(dataList.catalogId)
-                        $("#rel-imagePath").html(dataList.imagePath)
+                        $("#rel-imagePath img").attr("src","${ctx}/"+dataList.imagePath+"_cut.jpg")
                         $("#rel-status").html(tabStatus)
                         $("#rel-resState").html(dataList.resState)
                         $("#rel-publicType").html("mysql")

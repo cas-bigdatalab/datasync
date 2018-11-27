@@ -94,11 +94,14 @@
                         <div class="col-md-9 dataHead2" id="fileTitle" style="display: none"></div>
                         <div class="col-md-12" style="margin: 0 -15px">
                             <div class="col-md-2" style="margin: 0 -15px">选择文件</div>
-                            <div class="col-md-10" style="margin-top: 6px">
+                            <div class="col-md-5" style="margin-top: 6px">
                                 <div id="jstree_show_edit"></div>
                             <%--
                                 <div class="row" id="file-table"></div>
 --%>
+                            </div>
+                            <div class="col-md-5" style="margin-top: 6px">
+
                             </div>
                         </div>
                         <div class="col-md-12 ">

@@ -12,8 +12,8 @@ public class ResCatalog_Mongo {
 
     @Id
     private String objectId;
-    @Field("id")
-    private Integer id;
+    @Field("rid")
+    private Integer rid;
     @Field("parentid")
     private Integer parentid;
     @Field("name")
@@ -35,12 +35,12 @@ public class ResCatalog_Mongo {
         this.objectId = objectId;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getRid() {
+        return rid;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setRid(Integer rid) {
+        this.rid = rid;
     }
 
     public Integer getParentid() {

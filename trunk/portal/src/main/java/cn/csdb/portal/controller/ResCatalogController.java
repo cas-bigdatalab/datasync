@@ -43,7 +43,7 @@ public class ResCatalogController {
             JSONObject jo = ja.getJSONObject(i);
             ResCatalog_Mongo resCatalog = new ResCatalog_Mongo();
             if (jo.get("id").toString().indexOf("_") < 0) {
-                resCatalog.setId(Integer.parseInt(jo.get("id").toString()));
+                resCatalog.setRid(Integer.parseInt(jo.get("id").toString()));
             }
             resCatalog.setName(jo.get("text").toString());
             resCatalog.setLevel(Integer.parseInt(jo.get("level").toString()));

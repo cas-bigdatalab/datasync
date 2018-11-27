@@ -1,5 +1,6 @@
 package cn.csdb.portal.service;
 
+import cn.csdb.portal.repository.DataSrcDao;
 import cn.csdb.portal.repository.ResourceDao;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,9 @@ public class ResourceService {
 
     @Resource
     private ResourceDao resourceDao;
+
+    @Resource
+    private DataSrcDao dataSrcDao;
 
     /**
      * Function Description: 保存资源
@@ -124,6 +128,12 @@ public class ResourceService {
     }
 
     public cn.csdb.portal.model.Resource getById(String resourceId){
+
+
         return resourceDao.getById(resourceId);
+    }
+
+    public int getRecordCount(String host, String port, String userName, String password, String databaseName, List<String> tableName) {
+        return dataSrcDao.getRecordCount( host,  port,  userName,  password,  databaseName,  tableName);
     }
 }

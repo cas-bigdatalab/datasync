@@ -94,7 +94,9 @@ public class DataSyncController {
                 }
             }
             logger.info("ftpDataTaskId"+dataTask.getDataTaskId()+"上传状态:" + result + "\n");
+            logger.info("=========================上传流程结束========================" + "\n");
             ftpUtil.disconnect();
+            logger.info("=========================导入流程开始========================" + "\n");
             if(result.equals("Upload_New_File_Success")||result.equals("Upload_From_Break_Succes")){
                 String dataTaskString = JSONObject.toJSONString(dataTask);
                 JSONObject requestJSON = new JSONObject();
@@ -126,22 +128,22 @@ public class DataSyncController {
                         dataTask.setStatus("1");
                         dataTaskService.update(dataTask);
                         logger.info("导入成功"+ "\n");
-                        logger.info("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
+                        logger.info("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                         return 1;
                     }else{
                         logger.info("导入失败"+ "\n");
-                        logger.info("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
+                        logger.info("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                         return 0;
                     }
                 } catch (IOException e) {
                     logger.info("导入失败"+ "\n");
                     logger.error("导入异常IOException:"+e+ "\n");
-                    logger.info("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
+                    logger.info("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                     e.printStackTrace();
                 }
             }else{
                 logger.info("导入失败"+ "\n");
-                logger.info("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
+                logger.info("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                 return 0;
             }
         } catch (IOException e) {
