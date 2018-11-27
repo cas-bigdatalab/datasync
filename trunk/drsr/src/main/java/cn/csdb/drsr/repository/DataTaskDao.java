@@ -156,5 +156,15 @@ public class DataTaskDao {
         return generatedId;
     }
 
+    public boolean hasDatataskName(String datataskName){
+        String sql = "select * from t_datatask where dataTaskName=?";
+        List<DataTask> list = jdbcTemplate.query(sql, new Object[]{datataskName}, new DataTaskMapper());
+        if(list == null||list.size() == 0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 
 }

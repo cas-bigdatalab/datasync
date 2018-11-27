@@ -244,4 +244,19 @@ public class DataTaskController {
         jsonObject.put("result", dataSrcService.validateSql(sqlStr, dataSourceId));
         return jsonObject;
     }
+
+    /**
+     *
+     * Function Description: 判断是否包含datataskname
+     *
+     * @param: [datataskName]
+     * @return: boolean
+     * @auther: hw
+     * @date: 2018/11/27 14:51
+     */
+    @ResponseBody
+    @RequestMapping("hasDatataskName")
+    public boolean hasDatataskName(String datataskName){
+        return dataTaskService.hasDatataskName(datataskName);
+    }
 }
