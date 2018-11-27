@@ -121,9 +121,10 @@ public class DataTaskController {
                                    @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
                                    @RequestParam(name = "datataskType", required = false) String datataskType,
                                    @RequestParam(name = "status", required = false) String status){
+        String subjectCode = configPropertyService.getProperty("SubjectCode");
         JSONObject jsonObject = new JSONObject();
-        List<DataTask> dataTasks = dataTaskService.getDatataskByPage((pageNo-1)*pageSize,pageSize,datataskType,status);
-        int totalCount = dataTaskService.getCount(datataskType,status);
+        List<DataTask> dataTasks = dataTaskService.getDatataskByPage((pageNo-1)*pageSize,pageSize,datataskType,status, subjectCode);
+        int totalCount = dataTaskService.getCount(datataskType,status,subjectCode);
         jsonObject.put("dataTasks",dataTasks);
         jsonObject.put("totalCount",totalCount);
         jsonObject.put("pageNum",totalCount%pageSize==0?totalCount/pageSize:totalCount/pageSize+1);
@@ -182,6 +183,7 @@ public class DataTaskController {
                                            String dataRelTableList,
                                            String sqlTableNameEnList,
                                            @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList) {
+        String subjectCode = configPropertyService.getProperty("SubjectCode");
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);
@@ -192,6 +194,7 @@ public class DataTaskController {
         datatask.setCreateTime(new Date());
         datatask.setDataTaskType("mysql");
         datatask.setStatus("0");
+        datatask.setSubjectCode(subjectCode);
         Calendar rightNow = Calendar.getInstance();
         StringBuffer sb = new StringBuffer();
         Format dateFormat = new SimpleDateFormat("MMddHHmmssS");
@@ -208,7 +211,7 @@ public class DataTaskController {
     @ResponseBody
     @RequestMapping(value="saveFileDatatask",method = RequestMethod.POST)
     public JSONObject saveFileDatatask(int dataSourceId, String datataskName,String[] nodes){
-
+        String subjectCode = configPropertyService.getProperty("SubjectCode");
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);
@@ -223,6 +226,7 @@ public class DataTaskController {
         datatask.setCreateTime(new Date());
         datatask.setDataTaskType("file");
         datatask.setStatus("0");
+        datatask.setSubjectCode(subjectCode);
         Calendar rightNow = Calendar.getInstance();
         StringBuffer sb = new StringBuffer();
         Format dateFormat = new SimpleDateFormat("MMddHHmmssS");
@@ -235,7 +239,7 @@ public class DataTaskController {
             return  jsonObject;
         }
         List<String> filepaths = Arrays.asList(filePath.toString().split(";"));
-        String subjectCode = configPropertyService.getProperty("SubjectCode");
+
         String fileName = subjectCode+"_"+datataskId;
         fileResourceService.packDataResource(fileName,filepaths);
         String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";

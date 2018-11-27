@@ -157,9 +157,9 @@ public class DataTaskService {
         return dataTaskDao.getAll();
     }
 
-    public List<DataTask> getDatataskByPage(int start, int pageSize, String datataskType, String status) {
+    public List<DataTask> getDatataskByPage(int start, int pageSize, String datataskType, String status,String subjectCode) {
 
-        List<DataTask> dataTasks = dataTaskDao.getDatataskByPage(start, pageSize, datataskType, status);
+        List<DataTask> dataTasks = dataTaskDao.getDatataskByPage(start, pageSize, datataskType, status, subjectCode);
         for (DataTask dataTask : dataTasks) {
             DataSrc dataSrc = dataSrcDao.findById(dataTask.getDataSourceId());
             dataTask.setDataSrc(dataSrc);
@@ -167,8 +167,8 @@ public class DataTaskService {
         return dataTasks;
     }
 
-    public int getCount(String datataskType, String status) {
-        return dataTaskDao.getCount(datataskType, status);
+    public int getCount(String datataskType, String status,String subjectCode) {
+        return dataTaskDao.getCount(datataskType, status,subjectCode);
     }
 
     public int deleteDatataskById(int datataskId) {
