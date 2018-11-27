@@ -56,6 +56,14 @@ public class UserDao {
      */
     private void addUserToGroup(String userId, String groupName)
     {
+        //输入参数校验
+        userId = userId.trim();
+        groupName = groupName.trim();
+        if(userId.equals("") || groupName.equals(""))
+        {
+            return;
+        }
+
         //从t_group表中查找出名字为groupName的group，加入userName到它的users中去，之后把group再写入t_group表中
         logger.info("userId = " + userId + ", groupName = " + groupName);
         DBObject dBObject = QueryBuilder.start().and("groupName").is(groupName).get();

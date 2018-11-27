@@ -161,7 +161,7 @@ public class DataTaskDao {
         List<Object> params = Lists.newArrayList();
         params.add(datataskName);
         if(StringUtils.isNotBlank(datataskId)){
-            sql.append(" and dataTaskId=?");
+            sql.append(" and dataTaskId!=?");
             params.add(datataskId);
         }
         List<DataTask> list = jdbcTemplate.query(sql.toString(), params.toArray(), new DataTaskMapper());
