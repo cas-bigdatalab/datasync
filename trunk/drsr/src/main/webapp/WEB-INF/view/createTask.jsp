@@ -265,7 +265,8 @@
         var dataFileSrcId;
         var dataFilePathList;
         var dateDef = new Date();
-        var taskNameFlag=true
+        var taskNameFlag=false
+        var sqlFlag=
         dateDef = dateDef.Format("yyyyMMddhhmmss");
         $("#dataTaskName").val("数据任务"+dateDef)
         $("#dataTaskName").focusout(function () {
@@ -484,6 +485,7 @@
                 toastr["error"]("提示！", "任务名出错，请填写任务名");
                 return
             }
+
             if(numChecked ==0){
                 if(sqlNum >=2 && sqlNum%2 ==0){
 

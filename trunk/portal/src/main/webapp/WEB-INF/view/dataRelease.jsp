@@ -79,9 +79,9 @@
                             <option value="审核未通过">审核未通过</option>
                         </select>
 
-                    <button type="button" class="btn blue" style="margin-left: 20px" id="seachResource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
+                    <button type="button" class="btn blue btn-sm" style="margin-left: 20px" id="seachResource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                     <shiro:hasRole name="admin">
-                    <button type="button" class="btn green" style="float: right;margin-right: 15px" onclick="newRelease()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据发布
+                    <button type="button" class="btn green btn-sm" style="float: right;margin-right: 15px" onclick="newRelease()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据发布
                     </button>
                     </shiro:hasRole>
                 </form>
