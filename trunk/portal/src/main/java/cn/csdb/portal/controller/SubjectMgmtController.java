@@ -297,7 +297,7 @@ public class SubjectMgmtController {
     public boolean queryAdmin(HttpServletRequest request, @RequestParam(required = true) String admin) {
         logger.info("enterring SubjectMgmtController-queryUserName");
         logger.info("admin = " + admin);
-        long cntOfAdmin = subjectMgmtService.queryAdmin(admin);
+        long cntOfAdmin = subjectMgmtService.queryAdmin(admin.trim());
         logger.info("queried userNameCnt - cntOfUserName = " + cntOfAdmin);
 
         boolean retValue = false;
@@ -309,6 +309,7 @@ public class SubjectMgmtController {
         {
             retValue = true;
         }
+
         return retValue;
     }
 

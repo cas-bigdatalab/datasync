@@ -499,7 +499,7 @@ public class SubjectMgmtDao {
 
     public long queryAdmin(String admin)
     {
-        DBObject dbObject = QueryBuilder.start().and("admin").is(admin).get();
+        DBObject dbObject = QueryBuilder.start().and("loginId").is(admin).get();
         Query query = new BasicQuery(dbObject);
         //long cntOfAdminInSubject = mongoTemplate.count(query, "t_subject");
         long cntOfAdminInUser = mongoTemplate.count(query, "t_user");
