@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -28,7 +29,12 @@ public class CheckUserDao {
     }
 
     public Subject getSubjectByCode(String subjectCode){
-        return mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)),Subject.class).get(0);
+        List<Subject>sub = mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)),Subject.class);
+        if(sub.size()==0){
+            return null;
+        }else {
+            return mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)), Subject.class).get(0);
+        }
     }
 
     /**
