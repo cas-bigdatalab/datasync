@@ -198,7 +198,7 @@ public class DataTaskService {
         return "ok";
     }
 
-    public boolean hasDatataskName(String datataskName){
-        return dataTaskDao.hasDatataskName(datataskName);
+    public boolean hasDatataskName(String datataskName,String datataskId){
+        return dataTaskDao.hasDatataskName(datataskName,datataskId);
     }
 }
