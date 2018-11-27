@@ -156,9 +156,15 @@ public class DataTaskDao {
         return generatedId;
     }
 
-    public boolean hasDatataskName(String datataskName){
-        String sql = "select * from t_datatask where dataTaskName=?";
-        List<DataTask> list = jdbcTemplate.query(sql, new Object[]{datataskName}, new DataTaskMapper());
+    public boolean hasDatataskName(String datataskName,String datataskId){
+        StringBuffer sql = new StringBuffer("select * from t_datatask where dataTaskName=?");
+        List<Object> params = Lists.newArrayList();
+        params.add(datataskName);
+        if(StringUtils.isNotBlank(datataskId)){
+            sql.append(" and dataTaskId=?");
+            params.add(datataskId);
+        }
+        List<DataTask> list = jdbcTemplate.query(sql.toString(), params.toArray(), new DataTaskMapper());
         if(list == null||list.size() == 0){
             return false;
         }else{

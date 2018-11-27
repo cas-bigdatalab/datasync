@@ -256,7 +256,44 @@ public class DataTaskController {
      */
     @ResponseBody
     @RequestMapping("hasDatataskName")
-    public boolean hasDatataskName(String datataskName){
-        return dataTaskService.hasDatataskName(datataskName);
+    public boolean hasDatataskName(String datataskName,
+                                   @RequestParam(value = "datataskId", defaultValue = "", required = false)String datataskId){
+        return dataTaskService.hasDatataskName(datataskName,datataskId);
     }
+
+    /**
+     *
+     * Function Description: datatask编辑页面跳转
+     *
+     * @param: [datataskId]
+     * @return: org.springframework.web.servlet.ModelAndView
+     * @auther: hw
+     * @date: 2018/11/27 15:14
+     */
+    @RequestMapping(value = "editDatatask")
+    public ModelAndView editDatatask(String datataskId) {
+        ModelAndView mv = new ModelAndView("editDatatask");
+        mv.addObject("datataskId",datataskId);
+        return mv;
+    }
+
+    /**
+     *
+     * Function Description: 编辑页面通过id获得datatask信息
+     *
+     * @param: [datataskId]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/11/27 15:26
+     */
+    @ResponseBody
+    @RequestMapping("")
+    public JSONObject getDatataskById(int datataskId){
+        JSONObject jsonObject = new JSONObject();
+        DataTask dataTask = dataTaskService.get(datataskId);
+        jsonObject.put("datatask",dataTask);
+        return jsonObject;
+    }
+
+
 }
