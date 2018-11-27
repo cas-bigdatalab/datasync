@@ -52,6 +52,8 @@ public class ResourceController {
     private SubjectService subjectService;
     @Resource
     private AuditMessageService auditMessageService;
+    @Resource
+    private DataSrcService dataSrcService;
 
     private Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
@@ -697,6 +699,14 @@ public class ResourceController {
             jo.put("result","fail");
         }
         return jo;
+    }
+
+    @RequestMapping(value = "sqlValidation", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject validateSql(@RequestParam("sqlStr") String sqlStr, @RequestParam("dataSourceId") int dataSourceId) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("result", dataSrcService.validateSql(sqlStr, dataSourceId));
+        return jsonObject;
     }
 
 
