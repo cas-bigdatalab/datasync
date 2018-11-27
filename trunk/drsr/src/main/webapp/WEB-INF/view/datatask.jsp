@@ -42,27 +42,30 @@
         <div class="alert alert-info" role="alert" style="margin:0  33px">
             <!--查询条件 -->
             <div class="row">
-                <form class="form-inline">
-                    <div class="form-group" >
-                        <label >数据类型</label>
-                        <select  id="dataSourceList" class="form-control" style="width: 150px">
-                            <option value="">全部</option>
-                            <option value="mysql">mysql</option>
-                            <option value="file">file</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label  >状态</label>
-                        <select  id="dataStatusList" class="form-control" style="width: 150px">
-                            <option value="">全部</option>
-                            <option value="1">上传完成</option>
-                            <option value="0">未上传</option>
-                        </select>
-                    </div>
-
-                    <button type="button" class="btn blue" style="margin-left: 49px" id="seachTaskSource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
+                <div class="col-md-9">
+                    <form class="form-inline">
+                        <div class="form-group" >
+                            <label >数据类型</label>
+                            <select  id="dataSourceList" class="form-control" style="width: 150px">
+                                <option value="">全部</option>
+                                <option value="mysql">mysql</option>
+                                <option value="file">file</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label  >状态</label>
+                            <select  id="dataStatusList" class="form-control" style="width: 150px">
+                                <option value="">全部</option>
+                                <option value="1">上传完成</option>
+                                <option value="0">未上传</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn blue" style="margin-left: 49px" id="seachTaskSource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
+                    </form>
+                </div>
+                <div class="col-md-3" style="text-align: right">
                     <button type="button" class="btn green" style="margin-left: 49px" onclick="relCreateTask()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据任务</button>
-                </form>
+                </div>
             </div>
         </div>
         <div class="upload-table">
