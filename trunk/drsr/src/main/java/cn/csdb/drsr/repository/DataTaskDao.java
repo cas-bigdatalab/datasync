@@ -26,7 +26,7 @@ public class DataTaskDao {
     @Resource
     private JdbcTemplate jdbcTemplate;
 
-    public DataTask get(int id) {
+    public DataTask get(String id) {
         String sql = "select * from t_datatask where dataTaskId = ?";
         List<DataTask> list = jdbcTemplate.query(sql, new Object[]{id}, new DataTaskMapper());
         return list.size() > 0 ? list.get(0) : null;
@@ -38,13 +38,13 @@ public class DataTaskDao {
         String sql = "update T_dataTask set " +
                 "DataSourceId=?,DataTaskName=?,DataTaskType=?," +
                 "TableName=?,SqlString=?,SqlTableNameEn=?," +
-                "SqlFilePath=?,FilePath=?,creator=?,status=? " +
+                "SqlFilePath=?,FilePath=?,Creator=?,Status=?,SubjectCode=? " +
                 "where DataTaskId=? ";
         int i = jdbcTemplate.update(sql, new Object[]{
                 dataTask.getDataSourceId(), dataTask.getDataTaskName(), dataTask.getDataTaskType(),
                 dataTask.getTableName(), dataTask.getSqlString(), dataTask.getSqlTableNameEn(),
                 dataTask.getSqlFilePath(), dataTask.getFilePath(), dataTask.getCreator(),
-                dataTask.getStatus(), dataTask.getDataTaskId()});
+                dataTask.getStatus(), dataTask.getSubjectCode(),dataTask.getDataTaskId()});
         if (i >= 0) {
             result = true;
         }
@@ -120,8 +120,8 @@ public class DataTaskDao {
     public int insertDatatask(final DataTask datatask) {
         boolean flag = false;
         final String sql = "insert into t_datatask(dataSourceId,dataTaskName,dataTaskType," +
-                "tableName,sqlString,sqlTableNameEn,sqlFilePath,filePath,createTime,creator,status) " +
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+                "tableName,sqlString,sqlTableNameEn,sqlFilePath,filePath,createTime,creator,status,datataskId,subjectCode) " +
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 //        int i = jdbcTemplate.update(sql, new Object[]{datatask.getDataSourceId(),datatask.getDataTaskName(),
 //                datatask.getDataTaskType(), datatask.getTableName(), datatask.getSqlString(),
 //                datatask.getSqlTableNameEn(), datatask.getSqlFilePath(), datatask.getFilePath(),
@@ -146,6 +146,8 @@ public class DataTaskDao {
                 ps.setTimestamp(9,new Timestamp(datatask.getCreateTime().getTime()));
                 ps.setString(10,datatask.getCreator());
                 ps.setString(11,datatask.getStatus());
+                ps.setString(12,datatask.getDataTaskId());
+                ps.setString(13,datatask.getSubjectCode());
                 return ps;
 
             }

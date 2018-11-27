@@ -9,7 +9,7 @@ import java.util.Date;
  * @create: 2018-09-30 15:37
  **/
 public class DataTask {
-    private int dataTaskId;
+    private String dataTaskId;
     private int dataSourceId;
     private String dataTaskName;
     private String dataTaskType;
@@ -18,10 +18,19 @@ public class DataTask {
     private String sqlTableNameEn;
     private String sqlFilePath;
     private String filePath;
+    private String subjectCode;
     private Date createTime;
     private String creator;
     private String status;
     private DataSrc dataSrc;
+
+    public String getSubjectCode() {
+        return subjectCode;
+    }
+
+    public void setSubjectCode(String subjectCode) {
+        this.subjectCode = subjectCode;
+    }
 
     public DataSrc getDataSrc() {
         return dataSrc;
@@ -47,11 +56,11 @@ public class DataTask {
         this.dataTaskType = dataTaskType;
     }
 
-    public int getDataTaskId() {
+    public String getDataTaskId() {
         return dataTaskId;
     }
 
-    public void setDataTaskId(int dataTaskId) {
+    public void setDataTaskId(String dataTaskId) {
         this.dataTaskId = dataTaskId;
     }
 

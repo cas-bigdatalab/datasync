@@ -45,7 +45,7 @@ public class DataTaskService {
     private Logger logger = LoggerFactory.getLogger(DataTaskService.class);
 
     @Transactional(readOnly = true)
-    public DataTask get(int dataTaskId) {
+    public DataTask get(String dataTaskId) {
         return dataTaskDao.get(dataTaskId);
     }
 

@@ -440,7 +440,10 @@
                                     dataType: "json"
                                 }
                         },
-                        adminPasswd: "required",
+                        adminPasswd: {
+                            required: true,
+                            minlength: 6
+                        },
                         contact: "required",
                         phone:
                         {
@@ -466,7 +469,10 @@
                             required: "请输入数据节点管理员账号",
                             remote: "此数据节点管理员账号已经存在！"
                         },
-                        adminPasswd: "请输入数据节点管理密码",
+                        adminPasswd: {
+                            required: "请输入数据节点管理密码",
+                            minlength: "密码至少为6位"
+                        },
                         contact: "请输入数据节点联系人",
                         phone: {
                             required:"请输入手机号",
@@ -494,7 +500,10 @@
                         subjectName: "required",
                         subjectCode: "required",
                         admin: "required",
-                        adminPasswd: "required",
+                        adminPasswd: {
+                            required: true,
+                            minlength: 6
+                        },
                         contact: "required",
                         phone:
                             {
@@ -513,7 +522,10 @@
                         subjectName: "请输入数据节点名称",
                         subjectCode: "请输入数据节点代码",
                         admin: "请输入数据节点管理员账号",
-                        adminPasswd: "请输入数据节点管理密码",
+                        adminPasswd: {
+                            required: "请输入数据节点管理密码",
+                            minlength: "密码至少为6位"
+                        },
                         contact: "请输入数据节点联系人",
                         phone: {
                             required:"请输入手机号",
