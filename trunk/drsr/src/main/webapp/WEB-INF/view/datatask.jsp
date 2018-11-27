@@ -70,9 +70,9 @@
             <table class="table table-bordered data-table" id="upload-list" >
                 <thead>
                 <tr>
-                    <th>任务编号</th>
+                    <th>编号</th>
                     <th>任务标识</th>
-                    <th>数据来源类型</th>
+                    <th>数据类型</th>
                     <th>数据源</th>
                     <th>创建时间</th>
                     <th>上传进度</th>
