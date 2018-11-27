@@ -28,7 +28,7 @@ public class ResCatalogService {
     public int updateLocalResCatalog(ResCatalog_Mongo resCatalog){
         int i = resCatalogDao.updateLocalResCatalog(resCatalog);
         if(i>0){
-            return resCatalog.getId();
+            return resCatalog.getRid();
         }else{
             return -1;
         }
@@ -55,7 +55,7 @@ public class ResCatalogService {
         themeJson.put("stripes",false);
         coreJson.put("theme",themeJson);
         ResCatalog_Mongo rootNode = resCatalogDao.getLocalRootNode();
-        JSONObject dataJson = treeNodePackage(rootNode.getId(),4,catalogType,rootNode.getObjectId());
+        JSONObject dataJson = treeNodePackage(rootNode.getRid(),4,catalogType,rootNode.getObjectId());
         coreJson.put("data",dataJson);
         jsonObject.put("core",coreJson);
 //        type
@@ -87,7 +87,7 @@ public class ResCatalogService {
     public JSONObject treeNodePackage(int resCatalogId,int depth,String catalogType,String objectId){
         JSONObject jsonObject = new JSONObject();
         ResCatalog_Mongo resCatalog = resCatalogDao.getLocalResCatalogNodeById(objectId);
-        jsonObject.put("id",resCatalog.getId());
+        jsonObject.put("id",resCatalog.getRid());
         jsonObject.put("text",resCatalog.getName());
         if(resCatalog.getLevel() == 1){
             jsonObject.put("icon","glyphicon glyphicon-home");
@@ -100,7 +100,7 @@ public class ResCatalogService {
             List<ResCatalog_Mongo> resCatalogs = resCatalogDao.getLocalResCatalogChildrens(resCatalogId);
             if(resCatalogs.size()>0){
                 for(int i=0;i<resCatalogs.size();i++){
-                    ja.add(treeNodePackage(resCatalogs.get(i).getId(),depth,catalogType,resCatalogs.get(i).getObjectId()));
+                    ja.add(treeNodePackage(resCatalogs.get(i).getRid(),depth,catalogType,resCatalogs.get(i).getObjectId()));
                 }
             }
             jsonObject.put("children",ja);

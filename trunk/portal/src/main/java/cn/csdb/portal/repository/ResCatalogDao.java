@@ -56,7 +56,7 @@ public class ResCatalogDao {
         return -1;*/
 
         Query query = new Query();
-        query.with(new Sort(new Sort.Order(Sort.Direction.DESC,"id")));
+        query.with(new Sort(new Sort.Order(Sort.Direction.DESC,"rid")));
         ResCatalog_Mongo res = this.mongoTemplate.find(query, ResCatalog_Mongo.class).get(0);
         resCatalog.setParentid(resCatalog.getParentid());
         resCatalog.setName(resCatalog.getName());
@@ -64,7 +64,7 @@ public class ResCatalogDao {
         resCatalog.setNodeorder(resCatalog.getNodeorder());
         resCatalog.setUpdatetime(resCatalog.getUpdatetime());
         resCatalog.setCreatetime(resCatalog.getCreatetime());
-        resCatalog.setId(res.getId()+1);
+        resCatalog.setRid(res.getRid()+1);
         mongoTemplate.save(resCatalog);
         return 1;
     }
@@ -73,7 +73,7 @@ public class ResCatalogDao {
         /*String sql = "update t_localcatalog set name=?,parentid=?,level=?,nodeorder=?,updatetime=? where id=?";
         return jdbcTemplate.update(sql, resCatalog.getName(), resCatalog.getParentid(), resCatalog.getLevel(), resCatalog.getNodeorder(), resCatalog.getUpdatetime(), resCatalog.getId());*/
 
-        mongoTemplate.findAndModify(new Query(Criteria.where("id").is(resCatalog.getId())),
+        mongoTemplate.findAndModify(new Query(Criteria.where("rid").is(resCatalog.getRid())),
                 new Update().set("name", resCatalog.getName()).set("parentid", resCatalog.getParentid()).set("level", resCatalog.getLevel()).
                         set("nodeOrder",  resCatalog.getNodeorder()).set("updatetime",  resCatalog.getUpdatetime()).set("createtime",  resCatalog.getCreatetime()),
                 ResCatalog_Mongo.class);
@@ -121,7 +121,7 @@ public class ResCatalogDao {
     public int deleteLocalResCatalog(int id) {
         /*String sql = "delete from t_localcatalog where id=?";
         return jdbcTemplate.update(sql, id);*/
-        ResCatalog_Mongo r = mongoTemplate.find(new Query(Criteria.where("id").is(id)),ResCatalog_Mongo.class).get(0);
+        ResCatalog_Mongo r = mongoTemplate.find(new Query(Criteria.where("rid").is(id)),ResCatalog_Mongo.class).get(0);
         mongoTemplate.remove(r);
         return 1;
     }
