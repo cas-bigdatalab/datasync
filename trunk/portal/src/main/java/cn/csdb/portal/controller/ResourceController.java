@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Array;
 import java.sql.Connection;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -318,6 +319,9 @@ public class ResourceController {
             resource.setPublicContent(dataList);
             resource.setToFilesNumber(0);
             resource.setPublicType("mysql");
+            List<String> tableList = Arrays.asList(dataList.split(";"));
+            int rowCount = resourceService.getRecordCount(subject.getDbHost(),subject.getDbPort(),subject.getDbUserName(),subject.getDbPassword(),subject.getDbName(),tableList);
+            resource.setToRecordNumber(rowCount);
         } else if (publicType.equals("file")) {
             resource.setPublicType("file");
             StringBuffer sb = new StringBuffer();
@@ -345,8 +349,13 @@ public class ResourceController {
             }
             resource.setFilePath(sb.toString().replace("/", "%_%"));
             resource.setToMemorySize(String.valueOf(size));
+
         }
-        resource.setStatus("-1");
+        if(StringUtils.isNotBlank(resource.getUserGroupId())){
+            resource.setStatus("1");
+        }else{
+            resource.setStatus("-1");
+        }
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
@@ -483,6 +492,8 @@ public class ResourceController {
             resource.setPublicContent(dataList);
             resource.setToFilesNumber(0);
             resource.setPublicType("mysql");
+            List<String> tableList = Arrays.asList(dataList.split(";"));
+            int rowCount = resourceService.getRecordCount(subject.getDbHost(),subject.getDbPort(),subject.getDbUserName(),subject.getDbPassword(),subject.getDbName(),tableList);
         } else if (publicType.equals("file")) {
             resource.setPublicType("file");
             StringBuffer sb = new StringBuffer();
@@ -687,6 +698,7 @@ public class ResourceController {
         }
         return jo;
     }
+
 
 
 
