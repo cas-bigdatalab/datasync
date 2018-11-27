@@ -42,7 +42,7 @@
 
                     <button id="searchSubjectBtn" name="searchSubjectBtn" onclick="searchSubject();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <button id="addSubjectBtn" name="addSubjectBtn" class="btn info green btn-sm" onclick="addSubject()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据节点</button>
+                    <button id="addSubjectBtn" name="addSubjectBtn" style="float: right" class="btn info green btn-sm" onclick="addSubject()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据节点</button>
                 </div>
             </div>
         </div>

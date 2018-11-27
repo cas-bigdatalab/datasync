@@ -57,19 +57,19 @@
             <!--查询条件 -->
             <div class="row">
                 <form class="form-inline" style="margin-bottom: 0px">
-                    <div class="form-group">
+
                         <label style="padding-left: 10px;">数据集名称:</label>
                         <input type="text" class="form-control" id="resourceName" placeholder="请输入数据集名称">
-                    </div>
-                    <div class="form-group">
+
+
                         <label style="padding-left: 10px;">数据类型:</label>
                         <select id="resourcePublicType" class="form-control" style="width: 120px">
                             <option value="">全部</option>
                             <option value="mysql">mysql</option>
                             <option value="file">file</option>
                         </select>
-                    </div>
-                    <div class="form-group">
+
+
                         <label style="padding-left: 10px;">状态:</label>
                         <select id="resourceState" class="form-control" style="width: 120px">
                             <option value="">全部</option>
@@ -78,10 +78,10 @@
                             <option value="审核通过">审核通过</option>
                             <option value="审核未通过">审核未通过</option>
                         </select>
-                    </div>
+
                     <button type="button" class="btn blue" style="margin-left: 20px" id="seachResource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                     <shiro:hasRole name="admin">
-                    <button type="button" class="btn green" style="margin-left: 20px" onclick="newRelease()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据发布
+                    <button type="button" class="btn green" style="float: right;margin-right: 15px" onclick="newRelease()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据发布
                     </button>
                     </shiro:hasRole>
                 </form>

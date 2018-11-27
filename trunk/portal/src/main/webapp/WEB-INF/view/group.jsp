@@ -68,25 +68,35 @@
                             <div class="alert alert-info" role="alert">
                                 <div class="row">
                                     <div class="col-md-12 form-inline">
+                                        <div style="float: left;width: 23%">
                                             <label class="control-label">用户账号:</label>
-                                            <input type="text" id="loginIdFilter" name="loginIdFilter" placeholder="用户账号" class="form-control search-text" />
-                                            &nbsp;&nbsp;
+                                            <input type="text" id="loginIdFilter" style="width: 69%"
+                                                   name="loginIdFilter" placeholder="用户账号" class="form-control search-text" />
+                                        </div>
+                                        <div style="float: left;width: 23%">
                                             <label class="control-label">用户名:</label>
-                                            <input type="text" id="userNameFilter" name="userNameFilter" placeholder="用户名" class="form-control search-text" />
-                                            &nbsp;&nbsp;
+                                            <input type="text" id="userNameFilter" style="width: 69%"
+                                                   name="userNameFilter" placeholder="用户名" class="form-control search-text" />
+                                        </div>
+                                        <div style="float: left;width: 23%">
                                             <label class="control-label">用户组:</label>
-
-                                            <select name='groupsFilter' id='groupsFilter' multiple="multiple" class="form-control select2me" style="width: 200px;" >
+                                            <select name='groupsFilter' id='groupsFilter' style="width: 69%"
+                                                    multiple="multiple" class="form-control select2me" style="width: 200px;" >
                                                 <c:forEach  var="group"  items="${groupList}">
                                                     <option value="${group.groupName}" id="${group.id}" style="width: 150px; height: 30px;">${group.groupName}</option>
                                                 </c:forEach>
                                             </select>
-
-                                            &nbsp;&nbsp;&nbsp;&nbsp;
-
+                                        </div>
+                                        <div style="float: left;width: 10%;text-align: center">
                                             <button id="searchUserBtn" name="searchUserBtn" onclick="searchUser();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;
-                                            <button id="addUserBtn" name="addUserBtn" class="btn info green btn-sm" onclick="addUser()" ><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增用户</button>
+                                        </div>
+                                        <div style="float: left;width: 21%;">
+                                            <button id="addUserBtn" name="addUserBtn" style="float: right;"
+                                                    class="btn info green btn-sm" onclick="addUser()" ><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增用户</button>
+                                        </div>
+                                            <%--<label class="control-label">用户账号:</label>
+                                            <input type="text" id="loginIdFilter" name="loginIdFilter" placeholder="用户账号" class="form-control search-text" />
+                                            &nbsp;&nbsp;--%>
                                      </div>
                                 </div>
                             </div>
@@ -141,7 +151,7 @@
 
                                         <button id="btnSearch" name="btnSearch" onclick="search();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查询</button>
                                         &nbsp;&nbsp;
-                                        <button id="btnAdd" name="btnAdd" onclick="" class="btn info green btn-sm"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增用户组</button>
+                                        <button id="btnAdd" name="btnAdd" style="float: right" onclick="" class="btn info green btn-sm"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增用户组</button>
                                     </div>
                                 </div>
 
