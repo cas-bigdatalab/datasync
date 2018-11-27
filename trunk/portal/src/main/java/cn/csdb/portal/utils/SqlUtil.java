@@ -1,5 +1,10 @@
 package cn.csdb.portal.utils;
 
+import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.statement.select.PlainSelect;
+import net.sf.jsqlparser.statement.select.Select;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
 import java.io.*;
@@ -108,6 +113,29 @@ public class SqlUtil {
                 conn = null;
             }
         }
+    }
+
+    public static boolean validateSelectSql(String sql) {
+
+        return getSelectFromSelectSql(sql) == null ? false : true;
+
+    }
+
+    private static Select getSelectFromSelectSql(String sql) {
+        if (StringUtils.isBlank(sql)) {
+            return null;
+        }
+        Select select;
+        try {
+            select = (Select) CCJSqlParserUtil.parse(sql);
+        } catch (JSQLParserException e) {
+            return null;
+        }
+
+        if (!(select.getSelectBody() instanceof PlainSelect)) {
+            return null;
+        }
+        return select;
     }
 
 }

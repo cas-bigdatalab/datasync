@@ -106,7 +106,7 @@ public class ResCatalogDao {
     public ResCatalog_Mongo getLocalResCatalogNodeById(String resCatalogId) {
         /*String sql = "select * from t_localcatalog where id=?";
         return jdbcTemplate.query(sql, new Object[]{resCatalogId}, new ResCatalogMapper()).get(0);*/
-        return mongoTemplate.findById(resCatalogId,ResCatalog_Mongo.class);
+        return mongoTemplate.find(new Query(Criteria.where("id").is(resCatalogId)),ResCatalog_Mongo.class).get(0);
 
     }
 
