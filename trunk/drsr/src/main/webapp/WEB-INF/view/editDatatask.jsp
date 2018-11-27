@@ -17,7 +17,7 @@
 <body>
 <div class="page-content">
     <div class="task-head">
-       <h3>设置任务</h3>
+        <h3>设置任务</h3>
         <hr>
     </div>
     <div class="task-title">
@@ -76,51 +76,51 @@
                     <div class="col-md-12 ">
                         <button type="button" class="btn green pull-right" onclick="sendRelationTask()">提交</button>
                     </div>
-            </div>
+                </div>
             </div>
         </div>
 
         <div class="select-local" style="display: none;">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label>选择数据源</label>
-                        <select  id="DBFilechange" class="form-control"></select>
-                    </div>
-                </form>
+            <form class="form-inline">
+                <div class="form-group">
+                    <label>选择数据源</label>
+                    <select  id="DBFilechange" class="form-control"></select>
+                </div>
+            </form>
 
-                <div class="database-con-file container-fluid" style="display: none;">
-                    <div class="row">
-                        <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
-                        <div class="col-md-9 dataHead2" id="fileTitle" style="display: none"></div>
-                        <div class="col-md-12" style="margin: 0 -15px">
-                            <div class="col-md-2" style="margin: 0 -15px">选择文件</div>
-                            <div class="col-md-5" style="margin-top: 6px">
-                                <div id="jstree_show_edit"></div>
+            <div class="database-con-file container-fluid" style="display: none;">
+                <div class="row">
+                    <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
+                    <div class="col-md-9 dataHead2" id="fileTitle" style="display: none"></div>
+                    <div class="col-md-12" style="margin: 0 -15px">
+                        <div class="col-md-2" style="margin: 0 -15px">选择文件</div>
+                        <div class="col-md-5" style="margin-top: 6px">
+                            <div id="jstree_show_edit"></div>
                             <%--
                                 <div class="row" id="file-table"></div>
 --%>
-                            </div>
-                            <div class="col-md-5" style="margin-top: 6px">
-
-                            </div>
                         </div>
-                        <div class="col-md-12 ">
-                            <button type="button" class="btn green pull-right" onclick="sendFileTask()">提交</button>
-                        </div>
+                        <div class="col-md-5" style="margin-top: 6px">
 
-
-                        <%--<div class="col-md-12 dataHead3" style="max-height: 500px;overflow: auto;padding-top: 10px">
-                            <div class="col-md-2">选择文件</div>
-                            <div class="col-md-10 dataHead4" >
-                                <div class="row" id="file-table">
-                                </div>
-                            </div>
                         </div>
-                        <div class="col-md-12 ">
-                            <button type="button" class="btn green pull-right" onclick="sendFileTask()">提交</button>
-                        </div>--%>
                     </div>
+                    <div class="col-md-12 ">
+                        <button type="button" class="btn green pull-right" onclick="sendFileTask()">提交</button>
+                    </div>
+
+
+                    <%--<div class="col-md-12 dataHead3" style="max-height: 500px;overflow: auto;padding-top: 10px">
+                        <div class="col-md-2">选择文件</div>
+                        <div class="col-md-10 dataHead4" >
+                            <div class="row" id="file-table">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 ">
+                        <button type="button" class="btn green pull-right" onclick="sendFileTask()">提交</button>
+                    </div>--%>
                 </div>
+            </div>
         </div>
     </div>
     <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
@@ -139,30 +139,30 @@
                         <div class="col-md-12">
                             <div class="portlet box green-haze" style="border:0;">
                                 <div class="portlet-title" style="display: none">
-                                   <%-- <ul class="nav nav-tabs" style="float:left;">
-                                       &lt;%&ndash; <li class="active">
-                                            <a href="#editTableFieldComsId" data-toggle="tab"
-                                               id="editTableDataAndComsButtonId" aria-expanded="true">
-                                                编辑 </a>
-                                        </li>&ndash;%&gt;
-                                        <li class="active">
-                                            <a href="#previewTableDataAndComsId" id="previewTableDataAndComsButtonId"
-                                               data-toggle="tab" aria-expanded="true">
-                                                预览 </a>
-                                        </li>
-                                    </ul>--%>
+                                    <%-- <ul class="nav nav-tabs" style="float:left;">
+                                        &lt;%&ndash; <li class="active">
+                                             <a href="#editTableFieldComsId" data-toggle="tab"
+                                                id="editTableDataAndComsButtonId" aria-expanded="true">
+                                                 编辑 </a>
+                                         </li>&ndash;%&gt;
+                                         <li class="active">
+                                             <a href="#previewTableDataAndComsId" id="previewTableDataAndComsButtonId"
+                                                data-toggle="tab" aria-expanded="true">
+                                                 预览 </a>
+                                         </li>
+                                     </ul>--%>
                                 </div>
                                 <div class="tab-content"
                                      style="background-color: white;min-height:300px;max-height:70%;padding-top: 20px ; overflow: scroll;">
-                                   <%-- <div class="tab-pane active" id="editTableFieldComsId">
-                                    </div>--%>
+                                    <%-- <div class="tab-pane active" id="editTableFieldComsId">
+                                     </div>--%>
                                     <div id="previewTableDataAndComsId">
                                         <div class="skin skin-minimal">
                                             <table class="table table-hover table-bordered">
                                                 <thead>
-                                                    <tr style="word-break: keep-all" id="pre-head">
-                                                        <th>#</th>
-                                                    </tr>
+                                                <tr style="word-break: keep-all" id="pre-head">
+                                                    <th>#</th>
+                                                </tr>
                                                 </thead>
                                                 <tbody id="pre-body">
 
@@ -229,7 +229,7 @@
             <button type="button" class="btn blue preview">预览</button>
             <button type="button" class="btn red removeSql"><span class="glyphicon glyphicon-trash"></span>删除</button>
         </div>
-        
+
     </div>
 </script>
 
@@ -256,38 +256,15 @@
     <%--<script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>--%>
 
     <script>
+        var sdoId = "${resourceId}";
         var dataRelSrcId;
         var dataRelTableList;
         var dataRelSqlList;
-
         var dataFileSrcId;
         var dataFilePathList;
         var dateDef = new Date();
-        var taskNameFlag=true
         dateDef = dateDef.Format("yyyyMMddhhmmss");
         $("#dataTaskName").val("数据任务"+dateDef)
-        $("#dataTaskName").focusout(function () {
-            var taskName = $(this).val();
-            if(taskName =="" || taskName.trim() == ""){
-                toastr["error"]("提示！", "任务名不能为空");
-                return
-            }
-            $.ajax({
-                url:"${ctx}/datatask/hasDatataskName",
-                type:"POST",
-                data:{
-                    datataskName:$(this).val()
-                },
-                success:function (data) {
-                    console.log(data)
-                    if(data){
-                        toastr["error"]("提示！", "任务名已存在");
-                    }else {
-                        taskNameFlag=false
-                    }
-                }
-            })
-        })
         $("[name='ways']").on("change",function () {
             if(this.value =="DB"){
                 $(".select-database").show();
@@ -360,9 +337,9 @@
                 }
             })*/
             $('#jstree_show_edit').jstree("destroy");
-/*
-            $('#jstree_show_edit').data('jstree', false).empty();
-*/
+            /*
+                        $('#jstree_show_edit').data('jstree', false).empty();
+            */
             $('#jstree_show_edit').jstree({
                 "core": {
                     "themes": {
@@ -384,9 +361,9 @@
                             url: "${ctx}/fileResource/resCatalog",
                             dataType: "json",
                             data: {"data": str,
-/*
-                                "filePath":jsonData,
-*/
+                                /*
+                                                                "filePath":jsonData,
+                                */
                                 "dataSourceId":id
                             },
                             async: false,
@@ -478,8 +455,10 @@
                     sqlNum++
                 }
             })
-            if(taskNameFlag){
-                toastr["error"]("提示！", "任务名出错，请填写任务名");
+
+            if($("#dataTaskName").val() =="" || $("#dataTaskName").val().trim() == ""){
+                toastr["error"]("提示！", "请创建任务名");
+                return
             }
             if(numChecked ==0){
                 if(sqlNum >=2 && sqlNum%2 ==0){
@@ -498,9 +477,13 @@
                     return
                 }
             }
+
+
+
             $("[name='sqlTableName']").each(function () {
                 dataRelSqlTableList+=$(this).val()+";"
             })
+
             var relTabStr = "";
             $eleChecked.each(function () {
                 relTabStr+=$(this).val()+";"
@@ -546,27 +529,27 @@
                 toastr["error"]("您尚未选取文件");
                 return
             }else{
-            var fileTabStr = "";
-            $eleChecked.each(function () {
-                fileTabStr+=$(this).val()+";"
-            });
-            dataFilePathList=fileTabStr;
-            $.ajax({
-                url:"${ctx}/datatask/saveFileDatatask",
-                type:"POST",
-                traditional: true,
-                data:{"dataSourceId":dataFileSrcId,
-                    "datataskName":$("#dataTaskName").val(),
-                    "nodes":nodes,
-                },
-                success:function (data) {
-                    window.location.href="${ctx}/dataUpload"
-                },
-                error:function () {
-                    console.log("请求失败")
-                }
-            })
-        }
+                var fileTabStr = "";
+                $eleChecked.each(function () {
+                    fileTabStr+=$(this).val()+";"
+                });
+                dataFilePathList=fileTabStr;
+                $.ajax({
+                    url:"${ctx}/datatask/saveFileDatatask",
+                    type:"POST",
+                    traditional: true,
+                    data:{"dataSourceId":dataFileSrcId,
+                        "datataskName":$("#dataTaskName").val(),
+                        "nodes":nodes,
+                    },
+                    success:function (data) {
+                        window.location.href="${ctx}/dataUpload"
+                    },
+                    error:function () {
+                        console.log("请求失败")
+                    }
+                })
+            }
         }
         $(function(){
             $.ajax({
@@ -600,22 +583,9 @@
                 }
             })
         });
-
-
         function previewSqlDataAndComs(dataSourceId,str) {
+            /* var sqlName = splistLastStr(str);*/
             $.ajax({
-                url:"${ctx}/datatask/sqlValidation",
-                type:"GET",
-                data:{
-                    sqlStr:str,
-                    dataSourceId:dataSourceId
-                },
-                success:function (data) {
-                    console.log(data)
-                }
-            })
-           /* var sqlName = splistLastStr(str);*/
-           /* $.ajax({
                 type: "GET",
                 url:  '${ctx}/relationship/previewRelationalDatabaseBySQL',
                 data: {
@@ -646,7 +616,7 @@
                     var html = template("previewTableDataAndComsTmpl", {"datas": data.datas});
                     $('#pre-body').html(html);
                 }
-            });*/
+            });
         }
         function splistLastStr(str) {
 

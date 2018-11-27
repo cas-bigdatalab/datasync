@@ -19,9 +19,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.sql.Timestamp;
+import java.text.FieldPosition;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 
@@ -35,6 +37,8 @@ import java.util.regex.Matcher;
 @Controller
 @RequestMapping("/datatask")
 public class DataTaskController {
+
+    private static final FieldPosition HELPER_POSITION = new FieldPosition(0);
     @Resource
     private DataTaskService dataTaskService;
     @Resource
@@ -56,7 +60,7 @@ public class DataTaskController {
     @RequestMapping(value="/{id}")
     public JSONObject executeTask(@PathVariable("id") String id){
         JSONObject jsonObject = new JSONObject();
-        DataTask dataTask = dataTaskService.get(Integer.parseInt(id));
+        DataTask dataTask = dataTaskService.get(id);
         jsonObject = dataTaskService.executeTask(dataTask);
         dataTaskService.packDataResource(jsonObject.get("filePath").toString()+File.separator+dataTask.getDataTaskId()+".zip",Arrays.asList(dataTask.getSqlFilePath().split(";")));
         String fp = jsonObject.get("filePath").toString()+File.separator+dataTask.getDataTaskId()+".zip";
@@ -152,7 +156,7 @@ public class DataTaskController {
     @ResponseBody
     public JSONObject datataskDetail(String datataskId){
         JSONObject jsonObject = new JSONObject();
-        DataTask datatask = dataTaskService.get(Integer.parseInt(datataskId));
+        DataTask datatask = dataTaskService.get(datataskId);
         DataSrc dataSrc = dataSrcService.findById(datatask.getDataSourceId());
         jsonObject.put("datatask",datatask);
         jsonObject.put("dataSrc",dataSrc);
@@ -185,6 +189,11 @@ public class DataTaskController {
         datatask.setCreateTime(new Date());
         datatask.setDataTaskType("mysql");
         datatask.setStatus("0");
+        Calendar rightNow = Calendar.getInstance();
+        StringBuffer sb = new StringBuffer();
+        Format dateFormat = new SimpleDateFormat("MMddHHmmssS");
+        dateFormat.format(rightNow.getTime(), sb, HELPER_POSITION );
+        datatask.setDataTaskId(sb.toString());
         int flag = dataTaskService.insertDatatask(datatask);
         jsonObject.put("result",flag);
         if(flag < 0){
@@ -211,7 +220,13 @@ public class DataTaskController {
         datatask.setCreateTime(new Date());
         datatask.setDataTaskType("file");
         datatask.setStatus("0");
-        int datataskId = dataTaskService.insertDatatask(datatask);
+        Calendar rightNow = Calendar.getInstance();
+        StringBuffer sb = new StringBuffer();
+        Format dateFormat = new SimpleDateFormat("MMddHHmmssS");
+        dateFormat.format(rightNow.getTime(), sb, HELPER_POSITION );
+        String datataskId = sb.toString();
+        datatask.setDataTaskId(datataskId);
+        dataTaskService.insertDatatask(datatask);
         if(dataSourceId <0 ){
             jsonObject.put("result",false);
             return  jsonObject;
@@ -288,7 +303,7 @@ public class DataTaskController {
      */
     @ResponseBody
     @RequestMapping("")
-    public JSONObject getDatataskById(int datataskId){
+    public JSONObject getDatataskById(String datataskId){
         JSONObject jsonObject = new JSONObject();
         DataTask dataTask = dataTaskService.get(datataskId);
         jsonObject.put("datatask",dataTask);

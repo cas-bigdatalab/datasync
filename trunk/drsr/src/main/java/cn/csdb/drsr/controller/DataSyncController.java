@@ -64,7 +64,7 @@ public class DataSyncController {
      */
     @ResponseBody
     @RequestMapping("/ftpUpload")
-    public int ftpUpload(int dataTaskId,String processId){
+    public int ftpUpload(String dataTaskId,String processId){
         logger.info("=========================上传流程开始========================" + "\n");
         String host = configPropertyService.getProperty("FtpHost");
         String userName = configPropertyService.getProperty("FtpUser");
