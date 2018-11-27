@@ -13,7 +13,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title>登陆</title>
+    <title>系统登录</title>
     <meta name="author" content="DeathGhost" />
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/loginStyle.css" tppabs="${ctx}/resources/css/loginStyle.css">
     <style>

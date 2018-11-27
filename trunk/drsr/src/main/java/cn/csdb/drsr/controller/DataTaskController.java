@@ -19,11 +19,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.sql.Timestamp;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 
@@ -37,8 +39,6 @@ import java.util.regex.Matcher;
 @Controller
 @RequestMapping("/datatask")
 public class DataTaskController {
-
-    private static final FieldPosition HELPER_POSITION = new FieldPosition(0);
     @Resource
     private DataTaskService dataTaskService;
     @Resource
@@ -47,6 +47,9 @@ public class DataTaskController {
     private DataSrcService dataSrcService;
     @Autowired
     private ConfigPropertyService configPropertyService;
+
+    private static final FieldPosition HELPER_POSITION = new FieldPosition(0);
+
 
     /**
      * Function Description:执行一个数据任务，导出SQL文件后返回执行状态
@@ -62,7 +65,7 @@ public class DataTaskController {
         JSONObject jsonObject = new JSONObject();
         DataTask dataTask = dataTaskService.get(id);
         jsonObject = dataTaskService.executeTask(dataTask);
-        dataTaskService.packDataResource(jsonObject.get("filePath").toString()+File.separator+dataTask.getDataTaskId()+".zip",Arrays.asList(dataTask.getSqlFilePath().split(";")));
+        dataTaskService.packDataResource(jsonObject.get("filePath").toString()+File.separator+dataTask.getDataTaskId()+".zip",Arrays.asList(dataTask.getSqlFilePath().split(";")),dataTask);
         String fp = jsonObject.get("filePath").toString()+File.separator+dataTask.getDataTaskId()+".zip";
         dataTask.setFilePath(fp.replace(File.separator,"%_%"));
         dataTaskService.update(dataTask);
@@ -176,9 +179,9 @@ public class DataTaskController {
     @RequestMapping(value="saveRelationDatatask",method = RequestMethod.POST)
     public JSONObject saveRelationDatatask(int dataSourceId,
                                            String datataskName,
-                                   String dataRelTableList,
-                                   String sqlTableNameEnList,
-                                   @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList) {
+                                           String dataRelTableList,
+                                           String sqlTableNameEnList,
+                                           @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList) {
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);

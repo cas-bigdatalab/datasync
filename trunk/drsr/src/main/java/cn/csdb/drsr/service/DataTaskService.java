@@ -19,8 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.sql.Connection;
 import java.util.List;
 
@@ -51,7 +50,24 @@ public class DataTaskService {
 
 
     public JSONObject executeTask(DataTask dataTask) {
+        String fileName = dataTask.getDataTaskName()+"log.txt";//文件名及类型
+        String path = "D:\\";
+        FileWriter fw = null;
+        File file = new File(path, fileName);
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+                fw = new FileWriter(file, true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        PrintWriter pw = new PrintWriter(fw);
+        pw.println("=========================导出流程开始========================");
+
+/*
         logger.info("=========================导出流程开始========================" + "\n");
+*/
         JSONObject jsonObject = new JSONObject();
         try {
             DataSrc dataSrc = dataSrcDao.findById(dataTask.getDataSourceId());
@@ -86,7 +102,8 @@ public class DataTaskService {
                 sqlSb.append(DDL2SQLUtils.generateDDLFromSql(connection, sqlString, sqlTableNameEn));
                 dataSb.append(DDL2SQLUtils.generateInsertSqlFromSQL(connection, sqlString, sqlTableNameEn));
             }
-
+            pw.println("=========================SQL数据表结构:========================\n" + sqlSb.toString() + "\n");
+            pw.println("=========================SQL数据内容:==========================\n" + dataSb.toString() + "\n");
             logger.info("=========================SQL数据表结构:========================\n" + sqlSb.toString() + "\n");
             logger.info("=========================SQL数据内容:==========================\n" + dataSb.toString() + "\n");
 
@@ -110,12 +127,22 @@ public class DataTaskService {
             boolean result = dataTaskDao.update(dataTask);
             jsonObject.put("result", "true");
             jsonObject.put("filePath", filePath.getPath());
+            pw.println("导出成功，result = " + result+ "\n");
             logger.info("导出成功，result = " + result+ "\n");
+            pw.println("=========================导出流程结束========================" + "\n");
             logger.info("=========================导出流程结束========================" + "\n");
         } catch (Exception ex) {
             jsonObject.put("result", "false");
             logger.error("导出失败，result = false" + "\n");
+            pw.println("=========================导出流程结束========================" + "\n");
             logger.info("=========================导出流程结束========================" + "\n");
+        }
+        try {
+            fw.flush();
+            pw.close();
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return jsonObject;
     }
@@ -154,7 +181,7 @@ public class DataTaskService {
         return dataTaskDao.insertDatatask(datatask);
     }
 
-    public String packDataResource(final String fileName ,final List<String> filePaths) {
+    public String packDataResource(final String fileName ,final List<String> filePaths,DataTask dataTask) {
 //        dbFlag.await();
 //        String zipFilePath = "zipFile";
 //        File dir  = new File(System.getProperty("drsr.framework.root") + zipFilePath );
@@ -162,6 +189,19 @@ public class DataTaskService {
 //            dir.mkdirs();
 //        }
 //        String zipFile = System.getProperty("drsr.framework.root") + zipFilePath + File.separator + fileName + ".zip";
+        String fileName1 = dataTask.getDataTaskName()+"log.txt";//文件名及类型
+        String path = "D:\\";
+        FileWriter fw = null;
+        File file1 = new File(path, fileName1);
+        if(!file1.exists()){
+            try {
+                file1.createNewFile();
+                fw = new FileWriter(file1, true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        PrintWriter pw = new PrintWriter(fw);
         ZipArchiveOutputStream outputStream = null;
         try {
 //            if (new File(dirName).exists()) {
@@ -172,7 +212,9 @@ public class DataTaskService {
             outputStream.setEncoding("utf-8"); //23412
             outputStream.setCreateUnicodeExtraFields(ZipArchiveOutputStream.UnicodeExtraFieldPolicy.ALWAYS);
             outputStream.setFallbackToUTF8(true);
+            pw.println("=========================打包流程开始========================" + "\n");
             logger.info("=========================打包流程开始========================" + "\n");
+            pw.println(".zip:文件数据源,开始打包文件...\"+ \"\n");
             logger.info(".zip:文件数据源,开始打包文件..."+ "\n");
             for (String filePath : filePaths) {
                 filePath = filePath.replace("%_%",File.separator);
@@ -182,15 +224,26 @@ public class DataTaskService {
                 }
                 ZipUtils.zipDirectory(file, "", outputStream);
             }
+            pw.println("打包成功" + "\n");
             logger.info("打包成功" + "\n");
         } catch (Exception e) {
+            pw.println("打包失败"+ e+"\n");
             logger.error("打包失败", e+ "\n");
             return "error";
         } finally {
+            pw.println("打包失败"+ "\n");
+            pw.println("=========================打包流程结束========================" + "\n");
             logger.info("=========================打包流程结束========================" + "\n");
             try {
                 outputStream.finish();
                 outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                fw.flush();
+                pw.close();
+                fw.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
