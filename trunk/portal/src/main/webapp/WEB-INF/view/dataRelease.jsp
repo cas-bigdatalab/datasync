@@ -73,8 +73,9 @@
                         <label style="padding-left: 10px;">状态:</label>
                         <select id="resourceState" class="form-control" style="width: 120px">
                             <option value="">全部</option>
-                            <option value="审核通过">审核通过</option>
                             <option value="待审核">待审核</option>
+                            <option value="未完成">未完成</option>
+                            <option value="审核通过">审核通过</option>
                             <option value="审核未通过">审核未通过</option>
                         </select>
                     </div>
@@ -490,13 +491,23 @@
         <td id="{{value.dataTaskId}}">审核未通过</td>
         {{else if value.status == '2'}}
         <td id="{{value.dataTaskId}}">审核通过</td>
+        {{else if value.status == '-1'}}
+        <td id="{{value.dataTaskId}}">未完成</td>
         {{/if}}
 
         <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>
         <td>
-            <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')"><i
+            {{if value.status == '-1'}}
+            <button type="button" class="btn  edit-data btn-xs blue" style="margin-right: 66px"
+                    onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')"><i
                     class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
             </button>
+            {{else if value.status != '-1'}}
+            <button type="button" class="btn  edit-data btn-xs blue"
+                    onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')"><i
+                    class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
+            </button>
+            {{/if}}
 <shiro:hasRole name="admin">
             <button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;编辑
             </button>
@@ -534,7 +545,7 @@
         <form class="form-horizontal">
             <div class="form-group">
                 <label  class="col-sm-3 control-label">审核人姓名&nbsp;&nbsp;:</label>
-                <div class="col-sm-9">aaaa</div>
+                <div class="col-sm-9">{{value.auditPerson}}</div>
             </div>
             <div class="form-group">
                 <label  class="col-sm-3 control-label">审核时间&nbsp;&nbsp;:</label>

@@ -341,6 +341,42 @@ public class DataSrcDao {
         }
     }
 
+    public int getRecordCount(String host, String port, String userName, String password, String databaseName, List<String> tableName) {
+        String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName;
+        Connection con = null;
+        int totalcount = 0;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(url, userName, password);
+            Statement statement = con.createStatement();
+            for (int i=0;i<tableName.size();i++){
+                String sql = "SELECT count(*) FROM "+tableName.get(i);
+                ResultSet result = statement.executeQuery(sql);
+                if (result.next())
+                {
+                    totalcount += result.getInt(1);
+                }
+            }
+            return totalcount;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            logger.error("无法加载数据库驱动", e);
+            return totalcount;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.error("查询列信息出错", e);
+            return totalcount;
+        } finally {
+            if (con != null)
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+        }
+    }
+
+
     class FileComparator implements Comparator<JSONObject> {
 
         public int compare(JSONObject o1, JSONObject o2) {

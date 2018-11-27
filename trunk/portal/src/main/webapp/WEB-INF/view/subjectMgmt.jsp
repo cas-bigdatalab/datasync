@@ -113,7 +113,7 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectName">
-                                数据节点名称<span style="color: red;">*</span>
+                                节点名称<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
                                 <input type="text" class="form-control" placeholder="请输入数据节点名称" id="subjectName" name="subjectName" required="required"/>
@@ -123,7 +123,7 @@
                         <!--SubjectCode需要保证唯一性，为了保证唯一，需要通过后端数据库交互验证是否已经存在-->
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                数据节点代码<span style="color: red;">*</span>
+                                节点代码<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
                                 <input type="text" class="form-control" placeholder="请输入数据节点代码" id="subjectCode" name="subjectCode"  required="required" />
@@ -141,7 +141,7 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                数据节点简介
+                                节点简介
                             </label>
                             <div class="col-md-9">
                                 <textarea class="form-control" placeholder="请输入数据节点简介" id="brief" name="brief"></textarea>
@@ -237,7 +237,7 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectName">
-                                数据节点名称<span style="color: red;">*</span>
+                                节点名称<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
                                 <input type="text" class="form-control" placeholder="请输入数据节点名称" id="subjectNameM" name="subjectName" required="required"/>
@@ -246,7 +246,7 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                数据节点代码<span style="color: red;">*</span>
+                                节点代码<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
                                 <input type="text" class="form-control" placeholder="请输入数据节点代码" id="subjectCodeM" name="subjectCode"  required="required" readonly="readonly"/>
@@ -264,7 +264,7 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                数据节点简介
+                                节点简介
                             </label>
                             <div class="col-md-9">
                                 <textarea class="form-control" placeholder="请输入数据节点简介" id="briefM" name="brief"></textarea>
