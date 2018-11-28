@@ -58,12 +58,12 @@ public class UserDao {
     private void addUserToGroup(String userId, String groupName)
     {
         //输入参数校验
-        userId = userId.trim();
-        groupName = groupName.trim();
-        if(userId.equals("") || groupName.equals(""))
+        if(userId == null || userId.trim().equals("") || groupName == null || groupName.trim().equals(""))
         {
             return;
         }
+        userId = userId.trim();
+        groupName = groupName.trim();
 
         //从t_group表中查找出名字为groupName的group，加入userName到它的users中去，之后把group再写入t_group表中
         logger.info("userId = " + userId + ", groupName = " + groupName);
@@ -72,15 +72,13 @@ public class UserDao {
         Group group = mongoTemplate.findOne(query, Group.class);
 
         List<String> users = group.getUsers();
-        System.out.println("group = " + group + ", users = " + users.get(0));
         if (users == null)
         {
             users = new ArrayList<String>();
         }
-        else  //group中的users字段是一个List<String>，它存入mongodb之后，会变成一个数组，之后查询出来就成为一个字符串了，所以这种要做切分
-        {
+        System.out.println("group = " + group + ", users = " + users.get(0));
 
-        }
+
         logger.info("groupName = " + groupName + ", users before add new user, users = " + users);
         users.add(userId);
         logger.info("groupName = " + groupName + ", users after added new user, users = " + users);
@@ -102,11 +100,18 @@ public class UserDao {
         {
             return;
         }
-        //从t_group表中查找出名字为groupName的group，加入userName到它的users中去，之后把group再写入t_group表中
+        userId = userId.trim();
+        groupName = groupName.trim();
         logger.info("userId = " + userId + ", groupName = " + groupName);
+
+        //先查出group中的users，然后从中删掉userId， 再把users存入group
         DBObject dBObject = QueryBuilder.start().and("groupName").is(groupName).get();
         Query query = new BasicQuery(dBObject);
         Group group = mongoTemplate.findOne(query, Group.class);
+        if (group == null)
+        {
+            return;
+        }
         List<String> users = group.getUsers();
         if (users == null || users.size() == 0)
         {
