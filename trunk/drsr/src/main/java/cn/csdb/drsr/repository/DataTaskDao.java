@@ -38,13 +38,15 @@ public class DataTaskDao {
         String sql = "update T_dataTask set " +
                 "DataSourceId=?,DataTaskName=?,DataTaskType=?," +
                 "TableName=?,SqlString=?,SqlTableNameEn=?," +
-                "SqlFilePath=?,FilePath=?,Creator=?,Status=?,SubjectCode=? " +
+                "SqlFilePath=?,FilePath=?,Creator=?," +
+                "Status=?,SubjectCode=?,LogPath=? " +
                 "where DataTaskId=? ";
         int i = jdbcTemplate.update(sql, new Object[]{
                 dataTask.getDataSourceId(), dataTask.getDataTaskName(), dataTask.getDataTaskType(),
                 dataTask.getTableName(), dataTask.getSqlString(), dataTask.getSqlTableNameEn(),
                 dataTask.getSqlFilePath(), dataTask.getFilePath(), dataTask.getCreator(),
-                dataTask.getStatus(), dataTask.getSubjectCode(),dataTask.getDataTaskId()});
+                dataTask.getStatus(), dataTask.getSubjectCode(),dataTask.getLogPath(),
+                dataTask.getDataTaskId()});
         if (i >= 0) {
             result = true;
         }
@@ -126,8 +128,11 @@ public class DataTaskDao {
 
     public int insertDatatask(final DataTask datatask) {
         boolean flag = false;
-        final String sql = "insert into t_datatask(dataSourceId,dataTaskName,dataTaskType," +
-                "tableName,sqlString,sqlTableNameEn,sqlFilePath,filePath,createTime,creator,status,datataskId,subjectCode) " +
+        final String sql = "insert into t_datatask(" +
+                "dataSourceId,dataTaskName,dataTaskType," +
+                "tableName,sqlString,sqlTableNameEn," +
+                "sqlFilePath,filePath,createTime," +
+                "creator,status,datataskId,subjectCode) " +
                 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 //        int i = jdbcTemplate.update(sql, new Object[]{datatask.getDataSourceId(),datatask.getDataTaskName(),
 //                datatask.getDataTaskType(), datatask.getTableName(), datatask.getSqlString(),

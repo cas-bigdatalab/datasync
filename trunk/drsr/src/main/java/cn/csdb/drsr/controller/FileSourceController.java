@@ -269,7 +269,9 @@ public class FileSourceController {
      */
     @RequestMapping(value="findAllFileSrc")
     public @ResponseBody List<DataSrc> findAllFileSrc(){
-        return fileResourceService.findAll();
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+        return fileResourceService.findAll(subjectCode);
     }
 
     /**

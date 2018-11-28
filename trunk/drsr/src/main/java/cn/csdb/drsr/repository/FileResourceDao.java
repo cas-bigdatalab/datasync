@@ -154,10 +154,10 @@ public class FileResourceDao {
      * @auther: hw
      * @date: 2018/10/23 9:55
      */
-    public List<DataSrc> findAll() {
+    public List<DataSrc> findAll(String subjectCode) {
         List<DataSrc> dataSrcs = new ArrayList<DataSrc>();
-        String sql = "select * from t_datasource where DataSourceType='file'";
-        List<DataSrc> list = jdbcTemplate.query(sql,new DataSrcMapper());
+        String sql = "select * from t_datasource where DataSourceType='file' and SubjectCode=?";
+        List<DataSrc> list = jdbcTemplate.query(sql,new Object[]{subjectCode},new DataSrcMapper());
         return list;
     }
 

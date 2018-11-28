@@ -146,16 +146,22 @@ public class RelationDao{
         return relationDataOfThisPage;
     }
 
-    public List<DataSrc> findAll() {
+    public List<DataSrc> findAllBySubjectCode(String subjectCode) {
         List<DataSrc> dataSrcs = new ArrayList<DataSrc>();
-        String sql = "select * from t_datasource where DataSourceType='db'";
-        List<DataSrc> list = jdbcTemplate.query(sql,new DataSrcMapper());
+        String sql = "select * from t_datasource where DataSourceType='db' and SubjectCode=?";
+        List<DataSrc> list = jdbcTemplate.query(sql,new Object[]{subjectCode},new DataSrcMapper());
         return list;
     }
 
     public DataSrc findById(int id) {
         String sql = "select * from t_datasource where DataSourceId=?";
         DataSrc dataSrc = jdbcTemplate.queryForObject(sql, new Object[]{id}, new int[]{Types.INTEGER}, new DataSrcMapper());
+        return dataSrc;
+    }
+
+    public DataSrc findByIdAndSubjectCode(int id,String subjectCode) {
+        String sql = "select * from t_datasource where DataSourceId=? and SubjectCode=?";
+        DataSrc dataSrc = jdbcTemplate.queryForObject(sql, new Object[]{id,subjectCode}, new int[]{Types.INTEGER}, new DataSrcMapper());
         return dataSrc;
     }
 

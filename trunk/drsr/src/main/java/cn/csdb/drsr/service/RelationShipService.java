@@ -138,8 +138,8 @@ public class RelationShipService {
         }
     }
 
-    public List<DataSrc> findAll() {
-        return relationDao.findAll();
+    public List<DataSrc> findAllBySubjectCode(String subjectCode) {
+        return relationDao.findAllBySubjectCode(subjectCode);
     }
 
     public List<String> relationalDatabaseTableList(DataSrc dataSrc) {
@@ -148,6 +148,10 @@ public class RelationShipService {
         if (connection == null)
             return null;
         return dataSource.getTableList(connection);
+    }
+
+    public DataSrc findByIdAndSubjectCode(int id,String subjectCode) {
+        return relationDao.findByIdAndSubjectCode(id,subjectCode);
     }
 
     public DataSrc findById(int id) {

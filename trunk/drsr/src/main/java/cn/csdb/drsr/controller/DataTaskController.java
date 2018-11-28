@@ -383,4 +383,79 @@ public class DataTaskController {
     }
 
 
+    @ResponseBody
+    @RequestMapping(value="updateRelationDatatask",method = RequestMethod.POST)
+    public JSONObject updateRelationDatatask(String datataskId,
+                                             int dataSourceId,
+                                             String datataskName,
+                                             String dataRelTableList,
+                                             String sqlTableNameEnList,
+                                             @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList) {
+        String subjectCode = configPropertyService.getProperty("SubjectCode");
+        JSONObject jsonObject = new JSONObject();
+        DataTask datatask = dataTaskService.get(datataskId);
+        datatask.setDataSourceId(dataSourceId);
+        datatask.setDataTaskName(datataskName);
+        datatask.setTableName(dataRelTableList);
+        datatask.setSqlString(dataRelSqlList);
+        datatask.setSqlTableNameEn(sqlTableNameEnList);
+        datatask.setCreateTime(new Date());
+        datatask.setDataTaskType("mysql");
+        datatask.setStatus("0");
+        datatask.setSubjectCode(subjectCode);
+        int flag = dataTaskService.insertDatatask(datatask);
+        jsonObject.put("result",flag);
+        if(flag < 0){
+            return  jsonObject;
+        }
+        return jsonObject;
+    }
+
+    @ResponseBody
+    @RequestMapping(value="updateFileDatatask",method = RequestMethod.POST)
+    public JSONObject updateFileDatatask(String datataskId,int dataSourceId, String datataskName,String[] nodes){
+        String subjectCode = configPropertyService.getProperty("SubjectCode");
+        JSONObject jsonObject = new JSONObject();
+        DataTask datatask = dataTaskService.get(datataskId);
+        datatask.setDataSourceId(dataSourceId);
+        StringBuffer filePath = new StringBuffer("");
+        String str1 = "";
+        for (String nodeId : nodes){
+            String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
+            File file = new File(str);
+            if(file.isDirectory()) {
+                str1 = fileResourceService.traversingFiles(str);
+            }else{
+                str1 = str + ";";
+            }
+            if(filePath.indexOf(str+";")!=-1){
+
+            }else{
+                filePath.append(str1);
+            }
+        }
+        datatask.setFilePath(filePath.toString());
+        datatask.setDataTaskName(datataskName);
+        datatask.setCreateTime(new Date());
+        datatask.setDataTaskType("file");
+        datatask.setStatus("0");
+        datatask.setSubjectCode(subjectCode);
+        Calendar rightNow = Calendar.getInstance();
+        dataTaskService.insertDatatask(datatask);
+        if(dataSourceId <0 ){
+            jsonObject.put("result",false);
+            return  jsonObject;
+        }
+        List<String> filepaths = Arrays.asList(filePath.toString().split(";"));
+
+        String fileName = subjectCode+"_"+datataskId;
+        fileResourceService.packDataResource(fileName,filepaths);
+        String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
+        DataTask dt = dataTaskService.get(datataskId);
+        dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
+        boolean upresult = dataTaskService.update(dt);
+        jsonObject.put("result",true);
+        return  jsonObject;
+    }
+
 }
