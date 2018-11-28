@@ -45,7 +45,7 @@
                     <select  id="DBchange" class="form-control"></select>
                 </div>
             </form>
-            <div class="database-con-rel container-fluid" style="display: none">
+            <div class="database-con-rel container-fluid" >
                 <div class="row">
                     <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
                     <div class="col-md-9 dataHead2" id="resTitle" style="display: none"></div>
@@ -88,7 +88,7 @@
                 </div>
             </form>
 
-            <div class="database-con-file container-fluid" style="display: none;">
+            <div class="database-con-file container-fluid" >
                 <div class="row">
                     <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
                     <div class="col-md-9 dataHead2" id="fileTitle" style="display: none"></div>
@@ -258,10 +258,11 @@
     <%--<script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>--%>
 
     <script>
+        var sdoId = "${datataskId}";
+        console.log(sdoId)
         var dataRelSrcId;
         var dataRelTableList;
         var dataRelSqlList;
-
         var dataFileSrcId;
         var dataFilePathList;
         var dateDef = new Date();
@@ -621,6 +622,20 @@
                 error:function () {
                     console.log("请求失败")
                 }
+            })
+            $.ajax({
+                url:"${ctx}/datatask",
+                type:"GET",
+                data:{
+                    datataskId:sdoId
+                },
+                success:function (data) {
+                    console.log(JSON.parse(data))
+                },
+                error:function (data) {
+                    console.log("请求失败")
+                }
+
             })
         });
 
