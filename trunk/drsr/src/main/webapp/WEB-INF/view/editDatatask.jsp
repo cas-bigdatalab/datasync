@@ -607,7 +607,7 @@
                 toastr["error"]("最少选择一个文件资源");
                 return
             }*/
-            if(nodes.length==0){
+            if(nodes.length==0&&(tags_tagsinput.length==0)){
                 toastr["error"]("您尚未选取文件");
                 return
             }else{
