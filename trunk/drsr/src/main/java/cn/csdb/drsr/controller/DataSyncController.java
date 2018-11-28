@@ -70,7 +70,7 @@ public class DataSyncController {
     public int ftpUpload(String dataTaskId, String processId){
         DataTask dataTask = dataTaskService.get(String.valueOf(dataTaskId));
         String fileName = dataTask.getDataTaskName()+"log.txt";//文件名及类型
-        String path = "D:\\";
+        String path = "/logs/";
         FileWriter fw = null;
         File file = new File(path, fileName);
         if(!file.exists()){
