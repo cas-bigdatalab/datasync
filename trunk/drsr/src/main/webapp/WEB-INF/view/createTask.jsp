@@ -66,7 +66,7 @@
                             </div>
                             <div class="col-md-4">
                                 <button type="button" class="btn blue preview">预览</button>
-                                <%--<button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>sql查询</button>--%>
+                                <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>sql查询</button>
                             </div>
                             <div class="col-md-2" style="text-align: left">
                             </div>
@@ -266,7 +266,7 @@
         var dataFilePathList;
         var dateDef = new Date();
         var taskNameFlag=false
-        var sqlFlag=
+        var validSql = true;
         dateDef = dateDef.Format("yyyyMMddhhmmss");
         $("#dataTaskName").val("数据任务"+dateDef)
         $("#dataTaskName").focusout(function () {
@@ -446,8 +446,12 @@
             $(this).parent().parent().remove();
         })
         $("#totalList").delegate(".preview","click",function () {
-            var $Str =$(this).parent().parent().find(".sqlStatements").val();;
+            var $Str =$(this).parent().parent().find(".sqlStatements").val();
             previewSqlDataAndComs(dataRelSrcId,$Str)
+        })
+        $("#totalList").delegate(".sqlStatements","change",function () {
+            console.log("aaaa")
+            $(this).css("border-color","")
         })
         function addSql() {
             var result = true;
@@ -502,6 +506,20 @@
                     toastr["error"]("sql语句和新建表名不能为空");
                     return
                 }
+            }
+
+            $(".sqlStatements").each(function (i) {
+                var validSql = true;
+                if(validSql){
+                    allSqlvalidata(dataRelSrcId,$(this).val(),i)
+                }else {
+                    return
+                }
+
+            })
+            if(!validSql){
+                toastr["error"]("sql语句存在错误");
+                return
             }
             $("[name='sqlTableName']").each(function () {
                 dataRelSqlTableList+=$(this).val()+";"
@@ -666,6 +684,24 @@
             var arr =str.split(" ");
             var lastStr = arr[arr.length - 1];
             return lastStr;
+        }
+        function allSqlvalidata(dataSourceId,str,index) {
+            $.ajax({
+                url:"${ctx}/datatask/sqlValidation",
+                type:"GET",
+                async: false,
+                data:{
+                    sqlStr:str,
+                    dataSourceId:dataSourceId
+                },
+                success:function (data) {
+                    var flag = JSON.parse(data).result
+                    if(!flag){
+                        validSql = flag
+                        $(".sqlStatements:eq("+ index+")").css("border-color","red")
+                    }
+                }
+            })
         }
 
     </script>
