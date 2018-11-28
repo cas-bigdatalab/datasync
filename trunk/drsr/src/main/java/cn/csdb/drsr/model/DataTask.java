@@ -22,6 +22,7 @@ public class DataTask {
     private Date createTime;
     private String creator;
     private String status;
+    private String LogPath;
     private DataSrc dataSrc;
 
     public String getSubjectCode() {
@@ -134,5 +135,13 @@ public class DataTask {
 
     public void setSqlFilePath(String sqlFilePath) {
         this.sqlFilePath = sqlFilePath;
+    }
+
+    public String getLogPath() {
+        return LogPath;
+    }
+
+    public void setLogPath(String logPath) {
+        LogPath = logPath;
     }
 }
