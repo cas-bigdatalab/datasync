@@ -79,6 +79,10 @@ public class SubjectMgmtService {
     public int deleteSubject(String id)
     {
         String deleteSubjectNotice = "";
+        Subject subject = subjectMgmtDao.findSubjectById(id);
+        String admin = subject.getAdmin();
+        userDao.deleteUserByLoginId(admin);
+
         int deletedRowCnt = subjectMgmtDao.deleteSubject(id);
 
         return deletedRowCnt;
@@ -96,6 +100,21 @@ public class SubjectMgmtService {
     public String updateSubject(Subject subject)
     {
         String updatedSubjectNotice = "";
+
+        String admin = subject.getAdmin();
+        String adminPasswd = subject.getAdminPasswd();
+        User subjectUser = new User();
+        subjectUser.setUserName(admin);
+        subjectUser.setLoginId(admin);
+        subjectUser.setPassword(adminPasswd);
+        subjectUser.setSubjectCode(subject.getSubjectCode());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
+        subjectUser.setCreateTime(sdf.format(new Date()));
+        subjectUser.setRole("数据节点管理员");
+        subjectUser.setStat(0); //0：数据有效，1：数据无效
+        subjectUser.setGroups("");
+        userDao.updateUser(subjectUser);
+
         int modifiedRowCnt = subjectMgmtDao.updateSubject(subject);
         if (modifiedRowCnt == 1)
         {

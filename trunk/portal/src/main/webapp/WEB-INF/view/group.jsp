@@ -1306,7 +1306,7 @@
                         "loginId": $("#loginIdForUpdate").val(),
                         "password": $("#passwordForUpdate").val(),
                         "subjectCode": $("#subjectCodeForUpdateUserDialog").val().toString(),
-                        "groups": $("#groupsForUpdateUserDialog").val().toString()
+                        "groups": ($("#groupsForUpdateUserDialog").val()==null) ? "" : ($("#groupsForUpdateUserDialog").val().toString())
                     },
                     dataType: "text",
                     success: function (data) {

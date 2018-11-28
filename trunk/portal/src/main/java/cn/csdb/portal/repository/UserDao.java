@@ -272,6 +272,19 @@ public class UserDao {
         return deletedUserCnt;
     }
 
+    public int deleteUserByLoginId(String loginId)
+    {
+        int deletedUserCnt = 0;
+        DBObject dbObject = QueryBuilder.start().and("loginId").is(loginId).get();
+        Query query = new BasicQuery(dbObject);
+        User user = mongoTemplate.findOne(query, User.class);
+        WriteResult writeResult = mongoTemplate.remove(query, "t_user");
+
+        deletedUserCnt = writeResult.getN();
+
+        return deletedUserCnt;
+    }
+
     public User getUserById(String id)
     {
         DBObject dbObject = QueryBuilder.start().and("_id").is(id).get();
@@ -285,8 +298,6 @@ public class UserDao {
     {
         int updatedUserCnt = 1;
 
-        String userName = user.getUserName();
-        String[] groupArr = user.getGroups().split(",");
         updateUserGroup(user);
 
         mongoTemplate.save(user);
@@ -298,8 +309,17 @@ public class UserDao {
     {
         String userId = user.getId();
         String groupsBeforeUpdate = mongoTemplate.findById(userId, User.class).getGroups();
+        if (groupsBeforeUpdate == null)
+        {
+            groupsBeforeUpdate = "";
+        }
+        String groupsAfterUpdate = user.getGroups();
+        if (groupsAfterUpdate == null)
+        {
+            groupsAfterUpdate = "";
+        }
         String[] groupsBeforeUpdateArr = groupsBeforeUpdate.split(",");
-        String[] updatedGroupsArr = user.getGroups().split(",");
+        String[] updatedGroupsArr = groupsAfterUpdate.split(",");
 
         //如果有新增的用户组，则把用户加入到新增的用户组中去
         for (int i = 0; i < updatedGroupsArr.length; i++)
