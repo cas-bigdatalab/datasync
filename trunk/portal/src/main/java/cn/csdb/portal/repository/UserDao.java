@@ -69,15 +69,23 @@ public class UserDao {
         DBObject dBObject = QueryBuilder.start().and("groupName").is(groupName).get();
         Query query = new BasicQuery(dBObject);
         Group group = mongoTemplate.findOne(query, Group.class);
+        System.out.println("group = " + group);
+
         List<String> users = group.getUsers();
         if (users == null)
         {
             users = new ArrayList<String>();
         }
+        else  //group中的users字段是一个List<String>，它存入mongodb之后，会变成一个数组，之后查询出来就成为一个字符串了，所以这种要做切分
+        {
+
+        }
         logger.info("groupName = " + groupName + ", users before add new user, users = " + users);
         users.add(userId);
         logger.info("groupName = " + groupName + ", users after added new user, users = " + users);
         group.setUsers(users);
+        System.out.println("group = " + group);
+
         mongoTemplate.save(group);
     }
 
