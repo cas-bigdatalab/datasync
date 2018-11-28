@@ -1140,16 +1140,20 @@
                     if (userSize == 0)
                     {
                         $("#paginationForUser").off();
+                        $(".table-message").show();
                         $(".table-message").html("暂时没有数据");
-                        $(".page-message").html("");
-                        $(".page-list").html("");
+                        $(".page-message").hide();
+                        $(".page-list").hide();
+                        $("#userList").hide();
                     }
                     else
                     {
                         $(".table-message").hide();
+                        $(".page-message").show();
+                        $(".page-list").show();
+                        $("#userList").show();
 
                         var html = template("userListTable", data);
-
                         $("#userList").empty();
                         $("#userList").append(html);
 

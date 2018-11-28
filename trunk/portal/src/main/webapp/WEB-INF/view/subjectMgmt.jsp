@@ -565,14 +565,20 @@
                         var totalSubject = data.total;
                         if (totalSubject == 0)
                         {
-                            $("#paginationForUser").off();
+                            $("#pagination").off();
+                            $(".table-message").show();
                             $(".table-message").html("暂时没有数据");
-                            $(".page-message").html("");
-                            $(".page-list").html("");
+                            $(".page-message").hide();
+                            $(".page-list").hide();
+                            $("#subjectList").hide();
                         }
                         else
                         {
                             $(".table-message").hide();
+                            $(".page-message").show();
+                            $(".page-list").show();
+                            $("#subjectList").show();
+
                             var html = template("subjectListTable", data);
                             $("#subjectList").empty();
                             $("#subjectList").append(html);
@@ -581,6 +587,7 @@
                             currentPage = pageNum;
                             $("#totalPages").html(data.totalPages);
                             $("#total").html(data.total);
+
 
                             //分页
                             if ($("#pagination .bootpag").length != 0) {

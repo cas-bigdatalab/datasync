@@ -88,16 +88,23 @@ public class UserDao {
      */
     private void dropUserFromGroup(String userId, String groupName)
     {
+        if (userId == null || userId.trim().equals("") || groupName == null || groupName.trim().equals(""))
+        {
+            return;
+        }
         //从t_group表中查找出名字为groupName的group，加入userName到它的users中去，之后把group再写入t_group表中
         logger.info("userId = " + userId + ", groupName = " + groupName);
         DBObject dBObject = QueryBuilder.start().and("groupName").is(groupName).get();
         Query query = new BasicQuery(dBObject);
         Group group = mongoTemplate.findOne(query, Group.class);
         List<String> users = group.getUsers();
-        logger.info("groupName = " + groupName + ", users before remove new user, users = " + users);
-        if (users != null) {
-            users.remove(userId);
+        if (users == null || users.size() == 0)
+        {
+            return;
         }
+
+        logger.info("groupName = " + groupName + ", users before remove new user, users = " + users);
+        users.remove(userId);
         logger.info("groupName = " + groupName + ", users after removed new user, users = " + users);
         group.setUsers(users);
         mongoTemplate.save(group);
