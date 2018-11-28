@@ -1,6 +1,9 @@
 package cn.csdb.drsr.controller;
 
+import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
+import cn.csdb.drsr.repository.DataSrcDao;
+import cn.csdb.drsr.repository.DataTaskDao;
 import cn.csdb.drsr.service.ConfigPropertyService;
 import cn.csdb.drsr.service.DataSrcService;
 import cn.csdb.drsr.service.DataTaskService;
@@ -20,6 +23,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 
 /**
@@ -64,7 +66,28 @@ public class DataSyncController {
      */
     @ResponseBody
     @RequestMapping("/ftpUpload")
-    public int ftpUpload(String dataTaskId,String processId){
+    public int ftpUpload(int dataTaskId,String processId){
+        DataTask dataTask = dataTaskService.get(String.valueOf(dataTaskId));
+        String fileName = dataTask.getDataTaskName()+"log.txt";//文件名及类型
+        String path = "D:\\";
+        FileWriter fw = null;
+        File file = new File(path, fileName);
+        if(!file.exists()){
+            try {
+                file.createNewFile();
+                fw = new FileWriter(file, true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+            try{
+                fw = new FileWriter(file, true);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        PrintWriter pw = new PrintWriter(fw);
+        pw.println("=========================上传流程开始========================" + "\n");
         logger.info("=========================上传流程开始========================" + "\n");
         String host = configPropertyService.getProperty("FtpHost");
         String userName = configPropertyService.getProperty("FtpUser");
@@ -74,7 +97,10 @@ public class DataSyncController {
         String portalUrl = configPropertyService.getProperty("PortalUrl");
         String subjectCode = configPropertyService.getProperty("SubjectCode");
         FtpUtil ftpUtil = new FtpUtil();
+/*
         DataTask dataTask = dataTaskService.get(dataTaskId);
+*/
+        pw.println("数据任务名称为：" + dataTask.getDataTaskName() +"\n");
         logger.info("数据任务名称为：" + dataTask.getDataTaskName() +"\n");
         try {
             ftpUtil.connect(host, Integer.parseInt(port), userName, password);
@@ -93,9 +119,12 @@ public class DataSyncController {
                     return 0;
                 }
             }
+            pw.println("ftpDataTaskId"+dataTask.getDataTaskId()+"上传状态:" + result + "\n");
+            pw.println("=========================上传流程结束========================" + "\n");
             logger.info("ftpDataTaskId"+dataTask.getDataTaskId()+"上传状态:" + result + "\n");
             logger.info("=========================上传流程结束========================" + "\n");
             ftpUtil.disconnect();
+            pw.println("=========================导入流程开始========================" + "\n");
             logger.info("=========================导入流程开始========================" + "\n");
             if(result.equals("Upload_New_File_Success")||result.equals("Upload_From_Break_Succes")){
                 String dataTaskString = JSONObject.toJSONString(dataTask);
@@ -127,15 +156,22 @@ public class DataSyncController {
                     if(reponseContent.equals("1")){
                         dataTask.setStatus("1");
                         dataTaskService.update(dataTask);
+                        pw.println("导入成功"+ "\n");
+                        pw.println("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                         logger.info("导入成功"+ "\n");
                         logger.info("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                         return 1;
                     }else{
+                        pw.println("导入失败"+ "\n");
+                        pw.println("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                         logger.info("导入失败"+ "\n");
                         logger.info("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                         return 0;
                     }
                 } catch (IOException e) {
+                    pw.println("导入失败"+ "\n");
+                    pw.println("导入异常IOException:"+e+ "\n");
+                    pw.println("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                     logger.info("导入失败"+ "\n");
                     logger.error("导入异常IOException:"+e+ "\n");
                     logger.info("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
@@ -151,6 +187,14 @@ public class DataSyncController {
             logger.info("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
             System.out.println("连接FTP出错：" + e.getMessage());
             return 0;
+        }finally {
+            try {
+                fw.flush();
+                pw.close();
+                fw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return 1;
     }

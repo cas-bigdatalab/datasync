@@ -65,26 +65,26 @@ public class DataTaskDao {
      * @auther: hw
      * @date: 2018/10/23 15:46
      */
-    public List<DataTask> getDatataskByPage(int start, int pageSize, String datataskType, String status) {
+    public List<DataTask> getDatataskByPage(int start, int pageSize, String datataskType, String status,String subjectCode) {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from t_datatask ");
-        if (StringUtils.isNoneBlank(datataskType) || StringUtils.isNoneBlank(status)) {
+        if (StringUtils.isNoneBlank(datataskType) || StringUtils.isNoneBlank(status) || StringUtils.isNoneBlank(subjectCode)) {
             sb.append("where ");
         }
-        List<Object> params = getSql(datataskType, status, sb);
+        List<Object> params = getSql(datataskType, status, subjectCode,sb);
         sb.append(" order by datataskId desc limit ?,? ");
         params.add(start);
         params.add(pageSize);
         return jdbcTemplate.query(sb.toString(), params.toArray(), new DataTaskMapper());
     }
 
-    public int getCount(String datataskType,String status){
+    public int getCount(String datataskType,String status,String subjectCode){
         StringBuilder sb = new StringBuilder();
         sb.append("select count(*) from t_datatask ");
-        if (StringUtils.isNoneBlank(datataskType) || StringUtils.isNoneBlank(status)) {
+        if (StringUtils.isNoneBlank(datataskType) || StringUtils.isNoneBlank(status) || StringUtils.isNoneBlank(subjectCode)) {
             sb.append("where ");
         }
-        List<Object> params = getSql(datataskType, status, sb);
+        List<Object> params = getSql(datataskType, status, subjectCode,sb);
         return jdbcTemplate.queryForObject(sb.toString(),params.toArray(),Integer.class);
     }
 
@@ -96,7 +96,7 @@ public class DataTaskDao {
      * @auther: hw
      * @date: 2018/10/23 15:46
      */
-    List<Object> getSql(String datataskType, String status, StringBuilder sb) {
+    List<Object> getSql(String datataskType, String status, String subjectCode, StringBuilder sb) {
         List<Object> params = Lists.newArrayList();
         if (StringUtils.isNoneBlank(datataskType)) {
             sb.append("datataskType=? ");
@@ -108,6 +108,13 @@ public class DataTaskDao {
             }
             sb.append("status=? ");
             params.add(status);
+        }
+        if (StringUtils.isNoneBlank(subjectCode)) {
+            if (StringUtils.isNoneBlank(datataskType)||StringUtils.isNoneBlank(status)) {
+                sb.append("and ");
+            }
+            sb.append("subjectCode=? ");
+            params.add(subjectCode);
         }
         return params;
     }

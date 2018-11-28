@@ -211,8 +211,10 @@
 <script type="text/html" id="dataRelationshipList2">
     {{each list as value i}}
     <div class="col-md-4">
-        <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="relationBox" value="{{value}}" style="line-height: normal"></div>
-        <div style="padding-left: 20px;word-break: break-all ;"> {{value}}</div>
+        <label>
+            <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="relationBox" value="{{value}}" style="line-height: normal"></div>
+            <div style="padding-left: 20px;word-break: break-all ;"> {{value}}</div>
+        </label>
     </div>
     {{/each}}
 </script>
@@ -263,7 +265,8 @@
         var dataFileSrcId;
         var dataFilePathList;
         var dateDef = new Date();
-        var taskNameFlag=true
+        var taskNameFlag=false
+        var sqlFlag=
         dateDef = dateDef.Format("yyyyMMddhhmmss");
         $("#dataTaskName").val("数据任务"+dateDef)
         $("#dataTaskName").focusout(function () {
@@ -280,8 +283,9 @@
                 },
                 success:function (data) {
                     console.log(data)
-                    if(data){
+                    if(data === "true"){
                         toastr["error"]("提示！", "任务名已存在");
+                        taskNameFlag=true
                     }else {
                         taskNameFlag=false
                     }
@@ -443,7 +447,6 @@
         })
         $("#totalList").delegate(".preview","click",function () {
             var $Str =$(this).parent().parent().find(".sqlStatements").val();;
-            $("#staticSourceTableChoiceModal").modal("show");
             previewSqlDataAndComs(dataRelSrcId,$Str)
         })
         function addSql() {
@@ -480,7 +483,9 @@
             })
             if(taskNameFlag){
                 toastr["error"]("提示！", "任务名出错，请填写任务名");
+                return
             }
+
             if(numChecked ==0){
                 if(sqlNum >=2 && sqlNum%2 ==0){
 
@@ -603,6 +608,7 @@
 
 
         function previewSqlDataAndComs(dataSourceId,str) {
+
             $.ajax({
                 url:"${ctx}/datatask/sqlValidation",
                 type:"GET",
@@ -611,42 +617,49 @@
                     dataSourceId:dataSourceId
                 },
                 success:function (data) {
-                    console.log(data)
+                    var sqlFlag = JSON.parse(data).result
+                    if(sqlFlag){
+                        $("#staticSourceTableChoiceModal").modal("show");
+                        var sqlName = splistLastStr(str);
+                        $.ajax({
+                            type: "GET",
+                            url:  '${ctx}/relationship/previewRelationalDatabaseBySQL',
+                            data: {
+                                "dataSourceId": dataSourceId,
+                                "sqlStr": str
+                            },
+                            dataType: "json",
+                            success: function (data) {
+                                for(var key in data.maps){
+                                    var sqlName = key
+                                }
+                                var tabHead=data.maps[sqlName];
+                                var tabBody=data.datas;
+                                $("#pre-head").empty();
+                                $("#pre-body").empty();
+                                var preHeadStr="<th>#</th>";
+                                var preBodyStr="";
+                                if (!data || !data.datas) {
+                                    return;
+                                }
+                                for(var i=0;i<tabHead.length;i++){
+                                    preHeadStr+="<th>"+tabHead[i].columnName +"</th>"
+                                }
+                                $("#pre-head").append(preHeadStr);
+                                var columnTitleList = [];
+                                data.datas.unshift(columnTitleList);
+
+                                var html = template("previewTableDataAndComsTmpl", {"datas": data.datas});
+                                $('#pre-body').html(html);
+                            }
+                        });
+                    }else {
+                        toastr["error"]("提示！", "请正确输入sql语句");
+                    }
                 }
             })
-           /* var sqlName = splistLastStr(str);*/
-           /* $.ajax({
-                type: "GET",
-                url:  '${ctx}/relationship/previewRelationalDatabaseBySQL',
-                data: {
-                    "dataSourceId": dataSourceId,
-                    "sqlStr": str
-                },
-                dataType: "json",
-                success: function (data) {
-                    for(var key in data.maps){
-                        var sqlName = key
-                    }
-                    var tabHead=data.maps[sqlName];
-                    var tabBody=data.datas;
-                    $("#pre-head").empty();
-                    $("#pre-body").empty();
-                    var preHeadStr="<th>#</th>";
-                    var preBodyStr="";
-                    if (!data || !data.datas) {
-                        return;
-                    }
-                    for(var i=0;i<tabHead.length;i++){
-                        preHeadStr+="<th>"+tabHead[i].columnName +"</th>"
-                    }
-                    $("#pre-head").append(preHeadStr);
-                    var columnTitleList = [];
-                    data.datas.unshift(columnTitleList);
 
-                    var html = template("previewTableDataAndComsTmpl", {"datas": data.datas});
-                    $('#pre-body').html(html);
-                }
-            });*/
+
         }
         function splistLastStr(str) {
 

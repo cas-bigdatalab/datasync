@@ -5,6 +5,7 @@ import cn.csdb.portal.model.User;
 import cn.csdb.portal.repository.CheckUserDao;
 import cn.csdb.portal.repository.GroupDao;
 import cn.csdb.portal.repository.UserDao;
+import cn.csdb.portal.utils.ListUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -104,6 +105,75 @@ public class GroupServiceTest {
         logger.info(String.valueOf(list.size()));
         for (User user : list ){
             logger.info(user.getUserName() +"--"  +user.getRole() +"--" +user.getGroups());
+        }
+    }
+
+
+
+    @Test
+    public void testBB(){
+        List<String> list = new ArrayList<String>();
+        System.out.println("\n================================");
+        addDataToList(list,"5bfba2b84817541c14c411a0");
+         for (String s : list)
+         {
+             System.out.println(s);
+         }
+        System.out.println("\n\n================================");
+        addDataToList(list,"5bfba59448175451e89c619d");
+        for (String s : list)
+        {
+            System.out.println(s);
+        }
+        System.out.println("\n\n================================");
+        addDataToList(list,"5bfc04d91b0bc332480e8678");
+        for (String s : list)
+        {
+            System.out.println(s);
+        }
+        System.out.println("\n\n================================");
+        addDataToList(list,"99fc04d91b0bc332480e8699");
+        for (String s : list)
+        {
+            System.out.println(s);
+        }
+    }
+
+//          ["5bfba2b84817541c14c411a0"
+//         "5bfba59448175451e89c619d"
+//         "5bfc04d91b0bc332480e8678"]
+
+    private List<String> addDataToList(List<String> list, String userid){
+        if (list.size() == 0){
+            list.add("[" +"\"" + userid + "\"" + "]" ) ;
+        }else if (list.size() == 1){
+            String x = list.get(0).replace("]","");
+            list.get(0).replace("]","");
+            list.remove(0);
+            list.add(x);
+            list.add("\"" + userid + "\"" + "]" );
+        }else {
+            String tempStr = list.get(list.size()-1).replace("]","");
+            list.remove(list.get(list.size()-1));
+            list.add(tempStr);
+            list.add("\"" + userid + "\"" + "]" );
+        }
+        return list;
+    }
+
+
+    @Test
+    public void testB2(){
+        List<String> oldList = new ArrayList<String>();
+        oldList.add("[\"5bfba2b84817541c14c411a0\"");
+        oldList.add("\"5bfba59448175451e89c619d\"");
+        oldList.add("\"999859448175451e89c619d\"");
+        oldList.add("\"5bfc04d91b0bc332480e8678\"]");
+
+        List<String> result = ListUtil.transFormList(oldList);
+        for (String s : result)
+        {
+            System.out.println(s);
         }
     }
 }

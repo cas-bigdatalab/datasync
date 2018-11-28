@@ -43,7 +43,7 @@
             <!--查询条件 -->
             <div class="row">
                 <div class="col-md-9">
-                    <form class="form-inline">
+                    <form class="form-inline" style="margin-bottom: 0px">
                         <div class="form-group" >
                             <label >数据类型</label>
                             <select  id="dataSourceList" class="form-control" style="width: 150px">
@@ -60,11 +60,11 @@
                                 <option value="0">未上传</option>
                             </select>
                         </div>
-                        <button type="button" class="btn blue" style="margin-left: 49px" id="seachTaskSource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
+                        <button type="button" class="btn btn-sm blue" style="margin-left: 49px" id="seachTaskSource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                     </form>
                 </div>
                 <div class="col-md-3" style="text-align: right">
-                    <button type="button" class="btn green" style="margin-left: 49px" onclick="relCreateTask()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据任务</button>
+                    <button type="button" class="btn btn-sm green" style="margin-left: 49px" onclick="relCreateTask()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据任务</button>
                 </div>
             </div>
         </div>
@@ -263,7 +263,7 @@
             <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;重新上传</button>
             <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
             <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
-            <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="window.location.href='${ctx}/fileResource/downloadFile'"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
+            <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="window.location.href='${ctx}/fileResource/downloadFile?dataTaskId={{value.dataTaskId}}'"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
             {{/if}}
 
         </td>

@@ -1,6 +1,8 @@
 package cn.csdb.drsr.controller;
 
 import cn.csdb.drsr.model.DataSrc;
+import cn.csdb.drsr.model.DataTask;
+import cn.csdb.drsr.service.DataTaskService;
 import cn.csdb.drsr.service.FileResourceService;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
@@ -32,6 +34,8 @@ public class FileSourceController {
     private Logger logger = LoggerFactory.getLogger(FileSourceController.class);
     @Resource
     private FileResourceService fileResourceService;
+    @Resource
+    private DataTaskService dataTaskService;
 
     @RequestMapping("/deleteData")
     public
@@ -216,9 +220,13 @@ public class FileSourceController {
     }
 
     @RequestMapping(value="/downloadFile")
-    public String downloads(HttpServletResponse response) throws Exception{
+    public String downloads(String dataTaskId,HttpServletResponse response) throws Exception{
+        DataTask dataTask = dataTaskService.get(dataTaskId);
+/*
         String	path = "/logs/";
-        String  fileName = "drsrUpload.log";
+*/
+        String path = "D:\\";
+        String  fileName = dataTask.getDataTaskName()+"log.txt";
         //1、设置response 响应头
         response.reset();
         response.setCharacterEncoding("UTF-8");
