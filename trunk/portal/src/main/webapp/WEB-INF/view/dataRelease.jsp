@@ -754,7 +754,7 @@
         }
         function showData(id,type,tabStatus) {
             tabStatus = tabStatus ==0?"审核未通过":tabStatus ==1?"未审核":"审核通过"
-            if(tabStatus ==0){
+            if(tabStatus == "审核未通过"){
                 $.ajax({
                     url:"${ctx}/resource/getAuditMessage",
                     type:"GET",
@@ -762,8 +762,19 @@
                         resourceId:id
                     },
                     success:function (data) {
-                        var list = JSON.parse(data)
+                        var list = JSON.parse(data).auditMessageList[0]
                         console.log(list)
+                        if(type=="mysql" || type==""){
+                            $("#mysqlComments").show()
+                            $("#mysqlCommentsName").html(list.auditPerson)
+                            $("#mysqlCommentsTime").html(convertMilsToDateTimeString(list.auditTime))
+                            $("#mysqlCommentsContent").html(list.auditCom)
+                        }else {
+                            $("#fileComments").show()
+                            $("#fileCommentsName").html(list.auditPerson)
+                            $("#fileCommentsTime").html(convertMilsToDateTimeString(list.auditTime))
+                            $("#fileCommentsContent").html(list.auditCom)
+                        }
                     },
                     error:function () {
                         console.log("请求失败")
