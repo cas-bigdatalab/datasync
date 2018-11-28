@@ -191,6 +191,7 @@ public class DataSyncController {
             System.out.println("连接FTP出错：" + e.getMessage());
             return 0;
         }finally {
+            pw.println("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
             try {
                 fw.flush();
                 pw.close();
