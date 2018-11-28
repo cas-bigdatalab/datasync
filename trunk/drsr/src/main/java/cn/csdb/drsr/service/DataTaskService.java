@@ -155,8 +155,13 @@ public class DataTaskService {
     }
 
     @Transactional
-    public boolean update(DataTask dataTask) {
-        return dataTaskDao.update(dataTask);
+    public int update(DataTask dataTask) {
+        boolean flag =  dataTaskDao.update(dataTask);
+        if(flag == true){
+            return 1;
+        }else{
+            return -1;
+        }
     }
 
     @Transactional(readOnly = true)

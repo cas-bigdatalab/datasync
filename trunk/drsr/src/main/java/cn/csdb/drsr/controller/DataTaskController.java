@@ -310,7 +310,7 @@ public class DataTaskController {
         String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
         DataTask dt = dataTaskService.get(datataskId);
         dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
-        boolean upresult = dataTaskService.update(dt);
+        int upresult = dataTaskService.update(dt);
         jsonObject.put("result",true);
         return  jsonObject;
     }
@@ -403,7 +403,7 @@ public class DataTaskController {
         datatask.setDataTaskType("mysql");
         datatask.setStatus("0");
         datatask.setSubjectCode(subjectCode);
-        int flag = dataTaskService.insertDatatask(datatask);
+        int flag = dataTaskService.update(datatask);
         jsonObject.put("result",flag);
         if(flag < 0){
             return  jsonObject;
@@ -441,7 +441,7 @@ public class DataTaskController {
         datatask.setStatus("0");
         datatask.setSubjectCode(subjectCode);
         Calendar rightNow = Calendar.getInstance();
-        dataTaskService.insertDatatask(datatask);
+        dataTaskService.update(datatask);
         if(dataSourceId <0 ){
             jsonObject.put("result",false);
             return  jsonObject;
@@ -453,7 +453,7 @@ public class DataTaskController {
         String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
         DataTask dt = dataTaskService.get(datataskId);
         dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
-        boolean upresult = dataTaskService.update(dt);
+        int upresult = dataTaskService.update(dt);
         jsonObject.put("result",true);
         return  jsonObject;
     }
