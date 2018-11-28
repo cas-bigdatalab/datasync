@@ -101,7 +101,7 @@
 --%>
                         </div>
                         <div class="col-md-5" style="margin-top: 6px">
-
+                            <div id="tags_tagsinput" class="tagsinput" style="border: 1px solid black"></div>
                         </div>
                     </div>
                     <div class="col-md-12 ">
@@ -585,8 +585,19 @@
 
         }
         function sendFileTask(){
-            var $eleChecked = $("[name='fileTable']:checked")
             var nodes = $('#jstree_show_edit').jstree("get_checked");
+            var tags_tagsinput = $("#tags_tagsinput").text();
+            if((nodes.length==0)&&(tags_tagsinput.length==0)){
+                toastr["error"]("您尚未选取文件");
+            }else {
+                var attr = [];
+                $("#tags_tagsinput span").each(function (i) {
+                    if ($(this).attr('class') == 'filePathClass') {
+                        attr.push($(this).text());
+                    }
+                })
+            }
+            var $eleChecked = $("[name='fileTable']:checked")
             var numChecked = $eleChecked.size();
             if($("#dataTaskName").val() ==""){
                 toastr["error"]("提示！", "请创建任务名");
@@ -612,6 +623,7 @@
                     data:{"dataSourceId":dataFileSrcId,
                         "datataskName":$("#dataTaskName").val(),
                         "nodes":nodes,
+                        "attr": attr
                     },
                     success:function (data) {
                         window.location.href="${ctx}/dataUpload"
@@ -717,7 +729,13 @@
                     }else {
                         dataFileSrcId=dataTaskCon.dataSourceId
                         $("[Keyid="+dataFileSrcId +"]").prop("selected",true)
-
+                        var filepath = dataTaskCon.filePath.replace(/%_%/g, "/").split(";");
+                        var path = "";
+                        for(var i = 0;i<filepath.length-1;i++){
+                            path += '<span class="tag" style="display: inline-block">' +
+                                    '<span class="filePathClass">'+filepath[i]+'</span>'+'&nbsp;&nbsp;<a href="#" title="Removing tag" onclick="tagClick(this)">x</a> </span>'
+                        }
+                        $("#tags_tagsinput").html(path);
                     }
                 },
                 error:function (data) {
@@ -807,6 +825,10 @@
             })
         }
 
+        function tagClick(obj){
+            $(obj).parent().hide();
+            $(obj).parent().text("");
+        }
     </script>
 </div>
 
