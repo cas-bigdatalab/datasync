@@ -739,7 +739,69 @@
                     }else {
                         $(".select-database").hide();
                         $(".select-local").show();
+
                         dataFileSrcId=dataTaskCon.dataSourceId
+                        $('#jstree_show_edit').jstree({
+                            "core": {
+                                "themes": {
+                                    "responsive": false,
+                                },
+                                // so that create works
+                                "check_callback": true,
+                                'data': function (obj, callback) {
+                                    var jsonstr = "[]";
+                                    var jsonarray = eval('(' + jsonstr + ')');
+                                    var children;
+                                    if (obj != '#') {
+                                        var str = obj.id;
+                                        /*var str1 = str.replace("\/","%_%");
+                                         str1 = str1.replace("\\", "%_%");*/
+                                    }
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "${ctx}/fileResource/resCatalog",
+                                        dataType: "json",
+                                        data: {"data": str,
+                                            /*
+                                                                            "filePath":jsonData,
+                                            */
+                                            "dataSourceId":dataFileSrcId
+                                        },
+                                        async: false,
+                                        success: function (result) {
+                                            var arrays = result;
+                                            for (var i = 0; i < arrays.length; i++) {
+                                                console.log(arrays[i])
+                                                var arr = {
+                                                    "id": arrays[i].id,
+                                                    "parent": arrays[i].parentId == "root" ? "#" : arrays[i].parentId,
+                                                    "text": arrays[i].name,
+                                                    "type": arrays[i].type,
+                                                    "children":arrays[i].children
+                                                }
+                                                jsonarray.push(arr);
+                                                children = jsonarray;
+                                            }
+                                        }
+
+                                    });
+                                    generateChildJson(children);
+                                    callback.call(this, children);
+                                    /*else{
+                                     callback.call(this,);
+                                     }*/
+                                }
+                            },
+                            "types": {
+                                "default": {
+                                    "icon": "glyphicon glyphicon-flash"
+                                },
+                                "file": {
+                                    "icon": "glyphicon glyphicon-ok"
+                                }
+                            },
+                            "plugins": ["dnd"/*, "state"*/, "types", "checkbox", "wholerow"]
+                        })
                         $("[Keyid="+dataFileSrcId +"]").prop("selected",true)
                         var filepath = dataTaskCon.filePath.replace(/%_%/g, "/").split(";");
                         var path = "";
