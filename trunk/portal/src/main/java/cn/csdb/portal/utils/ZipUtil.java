@@ -57,6 +57,16 @@ public class ZipUtil {
                     }
                 }
             }
+
+//            将解压后的文件夹授权给ftp用户组，否则无法通过ftp删除该文件夹和文件
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                Runtime.getRuntime().exec("chown -R logupload:logupload "+destDir).waitFor();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         } catch(Exception e) {
             e.printStackTrace();
             throw e;
