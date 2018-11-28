@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -66,7 +67,7 @@ public class DataSyncController {
      */
     @ResponseBody
     @RequestMapping("/ftpUpload")
-    public int ftpUpload(int dataTaskId,String processId){
+    public int ftpUpload(String dataTaskId, String processId){
         DataTask dataTask = dataTaskService.get(String.valueOf(dataTaskId));
         String fileName = dataTask.getDataTaskName()+"log.txt";//文件名及类型
         String path = "D:\\";
@@ -178,16 +179,19 @@ public class DataSyncController {
                     e.printStackTrace();
                 }
             }else{
+                pw.println("导入失败"+ "\n");
                 logger.info("导入失败"+ "\n");
                 logger.info("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                 return 0;
             }
         } catch (IOException e) {
+            pw.println("连接FTP出错:"+e+ "\n");
             logger.error("连接FTP出错:"+e+ "\n");
             logger.info("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
             System.out.println("连接FTP出错：" + e.getMessage());
             return 0;
         }finally {
+            pw.println("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
             try {
                 fw.flush();
                 pw.close();
