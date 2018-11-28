@@ -95,12 +95,12 @@ public class FileResourceService {
         return fileResourceDao.editQueryData(id);
     }
 
-    public Map queryTotalPage() {
-        return fileResourceDao.queryTotalPage();
+    public Map queryTotalPage(String SubjectCode) {
+        return fileResourceDao.queryTotalPage(SubjectCode);
     }
 
-    public List<DataSrc> queryPage(int requestedPage) {
-        return fileResourceDao.queryPage(requestedPage);
+    public List<DataSrc> queryPage(int requestedPage,String SubjectCode) {
+        return fileResourceDao.queryPage(requestedPage,SubjectCode);
     }
 
     public List<JSONObject> fileTreeLoading(String data,String filePath) {
