@@ -144,7 +144,7 @@ public class DataTaskController {
     @RequestMapping(value="/delete")
     @ResponseBody
     public int deleteDatatask(String datataskId){
-        return dataTaskService.deleteDatataskById(Integer.parseInt(datataskId));
+        return dataTaskService.deleteDatataskById(datataskId);
     }
 
     /**

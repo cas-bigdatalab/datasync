@@ -178,7 +178,7 @@ public class DataTaskService {
         return dataTaskDao.getCount(datataskType, status,subjectCode);
     }
 
-    public int deleteDatataskById(int datataskId) {
+    public int deleteDatataskById(String datataskId) {
         return dataTaskDao.deleteDatataskById(datataskId);
     }
 

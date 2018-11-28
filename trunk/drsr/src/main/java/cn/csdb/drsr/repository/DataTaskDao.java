@@ -121,7 +121,7 @@ public class DataTaskDao {
         return params;
     }
 
-    public int deleteDatataskById(int datataskId) {
+    public int deleteDatataskById(String datataskId) {
         String sql = "delete from t_datatask where datataskId=?";
         return jdbcTemplate.update(sql, datataskId);
     }
