@@ -26,6 +26,7 @@ public class DataSrcMapper implements RowMapper<DataSrc> {
         dataSrc.setPassword(rs.getString("password"));
         dataSrc.setCreateTime(rs.getString("createTime"));
         dataSrc.setStat(rs.getInt("stat"));
+        dataSrc.setSubjectCode(rs.getString("SubjectCode"));
         return dataSrc;
     }
 }

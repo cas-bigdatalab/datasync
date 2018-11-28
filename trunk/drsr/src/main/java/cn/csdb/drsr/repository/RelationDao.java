@@ -27,10 +27,10 @@ public class RelationDao{
     private JdbcTemplate jdbcTemplate;
 
     public int addRelationData(DataSrc DataSrc) {
-        String insertSql = "insert into t_datasource(DataSourceName, DataSourceType, DatabaseName, DatabaseType ,Host, Port, UserName, Password, createTime, stat)" +
-                "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertSql = "insert into t_datasource(DataSourceName, DataSourceType, DatabaseName, DatabaseType ,Host, Port, UserName, Password, createTime, stat, SubjectCode)" +
+                "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Object[] arg = new Object[] {DataSrc.getDataSourceName(), DataSrc.getDataSourceType(), DataSrc.getDatabaseName(),
-                DataSrc.getDatabaseType(), DataSrc.getHost(), DataSrc.getPort(), DataSrc.getUserName(), DataSrc.getPassword(),DataSrc.getCreateTime() , "1"};
+                DataSrc.getDatabaseType(), DataSrc.getHost(), DataSrc.getPort(), DataSrc.getUserName(), DataSrc.getPassword(),DataSrc.getCreateTime() , "1", DataSrc.getSubjectCode()};
 
         int addedRowCnt = jdbcTemplate.update(insertSql,arg);
 
@@ -79,10 +79,11 @@ public class RelationDao{
         return queryData;
     }
 
-    public Map queryTotalPage(){
+    public Map queryTotalPage(String SubjectCode){
         int rowsPerPage = 10;
-        String rowSql="select count(*) from t_datasource WHERE DataSourceType = 'db'";
-        int totalRows=(Integer)jdbcTemplate.queryForObject(rowSql, Integer.class);
+        String rowSql="select count(*) from t_datasource WHERE DataSourceType = 'db' and SubjectCode = ?";
+        Object[] args = new Object[]{SubjectCode};
+        int totalRows=(Integer)jdbcTemplate.queryForObject(rowSql,args,Integer.class);
         int totalPages = 0;
         totalPages = totalRows / rowsPerPage + (totalRows % rowsPerPage == 0 ? 0 : 1);
         Map map = new HashMap();
@@ -91,7 +92,7 @@ public class RelationDao{
         return map;
     }
 
-    public List<DataSrc> queryPage(int pageNumber)
+    public List<DataSrc> queryPage(int pageNumber,String SubjectCode)
     {
         if (pageNumber < 1)
         {
@@ -99,8 +100,9 @@ public class RelationDao{
         }
 
         int rowsPerPage = 10;
-        String rowSql="select count(*) from t_datasource WHERE DataSourceType = 'db'";
-        int totalRows=(Integer)jdbcTemplate.queryForObject(rowSql, Integer.class);
+        String rowSql="select count(*) from t_datasource WHERE DataSourceType = 'db' and SubjectCode = ?";
+        Object[] args = new Object[]{SubjectCode};
+        int totalRows=(Integer)jdbcTemplate.queryForObject(rowSql,args,Integer.class);
         int totalPages = 0;
         totalPages = totalRows / rowsPerPage + (totalRows % rowsPerPage == 0 ? 0 : 1);
 
@@ -113,9 +115,9 @@ public class RelationDao{
         startRowNum = (pageNumber - 1) * rowsPerPage;
 
         final List<DataSrc> relationDataOfThisPage = new ArrayList<DataSrc>();
-        String querySql = "select * from t_datasource WHERE  DataSourceType = 'db' order by createTime Desc limit " +
+        String querySql = "select * from t_datasource WHERE  DataSourceType = 'db' and SubjectCode = ? order by createTime Desc limit " +
                 startRowNum + ", " + rowsPerPage;
-        jdbcTemplate.query(querySql, new RowCallbackHandler() {
+        jdbcTemplate.query(querySql, args, new RowCallbackHandler() {
             @Override
             public void processRow(ResultSet rs) throws SQLException {
                 do
@@ -135,6 +137,7 @@ public class RelationDao{
                     dataSrc.setPassword(rs.getString("Password"));
                     dataSrc.setCreateTime(rs.getString("createTime"));
                     dataSrc.setStat(rs.getInt("stat"));
+                    dataSrc.setSubjectCode(rs.getString("SubjectCode"));
                     relationDataOfThisPage.add(dataSrc);
                 }while(rs.next());
             }
