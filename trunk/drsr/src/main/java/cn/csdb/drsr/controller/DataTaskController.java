@@ -210,68 +210,12 @@ public class DataTaskController {
 
     @ResponseBody
     @RequestMapping(value="saveFileDatatask",method = RequestMethod.POST)
-    public JSONObject saveFileDatatask(int dataSourceId, String datataskName,String[] nodes,String[] attr){
+    public JSONObject saveFileDatatask(int dataSourceId, String datataskName,String[] nodes){
         String subjectCode = configPropertyService.getProperty("SubjectCode");
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);
-        String filePath = "";
-        if(nodes!=null) {
-            if(attr!=null) {
-                String nodePath = "";
-                for (String nodeId : nodes) {
-                    String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
-                    String str1 = fileResourceService.traversingFiles(str);
-                    nodePath += str1;
-                }
-                for(String attrs : attr){
-                    attrs.replaceAll("\\\\", Matcher.quoteReplacement(File.separator));
-                }
-                String[] traversingNodes = nodePath.split(";");
-                String[] unionNodes = FileResourceService.union(attr, traversingNodes);
-                for (String unionNode : unionNodes) {
-                    filePath += unionNode + ";";
-/*
-                    filePath += unionNode.replaceAll("/", "\\\\") + ";";
-*/
-                }
-                datatask.setFilePath(filePath.toString());
-            }else{
-                StringBuffer filePathBuffer = new StringBuffer("");
-                String str1 = "";
-                for (String nodeId : nodes){
-                    String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
-                    File file = new File(str);
-                    if(file.isDirectory()) {
-                        str1 = fileResourceService.traversingFiles(str);
-                    }else{
-                        str1 = str + ";";
-                    }
-                    if(filePathBuffer.indexOf(str+";")!=-1){
-
-                    }else{
-                        filePathBuffer.append(str1);
-                    }
-                }
-                filePath = filePathBuffer.toString();
-                datatask.setFilePath(filePathBuffer.toString());
-            }
-        }else{
-            for (String unionNode : attr) {
-                filePath += unionNode.replaceAll("\\\\", Matcher.quoteReplacement(File.separator)) + ";";
-            }
-            datatask.setFilePath(filePath);
-        }
-
-
-
-
-
-
-
-
-
-        /*StringBuffer filePath = new StringBuffer("");
+        StringBuffer filePath = new StringBuffer("");
         String str1 = "";
         for (String nodeId : nodes){
             String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
@@ -286,7 +230,8 @@ public class DataTaskController {
             }else{
                 filePath.append(str1);
             }
-        }*/
+        }
+        datatask.setFilePath(filePath.toString());
         datatask.setDataTaskName(datataskName);
         datatask.setCreateTime(new Date());
         datatask.setDataTaskType("file");
@@ -413,28 +358,58 @@ public class DataTaskController {
 
     @ResponseBody
     @RequestMapping(value="updateFileDatatask",method = RequestMethod.POST)
-    public JSONObject updateFileDatatask(String datataskId,int dataSourceId, String datataskName,String[] nodes){
+    public JSONObject updateFileDatatask(String datataskId,int dataSourceId, String datataskName,String[] nodes,String[] attr){
         String subjectCode = configPropertyService.getProperty("SubjectCode");
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = dataTaskService.get(datataskId);
         datatask.setDataSourceId(dataSourceId);
-        StringBuffer filePath = new StringBuffer("");
-        String str1 = "";
-        for (String nodeId : nodes){
-            String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
-            File file = new File(str);
-            if(file.isDirectory()) {
-                str1 = fileResourceService.traversingFiles(str);
+        String filePath = "";
+        if(nodes!=null) {
+            if(attr!=null) {
+                String nodePath = "";
+                for (String nodeId : nodes) {
+                    String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
+                    String str1 = fileResourceService.traversingFiles(str);
+                    nodePath += str1;
+                }
+                for(String attrs : attr){
+                    attrs.replaceAll("\\\\", Matcher.quoteReplacement(File.separator));
+                }
+                String[] traversingNodes = nodePath.split(";");
+                String[] unionNodes = FileResourceService.union(attr, traversingNodes);
+                for (String unionNode : unionNodes) {
+                    filePath += unionNode + ";";
+/*
+                    filePath += unionNode.replaceAll("/", "\\\\") + ";";
+*/
+                }
+                datatask.setFilePath(filePath.toString());
             }else{
-                str1 = str + ";";
-            }
-            if(filePath.indexOf(str+";")!=-1){
+                StringBuffer filePathBuffer = new StringBuffer("");
+                String str1 = "";
+                for (String nodeId : nodes){
+                    String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
+                    File file = new File(str);
+                    if(file.isDirectory()) {
+                        str1 = fileResourceService.traversingFiles(str);
+                    }else{
+                        str1 = str + ";";
+                    }
+                    if(filePathBuffer.indexOf(str+";")!=-1){
 
-            }else{
-                filePath.append(str1);
+                    }else{
+                        filePathBuffer.append(str1);
+                    }
+                }
+                filePath = filePathBuffer.toString();
+                datatask.setFilePath(filePathBuffer.toString());
             }
+        }else{
+            for (String unionNode : attr) {
+                filePath += unionNode.replaceAll("\\\\", Matcher.quoteReplacement(File.separator)) + ";";
+            }
+            datatask.setFilePath(filePath);
         }
-        datatask.setFilePath(filePath.toString());
         datatask.setDataTaskName(datataskName);
         datatask.setCreateTime(new Date());
         datatask.setDataTaskType("file");
