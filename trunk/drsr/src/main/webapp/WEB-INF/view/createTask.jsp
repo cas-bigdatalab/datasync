@@ -509,7 +509,7 @@
             }
 
             $(".sqlStatements").each(function (i) {
-                var validSql = true;
+                 validSql = true;
                 if(validSql){
                     allSqlvalidata(dataRelSrcId,$(this).val(),i)
                 }else {
