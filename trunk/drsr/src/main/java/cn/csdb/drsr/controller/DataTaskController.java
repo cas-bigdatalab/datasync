@@ -216,10 +216,20 @@ public class DataTaskController {
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);
         StringBuffer filePath = new StringBuffer("");
+        String str1 = "";
         for (String nodeId : nodes){
             String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
-            String str1 = fileResourceService.traversingFiles(str);
-            filePath.append(str1);
+            File file = new File(str);
+            if(file.isDirectory()) {
+                str1 = fileResourceService.traversingFiles(str);
+            }else{
+                str1 = str + ";";
+            }
+            if(filePath.indexOf(str+";")!=-1){
+
+            }else{
+                filePath.append(str1);
+            }
         }
         datatask.setFilePath(filePath.toString());
         datatask.setDataTaskName(datataskName);

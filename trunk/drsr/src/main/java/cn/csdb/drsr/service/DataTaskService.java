@@ -51,7 +51,7 @@ public class DataTaskService {
 
     public JSONObject executeTask(DataTask dataTask) {
         String fileName = dataTask.getDataTaskName()+"log.txt";//文件名及类型
-        String path = "D:\\";
+        String path = "/logs/";
         FileWriter fw = null;
         File file = new File(path, fileName);
         if(!file.exists()){

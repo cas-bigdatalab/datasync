@@ -232,7 +232,7 @@ public class FileSourceController {
 /*
         String	path = "/logs/";
 */
-        String path = "D:\\";
+        String path = "/logs/";
         String  fileName = dataTask.getDataTaskName()+"log.txt";
         //1、设置response 响应头
         response.reset();
