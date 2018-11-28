@@ -274,7 +274,7 @@
         var validSql = true;
         dateDef = dateDef.Format("yyyyMMddhhmmss");
         $("#dataTaskName").val("数据任务"+dateDef)
-        $("#dataTaskName").focusout(function () {
+        $("#dataTaskName").change(function () {
             var taskName = $(this).val();
             if(taskName =="" || taskName.trim() == ""){
                 toastr["error"]("提示！", "任务名不能为空");

@@ -121,6 +121,22 @@
                 <h4 class="modal-title">任务详情查看</h4>
             </div>
             <div class="modal-body" style="max-height: 500px;overflow: auto">
+                <div class="commentsList" id="mysqlComments" style="display: none">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">审核人姓名&nbsp;&nbsp;:</label>
+                            <div class="col-sm-9" id="mysqlCommentsName">aaa</div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">审核时间&nbsp;&nbsp;:</label>
+                            <div class="col-sm-9" id="mysqlCommentsTime">bbb</div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">审核内容&nbsp;&nbsp;:</label>
+                            <div class="col-sm-9" id="mysqlCommentsContent">vvvv</div>
+                        </div>
+                    </form>
+                </div>
                 <form class="form-horizontal">
                     <%--<div class="form-group">
                         <label class="col-sm-3 control-label">数据源ID:</label>
@@ -271,6 +287,22 @@
                 <h4 class="modal-title">任务详情查看</h4>
             </div>
             <div class="modal-body" style="max-height: 500px;overflow: auto">
+                <div class="commentsList" id="fileComments" style="display: none">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">审核人姓名&nbsp;&nbsp;:</label>
+                            <div class="col-sm-9" id="fileCommentsName">aaa</div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">审核时间&nbsp;&nbsp;:</label>
+                            <div class="col-sm-9" id="fileCommentsTime">bbb</div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-3 control-label">审核内容&nbsp;&nbsp;:</label>
+                            <div class="col-sm-9" id="fileCommentsContent">vvvv</div>
+                        </div>
+                    </form>
+                </div>
                 <form class="form-horizontal">
                     <%--<div class="form-group">
                         <label class="col-sm-3 control-label">数据源ID:</label>
@@ -722,7 +754,7 @@
         }
         function showData(id,type,tabStatus) {
             tabStatus = tabStatus ==0?"审核未通过":tabStatus ==1?"未审核":"审核通过"
-            /*if(tabStatus ==0){
+            if(tabStatus ==0){
                 $.ajax({
                     url:"${ctx}/resource/getAuditMessage",
                     type:"GET",
@@ -732,15 +764,12 @@
                     success:function (data) {
                         var list = JSON.parse(data)
                         console.log(list)
-                        var tabCon = template("resourceTmp2", list);
-                        $("#AuditMessageList").append(tabCon);
-                        $("#auditModal").modal("show")
                     },
                     error:function () {
                         console.log("请求失败")
                     }
                 })
-            }*/
+            }
             $.ajax({
                 url: "${ctx}/resource/resourceDetail",
                 type: "GET",

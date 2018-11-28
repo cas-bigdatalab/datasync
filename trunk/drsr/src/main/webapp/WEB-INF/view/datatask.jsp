@@ -367,7 +367,7 @@
                                     if(keyType == "mysql"){
                                         if(data =="1"){
                                             $("."+souceID).text("已导入")
-
+                                            tableConfiguration2(1,dataSourceName,dataSourceStatus)
                                             return
                                         }else {
                                             $("."+souceID).text("导入失败")
@@ -376,7 +376,7 @@
                                     }else {
                                         if(data =="1"){
                                             $("."+souceID).text("已上传")
-
+                                            tableConfiguration2(1,dataSourceName,dataSourceStatus)
                                             return
                                         }else {
                                             $("."+souceID).text("上传失败")
