@@ -325,8 +325,13 @@ public class UserDao {
 
     private void updateUserGroup(User user)
     {
-        String userId = user.getId();
-        String groupsBeforeUpdate = mongoTemplate.findById(userId, User.class).getGroups();
+        logger.info("user = " + user);
+        String loginId = user.getLoginId();
+        DBObject dbObject = QueryBuilder.start().and("loginId").is(loginId).get();
+        Query query = new BasicQuery(dbObject);
+        User userBeforeUpdate = mongoTemplate.findOne(query, User.class);
+        String userId = userBeforeUpdate.getId();
+        String groupsBeforeUpdate = userBeforeUpdate.getGroups();
         if (groupsBeforeUpdate == null)
         {
             groupsBeforeUpdate = "";
