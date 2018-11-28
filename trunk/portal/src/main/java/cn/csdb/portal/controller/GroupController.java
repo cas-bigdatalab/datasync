@@ -134,6 +134,8 @@ public class GroupController {
         //此用户组中原有用户列表
         List<String> oldUsers = group.getUsers();
         List<String> list = Arrays.asList(users);
+
+
         if (list.contains("null"))
             list = null;
         group.setUsers(list);
