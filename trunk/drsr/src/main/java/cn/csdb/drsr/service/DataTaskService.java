@@ -244,7 +244,6 @@ public class DataTaskService {
             logger.error("打包失败", e+ "\n");
             return "error";
         } finally {
-            pw.println("打包失败"+ "\n");
             pw.println("=========================打包流程结束========================" + "\n");
             logger.info("=========================打包流程结束========================" + "\n");
             try {
