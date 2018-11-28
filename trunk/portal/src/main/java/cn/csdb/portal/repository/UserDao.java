@@ -2,6 +2,7 @@ package cn.csdb.portal.repository;
 
 import cn.csdb.portal.model.Group;
 import cn.csdb.portal.model.User;
+import cn.csdb.portal.utils.ListUtil;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteResult;
@@ -69,15 +70,24 @@ public class UserDao {
         DBObject dBObject = QueryBuilder.start().and("groupName").is(groupName).get();
         Query query = new BasicQuery(dBObject);
         Group group = mongoTemplate.findOne(query, Group.class);
+
         List<String> users = group.getUsers();
+        System.out.println("group = " + group + ", users = " + users.get(0));
         if (users == null)
         {
             users = new ArrayList<String>();
         }
+        else  //group中的users字段是一个List<String>，它存入mongodb之后，会变成一个数组，之后查询出来就成为一个字符串了，所以这种要做切分
+        {
+
+        }
         logger.info("groupName = " + groupName + ", users before add new user, users = " + users);
         users.add(userId);
         logger.info("groupName = " + groupName + ", users after added new user, users = " + users);
+
+        users = ListUtil.transFormList(users);
         group.setUsers(users);
+
         mongoTemplate.save(group);
     }
 
@@ -106,6 +116,7 @@ public class UserDao {
         logger.info("groupName = " + groupName + ", users before remove new user, users = " + users);
         users.remove(userId);
         logger.info("groupName = " + groupName + ", users after removed new user, users = " + users);
+        users = ListUtil.transFormList(users);
         group.setUsers(users);
         mongoTemplate.save(group);
     }

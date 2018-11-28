@@ -27,6 +27,7 @@ public class DataTaskMapper implements RowMapper {
         dataTask.setCreateTime(resultSet.getTimestamp("CreateTime"));
         dataTask.setStatus(resultSet.getString("Status"));
         dataTask.setSubjectCode(resultSet.getString("SubjectCode"));
+        dataTask.setLogPath(resultSet.getString("LogPath"));
         return dataTask;
     }
 }
