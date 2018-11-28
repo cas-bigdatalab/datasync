@@ -30,10 +30,10 @@ public class FileResourceDao {
 
     public int addRelationData(DataSrc DataSrc)
     {
-        String insertSql = "insert into t_datasource(DataSourceName, DataSourceType, FileType, FilePath, createTime, stat)" +
-                "values (?, ?, ?, ?, ?, ?)";
+        String insertSql = "insert into t_datasource(DataSourceName, DataSourceType, FileType, FilePath, createTime, stat, SubjectCode)" +
+                "values (?, ?, ?, ?, ?, ?, ?)";
         Object[] arg = new Object[] {DataSrc.getDataSourceName(), DataSrc.getDataSourceType(), DataSrc.getFileType() ,DataSrc.getFilePath(),
-        DataSrc.getCreateTime(), "1"};
+        DataSrc.getCreateTime(), "1" , DataSrc.getSubjectCode()};
 
         int addedRowCnt = jdbcTemplate.update(insertSql,arg);
 
@@ -78,10 +78,11 @@ public class FileResourceDao {
         return queryData;
     }
 
-    public Map queryTotalPage(){
+    public Map queryTotalPage(String SubjectCode){
         int rowsPerPage = 10;
-        String rowSql="select count(*) from t_datasource WHERE DataSourceType = 'file'";
-        int totalRows=(Integer)jdbcTemplate.queryForObject(rowSql, Integer.class);
+        String rowSql="select count(*) from t_datasource WHERE DataSourceType = 'file' AND SubjectCode = ?";
+        Object[] args = new Object[]{SubjectCode};
+        int totalRows=(Integer)jdbcTemplate.queryForObject(rowSql,args,Integer.class);
         int totalPages = 0;
         totalPages = totalRows / rowsPerPage + (totalRows % rowsPerPage == 0 ? 0 : 1);
         Map map = new HashMap();
@@ -90,7 +91,7 @@ public class FileResourceDao {
         return map;
     }
 
-    public List<DataSrc> queryPage(int pageNumber)
+    public List<DataSrc> queryPage(int pageNumber,String SubjectCode)
     {
         if (pageNumber < 1)
         {
@@ -98,8 +99,9 @@ public class FileResourceDao {
         }
 
         int rowsPerPage = 10;
-        String rowSql="select count(*) from t_datasource WHERE  DataSourceType = 'file'";
-        int totalRows=(Integer)jdbcTemplate.queryForObject(rowSql, Integer.class);
+        String rowSql="select count(*) from t_datasource WHERE  DataSourceType = 'file' AND SubjectCode = ?";
+        Object[] args = new Object[]{SubjectCode};
+        int totalRows=(Integer)jdbcTemplate.queryForObject(rowSql, args, Integer.class);
         int totalPages = 0;
         totalPages = totalRows / rowsPerPage + (totalRows % rowsPerPage == 0 ? 0 : 1);
 
@@ -112,9 +114,9 @@ public class FileResourceDao {
         startRowNum = (pageNumber - 1) * rowsPerPage;
 
         final List<DataSrc> fileDataOfThisPage = new ArrayList<DataSrc>();
-        String querySql = "select * from t_datasource WHERE  DataSourceType = 'file' order by createTime Desc limit " +
+        String querySql = "select * from t_datasource WHERE  DataSourceType = 'file' AND SubjectCode = ? order by createTime Desc limit " +
                 startRowNum + ", " + rowsPerPage;
-        jdbcTemplate.query(querySql, new RowCallbackHandler() {
+        jdbcTemplate.query(querySql, args, new RowCallbackHandler() {
             @Override
             public void processRow(ResultSet rs) throws SQLException {
                 do
@@ -134,6 +136,7 @@ public class FileResourceDao {
                     dataSrc.setPassword(rs.getString("Password"));
                     dataSrc.setCreateTime(rs.getString("createTime"));
                     dataSrc.setStat(rs.getInt("stat"));
+                    dataSrc.setSubjectCode(rs.getString("SubjectCode"));
                     fileDataOfThisPage.add(dataSrc);
                 }while(rs.next());
             }

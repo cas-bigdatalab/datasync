@@ -88,16 +88,23 @@ public class UserDao {
      */
     private void dropUserFromGroup(String userId, String groupName)
     {
+        if (userId == null || userId.trim().equals("") || groupName == null || groupName.trim().equals(""))
+        {
+            return;
+        }
         //从t_group表中查找出名字为groupName的group，加入userName到它的users中去，之后把group再写入t_group表中
         logger.info("userId = " + userId + ", groupName = " + groupName);
         DBObject dBObject = QueryBuilder.start().and("groupName").is(groupName).get();
         Query query = new BasicQuery(dBObject);
         Group group = mongoTemplate.findOne(query, Group.class);
         List<String> users = group.getUsers();
-        logger.info("groupName = " + groupName + ", users before remove new user, users = " + users);
-        if (users != null) {
-            users.remove(userId);
+        if (users == null || users.size() == 0)
+        {
+            return;
         }
+
+        logger.info("groupName = " + groupName + ", users before remove new user, users = " + users);
+        users.remove(userId);
         logger.info("groupName = " + groupName + ", users after removed new user, users = " + users);
         group.setUsers(users);
         mongoTemplate.save(group);
@@ -272,6 +279,19 @@ public class UserDao {
         return deletedUserCnt;
     }
 
+    public int deleteUserByLoginId(String loginId)
+    {
+        int deletedUserCnt = 0;
+        DBObject dbObject = QueryBuilder.start().and("loginId").is(loginId).get();
+        Query query = new BasicQuery(dbObject);
+        User user = mongoTemplate.findOne(query, User.class);
+        WriteResult writeResult = mongoTemplate.remove(query, "t_user");
+
+        deletedUserCnt = writeResult.getN();
+
+        return deletedUserCnt;
+    }
+
     public User getUserById(String id)
     {
         DBObject dbObject = QueryBuilder.start().and("_id").is(id).get();
@@ -285,8 +305,6 @@ public class UserDao {
     {
         int updatedUserCnt = 1;
 
-        String userName = user.getUserName();
-        String[] groupArr = user.getGroups().split(",");
         updateUserGroup(user);
 
         mongoTemplate.save(user);
@@ -298,8 +316,17 @@ public class UserDao {
     {
         String userId = user.getId();
         String groupsBeforeUpdate = mongoTemplate.findById(userId, User.class).getGroups();
+        if (groupsBeforeUpdate == null)
+        {
+            groupsBeforeUpdate = "";
+        }
+        String groupsAfterUpdate = user.getGroups();
+        if (groupsAfterUpdate == null)
+        {
+            groupsAfterUpdate = "";
+        }
         String[] groupsBeforeUpdateArr = groupsBeforeUpdate.split(",");
-        String[] updatedGroupsArr = user.getGroups().split(",");
+        String[] updatedGroupsArr = groupsAfterUpdate.split(",");
 
         //如果有新增的用户组，则把用户加入到新增的用户组中去
         for (int i = 0; i < updatedGroupsArr.length; i++)
