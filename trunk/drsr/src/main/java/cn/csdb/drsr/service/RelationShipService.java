@@ -110,13 +110,13 @@ public class RelationShipService {
         return relationDao.editQueryData(id);
     }
 
-    public Map queryTotalPage(){
-        return relationDao.queryTotalPage();
+    public Map queryTotalPage(String SubjectCode){
+        return relationDao.queryTotalPage(SubjectCode);
     }
 
-    public List<DataSrc> queryPage(int requestedPage)
+    public List<DataSrc> queryPage(int requestedPage,String SubjectCode)
     {
-        return relationDao.queryPage(requestedPage);
+        return relationDao.queryPage(requestedPage,SubjectCode);
     }
 
     public String testCon(String host, String port, String userName, String password, String databaseName) {

@@ -70,7 +70,7 @@ public class DataTaskService {
         }
         PrintWriter pw = new PrintWriter(fw);
         pw.println("=========================导出流程开始========================");
-
+        dataTaskDao.insertLogPath(dataTask.getDataTaskId(),"true");
 /*
         logger.info("=========================导出流程开始========================" + "\n");
 */
@@ -261,5 +261,14 @@ public class DataTaskService {
 
     public boolean hasDatataskName(String datataskName,String datataskId){
         return dataTaskDao.hasDatataskName(datataskName,datataskId);
+    }
+
+    //将文件或者sql路径插入日志字段中
+    public void insertLog(String dataTaskId,String path){
+        try {
+            int flag = dataTaskDao.insertLogPath(dataTaskId,path);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

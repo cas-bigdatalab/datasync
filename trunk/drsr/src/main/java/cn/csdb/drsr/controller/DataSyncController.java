@@ -90,6 +90,7 @@ public class DataSyncController {
         PrintWriter pw = new PrintWriter(fw);
         pw.println("=========================上传流程开始========================" + "\n");
         logger.info("=========================上传流程开始========================" + "\n");
+        dataTaskService.insertLog(dataTask.getDataTaskId(),"true");
         String host = configPropertyService.getProperty("FtpHost");
         String userName = configPropertyService.getProperty("FtpUser");
         String password = configPropertyService.getProperty("FtpPassword");

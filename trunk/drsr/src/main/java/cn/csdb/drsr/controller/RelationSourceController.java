@@ -2,7 +2,9 @@ package cn.csdb.drsr.controller;
 
 import cn.csdb.drsr.model.TableInfo;
 import cn.csdb.drsr.model.TableInfoR;
+import cn.csdb.drsr.service.LoginService;
 import cn.csdb.drsr.service.RelationShipService;
+import cn.csdb.drsr.utils.ConfigUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
@@ -56,6 +58,8 @@ public class RelationSourceController {
         //格式化当前日期
         String currentTime = SimpleDateFormat.format(current_date.getTime());
         DataSrc datasrc = new DataSrc();
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        datasrc.setSubjectCode(ConfigUtil.getConfigItem(configFilePath, "SubjectCode"));
         datasrc.setDataSourceName(dataSourceName);
         datasrc.setDataSourceType(dataSourceType);
         datasrc.setDatabaseName(dataBaseName);
@@ -133,8 +137,10 @@ public class RelationSourceController {
         if (num == null) {
             num = 1;
         }
-        Map map = relationShipService.queryTotalPage();
-        List<DataSrc> relationDataOfThisPage = relationShipService.queryPage(num);
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String SubjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+        Map map = relationShipService.queryTotalPage(SubjectCode);
+        List<DataSrc> relationDataOfThisPage = relationShipService.queryPage(num,SubjectCode);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("relationDataOfThisPage", relationDataOfThisPage);
         jsonObject.put("totalPage", map.get("totalPages"));

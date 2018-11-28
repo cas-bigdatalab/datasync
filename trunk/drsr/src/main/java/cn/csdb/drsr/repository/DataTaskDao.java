@@ -181,5 +181,12 @@ public class DataTaskDao {
         }
     }
 
+    public int insertLogPath(String dataTaskId,String path){
+        String updateSql = "UPDATE t_datatask SET LogPath = ? WHERE DataTaskId = ?";
+        Object[] arg = new Object[] {path,dataTaskId};
+        int flag = jdbcTemplate.update(updateSql,arg);
+        return flag;
+    }
+
 
 }

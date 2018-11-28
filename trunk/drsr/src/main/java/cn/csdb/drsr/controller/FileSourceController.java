@@ -4,6 +4,8 @@ import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
 import cn.csdb.drsr.service.DataTaskService;
 import cn.csdb.drsr.service.FileResourceService;
+import cn.csdb.drsr.service.LoginService;
+import cn.csdb.drsr.utils.ConfigUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +52,8 @@ public class FileSourceController {
     @ResponseBody
     String add(String dataSourceName, String dataSourceType, String fileType, String filePath) {
         logger.debug("新增功能开始");
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String SubjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         Date current_date = new Date();
         //设置日期格式化样式为：yyyy-MM-dd
         SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -61,6 +65,7 @@ public class FileSourceController {
         datasrc.setFileType(fileType);
         datasrc.setCreateTime(currentTime);
         datasrc.setFilePath(filePath.replace("%_%",File.separator));
+        datasrc.setSubjectCode(SubjectCode);
         return fileResourceService.addData(datasrc);
 
     }
@@ -189,8 +194,10 @@ public class FileSourceController {
         if(num==null){
             num = 1;
         }
-        Map map = fileResourceService.queryTotalPage();
-        List<DataSrc> fileDataOfThisPage = fileResourceService.queryPage(num);
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String SubjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+        Map map = fileResourceService.queryTotalPage(SubjectCode);
+        List<DataSrc> fileDataOfThisPage = fileResourceService.queryPage(num,SubjectCode);
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("fileDataOfThisPage", fileDataOfThisPage);
         jsonObject.put("totalPage", map.get("totalPages"));
