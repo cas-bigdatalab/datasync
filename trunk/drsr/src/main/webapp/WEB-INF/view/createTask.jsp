@@ -492,23 +492,45 @@
 
             if(numChecked ==0){
                 if(sqlNum >=2 && sqlNum%2 ==0){
+                    $(".sqlStatements").each(function (i) {
+                        validSql = true;
+                        if(validSql){
+                            allSqlvalidata(dataRelSrcId,$(this).val(),i)
+                        }else {
+                            return
+                        }
 
+                    })
                 }else {
                     if(sqlNum ==0){
                         toastr["error"]("表资源与sql查询至少选择添加一个");
                         return
+                    }else {
+                        toastr["error"]("sql语句和新建表名不能为空");
+                        return
                     }
-                    toastr["error"]("sql语句和新建表名不能为空");
-                    return
+
                 }
             }else {
                 if((sqlNum<2 ||sqlNum%2 !=0) && sqlNum!=0 ){
                     toastr["error"]("sql语句和新建表名不能为空");
                     return
+                }else if(sqlNum ==0){
+
+                }else {
+                    $(".sqlStatements").each(function (i) {
+                        validSql = true;
+                        if(validSql){
+                            allSqlvalidata(dataRelSrcId,$(this).val(),i)
+                        }else {
+                            return
+                        }
+
+                    })
                 }
             }
 
-            $(".sqlStatements").each(function (i) {
+            /*$(".sqlStatements").each(function (i) {
                  validSql = true;
                 if(validSql){
                     allSqlvalidata(dataRelSrcId,$(this).val(),i)
@@ -516,7 +538,7 @@
                     return
                 }
 
-            })
+            })*/
             if(!validSql){
                 toastr["error"]("sql语句存在错误");
                 return

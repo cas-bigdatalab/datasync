@@ -245,25 +245,33 @@
         <td>{{value.dataTaskName}}</td>
         <td>{{value.dataTaskType}}</td>
         <td>{{value.dataSrc.dataSourceName}}</td>
-        <td>{{dateFormat(value.createTime)}}</td>
+        <td>{{dateTimeFormat(value.createTime)}}</td>
         {{if value.status  == "1"}}
         <td >100%</td>
         {{else if value.status  == "0"}}
         <td  id="{{value.dataTaskId}}">--</td>
         {{/if}}
-        <td  class="{{value.dataTaskId}}">{{upStatusName(value.status)}}</td>
+        <td  class="{{value.dataTaskId}}">{{upStatusName(value.status,value.dataTaskType)}}</td>
         <td style="text-align: center">
 
             {{if value.status  == 0}}
-            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
-            <button type="button" class="btn purple upload-data btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
-            <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-            <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+                {{if value.logPath  == ""}}
+                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
+                <button type="button" class="btn purple upload-data btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
+                <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+                {{else if value.logPath  != "" }}
+                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
+                <button type="button" class="btn purple upload-data btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
+                <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+                <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="window.location.href='${ctx}/fileResource/downloadFile?dataTaskId={{value.dataTaskId}}'"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
+            {{/if}}
             {{else if value.status  == 1 }}
-            <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;重新上传</button>
-            <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-            <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
-            <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="window.location.href='${ctx}/fileResource/downloadFile?dataTaskId={{value.dataTaskId}}'"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
+                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;重新上传</button>
+                <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+                <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="window.location.href='${ctx}/fileResource/downloadFile?dataTaskId={{value.dataTaskId}}'"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
             {{/if}}
 
         </td>
@@ -316,12 +324,18 @@
                 }
             })
         });
-        template.helper("upStatusName",function (num) {
+        template.helper("upStatusName",function (num,type) {
+            console.log(type == "file")
             var name=""
             if(num ==0){
                 name="未上传"
             }else if(num == 1 ) {
-                name="导入完成"
+                if(type =="file"){
+                    name="上传完成"
+                }else {
+                    name="导入完成"
+                }
+
             }
             return name
         })

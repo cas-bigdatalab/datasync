@@ -212,7 +212,9 @@
     {{each list as value i}}
     <div class="col-md-4">
         <label>
-            <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="relationBox" value="{{value}}" style="line-height: normal"></div>
+            <div style="float: left;width: 20px;height: 34px">
+                <input type="checkbox" name="relationBox" relname="{{value}}" value="{{value}}" style="line-height: normal">
+            </div>
             <div style="padding-left: 20px;word-break: break-all ;"> {{value}}</div>
         </label>
     </div>
@@ -245,7 +247,9 @@
     {{each data as value i}}
     <div class="col-md-4">
         <label>
-            <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="fileTable" value="{{value.id}}" style="line-height: normal"></div>
+            <div style="float: left;width: 20px;height: 34px">
+                <input type="checkbox" name="fileTable" value="{{value.id}}" style="line-height: normal">
+            </div>
             <div style="padding-left: 20px;word-break: break-all;"> {{value.text}}</div>
         </label>
     </div>
@@ -474,6 +478,10 @@
             var tabCon = template("addSql");
             $("#sqlList").append(tabCon);
         }
+        function addSql2() {
+            var tabCon = template("addSql");
+            $("#sqlList").append(tabCon);
+        }
         <!--create relation task -->
         function sendRelationTask() {
             var dataRelSqlTableList="";
@@ -493,23 +501,45 @@
 
             if(numChecked ==0){
                 if(sqlNum >=2 && sqlNum%2 ==0){
+                    $(".sqlStatements").each(function (i) {
+                        validSql = true;
+                        if(validSql){
+                            allSqlvalidata(dataRelSrcId,$(this).val(),i)
+                        }else {
+                            return
+                        }
 
+                    })
                 }else {
                     if(sqlNum ==0){
                         toastr["error"]("表资源与sql查询至少选择添加一个");
                         return
+                    }else {
+                        toastr["error"]("sql语句和新建表名不能为空");
+                        return
                     }
-                    toastr["error"]("sql语句和新建表名不能为空");
-                    return
+
                 }
             }else {
                 if((sqlNum<2 ||sqlNum%2 !=0) && sqlNum!=0 ){
                     toastr["error"]("sql语句和新建表名不能为空");
                     return
+                }else if(sqlNum ==0){
+
+                }else {
+                    $(".sqlStatements").each(function (i) {
+                        validSql = true;
+                        if(validSql){
+                            allSqlvalidata(dataRelSrcId,$(this).val(),i)
+                        }else {
+                            return
+                        }
+
+                    })
                 }
             }
 
-            $(".sqlStatements").each(function (i) {
+            /*$(".sqlStatements").each(function (i) {
                 var validSql = true;
                 if(validSql){
                     allSqlvalidata(dataRelSrcId,$(this).val(),i)
@@ -517,7 +547,7 @@
                     return
                 }
 
-            })
+            })*/
             if(!validSql){
                 toastr["error"]("sql语句存在错误");
                 return
@@ -595,6 +625,7 @@
         $(function(){
             $.ajax({
                 url:"${ctx}/relationship/findAllDBSrc",
+                async: false,
                 type:"GET",
                 success:function (data) {
                     var list =JSON.parse(data)
@@ -610,6 +641,7 @@
             })
             $.ajax({
                 url:"${ctx}/fileResource/findAllFileSrc",
+                async: false,
                 type:"GET",
                 success:function (data) {
                     var list =JSON.parse(data)
@@ -623,6 +655,7 @@
                     console.log("请求失败")
                 }
             })
+
             $.ajax({
                 url:"${ctx}/datatask",
                 type:"GET",
@@ -631,6 +664,61 @@
                 },
                 success:function (data) {
                     console.log(JSON.parse(data))
+
+
+                    var dataTaskCon = JSON.parse(data).datatask
+                    $("#dataTaskName").val(dataTaskCon.dataTaskName)
+                    var typeNum = dataTaskCon.dataTaskType =="mysql"?0:1
+                    $("[name='ways']:eq("+ typeNum+")").prop("checked",true)
+                    if(dataTaskCon.dataTaskType == "mysql"){
+                        dataRelSrcId=dataTaskCon.dataSourceId
+                        $("#"+dataRelSrcId).prop("selected",true)
+                        $.ajax({
+                            url:"${ctx}/relationship/relationalDatabaseTableList",
+                            type:"POST",
+                            data:{
+                                dataSourceId:dataRelSrcId
+                            },
+                            success:function (data) {
+                                $("#db-table").empty();
+                                var List =JSON.parse(data);
+                                var tabCon = template("dataRelationshipList2", List);
+                                $("#db-table").append(tabCon);
+                                var fileId=dataTaskCon.tableName
+                                fileId = fileId.substr(0, fileId.length - 1);
+                                var publicContentList = fileId.split(";")
+                                for(var i=0;i<publicContentList.length;i++){
+                                    $("[relname="+publicContentList[i] +"]").prop("checked",true)
+                                }
+                            },
+                            error:function () {
+                                console.log("请求失败")
+                            }
+                        })
+                        var sqllist=dataTaskCon.sqlString
+                        var sqlnamelist=dataTaskCon.sqlTableNameEn
+                        sqllist = sqllist.substr(0, sqllist.length - 1);
+                        sqlnamelist = sqlnamelist.substr(0, sqlnamelist.length - 1);
+                        var sqlArr = sqllist.split(";")
+                        var sqlNameArr = sqlnamelist.split(";")
+                        if(sqlArr.length==1){
+                            $(".sqlStatements:eq(0)").val(sqlArr[0]);
+                            $("[name='sqlTableName']:eq(0)").val(sqlNameArr[0])
+                        }else {
+                            for(var i=0;i<sqlArr.length-1;i++){
+                                addSql2()
+                            }
+                            for(var i=0;i<sqlArr.length;i++){
+                                $(".sqlStatements:eq("+i+")").val(sqlArr[i]);
+                                $("[name='sqlTableName']:eq("+i+")").val(sqlNameArr[i])
+                            }
+                        }
+
+                    }else {
+                        dataFileSrcId=dataTaskCon.dataSourceId
+                        $("[Keyid="+dataFileSrcId +"]").prop("selected",true)
+
+                    }
                 },
                 error:function (data) {
                     console.log("请求失败")
