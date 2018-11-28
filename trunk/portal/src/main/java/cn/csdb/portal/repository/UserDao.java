@@ -119,7 +119,25 @@ public class UserDao {
         }
 
         logger.info("groupName = " + groupName + ", users before remove new user, users = " + users);
-        users.remove(userId);
+        List<String> deletingUserList = new ArrayList<String>();
+        for (int i = 0; i < users.size(); i++)
+        {
+            if (users.get(i).contains(userId))
+            {
+                deletingUserList.add(users.get(i));
+            }
+        }
+        for (int i = deletingUserList.size() - 1; i >= 0; i--)
+        {
+            try {
+                users.remove(deletingUserList.get(i));
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
         logger.info("groupName = " + groupName + ", users after removed new user, users = " + users);
         users = ListUtil.transFormList(users);
         group.setUsers(users);
