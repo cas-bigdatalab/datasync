@@ -197,7 +197,7 @@ public class DataTaskService {
 //        }
 //        String zipFile = System.getProperty("drsr.framework.root") + zipFilePath + File.separator + fileName + ".zip";
         String fileName1 = dataTask.getDataTaskName()+"log.txt";//文件名及类型
-        String path = "D:\\";
+        String path = "/logs/";
         FileWriter fw = null;
         File file1 = new File(path, fileName1);
         if(!file1.exists()){
