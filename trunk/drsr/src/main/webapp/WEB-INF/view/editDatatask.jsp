@@ -32,7 +32,7 @@
 
     <div class="select-way">
         <span>数据源</span>
-        <input name="ways" type="radio" checked="checked" value="DB" id="aaa"/>
+        <input name="ways" type="radio" value="DB" id="aaa"/>
         <label for="aaa">数据库上传</label>
         <input name="ways" type="radio" value="LH" id="bbb"/>
         <label for="bbb">本地上传</label>
@@ -664,12 +664,16 @@
                 },
                 success:function (data) {
                     console.log(JSON.parse(data))
-
-
                     var dataTaskCon = JSON.parse(data).datatask
                     $("#dataTaskName").val(dataTaskCon.dataTaskName)
                     var typeNum = dataTaskCon.dataTaskType =="mysql"?0:1
                     $("[name='ways']:eq("+ typeNum+")").prop("checked",true)
+                   if(typeNum ==1){
+                        $("#bbb").click()
+                    }
+                    if(typeNum ==0){
+                        $("#aaa").click()
+                    }
                     if(dataTaskCon.dataTaskType == "mysql"){
                         dataRelSrcId=dataTaskCon.dataSourceId
                         $("#"+dataRelSrcId).prop("selected",true)
@@ -687,9 +691,15 @@
                                 var fileId=dataTaskCon.tableName
                                 fileId = fileId.substr(0, fileId.length - 1);
                                 var publicContentList = fileId.split(";")
-                                for(var i=0;i<publicContentList.length;i++){
-                                    $("[relname="+publicContentList[i] +"]").prop("checked",true)
+                                console.log(publicContentList)
+                                if(publicContentList[0] ==""){
+
+                                }else {
+                                    for(var i=0;i<publicContentList.length;i++){
+                                        $("[relname="+publicContentList[i] +"]").prop("checked",true)
+                                    }
                                 }
+
                             },
                             error:function () {
                                 console.log("请求失败")
@@ -715,6 +725,8 @@
                         }
 
                     }else {
+                        $(".select-database").hide();
+                        $(".select-local").show();
                         dataFileSrcId=dataTaskCon.dataSourceId
                         $("[Keyid="+dataFileSrcId +"]").prop("selected",true)
 
