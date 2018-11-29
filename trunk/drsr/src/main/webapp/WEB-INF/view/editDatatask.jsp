@@ -566,14 +566,15 @@
             dataRelTableList= relTabStr;
             dataRelSqlList =relSqlStr;
             $.ajax({
-                url:"${ctx}/datatask/saveRelationDatatask",
+                url:"${ctx}/datatask/updateRelationDatatask",
                 type:"POST",
                 data:{
                     dataSourceId:dataRelSrcId,
                     dataRelTableList:dataRelTableList,
                     dataRelSqlList:dataRelSqlList,
                     datataskName:$("#dataTaskName").val(),
-                    sqlTableNameEnList:dataRelSqlTableList
+                    sqlTableNameEnList:dataRelSqlTableList,
+                    datataskId:sdoId
                 },
                 success:function (data) {
                     window.location.href="${ctx}/dataUpload"
@@ -623,7 +624,8 @@
                     data:{"dataSourceId":dataFileSrcId,
                         "datataskName":$("#dataTaskName").val(),
                         "nodes":nodes,
-                        "attr": attr
+                        "attr": attr,
+                        datataskId:sdoId
                     },
                     success:function (data) {
                         window.location.href="${ctx}/dataUpload"
