@@ -37,6 +37,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @program: DataSync
@@ -88,7 +90,10 @@ public class DataSyncController {
             }
         }
         PrintWriter pw = new PrintWriter(fw);
-        pw.println("=========================上传流程开始========================" + "\n");
+        Date now = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+        String current = dateFormat.format(now);
+        pw.println(current+":"+"=========================上传流程开始========================" + "\n");
         if(dataTask.getFilePath()!=null&&dataTask.getFilePath()!=""){
             pw.println("###########上传的文件为###########" + "\n");
             String[] fileAttr = dataTask.getFilePath().split(";");
@@ -110,7 +115,6 @@ public class DataSyncController {
         DataTask dataTask = dataTaskService.get(dataTaskId);
 */
         pw.println("数据任务名称为：" + dataTask.getDataTaskName() +"\n");
-        logger.info("数据任务名称为：" + dataTask.getDataTaskName() +"\n");
         try {
             ftpUtil.connect(host, Integer.parseInt(port), userName, password);
             String result = "";
@@ -139,7 +143,6 @@ public class DataSyncController {
             }
             pw.println("ftpDataTaskId"+dataTask.getDataTaskId()+"上传状态:" + result + "\n");
             ftpUtil.disconnect();
-            pw.println("=========================导入流程开始========================" + "\n");
             if(result.equals("Upload_New_File_Success")||result.equals("Upload_From_Break_Succes")){
                 String dataTaskString = JSONObject.toJSONString(dataTask);
                 JSONObject requestJSON = new JSONObject();
@@ -170,31 +173,28 @@ public class DataSyncController {
                     if(reponseContent.equals("1")){
                         dataTask.setStatus("1");
                         dataTaskService.update(dataTask);
-                        pw.println("导入成功"+ "\n");
-                        pw.println("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                         return 1;
                     }else{
-                        pw.println("导入失败"+ "\n");
-                        pw.println("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                         return 0;
                     }
                 } catch (IOException e) {
-                    pw.println("导入失败"+ "\n");
-                    pw.println("导入异常IOException:"+e+ "\n");
-                    pw.println("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                     e.printStackTrace();
                 }
             }else{
-                pw.println("导入失败"+ "\n");
-                pw.println("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                 return 0;
             }
         } catch (IOException e) {
-            pw.println("连接FTP出错:"+e+ "\n");
+            now = new Date();
+            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+            current = dateFormat.format(now);
+            pw.println(current+":"+"连接FTP出错:"+e+ "\n");
             System.out.println("连接FTP出错：" + e.getMessage());
             return 0;
         }finally {
-            pw.println("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
+            now = new Date();
+            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+            current = dateFormat.format(now);
+            pw.println(current+":"+"=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
             try {
                 fw.flush();
                 pw.close();
