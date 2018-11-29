@@ -26,9 +26,9 @@ public class FtpClass {
     String host = "10.0.86.77";
 //    String host = "159.226.30.10";
     String port = "21";
-    String userName = "ftpUsercode2";
+    String userName = "ftpUserssdd";
 //    String userName = "sdcbackup";
-    String password = "ftpPasswordcode2";
+    String password = "ftpPasswordssdd";
 //    String password = "sdcfilecopy03";
 
 
@@ -373,7 +373,11 @@ public class FtpClass {
             this.connect(host, new java.lang.Integer(port), userName, password);
 
 //            this.download("/201803/csdb.cn/csdb20180205.tar.gz", "C:\\ftp\\csdb20180205.tar.gz");
-            System.out.println(this.upload("C:\\ftp\\csdb20180205.tar.gz", "/sdc00130.zip"));
+//            System.out.println(this.upload("C:\\ftp\\csdb20180205.tar.gz", "/sdc00130.zip"));
+//            boolean f = ftpClient.removeDirectory("/ssdd_1129153028518/sts项目成果-2-4.docx");
+            String s = new String("/ssdd_1129153028518/sts项目成果-2-4.docx".getBytes("UTF-8"),"iso-8859-1");
+            boolean f = ftpClient.deleteFile(new String("/ssdd_1129153028518/sts项目成果-2-4.docx".getBytes("UTF-8"),"iso-8859-1"));
+            boolean f3 = ftpClient.deleteFile(new String("/ssdd_1129153028518/123.docx".getBytes("GBK"),"iso-8859-1"));
             this.disconnect();
         } catch (IOException e) {
             System.out.println("连接FTP出错：" + e.getMessage());

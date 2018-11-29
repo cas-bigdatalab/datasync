@@ -250,7 +250,7 @@ public class DataTaskController {
         List<String> filepaths = Arrays.asList(filePath.toString().split(";"));
 
         String fileName = subjectCode+"_"+datataskId;
-        fileResourceService.packDataResource(fileName,filepaths);
+        fileResourceService.packDataResource(fileName,filepaths,datatask);
         String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
         DataTask dt = dataTaskService.get(datataskId);
         dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
@@ -348,6 +348,7 @@ public class DataTaskController {
         datatask.setDataTaskType("mysql");
         datatask.setStatus("0");
         datatask.setSubjectCode(subjectCode);
+        datatask.setCreateTime(new Date());
         int flag = dataTaskService.update(datatask);
         jsonObject.put("result",flag);
         if(flag < 0){
@@ -416,6 +417,7 @@ public class DataTaskController {
         datatask.setCreateTime(new Date());
         datatask.setDataTaskType("file");
         datatask.setStatus("0");
+        datatask.setCreateTime(new Date());
         datatask.setSubjectCode(subjectCode);
         Calendar rightNow = Calendar.getInstance();
         dataTaskService.update(datatask);
@@ -426,7 +428,7 @@ public class DataTaskController {
         List<String> filepaths = Arrays.asList(filePath.toString().split(";"));
 
         String fileName = subjectCode+"_"+datataskId;
-        fileResourceService.packDataResource(fileName,filepaths);
+        fileResourceService.packDataResource(fileName,filepaths,datatask);
         String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
         DataTask dt = dataTaskService.get(datataskId);
         dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
