@@ -268,7 +268,7 @@
         var taskNameFlag=false
         var validSql = true;
         dateDef = dateDef.Format("yyyyMMddhhmmss");
-        $("#dataTaskName").val("数据任务"+dateDef)
+        $("#dataTaskName").val(dateDef)
         $("#dataTaskName").change(function () {
             var taskName = $(this).val();
             if(taskName =="" || taskName.trim() == ""){
