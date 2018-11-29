@@ -89,7 +89,6 @@ public class DataSyncController {
         }
         PrintWriter pw = new PrintWriter(fw);
         pw.println("=========================上传流程开始========================" + "\n");
-        logger.info("=========================上传流程开始========================" + "\n");
         dataTaskService.insertLog(dataTask.getDataTaskId(),"true");
         String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
         String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
@@ -123,11 +122,8 @@ public class DataSyncController {
                 }
             }
             pw.println("ftpDataTaskId"+dataTask.getDataTaskId()+"上传状态:" + result + "\n");
-            logger.info("ftpDataTaskId"+dataTask.getDataTaskId()+"上传状态:" + result + "\n");
-            logger.info("=========================上传流程结束========================" + "\n");
             ftpUtil.disconnect();
             pw.println("=========================导入流程开始========================" + "\n");
-            logger.info("=========================导入流程开始========================" + "\n");
             if(result.equals("Upload_New_File_Success")||result.equals("Upload_From_Break_Succes")){
                 String dataTaskString = JSONObject.toJSONString(dataTask);
                 JSONObject requestJSON = new JSONObject();
@@ -160,35 +156,25 @@ public class DataSyncController {
                         dataTaskService.update(dataTask);
                         pw.println("导入成功"+ "\n");
                         pw.println("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
-                        logger.info("导入成功"+ "\n");
-                        logger.info("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                         return 1;
                     }else{
                         pw.println("导入失败"+ "\n");
                         pw.println("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
-                        logger.info("导入失败"+ "\n");
-                        logger.info("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                         return 0;
                     }
                 } catch (IOException e) {
                     pw.println("导入失败"+ "\n");
                     pw.println("导入异常IOException:"+e+ "\n");
                     pw.println("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
-                    logger.info("导入失败"+ "\n");
-                    logger.error("导入异常IOException:"+e+ "\n");
-                    logger.info("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                     e.printStackTrace();
                 }
             }else{
                 pw.println("导入失败"+ "\n");
-                logger.info("导入失败"+ "\n");
-                logger.info("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
+                pw.println("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                 return 0;
             }
         } catch (IOException e) {
             pw.println("连接FTP出错:"+e+ "\n");
-            logger.error("连接FTP出错:"+e+ "\n");
-            logger.info("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
             System.out.println("连接FTP出错：" + e.getMessage());
             return 0;
         }finally {
