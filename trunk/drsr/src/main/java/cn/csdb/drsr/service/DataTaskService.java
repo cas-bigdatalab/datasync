@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.io.*;
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,7 +71,10 @@ public class DataTaskService {
             }
         }
         PrintWriter pw = new PrintWriter(fw);
-        pw.println("=========================导出流程开始========================");
+        Date now = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+        String current = dateFormat.format(now);
+        pw.println(current+":"+"=========================导出流程开始========================");
         dataTaskDao.insertLogPath(dataTask.getDataTaskId(),"true");
 /*
         logger.info("=========================导出流程开始========================" + "\n");
@@ -133,14 +138,20 @@ public class DataTaskService {
             boolean result = dataTaskDao.update(dataTask);
             jsonObject.put("result", "true");
             jsonObject.put("filePath", filePath.getPath());
+            now = new Date();
+            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+            current = dateFormat.format(now);
             pw.println("导出成功，result = " + result+ "\n");
             logger.info("导出成功，result = " + result+ "\n");
-            pw.println("=========================导出流程结束========================" + "\n");
+            pw.println(current+":"+"=========================导出流程结束========================" + "\n");
             logger.info("=========================导出流程结束========================" + "\n");
         } catch (Exception ex) {
+            now = new Date();
+            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+            current = dateFormat.format(now);
             jsonObject.put("result", "false");
-            logger.error("导出失败，result = false" + "\n");
-            pw.println("=========================导出流程结束========================" + "\n");
+            logger.error(current+":"+"导出失败，result = false" + "\n");
+            pw.println(current+":"+"=========================导出流程结束========================" + "\n");
             logger.info("=========================导出流程结束========================" + "\n");
         }finally {
             try {
