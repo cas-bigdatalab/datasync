@@ -22,7 +22,7 @@
         <beans:prop key="ftpRootPath">/home/vftpuser/</beans:prop>
 
         <beans:prop key="dbUserName">root</beans:prop>
-        <beans:prop key="dbPassword"></beans:prop>
+        <beans:prop key="dbPassword">123456</beans:prop>
         <beans:prop key="dbHost">10.0.86.77</beans:prop>
         <beans:prop key="dbPort">3306</beans:prop>
     </util:properties>
