@@ -96,21 +96,25 @@ public class ResourceService {
 //                continue;
 //            }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", fp[i].getPath().replaceAll("\\\\","%_%"));
-            jsonObject.put("text", fp[i].getName().replaceAll("\\\\","%_%"));
+            if(fp[i].getPath().indexOf("_sql")==-1){
+            jsonObject.put("id", fp[i].getPath().replaceAll("\\\\", "%_%"));
+            jsonObject.put("text", fp[i].getName().replaceAll("\\\\", "%_%"));
             if (fp[i].isDirectory()) {
                 jsonObject.put("type", "directory");
                 JSONObject jo = new JSONObject();
-                jo.put("disabled","true");
-                jsonObject.put("state",jo);
+                jo.put("disabled", "true");
+                jsonObject.put("state", jo);
             } else {
                 jsonObject.put("type", "file");
             }
             jsonObjects.add(jsonObject);
         }
+    }
         Collections.sort(jsonObjects, new FileComparator());
         return jsonObjects;
+
     }
+
 
     class FileComparator implements Comparator<JSONObject> {
 
