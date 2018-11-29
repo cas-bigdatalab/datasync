@@ -76,8 +76,6 @@ public class UserDao {
         {
             users = new ArrayList<String>();
         }
-        System.out.println("group = " + group + ", users = " + users.get(0));
-
 
         logger.info("groupName = " + groupName + ", users before add new user, users = " + users);
         users.add(userId);
