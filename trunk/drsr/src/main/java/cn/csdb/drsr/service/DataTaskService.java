@@ -108,8 +108,8 @@ public class DataTaskService {
                 sqlSb.append(DDL2SQLUtils.generateDDLFromSql(connection, sqlString, sqlTableNameEn));
                 dataSb.append(DDL2SQLUtils.generateInsertSqlFromSQL(connection, sqlString, sqlTableNameEn));
             }
-            pw.println("=========================SQL数据表结构:========================\n" + sqlSb.toString() + "\n");
-            pw.println("=========================SQL数据内容:==========================\n" + dataSb.toString() + "\n");
+            pw.println("###########SQL数据表结构:###########\n" + sqlSb.toString() + "\n");
+            pw.println("###########SQL数据内容:###########\n" + dataSb.toString() + "\n");
             logger.info("=========================SQL数据表结构:========================\n" + sqlSb.toString() + "\n");
             logger.info("=========================SQL数据内容:==========================\n" + dataSb.toString() + "\n");
 
