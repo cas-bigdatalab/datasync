@@ -193,11 +193,11 @@ public class DataTaskController {
         datatask.setDataTaskType("mysql");
         datatask.setStatus("0");
         datatask.setSubjectCode(subjectCode);
-        Calendar rightNow = Calendar.getInstance();
+        /*Calendar rightNow = Calendar.getInstance();
         StringBuffer sb = new StringBuffer();
         Format dateFormat = new SimpleDateFormat("MMddHHmmssS");
-        dateFormat.format(rightNow.getTime(), sb, HELPER_POSITION );
-        datatask.setDataTaskId(sb.toString());
+        dateFormat.format(rightNow.getTime(), sb, HELPER_POSITION );*/
+        datatask.setDataTaskId(datataskName);
         int flag = dataTaskService.insertDatatask(datatask);
         jsonObject.put("result",flag);
         if(flag < 0){
@@ -236,12 +236,12 @@ public class DataTaskController {
         datatask.setDataTaskType("file");
         datatask.setStatus("0");
         datatask.setSubjectCode(subjectCode);
-        Calendar rightNow = Calendar.getInstance();
+        /*Calendar rightNow = Calendar.getInstance();
         StringBuffer sb = new StringBuffer();
         Format dateFormat = new SimpleDateFormat("MMddHHmmssS");
         dateFormat.format(rightNow.getTime(), sb, HELPER_POSITION );
-        String datataskId = sb.toString();
-        datatask.setDataTaskId(datataskId);
+        String datataskId = sb.toString();*/
+        datatask.setDataTaskId(datataskName);
         dataTaskService.insertDatatask(datatask);
         if(dataSourceId <0 ){
             jsonObject.put("result",false);
@@ -249,10 +249,10 @@ public class DataTaskController {
         }
         List<String> filepaths = Arrays.asList(filePath.toString().split(";"));
 
-        String fileName = subjectCode+"_"+datataskId;
+        String fileName = subjectCode+"_"+datataskName;
         fileResourceService.packDataResource(fileName,filepaths,datatask);
         String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
-        DataTask dt = dataTaskService.get(datataskId);
+        DataTask dt = dataTaskService.get(datataskName);
         dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
         int upresult = dataTaskService.update(dt);
         jsonObject.put("result",true);

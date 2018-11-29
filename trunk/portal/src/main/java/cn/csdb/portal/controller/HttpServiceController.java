@@ -40,107 +40,79 @@ public class HttpServiceController {
     private ConfigPropertyService configPropertyService;
 
     @ResponseBody
-    @RequestMapping(value = "getDataTask", method = {RequestMethod.POST,RequestMethod.GET})
-    public int getDataTask(@RequestBody String requestString){
+    @RequestMapping(value = "getDataTask", method = {RequestMethod.POST, RequestMethod.GET})
+    public int getDataTask(@RequestBody String requestString) {
         System.out.println(requestString);
         JSONObject requestJson = JSON.parseObject(requestString);
         String subjectCode = requestJson.get("subjectCode").toString();
         String dataTaskString = requestJson.get("dataTask").toString();
-        DataTask dataTask = JSON.parseObject(dataTaskString,DataTask.class);
-//        Site site = siteService.getSiteByMarker(siteMarker);
+        DataTask dataTask = JSON.parseObject(dataTaskString, DataTask.class);
         Subject subject = subjectMgmtService.findByCode(subjectCode);
         String siteFtpPath = subject.getFtpFilePath();
         dataTask.setSubjectCode(subject.getSubjectCode());
         String sqlFilePath = dataTask.getSqlFilePath();
-        sqlFilePath = sqlFilePath.replaceAll("%_%",File.separator);
-        System.out.println("sqlFilePath========"+sqlFilePath);
+        sqlFilePath = sqlFilePath.replaceAll("%_%", File.separator);
+        System.out.println("sqlFilePath========" + sqlFilePath);
         String[] sqlfilePathList = sqlFilePath.split(";");
         String filepath = dataTask.getFilePath();
         StringBuffer sqlfilePathBuffer = new StringBuffer();
-        StringBuffer filePathBuffer = new StringBuffer();
         String structDBFile = "";
         String dataDBFile = "";
-        String zipFile="";
+        String zipFile = "";
         String unZipPath = "";
-        for(String fp : sqlfilePathList){
-            if(fp.equals("")){
+        for (String fp : sqlfilePathList) {
+            if (fp.equals("")) {
                 continue;
             }
             String fileName = "";
-            if (fp.indexOf("/")>0){
-                fileName = fp.substring(fp.lastIndexOf("/")+1);
-            }else if(fp.indexOf("\\")>0){
-                fileName = fp.substring(fp.lastIndexOf("\\")+1);
+            if (fp.indexOf("/") > 0) {
+                fileName = fp.substring(fp.lastIndexOf("/") + 1);
+            } else if (fp.indexOf("\\") > 0) {
+                fileName = fp.substring(fp.lastIndexOf("\\") + 1);
             }
-            sqlfilePathBuffer.append(siteFtpPath+fileName+";");
-            if(dataTask.getDataTaskType().equals("mysql")){
-                String sqlZip = filepath;
-//                System.out.println("-------sqlZip"+sqlZip);
-                /*if (sqlZip.indexOf("/")>0){
-                    sqlZip = sqlZip.substring(sqlZip.lastIndexOf("/")+1);
-                }else if(sqlZip.indexOf("\\")>0){
-                    sqlZip = sqlZip.substring(sqlZip.lastIndexOf("\\")+1);
-                }else if(sqlZip.indexOf("%_%")>0){
-                    sqlZip = sqlZip.substring(sqlZip.lastIndexOf("%_%")+3);
-                    sqlZip = sqlZip.replaceAll("%_%",File.separator);
-
-                }*/
-                sqlZip = dataTask.getDataTaskId()+".zip";
-                sqlZip = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+sqlZip;
+            sqlfilePathBuffer.append(siteFtpPath + fileName + ";");
+            if (dataTask.getDataTaskType().equals("mysql")) {
+                String sqlZip = dataTask.getDataTaskId() + ".zip";
+                sqlZip = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + File.separator + sqlZip;
 //                System.out.println("-------sqlZip"+sqlZip);
                 File sqlfiles = new File(sqlZip);
                 ZipUtil zipUtil = new ZipUtil();
                 try {
-                    zipUtil.unZip(sqlfiles,siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId());
+                    zipUtil.unZip(sqlfiles, siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId()+"_sql");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                dataDBFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+"data.sql";
-                structDBFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+"struct.sql";
-                System.out.println("dataDBFile---------"+dataDBFile);
-                System.out.println("structDBFile---------"+structDBFile);
-
-                /*if(fileName.contains("data")){
-                    dataDBFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+"struct.sql";
-                    System.out.println("dataDBFile---------"+dataDBFile);
-                }else if(fileName.contains("struct")){
-                    structDBFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+File.separator+"data.sql";
-                }*/
-            }else if(dataTask.getDataTaskType().equals("file")){
-//                zipFile = siteFtpPath+fileName;
-                zipFile = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId()+".zip";
-                System.out.println("+++++++++"+zipFile);
+                dataDBFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + "data.sql";
+                structDBFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + "struct.sql";
+                System.out.println("dataDBFile---------" + dataDBFile);
+                System.out.println("structDBFile---------" + structDBFile);
+            } else if (dataTask.getDataTaskType().equals("file")) {
+                zipFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + ".zip";
+                System.out.println("+++++++++" + zipFile);
 //                System.out.println("=========="+fileName);
-                unZipPath = siteFtpPath+subjectCode+"_"+dataTask.getDataTaskId();
+                unZipPath = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId();
 
             }
-
         }
         dataTask.setSqlFilePath(sqlfilePathBuffer.toString());
-//        if (filepath.indexOf("/")>0){
-//            filepath = filepath.substring(filepath.lastIndexOf("/")+1);
-//        }else if(filepath.indexOf("\\")>0){
-//            filepath = filepath.substring(filepath.lastIndexOf("\\")+1);
-//        }
-//        dataTask.setFilePath(siteFtpPath+filepath);
-        if(dataTask.getDataTaskType().equals("mysql")){
+        if (dataTask.getDataTaskType().equals("mysql")) {
             String username = configPropertyService.getProperty("db.username");
             String password = configPropertyService.getProperty("db.password");
             String dbName = subject.getDbName();
 
             SqlUtil sqlUtil = new SqlUtil();
             try {
-                System.out.println("passwprd------"+password);
-                sqlUtil.importSql("localhost",username,password,dbName,structDBFile,dataDBFile);
+                System.out.println("passwprd------" + password);
+                sqlUtil.importSql("localhost", username, password, dbName, structDBFile, dataDBFile);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-        }else{
+        } else {
             File file = new File(zipFile);
             ZipUtil zipUtil = new ZipUtil();
             try {
-                zipUtil.unZip(file,unZipPath);
+                zipUtil.unZip(file, unZipPath);
             } catch (Exception e) {
                 e.printStackTrace();
             }
