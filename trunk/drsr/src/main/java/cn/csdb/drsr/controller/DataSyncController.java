@@ -126,7 +126,7 @@ public class DataSyncController {
                     return 0;
                 }
             }else if(dataTask.getDataTaskType().equals("mysql")){
-                String remoteFilepath = ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+"/";
+                String remoteFilepath = ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+"_sql/";
                 String[] localFileList = {dataTask.getFilePath()};
                 result = ftpUtil.upload(localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
                 if(result.equals("File_Exits")){
