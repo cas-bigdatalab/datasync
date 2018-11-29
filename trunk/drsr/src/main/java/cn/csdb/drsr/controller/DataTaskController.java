@@ -2,10 +2,8 @@ package cn.csdb.drsr.controller;
 
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
-import cn.csdb.drsr.service.ConfigPropertyService;
-import cn.csdb.drsr.service.DataSrcService;
-import cn.csdb.drsr.service.DataTaskService;
-import cn.csdb.drsr.service.FileResourceService;
+import cn.csdb.drsr.service.*;
+import cn.csdb.drsr.utils.ConfigUtil;
 import cn.csdb.drsr.utils.PropertiesUtil;
 import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
 import cn.csdb.drsr.utils.dataSrc.IDataSource;
@@ -45,8 +43,6 @@ public class DataTaskController {
     private FileResourceService fileResourceService;
     @Resource
     private DataSrcService dataSrcService;
-    @Autowired
-    private ConfigPropertyService configPropertyService;
 
     private static final FieldPosition HELPER_POSITION = new FieldPosition(0);
 
@@ -121,7 +117,8 @@ public class DataTaskController {
                                    @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
                                    @RequestParam(name = "datataskType", required = false) String datataskType,
                                    @RequestParam(name = "status", required = false) String status){
-        String subjectCode = configPropertyService.getProperty("SubjectCode");
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         JSONObject jsonObject = new JSONObject();
         List<DataTask> dataTasks = dataTaskService.getDatataskByPage((pageNo-1)*pageSize,pageSize,datataskType,status, subjectCode);
         int totalCount = dataTaskService.getCount(datataskType,status,subjectCode);
@@ -183,7 +180,8 @@ public class DataTaskController {
                                            String dataRelTableList,
                                            String sqlTableNameEnList,
                                            @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList) {
-        String subjectCode = configPropertyService.getProperty("SubjectCode");
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);
@@ -211,7 +209,8 @@ public class DataTaskController {
     @ResponseBody
     @RequestMapping(value="saveFileDatatask",method = RequestMethod.POST)
     public JSONObject saveFileDatatask(int dataSourceId, String datataskName,String[] nodes){
-        String subjectCode = configPropertyService.getProperty("SubjectCode");
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);
@@ -336,7 +335,8 @@ public class DataTaskController {
                                              String dataRelTableList,
                                              String sqlTableNameEnList,
                                              @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList) {
-        String subjectCode = configPropertyService.getProperty("SubjectCode");
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = dataTaskService.get(datataskId);
         datatask.setDataSourceId(dataSourceId);
@@ -359,7 +359,8 @@ public class DataTaskController {
     @ResponseBody
     @RequestMapping(value="updateFileDatatask",method = RequestMethod.POST)
     public JSONObject updateFileDatatask(String datataskId,int dataSourceId, String datataskName,String[] nodes,String[] attr){
-        String subjectCode = configPropertyService.getProperty("SubjectCode");
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = dataTaskService.get(datataskId);
         datatask.setDataSourceId(dataSourceId);
@@ -374,6 +375,7 @@ public class DataTaskController {
                 }
                 for(String attrs : attr){
                     attrs.replaceAll("\\\\", Matcher.quoteReplacement(File.separator));
+                    attrs.replaceAll("/", Matcher.quoteReplacement(File.separator));
                 }
                 String[] traversingNodes = nodePath.split(";");
                 String[] unionNodes = FileResourceService.union(attr, traversingNodes);

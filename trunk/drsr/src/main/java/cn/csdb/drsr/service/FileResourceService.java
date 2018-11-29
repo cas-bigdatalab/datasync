@@ -45,9 +45,6 @@ public class FileResourceService {
     @Resource
     private FileResourceDao fileResourceDao;
 
-    @Resource
-    private ConfigPropertyService configPropertyService;
-
     @Transactional
     public String addData(DataSrc datasrc) {
         try {
