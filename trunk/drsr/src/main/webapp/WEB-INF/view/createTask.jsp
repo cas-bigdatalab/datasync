@@ -599,6 +599,7 @@
             $.ajax({
                 url:"${ctx}/datatask/saveFileDatatask",
                 type:"POST",
+                aysnc:true,
                 traditional: true,
                 data:{"dataSourceId":dataFileSrcId,
                     "datataskName":$("#dataTaskName").val(),

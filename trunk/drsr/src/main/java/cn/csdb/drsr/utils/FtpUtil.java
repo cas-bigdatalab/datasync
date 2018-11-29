@@ -25,9 +25,6 @@ import java.util.Map;
  **/
 public class FtpUtil {
 
-    @Autowired
-    ConfigPropertyService configPropertyService;
-
     public static Map<String, Long> progressMap = new HashMap<String, Long>();
 
     public enum UploadStatus {

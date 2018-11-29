@@ -257,12 +257,12 @@
             {{if value.status  == 0}}
                 {{if value.logPath  == ""}}
                 <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
-                <button type="button" class="btn purple upload-data btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
+                <button type="button" class="btn purple btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
                 <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                 <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 {{else if value.logPath  != "" }}
                 <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
-                <button type="button" class="btn purple upload-data btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
+                <button type="button" class="btn purple btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
                 <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                 <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="window.location.href='${ctx}/fileResource/downloadFile?dataTaskId={{value.dataTaskId}}'"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
@@ -413,7 +413,7 @@
                         if(keyType == "mysql"){
                             if(data =="1"){
                                 $("."+souceID).text("已导入")
-                                return
+                                tableConfiguration2(1,dataSourceName,dataSourceStatus)
                             }else {
                                 $("."+souceID).text("导入失败")
                                 return
@@ -421,7 +421,7 @@
                         }else {
                             if(data =="1"){
                                 $("."+souceID).text("已上传")
-                                return
+                                tableConfiguration2(1,dataSourceName,dataSourceStatus)
                             }else {
                                 $("."+souceID).text("上传失败")
                                 return

@@ -161,7 +161,9 @@ public class RelationSourceController {
     @RequestMapping(value = "findAllDBSrc")
     public @ResponseBody
     List<DataSrc> findAllDBSrc() {
-        return relationShipService.findAll();
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+        return relationShipService.findAllBySubjectCode(subjectCode);
     }
 
     /**

@@ -31,12 +31,17 @@ public class ListUtil {
 
     public static List<String> addDataToList(List<String> plainList){
         List<String> result = new ArrayList<String>();
-        if (plainList.size() == 1){
+        if(plainList.size() == 0)
+        {
+            result = null;
+        }
+        else if (plainList.size() == 1){
             result.add("[" +"\"" + plainList.get(0) + "\"" + "]" ) ;
         }else if (plainList.size() == 2){
             result.add("[" +"\"" + plainList.get(0) + "\""  ) ;
             result.add("\"" + plainList.get(1) + "\"" + "]" ) ;
-        }else
+        }
+        else
         {
             result.add("[" +"\"" + plainList.get(0) + "\""  ) ;
             for (int i=1;i<=plainList.size()-2;i++)

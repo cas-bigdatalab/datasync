@@ -3,6 +3,7 @@ package cn.csdb.drsr.service;
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.repository.FileResourceDao;
 import cn.csdb.drsr.repository.RelationDao;
+import cn.csdb.drsr.utils.ConfigUtil;
 import cn.csdb.drsr.utils.ZipUtils;
 import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
 import cn.csdb.drsr.utils.dataSrc.IDataSource;
@@ -43,9 +44,6 @@ public class FileResourceService {
 
     @Resource
     private FileResourceDao fileResourceDao;
-
-    @Resource
-    private ConfigPropertyService configPropertyService;
 
     @Transactional
     public String addData(DataSrc datasrc) {
@@ -276,8 +274,9 @@ public class FileResourceService {
      * @auther: hw
      * @date: 2018/10/23 10:01
      */
-    public List<DataSrc> findAll() {
-        return fileResourceDao.findAll();
+    public List<DataSrc> findAll(String subjectCode) {
+
+        return fileResourceDao.findAll(subjectCode);
     }
 
     public List<JSONObject> fileSourceFileList(String filePath) {

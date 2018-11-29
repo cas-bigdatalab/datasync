@@ -2,10 +2,8 @@ package cn.csdb.drsr.controller;
 
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
-import cn.csdb.drsr.service.ConfigPropertyService;
-import cn.csdb.drsr.service.DataSrcService;
-import cn.csdb.drsr.service.DataTaskService;
-import cn.csdb.drsr.service.FileResourceService;
+import cn.csdb.drsr.service.*;
+import cn.csdb.drsr.utils.ConfigUtil;
 import cn.csdb.drsr.utils.PropertiesUtil;
 import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
 import cn.csdb.drsr.utils.dataSrc.IDataSource;
@@ -45,8 +43,6 @@ public class DataTaskController {
     private FileResourceService fileResourceService;
     @Resource
     private DataSrcService dataSrcService;
-    @Autowired
-    private ConfigPropertyService configPropertyService;
 
     private static final FieldPosition HELPER_POSITION = new FieldPosition(0);
 
@@ -121,7 +117,8 @@ public class DataTaskController {
                                    @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
                                    @RequestParam(name = "datataskType", required = false) String datataskType,
                                    @RequestParam(name = "status", required = false) String status){
-        String subjectCode = configPropertyService.getProperty("SubjectCode");
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         JSONObject jsonObject = new JSONObject();
         List<DataTask> dataTasks = dataTaskService.getDatataskByPage((pageNo-1)*pageSize,pageSize,datataskType,status, subjectCode);
         int totalCount = dataTaskService.getCount(datataskType,status,subjectCode);
@@ -144,7 +141,7 @@ public class DataTaskController {
     @RequestMapping(value="/delete")
     @ResponseBody
     public int deleteDatatask(String datataskId){
-        return dataTaskService.deleteDatataskById(Integer.parseInt(datataskId));
+        return dataTaskService.deleteDatataskById(datataskId);
     }
 
     /**
@@ -183,7 +180,8 @@ public class DataTaskController {
                                            String dataRelTableList,
                                            String sqlTableNameEnList,
                                            @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList) {
-        String subjectCode = configPropertyService.getProperty("SubjectCode");
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);
@@ -210,68 +208,13 @@ public class DataTaskController {
 
     @ResponseBody
     @RequestMapping(value="saveFileDatatask",method = RequestMethod.POST)
-    public JSONObject saveFileDatatask(int dataSourceId, String datataskName,String[] nodes,String[] attr){
-        String subjectCode = configPropertyService.getProperty("SubjectCode");
+    public JSONObject saveFileDatatask(int dataSourceId, String datataskName,String[] nodes){
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);
-        String filePath = "";
-        if(nodes!=null) {
-            if(attr!=null) {
-                String nodePath = "";
-                for (String nodeId : nodes) {
-                    String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
-                    String str1 = fileResourceService.traversingFiles(str);
-                    nodePath += str1;
-                }
-                for(String attrs : attr){
-                    attrs.replaceAll("\\\\", Matcher.quoteReplacement(File.separator));
-                }
-                String[] traversingNodes = nodePath.split(";");
-                String[] unionNodes = FileResourceService.union(attr, traversingNodes);
-                for (String unionNode : unionNodes) {
-                    filePath += unionNode + ";";
-/*
-                    filePath += unionNode.replaceAll("/", "\\\\") + ";";
-*/
-                }
-                datatask.setFilePath(filePath.toString());
-            }else{
-                StringBuffer filePathBuffer = new StringBuffer("");
-                String str1 = "";
-                for (String nodeId : nodes){
-                    String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
-                    File file = new File(str);
-                    if(file.isDirectory()) {
-                        str1 = fileResourceService.traversingFiles(str);
-                    }else{
-                        str1 = str + ";";
-                    }
-                    if(filePathBuffer.indexOf(str+";")!=-1){
-
-                    }else{
-                        filePathBuffer.append(str1);
-                    }
-                }
-                filePath = filePathBuffer.toString();
-                datatask.setFilePath(filePathBuffer.toString());
-            }
-        }else{
-            for (String unionNode : attr) {
-                filePath += unionNode.replaceAll("\\\\", Matcher.quoteReplacement(File.separator)) + ";";
-            }
-            datatask.setFilePath(filePath);
-        }
-
-
-
-
-
-
-
-
-
-        /*StringBuffer filePath = new StringBuffer("");
+        StringBuffer filePath = new StringBuffer("");
         String str1 = "";
         for (String nodeId : nodes){
             String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
@@ -286,7 +229,8 @@ public class DataTaskController {
             }else{
                 filePath.append(str1);
             }
-        }*/
+        }
+        datatask.setFilePath(filePath.toString());
         datatask.setDataTaskName(datataskName);
         datatask.setCreateTime(new Date());
         datatask.setDataTaskType("file");
@@ -310,7 +254,7 @@ public class DataTaskController {
         String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
         DataTask dt = dataTaskService.get(datataskId);
         dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
-        boolean upresult = dataTaskService.update(dt);
+        int upresult = dataTaskService.update(dt);
         jsonObject.put("result",true);
         return  jsonObject;
     }
@@ -382,5 +326,113 @@ public class DataTaskController {
         return jsonObject;
     }
 
+
+    @ResponseBody
+    @RequestMapping(value="updateRelationDatatask",method = RequestMethod.POST)
+    public JSONObject updateRelationDatatask(String datataskId,
+                                             int dataSourceId,
+                                             String datataskName,
+                                             String dataRelTableList,
+                                             String sqlTableNameEnList,
+                                             @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList) {
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+        JSONObject jsonObject = new JSONObject();
+        DataTask datatask = dataTaskService.get(datataskId);
+        datatask.setDataSourceId(dataSourceId);
+        datatask.setDataTaskName(datataskName);
+        datatask.setTableName(dataRelTableList);
+        datatask.setSqlString(dataRelSqlList);
+        datatask.setSqlTableNameEn(sqlTableNameEnList);
+        datatask.setCreateTime(new Date());
+        datatask.setDataTaskType("mysql");
+        datatask.setStatus("0");
+        datatask.setSubjectCode(subjectCode);
+        int flag = dataTaskService.update(datatask);
+        jsonObject.put("result",flag);
+        if(flag < 0){
+            return  jsonObject;
+        }
+        return jsonObject;
+    }
+
+    @ResponseBody
+    @RequestMapping(value="updateFileDatatask",method = RequestMethod.POST)
+    public JSONObject updateFileDatatask(String datataskId,int dataSourceId, String datataskName,String[] nodes,String[] attr){
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+        JSONObject jsonObject = new JSONObject();
+        DataTask datatask = dataTaskService.get(datataskId);
+        datatask.setDataSourceId(dataSourceId);
+        String filePath = "";
+        if(nodes!=null) {
+            if(attr!=null) {
+                String nodePath = "";
+                for (String nodeId : nodes) {
+                    String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
+                    String str1 = fileResourceService.traversingFiles(str);
+                    nodePath += str1;
+                }
+                for(String attrs : attr){
+                    attrs.replaceAll("\\\\", Matcher.quoteReplacement(File.separator));
+                    attrs.replaceAll("/", Matcher.quoteReplacement(File.separator));
+                }
+                String[] traversingNodes = nodePath.split(";");
+                String[] unionNodes = FileResourceService.union(attr, traversingNodes);
+                for (String unionNode : unionNodes) {
+                    filePath += unionNode + ";";
+/*
+                    filePath += unionNode.replaceAll("/", "\\\\") + ";";
+*/
+                }
+                datatask.setFilePath(filePath.toString());
+            }else{
+                StringBuffer filePathBuffer = new StringBuffer("");
+                String str1 = "";
+                for (String nodeId : nodes){
+                    String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
+                    File file = new File(str);
+                    if(file.isDirectory()) {
+                        str1 = fileResourceService.traversingFiles(str);
+                    }else{
+                        str1 = str + ";";
+                    }
+                    if(filePathBuffer.indexOf(str+";")!=-1){
+
+                    }else{
+                        filePathBuffer.append(str1);
+                    }
+                }
+                filePath = filePathBuffer.toString();
+                datatask.setFilePath(filePathBuffer.toString());
+            }
+        }else{
+            for (String unionNode : attr) {
+                filePath += unionNode.replaceAll("\\\\", Matcher.quoteReplacement(File.separator)) + ";";
+            }
+            datatask.setFilePath(filePath);
+        }
+        datatask.setDataTaskName(datataskName);
+        datatask.setCreateTime(new Date());
+        datatask.setDataTaskType("file");
+        datatask.setStatus("0");
+        datatask.setSubjectCode(subjectCode);
+        Calendar rightNow = Calendar.getInstance();
+        dataTaskService.update(datatask);
+        if(dataSourceId <0 ){
+            jsonObject.put("result",false);
+            return  jsonObject;
+        }
+        List<String> filepaths = Arrays.asList(filePath.toString().split(";"));
+
+        String fileName = subjectCode+"_"+datataskId;
+        fileResourceService.packDataResource(fileName,filepaths);
+        String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
+        DataTask dt = dataTaskService.get(datataskId);
+        dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
+        int upresult = dataTaskService.update(dt);
+        jsonObject.put("result",true);
+        return  jsonObject;
+    }
 
 }
