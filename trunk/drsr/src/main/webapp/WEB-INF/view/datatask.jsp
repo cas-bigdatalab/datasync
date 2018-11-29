@@ -413,7 +413,7 @@
                         if(keyType == "mysql"){
                             if(data =="1"){
                                 $("."+souceID).text("已导入")
-                                return
+                                tableConfiguration2(1,dataSourceName,dataSourceStatus)
                             }else {
                                 $("."+souceID).text("导入失败")
                                 return
@@ -421,7 +421,7 @@
                         }else {
                             if(data =="1"){
                                 $("."+souceID).text("已上传")
-                                return
+                                tableConfiguration2(1,dataSourceName,dataSourceStatus)
                             }else {
                                 $("."+souceID).text("上传失败")
                                 return
