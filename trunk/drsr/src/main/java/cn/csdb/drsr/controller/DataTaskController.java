@@ -348,6 +348,7 @@ public class DataTaskController {
         datatask.setDataTaskType("mysql");
         datatask.setStatus("0");
         datatask.setSubjectCode(subjectCode);
+        datatask.setCreateTime(new Date());
         int flag = dataTaskService.update(datatask);
         jsonObject.put("result",flag);
         if(flag < 0){
@@ -416,6 +417,7 @@ public class DataTaskController {
         datatask.setCreateTime(new Date());
         datatask.setDataTaskType("file");
         datatask.setStatus("0");
+        datatask.setCreateTime(new Date());
         datatask.setSubjectCode(subjectCode);
         Calendar rightNow = Calendar.getInstance();
         dataTaskService.update(datatask);

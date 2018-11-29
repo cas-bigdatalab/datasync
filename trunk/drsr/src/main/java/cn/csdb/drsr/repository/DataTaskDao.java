@@ -39,13 +39,13 @@ public class DataTaskDao {
                 "DataSourceId=?,DataTaskName=?,DataTaskType=?," +
                 "TableName=?,SqlString=?,SqlTableNameEn=?," +
                 "SqlFilePath=?,FilePath=?,Creator=?," +
-                "Status=?,SubjectCode=?,LogPath=? " +
+                "Status=?,SubjectCode=?,LogPath=?,CreateTime=?" +
                 "where DataTaskId=? ";
         int i = jdbcTemplate.update(sql, new Object[]{
                 dataTask.getDataSourceId(), dataTask.getDataTaskName(), dataTask.getDataTaskType(),
                 dataTask.getTableName(), dataTask.getSqlString(), dataTask.getSqlTableNameEn(),
                 dataTask.getSqlFilePath(), dataTask.getFilePath(), dataTask.getCreator(),
-                dataTask.getStatus(), dataTask.getSubjectCode(),dataTask.getLogPath(),
+                dataTask.getStatus(), dataTask.getSubjectCode(),dataTask.getLogPath(),dataTask.getCreateTime(),
                 dataTask.getDataTaskId()});
         if (i >= 0) {
             result = true;
@@ -74,7 +74,7 @@ public class DataTaskDao {
             sb.append("where ");
         }
         List<Object> params = getSql(datataskType, status, subjectCode,sb);
-        sb.append(" order by datataskId desc limit ?,? ");
+        sb.append(" order by CreateTime desc limit ?,? ");
         params.add(start);
         params.add(pageSize);
         return jdbcTemplate.query(sb.toString(), params.toArray(), new DataTaskMapper());
