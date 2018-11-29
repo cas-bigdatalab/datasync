@@ -155,6 +155,9 @@ public class FileResourceService {
                 logger.info("rootName为："+rootName);
 */
                 JSONObject jsonObject = new JSONObject();
+                JSONObject jsonObject1 = new JSONObject();
+                jsonObject1.put("opened",true);
+                jsonObject.put("sta",jsonObject1);
                 if (roots.isDirectory()) {
                     File file1 = roots;
                     File[] rootNode = file1.listFiles();

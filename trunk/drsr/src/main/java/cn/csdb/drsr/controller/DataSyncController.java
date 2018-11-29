@@ -123,7 +123,6 @@ public class DataSyncController {
                 }
             }
             pw.println("ftpDataTaskId"+dataTask.getDataTaskId()+"上传状态:" + result + "\n");
-            pw.println("=========================上传流程结束========================" + "\n");
             logger.info("ftpDataTaskId"+dataTask.getDataTaskId()+"上传状态:" + result + "\n");
             logger.info("=========================上传流程结束========================" + "\n");
             ftpUtil.disconnect();

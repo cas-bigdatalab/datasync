@@ -409,7 +409,8 @@
                                         "parent": arrays[i].parentId == "root" ? "#" : arrays[i].parentId,
                                         "text": arrays[i].name,
                                         "type": arrays[i].type,
-                                        "children":arrays[i].children
+                                        "children":arrays[i].children,
+                                        "state": arrays[i].sta
                                     }
                                     jsonarray.push(arr);
                                     children = jsonarray;
@@ -432,7 +433,7 @@
                         "icon": "glyphicon glyphicon-ok"
                     }
                 },
-                "plugins": ["dnd"/*, "state"*/, "types", "checkbox", "wholerow"]
+                "plugins": ["dnd", "state", "types", "checkbox", "wholerow"]
             })
         })
         function generateChildJson(childArray) {
@@ -780,7 +781,8 @@
                                                     "parent": arrays[i].parentId == "root" ? "#" : arrays[i].parentId,
                                                     "text": arrays[i].name,
                                                     "type": arrays[i].type,
-                                                    "children":arrays[i].children
+                                                    "children":arrays[i].children,
+                                                    "state": arrays[i].sta
                                                 }
                                                 jsonarray.push(arr);
                                                 children = jsonarray;
@@ -803,7 +805,7 @@
                                     "icon": "glyphicon glyphicon-ok"
                                 }
                             },
-                            "plugins": ["dnd"/*, "state"*/, "types", "checkbox", "wholerow"]
+                            "plugins": ["dnd", "state", "types", "checkbox", "wholerow"]
                         })
                         $("[Keyid="+dataFileSrcId +"]").prop("selected",true)
                         var filepath = dataTaskCon.filePath.replace(/%_%/g, "/").split(";");
