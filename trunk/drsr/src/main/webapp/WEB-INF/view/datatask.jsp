@@ -247,9 +247,9 @@
         <td>{{value.dataSrc.dataSourceName}}</td>
         <td>{{dateTimeFormat(value.createTime)}}</td>
         {{if value.status  == "1"}}
-        <td id="{{value.dataTaskId}}">100%</td>
+        <td kkid="{{value.dataTaskId}}">100%</td>
         {{else if value.status  == "0"}}
-        <td  id="{{value.dataTaskId}}">--</td>
+        <td kkid="{{value.dataTaskId}}">--</td>
         {{/if}}
         <td  class="{{value.dataTaskId}}">{{upStatusName(value.status,value.dataTaskType)}}</td>
         <td style="text-align: center">
@@ -664,12 +664,12 @@
            var setout= setInterval(function () {
                if($("[name="+keyID+"]").attr("valFlag") == "true"){
                    if($("."+souceID).text() == "导入失败" ||$("."+souceID).text() == "上传失败"){
-                       $("#"+souceID).text("--")
+                       $("[kkid="+souceID+"]").text("--")
                        clearInterval(setout)
                        $("[name="+keyID+"]").remove()
                        return
                    }else {
-                       $("#"+souceID).text(100+"%");
+                       $("[kkid="+souceID+"]").text(100+"%");
                        clearInterval(setout)
                        $("[name="+keyID+"]").remove()
                        return
@@ -686,17 +686,17 @@
                     success:function (data) {
                         console.log("process="+data)
                         if(data >= "100"){
-                            $("#"+souceID).text(100+"%");
+                            $("[kkid="+souceID+"]").text(100+"%");
                             $("."+souceID).text("上传完成")
                             clearInterval(setout)
                             return
                         }
                         if($("."+souceID).text() == "导入失败" ||$("."+souceID).text() == "上传失败"){
-                            $("#"+souceID).text("--")
+                            $("[kkid="+souceID+"]").text("--")
                             clearInterval(setout)
                             return
                         }
-                        $("#"+souceID).text(data+"%");
+                        $("[kkid="+souceID+"]").text(data+"%");
                     }
                 })
             },1000)
