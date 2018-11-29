@@ -130,7 +130,7 @@ public class DataSyncController {
                 String[] localFileList = {dataTask.getFilePath()};
                 result = ftpUtil.upload(localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
                 if(result.equals("File_Exits")){
-                    ftpUtil.removeDirectory(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId());
+                    ftpUtil.removeDirectory(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+"_sql");
                     result = ftpUtil.upload(localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
                 }
                 if(localFileList.length == 0){
