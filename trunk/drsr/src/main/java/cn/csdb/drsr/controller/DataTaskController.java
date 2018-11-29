@@ -374,6 +374,7 @@ public class DataTaskController {
                 }
                 for(String attrs : attr){
                     attrs.replaceAll("\\\\", Matcher.quoteReplacement(File.separator));
+                    attrs.replaceAll("/", Matcher.quoteReplacement(File.separator));
                 }
                 String[] traversingNodes = nodePath.split(";");
                 String[] unionNodes = FileResourceService.union(attr, traversingNodes);
