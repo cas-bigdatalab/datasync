@@ -7,6 +7,8 @@ import cn.csdb.drsr.repository.DataTaskDao;
 import cn.csdb.drsr.service.ConfigPropertyService;
 import cn.csdb.drsr.service.DataSrcService;
 import cn.csdb.drsr.service.DataTaskService;
+import cn.csdb.drsr.service.LoginService;
+import cn.csdb.drsr.utils.ConfigUtil;
 import cn.csdb.drsr.utils.FtpUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.io.IOUtils;
@@ -49,8 +51,6 @@ public class DataSyncController {
     private DataTaskService dataTaskService;
     @Resource
     private DataSrcService dataSrcService;
-    @Autowired
-    private ConfigPropertyService configPropertyService;
 
     private Logger logger = LoggerFactory.getLogger(DataSyncController.class);
 
@@ -91,13 +91,14 @@ public class DataSyncController {
         pw.println("=========================上传流程开始========================" + "\n");
         logger.info("=========================上传流程开始========================" + "\n");
         dataTaskService.insertLog(dataTask.getDataTaskId(),"true");
-        String host = configPropertyService.getProperty("FtpHost");
-        String userName = configPropertyService.getProperty("FtpUser");
-        String password = configPropertyService.getProperty("FtpPassword");
-        String port = configPropertyService.getProperty("FrpPort");
-        String remoteFilepath = configPropertyService.getProperty("FtpRootPath");
-        String portalUrl = configPropertyService.getProperty("PortalUrl");
-        String subjectCode = configPropertyService.getProperty("SubjectCode");
+        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+        String host = ConfigUtil.getConfigItem(configFilePath, "FtpHost");
+        String userName = ConfigUtil.getConfigItem(configFilePath, "FtpUser");
+        String password = ConfigUtil.getConfigItem(configFilePath, "FtpPassword");
+        String port = ConfigUtil.getConfigItem(configFilePath, "FrpPort");
+        String remoteFilepath = ConfigUtil.getConfigItem(configFilePath, "FtpRootPath");
+        String portalUrl = ConfigUtil.getConfigItem(configFilePath, "PortalUrl");
         FtpUtil ftpUtil = new FtpUtil();
 /*
         DataTask dataTask = dataTaskService.get(dataTaskId);

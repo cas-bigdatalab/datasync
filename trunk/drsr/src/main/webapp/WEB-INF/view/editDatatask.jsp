@@ -101,7 +101,7 @@
 --%>
                         </div>
                         <div class="col-md-5" style="margin-top: 6px">
-                            <div id="tags_tagsinput" class="tagsinput" style="border: 1px solid black"></div>
+                            <div id="tags_tagsinput" class="tagsinput" style="border: 1px solid black;display: none"></div>
                         </div>
                     </div>
                     <div class="col-md-12 ">
@@ -807,11 +807,16 @@
                         $("[Keyid="+dataFileSrcId +"]").prop("selected",true)
                         var filepath = dataTaskCon.filePath.replace(/%_%/g, "/").split(";");
                         var path = "";
+
                         for(var i = 0;i<filepath.length-1;i++){
                             path += '<span class="tag" style="display: inline-block">' +
                                     '<span class="filePathClass">'+filepath[i]+'</span>'+'&nbsp;&nbsp;<a href="#" title="Removing tag" onclick="tagClick(this)">x</a> </span>'
                         }
+
                         $("#tags_tagsinput").html(path);
+                        if($(".filePathClass").length > 0){
+                            $("#tags_tagsinput").show()
+                        }
                     }
                 },
                 error:function (data) {
@@ -904,6 +909,9 @@
         function tagClick(obj){
             $(obj).parent().hide();
             $(obj).parent().text("");
+            if($(".filePathClass").length == 0){
+                $("#tags_tagsinput").hide()
+            }
         }
     </script>
 </div>
