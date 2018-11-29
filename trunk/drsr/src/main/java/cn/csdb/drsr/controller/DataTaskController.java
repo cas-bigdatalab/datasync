@@ -250,7 +250,7 @@ public class DataTaskController {
         List<String> filepaths = Arrays.asList(filePath.toString().split(";"));
 
         String fileName = subjectCode+"_"+datataskId;
-        fileResourceService.packDataResource(fileName,filepaths);
+        fileResourceService.packDataResource(fileName,filepaths,datatask);
         String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
         DataTask dt = dataTaskService.get(datataskId);
         dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
@@ -428,7 +428,7 @@ public class DataTaskController {
         List<String> filepaths = Arrays.asList(filePath.toString().split(";"));
 
         String fileName = subjectCode+"_"+datataskId;
-        fileResourceService.packDataResource(fileName,filepaths);
+        fileResourceService.packDataResource(fileName,filepaths,datatask);
         String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
         DataTask dt = dataTaskService.get(datataskId);
         dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));

@@ -252,11 +252,11 @@ public class DataTaskService {
             pw.println("=========================打包流程结束========================" + "\n");
             logger.info("=========================打包流程结束========================" + "\n");
             try {
-                outputStream.finish();
-                outputStream.close();
                 fw.flush();
                 pw.close();
                 fw.close();
+                outputStream.finish();
+                outputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
