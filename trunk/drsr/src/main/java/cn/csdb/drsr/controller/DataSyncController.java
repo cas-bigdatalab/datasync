@@ -94,7 +94,7 @@ public class DataSyncController {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
         String current = dateFormat.format(now);
         pw.println(current+":"+"=========================上传流程开始========================" + "\n");
-        if(dataTask.getFilePath()!=null&&dataTask.getFilePath()!=""){
+        if(dataTask.getDataTaskType()=="file"){
             pw.println("###########上传的文件为###########" + "\n");
             String[] fileAttr = dataTask.getFilePath().split(";");
             for(String fileAttrName : fileAttr){
