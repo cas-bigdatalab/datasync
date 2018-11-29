@@ -96,7 +96,7 @@ public class DataSyncController {
         String userName = ConfigUtil.getConfigItem(configFilePath, "FtpUser");
         String password = ConfigUtil.getConfigItem(configFilePath, "FtpPassword");
         String port = ConfigUtil.getConfigItem(configFilePath, "FrpPort");
-        String remoteFilepath = ConfigUtil.getConfigItem(configFilePath, "FtpRootPath");
+        String ftpRootPath = ConfigUtil.getConfigItem(configFilePath, "FtpRootPath");
         String portalUrl = ConfigUtil.getConfigItem(configFilePath, "PortalUrl");
         FtpUtil ftpUtil = new FtpUtil();
 /*
@@ -109,14 +109,23 @@ public class DataSyncController {
             String result = "";
             if(dataTask.getDataTaskType().equals("file")){
                 String[] localFileList = {dataTask.getSqlFilePath()};
-                result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
+                result = ftpUtil.upload(localFileList, processId,ftpRootPath,dataTask,subjectCode).toString();
+                if(result.equals("File_Exits")){
+                    ftpUtil.removeDirectory(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId());
+                    ftpUtil.deleteFile(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+".zip");
+                    result = ftpUtil.upload(localFileList, processId,ftpRootPath,dataTask,subjectCode).toString();
+                }
                 if(localFileList.length == 0){
                     return 0;
                 }
             }else if(dataTask.getDataTaskType().equals("mysql")){
-                remoteFilepath = remoteFilepath+subjectCode+"_"+dataTask.getDataTaskId()+"/";
+                String remoteFilepath = ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+"/";
                 String[] localFileList = {dataTask.getFilePath()};
-                result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
+                result = ftpUtil.upload(localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
+                if(result.equals("File_Exits")){
+                    ftpUtil.removeDirectory(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId());
+                    result = ftpUtil.upload(localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
+                }
                 if(localFileList.length == 0){
                     return 0;
                 }

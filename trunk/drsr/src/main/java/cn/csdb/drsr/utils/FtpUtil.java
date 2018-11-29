@@ -172,7 +172,7 @@ public class FtpUtil {
         return result;
     }
 
-    public UploadStatus upload(String host, String username, String password, String port, String[] localFileList, String processId,String remoteFilepath,DataTask dataTask,String subjectCode) throws IOException {
+    public UploadStatus upload(String[] localFileList, String processId,String remoteFilepath,DataTask dataTask,String subjectCode) throws IOException {
 //        ftpClient.enterLocalPassiveMode();
 //        ftpClient.enterRemotePassiveMode();
         ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
@@ -358,5 +358,32 @@ public class FtpUtil {
             return 0L;
         }
         return progressMap.get(processId);
+    }
+
+    public boolean deleteFile(String delFile){
+        boolean flag = false;
+        try {
+            flag = ftpClient.deleteFile(delFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return flag;
+    }
+
+    public boolean removeDirectory(String delDirectory){
+        boolean flag = false;
+        try {
+            FTPFile[] files = ftpClient.listFiles(new String(delDirectory.getBytes("GBK"), "iso-8859-1"));
+            for(FTPFile file:files){
+                String fname = delDirectory+"/"+file.getName();
+                String name = new String(fname.getBytes("GBK"),"iso-8859-1");
+                boolean f = ftpClient.deleteFile(name);
+                System.out.println(f);
+            }
+            ftpClient.removeDirectory(delDirectory);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return flag;
     }
 }
