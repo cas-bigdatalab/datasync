@@ -89,6 +89,13 @@ public class DataSyncController {
         }
         PrintWriter pw = new PrintWriter(fw);
         pw.println("=========================上传流程开始========================" + "\n");
+        if(dataTask.getFilePath()!=null&&dataTask.getFilePath()!=""){
+            pw.println("###########上传的文件为###########" + "\n");
+            String[] fileAttr = dataTask.getFilePath().split(";");
+            for(String fileAttrName : fileAttr){
+                pw.println(fileAttrName+ "\n");
+            }
+        }
         dataTaskService.insertLog(dataTask.getDataTaskId(),"true");
         String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
         String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
