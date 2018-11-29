@@ -136,10 +136,10 @@
                         <label  class="col-sm-3 control-label">创建时间:</label>
                         <div class="col-sm-8 modediv" id="pre-createTime"></div>
                     </div>
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label  class="col-sm-3 control-label">创建者:</label>
                         <div class="col-sm-8 modediv" id="pre-creator"></div>
-                    </div>
+                    </div>--%>
                     <%--<div class="form-group">
                         <label  class="col-sm-3 control-label">上传进度:</label>
                         <div class="col-sm-8"></div>
@@ -196,10 +196,10 @@
                         <label  class="col-sm-3 control-label">创建时间:</label>
                         <div class="col-sm-8 modediv" id="file-createTime"></div>
                     </div>
-                    <div class="form-group">
+                    <%--<div class="form-group">
                         <label  class="col-sm-3 control-label">创建者:</label>
                         <div class="col-sm-8 modediv" id="file-creator"></div>
-                    </div>
+                    </div>--%>
                     <%--<div class="form-group">
                         <label  class="col-sm-3 control-label">上传进度:</label>
                         <div class="col-sm-8"></div>
