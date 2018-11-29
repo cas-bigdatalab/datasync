@@ -618,7 +618,7 @@
                 });
                 dataFilePathList=fileTabStr;
                 $.ajax({
-                    url:"${ctx}/datatask/saveFileDatatask",
+                    url:"${ctx}/datatask/updateFileDatatask",
                     type:"POST",
                     traditional: true,
                     data:{"dataSourceId":dataFileSrcId,
