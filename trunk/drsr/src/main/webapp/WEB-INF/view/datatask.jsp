@@ -79,7 +79,7 @@
                     <th>数据源</th>
                     <th>创建时间</th>
                     <th>上传进度</th>
-                    <th>状态</th>
+                    <th width="7%">状态</th>
                     <th width="29%">操作</th>
                 </tr>
                 </thead>
@@ -112,10 +112,10 @@
                         <label  class="col-sm-3 control-label">任务标识:</label>
                         <div class="col-sm-8 modediv" id="pre-dataTaskName"></div>
                     </div>
-                    <div class="form-group">
-                        <label  class="col-sm-3 control-label">数据源ID:</label>
+                    <%--<div class="form-group">
+                        <label  class="col-sm-3 control-label">数据源:</label>
                         <div class="col-sm-8 modediv" id="pre-dataSourceId"></div>
-                    </div>
+                    </div>--%>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">表名:</label>
                         <div class="col-sm-8 modediv" id="pre-tableName"></div>
@@ -172,10 +172,10 @@
                         <label  class="col-sm-3 control-label">任务标识:</label>
                         <div class="col-sm-8 modediv" id="file-dataTaskName"></div>
                     </div>
-                    <div class="form-group">
-                        <label  class="col-sm-3 control-label">数据源ID:</label>
+                    <%--<div class="form-group">
+                        <label  class="col-sm-3 control-label">数据源:</label>
                         <div class="col-sm-8 modediv" id="file-dataSourceId"></div>
-                    </div>
+                    </div>--%>
                     <%--<div class="form-group">
                         <label  class="col-sm-3 control-label">表名:</label>
                         <div class="col-sm-8 modediv" id="file-tableName"></div>
@@ -190,7 +190,7 @@
                     </div>--%>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">文件路径:</label>
-                        <div class="col-sm-8 modediv" id="file-filePath"></div>
+                        <div class="col-sm-8 modediv" id="file-filePath" style="max-height: 300px;overflow-x: hidden"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">创建时间:</label>
@@ -258,18 +258,18 @@
                 {{if value.logPath  == ""}}
                 <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
                 <button type="button" class="btn purple btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
-                <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}','{{value.dataSrc.dataSourceName}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                 <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 {{else if value.logPath  != "" }}
                 <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
                 <button type="button" class="btn purple btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
-                <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}','{{value.dataSrc.dataSourceName}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                 <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="window.location.href='${ctx}/fileResource/downloadFile?dataTaskId={{value.dataTaskId}}'"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
             {{/if}}
             {{else if value.status  == 1 }}
                 <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;重新上传</button>
-                <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
+                <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}','{{value.dataSrc.dataSourceName}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                 <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="window.location.href='${ctx}/fileResource/downloadFile?dataTaskId={{value.dataTaskId}}'"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
             {{/if}}
@@ -474,7 +474,7 @@
 
 
         }
-        function showData(id,type) {
+        function showData(id,type,name) {
             $.ajax({
                 url:"${ctx}/datatask/detail",
                 type:"POST",
@@ -484,7 +484,7 @@
                     console.log(datatask)
                     if(type=="mysql"){
                         $("#pre-dataTaskName").html(datatask.dataTaskName)
-                        $("#pre-dataSourceId").html(datatask.dataSourceId)
+                        $("#pre-dataSourceId").html(name)
                         var $tableName=$("#pre-tableName")
                         listSpan(datatask.tableName,";",$tableName)
                         /*$("#pre-tableName").html(datatask.tableName)*/
@@ -505,7 +505,7 @@
                         $("#relModal").modal('show');
                     }else {
                         $("#file-dataTaskName").html(datatask.dataTaskName)
-                        $("#file-dataSourceId").html(datatask.dataSourceId)
+                        $("#file-dataSourceId").html(name)
                         /*$("#file-tableName").html(datatask.tableName)
                         $("#file-sqlString").html(datatask.sqlString)
                         $("#file-sqlTableNameEn").html(datatask.sqlTableNameEn)*/

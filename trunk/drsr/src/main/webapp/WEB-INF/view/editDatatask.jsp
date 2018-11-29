@@ -25,7 +25,7 @@
         <form class="form-inline">
             <div class="form-group">
                 <label for="dataTaskName" style="font-size: 18px">创建任务名</label>
-                <input type="text" class="form-control" id="dataTaskName" style="width: 250px" >
+                <input type="text" class="form-control" id="dataTaskName" style="width: 250px;font-size: 16px" >
             </div>
         </form>
     </div>
@@ -42,7 +42,7 @@
             <form class="form-inline">
                 <div class="form-group">
                     <label >选择数据源</label>
-                    <select  id="DBchange" class="form-control"></select>
+                    <select  id="DBchange" class="form-control" style="font-size: 16px"></select>
                 </div>
             </form>
             <div class="database-con-rel container-fluid" >
@@ -84,7 +84,7 @@
             <form class="form-inline">
                 <div class="form-group">
                     <label>选择数据源</label>
-                    <select  id="DBFilechange" class="form-control"></select>
+                    <select  id="DBFilechange" class="form-control" style="font-size: 16px"></select>
                 </div>
             </form>
 
@@ -101,7 +101,8 @@
 --%>
                         </div>
                         <div class="col-md-5" style="margin-top: 6px">
-                            <div id="tags_tagsinput" class="tagsinput" style="border: 1px solid black;display: none"></div>
+                            <div id="tags_tagsinput" class="tagsinput" style="border: 1px solid black;
+                            display: none;width: 100%;overflow-y: auto;overflow-x:hidden;max-height: 500px"></div>
                         </div>
                     </div>
                     <div class="col-md-12 ">
@@ -809,8 +810,8 @@
                         var path = "";
 
                         for(var i = 0;i<filepath.length-1;i++){
-                            path += '<span class="tag" style="display: inline-block">' +
-                                    '<span class="filePathClass">'+filepath[i]+'</span>'+'&nbsp;&nbsp;<a href="#" title="Removing tag" onclick="tagClick(this)">x</a> </span>'
+                            path += '<span class="tag" style="display: inline-block;word-break: break-all;line-height:22px">' +
+                                    '<span class="filePathClass">'+filepath[i]+'</span>'+'&nbsp;&nbsp;<a href="#" title="Removing tag"  onclick="tagClick(this)">x</a> </span>'
                         }
 
                         $("#tags_tagsinput").html(path);

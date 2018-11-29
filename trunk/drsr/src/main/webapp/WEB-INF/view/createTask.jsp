@@ -25,7 +25,7 @@
         <form class="form-inline">
             <div class="form-group">
                 <label for="dataTaskName" style="font-size: 18px">创建任务名</label>
-                <input type="text" class="form-control" id="dataTaskName" style="width: 250px" >
+                <input type="text" class="form-control" id="dataTaskName" style="width: 250px;font-size: 16px" >
             </div>
         </form>
     </div>
@@ -42,7 +42,7 @@
             <form class="form-inline">
                 <div class="form-group">
                     <label >选择数据源</label>
-                    <select  id="DBchange" class="form-control"></select>
+                    <select  id="DBchange" class="form-control" style="font-size: 16px"></select>
                 </div>
             </form>
             <div class="database-con-rel container-fluid" style="display: none">
@@ -84,7 +84,7 @@
                 <form class="form-inline">
                     <div class="form-group">
                         <label>选择数据源</label>
-                        <select  id="DBFilechange" class="form-control"></select>
+                        <select  id="DBFilechange" class="form-control" style="font-size: 16px"></select>
                     </div>
                 </form>
 
