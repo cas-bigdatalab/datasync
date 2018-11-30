@@ -568,12 +568,20 @@
             $.ajax({
                 url:"${ctx}/datatask/saveRelationDatatask",
                 type:"POST",
+                aysnc:true,
+                timeout:30000,
                 data:{
                     dataSourceId:dataRelSrcId,
                     dataRelTableList:dataRelTableList,
                     dataRelSqlList:dataRelSqlList,
                     datataskName:$("#dataTaskName").val(),
                     sqlTableNameEnList:dataRelSqlTableList
+                },
+                complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+                    if(status=='timeout'){//超时,status还有success,error等值的情况
+                        ajaxTimeoutTest.abort();
+                        alert("超时");
+                    }
                 },
                 success:function (data) {
                     window.location.href="${ctx}/dataUpload"
@@ -609,6 +617,7 @@
                 url:"${ctx}/datatask/saveFileDatatask",
                 type:"POST",
                 aysnc:true,
+                timeout:30000,
                 traditional: true,
                 data:{"dataSourceId":dataFileSrcId,
                     "datataskName":$("#dataTaskName").val(),
@@ -616,6 +625,12 @@
                 },
                 success:function (data) {
                     window.location.href="${ctx}/dataUpload"
+                },
+                complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
+                    if(status=='timeout'){//超时,status还有success,error等值的情况
+                        ajaxTimeoutTest.abort();
+                        alert("超时");
+                    }
                 },
                 error:function () {
                     console.log("请求失败")
