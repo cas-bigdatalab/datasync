@@ -37,6 +37,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @program: DataSync
@@ -88,7 +90,17 @@ public class DataSyncController {
             }
         }
         PrintWriter pw = new PrintWriter(fw);
-        pw.println("=========================上传流程开始========================" + "\n");
+        Date now = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+        String current = dateFormat.format(now);
+        pw.println(current+":"+"=========================上传流程开始========================" + "\n");
+        if("file".equals(dataTask.getDataTaskType())){
+            pw.println("###########上传的文件为###########" + "\n");
+            String[] fileAttr = dataTask.getFilePath().split(";");
+            for(String fileAttrName : fileAttr){
+                pw.println(fileAttrName+ "\n");
+            }
+        }
         dataTaskService.insertLog(dataTask.getDataTaskId(),"true");
         String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
         String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
@@ -96,34 +108,41 @@ public class DataSyncController {
         String userName = ConfigUtil.getConfigItem(configFilePath, "FtpUser");
         String password = ConfigUtil.getConfigItem(configFilePath, "FtpPassword");
         String port = ConfigUtil.getConfigItem(configFilePath, "FrpPort");
-        String remoteFilepath = ConfigUtil.getConfigItem(configFilePath, "FtpRootPath");
+        String ftpRootPath = ConfigUtil.getConfigItem(configFilePath, "FtpRootPath");
         String portalUrl = ConfigUtil.getConfigItem(configFilePath, "PortalUrl");
         FtpUtil ftpUtil = new FtpUtil();
 /*
         DataTask dataTask = dataTaskService.get(dataTaskId);
 */
         pw.println("数据任务名称为：" + dataTask.getDataTaskName() +"\n");
-        logger.info("数据任务名称为：" + dataTask.getDataTaskName() +"\n");
         try {
             ftpUtil.connect(host, Integer.parseInt(port), userName, password);
             String result = "";
             if(dataTask.getDataTaskType().equals("file")){
                 String[] localFileList = {dataTask.getSqlFilePath()};
-                result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
+                result = ftpUtil.upload(localFileList, processId,ftpRootPath,dataTask,subjectCode).toString();
+                if(result.equals("File_Exits")){
+                    ftpUtil.removeDirectory(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId());
+                    ftpUtil.deleteFile(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+".zip");
+                    result = ftpUtil.upload(localFileList, processId,ftpRootPath,dataTask,subjectCode).toString();
+                }
                 if(localFileList.length == 0){
                     return 0;
                 }
             }else if(dataTask.getDataTaskType().equals("mysql")){
-                remoteFilepath = remoteFilepath+subjectCode+"_"+dataTask.getDataTaskId()+"/";
+                String remoteFilepath = ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+"_sql/";
                 String[] localFileList = {dataTask.getFilePath()};
-                result = ftpUtil.upload(host, userName, password, port, localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
+                result = ftpUtil.upload(localFileList, processId,remoteFilepath,dataTask,subjectCode+"_sql").toString();
+                if(result.equals("File_Exits")){
+                    ftpUtil.removeDirectory(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+"_sql");
+                    result = ftpUtil.upload(localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
+                }
                 if(localFileList.length == 0){
                     return 0;
                 }
             }
             pw.println("ftpDataTaskId"+dataTask.getDataTaskId()+"上传状态:" + result + "\n");
             ftpUtil.disconnect();
-            pw.println("=========================导入流程开始========================" + "\n");
             if(result.equals("Upload_New_File_Success")||result.equals("Upload_From_Break_Succes")){
                 String dataTaskString = JSONObject.toJSONString(dataTask);
                 JSONObject requestJSON = new JSONObject();
@@ -134,6 +153,18 @@ public class DataSyncController {
                 HttpPost postMethod = null;
                 HttpResponse response = null;
                 try {
+                    if("mysql".equals(dataTask.getDataTaskType())){
+                        now = new Date();
+                        dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+                        String current1 = dateFormat.format(now);
+                        pw.println(current1+":"+"=========================导入流程开始========================" + "\n");
+                    }
+                    if("file".equals(dataTask.getDataTaskType())){
+                        now = new Date();
+                        dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+                        String current1 = dateFormat.format(now);
+                        pw.println(current1+":"+"=========================解压流程开始========================" + "\n");
+                    }
                     httpClient = HttpClients.createDefault();
 //                    postMethod = new HttpPost("http://localhost:8080/portal/service/getDataTask");
                     postMethod = new HttpPost("http://"+portalUrl+"/service/getDataTask");
@@ -152,33 +183,72 @@ public class DataSyncController {
                     EntityUtils.consume(httpEntity);//释放资源
                     System.out.println("响应内容：" + reponseContent);
                     if(reponseContent.equals("1")){
+                        if("mysql".equals(dataTask.getDataTaskType())){
+                            now = new Date();
+                            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+                            String current1 = dateFormat.format(now);
+                            pw.println(current1+":"+"导入成功"+ "\n");
+                            pw.println(current1+":"+"=========================导入流程结束========================" + "\n");
+                        }
+                        if("file".equals(dataTask.getDataTaskType())){
+                            now = new Date();
+                            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+                            String current1 = dateFormat.format(now);
+                            pw.println(current1+":"+"解压成功"+ "\n");
+                            pw.println(current1+":"+"=========================解压流程结束========================" + "\n");
+                        }
                         dataTask.setStatus("1");
                         dataTaskService.update(dataTask);
-                        pw.println("导入成功"+ "\n");
-                        pw.println("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                         return 1;
                     }else{
-                        pw.println("导入失败"+ "\n");
-                        pw.println("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
+                        if("mysql".equals(dataTask.getDataTaskType())){
+                            now = new Date();
+                            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+                            String current1 = dateFormat.format(now);
+                            pw.println(current1+":"+"导入失败"+ "\n");
+                            pw.println(current1+":"+"=========================导入流程结束========================" + "\n");
+                        }
+                        if("file".equals(dataTask.getDataTaskType())){
+                            now = new Date();
+                            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+                            String current1 = dateFormat.format(now);
+                            pw.println(current1+":"+"解压失败"+ "\n");
+                            pw.println(current1+":"+"=========================解压流程结束========================" + "\n");
+                        }
                         return 0;
                     }
                 } catch (IOException e) {
-                    pw.println("导入失败"+ "\n");
-                    pw.println("导入异常IOException:"+e+ "\n");
-                    pw.println("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                     e.printStackTrace();
+                    if("mysql".equals(dataTask.getDataTaskType())){
+                        now = new Date();
+                        dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+                        String current1 = dateFormat.format(now);
+                        pw.println(current1+":"+"导入失败"+ e+"\n");
+                        pw.println(current1+":"+"=========================导入流程结束========================" + "\n");
+                    }
+                    if("file".equals(dataTask.getDataTaskType())){
+                        now = new Date();
+                        dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+                        String current1 = dateFormat.format(now);
+                        pw.println(current1+":"+"解压失败"+ e+"\n");
+                        pw.println(current1+":"+"=========================解压流程结束========================" + "\n");
+                    }
                 }
             }else{
-                pw.println("导入失败"+ "\n");
-                pw.println("=========================导入流程结束========================" + "\r\n"+"\n\n\n\n\n");
                 return 0;
             }
         } catch (IOException e) {
-            pw.println("连接FTP出错:"+e+ "\n");
+            now = new Date();
+            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+            current = dateFormat.format(now);
+            pw.println(current+":"+"连接FTP出错:"+e+ "\n");
             System.out.println("连接FTP出错：" + e.getMessage());
             return 0;
         }finally {
-            pw.println("=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
+            now = new Date();
+            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+            String current1 = dateFormat.format(now);
+            pw.println(current1+":"+"=========================上传流程结束========================" + "\r\n"+"\n\n\n\n\n");
             try {
                 fw.flush();
                 pw.close();

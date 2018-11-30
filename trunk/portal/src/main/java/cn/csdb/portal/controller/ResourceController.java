@@ -236,6 +236,21 @@ public class ResourceController {
         return jsonObjects;
     }
 
+    /**
+     * Function Description: 获得文件树节点下第一层的文件结构
+     *
+     * @param: [filePath]
+     * @return: java.util.List<com.alibaba.fastjson.JSONObject>
+     * @auther: shibaoping
+     * @date: 2018/11/1 10:58
+     */
+    @ResponseBody
+    @RequestMapping(value = "treeNodeFirst")
+    public List<JSONObject> treeNodeFirst(String filePath) {
+        List<JSONObject> jsonObjects = null;
+        jsonObjects = resourceService.fileSourceFileListFirst(filePath.replace("%_%", "\\"));
+        return jsonObjects;
+    }
 
     /**
      * Function Description: 添加资源第一步保存

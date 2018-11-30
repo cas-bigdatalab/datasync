@@ -1,6 +1,7 @@
 package cn.csdb.drsr.service;
 
 import cn.csdb.drsr.model.DataSrc;
+import cn.csdb.drsr.model.DataTask;
 import cn.csdb.drsr.repository.FileResourceDao;
 import cn.csdb.drsr.repository.RelationDao;
 import cn.csdb.drsr.utils.ConfigUtil;
@@ -19,10 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
@@ -301,7 +305,30 @@ public class FileResourceService {
      * @auther: hw
      * @date: 2018/10/23 16:11
      */
-    public String packDataResource(final String fileName ,final List<String> filePaths) {
+    public String packDataResource(final String fileName , final List<String> filePaths, DataTask datatask) {
+        String fileName1 = datatask.getDataTaskName()+"log.txt";//文件名及类型
+        String path = "/logs/";
+        FileWriter fw = null;
+        File file1 = new File(path, fileName1);
+        if(!file1.exists()){
+            try {
+                file1.createNewFile();
+                fw = new FileWriter(file1, true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+            try{
+                fw = new FileWriter(file1, true);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        PrintWriter pw = new PrintWriter(fw);
+        Date now = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+        String current = dateFormat.format(now);
+        pw.println(current+":"+"=========================打包流程开始========================" + "\n");
 //        dbFlag.await();
         String zipFilePath = "zipFile";
         File dir  = new File(System.getProperty("drsr.framework.root") + zipFilePath );
@@ -319,7 +346,10 @@ public class FileResourceService {
             outputStream.setEncoding("utf-8"); //23412
             outputStream.setCreateUnicodeExtraFields(ZipArchiveOutputStream.UnicodeExtraFieldPolicy.ALWAYS);
             outputStream.setFallbackToUTF8(true);
-            logger.info(".zip:文件数据源,开始打包文件...");
+            now = new Date();
+            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+            String current1 = dateFormat.format(now);
+            pw.println(current1+":"+".zip:文件数据源,开始打包文件..." + "\n");
             for (String filePath : filePaths) {
                 filePath = filePath.replace("%_%",File.separator);
                 File file = new File(filePath);
@@ -328,11 +358,25 @@ public class FileResourceService {
                 }
                 ZipUtils.zipDirectory(file, "", outputStream);
             }
+            now = new Date();
+            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+            String current2 = dateFormat.format(now);
+            pw.println(current2+":"+"打包成功" + "\n");
         } catch (Exception e) {
-            logger.error("打包失败", e);
+            now = new Date();
+            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+            String current2 = dateFormat.format(now);
+            pw.println(current2+":"+"打包失败"+ e+"\n");
             return "error";
         } finally {
+            now = new Date();
+            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+            String current2 = dateFormat.format(now);
+            pw.println(current2+":"+"=========================打包流程结束========================" + "\n");
             try {
+                fw.flush();
+                pw.close();
+                fw.close();
                 outputStream.finish();
                 outputStream.close();
             } catch (IOException e) {

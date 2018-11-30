@@ -25,7 +25,7 @@
         <form class="form-inline">
             <div class="form-group">
                 <label for="dataTaskName" style="font-size: 18px">创建任务名</label>
-                <input type="text" class="form-control" id="dataTaskName" style="width: 250px;font-size: 16px" >
+                <input type="text" class="form-control" id="dataTaskName" style="width: 250px;font-size: 16px;" disabled>
             </div>
         </form>
     </div>

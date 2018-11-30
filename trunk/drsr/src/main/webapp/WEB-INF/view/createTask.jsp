@@ -52,6 +52,7 @@
                     <div class="col-md-12" style="margin: 0 -15px">
                         <div class="col-md-2" style="margin: 0 -15px">选择表资源</div>
                         <div class="col-md-10" >
+                            <div style="text-align: center" id="dataUp">数据加载中......</div>
                             <div class="row" id="db-table" style="margin-top: 6px"></div>
                         </div>
                     </div>
@@ -268,7 +269,7 @@
         var taskNameFlag=false
         var validSql = true;
         dateDef = dateDef.Format("yyyyMMddhhmmss");
-        $("#dataTaskName").val("数据任务"+dateDef)
+        $("#dataTaskName").val(dateDef)
         $("#dataTaskName").change(function () {
             var taskName = $(this).val();
             if(taskName =="" || taskName.trim() == ""){
@@ -312,6 +313,7 @@
             }
             $(".database-con-rel").show();
             $("#resTitle").html(name);
+            console.log("aaaaaaaaaaa")
             $.ajax({
                 url:"${ctx}/relationship/relationalDatabaseTableList",
                 type:"POST",
@@ -319,8 +321,14 @@
                     dataSourceId:id
                 },
                 success:function (data) {
-                    $("#db-table").empty();
                     var List =JSON.parse(data);
+                    if(List.length !=0){
+                        $("#dataUp").html("")
+                    }else{
+                        $("#dataUp").html("暂时没有数据")
+                    }
+                    $("#db-table").empty();
+                    console.log(data)
                     var tabCon = template("dataRelationshipList2", List);
                     $("#db-table").append(tabCon);
 

@@ -96,21 +96,58 @@ public class ResourceService {
 //                continue;
 //            }
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("id", fp[i].getPath().replaceAll("\\\\","%_%"));
-            jsonObject.put("text", fp[i].getName().replaceAll("\\\\","%_%"));
+            jsonObject.put("id", fp[i].getPath().replaceAll("\\\\", "%_%"));
+            jsonObject.put("text", fp[i].getName().replaceAll("\\\\", "%_%"));
             if (fp[i].isDirectory()) {
                 jsonObject.put("type", "directory");
                 JSONObject jo = new JSONObject();
-                jo.put("disabled","true");
-                jsonObject.put("state",jo);
+                jo.put("disabled", "true");
+                jsonObject.put("state", jo);
             } else {
                 jsonObject.put("type", "file");
             }
             jsonObjects.add(jsonObject);
+    }
+        Collections.sort(jsonObjects, new FileComparator());
+        return jsonObjects;
+
+    }
+
+    public List<JSONObject> fileSourceFileListFirst(String filePath) {
+        List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
+        File file = new File(filePath);
+        if (!file.exists() || !file.isDirectory())
+            return jsonObjects;
+//        String[] fp = filePath.split(";");
+        File[] fp = file.listFiles();
+        for (int i = 0; i < fp.length; i++) {
+//            if(StringUtils.isBlank(fp[i])){
+//                continue;
+//            }
+//            File file = new File(fp[i]);
+//            if(!file.exists()){
+//                continue;
+//            }
+            JSONObject jsonObject = new JSONObject();
+            if(fp[i].getPath().indexOf("_sql")==-1){
+                if (fp[i].isDirectory()) {
+                    if(fp[i].getPath().indexOf("_sql")==-1) {
+                        jsonObject.put("id", fp[i].getPath().replaceAll("\\\\", "%_%"));
+                        jsonObject.put("text", fp[i].getName().replaceAll("\\\\", "%_%"));
+                        jsonObject.put("type", "directory");
+                        JSONObject jo = new JSONObject();
+                        jo.put("disabled", "true");
+                        jsonObject.put("state", jo);
+                        jsonObjects.add(jsonObject);
+                    }
+                }
+            }
         }
         Collections.sort(jsonObjects, new FileComparator());
         return jsonObjects;
+
     }
+
 
     class FileComparator implements Comparator<JSONObject> {
 

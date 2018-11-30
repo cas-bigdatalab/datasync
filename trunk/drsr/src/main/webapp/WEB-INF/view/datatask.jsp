@@ -247,28 +247,28 @@
         <td>{{value.dataSrc.dataSourceName}}</td>
         <td>{{dateTimeFormat(value.createTime)}}</td>
         {{if value.status  == "1"}}
-        <td >100%</td>
+        <td kkid="{{value.dataTaskId}}">100%</td>
         {{else if value.status  == "0"}}
-        <td  id="{{value.dataTaskId}}">--</td>
+        <td kkid="{{value.dataTaskId}}">--</td>
         {{/if}}
         <td  class="{{value.dataTaskId}}">{{upStatusName(value.status,value.dataTaskType)}}</td>
         <td style="text-align: center">
 
             {{if value.status  == 0}}
                 {{if value.logPath  == ""}}
-                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
+                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}" resupload="one"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
                 <button type="button" class="btn purple btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
                 <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}','{{value.dataSrc.dataSourceName}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                 <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 {{else if value.logPath  != "" }}
-                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
+                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}" resupload="one"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
                 <button type="button" class="btn purple btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
                 <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}','{{value.dataSrc.dataSourceName}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                 <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="window.location.href='${ctx}/fileResource/downloadFile?dataTaskId={{value.dataTaskId}}'"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
             {{/if}}
             {{else if value.status  == 1 }}
-                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}"><i class="glyphicon glyphicon-upload"></i>&nbsp;重新上传</button>
+                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}" resupload="two"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
                 <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}','{{value.dataSrc.dataSourceName}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                 <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="window.location.href='${ctx}/fileResource/downloadFile?dataTaskId={{value.dataTaskId}}'"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
@@ -340,35 +340,85 @@
             return name
         })
         $("#upload-list").delegate(".upload-data","click",function () {
-            $(this).css("background-color","dimgrey");
-            $(this).attr("disabled","disabled");
+            var isres = $(this).attr("resupload")
+            var $this = $(this)
+            if(isres == "two"){
+                bootbox.confirm("<span style='font-size: 16px'>确认要重新上传吗?</span>",function (r) {
+                    if(r){
+                        $this.css("background-color","dimgrey");
+                        $this.attr("disabled","disabled");
+                        var souceID = $this.attr("keyIdTd");
+                        var keyID = souceID + new Date().getTime();
+                        var keyType=$this.attr("keyDataType");
+                        uploadListFlag.append("<span name="+keyID+" valFlag='false'></span>")
+                        if(keyType =="mysql"){
+                            console.log("ddddddddddddddddddd")
+                            $.ajax({
+                                url:"${ctx}/datatask/" + souceID,
+                                type:"POST",
+                                dataType:"JSON",
+                                success:function (data) {
+                                    console.log("aaaaaaaaaaaaa")
+                                    if (data.result == 'true') {
 
-            var souceID = $(this).attr("keyIdTd");
-            var keyID = souceID + new Date().getTime();
-            var keyType=$(this).attr("keyDataType");
-            uploadListFlag.append("<span name="+keyID+" valFlag='false'></span>")
-            /*uploadTasks.push(new ObjStory(keyID,souceID));
-            localStorage.setItem("uploadList",JSON.stringify(uploadTasks));*/
-            if(keyType =="mysql"){
-                $.ajax({
-                    url:"${ctx}/datatask/" + souceID,
-                    type:"POST",
-                    dataType:"JSON",
-                    success:function (data) {
-                        if (data.result == 'true') {
+                                        $.ajax({
+                                            url:"${ctx}/ftpUpload",
+                                            type:"POST",
+                                            data:{dataTaskId:souceID,processId:keyID},
+                                            success:function (data) {
+                                                var data =JSON.parse(data)
+                                                $("[name="+keyID+"]").attr("valFlag","true")
+                                                if(keyType == "mysql"){
+                                                    if(data =="1"){
+                                                        $("."+souceID).text("已导入")
+                                                        tableConfiguration2(1,dataSourceName,dataSourceStatus)
+                                                        return
+                                                    }else {
+                                                        $("."+souceID).text("导入失败")
+                                                        return
+                                                    }
+                                                }else {
+                                                    if(data =="1"){
+                                                        $("."+souceID).text("已上传")
+                                                        tableConfiguration2(1,dataSourceName,dataSourceStatus)
+                                                        return
+                                                    }else {
+                                                        $("."+souceID).text("上传失败")
+                                                        return
+                                                    }
+                                                }
 
+
+                                            },
+                                            error:function () {
+                                                console.log("请求失败")
+                                            }
+                                        })
+                                        $("."+souceID).text("正在上传");
+                                        getProcess(keyID,souceID);
+
+                                    }else {
+                                        return
+                                    }
+                                },
+                                error:function () {
+                                    console.log("请求失败")
+                                }
+                            })
+                        }else{
+                            console.log("cccccccccccccccc")
                             $.ajax({
                                 url:"${ctx}/ftpUpload",
                                 type:"POST",
                                 data:{dataTaskId:souceID,processId:keyID},
                                 success:function (data) {
+                                    console.log("return="+data)
                                     var data =JSON.parse(data)
                                     $("[name="+keyID+"]").attr("valFlag","true")
                                     if(keyType == "mysql"){
                                         if(data =="1"){
                                             $("."+souceID).text("已导入")
                                             tableConfiguration2(1,dataSourceName,dataSourceStatus)
-                                            return
                                         }else {
                                             $("."+souceID).text("导入失败")
                                             return
@@ -377,7 +427,6 @@
                                         if(data =="1"){
                                             $("."+souceID).text("已上传")
                                             tableConfiguration2(1,dataSourceName,dataSourceStatus)
-                                            return
                                         }else {
                                             $("."+souceID).text("上传失败")
                                             return
@@ -392,59 +441,107 @@
                             })
                             $("."+souceID).text("正在上传");
                             getProcess(keyID,souceID);
-
-                        }else {
-                            return
                         }
-                    },
-                    error:function () {
-                        console.log("请求失败")
+                    }else {
+                        console.log("bbbbbbbbbbbbbbbbbbbb")
+                        return
                     }
                 })
             }else{
-                $.ajax({
-                    url:"${ctx}/ftpUpload",
-                    type:"POST",
-                    data:{dataTaskId:souceID,processId:keyID},
-                    success:function (data) {
-                        console.log("return="+data)
-                        var data =JSON.parse(data)
-                        $("[name="+keyID+"]").attr("valFlag","true")
-                        if(keyType == "mysql"){
-                            if(data =="1"){
-                                $("."+souceID).text("已导入")
-                                tableConfiguration2(1,dataSourceName,dataSourceStatus)
+                $(this).css("background-color","dimgrey");
+                $(this).attr("disabled","disabled");
+                var souceID = $(this).attr("keyIdTd");
+                var keyID = souceID + new Date().getTime();
+                var keyType=$(this).attr("keyDataType");
+                uploadListFlag.append("<span name="+keyID+" valFlag='false'></span>")
+                if(keyType =="mysql"){
+                    $.ajax({
+                        url:"${ctx}/datatask/" + souceID,
+                        type:"POST",
+                        dataType:"JSON",
+                        success:function (data) {
+                            if (data.result == 'true') {
+
+                                $.ajax({
+                                    url:"${ctx}/ftpUpload",
+                                    type:"POST",
+                                    data:{dataTaskId:souceID,processId:keyID},
+                                    success:function (data) {
+                                        var data =JSON.parse(data)
+                                        $("[name="+keyID+"]").attr("valFlag","true")
+                                        if(keyType == "mysql"){
+                                            if(data =="1"){
+                                                $("."+souceID).text("已导入")
+                                                tableConfiguration2(1,dataSourceName,dataSourceStatus)
+                                                return
+                                            }else {
+                                                $("."+souceID).text("导入失败")
+                                                return
+                                            }
+                                        }else {
+                                            if(data =="1"){
+                                                $("."+souceID).text("已上传")
+                                                tableConfiguration2(1,dataSourceName,dataSourceStatus)
+                                                return
+                                            }else {
+                                                $("."+souceID).text("上传失败")
+                                                return
+                                            }
+                                        }
+
+
+                                    },
+                                    error:function () {
+                                        console.log("请求失败")
+                                    }
+                                })
+                                $("."+souceID).text("正在上传");
+                                getProcess(keyID,souceID);
+
                             }else {
-                                $("."+souceID).text("导入失败")
                                 return
                             }
-                        }else {
-                            if(data =="1"){
-                                $("."+souceID).text("已上传")
-                                tableConfiguration2(1,dataSourceName,dataSourceStatus)
-                            }else {
-                                $("."+souceID).text("上传失败")
-                                return
-                            }
+                        },
+                        error:function () {
+                            console.log("请求失败")
                         }
+                    })
+                }else{
+                    $.ajax({
+                        url:"${ctx}/ftpUpload",
+                        type:"POST",
+                        data:{dataTaskId:souceID,processId:keyID},
+                        success:function (data) {
+                            var data =JSON.parse(data)
+                            $("[name="+keyID+"]").attr("valFlag","true")
+                            if(keyType == "mysql"){
+                                if(data =="1"){
+                                    $("."+souceID).text("已导入")
+                                    tableConfiguration2(1,dataSourceName,dataSourceStatus)
+                                }else {
+                                    $("."+souceID).text("导入失败")
+                                    return
+                                }
+                            }else {
+                                if(data =="1"){
+                                    $("."+souceID).text("已上传")
+                                    tableConfiguration2(1,dataSourceName,dataSourceStatus)
+                                }else {
+                                    $("."+souceID).text("上传失败")
+                                    return
+                                }
+                            }
 
 
-                    },
-                    error:function () {
-                        console.log("请求失败")
-                    }
-                })
-                $("."+souceID).text("正在上传");
-                getProcess(keyID,souceID);
+                        },
+                        error:function () {
+                            console.log("请求失败")
+                        }
+                    })
+                    $("."+souceID).text("正在上传");
+                    getProcess(keyID,souceID);
+                }
             }
-
-
-
-
-
-
-
-
 
 
 
@@ -565,14 +662,15 @@
         });*/
         function getProcess(keyID,souceID) {
            var setout= setInterval(function () {
+               console.log($("[name="+keyID+"]").attr("valFlag"))
                if($("[name="+keyID+"]").attr("valFlag") == "true"){
                    if($("."+souceID).text() == "导入失败" ||$("."+souceID).text() == "上传失败"){
-                       $("#"+souceID).text("--")
+                       $("[kkid="+souceID+"]").text("--")
                        clearInterval(setout)
                        $("[name="+keyID+"]").remove()
                        return
                    }else {
-                       $("#"+souceID).text(100+"%");
+                       $("[kkid="+souceID+"]").text(100+"%");
                        clearInterval(setout)
                        $("[name="+keyID+"]").remove()
                        return
@@ -587,19 +685,18 @@
                         processId:keyID
                     },
                     success:function (data) {
-                        console.log("process="+data)
-                        if(data >= "100"){
-                            $("#"+souceID).text(100+"%");
-                            $("."+souceID).text("上传完成")
+                        if(data >= 100){
+                            $("[kkid="+souceID+"]").text(100+"%");
+                            $("."+souceID).text("上传成功")
                             clearInterval(setout)
                             return
                         }
                         if($("."+souceID).text() == "导入失败" ||$("."+souceID).text() == "上传失败"){
-                            $("#"+souceID).text("--")
+                            $("[kkid="+souceID+"]").text("--")
                             clearInterval(setout)
                             return
                         }
-                        $("#"+souceID).text(data+"%");
+                        $("[kkid="+souceID+"]").html(data+"%");
                     }
                 })
             },1000)

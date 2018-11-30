@@ -292,17 +292,31 @@
                     }else{
                         str1 = filePath;
                     }
-                    $.ajax({
-                        type: "GET",
-                        url: "${ctx}/resource/treeNode",
-                        dataType: "json",
-                        data: {"filePath": str1},
-                        async: false,
-                        success: function (data) {
-                            children = data;
-                        }
+                    if(str1==filePath){
+                        $.ajax({
+                            type: "GET",
+                            url: "${ctx}/resource/treeNodeFirst",
+                            dataType: "json",
+                            data: {"filePath": str1},
+                            async: false,
+                            success: function (data) {
+                                children = data;
+                            }
 
-                    });
+                        });
+                    }else{
+                        $.ajax({
+                            type: "GET",
+                            url: "${ctx}/resource/treeNode",
+                            dataType: "json",
+                            data: {"filePath": str1},
+                            async: false,
+                            success: function (data) {
+                                children = data;
+                            }
+
+                        });
+                    }
                     generateChildJson(children);
                     callback.call(this, children);
                     /*else{
