@@ -127,6 +127,10 @@ public class DataSyncController {
                     result = ftpUtil.upload(localFileList, processId,ftpRootPath,dataTask,subjectCode).toString();
                 }
                 if(localFileList.length == 0){
+                    now = new Date();
+                    dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+                    String current1 = dateFormat.format(now);
+                    pw.println(current1+":"+"上传失败"+ "\n");
                     return 0;
                 }
             }else if(dataTask.getDataTaskType().equals("mysql")){
@@ -138,6 +142,10 @@ public class DataSyncController {
                     result = ftpUtil.upload(localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
                 }
                 if(localFileList.length == 0){
+                    now = new Date();
+                    dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+                    String current1 = dateFormat.format(now);
+                    pw.println(current1+":"+"上传失败"+ "\n");
                     return 0;
                 }
             }
