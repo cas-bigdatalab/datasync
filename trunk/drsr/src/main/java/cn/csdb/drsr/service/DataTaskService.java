@@ -109,10 +109,19 @@ public class DataTaskService {
                 }
             }
 
-            if (StringUtils.isNotEmpty(sqlString) && StringUtils.isNotEmpty(sqlTableNameEn)) {
-                sqlSb.append(DDL2SQLUtils.generateDDLFromSql(connection, sqlString, sqlTableNameEn));
-                dataSb.append(DDL2SQLUtils.generateInsertSqlFromSQL(connection, sqlString, sqlTableNameEn));
+            //xiajl20181130修改 (多条sql语句,多个表名)
+            String[] sqlArray = sqlString.split(";");
+            String[] sqlTableArray = sqlTableNameEn.split(";");
+            for (int i=0;i<sqlArray.length;i++){
+                if (StringUtils.isNotEmpty(sqlArray[i]) && StringUtils.isNotEmpty(sqlTableArray[i])) {
+                    sqlSb.append(DDL2SQLUtils.generateDDLFromSql(connection, sqlArray[i], sqlTableArray[i]));
+                    dataSb.append(DDL2SQLUtils.generateInsertSqlFromSQL(connection, sqlArray[i], sqlTableArray[i]));
+                }
             }
+            //if (StringUtils.isNotEmpty(sqlString) && StringUtils.isNotEmpty(sqlTableNameEn)) {
+            //    sqlSb.append(DDL2SQLUtils.generateDDLFromSql(connection, sqlString, sqlTableNameEn));
+            //    dataSb.append(DDL2SQLUtils.generateInsertSqlFromSQL(connection, sqlString, sqlTableNameEn));
+            //}
             pw.println("###########SQL数据表结构:###########\n" + sqlSb.toString() + "\n");
             pw.println("###########SQL数据内容:###########\n" + dataSb.toString() + "\n");
             logger.info("=========================SQL数据表结构:========================\n" + sqlSb.toString() + "\n");
@@ -241,10 +250,14 @@ public class DataTaskService {
             outputStream.setEncoding("utf-8"); //23412
             outputStream.setCreateUnicodeExtraFields(ZipArchiveOutputStream.UnicodeExtraFieldPolicy.ALWAYS);
             outputStream.setFallbackToUTF8(true);
-            pw.println("=========================打包流程开始========================" + "\n");
-            logger.info("=========================打包流程开始========================" + "\n");
-            pw.println(".zip:文件数据源,开始打包文件...\"+ \"\n");
-            logger.info(".zip:文件数据源,开始打包文件..."+ "\n");
+            Date now = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+            String current = dateFormat.format(now);
+            pw.println(current+":"+"=========================打包流程开始========================" + "\n");
+            now = new Date();
+            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+            String current2 = dateFormat.format(now);
+            pw.println(current2+":"+".zip:文件数据源,开始打包文件...\"+ \"\n");
             for (String filePath : filePaths) {
                 filePath = filePath.replace("%_%",File.separator);
                 File file = new File(filePath);
@@ -253,15 +266,21 @@ public class DataTaskService {
                 }
                 ZipUtils.zipDirectory(file, "", outputStream);
             }
-            pw.println("打包成功" + "\n");
-            logger.info("打包成功" + "\n");
+            now = new Date();
+            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+            String current1 = dateFormat.format(now);
+            pw.println(current1+":"+"打包成功" + "\n");
         } catch (Exception e) {
-            pw.println("打包失败"+ e+"\n");
-            logger.error("打包失败", e+ "\n");
+            Date now = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+            String current1 = dateFormat.format(now);
+            pw.println(current1+":"+"打包失败"+ e+"\n");
             return "error";
         } finally {
-            pw.println("=========================打包流程结束========================" + "\n");
-            logger.info("=========================打包流程结束========================" + "\n");
+            Date now = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+            String current1 = dateFormat.format(now);
+            pw.println(current1+":"+"=========================打包流程结束========================" + "\n");
             try {
                 fw.flush();
                 pw.close();
