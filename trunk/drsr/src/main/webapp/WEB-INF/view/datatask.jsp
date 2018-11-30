@@ -342,14 +342,14 @@
         $("#upload-list").delegate(".upload-data","click",function () {
             var isres = $(this).attr("resupload")
             var $this = $(this)
+            $this.css("background-color","dimgrey");
+            $this.attr("disabled","disabled");
+            var souceID = $this.attr("keyIdTd");
+            var keyID = souceID + new Date().getTime();
+            var keyType=$this.attr("keyDataType");
             if(isres == "two"){
                 bootbox.confirm("<span style='font-size: 16px'>确认要重新上传吗?</span>",function (r) {
                     if(r){
-                        $this.css("background-color","dimgrey");
-                        $this.attr("disabled","disabled");
-                        var souceID = $this.attr("keyIdTd");
-                        var keyID = souceID + new Date().getTime();
-                        var keyType=$this.attr("keyDataType");
                         uploadListFlag.append("<span name="+keyID+" valFlag='false'></span>")
                         if(keyType =="mysql"){
                             console.log("ddddddddddddddddddd")
@@ -448,11 +448,11 @@
                     }
                 })
             }else{
-                $(this).css("background-color","dimgrey");
+                /*$(this).css("background-color","dimgrey");
                 $(this).attr("disabled","disabled");
                 var souceID = $(this).attr("keyIdTd");
                 var keyID = souceID + new Date().getTime();
-                var keyType=$(this).attr("keyDataType");
+                var keyType=$(this).attr("keyDataType");*/
                 uploadListFlag.append("<span name="+keyID+" valFlag='false'></span>")
                 if(keyType =="mysql"){
                     $.ajax({
@@ -681,6 +681,7 @@
                 $.ajax({
                     url:"${ctx}/ftpUploadProcess",
                     type:"POST",
+                    async:true,
                     data:{
                         processId:keyID
                     },
