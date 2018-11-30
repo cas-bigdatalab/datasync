@@ -138,9 +138,9 @@ public class ResourceService {
                         JSONObject jo = new JSONObject();
                         jo.put("disabled", "true");
                         jsonObject.put("state", jo);
+                        jsonObjects.add(jsonObject);
                     }
                 }
-                jsonObjects.add(jsonObject);
             }
         }
         Collections.sort(jsonObjects, new FileComparator());
