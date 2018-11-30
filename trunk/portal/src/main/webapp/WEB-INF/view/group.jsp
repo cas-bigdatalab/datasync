@@ -48,8 +48,9 @@
             <!-- tab header --->
             <ul class="nav nav-tabs ">
                 <li class="active">
-                    <a href="#userContent" data-toggle="tab">
-                        用户管理</a>
+                    <a href="#userContent" data-toggle="tab" id="showUserContent" style="white-space:nowrap;">
+                        用户管理
+                    </a>
                 </li>
                 <li>
                     <a href="#groupContent" data-toggle="tab">
@@ -82,7 +83,7 @@
                                             <label class="control-label">用户组:</label>
                                             <select name='groupsFilter' id='groupsFilter' style="width: 69%"
                                                     multiple="multiple" class="form-control select2me" style="width: 200px;" >
-                                                <c:forEach  var="group"  items="${groupList}">
+                                                <c:forEach  var="group"  items="${allGroupList}">
                                                     <option value="${group.groupName}" id="${group.id}" style="width: 150px; height: 30px;">${group.groupName}</option>
                                                 </c:forEach>
                                             </select>
@@ -412,7 +413,7 @@
                             </label>
                             <div class="col-md-9">
                                 <select class='form-control select2me' name='groupsForAddUserDialog' id='groupsForAddUserDialog' multiple="multiple" placeholder="请选择用户组">
-                                    <c:forEach  var="group"  items="${groupList}">
+                                    <c:forEach  var="group"  items="${allGroupList}">
                                         <option value="${group.groupName}" id="${group.id}" >${group.groupName}</option>
                                     </c:forEach>
                                 </select>
@@ -488,7 +489,7 @@
                             </label>
                             <div class="col-md-9">
                                 <select class='form-control select2me' name='groupsForUpdateUserDialog' id='groupsForUpdateUserDialog' multiple="multiple">
-                                    <c:forEach  var="group"  items="${groupList}">
+                                    <c:forEach  var="group"  items="${allGroupList}">
                                         <option value="${group.groupName}" id="${group.id}" >${group.groupName}</option>
                                     </c:forEach>
                                 </select>
@@ -691,6 +692,11 @@
             // 用户管理标签页：jquery初始化代码
             //
             //////////////////////////////////////////////////////////////////////////////////////////////////
+            $("#showUserContent").click(function() {
+                location.reload();
+            });
+
+
             queryUser(null, null, null, 1); //用户管理标签页：获得用户列表
             //选择用户组筛选用户
             var groupsFilterSelect2 = $("#groupsFilter").select2(
@@ -709,16 +715,6 @@
                 placeholder: "请选择用户组",
                 allowClear: true
             });
-            //添加、更新用户对话框中， 选择subjectCode
-            /*var subjectCodeForAddUserDialogSelect2 = $('#subjectCodeForAddUserDialog').select2({
-                placeholder: "请选择用户组",
-                allowClear: true
-            });*/
-            /*var subjectCodeForUpdateUserDialogSelect2 = $('#subjectCodeForUpdateUserDialog').select2({
-                placeholder: "请选择用户组",
-                allowClear: true
-            });*/
-
 
             var addUserValid = {
                 errorElement: 'span',

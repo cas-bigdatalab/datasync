@@ -47,7 +47,7 @@ public class GroupController {
         model.addAttribute("list",list);
 
         List<Group> groupList = groupService.getGroupList();
-        model.addAttribute("groupList", groupList);
+        model.addAttribute("allGroupList", groupList);
 
         List<Subject> subjectList = subjectMgmtService.getSubjectCodeList();
         model.addAttribute("subjectList", subjectList);
