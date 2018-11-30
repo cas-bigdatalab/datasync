@@ -153,7 +153,7 @@ public class DataSyncController {
                 HttpPost postMethod = null;
                 HttpResponse response = null;
                 try {
-                    if(dataTask.getDataTaskType()=="mysql"){
+                    if("mysql".equals(dataTask.getDataTaskType())){
                         now = new Date();
                         dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
                         String current1 = dateFormat.format(now);
@@ -177,7 +177,7 @@ public class DataSyncController {
                     EntityUtils.consume(httpEntity);//释放资源
                     System.out.println("响应内容：" + reponseContent);
                     if(reponseContent.equals("1")){
-                        if(dataTask.getDataTaskType()=="mysql"){
+                        if("mysql".equals(dataTask.getDataTaskType())){
                             now = new Date();
                             dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
                             String current1 = dateFormat.format(now);
@@ -188,7 +188,7 @@ public class DataSyncController {
                         dataTaskService.update(dataTask);
                         return 1;
                     }else{
-                        if(dataTask.getDataTaskType()=="mysql"){
+                        if("mysql".equals(dataTask.getDataTaskType())){
                             now = new Date();
                             dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
                             String current1 = dateFormat.format(now);
@@ -198,7 +198,7 @@ public class DataSyncController {
                         return 0;
                     }
                 } catch (IOException e) {
-                    if(dataTask.getDataTaskType()=="mysql"){
+                    if("mysql".equals(dataTask.getDataTaskType())){
                         now = new Date();
                         dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
                         String current1 = dateFormat.format(now);
