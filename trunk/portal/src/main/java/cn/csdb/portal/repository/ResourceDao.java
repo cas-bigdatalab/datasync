@@ -76,7 +76,7 @@ public class ResourceDao {
             queryBuilder =queryBuilder.and("publicType").is(publicType);
         }
         if (StringUtils.isNotEmpty(resState)){
-            queryBuilder =queryBuilder.and("resState").is(resState);
+            queryBuilder =queryBuilder.and("status").is(resState);
         }
 
         DBObject dbObject = queryBuilder.get();
@@ -103,7 +103,7 @@ public class ResourceDao {
             queryBuilder =queryBuilder.and("publicType").is(publicType);
         }
         if (StringUtils.isNotEmpty(resState)){
-            queryBuilder =queryBuilder.and("resState").is(resState);
+            queryBuilder =queryBuilder.and("status").is(resState);
         }
 
         DBObject dbObject = queryBuilder.get();
