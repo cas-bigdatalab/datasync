@@ -73,10 +73,10 @@
                         <label style="padding-left: 10px;">状态:</label>
                         <select id="resourceState" class="form-control" style="width: 120px">
                             <option value="">全部</option>
-                            <option value="待审核">待审核</option>
-                            <option value="未完成">未完成</option>
-                            <option value="审核通过">审核通过</option>
-                            <option value="审核未通过">审核未通过</option>
+                            <option value="1">待审核</option>
+                            <option value="-1">未完成</option>
+                            <option value="2">审核通过</option>
+                            <option value="0">审核未通过</option>
                         </select>
 
                     <button type="button" class="btn blue btn-sm" style="margin-left: 20px" id="seachResource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>

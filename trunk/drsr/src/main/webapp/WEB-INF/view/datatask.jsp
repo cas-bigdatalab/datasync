@@ -662,6 +662,7 @@
         });*/
         function getProcess(keyID,souceID) {
            var setout= setInterval(function () {
+               console.log($("[name="+keyID+"]").attr("valFlag"))
                if($("[name="+keyID+"]").attr("valFlag") == "true"){
                    if($("."+souceID).text() == "导入失败" ||$("."+souceID).text() == "上传失败"){
                        $("[kkid="+souceID+"]").text("--")
@@ -684,10 +685,9 @@
                         processId:keyID
                     },
                     success:function (data) {
-                        console.log("process="+data)
-                        if(data >= "100"){
+                        if(data >= 100){
                             $("[kkid="+souceID+"]").text(100+"%");
-                            $("."+souceID).text("上传完成")
+                            $("."+souceID).text("上传成功")
                             clearInterval(setout)
                             return
                         }
@@ -696,7 +696,7 @@
                             clearInterval(setout)
                             return
                         }
-                        $("[kkid="+souceID+"]").text(data+"%");
+                        $("[kkid="+souceID+"]").html(data+"%");
                     }
                 })
             },1000)
