@@ -159,6 +159,12 @@ public class DataSyncController {
                         String current1 = dateFormat.format(now);
                         pw.println(current1+":"+"=========================导入流程开始========================" + "\n");
                     }
+                    if("file".equals(dataTask.getDataTaskType())){
+                        now = new Date();
+                        dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+                        String current1 = dateFormat.format(now);
+                        pw.println(current1+":"+"=========================解压流程开始========================" + "\n");
+                    }
                     httpClient = HttpClients.createDefault();
 //                    postMethod = new HttpPost("http://localhost:8080/portal/service/getDataTask");
                     postMethod = new HttpPost("http://"+portalUrl+"/service/getDataTask");
@@ -184,6 +190,13 @@ public class DataSyncController {
                             pw.println(current1+":"+"导入成功"+ "\n");
                             pw.println(current1+":"+"=========================导入流程结束========================" + "\n");
                         }
+                        if("file".equals(dataTask.getDataTaskType())){
+                            now = new Date();
+                            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+                            String current1 = dateFormat.format(now);
+                            pw.println(current1+":"+"解压成功"+ "\n");
+                            pw.println(current1+":"+"=========================解压流程结束========================" + "\n");
+                        }
                         dataTask.setStatus("1");
                         dataTaskService.update(dataTask);
                         return 1;
@@ -195,9 +208,17 @@ public class DataSyncController {
                             pw.println(current1+":"+"导入失败"+ "\n");
                             pw.println(current1+":"+"=========================导入流程结束========================" + "\n");
                         }
+                        if("file".equals(dataTask.getDataTaskType())){
+                            now = new Date();
+                            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+                            String current1 = dateFormat.format(now);
+                            pw.println(current1+":"+"解压失败"+ "\n");
+                            pw.println(current1+":"+"=========================解压流程结束========================" + "\n");
+                        }
                         return 0;
                     }
                 } catch (IOException e) {
+                    e.printStackTrace();
                     if("mysql".equals(dataTask.getDataTaskType())){
                         now = new Date();
                         dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
@@ -205,7 +226,13 @@ public class DataSyncController {
                         pw.println(current1+":"+"导入失败"+ e+"\n");
                         pw.println(current1+":"+"=========================导入流程结束========================" + "\n");
                     }
-                    e.printStackTrace();
+                    if("file".equals(dataTask.getDataTaskType())){
+                        now = new Date();
+                        dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+                        String current1 = dateFormat.format(now);
+                        pw.println(current1+":"+"解压失败"+ e+"\n");
+                        pw.println(current1+":"+"=========================解压流程结束========================" + "\n");
+                    }
                 }
             }else{
                 return 0;
