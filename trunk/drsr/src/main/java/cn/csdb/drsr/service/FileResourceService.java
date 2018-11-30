@@ -346,11 +346,10 @@ public class FileResourceService {
             outputStream.setEncoding("utf-8"); //23412
             outputStream.setCreateUnicodeExtraFields(ZipArchiveOutputStream.UnicodeExtraFieldPolicy.ALWAYS);
             outputStream.setFallbackToUTF8(true);
-            logger.info(".zip:文件数据源,开始打包文件...");
             now = new Date();
             dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
-            current = dateFormat.format(now);
-            pw.println(current+":"+".zip:文件数据源,开始打包文件..." + "\n");
+            String current1 = dateFormat.format(now);
+            pw.println(current1+":"+".zip:文件数据源,开始打包文件..." + "\n");
             for (String filePath : filePaths) {
                 filePath = filePath.replace("%_%",File.separator);
                 File file = new File(filePath);
@@ -361,20 +360,19 @@ public class FileResourceService {
             }
             now = new Date();
             dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
-            current = dateFormat.format(now);
-            pw.println(current+":"+"打包成功" + "\n");
+            String current2 = dateFormat.format(now);
+            pw.println(current2+":"+"打包成功" + "\n");
         } catch (Exception e) {
             now = new Date();
             dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
-            current = dateFormat.format(now);
-            pw.println(current+":"+"打包失败"+ e+"\n");
-            logger.error("打包失败", e);
+            String current2 = dateFormat.format(now);
+            pw.println(current2+":"+"打包失败"+ e+"\n");
             return "error";
         } finally {
             now = new Date();
             dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
-            current = dateFormat.format(now);
-            pw.println(current+":"+"=========================打包流程结束========================" + "\n");
+            String current2 = dateFormat.format(now);
+            pw.println(current2+":"+"=========================打包流程结束========================" + "\n");
             try {
                 fw.flush();
                 pw.close();
