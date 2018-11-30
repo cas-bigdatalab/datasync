@@ -109,10 +109,19 @@ public class DataTaskService {
                 }
             }
 
-            if (StringUtils.isNotEmpty(sqlString) && StringUtils.isNotEmpty(sqlTableNameEn)) {
-                sqlSb.append(DDL2SQLUtils.generateDDLFromSql(connection, sqlString, sqlTableNameEn));
-                dataSb.append(DDL2SQLUtils.generateInsertSqlFromSQL(connection, sqlString, sqlTableNameEn));
+            //xiajl20181130修改 (多条sql语句,多个表名)
+            String[] sqlArray = sqlString.split(";");
+            String[] sqlTableArray = sqlTableNameEn.split(";");
+            for (int i=0;i<sqlArray.length;i++){
+                if (StringUtils.isNotEmpty(sqlArray[i]) && StringUtils.isNotEmpty(sqlTableArray[i])) {
+                    sqlSb.append(DDL2SQLUtils.generateDDLFromSql(connection, sqlArray[i], sqlTableArray[i]));
+                    dataSb.append(DDL2SQLUtils.generateInsertSqlFromSQL(connection, sqlArray[i], sqlTableArray[i]));
+                }
             }
+            //if (StringUtils.isNotEmpty(sqlString) && StringUtils.isNotEmpty(sqlTableNameEn)) {
+            //    sqlSb.append(DDL2SQLUtils.generateDDLFromSql(connection, sqlString, sqlTableNameEn));
+            //    dataSb.append(DDL2SQLUtils.generateInsertSqlFromSQL(connection, sqlString, sqlTableNameEn));
+            //}
             pw.println("###########SQL数据表结构:###########\n" + sqlSb.toString() + "\n");
             pw.println("###########SQL数据内容:###########\n" + dataSb.toString() + "\n");
             logger.info("=========================SQL数据表结构:========================\n" + sqlSb.toString() + "\n");
