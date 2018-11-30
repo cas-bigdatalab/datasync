@@ -161,6 +161,8 @@ public class DDL2SQLUtils {
                 String name = metaData.getColumnName(index);
                 String tableName = metaData.getTableName(index);
                 int size = metaData.getColumnDisplaySize(index);
+                if (size > 2000)
+                    size = 2000;
                 boolean nullable = "1".equals(String.valueOf(metaData.isNullable(index)));
                 String type = metaData.getColumnTypeName(index);
 
@@ -186,22 +188,42 @@ public class DDL2SQLUtils {
                     }
                 }
 
-                sb.append("\n" + name);
+                //xiajl2018 去除重复列
+                StringBuilder ss = new StringBuilder();
+                ss.append("\n" + name);
+                //sb.append("\n" + name);
                 if ((type.startsWith("VARCHAR")) || (type.equals("CHAR")) || (type.equals("NUMBER"))
                         || (type.equals("NUMERIC")) || (type.equals("BLOB"))) {
                     if (chiffresApresVirgule == 0)
-                        sb.append(" " + type + "(" + size + ")");
+                        //sb.append(" " + type + "(" + size + ")");
+                        ss.append(" " + type + "(" + size + ")");
                     else
-                        sb.append(" " + type + "(" + size + "," + chiffresApresVirgule + ")");
+                        //sb.append(" " + type + "(" + size + "," + chiffresApresVirgule + ")");
+                        ss.append(" " + type + "(" + size + "," + chiffresApresVirgule + ")");
                 } else {
-                    sb.append(" " + type);
+                    //sb.append(" " + type);
+                    ss.append(" " + type);
                 }
+
 
                 if (!nullable) {
-                    sb.append(" NOT NULL");
+                    //sb.append(" NOT NULL");
+                    ss.append(" NOT NULL");
                 }
-
-                sb.append(",");
+                ss.append(",");
+                //sb.append(",");
+                if (sb.toString().contains(ss.toString()))
+                {
+                    //把列名变成 a_copy
+                    String tempStr = ss.toString();
+                    String result =tempStr.replace(name,name+"copy");
+                    //System.out.println(ss.toString());
+                    sb.append(result);
+                }
+                else
+                {
+                    sb.append(ss.toString());
+                }
             }
             if (sb.toString().endsWith(",")) {
                 sb.replace(sb.length()-1, sb.length(), " ");
