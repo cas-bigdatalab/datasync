@@ -64,6 +64,7 @@ public class CheckUserController {
                     }else{
                         request.getSession().setAttribute("userName", u.getUserName());
                         request.getSession().setAttribute("LoginId", u.getLoginId());
+                        request.getSession().setAttribute("roles", roles);
                     }
                     return "redirect:/loginSuccess";
                 }

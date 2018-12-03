@@ -82,11 +82,13 @@ public class ResourceController {
                                   @RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
                                   @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                                   HttpSession session) {
-        String subjectCode = session.getAttribute("SubjectCode").toString();
-        Subject subject = subjectService.findBySubjectCode(subjectCode);
+        String subjectCode = "";
         Set<String> roles = (HashSet<String>)(session.getAttribute("roles"));
         if(roles.contains("系统管理员")){
             subjectCode = "";
+        }else{
+            subjectCode = session.getAttribute("SubjectCode").toString();
+            Subject subject = subjectService.findBySubjectCode(subjectCode);
         }
         List<cn.csdb.portal.model.Resource> list = resourceService.getListByPage(subjectCode, title, publicType, resState, pageNo, pageSize);
         long count = resourceService.countByPage(subjectCode, title, publicType, resState);
