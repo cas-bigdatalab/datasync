@@ -109,12 +109,16 @@ public class ResCatalogDao {
 /*
         return mongoTemplate.find(new Query(Criteria.where("id").is(resCatalogId)),ResCatalog_Mongo.class).get(0);
 */
-        List<ResCatalog_Mongo> resCatalog_mongos = mongoTemplate.find(new Query(Criteria.where("rid").is(Integer.parseInt(resCatalogId))),ResCatalog_Mongo.class);
-        if(resCatalog_mongos!=null&&resCatalog_mongos.size()>0){
+/*
+        List<ResCatalog_Mongo> resCatalog_mongos = mongoTemplate.find(new Query(Criteria.where("id").is(Integer.parseInt(resCatalogId))),ResCatalog_Mongo.class);
+*/
+        ResCatalog_Mongo resCatalog_mongos = mongoTemplate.findById(resCatalogId,ResCatalog_Mongo.class);
+        /*if(resCatalog_mongos!=null&&resCatalog_mongos.size()>0){
             return resCatalog_mongos.get(0);
         }else{
             return null;
-        }
+        }*/
+        return resCatalog_mongos;
 
     }
 
