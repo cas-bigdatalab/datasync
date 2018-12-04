@@ -545,7 +545,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button"  data-dismiss="modal" class="btn green">保存
+                <button type="button"  data-dismiss="modal" class="btn red">关闭
                 </button>
                 <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
             </div>
