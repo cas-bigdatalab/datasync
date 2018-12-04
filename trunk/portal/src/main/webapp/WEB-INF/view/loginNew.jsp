@@ -38,7 +38,7 @@
 <body>
 <dl class="admin_login">
     <dt>
-        <strong>数据发布管理系统</strong>
+        <strong>烟草科研主题库构建与发布工具</strong>
         <em>Management System</em>
     </dt>
     <form action="${pageContext.request.contextPath}/login" method="post">

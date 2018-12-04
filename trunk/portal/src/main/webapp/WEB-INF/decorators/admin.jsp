@@ -248,7 +248,7 @@
             支撑数据管理系统
         </shiro:hasRole>
         <shiro:hasRole name="admin">
-            数据发布管理系统
+            烟草科研主题库构建与发布工具
         </shiro:hasRole>
 <%--
         <button class="btn blue" style="float: right;margin-top: 28px;" ><i class="icon-user"></i>登录</button>
