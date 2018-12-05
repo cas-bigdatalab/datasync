@@ -14,7 +14,7 @@
 <html>
 
 <head>
-    <title>数据发布管理系统</title>
+    <title>烟草科研主题库构建与发布工具</title>
 </head>
 
 <body>
@@ -24,7 +24,7 @@
         <h3><b>欢迎使用支撑数据管理系统</b></h3>
     </shiro:hasRole>
     <shiro:hasRole name="admin">
-        <h3><b>欢迎使用数据发布管理系统</b></h3>
+        <h3><b>烟草科研主题库构建与发布工具</b></h3>
     </shiro:hasRole>
 </div>
 

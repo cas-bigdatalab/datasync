@@ -468,7 +468,7 @@
                     <form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"  onfocusout="true"
                           method="POST">
                         <div class="form-group">
-                            <label class="control-label col-md-3" for="audit_status" >数据集名称 <span class="required">
+                            <label class="control-label col-md-3" for="audit_status" >审核结果 <span class="required">
                                                     * </span>
                             </label>
                             <div class="col-md-7" style="padding-top:13px">
@@ -483,7 +483,7 @@
 
                         </div>
                         <div class="form-group ">
-                            <label class="control-label col-md-3" for="audit_content">审核结果<span class="required">
+                            <label class="control-label col-md-3" for="audit_content">审核详情<span class="required">
                                                     * </span>
                             </label>
                             <div class="col-md-7" style="padding-top:13px">
