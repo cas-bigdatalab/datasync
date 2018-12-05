@@ -200,7 +200,7 @@ public class ResourceController {
     public List<JSONObject> fileSourceFileList(HttpSession session) {
         String subjectCode = session.getAttribute("SubjectCode").toString();
         Subject subject = subjectService.findBySubjectCode(subjectCode);
-        List<JSONObject> jsonObjects = resourceService.fileSourceFileList(subject.getFtpFilePath());
+        List<JSONObject> jsonObjects = resourceService.fileSourceFileListFirst(subject.getFtpFilePath());
         return jsonObjects;
     }
 
