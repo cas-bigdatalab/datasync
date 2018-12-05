@@ -131,6 +131,8 @@ public class DataSyncController {
                     dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
                     String current1 = dateFormat.format(now);
                     pw.println(current1+":"+"上传失败"+ "\n");
+                    dataTask.setStatus("0");
+                    dataTaskService.update(dataTask);
                     return 0;
                 }
             }else if(dataTask.getDataTaskType().equals("mysql")){
@@ -138,6 +140,9 @@ public class DataSyncController {
                 String[] localFileList = {dataTask.getFilePath()};
                 result = ftpUtil.upload(localFileList, processId,remoteFilepath,dataTask,subjectCode+"_sql").toString();
                 if(result.equals("File_Exits")){
+//                    有时候会因为同一个ftp连接在删除文件后无法创建目录，所以此处重新建立连接ftp
+                    ftpUtil.disconnect();
+                    ftpUtil.connect(host, Integer.parseInt(port), userName, password);
                     ftpUtil.removeDirectory(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+"_sql");
                     result = ftpUtil.upload(localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
                 }
@@ -146,6 +151,8 @@ public class DataSyncController {
                     dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
                     String current1 = dateFormat.format(now);
                     pw.println(current1+":"+"上传失败"+ "\n");
+                    dataTask.setStatus("0");
+                    dataTaskService.update(dataTask);
                     return 0;
                 }
             }
@@ -223,6 +230,8 @@ public class DataSyncController {
                             pw.println(current1+":"+"解压失败"+ "\n");
                             pw.println(current1+":"+"=========================解压流程结束========================" + "\n");
                         }
+                        dataTask.setStatus("0");
+                        dataTaskService.update(dataTask);
                         return 0;
                     }
                 } catch (IOException e) {
@@ -243,6 +252,8 @@ public class DataSyncController {
                     }
                 }
             }else{
+                dataTask.setStatus("0");
+                dataTaskService.update(dataTask);
                 return 0;
             }
         } catch (IOException e) {
@@ -251,6 +262,8 @@ public class DataSyncController {
             current = dateFormat.format(now);
             pw.println(current+":"+"连接FTP出错:"+e+ "\n");
             System.out.println("连接FTP出错：" + e.getMessage());
+            dataTask.setStatus("0");
+            dataTaskService.update(dataTask);
             return 0;
         }finally {
             now = new Date();
