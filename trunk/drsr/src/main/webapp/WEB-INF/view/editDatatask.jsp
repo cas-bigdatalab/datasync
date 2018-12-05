@@ -567,6 +567,10 @@
             })
             dataRelTableList= relTabStr;
             dataRelSqlList =relSqlStr;
+            var Bwrap = document.querySelector(".tabWrap");
+            Bwrap.style.display="block";
+            Bwrap.style.width=Math.max(document.body.offsetWidth,document.documentElement.clientWidth)+"px";
+            Bwrap.style.height=Math.max(document.body.offsetHeight,document.documentElement.clientHeight)+"px";
             $.ajax({
                 url:"${ctx}/datatask/updateRelationDatatask",
                 type:"POST",
@@ -582,8 +586,8 @@
                 },
                 complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
                     if(status=='timeout'){//超时,status还有success,error等值的情况
-                        ajaxTimeoutTest.abort();
-                        alert("超时");
+                        toastr["error"]("提示！", "请求超时");
+                        Bwrap.style.display="none";
                     }
                 },
                 success:function (data) {
@@ -627,6 +631,10 @@
                     fileTabStr+=$(this).val()+";"
                 });
                 dataFilePathList=fileTabStr;
+                var Bwrap = document.querySelector(".tabWrap");
+                Bwrap.style.display="block";
+                Bwrap.style.width=Math.max(document.body.offsetWidth,document.documentElement.clientWidth)+"px";
+                Bwrap.style.height=Math.max(document.body.offsetHeight,document.documentElement.clientHeight)+"px";
                 $.ajax({
                     url:"${ctx}/datatask/updateFileDatatask",
                     type:"POST",
@@ -641,8 +649,8 @@
                     },
                     complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
                         if(status=='timeout'){//超时,status还有success,error等值的情况
-                            ajaxTimeoutTest.abort();
-                            alert("超时");
+                            toastr["error"]("提示！", "请求超时");
+                            Bwrap.style.display="none";
                         }
                     },
                     success:function (data) {

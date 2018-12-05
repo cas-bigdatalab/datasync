@@ -52,6 +52,28 @@
         body table{
             font-size: 14px;
         }
+        .tabWrap{
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 500px;
+            height: 500px;
+            opacity: 0.5;
+            background-color: #747474;
+            /*display: none;*/
+            background-image: url("${ctx}/resources/img/loading2.gif");
+            background-repeat: no-repeat;
+            background-position: center center;
+            -webkit-transition: opacity 0.15s linear;
+            -o-transition: opacity 0.15s linear;
+            transition: opacity 0.15s linear;
+            z-index: 99999;
+            display: none;
+        }
+       /* .tabWrap img{
+            width: 200px;
+            height: 200px;
+        }*/
     </style>
 </head>
 <body class="page-quick-sidebar-over-content page-style-square">
@@ -206,6 +228,7 @@
         <i class="icon-arrow-up"></i>
     </div>
 </div>
+<div class="tabWrap"></div>
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 
 

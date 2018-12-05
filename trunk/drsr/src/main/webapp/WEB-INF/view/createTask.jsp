@@ -13,6 +13,9 @@
     <title>系统</title>
     <link href="${ctx}/resources/css/createTask.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/jstree/dist/themes/default/style.min.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+
+    </style>
 </head>
 <body>
 <div class="page-content">
@@ -187,6 +190,7 @@
         </div>
     </div>
 </div>
+
 <script type="text/html" id="previewTableDataAndComsTmpl">
     <div class="skin skin-minimal">
         <table class="table table-hover table-bordered">
@@ -565,6 +569,10 @@
             })
             dataRelTableList= relTabStr;
             dataRelSqlList =relSqlStr;
+            var Bwrap = document.querySelector(".tabWrap");
+            Bwrap.style.display="block";
+            Bwrap.style.width=Math.max(document.body.offsetWidth,document.documentElement.clientWidth)+"px";
+            Bwrap.style.height=Math.max(document.body.offsetHeight,document.documentElement.clientHeight)+"px";
             $.ajax({
                 url:"${ctx}/datatask/saveRelationDatatask",
                 type:"POST",
@@ -579,8 +587,8 @@
                 },
                 complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
                     if(status=='timeout'){//超时,status还有success,error等值的情况
-                        ajaxTimeoutTest.abort();
-                        alert("超时");
+                        toastr["error"]("提示！", "请求超时");
+                        Bwrap.style.display="none";
                     }
                 },
                 success:function (data) {
@@ -613,6 +621,11 @@
                 fileTabStr+=$(this).val()+";"
             });
             dataFilePathList=fileTabStr;
+
+            var Bwrap = document.querySelector(".tabWrap");
+            Bwrap.style.display="block";
+            Bwrap.style.width=Math.max(document.body.offsetWidth,document.documentElement.clientWidth)+"px";
+            Bwrap.style.height=Math.max(document.body.offsetHeight,document.documentElement.clientHeight)+"px";
             $.ajax({
                 url:"${ctx}/datatask/saveFileDatatask",
                 type:"POST",
@@ -628,8 +641,9 @@
                 },
                 complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
                     if(status=='timeout'){//超时,status还有success,error等值的情况
-                        ajaxTimeoutTest.abort();
-                        alert("超时");
+                        /*ajaxTimeoutTest.abort();*/
+                        toastr["error"]("提示！", "请求超时");
+                        Bwrap.style.display="none";
                     }
                 },
                 error:function () {
