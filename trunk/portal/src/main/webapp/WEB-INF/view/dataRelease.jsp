@@ -118,7 +118,7 @@
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">任务详情查看</h4>
+                <h4 class="modal-title">数据集详情查看</h4>
             </div>
             <div class="modal-body" style="max-height: 500px;overflow: auto">
                 <div class="commentsList" id="mysqlComments" style="display: none">
@@ -284,7 +284,7 @@
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">任务详情查看</h4>
+                <h4 class="modal-title">数据集详情查看</h4>
             </div>
             <div class="modal-body" style="max-height: 500px;overflow: auto">
                 <div class="commentsList" id="fileComments" style="display: none">
@@ -459,7 +459,7 @@
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">任务详情查看</h4>
+                <h4 class="modal-title">数据审核</h4>
             </div>
             <div class="modal-body" style="overflow: auto">
                 <div id="AuditMessageList">
@@ -475,8 +475,7 @@
                                 <%--<input type="text" class="form-control" name="Task_dataName" required="required"
                                        id="Task_dataName" placeholder="请输入名称">--%>
                                     <select id="audit_status" class="form-control" name="audit_status">
-                                        <option value="">请选择审核结果</option>
-                                        <option value="2">审核通过</option>
+                                        <option value="2" selected="selected">审核通过</option>
                                         <option value="0">审核未通过</option>
                                     </select>
                             </div>
