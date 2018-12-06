@@ -51,7 +51,7 @@
         <%--<div class="uplod-head">
             <span>数据发布管理</span>
         </div>--%>
-        <h3>数据发布审核管理</h3>
+        <h3>发布审核管理</h3>
             <hr>
         <div class="alert alert-info" role="alert">
             <!--查询条件 -->
@@ -513,13 +513,13 @@
         <td>{{dateFormat(value.creationDate)}}</td>
 
         {{if value.status == '1'}}
-        <td id="{{value.dataTaskId}}" style="color: #337ab7">待审核</td>
+        <td id="{{value.dataTaskId}}" >待审核</td>
         {{else if value.status == '0'}}
-        <td id="{{value.dataTaskId}}" style="color: #d9534f">审核未通过</td>
+        <td id="{{value.dataTaskId}}" style="color: #d9534f">审核未通过&nbsp;<span class="glyphicon glyphicon-remove"></span></td>
         {{else if value.status == '2'}}
-        <td id="{{value.dataTaskId}}" style="color: #5cb85c">审核通过</td>
+        <td id="{{value.dataTaskId}}" style="color: #5cb85c">审核通过&nbsp;<span class="glyphicon glyphicon-ok"></span></td>
         {{else if value.status == '-1'}}
-        <td id="{{value.dataTaskId}}" style="color:#ec971f">未完成</td>
+        <td id="{{value.dataTaskId}}" <%--style="color:#ec971f"--%>>未完成</td>
         {{/if}}
 
         <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>
