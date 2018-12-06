@@ -151,10 +151,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn green" data-dismiss="modal" ><i
-                        class="glyphicon glyphicon-ok"></i>确认
-                </button>
-                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+
+                <button type="button" data-dismiss="modal" class="btn  default">关闭</button>
             </div>
         </div>
     </div>
@@ -211,12 +209,10 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn green" data-dismiss="modal" ><i
-                        class="glyphicon glyphicon-ok"></i>确认
-                </button>
-                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+
+                <button type="button" data-dismiss="modal" class="btn default">关闭</button>
             </div>
-        </div>
+       </div>
     </div>
 </div>
 <div id="logModal" class="modal fade" tabindex="-1" data-width="400">
