@@ -177,7 +177,7 @@ public class FtpUtil {
 //        ftpClient.enterRemotePassiveMode();
         ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
         ftpClient.setControlEncoding("GBK");
-        System.out.println(ftpClient.getStatus());
+//        System.out.println(ftpClient.getStatus());
         UploadStatus result;
         Map resultmap;
         Long fileTotalSize = 0L;
@@ -186,14 +186,14 @@ public class FtpUtil {
 //            s = s.replace("%_%",File.separator);
             File file = new File(s.replace("%_%",File.separator));
             fileTotalSize += file.length();
-            System.out.println("-------fileTotalSize"+fileTotalSize);
+//            System.out.println("-------fileTotalSize"+fileTotalSize);
         }
 
         for (String localFilepath : localFileList) {
             String newlocalFilepath = localFilepath.replace("%_%",File.separator);
             String fileName = "";
-            System.out.println("-------localFilepath"+localFilepath);
-            System.out.println("-------localFilepath.indexOf(%_%)>0-----"+(localFilepath.indexOf("%_%")>0));
+//            System.out.println("-------localFilepath"+localFilepath);
+//            System.out.println("-------localFilepath.indexOf(%_%)>0-----"+(localFilepath.indexOf("%_%")>0));
             /*System.out.println("-------localFilepath.indexOf(File.separator)>0"+(localFilepath.indexOf(File.separator)>0));
             if(localFilepath.indexOf("%_%")>0){
                 fileName = localFilepath.substring(localFilepath.lastIndexOf("%_%")+3);
@@ -207,7 +207,7 @@ public class FtpUtil {
 
             //对远程目录的处理
             String remoteFileName = fileName.replace("%_%",File.separator);
-            System.out.println("-------------remoteFileName"+remoteFileName);
+//            System.out.println("-------------remoteFileName"+remoteFileName);
             if (remoteFilepath.contains("/")) {
 //                remoteFileName = remoteFilepath.substring(remoteFilepath.lastIndexOf("/") + 1);
                 //创建服务器远程目录结构，创建失败直接返回
@@ -263,9 +263,9 @@ public class FtpUtil {
         long process = progressMap.get(processId)==null?0:progressMap.put(processId,0L);
         long localreadbytes = 0L;
         RandomAccessFile raf = new RandomAccessFile(localFile, "r");
-        System.out.println("------------remoteFile.getBytes(\"GBK\")="+remoteFile.getBytes("GBK"));
+//        System.out.println("------------remoteFile.getBytes(\"GBK\")="+remoteFile.getBytes("GBK"));
         String testtring = new String(remoteFile.getBytes("GBK"), "iso-8859-1");
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!"+testtring);
+//        System.out.println("!!!!!!!!!!!!!!!!!!!!!!"+testtring);
         OutputStream out = ftpClient.appendFileStream(new String(remoteFile.getBytes("GBK"), "iso-8859-1"));
         if(out == null){
             System.out.println("=============null out");
@@ -336,7 +336,9 @@ public class FtpUtil {
                     if (ftpClient.makeDirectory(subDirectory)) {
                         ftpClient.changeWorkingDirectory(subDirectory);
                     } else {
-                        System.out.println("创建目录失败");
+                        System.out.println("创建目录失败"+ftpClient.makeDirectory(subDirectory));
+                        System.out.println("创建目录失败"+ftpClient.printWorkingDirectory());
+                        System.out.println("创建目录失败"+subDirectory);
                         return UploadStatus.Create_Directory_Fail;
                     }
                 }
