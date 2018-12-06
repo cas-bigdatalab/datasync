@@ -137,7 +137,7 @@
                 <li>
                     <a href="${ctx}/subjectInfo">
                         <i class="icon-wrench"></i>
-                        <span class="title">专业库信息</span>
+                        <span class="title">数据节点信息</span>
                         <span class="arrow "></span>
                     </a>
                 </li>
