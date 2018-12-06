@@ -51,7 +51,7 @@
         <%--<div class="uplod-head">
             <span>数据发布管理</span>
         </div>--%>
-        <h3>数据发布管理</h3>
+        <h3>数据发布审核管理</h3>
             <hr>
         <div class="alert alert-info" role="alert">
             <!--查询条件 -->
@@ -199,7 +199,7 @@
                             <div class="col-sm-8 modediv" id="rel-fieldComs"></div>
                         </div>--%>
                         <%--<div class="form-group">
-                            <label class="col-sm-3 control-label">数据节点代码:</label>
+                            <label class="col-sm-3 control-label">专业库代码:</label>
                             <div class="col-sm-8 modediv" id="rel-subjectCode"></div>
                         </div>--%>
                         <hr style="border-bottom:1px dashed #111;">
@@ -270,10 +270,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn green" data-dismiss="modal"><i
-                        class="glyphicon glyphicon-ok"></i>确认
-                </button>
-                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+
+                <button type="button" data-dismiss="modal" class="btn  default">关闭</button>
             </div>
         </div>
     </div>
@@ -368,7 +366,7 @@
                             <div class="col-sm-8 modediv" id="file-fieldComs"></div>
                         </div>--%>
                         <%--<div class="form-group">
-                            <label class="col-sm-3 control-label">数据节点代码:</label>
+                            <label class="col-sm-3 control-label">专业库代码:</label>
                             <div class="col-sm-8 modediv" id="file-subjectCode"></div>
                         </div>--%>
                         <hr style="border-bottom:1px dashed #111;">
@@ -445,10 +443,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn green" data-dismiss="modal"><i
-                        class="glyphicon glyphicon-ok"></i>确认
-                </button>
-                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+
+                <button type="button" data-dismiss="modal" class="btn  default">关闭</button>
             </div>
         </div>
     </div>
@@ -498,7 +494,7 @@
                 <button type="button" class="btn green"  auditId=""  id="auditId" ><i
                         class="glyphicon glyphicon-ok"></i>确认
                 </button>
-                <button type="button"  class="btn  btn-danger" onclick="remValidate()">取消</button>
+                <button type="button"  class="btn default" onclick="remValidate()">取消</button>
             </div>
         </div>
     </div>
@@ -517,13 +513,13 @@
         <td>{{dateFormat(value.creationDate)}}</td>
 
         {{if value.status == '1'}}
-        <td id="{{value.dataTaskId}}">待审核</td>
+        <td id="{{value.dataTaskId}}" style="color: #337ab7">待审核</td>
         {{else if value.status == '0'}}
-        <td id="{{value.dataTaskId}}">审核未通过</td>
+        <td id="{{value.dataTaskId}}" style="color: #d9534f">审核未通过</td>
         {{else if value.status == '2'}}
-        <td id="{{value.dataTaskId}}">审核通过</td>
+        <td id="{{value.dataTaskId}}" style="color: #5cb85c">审核通过</td>
         {{else if value.status == '-1'}}
-        <td id="{{value.dataTaskId}}">未完成</td>
+        <td id="{{value.dataTaskId}}" style="color:#ec971f">未完成</td>
         {{/if}}
 
         <%--<td class="{{value.id}}">{{upStatusName(value.status)}}</td>--%>

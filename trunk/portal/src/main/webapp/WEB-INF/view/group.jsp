@@ -395,11 +395,11 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectCodeForAddUserDialog">
-                                数据节点
+                                专业库
                             </label>
                             <div class="col-md-9">
-                                    <select class='form-control' name='subjectCodeForAddUserDialog' id='subjectCodeForAddUserDialog' placeholder="请选择数据节点">
-                                        <option value="" disabled selected>请选择数据节点</option>
+                                    <select class='form-control' name='subjectCodeForAddUserDialog' id='subjectCodeForAddUserDialog' placeholder="请选择专业库">
+                                        <option value="" disabled selected>请选择专业库</option>
                                         <c:forEach  var="subject"  items="${subjectList}">
                                             <option value="${subject.subjectCode}" id="${subject.subjectCode}" >${subject.subjectName}</option>
                                         </c:forEach>
@@ -473,7 +473,7 @@
                         </div>
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectCodeForUpdateUserDialog">
-                                数据节点
+                                专业库
                             </label>
                             <div class="col-md-9">
                                 <select class='form-control' name='subjectCodeForUpdateUserDialog' id='subjectCodeForUpdateUserDialog'>

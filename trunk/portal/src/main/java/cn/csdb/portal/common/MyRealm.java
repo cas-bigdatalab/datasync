@@ -49,7 +49,7 @@ public class MyRealm extends AuthorizingRealm {
                 Set<String> roles = new HashSet<>();
                 roles.add("root");
                 info.setRoles(roles);
-            } else if (user.getRole().equals("数据节点管理员")) {
+            } else if (user.getRole().equals("专业库管理员")) {
                 Set<String> roles = new HashSet<>();
                 roles.add("admin");
                 info.setRoles(roles);

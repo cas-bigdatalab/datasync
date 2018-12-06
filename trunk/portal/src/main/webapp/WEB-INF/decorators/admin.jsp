@@ -16,10 +16,10 @@
 <head>
     <title>
         <shiro:hasRole name="root">
-            支撑数据管理系统
+            主题库后台管理系统
         </shiro:hasRole>
         <shiro:hasRole name="admin">
-            数据发布管理系统
+            烟草科研主题库构建与发布工具
         </shiro:hasRole>
     </title>
 
@@ -85,7 +85,7 @@
     <div class="page-body">
         <div class="body-left">
             <ul class="list-ul center1" style="display: none">
-                <li><a href="${ctx}/ccc">数据节点管理</a></li>
+                <li><a href="${ctx}/ccc">专业库管理</a></li>
                 <li><a href="${ctx}/subjectMgmt/sdgsdfs?currentPage=1">用户组管理</a></li>
                 <li><a href="${ctx}/subjectMgmt/sdgsdfs?currentPage=1">资源分类管理</a></li>
                 <li><a href="${ctx}/subjectMgmt/zasda?currentPage=1">数据发布管理</a></li>
@@ -245,7 +245,7 @@
 
     <div class=" container tatle_div">
         <shiro:hasRole name="root">
-            支撑数据管理系统
+            主题库后台管理系统
         </shiro:hasRole>
         <shiro:hasRole name="admin">
             烟草科研主题库构建与发布工具
@@ -278,7 +278,14 @@
                     <li class="start">
                         <a href="${ctx}/subjectMgmt/subjectIndex">
                             <i class="icon-user"></i>
-                            <span class="title">数据节点管理</span>
+                            <span class="title">主题库注册管理</span>
+                            <span class="arrow"></span>
+                        </a>
+                    </li>
+                    <li class="startProject">
+                        <a href="${ctx}/subjectMgmt/subjectDes">
+                            <i class="icon-user"></i>
+                            <span class="title">专业库注册管理</span>
                             <span class="arrow"></span>
                         </a>
                     </li>
@@ -286,7 +293,7 @@
                     <li>
                         <a href="${ctx}/resCatalog">
                             <i class="icon-settings"></i>
-                            <span class="title">数据目录管理</span>
+                            <span class="title">数据分类管理</span>
                             <span class="arrow "></span>
                         </a>
                     </li>
@@ -307,7 +314,7 @@
                     <li>
                         <a href="${ctx}/dataRelease">
                             <i class="icon-layers"></i>
-                            <span class="title">数据发布管理</span>
+                            <span class="title">发布审核管理</span>
                             <span class="arrow "></span>
                         </a>
                     </li>
@@ -392,7 +399,7 @@
                     <td><a href="${ctx}/resource/resourcesList">资源与服务</a></td>
                     <td><a href="${ctx}/demcons/main/list/all">需求与咨询</a></td>
                     <td><a href="${ctx}/person/myApplyPage">个人中心</a></td>
-                    <td><a href="${ctx}/subjectMgmt/querySubject?currentPage=1">数据节点注册</a></td>
+                    <td><a href="${ctx}/subjectMgmt/querySubject?currentPage=1">专业库注册</a></td>
                 </tr>
             </table>
         </div>

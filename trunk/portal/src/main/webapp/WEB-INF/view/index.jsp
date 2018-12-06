@@ -14,17 +14,18 @@
 <html>
 
 <head>
-    <title>烟草科研主题库构建与发布工具</title>
+    <title>主题库后台管理系统
+    </title>
 </head>
 
 <body>
 
 <div class="page-content">
     <shiro:hasRole name="root">
-        <h3><b>欢迎使用支撑数据管理系统</b></h3>
+        <h3><b>欢迎使用主题库后台管理系统</b></h3>
     </shiro:hasRole>
     <shiro:hasRole name="admin">
-        <h3><b>烟草科研主题库构建与发布工具</b></h3>
+        <h3><b>欢迎使用烟草科研主题库构建与发布工具</b></h3>
     </shiro:hasRole>
 </div>
 

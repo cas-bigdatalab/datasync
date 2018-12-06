@@ -233,6 +233,11 @@ public class SubjectMgmtController {
         ModelAndView mv = new ModelAndView("subjectMgmt");
         return mv;
     }
+    @RequestMapping(value = "/subjectDes")
+    public ModelAndView subjectDes(HttpServletRequest request) {
+        ModelAndView mv = new ModelAndView("subjectDesigned");
+        return mv;
+    }
 
 
     @ResponseBody

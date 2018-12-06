@@ -28,21 +28,21 @@
 
 <body>
     <div class="page-content">
-        <h3>主题库注册管理</h3>
+        <h3>专业库注册管理</h3>
         <hr />
 
         <!--专业库筛选条件-->
         <div class="alert alert-info" role="alert">
             <div class="row">
                 <div class="col-md-12 form-inline">
-                    <label class="control-label">主题库名称:</label>
-                    <input type="text" id="subjectNameFilter" name="subjectNameFilter" placeholder="主题库名称" class="form-control search-text" style="width: 300px;" />
+                    <label class="control-label">专业库名称:</label>
+                    <input type="text" id="subjectNameFilter" name="subjectNameFilter" placeholder="专业库名称" class="form-control search-text" style="width: 300px;" />
 
                     &nbsp;&nbsp;&nbsp;&nbsp;
 
                     <button id="searchSubjectBtn" name="searchSubjectBtn" onclick="searchSubject();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <button id="addSubjectBtn" name="addSubjectBtn" style="float: right" class="btn info green btn-sm" onclick="addSubject()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增主题库</button>
+                    <button id="addSubjectBtn" name="addSubjectBtn" style="float: right" class="btn info green btn-sm" onclick="addSubject()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增专业库</button>
                 </div>
             </div>
         </div>
@@ -53,10 +53,10 @@
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
                     <tr id="dataList">
-                        <th style="display:none;">主题库ID</th>
+                        <th style="display:none;">专业库ID</th>
                         <th style="width: 3%;">编号</th>
-                        <th style="width: 5%;">主题库名称</th>
-                        <th style="width: 5%;">主题库代码</th>
+                        <th style="width: 5%;">专业库名称</th>
+                        <th style="width: 5%;">专业库代码</th>
                         <th style="width: 5%;">管理员账号</th>
                         <th style="width: 5%;">负责人</th>
                         <th style="width: 5%;">电话</th>
@@ -104,7 +104,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-primary">
                     <button class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button>
-                    <h4 id="titleForAddSubjectDialog" class="modal-title" >新增主题库</h4>
+                    <h4 id="titleForAddSubjectDialog" class="modal-title" >新增专业库</h4>
                 </div>
 
                 <!--subject info input form-->
@@ -113,20 +113,20 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectName">
-                                主题库名称<span style="color: red;">*</span>
+                                名称<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入主题库名称" id="subjectName" name="subjectName" required="required"/>
+                                <input type="text" class="form-control" placeholder="请输入专业库名称" id="subjectName" name="subjectName" required="required"/>
                             </div>
                         </div>
 
                         <!--SubjectCode需要保证唯一性，为了保证唯一，需要通过后端数据库交互验证是否已经存在-->
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                主题库代码<span style="color: red;">*</span>
+                                专业库代码<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入主题库代码" id="subjectCode" name="subjectCode"  required="required" />
+                                <input type="text" class="form-control" placeholder="请输入专业库代码" id="subjectCode" name="subjectCode"  required="required" />
                             </div>
                         </div>
 
@@ -141,10 +141,10 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                主题库简介
+                                专业库简介
                             </label>
                             <div class="col-md-9">
-                                <textarea class="form-control" placeholder="请输入主题库简介" id="brief" name="brief"></textarea>
+                                <textarea class="form-control" placeholder="请输入专业库简介" id="brief" name="brief"></textarea>
                             </div>
                         </div>
 
@@ -222,13 +222,13 @@
             <div class="modal-content">
                 <div class="modal-header bg-primary">
                     <button class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button>
-                    <h4 id="titleForUpdateSubjectDialog" class="modal-title" >修改主题库</h4>
+                    <h4 id="titleForUpdateSubjectDialog" class="modal-title" >修改专业库</h4>
                 </div>
                 <div class="modal-body">
                     <form id="updateSubjectForm" class="form-horizontal" role="form" method="post">
                         <div class="form-group">
                                 <label class="col-md-3 control-label" for="subjectName" style="display:none;">
-                                    主题库id（不显示）
+                                    专业库id（不显示）
                                 </label>
                                 <div style="display:none;">
                                     <input type="text" class="form-control" id="idM" name="id" />
@@ -237,19 +237,19 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectName">
-                                主题库名称<span style="color: red;">*</span>
+                                专业库名称<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入主题库名称" id="subjectNameM" name="subjectName" required="required"/>
+                                <input type="text" class="form-control" placeholder="请输入专业库名称" id="subjectNameM" name="subjectName" required="required"/>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                主题库代码<span style="color: red;">*</span>
+                                专业库代码<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入主题库代码" id="subjectCodeM" name="subjectCode"  required="required" readonly="readonly"/>
+                                <input type="text" class="form-control" placeholder="请输入专业库代码" id="subjectCodeM" name="subjectCode"  required="required" readonly="readonly"/>
                             </div>
                         </div>
 
@@ -264,10 +264,10 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                主题库简介
+                                专业库简介
                             </label>
                             <div class="col-md-9">
-                                <textarea class="form-control" placeholder="请输入主题库简介" id="briefM" name="brief"></textarea>
+                                <textarea class="form-control" placeholder="请输入专业库简介" id="briefM" name="brief"></textarea>
                             </div>
                         </div>
 
@@ -382,7 +382,7 @@
 
             //初始化
             $(function () {
-                console.log("主题库页面初始化");
+                console.log("专业库页面初始化");
                 getSubject(1);
 
                 toastr.options = {
@@ -459,21 +459,21 @@
                         serialNo: "required"
                     },
                     messages: {
-                        subjectName: "请输入主题库名称",
+                        subjectName: "请输入专业库名称",
                         subjectCode: {
-                            required: "请输入主题库代码",
-                            remote: "此主题库代码已经存在！"
+                            required: "请输入专业库代码",
+                            remote: "此专业库代码已经存在！"
                         },
                         image: "请选择一个图片",
                         admin: {
-                            required: "请输入主题库管理员账号",
-                            remote: "此主题库管理员账号已经存在！"
+                            required: "请输入专业库管理员账号",
+                            remote: "此专业库管理员账号已经存在！"
                         },
                         adminPasswd: {
-                            required: "请输入主题库管理密码",
+                            required: "请输入专业库管理密码",
                             minlength: "密码至少为6位"
                         },
-                        contact: "请输入主题库联系人",
+                        contact: "请输入专业库联系人",
                         phone: {
                             required:"请输入手机号",
                             maxlength:"请填写11位的手机号",
@@ -481,7 +481,7 @@
                             isphoneNum:"请填写正确的手机号码"
                         },
                         email: "请输入一个正确的email",
-                        serialNo: "请输入主题库的序号"
+                        serialNo: "请输入专业库的序号"
                     }
                 };
 
@@ -519,14 +519,14 @@
                         serialNo: "required"
                     },
                     messages: {
-                        subjectName: "请输入主题库名称",
-                        subjectCode: "请输入主题库代码",
-                        admin: "请输入主题库管理员账号",
+                        subjectName: "请输入专业库名称",
+                        subjectCode: "请输入专业库代码",
+                        admin: "请输入专业库管理员账号",
                         adminPasswd: {
-                            required: "请输入主题库管理密码",
+                            required: "请输入专业库管理密码",
                             minlength: "密码至少为6位"
                         },
-                        contact: "请输入主题库联系人",
+                        contact: "请输入专业库联系人",
                         phone: {
                             required:"请输入手机号",
                             maxlength:"请填写11位的手机号",
@@ -534,7 +534,7 @@
                             isphoneNum:"请填写正确的手机号码"
                         },
                         email: "请输入一个正确的email",
-                        serialNo: "请输入主题库的序号"
+                        serialNo: "请输入专业库的序号"
                     }
                 };
                 $("#addSubjectForm").validate(addSubjectValid);
