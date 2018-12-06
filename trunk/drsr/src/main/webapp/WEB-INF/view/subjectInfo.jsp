@@ -30,7 +30,7 @@
     </div>
 
     <div class="task-title">
-        <span>专业库信息认证管理</span>
+        <span>数据节点信息认证管理</span>
     </div>
 
     <div class="messageCon" >
@@ -38,12 +38,12 @@
         <form class="form-horizontal">
 
             <div class="form-group">
-                <label  class="col-sm-3 control-label">专业库名称:</label>
+                <label  class="col-sm-3 control-label">数据节点名称:</label>
                 <div class="col-sm-8">${subject.subjectName}</div>
             </div>
 
             <div class="form-group">
-                <label  class="col-sm-3 control-label">专业库代码 :</label>
+                <label  class="col-sm-3 control-label">数据节点代码 :</label>
                 <div class="col-sm-8">${subject.subjectCode}</div>
             </div>
 

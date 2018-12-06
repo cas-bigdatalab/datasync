@@ -38,7 +38,7 @@ public class SubjectMgmtService {
     {
         String addSubjectNotice = "";
 
-        //添加 专业库管理员 账号
+        //添加 数据节点理员 账号
         String admin = subject.getAdmin();
         String adminPasswd = subject.getAdminPasswd();
         User subjectUser = new User();
@@ -48,20 +48,20 @@ public class SubjectMgmtService {
         subjectUser.setSubjectCode(subject.getSubjectCode());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
         subjectUser.setCreateTime(sdf.format(new Date()));
-        subjectUser.setRole("专业库管理员");
+        subjectUser.setRole("数据节点管理员");
         subjectUser.setStat(0); //0：数据有效，1：数据无效
         subjectUser.setGroups("");
         userDao.addUser(subjectUser);
 
-        // 添加 专业库
+        // 添加 数据节点
         int addedRowCnt = subjectMgmtDao.addSubject(subject);
         if (addedRowCnt == 1)
         {
-            addSubjectNotice = "添加专业库：成功！";
+            addSubjectNotice = "添加数据节点：成功！";
         }
         else
         {
-            addSubjectNotice = "添加专业库：失败！";
+            addSubjectNotice = "添加数据节点：失败！";
         }
         return addSubjectNotice;
     }
@@ -110,7 +110,7 @@ public class SubjectMgmtService {
         subjectUser.setSubjectCode(subject.getSubjectCode());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
         subjectUser.setCreateTime(sdf.format(new Date()));
-        subjectUser.setRole("专业库管理员");
+        subjectUser.setRole("数据节点管理员");
         subjectUser.setStat(0); //0：数据有效，1：数据无效
         subjectUser.setGroups("");
         userDao.updateUser(subjectUser);
@@ -118,11 +118,11 @@ public class SubjectMgmtService {
         int modifiedRowCnt = subjectMgmtDao.updateSubject(subject);
         if (modifiedRowCnt == 1)
         {
-            updatedSubjectNotice = "修改专业库：成功！";
+            updatedSubjectNotice = "修改数据节点：成功！";
         }
         else
         {
-            updatedSubjectNotice = "修改专业库：失败！";
+            updatedSubjectNotice = "修改数据节点：失败！";
         }
 
         return updatedSubjectNotice;
