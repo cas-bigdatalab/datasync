@@ -38,7 +38,7 @@
 <body>
 <dl class="admin_login">
     <dt>
-        <strong style="color: #f9fafa">烟草科研主题库构建与发布工具</strong>
+        <strong style="color: #f9fafa">烟草科研主题库统一登录认证</strong>
         <em style="color: #f9fafa">Management System</em>
     </dt>
     <form action="${pageContext.request.contextPath}/login" method="post">

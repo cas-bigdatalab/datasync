@@ -51,7 +51,13 @@
         <%--<div class="uplod-head">
             <span>数据发布管理</span>
         </div>--%>
-        <h3>发布审核管理</h3>
+            <shiro:hasRole name="admin">
+                <h3>数据发布管理</h3>
+            </shiro:hasRole>
+            <shiro:hasRole name="root">
+                <h3>发布审核管理</h3>
+            </shiro:hasRole>
+
             <hr>
         <div class="alert alert-info" role="alert">
             <!--查询条件 -->
@@ -503,7 +509,7 @@
     {{each resourceList as value i}}
     <tr keyIdTr="{{value.id}}">
         <td>{{i + 1}}</td>
-        <td>{{value.title}}</td>
+        <td><a href="javascript:void(0)">{{value.title}}</a></td>
         {{if value.publicType == 'mysql' ||value.publicType == '' }}
         <td>mysql</td>
         {{else if value.publicType == 'file'}}
