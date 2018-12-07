@@ -6,6 +6,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.annotation.Resource;
@@ -87,7 +88,20 @@ public class CheckUserController {
         }
 
         @RequestMapping("/loginSuccess")
-        public String loginSuccess() {
+        public String loginSuccess(HttpServletRequest request, Model model) {
+            //xiajl20181207
+            String loginid = "";
+            if (request.getSession().getAttribute("LoginId") != null) {
+                loginid = request.getSession().getAttribute("LoginId").toString();
+            }
+
+            User u = checkUserService.getByUserName(loginid);
+            cn.csdb.portal.model.Subject subject = null;
+            if (u.getSubjectCode() != null) {
+                subject = checkUserService.getSubjectByCode(u.getSubjectCode());
+                model.addAttribute("subject", subject);
+            }
+
             return "index";
         }
 }

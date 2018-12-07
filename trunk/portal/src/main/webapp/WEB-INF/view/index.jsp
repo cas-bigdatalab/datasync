@@ -26,6 +26,57 @@
     </shiro:hasRole>
     <shiro:hasRole name="admin">
         <h3><b>欢迎使用烟草科研主题库构建与发布工具</b></h3>
+
+        <div class="task-title" style="font-size: 16px; font-weight: bold; padding-top: 50px; padding-right:250px;text-align: center;">
+            <span>主题库信息</span>
+        </div>
+
+        <div class="messageCon"  style="font-size: 14px; padding-left: 50px; padding-right: 50px;">
+
+
+
+                <div class="form-group">
+                    <div  class="col-sm-4" style="text-align: right;">主题库名称:</div>
+                    <div class="col-sm-6" style="padding-left: 50px;">${subject.subjectName}</div>
+                </div>
+
+                <div class="form-group">
+                    <div  class="col-sm-4 " style="text-align: right;">主题库代码:</div>
+                    <div class="col-sm-6" style="padding-left: 50px;">${subject.subjectCode}</div>
+                </div>
+
+                <div class="form-group">
+                    <div  class="col-sm-4" style="text-align: right;">管理员账号:</div>
+                    <div class="col-sm-6" style="padding-left: 50px;">${subject.admin}</div>
+                </div>
+
+                <%--<div class="form-group">
+                    <label  class="col-sm-3 control-label">密码:</label>
+                    <div class="col-sm-8">${subject.adminPasswd}</div>
+                </div>--%>
+
+                <div class="form-group">
+                    <div  class="col-sm-4" style="text-align: right;">联系人:</div>
+                    <div class="col-sm-6" style="padding-left: 50px;">${subject.contact}</div>
+                </div>
+
+                <div class="form-group">
+                    <div  class="col-sm-4" style="text-align: right;">电话:</div>
+                    <div class="col-sm-6" style="padding-left: 50px;">${subject.phone}</div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4" style="text-align: right;">邮箱:</div>
+                    <div class="col-sm-6" style="padding-left: 50px;">${subject.email}</div>
+                </div>
+
+
+                <div class="form-group">
+                    <div  class="col-sm-4" style="text-align: right;">描述:</div>
+                    <div class="col-sm-6" style="padding-left: 50px;">${subject.brief}</div>
+                </div>
+        </div>
+
     </shiro:hasRole>
 </div>
 
