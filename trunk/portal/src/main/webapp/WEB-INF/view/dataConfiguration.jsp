@@ -127,20 +127,24 @@
                         <a href="#filedata" data-toggle="tab">
                             文件数据</a>
                     </li>
+                    <li value="3">
+                        <a href="#exceldownload" data-toggle="tab">
+                            Excel上传</a>
+                    </li>
                 </ul>
                 <!--tab content-->
                 <div class="tab-content">
 
                     <!--用户管理标签页-->
-                    <div class="tab-pane active" id="undescribe" style="min-height: 400px">
+                    <div class="tab-pane active" id="undescribe" style="min-height: 400px;overflow: hidden">
 
                     </div>
 
                     <!--group tab-->
-                    <div class="tab-pane" id="isdescribe" style="min-height: 400px">
+                    <div class="tab-pane" id="isdescribe" style="min-height: 400px;overflow: hidden">
 
                     </div>
-                    <div class="tab-pane" id="filedata" style="min-height: 400px">
+                    <div class="tab-pane" id="filedata" style="min-height: 400px;overflow: hidden">
                         <div id="jstree_show"></div>
                     </div>
                     <%--<div class="tab-pane active" id="undescribe" style="min-height: 400px">
@@ -148,6 +152,9 @@
 
                         </div>
                     </div>--%>
+                    <div class="tab-pane" id="exceldownload" style="min-height: 400px;overflow: hidden">
+
+                    </div>
                 </div>
             </div>
         </div>
