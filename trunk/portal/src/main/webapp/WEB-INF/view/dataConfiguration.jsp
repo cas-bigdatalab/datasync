@@ -30,6 +30,34 @@
         .nav-tabs>li.active>a:hover{
             background-color: #28a4a4!important;
         }*/
+        .cus-input{
+            font-size: 14px;
+            font-weight: normal;
+            color: #333333;
+            background-color: white;
+            border: 1px solid #e5e5e5;
+        }
+       .file-box{
+           display: inline-block;
+           position: relative;
+           padding: 3px 5px;
+           overflow: hidden;
+           color:#fff;
+           background-color: #ccc;
+       }
+       .file-btn{
+           position: absolute;
+           width: 100%;
+           height: 100%;
+           top: 0;
+           left: 0;
+           outline: none;
+           background-color: transparent;
+           filter:alpha(opacity=0);
+           -moz-opacity:0;
+           -khtml-opacity: 0;
+           opacity: 0;
+       }
     </style>
 </head>
 
@@ -128,8 +156,12 @@
                             文件数据</a>
                     </li>
                     <li value="3">
-                        <a href="#exceldownload" data-toggle="tab">
+                        <a href="#excelUpload" data-toggle="tab">
                             Excel上传</a>
+                    </li>
+                    <li value="4">
+                        <a href="#fileUpload" data-toggle="tab">
+                            上传文件</a>
                     </li>
                 </ul>
                 <!--tab content-->
@@ -152,9 +184,26 @@
 
                         </div>
                     </div>--%>
-                    <div class="tab-pane" id="exceldownload" style="min-height: 400px;overflow: hidden">
-
+                    <div class="tab-pane" id="excelUpload" style="min-height: 400px;overflow: hidden">
+                        <%--<form id="fileForm">--%>
+                            <%--<input type="file" id="file" name="file"/>--%>
+                            <%--<button type="button" id="button">测试上传excel按钮</button>--%>
+                        <%--</form>--%>
+                            <div class="file-box">
+                                <input type="file" class="file-btn"/>
+                                上传文件
+                            </div>
+                            <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
+                                <input  id="fcupload" type="file" name="file" class="cus-input">
+                                <input type="button" class="btn btn-default" onclick="doUpload();" value="上传"/>
+                            </form>
                     </div>
+                    <div class="tab-pane" id="fileUpload" style="min-height: 400px;overflow: hidden">
+                    <%--<form id="fileForm">--%>
+                    <%--<input type="file" id="file" name="file"/>--%>
+                    <%--<button type="button" id="button">测试上传excel按钮</button>--%>
+                    <%--</form>--%>
+                </div>
                 </div>
             </div>
         </div>
@@ -352,6 +401,50 @@
                     child.icon = "jstree-file";
                 }
             }
+        }
+
+        /*$("#button").on("click",function(){
+            var formData = new FormData();
+            formData = document.getElementById("fileForm");
+            $.ajax({
+                url: "/fileImport/excel",
+                type: 'post',
+                data: {},
+                // encType: 'multipart/form-data', //表明上传类型为文件
+                // dataType: "json",
+                // cache: false,//上传文件无需缓存
+                // processData: false,//用于对data参数进行序列化处理 这里必须false
+                // contentType: false, //必须
+                success: function(data){
+                    console.log(data);
+                }
+
+            });
+        })*/
+        function doUpload(){
+            $(".jcrop-holder").hide();
+            var formData = new FormData($( "#fileForm" )[0]);
+            formData.append("subjectCode",$.trim($("#subjectCode").val()));
+            $.ajax({
+                url: '${ctx}/fileImport/excel' ,
+                type: 'post',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    var resultJson = JSON.parse(result);
+                    if(resultJson["code"] === "error"){
+                        toastr["error"]("错误！", resultJson["message"]);
+                    } else{
+                        toastr["success"](resultJson["message"]+"！");
+                    }
+                },
+                error: function (returndata) {
+                    alert(returndata);
+                }
+            });
         }
     </script>
 </div>
