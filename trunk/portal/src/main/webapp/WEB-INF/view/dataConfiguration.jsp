@@ -17,6 +17,8 @@
     <title>数据发布管理系统</title>
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jstree/dist/themes/default/style.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/dataConfig.css">
+    <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/bootstrap.min.css">--%>
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/fileinput.min.css">
     <style type="text/css">
        /* .nav-tabs li a{
             font-size: 16px;
@@ -37,27 +39,6 @@
             background-color: white;
             border: 1px solid #e5e5e5;
         }
-       .file-box{
-           display: inline-block;
-           position: relative;
-           padding: 3px 5px;
-           overflow: hidden;
-           color:#fff;
-           background-color: #ccc;
-       }
-       .file-btn{
-           position: absolute;
-           width: 100%;
-           height: 100%;
-           top: 0;
-           left: 0;
-           outline: none;
-           background-color: transparent;
-           filter:alpha(opacity=0);
-           -moz-opacity:0;
-           -khtml-opacity: 0;
-           opacity: 0;
-       }
     </style>
 </head>
 
@@ -186,24 +167,24 @@
                     </div>--%>
                     <div class="tab-pane" id="excelUpload" style="min-height: 400px;overflow: hidden">
                         <%--<form id="fileForm">--%>
-                            <%--<input type="file" id="file" name="file"/>--%>
-                            <%--<button type="button" id="button">测试上传excel按钮</button>--%>
+                        <%--<input type="file" id="file" name="file"/>--%>
+                        <%--<button type="button" id="button">测试上传excel按钮</button>--%>
                         <%--</form>--%>
-                            <div class="file-box">
-                                <input type="file" class="file-btn"/>
-                                上传文件
-                            </div>
-                            <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
-                                <input  id="fcupload" type="file" name="file" class="cus-input">
-                                <input type="button" class="btn btn-default" onclick="doUpload();" value="上传"/>
-                            </form>
+                        <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
+                            <input id="fcupload" type="file" name="file" class="cus-input">
+                            <input type="button" class="btn btn-default" onclick="doUpload();" value="上传"/>
+                        </form>
                     </div>
+
                     <div class="tab-pane" id="fileUpload" style="min-height: 400px;overflow: hidden">
-                    <%--<form id="fileForm">--%>
-                    <%--<input type="file" id="file" name="file"/>--%>
-                    <%--<button type="button" id="button">测试上传excel按钮</button>--%>
-                    <%--</form>--%>
-                </div>
+                        <form enctype="multipart/form-data">
+                            <div style="height: 200px">
+                            <div class="file-loading" >
+                                <input id="file-4" type="file" class="file" data-theme="fas" multiple>
+                            </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -289,6 +270,7 @@
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
+    <script src="${ctx}/resources/bundles/bootstrap-fileinput/js/fileinput.min.js"></script>
     <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
 <%--
     <script src="${ctx}/resources/js/metaTemplate.js"></script>
@@ -301,6 +283,7 @@
             chooseTable(sub,0);
             loadTree();
         });
+
         var sub1 = '${sessionScope.SubjectCode}'
         $("#tabDescribe li").click(function () {
             var flag = $(this).val();
@@ -446,6 +429,30 @@
                 }
             });
         }
+
+        (function(){
+            $("#file-4").fileinput({
+                language: "zh",
+                theme: 'fas',
+                uploadUrl: "${ctx}/fileUpload/toFtp",
+                showUpload: true,
+                showCaption: false,
+                // browseClass: "btn btn-primary btn-lg",
+                browseClass:"btn btn-primary", //按钮样式
+                dropZoneEnabled: true,//是否显示拖拽区域 默认显示
+                fileType: "any",
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+                overwriteInitial: false,
+                hideThumbnailContent: true, // 隐藏文件的预览 以最小内容展示
+                maxFileCount: 1, // 允许选中的文件数量
+                uploadExtraData:function(){
+                    return {
+                        "subjectCode": $.trim($("#subjectCode").val())
+                    }
+                }
+
+            });
+        })()
     </script>
 </div>
 
