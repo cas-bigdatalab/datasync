@@ -2,14 +2,17 @@ package cn.csdb.portal.controller;
 
 import cn.csdb.portal.model.DataSrc;
 import cn.csdb.portal.model.Subject;
+import cn.csdb.portal.model.TableField;
 import cn.csdb.portal.repository.CheckUserDao;
 import cn.csdb.portal.service.FileImportService;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +21,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * @ClassName FileImportController
@@ -29,7 +33,7 @@ import java.io.InputStream;
 @Controller
 @RequestMapping("/fileImport")
 public class FileImportController {
-    private Logger logger= LoggerFactory.getLogger(FileImportController.class);
+    private Logger logger = LoggerFactory.getLogger(FileImportController.class);
     @Resource
     private FileImportService fileImportService;
 
@@ -62,4 +66,27 @@ public class FileImportController {
         return jsonObject;
     }
 
+    @PostMapping("/createTableAndInsertValue")
+    @ResponseBody
+    public JSONObject createTableAndInsertValue(HttpServletRequest request, @RequestParam(value = "file") MultipartFile file) {
+        JSONObject jsonObject = new JSONObject();
+        InputStream inputStream = null;
+        Workbook workBook = null;
+        String subjectCode = request.getParameter("subjectCode");
+        String tableData = request.getParameter("tableData");
+        String tableName = request.getParameter("tableName");
+        List<TableField> tableFields = JSON.parseArray(tableData, TableField.class);
+        if (!file.isEmpty()) {
+            try {
+                inputStream = file.getInputStream();
+                workBook = WorkbookFactory.create(inputStream);
+            } catch (InvalidFormatException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        fileImportService.createTableAndInsertValue(tableName,tableFields, workBook, subjectCode);
+        return jsonObject;
+    }
 }
