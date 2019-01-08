@@ -79,11 +79,7 @@ public class FileImportService {
             Map<String, Map<String, List<String>>> tableResult = new LinkedHashMap<>();
             Map<String, List<String>> stringListMap = new LinkedHashMap<>();
             if (tableIsExist) {
-                try {
-                    stringListMap = tableField(key, connection);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                stringListMap = tableField(key, connection);
             }
             // excel当前表不存在 选择字段类型、长度、是否主键
             stringListMap.put("excelField", value.get(1));
@@ -136,14 +132,43 @@ public class FileImportService {
             Map.Entry<String, List<List<String>>> next = iterator.next();
             List<List<String>> value = next.getValue();
             boolean insertValue = insertValue(connection, tableName, value);
-            if(insertValue){
+            if (!insertValue) {
                 jsonObject.put("code", "error");
                 jsonObject.put("message", "数据插入失败");
                 return jsonObject;
             }
         }
         jsonObject.put("code", "success");
-        jsonObject.put("message", tableName+"创建成功，数据增添成功");
+        jsonObject.put("message", tableName + "创建成功，数据增添成功");
+        return jsonObject;
+    }
+
+    @Transactional
+    public JSONObject onlyInsertValue(String tableName, List<TableField> tableFields, Workbook workbook, String subjectCode) {
+        JSONObject jsonObject = new JSONObject();
+        Map<String, List<List<String>>> mapSheet = new LinkedHashMap<>();
+        parseExcel(workbook, mapSheet);
+        // 获取当前用户的MySQL连接
+        DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
+        Connection connection = getConnection(dataSrc);
+        if (connection == null) {
+            jsonObject.put("code", "error");
+            jsonObject.put("message", "数据库连接异常");
+            return jsonObject;
+        }
+        Iterator<Map.Entry<String, List<List<String>>>> iterator = mapSheet.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<String, List<List<String>>> next = iterator.next();
+            List<List<String>> value = next.getValue();
+            boolean insertValue = onlyInsertSql(tableName, tableFields, value, connection);
+            if(!insertValue){
+                jsonObject.put("code","error");
+                jsonObject.put("message","数据添加失败");
+                return jsonObject;
+            }
+        }
+        jsonObject.put("code","success");
+        jsonObject.put("message","数据添加成功");
         return jsonObject;
     }
 
@@ -173,6 +198,7 @@ public class FileImportService {
         }
         return "1".equals(num);
     }
+
 
     /**
      * 处理excel生成 Map<表名，List<行值>>
@@ -214,6 +240,7 @@ public class FileImportService {
         }
     }
 
+
     /**
      * 根据当前用户获取相关连接信息
      *
@@ -233,6 +260,7 @@ public class FileImportService {
         return datasrc;
     }
 
+
     /**
      * 获取数据库连接
      *
@@ -245,6 +273,7 @@ public class FileImportService {
         return connection;
     }
 
+
     /**
      * 获取 已存在表的字段名称 & 字段注释 & 是否主键
      *
@@ -253,22 +282,36 @@ public class FileImportService {
      * @return
      * @throws SQLException
      */
-    private Map<String, List<String>> tableField(String tableName, Connection connection) throws SQLException {
+    private Map<String, List<String>> tableField(String tableName, Connection connection) {
         Map<String, List<String>> tableField = new LinkedHashMap<>();
         List<String> fieldList = new LinkedList<>();
         List<String> commentList = new LinkedList<>();
+        List<String> priKey = new LinkedList<>();
         StringBuilder sb = new StringBuilder("SHOW FULL COLUMNS FROM ");
         sb.append(tableName);
-        PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
-        ResultSet resultSet = preparedStatement.executeQuery();
-        while (resultSet.next()) {
-            fieldList.add(resultSet.getString("Field"));
-            commentList.add(resultSet.getString("Comment"));
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                fieldList.add(resultSet.getString("Field"));
+                commentList.add(resultSet.getString("Comment"));
+                priKey.add(resultSet.getString("Key"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.error("获取表" + tableName + "字段属性值错误！");
+            try {
+                connection.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
         }
         tableField.put("tableField", fieldList);
         tableField.put("tableComment", commentList);
+        tableField.put("priKey", priKey);
         return tableField;
     }
+
 
     /**
      * 将table & excel 数据格式化输出 适合页面渲染
@@ -286,20 +329,24 @@ public class FileImportService {
             List<String> list1 = tableMap.get("tableComment");
             List<String> list2 = tableMap.get("excelField");
             List<String> list3 = tableMap.get("excelComment");
+            // 主键标识
+            List<String> list4 = tableMap.get("priKey");
             int tableSize = list == null ? 0 : list.size();
             int excelSize = list2 == null ? 0 : list2.size();
             for (int i = 0; i < tableSize || i < excelSize; i++) {
                 List<String> l = new LinkedList<>();
                 if (i >= tableSize) {
-//                    l.add("");
-//                    l.add("");
+                    l.add("");
+                    l.add("");
+                    l.add("");
                 } else {
                     l.add(list.get(i));
                     l.add(list1.get(i));
+                    l.add(list4.get(i));
                 }
                 if (i >= excelSize) {
-//                    l.add("");
-//                    l.add("");
+                    l.add("");
+                    l.add("");
                 } else {
                     l.add(list2.get(i));
                     l.add(list3.get(i));
@@ -342,7 +389,7 @@ public class FileImportService {
             sb.append("`" + field + "`  ");
             sb.append(type);
             sb.append("(" + length + ")");
-            sb.append("COMMENT '"+comment+"'");
+            sb.append("COMMENT '" + comment + "'");
             if ("1".equals(pk)) {
                 sb.append(" PRIMARY KEY");
             }
@@ -356,6 +403,12 @@ public class FileImportService {
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
+            logger.error("创建表" + tableName + "失败");
+            try {
+                connection.close();
+            } catch (SQLException ee) {
+                ee.printStackTrace();
+            }
             return false;
         }
         return true;
@@ -364,6 +417,7 @@ public class FileImportService {
 
     /**
      * 插入数据
+     *
      * @param connection
      * @param tableName
      * @param value
@@ -380,7 +434,12 @@ public class FileImportService {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Error: 生成insert语句获取列名称错误");
+            logger.error(tableName + "生成insert语句获取列名称错误");
+            try {
+                connection.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
             return false;
         }
         if (sb.toString().endsWith(",")) {
@@ -415,12 +474,97 @@ public class FileImportService {
                 // 首次插入失败 删除表
                 PreparedStatement preparedStatement = connection.prepareStatement("drop table " + tableName);
                 preparedStatement.execute();
-            } catch (SQLException ee) {
-                ee.printStackTrace();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            } finally {
+                try {
+                    connection.close();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
             }
             return false;
         }
         return true;
     }
 
+
+    private boolean onlyInsertSql(String tableName, List<TableField> tableFields, List<List<String>> value, Connection connection) {
+        // excel字段名称
+        List<String> excelField = value.get(1);
+        // 插入的数据
+        List<List<String>> insertValue = value.subList(2, value.size());
+        // k:表字段名->v:excel字段名
+        Map<String, String> fieldMapping = new LinkedHashMap<>();
+        // 前端数据 原始表字段顺序
+        List<String> tableFiled = new ArrayList<>();
+        // 前端数据 原始表字段对应excel字段顺序
+        List<String> newField = new ArrayList<>();
+        // excel数据位置
+        List<String> orderNum = new ArrayList<>();
+
+        StringBuffer sb = new StringBuffer("INSERT INTO `" + tableName + "`");
+        for (TableField t : tableFields) {
+            tableFiled.add(t.getOldField());
+            newField.add(t.getField());
+            fieldMapping.put(t.getOldField(), t.getField());
+        }
+
+        Iterator<Map.Entry<String, String>> iterator = fieldMapping.entrySet().iterator();
+        sb.append("( ");
+        while (iterator.hasNext()) {
+            Map.Entry<String, String> next = iterator.next();
+            String k = next.getKey();
+            String v = next.getValue();
+            if (!"-1".equals(v)) {
+                sb.append(k + ",");
+            }
+        }
+
+        for (String n : newField) {
+            for (int i = 0; i < excelField.size(); i++) {
+                String s = excelField.get(i);
+                if (n.equals(s)) {
+                    orderNum.add(Integer.valueOf(i).toString());
+                    break;
+                }
+            }
+        }
+        if (sb.toString().endsWith(",")) {
+            sb.replace(sb.length() - 1, sb.length(), " )");
+        }
+        sb.append(" VALUES ");
+        Iterator<List<String>> iteratorV = insertValue.iterator();
+        while (iteratorV.hasNext()) {
+            sb.append("( ");
+            List<String> next = iteratorV.next();
+            for (String i : orderNum) {
+                int j = Integer.parseInt(i);
+                sb.append("'" + next.get(j) + "',");
+            }
+            if (sb.toString().endsWith(",")) {
+                sb.replace(sb.length() - 1, sb.length(), "),");
+            }
+        }
+        if (sb.toString().endsWith(",")) {
+            sb.replace(sb.length() - 1, sb.length(), "");
+        }
+        String sql = sb.toString();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+            logger.error("ERROR: "+tableName+"插入数据失败");
+            return false;
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
+    }
 }

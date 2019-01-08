@@ -121,12 +121,41 @@
             {{if i > 0}}
             <tr>
                 {{each v as vv ii}}
+                {{if ii == 0 || ii == 1}}
                 <td>
                     {{vv}}
                 </td>
+                {{/if}}
                 {{/each}}
 
-                <td><input type="radio" name="isPK" field={{v[0]}} disabled/></td>
+
+                <td>
+                    <select>
+                        <option  value="-1">不匹配任何字段</option>
+                        {{each data as vd id}}
+                            {{if id > 0 }}
+                                {{if id == i}}
+                                <option selected="selected" value={{vd[3]}}>{{vd[3]}}</option>
+                                {{else}}
+                                <option value={{vd[3]}}>{{vd[3]}}</option>
+                                {{/if}}
+                            {{/if}}
+                        {{/each}}
+                    </select>
+                </td>
+
+
+                {{each v as vv ii}}
+                {{if ii == 4}}
+                <td>{{vv}}</td>
+                {{/if}}
+                {{/each}}
+
+                {{if v[2] == "PRI"}}
+                <td><input type="radio" name="isPK" fieldPk={{v[0]}} checked disabled/></td>
+                {{else }}
+                <td><input type="radio" name="isPK"  disabled/></td>
+                {{/if}}
             </tr>
             {{/if}}
             {{/each}}
@@ -153,11 +182,15 @@
             {{if i > 0}}
             <tr>
                 <td>{{i}}</td>
+
                 {{each v as vv ii}}
+                {{if ii > 2}}
                 <td>
                     <input name={{vv}} value={{vv}} />
                 </td>
+                {{/if}}
                 {{/each}}
+
                 <td>
                     <select fieldType={{v[0]}}>
                         <option value="0" selected>请选择字段类型</option>
@@ -166,6 +199,7 @@
                         <option value="text">text</option>
                     </select>
                 </td>
+
                 <td>
                     <input placeholder="请输入字段长度" fieldLength={{v[0]}} />
                 </td>

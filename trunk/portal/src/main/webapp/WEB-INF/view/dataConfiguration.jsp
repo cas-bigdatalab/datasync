@@ -185,7 +185,7 @@
                                                         </ul>
                                                     </div>
                                                     <div class="tab-content" style="background-color: white;min-height:300px;
-                                                    max-height:70%;padding-top: 20px ; overflow: scroll;" id="tableNamePDiv">
+                                                    max-height:70%;padding-top: 20px ;" id="tableNamePDiv"> <%--overflow: scroll;--%>
                                                     </div>
                                                 </div>
                                             </div>
@@ -482,77 +482,124 @@
             }
             var table = $(_this).parent().prev().find(".active table")[0];
             var tableData = getTableData(table);
-            if(tableData){
-                var data = new FormData($( "#fileForm" )[0]);
-                var s = JSON.stringify(tableData);
-                data.append("tableData",s);
-                data.append("subjectCode",$.trim($("#subjectCode").val()));
-                data.append("tableName",tableName);
+            var size = tableData.data.length;
+            if (size) {
+                var data = new FormData($("#fileForm")[0]);
+                var s = JSON.stringify(tableData.data);
+                data.append("tableData", s);
+                data.append("subjectCode", $.trim($("#subjectCode").val()));
+                data.append("tableName", tableName);
+
+                var requestUrl = "";
+                if (tableData.type === "insert") {
+                    requestUrl = "${ctx}/fileImport/onlyInsertValue";
+                } else {
+                    requestUrl = "${ctx}/fileImport/createTableAndInsertValue";
+                }
                 $.ajax({
-                    type:"POST",
-                    url:"${ctx}/fileImport/createTableAndInsertValue",
+                    type: "POST",
+                    url: requestUrl,
                     data: data,
                     async: false,
                     cache: false,
                     contentType: false,
                     processData: false,
-                    success:function(data){
-
+                    success: function (data) {
+                        var jsonData = JSON.parse(data);
+                        if (jsonData.code === "error") {
+                            toastr["error"]("错误！", jsonData.message);
+                        } else {
+                            toastr["success"]("提示！", jsonData.message);
+                        }
                     }
                 })
             }
 
+            /**
+            * 将表格数据转化为 json格式
+            * @param table
+            * @returns {*}
+            */
             function getTableData(table) {
+                var result = {};
                 var rows = table.rows;
                 var rowLength = rows.length;
                 var trl = [];
                 for (var i = 1; i < rowLength; i++) {
                     var cells = rows[i].cells;
                     var cellLength = cells.length;
+                    /*
+                    * 根据cellLength 区分
+                    * 6:新增表 并新增数据
+                    * 5：比对数据库已存在表字段 与excel新导入字段 导入新增数据
+                    * */
                     if (cellLength === 6) {
-                        var tdl = {};
-                        for (var j = 0; j < cellLength; j++) {
-                            if (j === 1) {
-                                var fieldName = $.trim($(cells[j]).find("input").val());
-                                /*if(fieldName === ""){
-                                    toastr["error"]("错误！","第"+i+"行 请输入字段名称！");
-                                    return false;
-                                }*/
-                                tdl["field"] = fieldName;
-                            } else if (j === 2) {
-                                var fieldComment = $.trim($(cells[j]).find("input").val());
-                                /*if(fieldComment === ""){
-                                    toastr["error"]("错误！","第"+i+"行 请输入字段注释！");
-                                    return false;
-                                }*/
-                                tdl["comment"] = fieldComment;
-                            } else if (j === 3) {
-                                var fieldType = $(cells[j]).find("select :selected").val();
-                                /*if(fieldType === "0"){
-                                    toastr["error"]("错误！","第"+i+"行 请选择字段类型！");
-                                    return false;
-                                }*/
-                                tdl["type"] = fieldType;
-                            } else if (j === 4) {
-                                var fieldLength = $.trim($(cells[j]).find("input").val());
-                                var reg = /^[1-9]\d*$/;
-                                /*if(!reg.test(fieldLength)){
-                                    toastr["error"]("错误！","第"+i+"行 字段长度有误！");
-                                    return false;
-                                }*/
-                                tdl["length"] = fieldLength;
-                            } else if (j === 5) {
-                                var length = $(cells[j]).find("input:checked").length;
-                                tdl["pk"] = length;
-                            }
-                        }
-                        trl.push(tdl);
+                        serializeTableFor6(cellLength,cells,trl,i);
+                        result["type"]="createAndInsert";
+                    }
+                    if(cellLength === 5){
+                        serializeTableFor5(cellLength,cells,trl,i);
+                        result["type"]="insert";
                     }
                 }
-                return trl;
+                result["data"]=trl;
+                return result;
             }
+        }
 
+        function serializeTableFor6(cellLength, cells, trl) {
+            var tdl = {};
+            for (var j = 0; j < cellLength; j++) {
+                if (j === 1) {
+                    var fieldName = $.trim($(cells[j]).find("input").val());
+                    if (fieldName === "") {
+                        toastr["error"]("错误！", "第" + i + "行 请输入字段名称！");
+                        return false;
+                    }
+                    tdl["field"] = fieldName;
+                } else if (j === 2) {
+                    var fieldComment = $.trim($(cells[j]).find("input").val());
+                    if (fieldComment === "") {
+                        toastr["error"]("错误！", "第" + i + "行 请输入字段注释！");
+                        return false;
+                    }
+                    tdl["comment"] = fieldComment;
+                } else if (j === 3) {
+                    var fieldType = $(cells[j]).find("select :selected").val();
+                    if (fieldType === "0") {
+                        toastr["error"]("错误！", "第" + i + "行 请选择字段类型！");
+                        return false;
+                    }
+                    tdl["type"] = fieldType;
+                } else if (j === 4) {
+                    var fieldLength = $.trim($(cells[j]).find("input").val());
+                    var reg = /^[1-9]\d*$/;
+                    if (!reg.test(fieldLength)) {
+                        toastr["error"]("错误！", "第" + i + "行 字段长度有误！");
+                        return false;
+                    }
+                    tdl["length"] = fieldLength;
+                } else if (j === 5) {
+                    var length = $(cells[j]).find("input:checked").length;
+                    tdl["pk"] = length;
+                }
+            }
+            trl.push(tdl);
+        }
 
+        function serializeTableFor5(cellLength, cells, trl, i) {
+            var tdl = {};
+            for (var j = 0; j < cellLength; j++) {
+                if (j === 0) {
+                    tdl["oldField"] = $.trim($(cells[j]).text());
+                }
+                if (j === 2) {
+                    tdl["field"] = $.trim($(cells[j]).find("select :selected").val());
+                    var num = $(cells[j]).find(":checked").val();
+                    tdl["insertNum"] = num === -1 ? -1 : num - 1;
+                }
+            }
+            trl.push(tdl);
         }
         // 初始化 bootstrap-fileinput 上传组件
         (function(){
@@ -577,7 +624,8 @@
                 }
 
             });
-        })()
+        })();
+
     </script>
 </div>
 

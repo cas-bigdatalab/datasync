@@ -86,7 +86,31 @@ public class FileImportController {
                 e.printStackTrace();
             }
         }
-        fileImportService.createTableAndInsertValue(tableName,tableFields, workBook, subjectCode);
+        jsonObject = fileImportService.createTableAndInsertValue(tableName, tableFields, workBook, subjectCode);
+        return jsonObject;
+    }
+
+    @PostMapping("/onlyInsertValue")
+    @ResponseBody
+    public JSONObject onlyInsertValue (HttpServletRequest request, @RequestParam(value = "file") MultipartFile file){
+        JSONObject jsonObject = new JSONObject();
+        InputStream inputStream = null;
+        Workbook workBook = null;
+        String subjectCode = request.getParameter("subjectCode");
+        String tableData = request.getParameter("tableData");
+        String tableName = request.getParameter("tableName");
+        List<TableField> tableFields = JSON.parseArray(tableData, TableField.class);
+        if (!file.isEmpty()) {
+            try {
+                inputStream = file.getInputStream();
+                workBook = WorkbookFactory.create(inputStream);
+            } catch (InvalidFormatException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+            fileImportService.onlyInsertValue(tableName, tableFields, workBook, subjectCode);
         return jsonObject;
     }
 }

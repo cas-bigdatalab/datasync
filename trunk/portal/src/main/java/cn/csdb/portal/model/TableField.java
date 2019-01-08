@@ -19,6 +19,8 @@ public class TableField {
     private String type;
     private String length;
     private String pk;
+    private String insertNum;
+
 
     public String getOldField() {
         return oldField;
@@ -76,4 +78,11 @@ public class TableField {
         this.pk = pk;
     }
 
+    public String getInsertNum() {
+        return insertNum;
+    }
+
+    public void setInsertNum(String insertNum) {
+        this.insertNum = insertNum;
+    }
 }
