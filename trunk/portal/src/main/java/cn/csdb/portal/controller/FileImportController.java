@@ -84,7 +84,9 @@ public class FileImportController {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+
             }
+
         }
         jsonObject = fileImportService.createTableAndInsertValue(tableName, tableFields, workBook, subjectCode);
         return jsonObject;
