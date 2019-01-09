@@ -17,6 +17,8 @@
     <title>数据发布管理系统</title>
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/jstree/dist/themes/default/style.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/dataConfig.css">
+    <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/bootstrap.min.css">--%>
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/fileinput.min.css">
     <style type="text/css">
        /* .nav-tabs li a{
             font-size: 16px;
@@ -30,6 +32,13 @@
         .nav-tabs>li.active>a:hover{
             background-color: #28a4a4!important;
         }*/
+        .cus-input{
+            font-size: 14px;
+            font-weight: normal;
+            color: #333333;
+            background-color: white;
+            border: 1px solid #e5e5e5;
+        }
     </style>
 </head>
 
@@ -128,8 +137,12 @@
                             文件数据</a>
                     </li>
                     <li value="3">
-                        <a href="#exceldownload" data-toggle="tab">
+                        <a href="#excelUpload" data-toggle="tab">
                             Excel上传</a>
+                    </li>
+                    <li value="4">
+                        <a href="#fileUpload" data-toggle="tab">
+                            上传文件</a>
                     </li>
                 </ul>
                 <!--tab content-->
@@ -152,8 +165,50 @@
 
                         </div>
                     </div>--%>
-                    <div class="tab-pane" id="exceldownload" style="min-height: 400px;overflow: hidden">
+                    <div class="tab-pane" id="excelUpload" style="min-height: 400px;overflow: hidden">
+                        <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
+                            <input id="fcupload" type="file" name="file" class="cus-input">
+                            <input type="button" class="btn btn-default" onclick="doUpload();" value="上传"/>
+                        </form>
+                        <div  tabindex="-1" data-width="200">
+                            <div class="" style="width:auto">
+                                <div class="">
+                                    <div class="">
+                                        <h4 class="modal-title" id="4"></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="portlet box green-haze" style="border:0;">
+                                                    <div class="portlet-title">
+                                                        <ul class="nav nav-tabs" style="float:left;" id="tableNameUl">
+                                                        </ul>
+                                                    </div>
+                                                    <div class="tab-content" style="background-color: white;min-height:300px;
+                                                    max-height:70%;padding-top: 20px ;" id="tableNamePDiv"> <%--overflow: scroll;--%>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" onclick="createTableAndInsertValue(this)" data-dismiss="modal" class="btn green">保存
+                                        </button>
+                                        <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="tab-pane" id="fileUpload" style="min-height: 400px;overflow: hidden">
+                        <form enctype="multipart/form-data">
+                            <div style="height: 200px">
+                            <div class="file-loading" >
+                                <input id="file-4" type="file" class="file" data-theme="fas" multiple>
+                            </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -240,6 +295,7 @@
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
+    <script src="${ctx}/resources/bundles/bootstrap-fileinput/js/fileinput.min.js"></script>
     <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
 <%--
     <script src="${ctx}/resources/js/metaTemplate.js"></script>
@@ -252,6 +308,7 @@
             chooseTable(sub,0);
             loadTree();
         });
+
         var sub1 = '${sessionScope.SubjectCode}'
         $("#tabDescribe li").click(function () {
             var flag = $(this).val();
@@ -353,6 +410,222 @@
                 }
             }
         }
+
+        /**
+        * 上传excel 成功后显示字段内容
+        */
+        function doUpload(){
+            var formData = new FormData($( "#fileForm" )[0]);
+            var fileName = formData.get("file").name;
+            if(fileName=== undefined){
+                toastr["warning"]("提示！", "请选择文件");
+                return;
+            }
+            var allFileType=".xls|";
+            var s = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
+             if(allFileType.indexOf(s+"|") === -1){
+                toastr["warning"]("提示！", "请选择上传Excel2007以上版本文件");
+                return;
+            }
+            formData.append("subjectCode",$.trim($("#subjectCode").val()));
+            $.ajax({
+                url: '${ctx}/fileImport/excel' ,
+                type: 'post',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    var resultJson = JSON.parse(result);
+                    if(resultJson["code"] === "error"){
+                        toastr["error"]("错误！", resultJson["message"]);
+                    } else{
+                        var data = resultJson.data;
+                        var tableName = template("tableNameLi",{"data":data});
+                        $("#tableNameUl").html("");
+                        $("#tableNameUl").html(tableName);
+                        var tableNameDiv = template("tableNameDiv",{"data":data});
+                        $("#tableNamePDiv").html("");
+                        $("#tableNamePDiv").html(tableNameDiv);
+                        $.each(data,function(key,value){
+                            $.each(value,function(k,v){
+                                var tableField;
+                                var exist = v[0][0] ;
+                                if (exist === "isExist") {
+                                    tableField = template("tableFieldIsExist",{"data":v});
+                                } else {
+                                    tableField = template("tableFieldNotExist",{"data":v});
+                                }
+                                $("#"+k).html("");
+                                $("#"+k).append(tableField);
+                            })
+
+                        })
+                    }
+                },
+                error: function (returndata) {
+                    toastr["error"]("错误！", returndata);
+                }
+            });
+        }
+
+        /**
+        * 创建表并保存数据 || 仅保存数据
+        */
+        function createTableAndInsertValue(_this) {
+            var tableName = $(_this).parent().prev().find("li.active a").attr("href").substring(1);
+            var tableNum = $(_this).parent().prev().find(".active table").length;
+            if(tableNum === 0){
+                toastr["error"]("错误！","请上传数据Excel");
+                return;
+            }
+            var table = $(_this).parent().prev().find(".active table")[0];
+            var tableData = getTableData(table);
+            var size = tableData.data.length;
+            if (size) {
+                var data = new FormData($("#fileForm")[0]);
+                var s = JSON.stringify(tableData.data);
+                data.append("tableData", s);
+                data.append("subjectCode", $.trim($("#subjectCode").val()));
+                data.append("tableName", tableName);
+
+                var requestUrl = "";
+                if (tableData.type === "insert") {
+                    requestUrl = "${ctx}/fileImport/onlyInsertValue";
+                } else {
+                    requestUrl = "${ctx}/fileImport/createTableAndInsertValue";
+                }
+                $.ajax({
+                    type: "POST",
+                    url: requestUrl,
+                    data: data,
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        var jsonData = JSON.parse(data);
+                        if (jsonData.code === "error") {
+                            toastr["error"]("错误！", jsonData.message);
+                        } else {
+                            toastr["success"]("提示！", jsonData.message);
+                        }
+                    }
+                })
+            }
+
+            /**
+            * 将表格数据转化为 json格式
+            * @param table
+            * @returns {*}
+            */
+            function getTableData(table) {
+                var result = {};
+                var rows = table.rows;
+                var rowLength = rows.length;
+                var trl = [];
+                for (var i = 1; i < rowLength; i++) {
+                    var cells = rows[i].cells;
+                    var cellLength = cells.length;
+                    /*
+                    * 根据cellLength 区分
+                    * 6:新增表 并新增数据
+                    * 5：比对数据库已存在表字段 与excel新导入字段 导入新增数据
+                    * */
+                    if (cellLength === 6) {
+                        serializeTableFor6(cellLength,cells,trl,i);
+                        result["type"]="createAndInsert";
+                    }
+                    if(cellLength === 5){
+                        serializeTableFor5(cellLength,cells,trl,i);
+                        result["type"]="insert";
+                    }
+                }
+                result["data"]=trl;
+                return result;
+            }
+        }
+
+        function serializeTableFor6(cellLength, cells, trl) {
+            var tdl = {};
+            for (var j = 0; j < cellLength; j++) {
+                if (j === 1) {
+                    var fieldName = $.trim($(cells[j]).find("input").val());
+                    if (fieldName === "") {
+                        toastr["error"]("错误！", "第" + i + "行 请输入字段名称！");
+                        return false;
+                    }
+                    tdl["field"] = fieldName;
+                } else if (j === 2) {
+                    var fieldComment = $.trim($(cells[j]).find("input").val());
+                    if (fieldComment === "") {
+                        toastr["error"]("错误！", "第" + i + "行 请输入字段注释！");
+                        return false;
+                    }
+                    tdl["comment"] = fieldComment;
+                } else if (j === 3) {
+                    var fieldType = $(cells[j]).find("select :selected").val();
+                    if (fieldType === "0") {
+                        toastr["error"]("错误！", "第" + i + "行 请选择字段类型！");
+                        return false;
+                    }
+                    tdl["type"] = fieldType;
+                } else if (j === 4) {
+                    var fieldLength = $.trim($(cells[j]).find("input").val());
+                    var reg = /^[1-9]\d*$/;
+                    if (!reg.test(fieldLength)) {
+                        toastr["error"]("错误！", "第" + i + "行 字段长度有误！");
+                        return false;
+                    }
+                    tdl["length"] = fieldLength;
+                } else if (j === 5) {
+                    var length = $(cells[j]).find("input:checked").length;
+                    tdl["pk"] = length;
+                }
+            }
+            trl.push(tdl);
+        }
+
+        function serializeTableFor5(cellLength, cells, trl, i) {
+            var tdl = {};
+            for (var j = 0; j < cellLength; j++) {
+                if (j === 0) {
+                    tdl["oldField"] = $.trim($(cells[j]).text());
+                }
+                if (j === 2) {
+                    tdl["field"] = $.trim($(cells[j]).find("select :selected").val());
+                    var num = $(cells[j]).find(":checked").val();
+                    tdl["insertNum"] = num === -1 ? -1 : num - 1;
+                }
+            }
+            trl.push(tdl);
+        }
+        // 初始化 bootstrap-fileinput 上传组件
+        (function(){
+            $("#file-4").fileinput({
+                language: "zh",
+                theme: 'fas',
+                uploadUrl: "${ctx}/fileUpload/toFtp",
+                showUpload: true,
+                showCaption: false,
+                // browseClass: "btn btn-primary btn-lg",
+                browseClass:"btn btn-primary", //按钮样式
+                dropZoneEnabled: true,//是否显示拖拽区域 默认显示
+                fileType: "any",
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+                overwriteInitial: false,
+                hideThumbnailContent: true, // 隐藏文件的预览 以最小内容展示
+                maxFileCount: 1, // 允许选中的文件数量
+                uploadExtraData:function(){
+                    return {
+                        "subjectCode": $.trim($("#subjectCode").val())
+                    }
+                }
+
+            });
+        })();
+
     </script>
 </div>
 

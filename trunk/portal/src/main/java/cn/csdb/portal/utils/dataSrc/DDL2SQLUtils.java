@@ -1,10 +1,14 @@
 package cn.csdb.portal.utils.dataSrc;
 
+import com.alibaba.fastjson.JSONObject;
+import com.mongodb.util.JSON;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -19,7 +23,7 @@ public class DDL2SQLUtils {
      * generate a ddl sql from tables
      */
     public static String generateDDLFromTable(Connection jdbcConnection, String catalog, String schema,
-                                        String table) {
+                                              String table) {
         StringBuilder sb = new StringBuilder();
         sb.append("DROP TABLE IF EXISTS " + table + " ; \n");
         sb.append("CREATE TABLE " + table + "(");
@@ -118,7 +122,7 @@ public class DDL2SQLUtils {
     }
 
     /**
-     *  get Primary Key List
+     * get Primary Key List
      */
     private static List<String> getPKs(Connection jdbcConnection, String catalog, String schema, String table) {
         List<String> pks = new ArrayList<String>();
@@ -160,7 +164,7 @@ public class DDL2SQLUtils {
 
                 int chiffresApresVirgule = 0;
                 if ((type.equalsIgnoreCase("NUMBER")) || (type.equalsIgnoreCase("NUMERIC"))
-                        || (type.equalsIgnoreCase("DECIMAL"))  || (type.equalsIgnoreCase("FLOAT"))   || (type.equalsIgnoreCase("DOUBLE"))    ) {
+                        || (type.equalsIgnoreCase("DECIMAL")) || (type.equalsIgnoreCase("FLOAT")) || (type.equalsIgnoreCase("DOUBLE"))) {
                     type = "NUMERIC";
                     chiffresApresVirgule = metaData.getScale(index);
                 } else if (type.equalsIgnoreCase("VARCHAR2")) {
@@ -198,7 +202,7 @@ public class DDL2SQLUtils {
                 sb.append(",");
             }
             if (sb.toString().endsWith(",")) {
-                sb.replace(sb.length()-1, sb.length(), " ");
+                sb.replace(sb.length() - 1, sb.length(), " ");
             }
             sb.append("\n);\n");
 
@@ -212,7 +216,7 @@ public class DDL2SQLUtils {
     /**
      * generate Insert data Sql from a SQL string
      */
-    public static String generateInsertSqlFromSQL(Connection jdbcConnection,  String sql, String logicTable) {
+    public static String generateInsertSqlFromSQL(Connection jdbcConnection, String sql, String logicTable) {
         StringBuilder result = new StringBuilder();
         try {
             PreparedStatement stmt = jdbcConnection.prepareStatement(sql);
@@ -295,11 +299,11 @@ public class DDL2SQLUtils {
             if (!f.exists()) {
                 f.mkdirs();
             }
-            path = path +File.separator + FileName;
+            path = path + File.separator + FileName;
             f = new File(path);
             PrintWriter out;
-            out = new PrintWriter(f,"UTF-8");
-            out.print(body +"\n");
+            out = new PrintWriter(f, "UTF-8");
+            out.print(body + "\n");
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -309,4 +313,97 @@ public class DDL2SQLUtils {
         return false;
     }
 
+
+    public static boolean tableIsExist(Connection connection, String catalog, String schema, String table) {
+        StringBuilder sql = new StringBuilder("");
+        sql.append("select COUNT(1) AS num from information_schema.TABLES t WHERE t.TABLE_SCHEMA = '" + schema + "' AND t.TABLE_NAME = '" + table + "'");
+        String num = "";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql.toString());
+            ResultSet res = preparedStatement.executeQuery();
+            while (res.next()) {
+                num = res.getString("num");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error: could not retrieve data for the sql '" + sql + "' from the backend.");
+        }
+        return "1".equals(num);
+    }
+
+    public static JSONObject verifyField(Connection connection, String catalog, String schema, String table, List<String> fields) {
+        JSONObject jsonObject = new JSONObject();
+        String name = "";
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet res = metaData.getColumns(null, schema, table, null);
+            while (res.next()) {
+                name = res.getString("COLUMN_NAME");
+                boolean contains = fields.contains(name);
+                if (!contains){
+                    jsonObject.put("code","error");
+                    jsonObject.put("message",name+"不存在");
+                    return jsonObject;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            jsonObject.put("code","error");
+            jsonObject.put("message","比较字段名称异常");
+            return jsonObject;
+        }
+        jsonObject.put("code","success");
+       return jsonObject;
+    }
+
+    public static String createNewTable(Connection connection, String catalog, String schema, String table, List<String> fields, String pk) {
+//        StringBuilder sb = new StringBuilder("DROP TABLE IF EXISTS `" + table + "` ; ");
+        StringBuilder sb = new StringBuilder("");
+        sb.append("CREATE TABLE `" + table + "`(");
+        for(String f :fields){
+            sb.append(f);
+            sb.append(" VARCHAR(128),");
+        }
+        if(sb.toString().endsWith(",")){
+            sb.replace(sb.length()-1,sb.length()," ");
+        }
+        sb.append(");");
+        return sb.toString();
+    }
+
+    public static String insertSql(Connection connection,String tableName,List<List<String>> value){
+        StringBuilder sb = new StringBuilder("INSERT INTO `"+tableName+"`(");
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet res = metaData.getColumns(null, null, tableName, null);
+            while (res.next()){
+                sb.append(res.getString("COLUMN_NAME"));
+                sb.append(",");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error: 生成insert语句获取列名称错误");
+        }
+        if(sb.toString().endsWith(",")){
+            sb.replace(sb.length()-1,sb.length()," )");
+        }
+        sb.append("values");
+        Iterator<List<String>> iterator = value.iterator();
+        while (iterator.hasNext()){
+            List<String> next = iterator.next();
+            sb.append("( ");
+            Iterator<String> iterator1 = next.iterator();
+            while (iterator1.hasNext()){
+                String next1 = iterator1.next();
+                sb.append("'"+next1+"',");
+            }
+            if(sb.toString().endsWith(",")){
+                sb.replace(sb.length()-1,sb.length()," ),");
+            }
+        }
+        if(sb.toString().endsWith(",")){
+            sb.replace(sb.length()-1,sb.length()," ");
+        }
+        return sb.toString();
+    }
 }
