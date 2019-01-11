@@ -370,6 +370,7 @@ public class FileImportService {
      * @return
      */
     private Boolean createTableSql(Connection connection, String tableName, List<TableField> tableFields) {
+        List<String> primaryKeys = new ArrayList<>(3);
         StringBuffer sb = new StringBuffer("CREATE TABLE ");
         sb.append(tableName);
         sb.append("(");
@@ -386,13 +387,17 @@ public class FileImportService {
             sb.append("(" + length + ")");
             sb.append("COMMENT '" + comment + "'");
             if ("1".equals(pk)) {
-                sb.append(" PRIMARY KEY");
+                primaryKeys.add(field);
             }
             sb.append(",");
         }
-        if (sb.toString().endsWith(",")) {
-            sb.replace(sb.length() - 1, sb.length(), " )");
+        sb.append("PORTALID INT not null AUTO_INCREMENT COMMENT '中心端系统ID', PRIMARY KEY (");
+        if (primaryKeys.size() != 0) {
+            for (String s : primaryKeys) {
+                sb.append("`" + s + "`,");
+            }
         }
+        sb.append("PORTALID))");
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sb.toString());
             preparedStatement.execute();
@@ -425,7 +430,11 @@ public class FileImportService {
             DatabaseMetaData metaData = connection.getMetaData();
             ResultSet res = metaData.getColumns(null, null, tableName, null);
             while (res.next()) {
-                sb.append(res.getString("COLUMN_NAME"));
+                String field = res.getString("COLUMN_NAME");
+                if ("PORTALID".equals(field)) {
+                    continue;
+                }
+                sb.append(field);
                 sb.append(",");
             }
         } catch (SQLException e) {
@@ -507,11 +516,11 @@ public class FileImportService {
         // k:表字段名->v:excel字段名
         Map<String, String> fieldMapping = new LinkedHashMap<>();
         // 前端数据 原始表字段顺序
-        List<String> tableFiled = new ArrayList<>();
+        List<String> tableFiled = new ArrayList<>(64);
         // 前端数据 原始表字段对应excel字段顺序
-        List<String> newField = new ArrayList<>();
+        List<String> newField = new ArrayList<>(1024);
         // excel数据位置
-        List<String> orderNum = new ArrayList<>();
+        List<String> orderNum = new ArrayList<>(64);
 
         StringBuffer sb = new StringBuffer("INSERT INTO `" + tableName + "`");
         for (TableField t : tableFields) {

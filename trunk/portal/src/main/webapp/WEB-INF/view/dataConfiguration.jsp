@@ -384,28 +384,6 @@
         function loadTree() {
 
             // 文件树 右键插件事件
-            /*var contextmenu = {
-                // select_node:
-                items: {
-                    "当前目录下增加目录": {
-                        label: "当前目录下增加目录",
-                        action: function (data) {
-                            var selected = $('#jstree_show').jstree("get_selected");
-                            $("#addDirectory").modal("show");
-                            $("#parentURI").val(selected);
-                            $("#directorName").val("");
-                        }
-                    },
-                    "将文件上传至当前目录": {
-                        label: "上传文件至该目录",
-                        action: function (data) {
-                            var selected = $('#jstree_show').jstree("get_selected");
-                            $("#addFile").modal("show");
-                            $("#parentURI").val(selected);
-                        }
-                    }
-                }
-            };*/
             var contextmenu = {
                 items: function(node){
                     if("directory"===node.original.type){
@@ -480,7 +458,8 @@
                                 type: "GET",
                                 url: "${ctx}/resource/treeNodeFirst",
                                 dataType: "json",
-                                data: {"filePath": str1},
+                                // data: {"filePath": str1},
+                                data: {"filePath": "H:\\testftp"},
                                 async: false,
                                 success: function (data) {
                                     $.each(data, function (k, v) {
@@ -644,6 +623,9 @@
             }
             var table = $(_this).parent().prev().find(".active table")[0];
             var tableData = getTableData(table);
+            if (tableData === undefined) {
+                return;
+            }
             var size = tableData.data.length;
             if (size) {
                 var data = new FormData($("#fileForm")[0]);
@@ -696,7 +678,10 @@
                     * 5：比对数据库已存在表字段 与excel新导入字段 导入新增数据
                     * */
                     if (cellLength === 6) {
-                        serializeTableFor6(cellLength, cells, trl, i);
+                        var b = serializeTableFor6(cellLength, cells, trl, i);
+                        if (b === false) {
+                            return b;
+                        }
                         result["type"] = "createAndInsert";
                     }
                     if (cellLength === 5) {
@@ -709,7 +694,7 @@
             }
         }
 
-        function serializeTableFor6(cellLength, cells, trl) {
+        function serializeTableFor6(cellLength, cells, trl, i) {
             var tdl = {};
             for (var j = 0; j < cellLength; j++) {
                 if (j === 1) {
@@ -764,6 +749,35 @@
             trl.push(tdl);
         }
 
+        // 初始化 bootstrap-fileinput 上传组件
+        (function () {
+            $("#file-5").fileinput({
+                language: "zh",
+                theme: 'fas',
+                uploadUrl: "${ctx}/fileUpload/addFile",
+                showUpload: true,
+                showCaption: false,
+                // browseClass: "btn btn-primary btn-lg",
+                browseClass: "btn btn-primary", //按钮样式
+                dropZoneEnabled: true,//是否显示拖拽区域 默认显示
+                fileType: "any",
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+                overwriteInitial: false,
+                hideThumbnailContent: true, // 隐藏文件的预览 以最小内容展示
+                maxFileCount: 5, // 允许选中的文件数量
+                maxFileSize: 1000000, // 允许选中的文件大小 KB
+                uploadExtraData: function () {
+                    return {
+                        "parentURI": $.trim($("#parentURI").val())
+                    }
+                }
+
+            }).on("filebatchselected", function (event, files) {
+            }).on("fileuploaded", function (event, data) {
+                var jt = $("#jstree_show").jstree(true);
+                jt.refresh();
+            })
+        })();
 
         // 初始化 主键清除按钮事件
         (function () {

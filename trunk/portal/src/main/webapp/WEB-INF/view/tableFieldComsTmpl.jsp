@@ -118,7 +118,7 @@
             </thead>
             <tbody>
             {{each data as v i}}
-            {{if i > 0}}
+            {{if i > 0 && v[0] !="PORTALID"}}
             <tr>
                 {{each v as vv ii}}
                 {{if ii == 0 || ii == 1}}
@@ -133,7 +133,7 @@
                     <select>
                         <option  value="-1">不匹配任何字段</option>
                         {{each data as vd id}}
-                            {{if id > 0 }}
+                        {{if id > 0 && vd[3] != ""}}
                                 {{if id == i}}
                                 <option selected="selected" value={{vd[3]}}>{{vd[3]}}</option>
                                 {{else}}
