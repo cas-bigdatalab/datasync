@@ -577,7 +577,7 @@
                 url:"${ctx}/datatask/saveRelationDatatask",
                 type:"POST",
                 aysnc:true,
-                timeout:30000,
+                timeout:600000,
                 data:{
                     dataSourceId:dataRelSrcId,
                     dataRelTableList:dataRelTableList,
@@ -630,7 +630,7 @@
                 url:"${ctx}/datatask/saveFileDatatask",
                 type:"POST",
                 aysnc:true,
-                timeout:30000,
+                timeout:600000,
                 traditional: true,
                 data:{"dataSourceId":dataFileSrcId,
                     "datataskName":$("#dataTaskName").val(),

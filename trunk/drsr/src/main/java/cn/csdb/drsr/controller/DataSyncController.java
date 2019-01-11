@@ -38,7 +38,7 @@ import javax.annotation.Resource;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 
 /**
  * @program: DataSync
@@ -56,6 +56,8 @@ public class DataSyncController {
 
     private Logger logger = LoggerFactory.getLogger(DataSyncController.class);
 
+    private  FtpUtil ftpUtil=new FtpUtil();
+
 
 
     /**
@@ -69,7 +71,11 @@ public class DataSyncController {
      */
     @ResponseBody
     @RequestMapping("/ftpUpload")
-    public int ftpUpload(String dataTaskId, String processId){
+    public int ftpUpload(String dataTaskId, String processId) throws IOException {
+        ftpUtil.numberOfRequest.put(dataTaskId+"Block",dataTaskId);//存放请求
+        Long process= Long.valueOf(0);
+        ftpUtil.progressMap.put(dataTaskId,process);//初始化进度
+
         DataTask dataTask = dataTaskService.get(String.valueOf(dataTaskId));
         String fileName = dataTask.getDataTaskName()+"log.txt";//文件名及类型
         String path = "/logs/";
@@ -95,6 +101,8 @@ public class DataSyncController {
         String current = dateFormat.format(now);
         pw.println(current+":"+"=========================上传流程开始========================" + "\n");
         if("file".equals(dataTask.getDataTaskType())){
+            dataTask.setStatus("0");
+            dataTaskService.update(dataTask);
             pw.println("###########上传的文件为###########" + "\n");
             String[] fileAttr = dataTask.getFilePath().split(";");
             for(String fileAttrName : fileAttr){
@@ -120,11 +128,11 @@ public class DataSyncController {
             String result = "";
             if(dataTask.getDataTaskType().equals("file")){
                 String[] localFileList = {dataTask.getSqlFilePath()};
-                result = ftpUtil.upload(localFileList, processId,ftpRootPath,dataTask,subjectCode).toString();
+                result = ftpUtil.upload(localFileList, dataTaskId,ftpRootPath,dataTask,subjectCode).toString();
                 if(result.equals("File_Exits")){
                     ftpUtil.removeDirectory(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId());
                     ftpUtil.deleteFile(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+".zip");
-                    result = ftpUtil.upload(localFileList, processId,ftpRootPath,dataTask,subjectCode).toString();
+                    result = ftpUtil.upload(localFileList, dataTaskId,ftpRootPath,dataTask,subjectCode).toString();
                 }
                 if(localFileList.length == 0){
                     now = new Date();
@@ -214,6 +222,8 @@ public class DataSyncController {
                         }
                         dataTask.setStatus("1");
                         dataTaskService.update(dataTask);
+                        ftpUtil.numberOfRequest.remove(dataTask.getDataTaskId()+"Block");
+                        ftpUtil.progressMap.put(dataTask.getDataTaskId(),Long.valueOf(100));
                         return 1;
                     }else{
                         if("mysql".equals(dataTask.getDataTaskType())){
@@ -235,6 +245,7 @@ public class DataSyncController {
                         return 0;
                     }
                 } catch (IOException e) {
+                    ftpUtil.disconnect();
                     e.printStackTrace();
                     if("mysql".equals(dataTask.getDataTaskType())){
                         now = new Date();
@@ -257,11 +268,16 @@ public class DataSyncController {
                 return 0;
             }
         } catch (IOException e) {
+            ftpUtil.disconnect();
             now = new Date();
             dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
             current = dateFormat.format(now);
             pw.println(current+":"+"连接FTP出错:"+e+ "\n");
             System.out.println("连接FTP出错：" + e.getMessage());
+            for(Iterator<Map.Entry<String, String>> it = ftpUtil.numberOfRequest.entrySet().iterator(); it.hasNext();){
+                Map.Entry<String, String> item = it.next();
+                it.remove();
+            }
             dataTask.setStatus("0");
             dataTaskService.update(dataTask);
             return 0;
@@ -283,10 +299,18 @@ public class DataSyncController {
 
     @ResponseBody
     @RequestMapping("ftpUploadProcess")
-    public Long ftpUploadProcess(String processId){
-        FtpUtil ftpUtil =new FtpUtil();
+    public JSONObject ftpUploadProcess(String processId){
+        JSONObject jsonObject = new JSONObject();
+        List<Long> processList=new ArrayList<Long>();
+        List<String> blockList=new ArrayList<String>();
+        for(String value:ftpUtil.numberOfRequest.values()){
+            blockList.add(value);
+        }
         Long process =  ftpUtil.getFtpUploadProcess(processId);
-        return process;
+        processList.add(process);
+        jsonObject.put("process",processList);
+        jsonObject.put("blockList",blockList);
+        return jsonObject;
     }
 
 }

@@ -374,6 +374,7 @@ public class FileResourceService {
             String current2 = dateFormat.format(now);
             pw.println(current2+":"+"=========================打包流程结束========================" + "\n");
             try {
+                pw.flush();
                 fw.flush();
                 pw.close();
                 fw.close();
