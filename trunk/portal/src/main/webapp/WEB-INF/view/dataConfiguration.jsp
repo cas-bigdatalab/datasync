@@ -140,10 +140,6 @@
                         <a href="#excelUpload" data-toggle="tab">
                             Excel上传</a>
                     </li>
-                    <li value="4">
-                        <a href="#fileUpload" data-toggle="tab">
-                            上传文件</a>
-                    </li>
                 </ul>
                 <!--tab content-->
                 <div class="tab-content">
@@ -164,7 +160,7 @@
                     <!--excel 导入数据库-->
                     <div class="tab-pane" id="excelUpload" style="min-height: 400px;overflow: hidden">
                         <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
-                            <input id="fcupload" type="file" name="file" class="cus-input">
+                            <input id="excelFile" type="file" name="file" class="cus-input">
                             <input type="button" class="btn btn-default" onclick="doUpload();" value="上传"/>
                         </form>
                         <div tabindex="-1" data-width="200">
@@ -200,16 +196,6 @@
                         </div>
                     </div>
 
-                    <!--文件上传至ftp服务器-->
-                    <div class="tab-pane" id="fileUpload" style="min-height: 400px;overflow: hidden">
-                        <form enctype="multipart/form-data">
-                            <div style="height: 200px">
-                                <div class="file-loading">
-                                    <input id="file-4" type="file" data-theme="fas" multiple>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
                 </div>
             </div>
         </div>
@@ -778,54 +764,14 @@
             trl.push(tdl);
         }
 
-        // 初始化 bootstrap-fileinput 上传组件
+
+        // 初始化 主键清除按钮事件
         (function () {
-            $("#file-4").fileinput({
-                language: "zh",
-                theme: 'fas',
-                uploadUrl: "${ctx}/fileUpload/toFtp",
-                showUpload: true,
-                showCaption: false,
-                // browseClass: "btn btn-primary btn-lg",
-                browseClass: "btn btn-primary", //按钮样式
-                dropZoneEnabled: true,//是否显示拖拽区域 默认显示
-                fileType: "any",
-                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
-                overwriteInitial: false,
-                hideThumbnailContent: true, // 隐藏文件的预览 以最小内容展示
-                maxFileCount: 1, // 允许选中的文件数量
-                uploadExtraData:function(){
-                    return {
-                        "subjectCode": $.trim($("#subjectCode").val())
-                    }
-                }
-
+            $("body").on("click", "#clearPK", function () {
+                $("[name=isPK]").prop("checked", false);
             });
-            $("#file-5").fileinput({
-                language: "zh",
-                theme: 'fas',
-                uploadUrl: "${ctx}/fileUpload/addFile",
-                showUpload: true,
-                showCaption: false,
-                // browseClass: "btn btn-primary btn-lg",
-                browseClass: "btn btn-primary", //按钮样式
-                dropZoneEnabled: true,//是否显示拖拽区域 默认显示
-                fileType: "any",
-                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
-                overwriteInitial: false,
-                hideThumbnailContent: true, // 隐藏文件的预览 以最小内容展示
-                maxFileCount: 5, // 允许选中的文件数量
-                uploadExtraData: function () {
-                    return {
-                        "parentURI": $.trim($("#parentURI").val())
-                    }
-                }
-
-            }).on("filebatchselected",function(event, files){
-            }).on("fileuploaded",function(event,data){
-            })
+            $("#excelFile").val("");
         })();
-
     </script>
 </div>
 

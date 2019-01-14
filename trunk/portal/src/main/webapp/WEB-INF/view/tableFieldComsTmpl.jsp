@@ -174,7 +174,10 @@
                 <th>excel字段注释</th>
                 <th>字段类型</th>
                 <th>字段长度</th>
-                <th>是否主键</th>
+                <th>
+                    是否主键
+                    <button id="clearPK" class="btn btn-default" type="button">清除</button>
+                </th>
             </tr>
             </thead>
             <tbody>
