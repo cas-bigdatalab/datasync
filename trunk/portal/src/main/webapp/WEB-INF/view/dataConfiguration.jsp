@@ -20,19 +20,19 @@
     <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/bootstrap.min.css">--%>
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/fileinput.min.css">
     <style type="text/css">
-       /* .nav-tabs li a{
-            font-size: 16px;
-            background-color: gainsboro;
-        }*/
-     /*   .nav-tabs>li.active>a{
-            background-color: #28a4a4!important;
-            border: 1px solid black!important;
-            border-bottom-color:transparent!important;
-        }
-        .nav-tabs>li.active>a:hover{
-            background-color: #28a4a4!important;
-        }*/
-        .cus-input{
+        /* .nav-tabs li a{
+             font-size: 16px;
+             background-color: gainsboro;
+         }*/
+        /*   .nav-tabs>li.active>a{
+               background-color: #28a4a4!important;
+               border: 1px solid black!important;
+               border-bottom-color:transparent!important;
+           }
+           .nav-tabs>li.active>a:hover{
+               background-color: #28a4a4!important;
+           }*/
+        .cus-input {
             font-size: 14px;
             font-weight: normal;
             color: #333333;
@@ -47,9 +47,9 @@
 <div class="page-content">
     <h3>数据配置</h3>
     <hr>
-   <%-- <div class="config-head">
-        <span>DataSync / 传输信息</span>
-    </div>--%>
+    <%-- <div class="config-head">
+         <span>DataSync / 传输信息</span>
+     </div>--%>
     <div>
         <!-- Nav tabs -->
         <%--<ul class="nav nav-tabs" role="tablist" id="tabDescribe">
@@ -160,17 +160,14 @@
                     <div class="tab-pane" id="filedata" style="min-height: 400px;overflow: hidden">
                         <div id="jstree_show"></div>
                     </div>
-                    <%--<div class="tab-pane active" id="undescribe" style="min-height: 400px">
-                        <div class="row">
 
-                        </div>
-                    </div>--%>
+                    <!--excel 导入数据库-->
                     <div class="tab-pane" id="excelUpload" style="min-height: 400px;overflow: hidden">
                         <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
                             <input id="fcupload" type="file" name="file" class="cus-input">
                             <input type="button" class="btn btn-default" onclick="doUpload();" value="上传"/>
                         </form>
-                        <div  tabindex="-1" data-width="200">
+                        <div tabindex="-1" data-width="200">
                             <div class="" style="width:auto">
                                 <div class="">
                                     <div class="">
@@ -185,14 +182,16 @@
                                                         </ul>
                                                     </div>
                                                     <div class="tab-content" style="background-color: white;min-height:300px;
-                                                    max-height:70%;padding-top: 20px ;" id="tableNamePDiv"> <%--overflow: scroll;--%>
+                                                    max-height:70%;padding-top: 20px ;"
+                                                         id="tableNamePDiv"> <%--overflow: scroll;--%>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" onclick="createTableAndInsertValue(this)" data-dismiss="modal" class="btn green">保存
+                                        <button type="button" onclick="createTableAndInsertValue(this)"
+                                                data-dismiss="modal" class="btn green">保存
                                         </button>
                                         <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
                                     </div>
@@ -201,12 +200,13 @@
                         </div>
                     </div>
 
+                    <!--文件上传至ftp服务器-->
                     <div class="tab-pane" id="fileUpload" style="min-height: 400px;overflow: hidden">
                         <form enctype="multipart/form-data">
                             <div style="height: 200px">
-                            <div class="file-loading" >
-                                <input id="file-4" type="file" class="file" data-theme="fas" multiple>
-                            </div>
+                                <div class="file-loading">
+                                    <input id="file-4" type="file" data-theme="fas" multiple>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -235,7 +235,8 @@
                                                     编辑 </a>
                                             </li>
                                             <li class="">
-                                                <a href="#previewTableDataAndComsId" id="previewTableDataAndComsButtonId"
+                                                <a href="#previewTableDataAndComsId"
+                                                   id="previewTableDataAndComsButtonId"
                                                    data-toggle="tab" aria-expanded="false">
                                                     预览 </a>
                                             </li>
@@ -256,6 +257,61 @@
                         <button type="button" id="editTableFieldComsSaveId" data-dismiss="modal" class="btn green">保存
                         </button>
                         <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--文件树创建目录弹窗页-->
+        <div id="addSonDirectory" class="modal fade" tabindex="-1" data-width="200">
+            <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">子集目录名称</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="parentURI">
+                        <input id="directorName" placeholder="请输入目录名称"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="addDirectory(this)" class="btn green">创建目录
+                        </button>
+                        <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="addBrotherDirectory" class="modal fade" tabindex="-1" data-width="200">
+            <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">同级目录名称</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="brotherDirectorName" placeholder="请输入目录名称"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="addDirectory('brother')" class="btn green">创建目录
+                        </button>
+                        <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--文件树新增文件弹窗页-->
+        <div id="addFile" class="modal fade" tabindex="-1" data-width="200">
+            <div class="modal-dialog" style="min-width:400px;width:auto;max-width: 35%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">选择文件并上传</h4>
+                    </div>
+                    <div class="modal-body" style="height: 600px">
+                        <form enctype="multipart/form-data">
+                            <div style="height: 400px">
+                                <div class="file-loading">
+                                    <input id="file-5" type="file" multiple>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -297,108 +353,228 @@
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-fileinput/js/fileinput.min.js"></script>
     <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
-<%--
-    <script src="${ctx}/resources/js/metaTemplate.js"></script>
---%>
+    <%--
+        <script src="${ctx}/resources/js/metaTemplate.js"></script>
+    --%>
     <script>
         var ctx = '${ctx}', edit = false;
         var sub = '${sessionScope.SubjectCode}'
         var filePath = '${FtpFilePath}'
         $(function () {
-            chooseTable(sub,0);
+            chooseTable(sub, 0);
             loadTree();
         });
 
         var sub1 = '${sessionScope.SubjectCode}'
         $("#tabDescribe li").click(function () {
             var flag = $(this).val();
-            chooseTable(sub1,flag);
+            chooseTable(sub1, flag);
         })
-        function chooseTable(subjectCode,flag) {
+
+        function chooseTable(subjectCode, flag) {
             $.ajax({
                 type: "GET",
                 url: '${ctx}/relationalDatabaseTableList',
-                data: {"subjectCode":subjectCode,"flag":flag},
+                data: {"subjectCode": subjectCode, "flag": flag},
                 dataType: "json",
                 success: function (data) {
                     var html = "<div class='form-group'>" +
-                    "<div class='col-md-12'>" +
-                    "<div class='icheck-list' style='padding-top: 7px'>";
+                        "<div class='col-md-12'>" +
+                        "<div class='icheck-list' style='padding-top: 7px'>";
                     var list = data.list;
                     for (var i = 0; i < list.length; i++) {
                         html += "<label class='col-md-6' style='padding-left: 0px'><input type='checkbox' name='mapTable' onclick=\"staticSourceTableChoice(1,this" + ",'" + sub1 + "','" + list[i] + "','dataResource')\" value='" + list[i] + "'>&nbsp;" + list[i] + "</label>"
                     }
                     html += "</div><input type='text' class='form-control' name='maptableinput' id='maptableinput' style='display:none;'/></div></div>";
-                    if(flag=='0') {
+                    if (flag == '0') {
                         $("#undescribe").html(html);
-                    }else{
+                    } else {
                         $("#isdescribe").html(html);
                     }
                 }
             });
         }
-       function loadTree() {
-        //加载文件树
-        $('#jstree_show').jstree({
-            "core": {
-                "themes": {
-                    "responsive": false,
-                },
-                // so that create works
-                "check_callback": true,
-                'data': function (obj, callback) {
-                    var jsonstr = "[]";
-                    var jsonarray = eval('(' + jsonstr + ')');
-                    var children;
-                    if (obj.id != '#') {
-                        var str = obj.id;
-                        var str1 = str.replace(/%_%/g, "/");
-                    }else{
-                        str1 = filePath;
-                    }
-                    if(str1==filePath){
-                        $.ajax({
-                            type: "GET",
-                            url: "${ctx}/resource/treeNodeFirst",
-                            dataType: "json",
-                            data: {"filePath": str1},
-                            async: false,
-                            success: function (data) {
-                                children = data;
-                            }
 
-                        });
-                    }else{
-                        $.ajax({
-                            type: "GET",
-                            url: "${ctx}/resource/treeNode",
-                            dataType: "json",
-                            data: {"filePath": str1},
-                            async: false,
-                            success: function (data) {
-                                children = data;
-                            }
+        function loadTree() {
 
-                        });
+            // 文件树 右键插件事件
+            /*var contextmenu = {
+                // select_node:
+                items: {
+                    "当前目录下增加目录": {
+                        label: "当前目录下增加目录",
+                        action: function (data) {
+                            var selected = $('#jstree_show').jstree("get_selected");
+                            $("#addDirectory").modal("show");
+                            $("#parentURI").val(selected);
+                            $("#directorName").val("");
+                        }
+                    },
+                    "将文件上传至当前目录": {
+                        label: "上传文件至该目录",
+                        action: function (data) {
+                            var selected = $('#jstree_show').jstree("get_selected");
+                            $("#addFile").modal("show");
+                            $("#parentURI").val(selected);
+                        }
                     }
-                    generateChildJson(children);
-                    callback.call(this, children);
-                    /*else{
-                     callback.call(this,);
-                     }*/
                 }
-            },
-            "types": {
-                "default": {
-                    "icon": "glyphicon glyphicon-flash"
+            };*/
+            var contextmenu = {
+                items: function(node){
+                    if("directory"===node.original.type){
+                        return {
+                            "增加同级目录":{
+                                label: "增加同级目录",
+                                action:function(data){
+                                    var selected = $('#jstree_show').jstree("get_selected");
+                                    var length = selected.length;
+                                    if(length !== 1){
+                                        toastr["error"]("错误！","请选择一个目录");
+                                        return false;
+                                    }
+                                    var parentURI = selected[0];
+                                    parentURI = parentURI.substring(0,parentURI.lastIndexOf("%_%"));
+                                    $("#addBrotherDirectory").modal("show");
+                                    $("#parentURI").val(parentURI);
+                                    $("#brotherDirectorName").val("");
+                                }
+                            },
+                            "增加子级目录": {
+                                label: "增加子级目录",
+                                action: function (data) {
+                                    var selected = $('#jstree_show').jstree("get_selected");
+                                    var length = selected.length;
+                                    if(length !== 1){
+                                        toastr["error"]("错误！","请选择一个目录");
+                                        return false;
+                                    }
+                                    $("#addSonDirectory").modal("show");
+                                    $("#parentURI").val(selected);
+                                    $("#directorName").val("");
+                                }
+                            },
+                            "将文件上传至当前目录": {
+                                label: "上传文件至该目录",
+                                action: function (data) {
+                                    var selected = $('#jstree_show').jstree("get_selected");
+                                    var length = selected.length;
+                                    if(length !== 1){
+                                        toastr["error"]("错误！","请选择一个目录");
+                                        return false;
+                                    }
+                                    $("#addFile").modal("show");
+                                    $("#parentURI").val(selected);
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            // 重新实现文件树的加载
+            $('#jstree_show').jstree({
+                "core": {
+                    "themes": {
+                        "responsive": false
+                    },
+                    // so that create works
+                    "check_callback": true,
+                    'data': function (obj, callback) {
+                        var jsonstr = "[]";
+                        var jsonarray = eval('(' + jsonstr + ')');
+                        var children;
+                        if (obj.id != '#') {
+                            var str = obj.id;
+                            var str1 = str.replace(/%_%/g, "/");
+                        } else {
+                            str1 = filePath;
+                        }
+                        if (str1 == filePath) {
+                            $.ajax({
+                                type: "GET",
+                                url: "${ctx}/resource/treeNodeFirst",
+                                dataType: "json",
+                                data: {"filePath": str1},
+                                async: false,
+                                success: function (data) {
+                                    $.each(data, function (k, v) {
+                                        v["state"] = {};
+                                    });
+                                    children = data;
+                                }
+
+                            });
+                        } else {
+                            $.ajax({
+                                type: "GET",
+                                url: "${ctx}/resource/treeNode",
+                                dataType: "json",
+                                data: {"filePath": str1},
+                                async: false,
+                                success: function (data) {
+                                    $.each(data, function (k, v) {
+                                        v["state"] = {};
+                                    });
+                                    children = data;
+                                }
+
+                            });
+                        }
+                        generateChildJson(children);
+                        callback.call(this, children);
+                        /*else{
+                         callback.call(this,);
+                         }*/
+                    }
                 },
-                "file": {
-                    "icon": "glyphicon glyphicon-ok"
-                }
-            },
-            "plugins": ["dnd"/*, "state"*/, "types", /*"checkbox",*/ "wholerow"]
-        })
+                "types": {
+                    "default": {
+                        "icon": "glyphicon glyphicon-flash"
+                    },
+                    "file": {
+                        "icon": "glyphicon glyphicon-ok"
+                    }
+                },
+                "contextmenu": contextmenu,
+                "plugins": [/*"dnd"*//*, "state"*/, "types", /*"checkbox",*/ "wholerow", "contextmenu"]
+            });
         }
+
+        // 增加目录
+        function addDirectory(t) {
+            var dirName = $.trim($("#directorName").val());
+            if("brother"===t){
+                dirName = $.trim($("#brotherDirectorName").val());
+            }
+            var parentURI = $("#parentURI").val();
+            if (dirName === "") {
+                toastr["warning"]("警告！", "请输入目录名称");
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "${ctx}/fileUpload/addDirectory",
+                data: {
+                    "dirName": dirName,
+                    "parentURI": parentURI
+                },
+                success: function (data) {
+                    var jsonData = JSON.parse(data);
+                    if (jsonData.code === "error") {
+                        toastr["error"]("错误！", jsonData.message);
+                    } else {
+                        toastr["success"]("成功！", jsonData.message);
+                        $("#addSonDirectory").modal("hide");
+                        $("#addBrotherDirectory").modal("hide");
+                        var jt = $("#jstree_show").jstree(true);
+                        jt.refresh();
+                        // jt.deselect_all();
+                        // jt.select_node(jsonData.data);
+                    }
+                }
+            });
+        }
+
         function generateChildJson(childArray) {
             for (var i = 0; i < childArray.length; i++) {
                 var child = childArray[i];
@@ -412,24 +588,24 @@
         }
 
         /**
-        * 上传excel 成功后显示字段内容
-        */
-        function doUpload(){
-            var formData = new FormData($( "#fileForm" )[0]);
+         * 上传excel 成功后显示字段内容
+         */
+        function doUpload() {
+            var formData = new FormData($("#fileForm")[0]);
             var fileName = formData.get("file").name;
-            if(fileName=== undefined){
+            if (fileName === undefined) {
                 toastr["warning"]("提示！", "请选择文件");
                 return;
             }
-            var allFileType=".xls|";
+            var allFileType = ".xlsx|";
             var s = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
-             if(allFileType.indexOf(s+"|") === -1){
-                toastr["warning"]("提示！", "请选择上传Excel2007以上版本文件");
+            if (allFileType.indexOf(s + "|") === -1) {
+                toastr["warning"]("提示！", "请选择上传Excel2007及以上版本文件");
                 return;
             }
-            formData.append("subjectCode",$.trim($("#subjectCode").val()));
+            formData.append("subjectCode", $.trim($("#subjectCode").val()));
             $.ajax({
-                url: '${ctx}/fileImport/excel' ,
+                url: '${ctx}/fileImport/excel',
                 type: 'post',
                 data: formData,
                 async: false,
@@ -438,27 +614,27 @@
                 processData: false,
                 success: function (result) {
                     var resultJson = JSON.parse(result);
-                    if(resultJson["code"] === "error"){
+                    if (resultJson["code"] === "error") {
                         toastr["error"]("错误！", resultJson["message"]);
-                    } else{
+                    } else {
                         var data = resultJson.data;
-                        var tableName = template("tableNameLi",{"data":data});
+                        var tableName = template("tableNameLi", {"data": data});
                         $("#tableNameUl").html("");
                         $("#tableNameUl").html(tableName);
-                        var tableNameDiv = template("tableNameDiv",{"data":data});
+                        var tableNameDiv = template("tableNameDiv", {"data": data});
                         $("#tableNamePDiv").html("");
                         $("#tableNamePDiv").html(tableNameDiv);
-                        $.each(data,function(key,value){
-                            $.each(value,function(k,v){
+                        $.each(data, function (key, value) {
+                            $.each(value, function (k, v) {
                                 var tableField;
-                                var exist = v[0][0] ;
+                                var exist = v[0][0];
                                 if (exist === "isExist") {
-                                    tableField = template("tableFieldIsExist",{"data":v});
+                                    tableField = template("tableFieldIsExist", {"data": v});
                                 } else {
-                                    tableField = template("tableFieldNotExist",{"data":v});
+                                    tableField = template("tableFieldNotExist", {"data": v});
                                 }
-                                $("#"+k).html("");
-                                $("#"+k).append(tableField);
+                                $("#" + k).html("");
+                                $("#" + k).append(tableField);
                             })
 
                         })
@@ -471,13 +647,13 @@
         }
 
         /**
-        * 创建表并保存数据 || 仅保存数据
-        */
+         * 创建表并保存数据 || 仅保存数据
+         */
         function createTableAndInsertValue(_this) {
             var tableName = $(_this).parent().prev().find("li.active a").attr("href").substring(1);
             var tableNum = $(_this).parent().prev().find(".active table").length;
-            if(tableNum === 0){
-                toastr["error"]("错误！","请上传数据Excel");
+            if (tableNum === 0) {
+                toastr["error"]("错误！", "请上传数据Excel");
                 return;
             }
             var table = $(_this).parent().prev().find(".active table")[0];
@@ -516,10 +692,10 @@
             }
 
             /**
-            * 将表格数据转化为 json格式
-            * @param table
-            * @returns {*}
-            */
+             * 将表格数据转化为 json格式
+             * @param table
+             * @returns {*}
+             */
             function getTableData(table) {
                 var result = {};
                 var rows = table.rows;
@@ -534,15 +710,15 @@
                     * 5：比对数据库已存在表字段 与excel新导入字段 导入新增数据
                     * */
                     if (cellLength === 6) {
-                        serializeTableFor6(cellLength,cells,trl,i);
-                        result["type"]="createAndInsert";
+                        serializeTableFor6(cellLength, cells, trl, i);
+                        result["type"] = "createAndInsert";
                     }
-                    if(cellLength === 5){
-                        serializeTableFor5(cellLength,cells,trl,i);
-                        result["type"]="insert";
+                    if (cellLength === 5) {
+                        serializeTableFor5(cellLength, cells, trl, i);
+                        result["type"] = "insert";
                     }
                 }
-                result["data"]=trl;
+                result["data"] = trl;
                 return result;
             }
         }
@@ -601,8 +777,9 @@
             }
             trl.push(tdl);
         }
+
         // 初始化 bootstrap-fileinput 上传组件
-        (function(){
+        (function () {
             $("#file-4").fileinput({
                 language: "zh",
                 theme: 'fas',
@@ -610,7 +787,7 @@
                 showUpload: true,
                 showCaption: false,
                 // browseClass: "btn btn-primary btn-lg",
-                browseClass:"btn btn-primary", //按钮样式
+                browseClass: "btn btn-primary", //按钮样式
                 dropZoneEnabled: true,//是否显示拖拽区域 默认显示
                 fileType: "any",
                 previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
@@ -624,6 +801,29 @@
                 }
 
             });
+            $("#file-5").fileinput({
+                language: "zh",
+                theme: 'fas',
+                uploadUrl: "${ctx}/fileUpload/addFile",
+                showUpload: true,
+                showCaption: false,
+                // browseClass: "btn btn-primary btn-lg",
+                browseClass: "btn btn-primary", //按钮样式
+                dropZoneEnabled: true,//是否显示拖拽区域 默认显示
+                fileType: "any",
+                previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+                overwriteInitial: false,
+                hideThumbnailContent: true, // 隐藏文件的预览 以最小内容展示
+                maxFileCount: 5, // 允许选中的文件数量
+                uploadExtraData: function () {
+                    return {
+                        "parentURI": $.trim($("#parentURI").val())
+                    }
+                }
+
+            }).on("filebatchselected",function(event, files){
+            }).on("fileuploaded",function(event,data){
+            })
         })();
 
     </script>

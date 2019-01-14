@@ -1,6 +1,5 @@
 package cn.csdb.portal.service;
 
-import cn.csdb.portal.model.DataSrc;
 import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.repository.CheckUserDao;
 import cn.csdb.portal.utils.ConfigUtil;
@@ -14,8 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.annotation.Resource;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Map;
 
 /**
@@ -50,7 +48,8 @@ public class FileUploadService {
             String port = ConfigUtil.getConfigItem(configFilePath, "FrpPort");
             String ftpRootPath = ConfigUtil.getConfigItem(configFilePath, "FtpRootPath");
             boolean connect = ftpUtil.connect(host, Integer.parseInt(port), userName, password);
-            ftpUtil.upload(name, fileItem.getInputStream());
+            boolean upload = ftpUtil.upload(name, fileItem.getInputStream());
+            System.out.println(upload);
 //            ftpUtil.disconnect();
 
 //            ftpUtil.uploadFile();
@@ -60,7 +59,64 @@ public class FileUploadService {
         return jsonObject;
     }
 
-    Subject getDataSrc(String subjectCode, String DatabaseType) {
+    public JSONObject addDirectory(String dirName, String parentURI) {
+        JSONObject jsonObject = new JSONObject();
+        String newDir = parentURI + File.separator + dirName;
+        File file = new File(newDir);
+        if (!file.exists()) {
+            boolean mkdirs = file.mkdirs();
+            if (mkdirs) {
+                jsonObject.put("code", "success");
+                jsonObject.put("message", dirName + " 目录创建成功");
+                String replaceDirName = newDir.replace(String.valueOf(File.separator), "%_%");
+                jsonObject.put("data", replaceDirName);
+            } else {
+                jsonObject.put("code", "error");
+                jsonObject.put("message", dirName + " 目录创建异常");
+            }
+        } else {
+            jsonObject.put("code", "error");
+            jsonObject.put("message", "当前目录已存在");
+        }
+        return jsonObject;
+    }
+
+    public JSONObject addFile(String parentURI, Map.Entry<String, MultipartFile> multipartFile) {
+        JSONObject jsonObject = new JSONObject();
+        File file = new File(parentURI);
+        if (!file.exists()) {
+            jsonObject.put("code", "error");
+            jsonObject.put("message", "请检查目录");
+        } else {
+            String s = multipartFile.getKey();
+            MultipartFile value = multipartFile.getValue();
+            FileItem fileItem = ((CommonsMultipartFile) value).getFileItem();
+            String fileName = fileItem.getName();
+            try {
+//                OutputStream outputStream = fileItem.getOutputStream();
+                InputStream inputStream = fileItem.getInputStream();
+                File f = new File(parentURI+File.separator+fileName);
+                OutputStream  outputStream = new FileOutputStream(f);
+                int bytesWritten = 0;
+                int byteCount = 0;
+
+                byte[] bytes = new byte[1024];
+
+                while ((byteCount = inputStream.read(bytes)) != -1)
+                {
+                    outputStream.write(bytes, 0, bytes.length);
+//                    bytesWritten += byteCount;
+                }
+                inputStream.close();
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return jsonObject;
+    }
+
+    private Subject getDataSrc(String subjectCode, String DatabaseType) {
         Subject subject = checkUserDao.getSubjectByCode(subjectCode);
 //        DataSrc datasrc = new DataSrc();
 //        datasrc.setDatabaseName(subject.getDbName());

@@ -1,3 +1,4 @@
+/*
 package cn.csdb.portal.service;
 
 import cn.csdb.portal.model.Subject;
@@ -20,12 +21,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+*/
 /**
  * @program: DataSync
  * @description: group Service Test
  * @author: xiajl
  * @create: 2018-11-17 10:45
- **/
+ **//*
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations = {"classpath:applicationContext.xml", "classpath:spring-mvc.xml"})
@@ -177,3 +180,4 @@ public class GroupServiceTest {
         }
     }
 }
+*/
