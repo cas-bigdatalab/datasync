@@ -382,6 +382,7 @@
                         $("[kkid="+souceID+"Text]")[0].textContent="0%";
                         uploadListFlag.append("<span name="+keyID+" valFlag='false'></span>")
                         if(keyType =="mysql"){
+
                             console.log("ddddddddddddddddddd")
                             $.ajax({
                                 url:"${ctx}/datatask/" + souceID,
@@ -476,8 +477,6 @@
                                             return
                                         }
                                     }
-
-
                                 },
                                 error:function () {
                                     console.log("请求失败")
@@ -529,8 +528,6 @@
                                                 return
                                             }
                                         }
-
-
                                     },
                                     error:function () {
                                         console.log("请求失败")

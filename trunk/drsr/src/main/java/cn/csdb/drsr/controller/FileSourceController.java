@@ -209,11 +209,11 @@ public class FileSourceController {
     @RequestMapping("/resCatalog")
     public
     @ResponseBody
-    List<JSONObject> showResCatalog(String data,Integer dataSourceId) {
+    JSONObject showResCatalog(String data,Integer dataSourceId) {
 
         logger.info("加载文件树");
         String filePath = fileSourceFileList(dataSourceId);
-        List<JSONObject> jsonObjects = fileResourceService.fileTreeLoading(data,filePath);
+        JSONObject jsonObjects = fileResourceService.fileTreeLoading(data,filePath);
         return jsonObjects;
     }
 

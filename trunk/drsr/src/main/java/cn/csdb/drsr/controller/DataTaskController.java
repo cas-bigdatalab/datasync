@@ -244,7 +244,7 @@ public class DataTaskController {
             String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
             File file = new File(str);
             if(file.isDirectory()) {
-                str1 = fileResourceService.traversingFiles(str);
+//                str1 = fileResourceService.traversingFiles(str);
             }else{
                 str1 = str + ";";
             }
@@ -346,7 +346,12 @@ public class DataTaskController {
     public JSONObject getDatataskById(String datataskId){
         JSONObject jsonObject = new JSONObject();
         DataTask dataTask = dataTaskService.get(datataskId);
+//        DataSrcService dataSrcService=new DataSrcService();
+//        String filePath = fileSourceFileList(dataSourceId);
+        String filePath=fileResourceService.findById(dataTask.getDataSourceId()).getFilePath();
+        JSONObject jsonObjectsTree = fileResourceService.fileTreeLoading("",filePath);
         jsonObject.put("datatask",dataTask);
+        jsonObject.put("jsonObjectsTree",jsonObjectsTree);
         return jsonObject;
     }
 
@@ -395,7 +400,7 @@ public class DataTaskController {
                 String nodePath = "";
                 for (String nodeId : nodes) {
                     String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
-                    String str1 = fileResourceService.traversingFiles(str);
+                    String str1 = str;
                     nodePath += str1;
                 }
                 for(String attrs : attr){
@@ -418,7 +423,7 @@ public class DataTaskController {
                     String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
                     File file = new File(str);
                     if(file.isDirectory()) {
-                        str1 = fileResourceService.traversingFiles(str);
+                        //str1 = fileResourceService.traversingFiles(str);
                     }else{
                         str1 = str + ";";
                     }

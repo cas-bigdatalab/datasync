@@ -105,127 +105,87 @@ public class FileResourceService {
         return fileResourceDao.queryPage(requestedPage,SubjectCode);
     }
 
-    public List<JSONObject> fileTreeLoading(String data,String filePath) {
+    public JSONObject fileTreeLoading(String data,String localFilePath) {
         String FILE_SEPARATOR = System.getProperties().getProperty("file.separator");
+        JSONObject jsonObject = new JSONObject();
         File file;
         data = data.replaceAll("%_%",Matcher.quoteReplacement(File.separator));
-        filePath = filePath.replaceAll("%_%",Matcher.quoteReplacement(File.separator));
-        List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
-        if ("#".equals(data)) {
-            /*//获取服务器盘符
-            String os = System.getProperty("os.name");
-            if(os.toLowerCase().startsWith("win")){
-                File[] roots = File.listRoots();
-                logger.info("服务器盘符为："+roots);
-                logger.info("子目录个数为："+roots.length);
-                for (int i =0; i < roots.length; i++) {
-                    String root = roots[i].toString();
-                    String rootName= root.substring(0, root.indexOf("\\"));
-                    JSONObject jsonObject = new JSONObject();
-                    if (roots[i].isDirectory()) {
-                        File file1 = roots[i];
-                        File[] rootNode = file1.listFiles();
-                        if (rootNode != null) {
-                            if (rootNode.length == 0) {
-                                jsonObject.put("children", false);
-                            } else {
-                                jsonObject.put("children", true);
-                            }
-                        } else {
-                            jsonObject.put("children", false);
-                        }
-                        jsonObject.put("type", "directory");
-                        JSONObject jo = new JSONObject();
-                        jo.put("disabled", "true");
-                        jsonObject.put("state", jo);
-                        jsonObject.put("id", root.replaceAll("\\\\", "%_%"));
-                        jsonObject.put("name", rootName);
-                    } else {
-                        jsonObject.put("type", "file");
-                        jsonObject.put("id", root.replaceAll("\\\\", "%_%"));
-                        jsonObject.put("name", rootName);
-                    }
-                    jsonObjects.add(jsonObject);
-                }
-            }else{*/
-                File roots = new File(filePath);
-                logger.info("服务器盘符为："+roots);
-                String root = roots.toString();
-                logger.info("root为："+root);
-/*
-                String rootName= root.substring(0, root.indexOf("\\"));
-*/
-/*
-                logger.info("rootName为："+rootName);
-*/
-                JSONObject jsonObject = new JSONObject();
-                JSONObject jsonObject1 = new JSONObject();
-                jsonObject1.put("opened",true);
-                jsonObject.put("sta",jsonObject1);
-                if (roots.isDirectory()) {
-                    File file1 = roots;
-                    File[] rootNode = file1.listFiles();
-                    if (rootNode != null) {
-                        if (rootNode.length == 0) {
-                            jsonObject.put("children", false);
-                        } else {
-                            jsonObject.put("children", true);
-                        }
-                    } else {
-                        jsonObject.put("children", false);
-                    }
-                    jsonObject.put("type", "directory");
-                    JSONObject jo = new JSONObject();
-                    jo.put("disabled", "true");
-                    jsonObject.put("state", jo);
-                    jsonObject.put("id", root.replaceAll(Matcher.quoteReplacement(File.separator), "%_%"));
-                    jsonObject.put("name", root);
-                } else {
-                    jsonObject.put("type", "file");
-                    jsonObject.put("id", root.replaceAll(Matcher.quoteReplacement(File.separator), "%_%"));
-                    jsonObject.put("name", root);
-                }
-                jsonObjects.add(jsonObject);
-                return jsonObjects;
-        } else {
-            file = new File(data);
-            if (!file.exists() || !file.isDirectory()) {
-                return jsonObjects;
-            } else {
-                File[] fileList = file.listFiles();
-                for (int i = 0; i < fileList.length; i++) {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("id", fileList[i].getPath().replaceAll(Matcher.quoteReplacement(File.separator), "%_%"));
-                    jsonObject.put("name", fileList[i].getName().replaceAll(Matcher.quoteReplacement(File.separator), "%_%"));
-                    if (fileList[i].isDirectory()) {
-                        File file1 = fileList[i];
-                        File[] fileNode = file1.listFiles();
-                        if (fileNode != null) {
-                            if (fileNode.length == 0) {
-                                jsonObject.put("children", false);
-                            } else {
-                                jsonObject.put("children", true);
-                            }
-                        } else {
-                            jsonObject.put("children", false);
-                        }
-                        jsonObject.put("type", "directory");
-                        JSONObject jo = new JSONObject();
-                        jo.put("disabled", "true");
-                        jsonObject.put("state", jo);
-                    } else {
-                        jsonObject.put("type", "file");
-                    }
-                    jsonObjects.add(jsonObject);
-                }
-                return jsonObjects;
+        localFilePath = localFilePath.replaceAll("%_%",Matcher.quoteReplacement(File.separator));
+        List<Object> list=new ArrayList<Object>();
+        list=getJobTree(localFilePath,list);
+        jsonObject.put("list",list);
+        return jsonObject;
 
+    }
+
+    //获取--树--数据源
+    public List<Object> getJobTree(String path,List<Object> list){
+        System.out.println("服务器系统:"+System.getProperties().getProperty("os.name"));
+        String systemName=System.getProperties().getProperty("os.name");
+        int isWindows=systemName.indexOf("Windows");
+        // List<Object> list=new ArrayList<Object>();//递归获取文件
+        List<Object> fileList=new ArrayList<Object>();//递归获取文件
+        File dirFile = new File(path);//获取文件第一层
+        File[] fs = dirFile.listFiles();
+        list.add("{ id:\""+path+"\", pId:0, name:\""+path+"\", open:true,checked:false}");
+        for (int i = 0; i < fs.length; i++) {
+            if(fs[i].isFile()){//当对象为文件时
+                boolean checked=false;
+                String pidStr="";
+                if("-1".equals(isWindows+"")){//linux
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("/"));
+                }else {
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("\\"));
+                }
+                list.add("{ id:\""+fs[i].toString()+"\", pId:\""+pidStr+"\", name:\""+fs[i].getName()+"\", open:true,checked:\""+checked+"\"}");
+                System.out.println();
+            }else if(fs[i].isDirectory()){//当对象为路径时
+                boolean checked=false;
+                String pidStr="";
+                if("-1".equals(isWindows+"")){//linux
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("/"));
+                }else {
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("\\"));
+                }
+                list.add("{ id:\""+fs[i].toString()+"\", pId:\""+pidStr+"\", name:\""+fs[i].getName()+"\", open:false,checked:\""+checked+"\"}");
+                List<Object> listStr=new ArrayList<Object>();//递归获取文件
+                fileList=getFileList( fs[i].toString(),listStr);
+                for(Object o:fileList){
+                    list.add(o);
+                }
             }
         }
+        return list;
+    }
 
-/*
-        Collections.sort(jsonObjects, new FileComparator());
-*/
+    public List<Object> getFileList(String path, List<Object> list){
+        String systemName=System.getProperties().getProperty("os.name");
+        int isWindows=systemName.indexOf("Windows");
+        File dirFile = new File(path);//获取文件第一层
+        File[] fs = dirFile.listFiles();
+        for(int i=0; i < fs.length; i++){
+            if(fs[i].isDirectory()){
+                boolean checked=false;
+                String pidStr="";
+                if("-1".equals(isWindows+"")){//linux
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("/"));
+                }else {
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("\\"));
+                }
+                list.add("{ id:\""+fs[i].toString()+"\", pId:\""+pidStr+"\", name:\""+fs[i].getName()+"\", open:false,checked:\""+checked+"\"}");
+                getFileList(fs[i].toString(),list);
+            }else if (fs[i].isFile()){
+                boolean checked=false;
+                String pidStr="";
+                if("-1".equals(isWindows+"")){//linux
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("/"));
+                }else {
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("\\"));
+                }
+                list.add("{ id:\""+fs[i].toString()+"\", pId:\""+pidStr+"\", name:\""+fs[i].getName()+"\", open:false,checked:\""+checked+"\"}");
+            }
+        }
+        return list;
     }
 
     public String traversingFiles(String nodeId) {
@@ -374,12 +334,12 @@ public class FileResourceService {
             String current2 = dateFormat.format(now);
             pw.println(current2+":"+"=========================打包流程结束========================" + "\n");
             try {
+                outputStream.finish();
+                outputStream.close();
                 pw.flush();
                 fw.flush();
                 pw.close();
                 fw.close();
-                outputStream.finish();
-                outputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

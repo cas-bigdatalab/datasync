@@ -165,7 +165,7 @@ public class DataSyncController {
                 }
             }
             pw.println("ftpDataTaskId"+dataTask.getDataTaskId()+"上传状态:" + result + "\n");
-            ftpUtil.disconnect();
+
             if(result.equals("Upload_New_File_Success")||result.equals("Upload_From_Break_Succes")){
                 String dataTaskString = JSONObject.toJSONString(dataTask);
                 JSONObject requestJSON = new JSONObject();
@@ -221,6 +221,8 @@ public class DataSyncController {
                             pw.println(current1+":"+"=========================解压流程结束========================" + "\n");
                         }
                         dataTask.setStatus("1");
+//                        ftpUtil.removeDirectory(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+".zip");
+                        ftpUtil.deleteFile(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+".zip");
                         dataTaskService.update(dataTask);
                         ftpUtil.numberOfRequest.remove(dataTask.getDataTaskId()+"Block");
                         ftpUtil.progressMap.put(dataTask.getDataTaskId(),Long.valueOf(100));
@@ -282,6 +284,7 @@ public class DataSyncController {
             dataTaskService.update(dataTask);
             return 0;
         }finally {
+            ftpUtil.disconnect();
             now = new Date();
             dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
             String current1 = dateFormat.format(now);

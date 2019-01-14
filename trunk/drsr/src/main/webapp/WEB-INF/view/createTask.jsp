@@ -13,8 +13,16 @@
     <title>系统</title>
     <link href="${ctx}/resources/css/createTask.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/jstree/dist/themes/default/style.min.css" rel="stylesheet" type="text/css"/>
-    <style type="text/css">
-
+    <link href="${ctx}/resources/bundles/zTree_v3/css/demo.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/layerJs/theme/default/layer.css" rel="stylesheet" type="text/css"/>
+    <style>
+        .col-md-5 {
+            width: 66.666667% !important;
+        }
+        .ztree{
+            width: 100% !important;
+        }
     </style>
 </head>
 <body>
@@ -99,7 +107,9 @@
                         <div class="col-md-12" style="margin: 0 -15px">
                             <div class="col-md-2" style="margin: 0 -15px">选择文件</div>
                             <div class="col-md-5" style="margin-top: 6px">
-                                <div id="jstree_show_edit"></div>
+                                <div id="jstree_show_edit">
+                                    <ul id="LocalTreeDemo" class="ztree" ></ul>
+                                </div>
                             <%--
                                 <div class="row" id="file-table"></div>
 --%>
@@ -260,6 +270,8 @@
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.min.js"></script>
+    <script src="${ctx}/resources/bundles/layerJs/layer.js"></script>
+    <script src="${ctx}/resources/bundles/zTree_v3/js/jquery.ztree.all.js"></script>
     <%--<script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>--%>
 
     <script>
@@ -353,94 +365,42 @@
             }
             $(".database-con-file").show();
             $("#fileTitle").html(name);
-            /*$.ajax({
-                url:"${ctx}/fileResource/fileSourceFileList",
-                type:"POST",
-                data:{
-                    dataSourceId:id
-                },
-                success:function (data) {
-                    jsonData = JSON.parse(data);
-                    jsonData = jsonData.replace(/\//g,"%_%");
-                    jsonData = jsonData.replace(/\\/g, "%_%");
-                    /!*$("#file-table").empty();
-                    var List =JSON.parse(data)
-                    var data={
-                        data:List
-                    }
-                    var tabCon = template("dataFileshipList2", data);
-                    $("#file-table").append(tabCon);*!/
-                },
-                error:function () {
-                    console.log("请求失败")
-                }
-            })*/
-            $('#jstree_show_edit').jstree("destroy");
-/*
-            $('#jstree_show_edit').data('jstree', false).empty();
-*/
-            $('#jstree_show_edit').jstree({
-                "core": {
-                    "themes": {
-                        "responsive": false,
-                    },
-                    // so that create works
-                    "check_callback": true,
-                    'data': function (obj, callback) {
-                        var jsonstr = "[]";
-                        var jsonarray = eval('(' + jsonstr + ')');
-                        var children;
-                        if (obj != '#') {
-                            var str = obj.id;
-                            /*var str1 = str.replace("\/","%_%");
-                             str1 = str1.replace("\\", "%_%");*/
-                        }
-                        $.ajax({
-                            type: "GET",
-                            url: "${ctx}/fileResource/resCatalog",
-                            dataType: "json",
-                            data: {"data": str,
-/*
-                                "filePath":jsonData,
-*/
-                                "dataSourceId":id
-                            },
-                            async: false,
-                            success: function (result) {
-                                var arrays = result;
-                                for (var i = 0; i < arrays.length; i++) {
-                                    console.log(arrays[i])
-                                    var arr = {
-                                        "id": arrays[i].id,
-                                        "parent": arrays[i].parentId == "root" ? "#" : arrays[i].parentId,
-                                        "text": arrays[i].name,
-                                        "type": arrays[i].type,
-                                        "children":arrays[i].children,
-                                        "state": arrays[i].sta
-                                    }
-                                    jsonarray.push(arr);
-                                    children = jsonarray;
-                                }
-                            }
+            var data ="";
 
-                        });
-                        generateChildJson(children);
-                        callback.call(this, children);
-                        /*else{
-                         callback.call(this,);
-                         }*/
-                    }
+            $.ajax({
+                type:"POST",
+                url: "${ctx}/fileResource/resCatalog",
+                dataType: "json",
+                data: {
+                    "data": "",
+                    "dataSourceId":id
                 },
-                "types": {
-                    "default": {
-                        "icon": "glyphicon glyphicon-flash"
-                    },
-                    "file": {
-                        "icon": "glyphicon glyphicon-ok"
-                    }
+                async: true,
+                beforeSend:function(data){
+                    index = layer.load(1, {
+                        shade: [0.5,'#fff'] //0.1透明度的白色背景
+                    });
                 },
-                "plugins": ["dnd", "state", "types", "checkbox", "wholerow"]
+                success: function (data) {
+                    $("#bdTableLabel").css("display", "block");//显示“选择资源”标签
+                    $("#bdDirDiv").css("display", "block");//显示“选择资源”标签
+                    $("#bdSubmitButton").css("display", "block"); //显示“提交”按钮
+
+                    var coreData = eval("["+data.list.toString().replace(/\\/g,"/")+"]");
+                    var zTreeObj = $.fn.zTree.getZTreeObj("LocalTreeDemo");
+                    if(zTreeObj!=null){
+                        zTreeObj.destroy();//用之前先销毁tree
+                    }
+                    $.fn.zTree.init($("#LocalTreeDemo"), setting, coreData);
+                    $("#layui-layer-shade"+index+"").remove();
+                    $("#layui-layer"+index+"").remove();
+                },
+                error: function (data) {
+                    toastr["error"]("获得本地目录中的文件树失败,请检查文件上路径及数据源！");
+                    console.log("获得本地目录中的文件树失败")
+                }
             })
+
         })
         function generateChildJson(childArray) {
             for (var i = 0; i < childArray.length; i++) {
@@ -601,9 +561,10 @@
 
         }
         function sendFileTask(){
-            var $eleChecked = $("[name='fileTable']:checked")
-            var nodes = $('#jstree_show_edit').jstree("get_checked");
-            var numChecked = $eleChecked.size();
+             var $eleChecked = $("[name='fileTable']:checked")
+            // var getCheckedFile = getChecedValueInLocalTree();//获取选中的文件
+            var nodes = getChecedValueInLocalTree();//获取选中的文件
+             var numChecked = $eleChecked.size();
             if($("#dataTaskName").val() ==""){
                 toastr["error"]("提示！", "请创建任务名");
                 return
@@ -763,6 +724,28 @@
                     }
                 }
             })
+        }
+
+        var setting = {
+            check: {
+                enable: true
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            }
+        };
+
+        //获取界面中所有被选中的radio
+        function getChecedValueInLocalTree() {
+            var pathsOfCheckedFiles = new Array();
+            var treeObj=$.fn.zTree.getZTreeObj("LocalTreeDemo"),
+                nodes=treeObj.getCheckedNodes(true),v="";
+            for(var i=0;i<nodes.length;i++){
+                pathsOfCheckedFiles.push(nodes[i].id);
+            }
+            return pathsOfCheckedFiles;
         }
 
     </script>
