@@ -281,11 +281,13 @@
 
             {{if value.status  == 0}}
                 {{if value.logPath  == ""}}
+                <button type="button" kkid="{{value.dataTaskId}}Pause" style="display: none;" class="btn red btn-xs" onclick="pauseUpLoading('{{value.dataTaskId}}',new Date().getTime());"><i class="glyphicon glyphicon-pause"></i>&nbsp;暂停</button>
                 <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}" resupload="one"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
                 <button type="button" class="btn purple btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
                 <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}','{{value.dataSrc.dataSourceName}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                 <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 {{else if value.logPath  != "" }}
+                <button type="button" kkid="{{value.dataTaskId}}Pause" style="display: none;"  class="btn red btn-xs" onclick="pauseUpLoading('{{value.dataTaskId}}',new Date().getTime());"><i class="glyphicon glyphicon-pause"></i>&nbsp;暂停</button>
                 <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}" resupload="one"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
                 <button type="button" class="btn purple btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
                 <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}','{{value.dataSrc.dataSourceName}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
@@ -293,6 +295,7 @@
                 <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="window.location.href='${ctx}/fileResource/downloadFile?dataTaskId={{value.dataTaskId}}'"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
             {{/if}}
             {{else if value.status  == 1 }}
+                <button type="button" kkid="{{value.dataTaskId}}Pause" style="display: none;"  class="btn red btn-xs" onclick="pauseUpLoading('{{value.dataTaskId}}',new Date().getTime());"><i class="glyphicon glyphicon-pause"></i>&nbsp;暂停</button>
                 <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}" resupload="two"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
                 <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}','{{value.dataSrc.dataSourceName}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                 <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
@@ -463,6 +466,8 @@
                                             toastr["success"]("上传成功！");
                                             $("."+souceID).text("已上传")
                                             tableConfiguration2(1,dataSourceName,dataSourceStatus)
+                                        }else if(data =="3"){
+                                           // toastr["error"]("暂停成功！");
                                         }else if(data=="0"){
                                             stopSetOuts();
                                             toastr["error"]("连接FTP出错：请检查网络连接！");
@@ -725,12 +730,17 @@
                        if(dataJson.process[0]==0 && dataJson.process[0]!=99){
                            $("."+souceID).text("正在上传");
                            $("[kkid="+souceID+"Loading]")[0].style.display="block";
+                           $("[kkid="+souceID+"Pause]")[0].style.display="inline";
+                           $("[keyIdTd="+souceID+"]")[0].style.display="none";
                        }else if(dataJson.process[0]==99){
                            $("."+souceID).text("解压中...");
                            $("[kkid="+souceID+"Unziping]")[0].style.display="block";
+                           $("[kkid="+souceID+"Pause]")[0].style.display="none";
                        }else{
                            $("."+souceID).text("正在上传");
+                           $("[keyIdTd="+souceID+"]")[0].style.display="none";
                            $("[kkid="+souceID+"Loading]")[0].style.display="none";
+                           $("[kkid="+souceID+"Pause]")[0].style.display="inline";
                             $("[kkid="+souceID+"]")[0].style.width=dataJson.process[0]+"%";
                             $("[kkid="+souceID+"Text]")[0].textContent=dataJson.process[0]+"%";
                        }
@@ -761,7 +771,6 @@
                    /* $(".table-message").hide();*/
                     $("#bd-data").html("");
                     var DataList = JSON.parse(data);
-                    debugger
                     taskProcessStr=DataList.taskProcessList[0];//刷新页面后，获取上传进度
                     requestStr=DataList.requestList[0];//刷新页面后，获取正在上傳的任務
                     console.log(DataList)
@@ -783,7 +792,6 @@
                             $("[kkid="+taskId+"Text]")[0].textContent=taskProcessStr[taskId]+"%";
                         }
                     }
-
                     //循環設置定時器
                     for(var request in requestStr){
                         var souceID = request.substr(0,request.indexOf("Block"));
@@ -837,7 +845,26 @@
             }
             ele.empty()
             ele.append(arrListStr)
-        }
+        };
+
+        //暂停
+       function pauseUpLoading(taskId,time){
+           $("."+taskId).text("已暂停");
+           $.ajax({
+               url:"${ctx}/pauseUpLoading",
+               type:"post",
+               data:{
+                   taskId:taskId,
+                   time:time
+               },
+               success:function (data) {
+                  toastr["success"]("任务"+taskId+":  已暂停");
+               },
+               error:function () {
+                   console.log("请求失败")
+               }
+           })
+       }
 
     </script>
 </div>
