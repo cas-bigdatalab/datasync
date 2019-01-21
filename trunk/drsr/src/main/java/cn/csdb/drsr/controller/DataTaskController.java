@@ -348,10 +348,14 @@ public class DataTaskController {
         DataTask dataTask = dataTaskService.get(datataskId);
 //        DataSrcService dataSrcService=new DataSrcService();
 //        String filePath = fileSourceFileList(dataSourceId);
-        String filePath=fileResourceService.findById(dataTask.getDataSourceId()).getFilePath();
-        JSONObject jsonObjectsTree = fileResourceService.fileTreeLoading("",filePath);
-        jsonObject.put("datatask",dataTask);
-        jsonObject.put("jsonObjectsTree",jsonObjectsTree);
+        if("file".equals(dataTask.getDataTaskType())){
+            String filePath=fileResourceService.findById(dataTask.getDataSourceId()).getFilePath();
+            JSONObject jsonObjectsTree = fileResourceService.fileTreeLoading("",filePath);
+            jsonObject.put("datatask",dataTask);
+            jsonObject.put("jsonObjectsTree",jsonObjectsTree);
+        }else {
+            jsonObject.put("datatask",dataTask);
+        }
         return jsonObject;
     }
 

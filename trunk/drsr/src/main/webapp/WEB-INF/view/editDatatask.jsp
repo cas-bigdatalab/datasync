@@ -787,12 +787,14 @@
                             zTreeObj.destroy();//用之前先销毁tree
                         }
                         $.fn.zTree.init($("#treeDemo"), setting, coreData);
+                    }
                         $("#layui-layer-shade"+index+"").remove();
                         $("#layui-layer"+index+"").remove();
-                    }
                 },
                 error:function (data) {
                     console.log("请求失败")
+                    $("#layui-layer-shade"+index+"").remove();
+                    $("#layui-layer"+index+"").remove();
                 }
 
             })

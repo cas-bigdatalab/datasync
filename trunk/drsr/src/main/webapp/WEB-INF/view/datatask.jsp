@@ -288,7 +288,7 @@
                 <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 {{else if value.logPath  != "" }}
                 <button type="button" kkid="{{value.dataTaskId}}Pause" style="display: none;"  class="btn red btn-xs" onclick="pauseUpLoading('{{value.dataTaskId}}',new Date().getTime());"><i class="glyphicon glyphicon-pause"></i>&nbsp;暂停</button>
-                <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}" resupload="one"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
+                <button type="button" class="btn green upload-data btn -xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}" resupload="one"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
                 <button type="button" class="btn purple btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
                 <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}','{{value.dataSrc.dataSourceName}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
                 <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
@@ -858,7 +858,7 @@
                    time:time
                },
                success:function (data) {
-                  toastr["success"]("任务"+taskId+":  已暂停");
+                  //toastr["success"]("任务"+taskId+":  已暂停");
                },
                error:function () {
                    console.log("请求失败")
