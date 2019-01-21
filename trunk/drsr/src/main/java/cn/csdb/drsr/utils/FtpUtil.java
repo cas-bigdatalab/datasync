@@ -27,6 +27,8 @@ public class FtpUtil {
 
     public static Map<String, Long> progressMap = new HashMap<String, Long>();
     public static Map<String, String> numberOfRequest = new HashMap<String,String>();
+    public static Map<String, OutputStream> ftpOutputStream = new HashMap<String,OutputStream>();
+    public static Map<String, Object> pauseTasks = new HashMap<String,Object>();
 
     public enum UploadStatus {
         Create_Directory_Fail,   //远程服务器相应目录创建失败
@@ -49,13 +51,14 @@ public class FtpUtil {
         Download_New_Failed;    //全新下载文件失败
     }
 
-    public FTPClient ftpClient = new FTPClient();
+    public static FTPClient ftpClient = new FTPClient();
 
-    public boolean connect(String hostname, int port, String username, String password) throws IOException {
+    public boolean connect(String hostname, int port, String username, String password,String taskID) throws IOException {
         ftpClient.connect(hostname, port);
         ftpClient.setControlEncoding("GBK");
         if (FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
             if (ftpClient.login(username, password)) {
+//                ftpClientList.put(taskID,ftpClient);
                 return true;
             }
         }
@@ -64,7 +67,7 @@ public class FtpUtil {
     }
 
     public void disconnect() throws IOException {
-        if (ftpClient.isConnected()) {
+            if (ftpClient.isConnected()) {
             ftpClient.disconnect();
         }
     }
@@ -232,7 +235,7 @@ public class FtpUtil {
                 }
 
                 //尝试移动文件内读取指针,实现断点续传
-                resultmap = uploadFile(fileTotalSize, finishedSize,processId, remoteFileName, f, ftpClient, remoteSize);
+                resultmap = uploadFile(fileTotalSize, finishedSize,processId, remoteFileName, f, ftpClient, remoteSize,dataTask.getDataTaskId());
                 result = (UploadStatus)(resultmap.get("status"));
                 finishedSize = (Long)(resultmap.get("finishedSize"));
 
@@ -241,12 +244,12 @@ public class FtpUtil {
                     if (!ftpClient.deleteFile(remoteFileName)) {
                         return UploadStatus.Delete_Remote_Faild;
                     }
-                    resultmap = uploadFile(fileTotalSize, finishedSize, processId, remoteFileName, f, ftpClient, 0);
+                    resultmap = uploadFile(fileTotalSize, finishedSize, processId, remoteFileName, f, ftpClient, 0,dataTask.getDataTaskId());
                     result = (UploadStatus)(resultmap.get("status"));
                     finishedSize = (Long)(resultmap.get("finishedSize"));
                 }
             } else {
-                resultmap = uploadFile(fileTotalSize, finishedSize, processId, remoteFileName, new File(newlocalFilepath), ftpClient, 0);
+                resultmap = uploadFile(fileTotalSize, finishedSize, processId, remoteFileName, new File(newlocalFilepath), ftpClient, 0,dataTask.getDataTaskId());
                 result = (UploadStatus)(resultmap.get("status"));
                 finishedSize = (Long)(resultmap.get("finishedSize"));
             }
@@ -258,7 +261,7 @@ public class FtpUtil {
         return UploadStatus.Upload_New_File_Success;
     }
 
-    public Map uploadFile(long fileTotalSize, long finishedSize, String processId, String remoteFile, File localFile, FTPClient ftpClient, long remoteSize) throws IOException {
+    public Map uploadFile(long fileTotalSize, long finishedSize, String processId, String remoteFile, File localFile, FTPClient ftpClient, long remoteSize,String dataTaskId) throws IOException {
         Map returnMap = new HashMap();
         UploadStatus status;
         long step = fileTotalSize / 100;
@@ -269,6 +272,7 @@ public class FtpUtil {
         String testtring = new String(remoteFile.getBytes("GBK"), "iso-8859-1");
 //        System.out.println("!!!!!!!!!!!!!!!!!!!!!!"+testtring);
         OutputStream out = ftpClient.appendFileStream(new String(remoteFile.getBytes("GBK"), "iso-8859-1"));
+        ftpOutputStream.put(dataTaskId,out);
         if(out == null){
             System.out.println("=============null out");
         }

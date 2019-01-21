@@ -56,7 +56,7 @@ public class DataSyncController {
 
     private Logger logger = LoggerFactory.getLogger(DataSyncController.class);
 
-    private  FtpUtil ftpUtil=new FtpUtil();
+    private  static FtpUtil ftpUtil=new FtpUtil();
 
 
 
@@ -72,10 +72,10 @@ public class DataSyncController {
     @ResponseBody
     @RequestMapping("/ftpUpload")
     public int ftpUpload(String dataTaskId, String processId) throws IOException {
+        //FtpUtil ftpUtil = new FtpUtil();
         ftpUtil.numberOfRequest.put(dataTaskId+"Block",dataTaskId);//存放请求
         Long process= Long.valueOf(0);
         ftpUtil.progressMap.put(dataTaskId,process);//初始化进度
-
         DataTask dataTask = dataTaskService.get(String.valueOf(dataTaskId));
         String fileName = dataTask.getDataTaskName()+"log.txt";//文件名及类型
         String path = "/logs/";
@@ -118,13 +118,13 @@ public class DataSyncController {
         String port = ConfigUtil.getConfigItem(configFilePath, "FrpPort");
         String ftpRootPath = ConfigUtil.getConfigItem(configFilePath, "FtpRootPath");
         String portalUrl = ConfigUtil.getConfigItem(configFilePath, "PortalUrl");
-        FtpUtil ftpUtil = new FtpUtil();
 /*
         DataTask dataTask = dataTaskService.get(dataTaskId);
 */
         pw.println("数据任务名称为：" + dataTask.getDataTaskName() +"\n");
         try {
-            ftpUtil.connect(host, Integer.parseInt(port), userName, password);
+            ftpUtil.connect(host, Integer.parseInt(port), userName, password,dataTaskId);
+//            ftpUtil.ftpClientList.put(dataTaskId,ftpUtil.ftpClient);
             String result = "";
             if(dataTask.getDataTaskType().equals("file")){
                 String[] localFileList = {dataTask.getSqlFilePath()};
@@ -150,7 +150,7 @@ public class DataSyncController {
                 if(result.equals("File_Exits")){
 //                    有时候会因为同一个ftp连接在删除文件后无法创建目录，所以此处重新建立连接ftp
                     ftpUtil.disconnect();
-                    ftpUtil.connect(host, Integer.parseInt(port), userName, password);
+                    ftpUtil.connect(host, Integer.parseInt(port), userName, password,dataTaskId);
                     ftpUtil.removeDirectory(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+"_sql");
                     result = ftpUtil.upload(localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
                 }
@@ -270,19 +270,31 @@ public class DataSyncController {
                 return 0;
             }
         } catch (IOException e) {
-            ftpUtil.disconnect();
-            now = new Date();
-            dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
-            current = dateFormat.format(now);
-            pw.println(current+":"+"连接FTP出错:"+e+ "\n");
-            System.out.println("连接FTP出错：" + e.getMessage());
-            for(Iterator<Map.Entry<String, String>> it = ftpUtil.numberOfRequest.entrySet().iterator(); it.hasNext();){
-                Map.Entry<String, String> item = it.next();
-                it.remove();
+            if(ftpUtil.pauseTasks.get(dataTaskId)!=null && ftpUtil.pauseTasks.get(dataTaskId)!=""){//点击暂停时触发
+                ftpUtil.disconnect();
+                pw.println(current+":"+"暂停传输:"+e+ "\n");
+                System.out.println("暂停传输！" );
+                ftpUtil.numberOfRequest.remove(dataTaskId+"Block");
+
+                ftpUtil.pauseTasks.remove(dataTaskId);
+                dataTask.setStatus("0");
+                dataTaskService.update(dataTask);
+                return 3;//暂停
+            }else{
+                ftpUtil.disconnect();
+                now = new Date();
+                dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+                current = dateFormat.format(now);
+                pw.println(current+":"+"连接FTP出错:"+e+ "\n");
+                System.out.println("连接FTP出错：" + e.getMessage());
+                for(Iterator<Map.Entry<String, String>> it = ftpUtil.numberOfRequest.entrySet().iterator(); it.hasNext();){
+                    Map.Entry<String, String> item = it.next();
+                    it.remove();
+                }
+                dataTask.setStatus("0");
+                dataTaskService.update(dataTask);
+                return 0;
             }
-            dataTask.setStatus("0");
-            dataTaskService.update(dataTask);
-            return 0;
         }finally {
             ftpUtil.disconnect();
             now = new Date();
@@ -314,6 +326,19 @@ public class DataSyncController {
         jsonObject.put("process",processList);
         jsonObject.put("blockList",blockList);
         return jsonObject;
+    }
+
+    @ResponseBody
+    @RequestMapping("pauseUpLoading")
+    public void pauseUpLoading(String taskId){
+        try {
+            ftpUtil.ftpOutputStream.get(taskId).flush();
+            ftpUtil.ftpOutputStream.get(taskId).close();
+            ftpUtil.pauseTasks.put(taskId,taskId);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("暂停异常！");
+        }
     }
 
 }
