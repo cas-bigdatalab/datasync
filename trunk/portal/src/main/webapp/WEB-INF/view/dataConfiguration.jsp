@@ -216,7 +216,7 @@
                             <input id="fcupload" type="file" name="file" class="cus-input">
                             <input type="button" class="btn btn-default" onclick="doUpload();" value="上传"/>
                         </form>
-                        <div tabindex="-1" data-width="200">
+                        <div  tabindex="-1" data-width="200">
                             <div class="" style="width:auto">
                                 <div class="">
                                     <div class="">
@@ -231,16 +231,14 @@
                                                         </ul>
                                                     </div>
                                                     <div class="tab-content" style="background-color: white;min-height:300px;
-                                                    max-height:70%;padding-top: 20px ;"
-                                                         id="tableNamePDiv"> <%--overflow: scroll;--%>
+                                                    max-height:70%;padding-top: 20px ;" id="tableNamePDiv"> <%--overflow: scroll;--%>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" onclick="createTableAndInsertValue(this)"
-                                                data-dismiss="modal" class="btn green">保存
+                                        <button type="button" onclick="createTableAndInsertValue(this)" data-dismiss="modal" class="btn green">保存
                                         </button>
                                         <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
                                     </div>
@@ -309,10 +307,10 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
-        <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
+
+        <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
             <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -332,8 +330,7 @@
                                                     编辑 </a>
                                             </li>
                                             <li class="">
-                                                <a href="#previewTableDataAndComsId"
-                                                   id="previewTableDataAndComsButtonId"
+                                                <a href="#previewTableDataAndComsId" id="previewTableDataAndComsButtonId"
                                                    data-toggle="tab" aria-expanded="false">
                                                     预览 </a>
                                             </li>
@@ -358,8 +355,6 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 </div>
 <input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
@@ -383,15 +378,6 @@
     </tr>
     {{/each}}
 </script>
-
-<script type="text/html" id="resourceTmp1">
-    <%--<tr>--%>
-    <%--{{for(var key in dataArry)}}--%>
-    <%--<td>{{data[key]}}</td>--%>
-    <%--</tr>--%>
-    <%--{{/each}}--%>
-</script>
-
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
@@ -406,45 +392,43 @@
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-fileinput/js/fileinput.min.js"></script>
     <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
-    <%--
-        <script src="${ctx}/resources/js/metaTemplate.js"></script>
-    --%>
+<%--
+    <script src="${ctx}/resources/js/metaTemplate.js"></script>
+--%>
     <script>
         var ctx = '${ctx}', edit = false;
-        var sub = '${sessionScope.SubjectCode}';
-        var filePath = '${FtpFilePath}';
-        var olddata = {};
+        var sub = '${sessionScope.SubjectCode}'
+        var filePath = '${FtpFilePath}'
         $(function () {
-            chooseTable(sub, 0);
+            chooseTable(sub,0);
             loadTree();
-            clickEditData(sub);//数据编辑
         });
 
-        var sub1 = '${sessionScope.SubjectCode}';
+        var sub1 = '${sessionScope.SubjectCode}'
         $("#tabDescribe li").click(function () {
             var flag = $(this).val();
             chooseTable(sub1, flag);
 
-        });
+        })
 
         function chooseTable(subjectCode, flag) {
             $.ajax({
                 type: "GET",
                 url: '${ctx}/relationalDatabaseTableList',
-                data: {"subjectCode": subjectCode, "flag": flag},
+                data: {"subjectCode":subjectCode,"flag":flag},
                 dataType: "json",
                 success: function (data) {
                     var html = "<div class='form-group'>" +
-                        "<div class='col-md-12'>" +
-                        "<div class='icheck-list' style='padding-top: 7px'>";
+                    "<div class='col-md-12'>" +
+                    "<div class='icheck-list' style='padding-top: 7px'>";
                     var list = data.list;
                     for (var i = 0; i < list.length; i++) {
                         html += "<label class='col-md-6' style='padding-left: 0px'><input type='checkbox' name='mapTable' onclick=\"staticSourceTableChoice(1,this" + ",'" + sub1 + "','" + list[i] + "','dataResource')\" value='" + list[i] + "'>&nbsp;" + list[i] + "</label>"
                     }
                     html += "</div><input type='text' class='form-control' name='maptableinput' id='maptableinput' style='display:none;'/></div></div>";
-                    if (flag == '0') {
+                    if(flag=='0') {
                         $("#undescribe").html(html);
-                    } else {
+                    }else{
                         $("#isdescribe").html(html);
                     }
                 }
@@ -636,39 +620,38 @@
                                     children = data;
                                 }
 
-                            });
-                        } else {
-                            $.ajax({
-                                type: "GET",
-                                url: "${ctx}/resource/treeNode",
-                                dataType: "json",
-                                data: {"filePath": str1},
-                                async: false,
-                                success: function (data) {
-                                    children = data;
-                                }
+                        });
+                    }else{
+                        $.ajax({
+                            type: "GET",
+                            url: "${ctx}/resource/treeNode",
+                            dataType: "json",
+                            data: {"filePath": str1},
+                            async: false,
+                            success: function (data) {
+                                children = data;
+                            }
 
-                            });
-                        }
-                        generateChildJson(children);
-                        callback.call(this, children);
-                        /*else{
-                         callback.call(this,);
-                         }*/
+                        });
                     }
+                    generateChildJson(children);
+                    callback.call(this, children);
+                    /*else{
+                     callback.call(this,);
+                     }*/
+                }
+            },
+            "types": {
+                "default": {
+                    "icon": "glyphicon glyphicon-flash"
                 },
-                "types": {
-                    "default": {
-                        "icon": "glyphicon glyphicon-flash"
-                    },
-                    "file": {
-                        "icon": "glyphicon glyphicon-ok"
-                    }
-                },
-                "plugins": ["dnd"/*, "state"*/, "types", /*"checkbox",*/ "wholerow"]
-            })
+                "file": {
+                    "icon": "glyphicon glyphicon-ok"
+                }
+            },
+            "plugins": ["dnd"/*, "state"*/, "types", /*"checkbox",*/ "wholerow"]
+        })
         }
-
         function generateChildJson(childArray) {
             for (var i = 0; i < childArray.length; i++) {
                 var child = childArray[i];
@@ -682,24 +665,24 @@
         }
 
         /**
-         * 上传excel 成功后显示字段内容
-         */
-        function doUpload() {
-            var formData = new FormData($("#fileForm")[0]);
+        * 上传excel 成功后显示字段内容
+        */
+        function doUpload(){
+            var formData = new FormData($( "#fileForm" )[0]);
             var fileName = formData.get("file").name;
-            if (fileName === undefined) {
+            if(fileName=== undefined){
                 toastr["warning"]("提示！", "请选择文件");
                 return;
             }
-            var allFileType = ".xls|";
+            var allFileType=".xls|";
             var s = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
-            if (allFileType.indexOf(s + "|") === -1) {
+             if(allFileType.indexOf(s+"|") === -1){
                 toastr["warning"]("提示！", "请选择上传Excel2007以上版本文件");
                 return;
             }
-            formData.append("subjectCode", $.trim($("#subjectCode").val()));
+            formData.append("subjectCode",$.trim($("#subjectCode").val()));
             $.ajax({
-                url: '${ctx}/fileImport/excel',
+                url: '${ctx}/fileImport/excel' ,
                 type: 'post',
                 data: formData,
                 async: false,
@@ -708,27 +691,27 @@
                 processData: false,
                 success: function (result) {
                     var resultJson = JSON.parse(result);
-                    if (resultJson["code"] === "error") {
+                    if(resultJson["code"] === "error"){
                         toastr["error"]("错误！", resultJson["message"]);
-                    } else {
+                    } else{
                         var data = resultJson.data;
-                        var tableName = template("tableNameLi", {"data": data});
+                        var tableName = template("tableNameLi",{"data":data});
                         $("#tableNameUl").html("");
                         $("#tableNameUl").html(tableName);
-                        var tableNameDiv = template("tableNameDiv", {"data": data});
+                        var tableNameDiv = template("tableNameDiv",{"data":data});
                         $("#tableNamePDiv").html("");
                         $("#tableNamePDiv").html(tableNameDiv);
-                        $.each(data, function (key, value) {
-                            $.each(value, function (k, v) {
+                        $.each(data,function(key,value){
+                            $.each(value,function(k,v){
                                 var tableField;
-                                var exist = v[0][0];
+                                var exist = v[0][0] ;
                                 if (exist === "isExist") {
-                                    tableField = template("tableFieldIsExist", {"data": v});
+                                    tableField = template("tableFieldIsExist",{"data":v});
                                 } else {
-                                    tableField = template("tableFieldNotExist", {"data": v});
+                                    tableField = template("tableFieldNotExist",{"data":v});
                                 }
-                                $("#" + k).html("");
-                                $("#" + k).append(tableField);
+                                $("#"+k).html("");
+                                $("#"+k).append(tableField);
                             })
 
                         })
@@ -741,13 +724,13 @@
         }
 
         /**
-         * 创建表并保存数据 || 仅保存数据
-         */
+        * 创建表并保存数据 || 仅保存数据
+        */
         function createTableAndInsertValue(_this) {
             var tableName = $(_this).parent().prev().find("li.active a").attr("href").substring(1);
             var tableNum = $(_this).parent().prev().find(".active table").length;
-            if (tableNum === 0) {
-                toastr["error"]("错误！", "请上传数据Excel");
+            if(tableNum === 0){
+                toastr["error"]("错误！","请上传数据Excel");
                 return;
             }
             var table = $(_this).parent().prev().find(".active table")[0];
@@ -786,10 +769,10 @@
             }
 
             /**
-             * 将表格数据转化为 json格式
-             * @param table
-             * @returns {*}
-             */
+            * 将表格数据转化为 json格式
+            * @param table
+            * @returns {*}
+            */
             function getTableData(table) {
                 var result = {};
                 var rows = table.rows;
@@ -804,15 +787,15 @@
                     * 5：比对数据库已存在表字段 与excel新导入字段 导入新增数据
                     * */
                     if (cellLength === 6) {
-                        serializeTableFor6(cellLength, cells, trl, i);
-                        result["type"] = "createAndInsert";
+                        serializeTableFor6(cellLength,cells,trl,i);
+                        result["type"]="createAndInsert";
                     }
-                    if (cellLength === 5) {
-                        serializeTableFor5(cellLength, cells, trl, i);
-                        result["type"] = "insert";
+                    if(cellLength === 5){
+                        serializeTableFor5(cellLength,cells,trl,i);
+                        result["type"]="insert";
                     }
                 }
-                result["data"] = trl;
+                result["data"]=trl;
                 return result;
             }
         }
@@ -871,9 +854,8 @@
             }
             trl.push(tdl);
         }
-
         // 初始化 bootstrap-fileinput 上传组件
-        (function () {
+        (function(){
             $("#file-4").fileinput({
                 language: "zh",
                 theme: 'fas',
@@ -881,14 +863,14 @@
                 showUpload: true,
                 showCaption: false,
                 // browseClass: "btn btn-primary btn-lg",
-                browseClass: "btn btn-primary", //按钮样式
+                browseClass:"btn btn-primary", //按钮样式
                 dropZoneEnabled: true,//是否显示拖拽区域 默认显示
                 fileType: "any",
                 previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
                 overwriteInitial: false,
                 hideThumbnailContent: true, // 隐藏文件的预览 以最小内容展示
                 maxFileCount: 1, // 允许选中的文件数量
-                uploadExtraData: function () {
+                uploadExtraData:function(){
                     return {
                         "subjectCode": $.trim($("#subjectCode").val())
                     }

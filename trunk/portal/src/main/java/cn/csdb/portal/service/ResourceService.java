@@ -119,6 +119,13 @@ public class ResourceService {
         if (!file.exists() || !file.isDirectory())
             return jsonObjects;
 //        String[] fp = filePath.split(";");
+        String separator = File.separator;
+        String reg = "";
+        if ("/".equals(separator)) {
+            reg = separator;
+        } else {
+            reg = "\\\\";
+        }
         File[] fp = file.listFiles();
         for (int i = 0; i < fp.length; i++) {
 //            if(StringUtils.isBlank(fp[i])){
@@ -132,8 +139,8 @@ public class ResourceService {
             if(fp[i].getPath().indexOf("_sql")==-1){
                 if (fp[i].isDirectory()) {
                     if(fp[i].getPath().indexOf("_sql")==-1) {
-                        jsonObject.put("id", fp[i].getPath().replaceAll("\\\\", "%_%"));
-                        jsonObject.put("text", fp[i].getName().replaceAll("\\\\", "%_%"));
+                        jsonObject.put("id", fp[i].getPath().replaceAll(reg, "%_%"));
+                        jsonObject.put("text", fp[i].getName().replaceAll(reg, "%_%"));
                         jsonObject.put("type", "directory");
                         JSONObject jo = new JSONObject();
                         jo.put("disabled", "true");

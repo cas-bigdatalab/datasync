@@ -110,7 +110,7 @@ public class FileImportController {
                 e.printStackTrace();
             }
         }
-            fileImportService.onlyInsertValue(tableName, tableFields, workBook, subjectCode);
+        jsonObject = fileImportService.onlyInsertValue(tableName, tableFields, workBook, subjectCode);
         return jsonObject;
     }
 }

@@ -1,3 +1,4 @@
+/*
 package cn.csdb.portal.service;
 
 import cn.csdb.portal.model.Subject;
@@ -12,12 +13,14 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.annotation.Resource;
 
+*/
 /**
  * @program: DataSync
  * @description: a test class for subjectservice
  * @author: xiajl
  * @create: 2018-10-22 16:03
- **/
+ **//*
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
 @ContextConfiguration(locations = {"classpath:applicationContext.xml", "classpath:spring-mvc.xml"})
@@ -35,14 +38,16 @@ public class SubjectServiceTest {
         logger.info("\n\n"+ subject.getSubjectName() + ":" + subject.getBrief());
     }
 
-    /**
+    */
+/**
      * Function Description: 
      *
      * @param:  测试保存subject对像
      * @return: 
      * @auther: Administrator
      * @date:   2018/10/25 16:27
-     */
+     *//*
+
     
     @Test
     public void save(){
@@ -52,3 +57,4 @@ public class SubjectServiceTest {
         subjectDao.save(subject);
     }
 }
+*/

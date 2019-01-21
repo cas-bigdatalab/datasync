@@ -89,7 +89,7 @@
     </bean>
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize" value="10000000"/> <!--默认最大支持10M大小的文件-->
+        <property name="maxUploadSize" value="1000000000"/> <!--默认最大支持10M大小的文件-->
         <property name="defaultEncoding" value="utf-8"/>
     </bean>
 

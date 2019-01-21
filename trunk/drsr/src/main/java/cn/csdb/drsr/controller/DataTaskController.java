@@ -4,6 +4,7 @@ import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
 import cn.csdb.drsr.service.*;
 import cn.csdb.drsr.utils.ConfigUtil;
+import cn.csdb.drsr.utils.FtpUtil;
 import cn.csdb.drsr.utils.PropertiesUtil;
 import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
 import cn.csdb.drsr.utils.dataSrc.IDataSource;
@@ -20,10 +21,7 @@ import java.io.File;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
 
@@ -45,6 +43,7 @@ public class DataTaskController {
     private DataSrcService dataSrcService;
 
     private static final FieldPosition HELPER_POSITION = new FieldPosition(0);
+    private FtpUtil ftpUtil=new FtpUtil();
 
 
     /**
@@ -122,10 +121,35 @@ public class DataTaskController {
         JSONObject jsonObject = new JSONObject();
         List<DataTask> dataTasks = dataTaskService.getDatataskByPage((pageNo-1)*pageSize,pageSize,datataskType,status, subjectCode);
         int totalCount = dataTaskService.getCount(datataskType,status,subjectCode);
+        List<Map<Object,Object>> taskProcessList = new ArrayList<Map<Object,Object>>();
+        List<Map<Object,Object>> requestList = new ArrayList<Map<Object,Object>>();
+        Map<Object,Object> map=new HashMap<Object, Object>();
+        Map<Object,Object> requestMap=new HashMap<Object, Object>();
+        if(dataTasks.size()!=0){
+            for(int i=0;i<dataTasks.size();i++){
+                Object process =  ftpUtil.getFtpUploadProcess(dataTasks.get(i).getDataTaskId());
+                map.put(dataTasks.get(i).getDataTaskId(),process);
+                System.out.println(process);
+            }
+        }
+
+        for (String in : ftpUtil.numberOfRequest.keySet()) {
+            String value = ftpUtil.numberOfRequest.get(in);//得到每个key多对用value的值
+            requestMap.put(in,value);
+        }
+
+
+
         jsonObject.put("dataTasks",dataTasks);
         jsonObject.put("totalCount",totalCount);
         jsonObject.put("pageNum",totalCount%pageSize==0?totalCount/pageSize:totalCount/pageSize+1);
         jsonObject.put("pageSize",pageSize);
+
+        taskProcessList.add(map);
+        requestList.add(requestMap);
+        jsonObject.put("taskProcessList",taskProcessList);
+        jsonObject.put("requestList",requestList);
+
         return jsonObject;
     }
 
@@ -220,7 +244,7 @@ public class DataTaskController {
             String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
             File file = new File(str);
             if(file.isDirectory()) {
-                str1 = fileResourceService.traversingFiles(str);
+//                str1 = fileResourceService.traversingFiles(str);
             }else{
                 str1 = str + ";";
             }
@@ -322,7 +346,16 @@ public class DataTaskController {
     public JSONObject getDatataskById(String datataskId){
         JSONObject jsonObject = new JSONObject();
         DataTask dataTask = dataTaskService.get(datataskId);
-        jsonObject.put("datatask",dataTask);
+//        DataSrcService dataSrcService=new DataSrcService();
+//        String filePath = fileSourceFileList(dataSourceId);
+        if("file".equals(dataTask.getDataTaskType())){
+            String filePath=fileResourceService.findById(dataTask.getDataSourceId()).getFilePath();
+            JSONObject jsonObjectsTree = fileResourceService.fileTreeLoading("",filePath);
+            jsonObject.put("datatask",dataTask);
+            jsonObject.put("jsonObjectsTree",jsonObjectsTree);
+        }else {
+            jsonObject.put("datatask",dataTask);
+        }
         return jsonObject;
     }
 
@@ -371,7 +404,7 @@ public class DataTaskController {
                 String nodePath = "";
                 for (String nodeId : nodes) {
                     String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
-                    String str1 = fileResourceService.traversingFiles(str);
+                    String str1 = str;
                     nodePath += str1;
                 }
                 for(String attrs : attr){
@@ -394,7 +427,7 @@ public class DataTaskController {
                     String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
                     File file = new File(str);
                     if(file.isDirectory()) {
-                        str1 = fileResourceService.traversingFiles(str);
+                        //str1 = fileResourceService.traversingFiles(str);
                     }else{
                         str1 = str + ";";
                     }
