@@ -74,6 +74,60 @@
             width: 200px;
             height: 200px;
         }*/
+
+        /* 下拉按钮样式 */
+        .dropbtn {
+            background-color: #438eb9;
+            color: white;
+            padding: 11px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* 容器 <div> - 需要定位下拉内容 */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            float: right;
+        }
+
+        /* 下拉内容 (默认隐藏) */
+        .dropdown-content {
+            opacity:0.6;
+            filter:alpha(opacity=40);
+            display: none;
+            position: absolute;
+            background-color: #438eb9;
+            width: 100%;
+            /*color: white;*/
+            /*min-width: 100%;*/
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        }
+
+        /* 下拉菜单的链接 */
+        .dropdown-content a {
+            color: white;
+           /*// padding: 6px 10px;*/
+            font-size: 16px;
+            width: 100%;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        /* 鼠标移上去后修改下拉菜单链接颜色 */
+        .dropdown-content a:hover {background-color: #2128f1}
+
+        /* 在鼠标移上去后显示下拉菜单 */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* 当下拉内容显示后修改下拉按钮的背景颜色 */
+        .dropdown:hover .dropbtn {
+            background-color: #438eb9;
+        }
     </style>
 </head>
 <body class="page-quick-sidebar-over-content page-style-square">
@@ -83,26 +137,40 @@
     <div class="page-header-inner">
         <!-- BEGIN LOGO -->
         <div class="page-logo" style="width: auto;">
-            <a href="${ctx}/index">
+            <a href="#">
                 <h4 style="margin-top:14px ">分布式数据汇交管理系统</h4>
             </a>
         </div>
 
-        <div class="top-menu">
-            <ul class="nav navbar-nav pull-right">
-                <!-- BEGIN USER LOGIN DROPDOWN -->
-                <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+        <%--<div class="top-menu">--%>
+            <%--<ul class="cus_ul">--%>
+                <%--<li>--%>
+                    <%--<a href="#" id="cus_User_id">--%>
+                        <%--<i class="glyphicon glyphicon-user"></i>--%>
+                        <%--&nbsp;&nbsp;--%>
+                        <%--<span>欢迎您！${sessionScope.userName}</span>--%>
+                        <%--&nbsp;--%>
+                        <%--<i class="fa fa-angle-down"></i>--%>
+                    <%--</a>--%>
+                    <%--<ul class="cus_drop">--%>
+                        <%--<li>--%>
+                            <%--<a href="logout"><i class="icon-key"></i>&nbsp;安全退出</a>--%>
+                        <%--</li>--%>
+                    <%--</ul>--%>
+                <%--</li>--%>
+                <%--<!-- END USER LOGIN DROPDOWN -->--%>
+            <%--</ul>--%>
+        <%--</div>--%>
 
-                <li>
-                    <a href="${ctx}/">
-                        <span style="color:black;">hi, ${sessionScope.userName} &nbsp</span>
-                        <i class="glyphicon glyphicon-user" style="color: white;"></i>
-                        <i class="fa fa-angle-down" style="color: white;"></i>
-                    </a>
-                </li>
-                <!-- END USER LOGIN DROPDOWN -->
-            </ul>
+
+        <div class="dropdown">
+            <i class="glyphicon glyphicon-user"></i>
+            <button class="dropbtn">欢迎您！${sessionScope.userName}</button>
+            <div class="dropdown-content">
+               <a href="/drsr/logout"> <i class="glyphicon glyphicon-off"></i> &nbsp;安全退出</a>
+            </div>
         </div>
+
         <!-- END TOP NAVIGATION MENU -->
     </div>
     <!-- END HEADER INNER -->
@@ -115,25 +183,10 @@
     <!-- BEGIN SIDEBAR -->
     <div class="page-sidebar-wrapper">
         <div class="page-sidebar navbar-collapse collapse">
-            <!-- BEGIN SIDEBAR MENU -->
-            <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
-            <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
-            <!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
-            <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
-            <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
-            <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
             <ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
                 <li>
                     <div style="height: 70px"></div>
                 </li>
-               <%-- <li class="start">
-                    <a href="${ctx}/index">
-                        <i class="icon-home"></i>
-                        <span class="title">首页</span>
-                        <span class="arrow"></span>
-                    </a>
-                </li>--%>
-                <%-- <shiro:hasRole name="Register">--%>
                 <li>
                     <a href="${ctx}/subjectInfo">
                         <i class="icon-wrench"></i>
@@ -173,46 +226,9 @@
                         <span class="arrow "></span>
                     </a>
                 </li>
-                <%--<li>
-                    <a href="${ctx}/dataSource">
-                        <i class="icon-wrench"></i>
-                        <span class="title">数据源</span>
-                        <span class="arrow "></span>
-                    </a>
-                </li>--%>
-
-                <%-- </shiro:hasRole>
-                 <shiro:hasRole name="管理员">--%>
-                <%--<li>
-                    <a href="${ctx}/resource/audit/localAudit">
-                        <i class="icon-lock"></i>
-                        <span class="title">注册资源审核</span>
-                        <span class="arrow "></span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="${ctx}/resCatalog">
-                        <i class="icon-list"></i>
-                        <span class="title">本地资源目录管理</span>
-                        <span class="arrow "></span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="${ctx}/metaTemplate/">
-                        <i class="icon-layers"></i>
-                        <span class="title">元数据模板管理</span>
-                        <span class="arrow "></span>
-                    </a>
-                </li>--%>
-
             </ul>
-            <!-- END SIDEBAR MENU -->
         </div>
     </div>
-    <!-- END SIDEBAR -->
-    <!-- BEGIN CONTENT -->
     <div class="page-content-wrapper">
         <sitemesh:write property="body"/>
 
@@ -229,13 +245,7 @@
     </div>
 </div>
 <div class="tabWrap"></div>
-<!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 
-
-
-
-
-<!-- BEGIN CORE PLUGINS -->
 <!--[if lt IE 9]>
 <script src="${ctx}/resources/bundles/metronic/global/plugins/respond.min.js"></script>
 <script src="${ctx}/resources/bundles/metronic/global/plugins/excanvas.min.js"></script>
