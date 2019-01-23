@@ -165,7 +165,7 @@
 
         <div class="dropdown">
             <i class="glyphicon glyphicon-user"></i>
-            <button class="dropbtn">欢迎您！${sessionScope.userName}</button>
+            <button class="dropbtn">欢迎您！${sessionScope.userName} &nbsp; &nbsp;</button>
             <div class="dropdown-content">
                <a href="/drsr/logout"> <i class="glyphicon glyphicon-off"></i> &nbsp;安全退出</a>
             </div>

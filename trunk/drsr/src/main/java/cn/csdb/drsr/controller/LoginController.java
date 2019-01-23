@@ -53,13 +53,21 @@ public class LoginController {
 
         String loginNotice = "";
         int loginStatus = 0; // log success or not， 0 ：success, 1: failed, notice : username or password is wrong
-        loginStatus = loginService.validateLogin(userName, password);
+        if("".equals(userName) || "".equals(password)){//账号或者密码为空
+            loginStatus=2;
+        }else{
+            loginStatus = loginService.validateLogin(userName, password);
+        }
 
         String retView = "";
         if (loginStatus == 1)
         {
             request.getSession().setAttribute("userName", userName);
             retView = "redirect:/index";
+        }
+        else if(loginStatus == 2){
+            retView = "redirect:/";
+            attributes.addFlashAttribute("loginNotice", "账号或者密码不能为空！");
         }
         else
         {
