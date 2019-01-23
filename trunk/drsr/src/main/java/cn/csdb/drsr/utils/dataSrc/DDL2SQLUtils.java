@@ -1,12 +1,12 @@
 package cn.csdb.drsr.utils.dataSrc;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @description: generate ddl from table or sql string
@@ -73,6 +73,7 @@ public class DDL2SQLUtils {
 
                 sb.append(",");
             }
+            sb.append("PORTALID VARCHAR(36) COMMENT '中心端系统ID',");
         } catch (Exception e) {
             System.out.println(
                     "Error: could not retrieve column metadata for the table '" + table + "' from the backend.");
@@ -289,7 +290,14 @@ public class DDL2SQLUtils {
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();
             while (rs.next()) {
-                result.append("INSERT INTO " + table + " VALUES (");
+                result.append("INSERT INTO " + table + " (");
+                for (int j = 1; j <= columnCount; j++) {
+                    result.append(metaData.getColumnLabel(j) + ",");
+                }
+                if (result.toString().endsWith(",")) {
+                    result.replace(result.length() - 1, result.length(), ",PORTALID)");
+                }
+                result.append("VALUES (");
                 for (int i = 0; i < columnCount; i++) {
                     if (i > 0) {
                         result.append(", ");
@@ -303,6 +311,7 @@ public class DDL2SQLUtils {
                         result.append("'" + outputValue + "'");
                     }
                 }
+                result.append(",'" + UUID.randomUUID().toString() + "'");
                 result.append(");\n");
             }
             rs.close();
