@@ -53,7 +53,7 @@
         </property>
     </bean>
 
-    <!--<bean class="org.springframework.web.context.support.ServletContextAttributeExporter">
+    <bean class="org.springframework.web.context.support.ServletContextAttributeExporter">
         <property name="attributes">
             <map>
                 <entry key="systemPro">
@@ -61,5 +61,17 @@
                 </entry>
             </map>
         </property>
-    </bean>-->
+    </bean>
+
+    <!-- 开启shiro注解-->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor">
+        <property name="proxyTargetClass" value="true" />
+    </bean>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+
+
+
 </beans>

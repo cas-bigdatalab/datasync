@@ -114,7 +114,7 @@
     </bean>
     <import resource="system-config.xml"/>
     <!-- 缓存配置文件 -->
-    <!--<import resource="spring-cache.xml"/>-->
+    <import resource="spring-cache.xml"/>
     <!-- 权限控制配置文件  -->
-    <!--<import resource="spring-shiro.xml"/>-->
+    <import resource="spring-shiro.xml"/>
 </beans>
