@@ -21,17 +21,17 @@
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean" depends-on="roleOrFilter">
         <property name="securityManager" ref="securityManager"/>
         <!-- 设定角色的登录链接，这里为cas登录页面的链接可配置回调地址  -->
-        <property name="loginUrl" value="${cas.url.prefix}/login?service=${drsr.url}/shiro-cas"/>
+        <property name="loginUrl" value="/login"/><!--${cas.url.prefix}/login?service=${resreg.url}/shiro-cas-->
         <!--<property name="loginUrl" value="/"/>-->
         <property name="successUrl" value="/"/>
         <property name="unauthorizedUrl" value="/403"/>
 
-        <property name="filters">
-            <util:map>
-                <entry key="cas" value-ref="casFilter"/>
-                <entry key="roles" value-ref="roleOrFilter"/>
-            </util:map>
-        </property>
+        <!--<property name="filters">-->
+            <!--<util:map>-->
+                <!--<entry key="cas" value-ref="casFilter"/>-->
+                <!--<entry key="roles" value-ref="roleOrFilter"/>-->
+            <!--</util:map>-->
+        <!--</property>-->
         <property name="filterChainDefinitions">
             <value>
                 /shiro-cas=cas
@@ -47,7 +47,7 @@
                 /key/**=anon
                 /v1/sync/**=anon
                 <!--/** = authc,roles[管理员,系统管理员]-->
-                /** = anon
+                /** = authc
             </value>
         </property>
     </bean>
@@ -63,19 +63,20 @@
     </bean>
 
 
-    <bean id="casRealm" class="cn.csdb.drsr.common.NCasRealm">
-        <!--cas地址后台验证地址-->
-        <property name="casServerUrlPrefix" value="${cas.url.prefix}"/>
-        <!-- 客户端的回调地址设置，必须和下面的shiro-cas过滤器拦截的地址一致 -->
-        <property name="casService" value="${drsr.url}/shiro-cas"/>
-    </bean>
+    <!--<bean id="casRealm" class="cn.csdb.drsr.common.NCasRealm">-->
+        <!--&lt;!&ndash;cas地址后台验证地址&ndash;&gt;-->
+        <!--<property name="casServerUrlPrefix" value="${cas.url.prefix}"/>-->
+        <!--&lt;!&ndash; 客户端的回调地址设置，必须和下面的shiro-cas过滤器拦截的地址一致 &ndash;&gt;-->
+        <!--<property name="casService" value="${drsr.url}/shiro-cas"/>-->
+    <!--</bean>-->
 
+    <!-- 自定义Realm -->
+    <bean id="myRealm" class="cn.csdb.drsr.common.MyRealm"/>
 
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="cacheManager" ref="shiroCacheManager"/>
-        <property name="realm" ref="casRealm"/>
-
-        <property name="subjectFactory" ref="casSubjectFactory"/>
+        <property name="realm" ref="myRealm"/>
+        <!--<property name="subjectFactory" ref="casSubjectFactory"/>-->
     </bean>
 
     <!-- shiro ehcache-->
