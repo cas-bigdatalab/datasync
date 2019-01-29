@@ -93,19 +93,43 @@ public class DataSrcService {
                 e.printStackTrace();
             }
         }
-        System.out.println("测试dddddd："+i);
+//        System.out.println("测试dddddd："+i);
         return i;
     }
-
-//    连接mysql数据库，根据表明查出所有数据，供编辑
-    public List<Map<String,Object>>  getTableData(DataSrc dataSrc,String tableName){
+//    分页
+    public int countData(DataSrc dataSrc,String tableName){
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
         List<Map<String,Object>> listMap=new ArrayList<Map<String,Object>>();
+        int count=0;
+        try{
+            String sql="select count(*) as num from "+tableName+"";
 
+            //         时间格式的数据怎么获得
+            PreparedStatement pst=connection.prepareStatement(sql);
+            ResultSet rs=pst.executeQuery();
+            while(rs.next()){
+                count=rs.getInt("num");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try{ connection.close();}catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return count;
+    }
+
+//    连接mysql数据库，根据表明查出所有数据，供编辑
+    public List<Map<String,Object>>  getTableData(DataSrc dataSrc,String tableName,int pageNo,int pageSize){
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        List<Map<String,Object>> listMap=new ArrayList<Map<String,Object>>();
+         int start=pageSize*(pageNo-1);
        try{
 //           select COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT from information_schema.COLUMNS where table_name = '表名' and table_schema = '数据库名称';
-           String sql="select * from "+tableName+"";
+           String sql="select * from "+tableName+" limit "+start+" ,"+ pageSize+"";
 
            //         时间格式的数据怎么获得
            PreparedStatement pst=connection.prepareStatement(sql);

@@ -67,7 +67,7 @@
             table-layout: fixed;
             white-space: normal;
             word-break: break-all;
-            width: 1000px;
+            width: 1300px;
         }
 
         #tableDatil table td {
@@ -78,8 +78,43 @@
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            width: 50px;
-            height: 50px;
+            width: 65px;
+            height: 65px;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        table td, table th {
+            text-align: center;
+            border: 1px solid #cad9ea;
+            color: #666;
+            height: 30px;
+            width: 200px;
+        }
+
+        table thead th {
+            background-color: #CCE8EB;
+            /*width: 100px;*/
+        }
+        input{
+            border: 1px solid #cad9ea;
+        }
+        #div_head input {
+            background-color: #CCE8EB;
+            width: 200px;
+            border-collapse: collapse;
+            text-align: center;
+
+
+        }
+        #form_id input{
+            width: 200px;
+            border-collapse: collapse;
+            text-align: center;
         }
     </style>
 </head>
@@ -250,7 +285,7 @@
                         </div>
 
                         <div id="tableDatil" style="width:1400px;min-height: 300px;overflow: hidden;">
-                            <div class="portlet-title" style="width:1370px; height:450px; overflow:scroll;">
+                            <div class="portlet-title" style="width:1370px; height:500px; ">
                                 <table border="1" id="table1" class="table_class">
                                     <thead id="thead_id">
                                     </thead>
@@ -258,6 +293,19 @@
                                     <tbody id="fileBody">
                                     </tbody>
                                 </table>
+                                <div class="review-item clearfix">
+
+                                    <div style="padding-top: 25px; float: left">
+                                        当前第<span style="color:blue;" id="currentPageNo"></span>页,共<span
+                                            style="color:blue;"
+                                            id="totalPages"></span>页,<span
+                                            style="color:blue;" id="totalCount"></span>条数据
+                                    </div>
+                                    <div style="float: right">
+                                        <div id="pagination"></div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -266,29 +314,105 @@
 
                      </script>
                 </div>
-
             </div>
-            <div id="staticUpdateData" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
-                <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 70%;">
-                    <div class="modal-content">
-                        <div class="modal-header" style="background-color:#28a4a4!important;">
-                            <h4 class="modal-title" id="title_id1">表数据编辑</h4>
+        </div>
 
-                        </div>
+        <div id="staticUpdateData" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
+            <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 50%;">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color:#28a4a4!important;">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                id="editTableFieldComsCloseId11"></button>
+                        <h4 class="modal-title" id="title_id1">表数据编辑</h4>
 
-                        <div class="modal-body" style="overflow-x:scroll;">
+                    </div>
 
-                            <div id="div_head">
+                    <div class="modal-body" style="overflow-x:scroll;">
 
+                        <div class="tab-content"
+                             style="background-color: white;min-height:300px;max-height:50%;padding-top: 20px ; overflow: scroll;">
+                            <div style="margin-left: 5%;">
+                                <div id="div_head">
+
+                                </div>
+                                <div>
+                                    <form id="form_id" action="#" method="post">
+
+                                    </form>
+                                </div>
                             </div>
-                            <div>
-                                <form id="form_id" action="#" method="post">
-
-
-                                </form>
-                            </div>
-
                         </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <%--表数据查看详情--%>
+        <div id="staticShowDataDetail" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
+            <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 50%;">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color:#28a4a4!important;">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                id="editTableFieldComsCloseId1"></button>
+                        <h4 class="modal-title" id="checkDetial">查看详情</h4>
+
+                    </div>
+
+                    <div class="modal-body" style="overflow-x:scroll;">
+                        <div class="tab-content"
+                             style="background-color: white;min-height:300px;max-height:60%;padding-top: 20px ;">
+                            <div class="tab-pane active" id="checkData1" style=" ">
+                                <table border="1" id="checkTable">
+                                    <thead>
+                                    <th>字段名</th>
+                                    <th>字段类型</th>
+                                    <th>注释</th>
+                                    <th>字段值</th>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <%--新增表数据--%>
+        <div id="staticAddData" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
+            <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 50%;">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color:#28a4a4!important;">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                id="addTableData"></button>
+                        <h4 class="modal-title" id="adddata1">新增数据</h4>
+
+                    </div>
+
+                    <div class="modal-body" style="overflow-x:scroll;">
+                        <div class="tab-content"
+                             style="background-color: white;min-height:300px;max-height:60%;padding-top: 20px ;">
+                            <div class="tab-pane active" id="adddata" style=" ">
+                                <table border="1" id="addTable">
+                                    <thead>
+                                    <th>字段名</th>
+                                    <th>字段类型</th>
+                                    <th>注释</th>
+                                    <th>字段值</th>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="add_div" class="modal-footer" >
+                        <button id="addbtn"  style="width: 80px;height: 30px; border: 1px solid #cad9ea;" onclick="addTablefuntion()">保存</button>
                     </div>
                 </div>
             </div>
@@ -341,6 +465,7 @@
                 </div>
             </div>
         </div>
+
         <!--文件树创建目录弹窗页-->
         <div id="addSonDirectory" class="modal fade" tabindex="-1" data-width="200">
             <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
@@ -441,6 +566,10 @@
         var sub = '${sessionScope.SubjectCode}';
         var filePath = '${FtpFilePath}';
         var olddata = {};
+        var S_subjectCode;
+        var S_tableName;
+        var S_column;
+        var S_dataType;
         $(function () {
             chooseTable(sub, 0);
             loadTree();
@@ -499,33 +628,37 @@
         }
 
         //数据库数据编辑方法
-        function editTableData(subjectCode, tableName) {
+        function editTableData(subjectCode, tableName, pageNo) {
             $("#thead_id").html("");
             $("#fileBody").html("");
 
             $.ajax({
                 url: "${ctx}/showTableData",
                 type: "POST",
-                data: {"subjectCode": subjectCode, "tableName": tableName},
+                data: {
+                    "subjectCode": subjectCode,
+                    "tableName": tableName,
+                    "pageNo": pageNo
+                },
                 dataType: "json",
                 success: function (data) {
-                    // alert("请求成功！！")
-                    // var list=data.list;
-                    var arr = [];
-                    arr = data.columns;
+                    var arr = data.columns;
                     var dataType = data.dataType;
+                    var columnComment = data.columnComment;
                     var s = "<tr class='tr_class' style='background-color:gainsboro;'>";
                     //表头
                     for (var i = 0; i < arr.length; i++) {
-                        s += "<th style='border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:60px;height:60px;'title=字段类型：" + dataType[i] + ">" + arr[i] + "</th>";
-
+                        if (i <= 15) {
+                            s += "<th style='border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                        } else {
+                            s += "<th style='display:none;border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                        }
                     }
-                    s += "<th style='border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:60px;height:60px;'>操作</th></tr>";
+                    s += "<th style='border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:120px;height:60px;'>操作</th></tr>";
                     $("#thead_id").append(s);
 
                     console.log(data);
-                    var dataArry = [];
-                    dataArry = data.dataDatil;
+                    var dataArry = data.dataDatil;
 
                     var ss = "";
                     for (var key in dataArry) {
@@ -533,72 +666,210 @@
                         var d = dataArry[key];
                         var eachData = [];
                         var i = 0;
+                        var j = 0;
                         for (var k in d) {
-                            if (k === arr[i]) {
-                                if (dataType[i] === "datetime") {
-                                    var date = d[k].split(".");
-                                    d[k] = date[0];
-                                }
-                                ss += "<td title='" + d[k] + "'>" + d[k] + "</td>";
-                                eachData.push(d[k]);
+                            if (j <= 15) {
+                                if (k === arr[i]) {
+                                    if (dataType[i] === "datetime" && d[k] !== null && d[k] !== " ") {
+                                        var date = d[k].split(".");
+                                        d[k] = date[0];
+                                    }
+                                    ss += "<td title='" + d[k] + "'>" + d[k] + "</td>";
+                                    eachData.push(d[k]);
 
+                                } else {
+                                    if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
+                                        var date = d[arr[i]].split(".");
+                                        d[arr[i]] = date[0];
+                                    }
+                                    ss += "<td title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
+                                    eachData.push(d[arr[i]]);
+                                }
+                                i++;
                             } else {
-                                if (dataType[i] === "datetime") {
-                                    var date = d[arr[i]].split(".");
-                                    d[arr[i]] = date[0];
+                                if (k === arr[i]) {
+                                    eachData.push(d[k]);
+                                } else {
+                                    eachData.push(d[arr[i]]);
                                 }
-                                ss += "<td title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
-                                eachData.push(d[arr[i]]);
-
+                                i++;
                             }
-                            i++;
+                            j++;
                         }
-                        ss += "<td ><a src='#' onclick=\" updateData('" + eachData + "','" + arr + "','" + tableName + "','" + subjectCode + "','" + dataType + "')\">修改</a></td></tr>";
+                        ss += "<td ><a src='#' onclick=\" updateData('" + eachData + "','" + arr + "','" + tableName + "','" + subjectCode + "','" + dataType + "','" + columnComment + "')\">修改 | </a><a href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment +"','" + tableName + "','" + subjectCode + "')\">增加 | </a><a href='#' onclick=\"checkDada('" + eachData + "','" + arr + "','" + dataType + "','" + columnComment + "')\">查看</a></td></tr>";
                     }
                     $("#fileBody").append(ss);
+
+                    fun_limit(subjectCode, tableName, data);
                 }
             });
         }
 
-        function updateData(data, columns, tableName, subjectCode, dataType) {
+        function checkDada(data, columns, dataType, columnComment) {
+            $("#checkTable tbody").html(" ");
+            var strs = new Array(); //定义一数组
+            strs = data.split(","); //字符分割
+            var strs2 = new Array(); //定义一数组
+            strs2 = columns.split(",");
+            var dataTypeArr = dataType.split(",");
+            var columnComments = columnComment.split(",");
+            var s = "";
+            for (var i = 0; i < strs.length; i++) {
+                s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td>" + strs[i] + "</td><tr>";
+            }
+            $("#checkTable tbody").append(s);
+            $("#staticShowDataDetail").modal("show");
+        }
+
+        function fun_limit(subjectCode, tableName, data) {
+            $("#currentPageNo").html(data.currentPage);
+            $("#totalPages").html(data.totalPages);
+            $("#totalCount").html(data.totalCount);
+            if ($("#pagination .bootpag").length != 0) {
+                $("#pagination").off();
+                $('#pagination').empty();
+            }
+
+            $('#pagination').bootpag({
+                total: data.totalPages,
+                page: data.currentPage,
+                maxVisible: 5,
+                leaps: true,
+                firstLastUse: true,
+                first: '首页',
+                last: '尾页',
+                wrapClass: 'pagination',
+                activeClass: 'active',
+                disabledClass: 'disabled',
+                nextClass: 'next',
+                prevClass: 'prev',
+                lastClass: 'last',
+                firstClass: 'first'
+            }).on('page', function (event, num) {
+                editTableData(subjectCode, tableName, num);
+            });
+        }
+
+        function updateData(data, columns, tableName, subjectCode, dataType, columnComment) {
 
             $("#form_id").html(" ");
-            $("#div_head").html(" ");
-
-            //获得input修改之前的数据
+            $("#updateTable tbody").html(" ");
+            $("#div_head").html("");
+            //获得当前页码
+            var currentPage = $("#currentPageNo").html();
 
             var strs = new Array(); //定义一数组
             strs = data.split(","); //字符分割
             var strs2 = new Array(); //定义一数组
             strs2 = columns.split(",");
             var dataTypeArr = dataType.split(",");
-            var s_head = "";
-            for (var i = 0; i < strs2.length; i++) {
-                s_head += "<input type='text' title=字段类型："+dataTypeArr[i] +" value=" + strs2[i] + " readonly='true'/>";
-            }
+            var columnComments = columnComment.split(",");
+            var s_head = "<input type='text' value='字段名' readonly='true'/><input type='text'  value='字段类型' readonly='true'/><input type='text'  value='注释' readonly='true'/><input type='text'  value='字段值' readonly='true'/><br/>";
+
             var ss = "<input type='text' name='tableName'style='display:none;' value=" + tableName + " />";
             ss += "<input type='text' name='subjectCode'style='display:none;' value=" + subjectCode + " />";
+
             for (var i = 0; i < strs.length; i++) {
-                // var ss="<div style='border: 1px red solid'>";
-                // ss+="<div style='float: left;width:60px;height: 50px;margin-left: 1%;'>"+strs2[i] +"：</div><div style='float:left;width:auto;height: 50px;'><input type='text' name="+ strs2[i] +" value="+ strs[i]+" /></div>";
-                // ss+="<br/></div>";
-                ss += "<input class='" + dataTypeArr[i] + "'type='text' name=" + strs2[i] + " value='" + strs[i] + "' />";
+                ss += "<input type='text' value='" + strs2[i] + "' readonly='true'/><input type='text'  value='" + dataTypeArr[i] + "' readonly='true'/><input type='text'  value='" + columnComments[i] + "' readonly='true' /><input class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
             }
-            ss += "<div style='margin-top: 20px;width:200px;height: 100px;'><input class='eee'id='btn_save'type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataType + "')\"/><input style='width:80px;height:35px;' type='button' value='取消'/></div>";
+            ss += "<div style='margin-top: 20px;width:200px;height: 100px;'><input class='eee'id='btn_save'type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataType + "','" + currentPage + "')\"/><input style='width:80px;height:35px;' type='button' value='取消' onclick=\"fun_cancel()\"/></div>";
             $("#div_head").append(s_head);
             $("#form_id").append(ss);
 
             $("#staticUpdateData").modal("show");
             olddata = $('#form_id').serializeArray();
-            // alert(olddata)
         }
 
+        //新增数据
+        function  addTableData(columns, dataType, columnComment,tableName,subjectCode) {
+            $("#addTable tbody").html(" ");
+
+            var strs2 = columns.split(",");
+            var dataTypeArr = dataType.split(",");
+            var columnComments = columnComment.split(",");
+            var s = "";
+            for (var i = 0; i < strs2.length; i++) {
+                s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' value='' name='"+strs2[i] +"'/></td><tr>";
+            }
+            $("#addTable tbody").append(s);
+            $("#staticAddData").modal("show");
+            S_subjectCode=subjectCode;
+            S_tableName=tableName;
+            S_dataType=dataTypeArr;
+            S_column=strs2;
+        }
+        function addTablefuntion() {
+            var dataArr=[];
+            $('#addTable input').each(function(){
+                dataArr.push($(this).val());
+            });
+            var data1=[];
+            alert(dataArr);
+             for(var i=0;i<dataArr.length;i++){
+                 if(dataArr[i] !==" " && dataArr[i] !==null){
+                     var data2={};
+                    if(egx_data(S_dataType[i],dataArr[i])) {
+                        data2.columnName = S_column[i];
+                        data2.columnValue = dataArr[i];
+                        data1.push(data2);
+                    }
+                 }
+             }
+
+             alert(JSON.stringify(data1));
+
+            $.ajax({
+                url: "${ctx}/addTableData",
+                type: "POST",
+                data: {
+                    "subjectCode": S_subjectCode,
+                    "tableName": S_tableName
+                },
+                dataType: "json",
+                success:function () {
+                    editTableData(S_subjectCode, S_tableName, 1);
+                }
+            })
+        }
+        function egx_data(dataType,dataValue) {
+            if(dataType==="int"||dataType==="integer"){
+                var result=dataValue.match(/^(-|\+)?\d+$/);
+                if(result==null){
+                    alert("不是int或integer等类型！！");
+                    return false;
+                }else{ return true;}
+            }
+
+            if(dataType==="float"||dataType==="double" ){
+                if(!isNaN(dataValue)){
+                    return true;
+                }else{
+                    alert("不是float或double等类型！！");
+                    return false;
+                }
+            }
+            if(dataType==="datetime"){
+                var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
+                var regExp = new RegExp(reg);
+                if (!regExp.test(dataValue) && dataValue !== null && dataValue !== "") {
+                    alert("时间格式不正确,正确格式为: xxxx-xx-xx xx:xx:xx ");
+                    return false;
+                }else{
+                     return true;
+                }
+            }
+        }
+        //取消事件
+        function fun_cancel() {
+            $("#staticUpdateData").modal("hide");
+        };
+
         //修改数据
-    function saveData(tableName, subjectCode, dataType) {
+        function saveData(tableName, subjectCode, dataType, currentPage) {
             var dataTypeArr = dataType.split(",");
             var newdata = $('#form_id').serializeArray();
 
-            var newdata1=new FormData();
+            var newdata1 = new FormData();
 
             // //获得classs属性，格式判断
             // (/^((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)
@@ -607,9 +878,9 @@
             var regExp = new RegExp(reg);
             var a = $(".datetime");
             $.each(a, function (k, v) {
-               var date= $(v).val();
-                if(!regExp.test(date)){
-                    alert("时间格式不正确,正确格式为: 2014-01-01 12:00:00 ");
+                var date = $(v).val();
+                if (!regExp.test(date) && date !== null && date !== "") {
+                    alert("时间格式不正确,正确格式为: xxxx-xx-xx xx:xx:xx ");
                     return;
                 }
             });
@@ -617,13 +888,13 @@
             $.ajax({
                 url: "${ctx}/saveTableData",
                 type: "POST",
-                data: {"olddata":JSON.stringify(olddata),"newdata":JSON.stringify(newdata)},
+                data: {"olddata": JSON.stringify(olddata), "newdata": JSON.stringify(newdata)},
                 dataType: "json",
                 success: function () {
                     // alert("保存成功！");
                     $("#staticUpdateData").modal("hide");
                     //    修改成功需要更新表中数据 ，1：从数据库查。2：从页面上获得
-
+                    editTableData(subjectCode, tableName, currentPage);
                 },
                 error: function () {
                     alert("error!!!!!");
@@ -635,20 +906,20 @@
 
             // 文件树 右键插件事件
             var contextmenu = {
-                items: function(node){
-                    if("directory"===node.original.type){
+                items: function (node) {
+                    if ("directory" === node.original.type) {
                         return {
-                            "增加同级目录":{
+                            "增加同级目录": {
                                 label: "增加同级目录",
-                                action:function(data){
+                                action: function (data) {
                                     var selected = $('#jstree_show').jstree("get_selected");
                                     var length = selected.length;
-                                    if(length !== 1){
-                                        toastr["error"]("错误！","请选择一个目录");
+                                    if (length !== 1) {
+                                        toastr["error"]("错误！", "请选择一个目录");
                                         return false;
                                     }
                                     var parentURI = selected[0];
-                                    parentURI = parentURI.substring(0,parentURI.lastIndexOf("%_%"));
+                                    parentURI = parentURI.substring(0, parentURI.lastIndexOf("%_%"));
                                     $("#addBrotherDirectory").modal("show");
                                     $("#parentURI").val(parentURI);
                                     $("#brotherDirectorName").val("Customdir-");
@@ -659,8 +930,8 @@
                                 action: function (data) {
                                     var selected = $('#jstree_show').jstree("get_selected");
                                     var length = selected.length;
-                                    if(length !== 1){
-                                        toastr["error"]("错误！","请选择一个目录");
+                                    if (length !== 1) {
+                                        toastr["error"]("错误！", "请选择一个目录");
                                         return false;
                                     }
                                     $("#addSonDirectory").modal("show");
@@ -673,8 +944,8 @@
                                 action: function (data) {
                                     var selected = $('#jstree_show').jstree("get_selected");
                                     var length = selected.length;
-                                    if(length !== 1){
-                                        toastr["error"]("错误！","请选择一个目录");
+                                    if (length !== 1) {
+                                        toastr["error"]("错误！", "请选择一个目录");
                                         return false;
                                     }
                                     $("#addFile").modal("show");
@@ -758,7 +1029,7 @@
         // 增加目录
         function addDirectory(t) {
             var dirName = $.trim($("#directorName").val());
-            if("brother"===t){
+            if ("brother" === t) {
                 dirName = $.trim($("#brotherDirectorName").val());
             }
             var parentURI = $("#parentURI").val();

@@ -10,10 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -60,7 +57,8 @@ public class EditDataController {
     @ResponseBody
     @RequestMapping("/showTableData")
 //    public List<Map<String,Object>> test(String subjectCode, String tableName){
-        public JSONObject test(String subjectCode, String tableName){
+        public JSONObject test(String subjectCode, String tableName,@RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
+                               @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
         DataSrc datasrc=getDataSrc(subjectCode);
          List<Map<String,Object>> list=new ArrayList<>();
 
@@ -68,7 +66,7 @@ public class EditDataController {
         List<String> list3=map.get("COLUMN_NAME");
         List<String> list4=map.get("DATA_TYPE");
         List<String> list5=map.get("COLUMN_COMMENT");
-             list=dataSrcService.getTableData(datasrc,tableName);
+             list=dataSrcService.getTableData(datasrc,tableName,pageNo,pageSize);
         List<String> list1=new ArrayList<>();
 //         for(int i=0;i<=0;i++){
 //             Map<String,Object> map1=list.get(i);
@@ -78,11 +76,17 @@ public class EditDataController {
 //             }
 //         }
 
+        int countNum=dataSrcService.countData(datasrc,tableName);
         JSONObject jsonObject=new JSONObject();
-//         ???  表列明顺序和读出的值顺序不一致
+        jsonObject.put("totalCount", countNum);
+        jsonObject.put("currentPage", pageNo);
+        jsonObject.put("pageSize", pageSize);
+        jsonObject.put("totalPages", countNum % pageSize == 0 ? countNum / pageSize : countNum / pageSize + 1);
+
          jsonObject.put("dataDatil",list);
          jsonObject.put("columns",list3);
         jsonObject.put("dataType",list4);
+        jsonObject.put("columnComment",list5);
        return jsonObject;
     }
 
@@ -103,14 +107,18 @@ public class EditDataController {
         for(int i=2;i<jsonArray1.size();i++){
             String column=jsonArray1.getJSONObject(i).getString("name");
             String value=jsonArray1.getJSONObject(i).getString("value");
-            conditionstr+=""+column +"= '"+value+"' and ";
+            if(!value.equals("")&& value!=null) {
+                conditionstr += "" + column + "= '" + value + "' and ";
+            }
         }
   //更新的数据
      String updatestr=" set ";
         for(int i=2;i<jsonArray2.size();i++){
             String column=jsonArray2.getJSONObject(i).getString("name");
             String value=jsonArray2.getJSONObject(i).getString("value");
-            updatestr+=""+column +"= '"+value+"' , ";
+            if(!value.equals(jsonArray1.getJSONObject(i).getString("value"))) {
+                updatestr += "" + column + "= '" + value + "' , ";
+            }
         }
         int l=conditionstr.length();
         String s1=conditionstr.substring(0,l-5);
@@ -121,5 +129,11 @@ public class EditDataController {
         System.out.println(s2+"............"+ s1);
 
         return "修改成功";
+    }
+
+    @RequestMapping("/addTableData")
+    @ResponseBody
+    public void addTableData(){
+        System.out.println("请求成功！！！！");
     }
 }
