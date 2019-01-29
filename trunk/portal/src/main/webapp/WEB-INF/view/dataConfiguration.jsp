@@ -651,7 +651,7 @@
                                     parentURI = parentURI.substring(0,parentURI.lastIndexOf("%_%"));
                                     $("#addBrotherDirectory").modal("show");
                                     $("#parentURI").val(parentURI);
-                                    $("#brotherDirectorName").val("");
+                                    $("#brotherDirectorName").val("Customdir-");
                                 }
                             },
                             "增加子级目录": {
@@ -665,7 +665,7 @@
                                     }
                                     $("#addSonDirectory").modal("show");
                                     $("#parentURI").val(selected);
-                                    $("#directorName").val("");
+                                    $("#directorName").val("Customdir-");
                                 }
                             },
                             "将文件上传至当前目录": {
@@ -751,7 +751,7 @@
                     }
                 },
                 "contextmenu": contextmenu,
-                "plugins": [/*"dnd"*//*, "state"*/, "types", /*"checkbox",*/ "wholerow", "contextmenu"]
+                "plugins": ["types", "wholerow", "contextmenu"]
             });
         }
 
@@ -764,6 +764,12 @@
             var parentURI = $("#parentURI").val();
             if (dirName === "") {
                 toastr["warning"]("警告！", "请输入目录名称");
+                return;
+            }
+            var regDirName = /^Customdir-/g;
+            if (!regDirName.test(dirName)) {
+                toastr["warning"]("警告！", "目录前缀不可更改");
+                $("#brotherDirectorName").val("Customdir-");
                 return;
             }
             $.ajax({
@@ -783,8 +789,6 @@
                         $("#addBrotherDirectory").modal("hide");
                         var jt = $("#jstree_show").jstree(true);
                         jt.refresh();
-                        // jt.deselect_all();
-                        // jt.select_node(jsonData.data);
                     }
                 }
             });
@@ -808,6 +812,7 @@
         function doUpload() {
             var formData = new FormData($("#fileForm")[0]);
             var fileName = formData.get("file").name;
+
             if (fileName === undefined) {
                 toastr["warning"]("提示！", "请选择文件");
                 return;
@@ -819,6 +824,8 @@
                 return;
             }
             formData.append("subjectCode", $.trim($("#subjectCode").val()));
+            var filePath = $("#excelFile").val();
+            formData.append("filePath", filePath);
             $.ajax({
                 url: '${ctx}/fileImport/excel',
                 type: 'post',
