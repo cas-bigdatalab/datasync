@@ -128,6 +128,12 @@ public class DataSyncController {
             String result = "";
             if(dataTask.getDataTaskType().equals("file")){
                 String[] localFileList = {dataTask.getSqlFilePath()};
+               File fi=new File(localFileList[0].replaceAll("%_%","/"));
+               if(!fi.exists()){
+                   pw.println("上传文件不存在！"+ "\n");
+                   ftpUtil.numberOfRequest.remove(dataTaskId+"Block");
+                   return 4;
+               }
                 result = ftpUtil.upload(localFileList, dataTaskId,ftpRootPath,dataTask,subjectCode).toString();
                 if(result.equals("File_Exits")){
                     ftpUtil.removeDirectory(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId());
@@ -141,6 +147,7 @@ public class DataSyncController {
                     pw.println(current1+":"+"上传失败"+ "\n");
                     dataTask.setStatus("0");
                     dataTaskService.update(dataTask);
+                    ftpUtil.numberOfRequest.remove(dataTaskId+"Block");
                     return 0;
                 }
             }else if(dataTask.getDataTaskType().equals("mysql")){
@@ -161,6 +168,7 @@ public class DataSyncController {
                     pw.println(current1+":"+"上传失败"+ "\n");
                     dataTask.setStatus("0");
                     dataTaskService.update(dataTask);
+                    ftpUtil.numberOfRequest.remove(dataTaskId+"Block");
                     return 0;
                 }
             }
@@ -244,6 +252,7 @@ public class DataSyncController {
                         }
                         dataTask.setStatus("0");
                         dataTaskService.update(dataTask);
+                        ftpUtil.numberOfRequest.remove(dataTaskId+"Block");
                         return 0;
                     }
                 } catch (IOException e) {
@@ -267,6 +276,7 @@ public class DataSyncController {
             }else{
                 dataTask.setStatus("0");
                 dataTaskService.update(dataTask);
+                ftpUtil.numberOfRequest.remove(dataTaskId+"Block");
                 return 0;
             }
         } catch (IOException e) {

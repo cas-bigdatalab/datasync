@@ -129,7 +129,7 @@ public class DataTaskController {
             for(int i=0;i<dataTasks.size();i++){
                 Object process =  ftpUtil.getFtpUploadProcess(dataTasks.get(i).getDataTaskId());
                 map.put(dataTasks.get(i).getDataTaskId(),process);
-                System.out.println(process);
+             //   System.out.println(process);
             }
         }
 
@@ -138,13 +138,10 @@ public class DataTaskController {
             requestMap.put(in,value);
         }
 
-
-
         jsonObject.put("dataTasks",dataTasks);
         jsonObject.put("totalCount",totalCount);
         jsonObject.put("pageNum",totalCount%pageSize==0?totalCount/pageSize:totalCount/pageSize+1);
         jsonObject.put("pageSize",pageSize);
-
         taskProcessList.add(map);
         requestList.add(requestMap);
         jsonObject.put("taskProcessList",taskProcessList);
@@ -240,20 +237,24 @@ public class DataTaskController {
         datatask.setDataSourceId(dataSourceId);
         StringBuffer filePath = new StringBuffer("");
         String str1 = "";
+        Boolean containsFile=false;//检查是否全部为空文件夹，是否包含文件
         for (String nodeId : nodes){
             String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
             File file = new File(str);
             if(file.isDirectory()) {
 //                str1 = fileResourceService.traversingFiles(str);
             }else{
+                containsFile=true;
                 str1 = str + ";";
-            }
-            if(filePath.indexOf(str+";")!=-1){
-
-            }else{
                 filePath.append(str1);
             }
+//            if(filePath.indexOf(str+";")!=-1){
+//
+//            }else{
+//
+//            }
         }
+
         datatask.setFilePath(filePath.toString());
         datatask.setDataTaskName(datataskName);
         datatask.setCreateTime(new Date());
@@ -266,21 +267,26 @@ public class DataTaskController {
         dateFormat.format(rightNow.getTime(), sb, HELPER_POSITION );
         String datataskId = sb.toString();*/
         datatask.setDataTaskId(datataskName);
-        dataTaskService.insertDatatask(datatask);
-        if(dataSourceId <0 ){
-            jsonObject.put("result",false);
+        if(containsFile){
+            dataTaskService.insertDatatask(datatask);
+            if(dataSourceId <0 ){
+                jsonObject.put("result",false);
+                return  jsonObject;
+            }
+            List<String> filepaths = Arrays.asList(filePath.toString().split(";"));
+
+            String fileName = subjectCode+"_"+datataskName;
+            fileResourceService.packDataResource(fileName,filepaths,datatask);
+            String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
+            DataTask dt = dataTaskService.get(datataskName);
+            dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
+            int upresult = dataTaskService.update(dt);
+            jsonObject.put("result",true);
+            return  jsonObject;
+        }else{
+            jsonObject.put("result",2);//全部位路径，没有文件
             return  jsonObject;
         }
-        List<String> filepaths = Arrays.asList(filePath.toString().split(";"));
-
-        String fileName = subjectCode+"_"+datataskName;
-        fileResourceService.packDataResource(fileName,filepaths,datatask);
-        String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
-        DataTask dt = dataTaskService.get(datataskName);
-        dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
-        int upresult = dataTaskService.update(dt);
-        jsonObject.put("result",true);
-        return  jsonObject;
     }
 
     /**
@@ -398,6 +404,7 @@ public class DataTaskController {
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = dataTaskService.get(datataskId);
         datatask.setDataSourceId(dataSourceId);
+        Boolean containsFile=false;//检查是否全部为空文件夹，是否包含文件
         String filePath = "";
         if(nodes!=null) {
             if(attr!=null) {
@@ -429,12 +436,14 @@ public class DataTaskController {
                     if(file.isDirectory()) {
                         //str1 = fileResourceService.traversingFiles(str);
                     }else{
+                        containsFile=true;
                         str1 = str + ";";
+                        filePathBuffer.append(str1);
                     }
                     if(filePathBuffer.indexOf(str+";")!=-1){
 
                     }else{
-                        filePathBuffer.append(str1);
+//                        filePathBuffer.append(str1);
                     }
                 }
                 filePath = filePathBuffer.toString();
@@ -446,28 +455,33 @@ public class DataTaskController {
             }
             datatask.setFilePath(filePath);
         }
-        datatask.setDataTaskName(datataskName);
-        datatask.setCreateTime(new Date());
-        datatask.setDataTaskType("file");
-        datatask.setStatus("0");
-        datatask.setCreateTime(new Date());
-        datatask.setSubjectCode(subjectCode);
-        Calendar rightNow = Calendar.getInstance();
-        dataTaskService.update(datatask);
-        if(dataSourceId <0 ){
-            jsonObject.put("result",false);
+        if(containsFile){
+            datatask.setDataTaskName(datataskName);
+            datatask.setCreateTime(new Date());
+            datatask.setDataTaskType("file");
+            datatask.setStatus("0");
+            datatask.setCreateTime(new Date());
+            datatask.setSubjectCode(subjectCode);
+            Calendar rightNow = Calendar.getInstance();
+            dataTaskService.update(datatask);
+            if(dataSourceId <0 ){
+                jsonObject.put("result",false);
+                return  jsonObject;
+            }
+            List<String> filepaths = Arrays.asList(filePath.toString().split(";"));
+
+            String fileName = subjectCode+"_"+datataskId;
+            fileResourceService.packDataResource(fileName,filepaths,datatask);
+            String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
+            DataTask dt = dataTaskService.get(datataskId);
+            dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
+            int upresult = dataTaskService.update(dt);
+            jsonObject.put("result",true);
+            return  jsonObject;
+        }else{
+            jsonObject.put("result",2);//全部位路径，没有文件
             return  jsonObject;
         }
-        List<String> filepaths = Arrays.asList(filePath.toString().split(";"));
-
-        String fileName = subjectCode+"_"+datataskId;
-        fileResourceService.packDataResource(fileName,filepaths,datatask);
-        String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
-        DataTask dt = dataTaskService.get(datataskId);
-        dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
-        int upresult = dataTaskService.update(dt);
-        jsonObject.put("result",true);
-        return  jsonObject;
     }
 
 }
