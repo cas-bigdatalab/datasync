@@ -7,7 +7,6 @@ import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.service.*;
 import cn.csdb.portal.utils.FileUploadUtil;
 import cn.csdb.portal.utils.ImgCut;
-import cn.csdb.portal.utils.SqlUtil;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
@@ -25,8 +24,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.io.IOException;
-import java.sql.Array;
 import java.sql.Connection;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -250,7 +247,8 @@ public class ResourceController {
     @RequestMapping(value = "treeNodeFirst")
     public List<JSONObject> treeNodeFirst(String filePath) {
         List<JSONObject> jsonObjects = null;
-        jsonObjects = resourceService.fileSourceFileListFirst(filePath.replace("%_%", "\\"));
+//        jsonObjects = resourceService.fileSourceFileListFirst(filePath.replace("%_%", "\\"));
+        jsonObjects = resourceService.treeNodeFirst(filePath.replace("%_%", "\\"), 2);
         return jsonObjects;
     }
 

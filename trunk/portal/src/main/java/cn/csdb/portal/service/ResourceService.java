@@ -3,7 +3,6 @@ package cn.csdb.portal.service;
 import cn.csdb.portal.repository.DataSrcDao;
 import cn.csdb.portal.repository.ResourceDao;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -153,6 +152,49 @@ public class ResourceService {
         Collections.sort(jsonObjects, new FileComparator());
         return jsonObjects;
 
+    }
+
+    /**
+     * 配置前端文件树搜索功能 重新实现树首次加载方法
+     *
+     * @param filePath 当前文件路径
+     * @param count    递归次数决定文件默认深度
+     * @return 树值
+     */
+    public List<JSONObject> treeNodeFirst(String filePath, int count) {
+        count--;
+        List<JSONObject> jsonObjects = new ArrayList<JSONObject>(32);
+        File file = new File(filePath);
+        if (!file.exists() || !file.isDirectory()) {
+            return jsonObjects;
+        }
+        String separator = File.separator;
+        String reg = "";
+        if ("/".equals(separator)) {
+            reg = separator;
+        } else {
+            reg = "\\\\";
+        }
+        File[] fp = file.listFiles();
+        for (int i = 0; i < fp.length; i++) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("id", fp[i].getPath().replaceAll("\\\\", "%_%"));
+            jsonObject.put("text", fp[i].getName().replaceAll("\\\\", "%_%"));
+            if (fp[i].isDirectory()) {
+                jsonObject.put("type", "directory");
+                JSONObject jo = new JSONObject();
+                jo.put("disabled", "true");
+                if (count >= 0) {
+                    jsonObject.put("children", treeNodeFirst(fp[i].getPath(), count));
+                }
+                jsonObject.put("state", jo);
+            } else {
+                jsonObject.put("type", "file");
+            }
+            jsonObjects.add(jsonObject);
+        }
+        Collections.sort(jsonObjects, new FileComparator());
+        return jsonObjects;
     }
 
 

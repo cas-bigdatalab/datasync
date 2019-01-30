@@ -236,6 +236,12 @@
 
                     </div>
                     <div class="tab-pane" id="filedata" style="min-height: 400px;overflow: hidden">
+                        <form>
+                            <p>
+                                <label style="padding-left: 10px;">文件检索:</label>
+                                <input id="jstreeSearch" placeholder="输入文件名称"/>
+                            </p>
+                        </form>
                         <div id="jstree_show"></div>
                     </div>
 
@@ -961,6 +967,13 @@
                     }
                 }
             };
+            // 树搜索
+            $(function () {
+                $("#jstreeSearch").keyup(function () {
+                    var seachString = $("#jstreeSearch").val();
+                    $("#jstree_show").jstree(true).search(seachString);
+                })
+            });
             // 重新实现文件树的加载
             $('#jstree_show').jstree({
                 "core": {
@@ -1027,7 +1040,7 @@
                     }
                 },
                 "contextmenu": contextmenu,
-                "plugins": ["types", "wholerow", "contextmenu"]
+                "plugins": ["types", "wholerow", "contextmenu", "search"]
             });
         }
 
@@ -1073,11 +1086,21 @@
         function generateChildJson(childArray) {
             for (var i = 0; i < childArray.length; i++) {
                 var child = childArray[i];
-                if (child.type == 'directory') {
-                    child.children = true;
-                    child.icon = "jstree-folder";
+                if (child.children !== undefined) {
+                    if (child.type == 'directory') {
+                        // child.children = true;
+                        child.icon = "jstree-folder";
+                    } else {
+                        child.icon = "jstree-file";
+                    }
+                    generateChildJson(child.children);
                 } else {
-                    child.icon = "jstree-file";
+                    if (child.type == 'directory') {
+                        child.children = true;
+                        child.icon = "jstree-folder";
+                    } else {
+                        child.icon = "jstree-file";
+                    }
                 }
             }
         }
