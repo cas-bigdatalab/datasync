@@ -598,6 +598,14 @@
                     "nodes":nodes,
                 },
                 success:function (data) {
+                    var jsonlist=JSON.parse(data);
+                    if(jsonlist.result==2){
+                        toastr["warning"]("所选文件夹不能全部为空！");
+                        Bwrap.style.display="none";
+                        // $("#layui-layer-shade"+index+"").remove();
+                        // $("#layui-layer"+index+"").remove();
+                        return;
+                    }
                     window.location.href="${ctx}/dataUpload"
                 },
                 complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
