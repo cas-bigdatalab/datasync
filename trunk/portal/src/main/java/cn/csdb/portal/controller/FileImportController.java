@@ -65,7 +65,8 @@ public class FileImportController {
             jsonObject.put("code", "error");
             jsonObject.put("message", "上传文件为空,请重新选择");
         }
-        deleteTempFile(tempFilePath);
+        boolean b = deleteTempFile(tempFilePath);
+        jsonObject.put("fileStatus", b);
         return jsonObject;
     }
 
@@ -76,7 +77,7 @@ public class FileImportController {
         String subjectCode = request.getParameter("subjectCode");
         String tableData = request.getParameter("tableData");
         String tableName = request.getParameter("tableName");
-        String realPath = request.getRealPath("");
+        String realPath = request.getRealPath("/") + "temp/";
         String tempFilePath = "";
         List<TableField> tableFields = JSON.parseArray(tableData, TableField.class);
         if (!file.isEmpty()) {
@@ -87,7 +88,8 @@ public class FileImportController {
             }
         }
         jsonObject = fileImportService.createTableAndInsertValue(tableName, tableFields, tempFilePath, subjectCode);
-        deleteTempFile(realPath);
+        boolean b = deleteTempFile(tempFilePath);
+        jsonObject.put("fileStatus", b);
         return jsonObject;
     }
 
@@ -98,7 +100,7 @@ public class FileImportController {
         String subjectCode = request.getParameter("subjectCode");
         String tableData = request.getParameter("tableData");
         String tableName = request.getParameter("tableName");
-        String realPath = request.getRealPath("");
+        String realPath = request.getRealPath("/") + "temp/";
         String tempFilePath = "";
         List<TableField> tableFields = JSON.parseArray(tableData, TableField.class);
         if (!file.isEmpty()) {
@@ -109,7 +111,8 @@ public class FileImportController {
             }
         }
         jsonObject = fileImportService.onlyInsertValue(tableName, tableFields, tempFilePath, subjectCode);
-        deleteTempFile(realPath);
+        boolean b = deleteTempFile(tempFilePath);
+        jsonObject.put("fileStatus", b);
         return jsonObject;
     }
 
@@ -138,10 +141,12 @@ public class FileImportController {
         return tempFilePath;
     }
 
-    private void deleteTempFile(String realPath) {
+    private boolean deleteTempFile(String realPath) {
+        boolean del = false;
         File f = new File(realPath);
         if (f.exists()) {
-            f.delete();
+            del = f.delete();
         }
+        return del;
     }
 }

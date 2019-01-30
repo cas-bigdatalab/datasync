@@ -57,6 +57,7 @@ public class Excel2ListIncludeNull {
             List<List<String>> allList = contentHandler.getAllList();
             map.put(sheetName, allList);
         }
+        pkg.close();
         return map;
     }
 

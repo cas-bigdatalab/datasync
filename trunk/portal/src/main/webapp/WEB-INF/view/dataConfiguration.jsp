@@ -19,6 +19,7 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/css/dataConfig.css">
     <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/bootstrap.min.css">--%>
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/fileinput.min.css">
+    <link href="${ctx}/resources/bundles/layerJs/theme/default/layer.css" rel="stylesheet" type="text/css"/>
     <style type="text/css">
         /* .nav-tabs li a{
              font-size: 16px;
@@ -242,7 +243,10 @@
                     <div class="tab-pane" id="excelUpload" style="min-height: 400px;overflow: hidden">
                         <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
                             <input id="excelFile" type="file" name="file" class="cus-input">
-                            <input type="button" class="btn btn-default" onclick="doUpload();" value="上传"/>
+                            <input id="excelFileUpload" type="button" class="btn btn-default" onclick="doUpload();"
+                                   value="上传"/>
+                            <input id="excelFileReset" type="reset" class="btn btn-default" style="display: none;"
+                                   onclick="removeElement()" value="重置"/>
                         </form>
                         <div tabindex="-1" data-width="200">
                             <div class="" style="width:auto">
@@ -558,6 +562,7 @@
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-fileinput/js/fileinput.min.js"></script>
     <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
+    <script src="${ctx}/resources/bundles/layerJs/layer.js"></script>
     <%--
         <script src="${ctx}/resources/js/metaTemplate.js"></script>
     --%>
@@ -1105,6 +1110,12 @@
                 cache: false,
                 contentType: false,
                 processData: false,
+                beforeSend: function () {
+                    index = layer.load(1, {
+                        shade: [0.5, '#fff'] //0.1透明度的白色背景
+                    });
+                    $("#excelFile").attr("disabled", "disabled");
+                },
                 success: function (result) {
                     var resultJson = JSON.parse(result);
                     if (resultJson["code"] === "error") {
@@ -1133,16 +1144,31 @@
                         })
                     }
                 },
+                complete: function () {
+                    $("#layui-layer-shade" + index + "").remove();
+                    $("#layui-layer" + index + "").remove();
+                    $("#excelFileUpload").hide();
+                    $("#excelFileReset").show();
+                },
                 error: function (returndata) {
                     toastr["error"]("错误！", returndata);
                 }
             });
         }
 
+        function removeElement() {
+            $("#excelFile").removeAttr("disabled");
+            $("#tableNamePDiv div").remove();
+            $("#tableNameUl li").remove();
+            $("#excelFileUpload").show();
+            $("#excelFileReset").hide();
+        }
+
         /**
          * 创建表并保存数据 || 仅保存数据
          */
         function createTableAndInsertValue(_this) {
+            $("#excelFile").removeAttr("disabled");
             var tableName = $(_this).parent().prev().find("li.active a").attr("href").substring(1);
             var tableNum = $(_this).parent().prev().find(".active table").length;
             if (tableNum === 0) {
@@ -1176,6 +1202,11 @@
                     cache: false,
                     contentType: false,
                     processData: false,
+                    beforeSend: function () {
+                        index = layer.load(1, {
+                            shade: [0.5, '#fff'] //0.1透明度的白色背景
+                        });
+                    },
                     success: function (data) {
                         var jsonData = JSON.parse(data);
                         if (jsonData.code === "error") {
@@ -1183,8 +1214,13 @@
                         } else {
                             toastr["success"]("提示！", jsonData.message);
                         }
+                    },
+                    complete: function () {
+                        $("#layui-layer-shade" + index + "").remove();
+                        $("#layui-layer" + index + "").remove();
                     }
-                })
+                });
+                $("#excelFile").attr("disabled", "disabled");
             }
 
             /**

@@ -43,9 +43,11 @@ public class FileImportService {
         if (sheetSize == 0) {
             jsonObject.put("code", "error");
             jsonObject.put("message", "excel数据为空");
+            return jsonObject;
         } else if (sheetSize > 1) {
             jsonObject.put("code", "error");
             jsonObject.put("message", "excel中仅能有一个数据源");
+            return jsonObject;
         }
 
         // 获取当前用户的MySQL连接
