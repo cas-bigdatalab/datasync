@@ -38,33 +38,42 @@ public class DataSrcService {
             return null;
         return dataSource.getTableList(connection);
     }
-
-//获得列名和字段类型
-    public  Map<String,List<String>> getColumnName(DataSrc dataSrc,String tableName){
+//    表结构
+    public  Map<String,List<String>> getTableStructure(DataSrc dataSrc,String tableName){
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        Map<String,List<String>> map=new HashMap<>();
         List<String> list1=new ArrayList<>();
         List<String> list2=new ArrayList<>();
         List<String> list3=new ArrayList<>();
-        Map<String,List<String>> map=new HashMap<>();
+        List<String> list4=new ArrayList<>();
+        List<String> list5=new ArrayList<>();
+        List<String> list6=new ArrayList<>();
         try{
-            String sql="select  COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT from information_schema.COLUMNS where TABLE_SCHEMA= ? and table_name =?";
+            String sql="SELECT COLUMN_NAME,IS_NULLABLE,DATA_TYPE,COLUMN_KEY,COLUMN_COMMENT,EXTRA " +
+                    "FROM information_schema. COLUMNS WHERE table_schema = ? AND table_name = ? ";
+
             PreparedStatement pst=connection.prepareStatement(sql);
             pst.setString(1,dataSrc.getDatabaseName());
             pst.setString(2,tableName);
             ResultSet set=pst.executeQuery();
             while (set.next()){
-//                String name=set.getString("COLUMN_NAME");
-//                System.out.println(name);
                 list1.add(set.getString("COLUMN_NAME"));
                 list2.add(set.getString("DATA_TYPE"));
                 list3.add(set.getString("COLUMN_COMMENT"));
-//                System.out.println(set.getString("COLUMN_NAME"));
+                list4.add(set.getString("COLUMN_KEY"));
+                list5.add(set.getString("EXTRA"));
+                list6.add(set.getString("IS_NULLABLE"));
 
+//                System.out.println(set.getString("COLUMN_KEY")+"..."+set.getString("EXTRA"));
             }
             map.put("COLUMN_NAME",list1);
             map.put("DATA_TYPE",list2);
             map.put("COLUMN_COMMENT",list3);
+            map.put("pkColumn",list4);
+            map.put("autoAdd",list5);
+            map.put("IS_NULLABLE",list6);
+
         }catch(Exception e){
             e.printStackTrace();
         }finally {
@@ -74,6 +83,53 @@ public class DataSrcService {
         }
         return map;
     }
+
+//获得列名和字段类型
+    public  Map<String,List<String>> getColumnName(DataSrc dataSrc,String tableName){
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        List<String> list1=new ArrayList<>();
+        List<String> list2=new ArrayList<>();
+        List<String> list3=new ArrayList<>();
+        List<String> list4=new ArrayList<>();
+        List<String> list5=new ArrayList<>();
+        Map<String,List<String>> map=new HashMap<>();
+        try{
+
+           String sql=" SELECT a.column_Name AS columnName,CASE WHEN p.column_Name IS NULL THEN 'false' ELSE 'true'END AS pkColumn,CASE WHEN a.extra = 'auto_increment' " +
+                   "THEN  'true'  ELSE 'false' END AS autoAdd,a.data_type jdbcType, column_COMMENT descr FROM information_schema. COLUMNS a  " +
+                   "LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS p ON a.table_schema = p.table_schema AND a.table_name = p.TABLE_NAME AND a.COLUMN_NAME = p.COLUMN_NAME AND p.constraint_name = 'PRIMARY' " +
+                   "WHERE a.table_schema = ? AND a.table_name = ? ORDER BY  a.ordinal_position";
+
+//            String sql="select  COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT from information_schema.COLUMNS where TABLE_SCHEMA= ? and table_name =?";
+            PreparedStatement pst=connection.prepareStatement(sql);
+            pst.setString(1,dataSrc.getDatabaseName());
+            pst.setString(2,tableName);
+            ResultSet set=pst.executeQuery();
+            while (set.next()){
+                list1.add(set.getString("columnName"));
+                list2.add(set.getString("jdbcType"));
+                list3.add(set.getString("descr"));
+                list4.add(set.getString("pkColumn"));
+                list5.add(set.getString("autoAdd"));
+
+                System.out.println(set.getString("pkColumn")+"..."+set.getString("autoAdd"));
+            }
+            map.put("COLUMN_NAME",list1);
+            map.put("DATA_TYPE",list2);
+            map.put("COLUMN_COMMENT",list3);
+            map.put("pkColumn",list4);
+            map.put("autoAdd",list5);
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
+            try{ connection.close();}catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return map;
+    }
+
 //    更新数据
     public  int updateDate(String condition,String setData,String tableName,DataSrc dataSrc){
         int i=0;
@@ -83,7 +139,6 @@ public class DataSrcService {
             String sql="update "+tableName+""+setData+condition;
             PreparedStatement pst=connection.prepareStatement(sql);
             i= pst.executeUpdate();
-            System.out.println("测试："+sql);
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -93,9 +148,57 @@ public class DataSrcService {
                 e.printStackTrace();
             }
         }
-//        System.out.println("测试dddddd："+i);
         return i;
     }
+
+//    新增数据
+    public  int addData(DataSrc dataSrc,String tableName,String col,String val) {
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+       int i=0;
+        try {
+            String sql="insert into  "+tableName +"("+ col + ")  values("+ val +")";
+            System.out.println("新增："+sql);
+            PreparedStatement pst=connection.prepareStatement(sql);
+            i= pst.executeUpdate();
+
+            System.out.println("影响数据行："+i);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return i;
+    }
+//判断主键是否重复
+    public int checkPriKey(DataSrc dataSrc,String tableName,int primaryKey,String colName){
+        int i=0;
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        try{
+            String sql="select count("+colName+") as num "+"from "+tableName+ " where "+colName+"= ?";
+            System.out.println("判断主键是否重复："+sql);
+            PreparedStatement pst=connection.prepareStatement(sql);
+            pst.setInt(1,primaryKey);
+            ResultSet rs= pst.executeQuery();
+            while(rs.next()){
+               i= rs.getInt("num");
+               System.out.println("是否重复"+i);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try{ connection.close();}catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return i;
+    }
+
 //    分页
     public int countData(DataSrc dataSrc,String tableName){
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());

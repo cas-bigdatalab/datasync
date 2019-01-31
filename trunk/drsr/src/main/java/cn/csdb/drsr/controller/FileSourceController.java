@@ -2,11 +2,13 @@ package cn.csdb.drsr.controller;
 
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
+import cn.csdb.drsr.model.FileTreeNode;
 import cn.csdb.drsr.service.DataTaskService;
 import cn.csdb.drsr.service.FileResourceService;
 import cn.csdb.drsr.service.LoginService;
 import cn.csdb.drsr.utils.ConfigUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.sun.xml.internal.fastinfoset.stax.events.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +25,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -291,5 +295,59 @@ public class FileSourceController {
         /*List<JSONObject> jsonObjects = fileResourceService.fileSourceFileList(dataSrc.getFilePath());
         return jsonObjects;*/
     }
+
+
+    /**
+     *
+     * Function Description:
+     *
+     * @param: []
+     * @return: java.util.List
+     * @auther: hw
+     * @date: 2018/10/23 10:34
+     */
+//    @RequestMapping(value="asyncGetNodes")
+//    public JSONObject asyncGetNodes(){
+//       JSONObject jsonObject=new JSONObject();
+//        List<Object> list=new ArrayList<Object>();//递归获取文件
+//        list.add("{ id:\""+"12"+"\", pId:0, name:\""+"12"+"\", open:true,checked:false}");
+//        jsonObject.put("list",list);
+//       return jsonObject;
+//    }
+    @RequestMapping(value="asyncGetNodes")
+    @ResponseBody
+    public List<FileTreeNode> asyncGetNodes(String id, String pid, String name, String taskId, HttpServletRequest req){
+        List<FileTreeNode> nodeList = new ArrayList<FileTreeNode>();
+        nodeList=fileResourceService.asynLoadingTree("",id,"false");
+        String taskid=req.getParameter("taskid");
+        if(taskid!=null && taskid!=""){
+            DataTask dataTask = dataTaskService.get(taskid);
+           String[] checkedFilePath=dataTask.getFilePath().split(";");
+    //        String [] checkedFilePath=dataTask.getFilePath().split(";");
+            for(int i=0;i<checkedFilePath.length;i++){
+                for(int j=0;j<nodeList.size();j++){
+                    if(checkedFilePath[i].indexOf(nodeList.get(j).getId())!=-1){
+                        nodeList.get(j).setChecked("true");
+                    }
+                }
+            }
+        }
+        return nodeList;
+    }
+
+    @RequestMapping("/newResCatalog")
+    public
+    @ResponseBody
+    List<FileTreeNode> newResCatalog(String data,Integer dataSourceId) {
+        logger.info("加载文件树");
+        List<FileTreeNode> nodeList=new ArrayList<FileTreeNode>();
+        String filePath = fileSourceFileList(dataSourceId);
+        nodeList=fileResourceService.asynLoadingTree(data,filePath,"init");
+        return nodeList;
+
+//        JSONObject jsonObjects = fileResourceService.fileTreeLoading(data,filePath);
+//        return jsonObjects;
+    }
+
 
 }

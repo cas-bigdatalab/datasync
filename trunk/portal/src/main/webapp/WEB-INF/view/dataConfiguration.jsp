@@ -101,9 +101,11 @@
             background-color: #CCE8EB;
             /*width: 100px;*/
         }
-        input{
+
+        input {
             border: 1px solid #cad9ea;
         }
+
         #div_head input {
             background-color: #CCE8EB;
             width: 200px;
@@ -112,7 +114,8 @@
 
 
         }
-        #form_id input{
+
+        #form_id input {
             width: 200px;
             border-collapse: collapse;
             text-align: center;
@@ -327,6 +330,7 @@
             </div>
         </div>
 
+        <%--修改数据--%>
         <div id="staticUpdateData" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
             <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 50%;">
                 <div class="modal-content">
@@ -340,13 +344,13 @@
                     <div class="modal-body" style="overflow-x:scroll;">
 
                         <div class="tab-content"
-                             style="background-color: white;min-height:300px;max-height:50%;padding-top: 20px ; overflow: scroll;">
+                             style="background-color: white;min-height:300px;max-height:50%;padding-top: 20px ;">
                             <div style="margin-left: 5%;">
                                 <div id="div_head">
 
                                 </div>
                                 <div>
-                                    <form id="form_id" action="#" method="post">
+                                    <form id="form_id" action="#" method="post" name="form_id">
 
                                     </form>
                                 </div>
@@ -354,6 +358,9 @@
                         </div>
                     </div>
 
+                    <div id="update_div" class="modal-footer">
+                        <%--<button id="updatebtn"  style="width: 80px;height: 30px; border: 1px solid #cad9ea;">保存</button>--%>
+                    </div>
                 </div>
             </div>
         </div>
@@ -421,8 +428,10 @@
                             </div>
                         </div>
                     </div>
-                    <div id="add_div" class="modal-footer" >
-                        <button id="addbtn"  style="width: 80px;height: 30px; border: 1px solid #cad9ea;" onclick="addTablefuntion()">保存</button>
+                    <div id="add_div" class="modal-footer">
+                        <button id="addbtn" style="width: 80px;height: 30px; border: 1px solid #cad9ea;"
+                                onclick="addTablefuntion()">保存
+                        </button>
                     </div>
                 </div>
             </div>
@@ -581,6 +590,8 @@
         var S_tableName;
         var S_column;
         var S_dataType;
+        var S_updateData=[];
+
         $(function () {
             chooseTable(sub, 0);
             loadTree();
@@ -668,14 +679,18 @@
                     s += "<th style='border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:120px;height:60px;'>操作</th></tr>";
                     $("#thead_id").append(s);
 
-                    console.log(data);
+                    // console.log(data);
                     var dataArry = data.dataDatil;
-
+                    var pkColumn = data.pkColumn;
+                    var autoAdd = data.autoAdd;
                     var ss = "";
                     for (var key in dataArry) {
                         ss += "<tr>";
                         var d = dataArry[key];
-                        var eachData = [];
+
+                          var eachData = [];
+                          var datajson={};
+                          var eachData2=[];
                         var i = 0;
                         var j = 0;
                         for (var k in d) {
@@ -687,6 +702,9 @@
                                     }
                                     ss += "<td title='" + d[k] + "'>" + d[k] + "</td>";
                                     eachData.push(d[k]);
+                                    datajson.colName=arr[i];
+                                    datajson.colValue=d[k];
+                                    eachData2.push(datajson);
 
                                 } else {
                                     if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
@@ -695,23 +713,33 @@
                                     }
                                     ss += "<td title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
                                     eachData.push(d[arr[i]]);
+                                    datajson.colName=arr[i];
+                                    datajson.colValue=d[arr[i]];
+                                    eachData2.push(datajson);
                                 }
                                 i++;
                             } else {
                                 if (k === arr[i]) {
                                     eachData.push(d[k]);
+                                    datajson.colName=arr[i];
+                                    datajson.colValue=d[k];
+                                    eachData2.push(datajson);
                                 } else {
                                     eachData.push(d[arr[i]]);
+                                    datajson.colName=arr[i];
+                                    datajson.colValue=d[arr[i]];
+                                    eachData2.push(datajson);
                                 }
                                 i++;
                             }
                             j++;
                         }
-                        ss += "<td ><a src='#' onclick=\" updateData('" + eachData + "','" + arr + "','" + tableName + "','" + subjectCode + "','" + dataType + "','" + columnComment + "')\">修改 | </a><a href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment +"','" + tableName + "','" + subjectCode + "')\">增加 | </a><a href='#' onclick=\"checkDada('" + eachData + "','" + arr + "','" + dataType + "','" + columnComment + "')\">查看</a></td></tr>";
+                        ss += "<td ><a src='#' onclick=\" updateData('"+eachData+"','" + arr + "','" + tableName + "','" + subjectCode + "','" + dataType + "','" + columnComment + "','"+eachData2+"')\">修改 | </a><a href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">增加 | </a><a href='#' onclick=\"checkDada('" + eachData + "','" + arr + "','" + dataType + "','" + columnComment + "')\">查看</a></td></tr>";
                     }
                     $("#fileBody").append(ss);
 
                     fun_limit(subjectCode, tableName, data);
+
                 }
             });
         }
@@ -761,11 +789,18 @@
             });
         }
 
-        function updateData(data, columns, tableName, subjectCode, dataType, columnComment) {
+        function updateData(data,columns, tableName, subjectCode, dataType, columnComment,data1) {
+               // alert(data);
+           // var dataArr1=data;
+           //  for (var key in data1) {
+           //      var d = data1[key].colName;
+           //      alert(d);
+           //  }
 
             $("#form_id").html(" ");
             $("#updateTable tbody").html(" ");
             $("#div_head").html("");
+            $("#update_div").html("");
             //获得当前页码
             var currentPage = $("#currentPageNo").html();
 
@@ -783,93 +818,172 @@
             for (var i = 0; i < strs.length; i++) {
                 ss += "<input type='text' value='" + strs2[i] + "' readonly='true'/><input type='text'  value='" + dataTypeArr[i] + "' readonly='true'/><input type='text'  value='" + columnComments[i] + "' readonly='true' /><input class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
             }
-            ss += "<div style='margin-top: 20px;width:200px;height: 100px;'><input class='eee'id='btn_save'type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataType + "','" + currentPage + "')\"/><input style='width:80px;height:35px;' type='button' value='取消' onclick=\"fun_cancel()\"/></div>";
+            // var s_save= "<div style='margin-top: 20px;margin-left:80%;width:200px;height: 100px;'><input class='eee'id='btn_save'type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataType + "','" + currentPage + "')\"/><input style='width:80px;height:35px;' type='button' value='取消' onclick=\"fun_cancel()\"/></div>";
+            var s_save = "<input class='eee'id='btn_save'type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataType + "','" + currentPage + "')\"/>";
+
             $("#div_head").append(s_head);
             $("#form_id").append(ss);
+
+            $("#update_div").append(s_save);
 
             $("#staticUpdateData").modal("show");
             olddata = $('#form_id').serializeArray();
         }
 
         //新增数据
-        function  addTableData(columns, dataType, columnComment,tableName,subjectCode) {
+        function addTableData(columns, dataType, columnComment, tableName, subjectCode, pkColumn, autoAdd) {
+            // for(var i=0;i<S_updateData.length;i++){
+            //     alert(S_updateData[i]);
+            // }
+
             $("#addTable tbody").html(" ");
 
             var strs2 = columns.split(",");
             var dataTypeArr = dataType.split(",");
             var columnComments = columnComment.split(",");
+            var pkColumnArr = pkColumn.split(",");
+            var autoAddArr = autoAdd.split(",");
             var s = "";
             for (var i = 0; i < strs2.length; i++) {
-                s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' value='' name='"+strs2[i] +"'/></td><tr>";
+                if (pkColumnArr[i] === "PRI" && autoAddArr[i] === "auto_increment") {
+                    s += "<tr style='display: none;'><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
+                } else if (pkColumnArr[i] === "PRI" && autoAddArr[i] !== "auto_increment") {
+                    s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>(主键，不自增)  " + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
+                } else {
+                    s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
+                }
             }
             $("#addTable tbody").append(s);
             $("#staticAddData").modal("show");
-            S_subjectCode=subjectCode;
-            S_tableName=tableName;
-            S_dataType=dataTypeArr;
-            S_column=strs2;
+            S_subjectCode = subjectCode;
+            S_tableName = tableName;
+            S_dataType = dataTypeArr;
+            S_column = strs2;
         }
+
         function addTablefuntion() {
-            var dataArr=[];
-            $('#addTable input').each(function(){
+            var dataArr = [];
+            $('#addTable input').each(function () {
                 dataArr.push($(this).val());
             });
-            var data1=[];
-            alert(dataArr);
-             for(var i=0;i<dataArr.length;i++){
-                 if(dataArr[i] !==" " && dataArr[i] !==null){
-                     var data2={};
-                    if(egx_data(S_dataType[i],dataArr[i])) {
+            var data1 = [];
+            // alert(dataArr);
+            for (var i = 0; i < dataArr.length; i++) {
+                if (dataArr[i] !== " " && dataArr[i] !== null) {
+                    var data2 = {};
+                    if (dataArr[i] !== null && dataArr[i] !== "") {
+                        if (S_dataType[i] === "int" || S_dataType[i] === "integer") {
+                            var result = dataArr[i].match(/^(-|\+)?\d+$/);
+                            if (result == null) {
+                                // alert(S_column[i] + "是int或integer等类型！！");
+                                toastr.warning("该字段应是int或integer等类型！");
+                                return;
+                            }
+                        }
+
+                        if (S_dataType[i] === "float" || S_dataType[i] === "double") {
+                            if (isNaN(dataArr[i])) {
+                                // alert(S_column[i] + "是float或double等类型！！");
+                                toastr.warning("该字段应是float或double等类型！");
+                                return;
+                            }
+                        }
+
+                        if (S_dataType[i] === "datetime") {
+                            var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
+                            var regExp = new RegExp(reg);
+                            if (!regExp.test(dataArr[i]) && dataArr[i] !== null && dataArr[i] !== "") {
+                                // alert(S_column[i] + "是时间格式,正确格式为: xxxx-xx-xx xx:xx:xx ");
+                                toastr.warning("该字段是时间格式,正确格式应为: xxxx-xx-xx xx:xx:xx ");
+                                return;
+                            }
+                        }
+
+                        if(S_dataType[i]==="decimal"){
+                            var reg = /^(([0-9]+)|([0-9]+\.[0-9]{1,9}))$/;
+                            if(!reg.test(dataArr[i])){
+                                toastr.warning("该字段是decimal类型！ ");
+                                return;
+                            }
+                        }
+
+                        data2.columnName = S_column[i];
+                        data2.columnValue = dataArr[i];
+                        data1.push(data2);
+                    } else {
                         data2.columnName = S_column[i];
                         data2.columnValue = dataArr[i];
                         data1.push(data2);
                     }
-                 }
-             }
-
-             alert(JSON.stringify(data1));
+                }
+            }
 
             $.ajax({
                 url: "${ctx}/addTableData",
                 type: "POST",
                 data: {
                     "subjectCode": S_subjectCode,
-                    "tableName": S_tableName
+                    "tableName": S_tableName,
+                    "addData": JSON.stringify(data1)
                 },
                 dataType: "json",
-                success:function () {
-                    editTableData(S_subjectCode, S_tableName, 1);
+                success: function (data) {
+                    if (data.data === "0") {
+                        // alert("添加数据失败，主键重复！");
+                        toastr.error("添加数据失败，主键重复！");
+                    } else if (data.data === "1") {
+
+                        toastr.success("添加成功!");
+                        editTableData(S_subjectCode, S_tableName, 1);
+                        $("#staticAddData").modal("hide");
+                    } else if (data.data === "-1") {
+
+                        toastr.error("添加数据失败，主键不能为空！");
+                    } else {
+                        var arr = data.data.split("+");
+                        if (arr[0] === "-2") {
+                            toastr.error("添加数据失败，" + arr[1] + " 列不能为空！");
+                        }
+                    }
+                },
+                error: function () {
+                    alert("error!!!");
                 }
             })
         }
-        function egx_data(dataType,dataValue) {
-            if(dataType==="int"||dataType==="integer"){
-                var result=dataValue.match(/^(-|\+)?\d+$/);
-                if(result==null){
+
+        //格式判断
+        function egx_data(dataType, dataValue) {
+            if (dataType === "int" || dataType === "integer") {
+                var result = dataValue.match(/^(-|\+)?\d+$/);
+                if (result == null) {
                     alert("不是int或integer等类型！！");
                     return false;
-                }else{ return true;}
+                } else {
+                    return true;
+                }
             }
 
-            if(dataType==="float"||dataType==="double" ){
-                if(!isNaN(dataValue)){
+            if (dataType === "float" || dataType === "double") {
+                if (!isNaN(dataValue)) {
                     return true;
-                }else{
+                } else {
                     alert("不是float或double等类型！！");
                     return false;
                 }
             }
-            if(dataType==="datetime"){
+            if (dataType === "datetime") {
                 var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
                 var regExp = new RegExp(reg);
                 if (!regExp.test(dataValue) && dataValue !== null && dataValue !== "") {
                     alert("时间格式不正确,正确格式为: xxxx-xx-xx xx:xx:xx ");
                     return false;
-                }else{
-                     return true;
+                } else {
+                    return true;
                 }
             }
         }
+
         //取消事件
         function fun_cancel() {
             $("#staticUpdateData").modal("hide");
@@ -877,41 +991,82 @@
 
         //修改数据
         function saveData(tableName, subjectCode, dataType, currentPage) {
-            var dataTypeArr = dataType.split(",");
             var newdata = $('#form_id').serializeArray();
+            var dataTypeArr = dataType.split(",");
+            var form1 = document.getElementById("form_id");
+            var kk = 5;
+            var checkdataArr = [];
 
-            var newdata1 = new FormData();
-
-            // //获得classs属性，格式判断
-            // (/^((?:19|20)\d\d)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)
-            // /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/
-            var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
-            var regExp = new RegExp(reg);
-            var a = $(".datetime");
-            $.each(a, function (k, v) {
-                var date = $(v).val();
-                if (!regExp.test(date) && date !== null && date !== "") {
-                    alert("时间格式不正确,正确格式为: xxxx-xx-xx xx:xx:xx ");
-                    return;
+            for (var i = 5; i < form1.elements.length; i++) {
+                var e = document.form_id.elements[kk];
+                checkdataArr.push(e.value);
+                kk = kk + 4;
+                if (kk > form1.elements.length) {
+                    break;
                 }
-            });
+            }
+
+            for (var i = 0; i < checkdataArr.length; i++) {
+
+                if (dataTypeArr[i] === "int" || dataTypeArr[i] === "integer") {
+                    var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
+                    if (result == null) {
+
+                        //警告消息提示，默认背景为橘黄色
+                        toastr.warning("该字段应是int或integer等类型！");
+                        return;
+                    }
+                }
+
+                if (dataTypeArr[i] === "float" || dataTypeArr[i] === "double") {
+                    if (isNaN(checkdataArr[i])) {
+                        // alert(checkdataArr[i] + "应是float或double等类型！");
+                        toastr.warning("该字段应是float或double等类型！");
+                        return;
+                    }
+                }
+
+                if (dataTypeArr[i] === "datetime") {
+                    var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
+                    var regExp = new RegExp(reg);
+                    if (!regExp.test(checkdataArr[i]) && checkdataArr[i] !== null && checkdataArr[i] !== "") {
+                        // alert(checkdataArr[i] + "是时间格式,正确格式应为: xxxx-xx-xx xx:xx:xx ");
+                        toastr.warning("该字段是时间格式,正确格式应为: xxxx-xx-xx xx:xx:xx ");
+                        return;
+                    }
+                }
+                if(dataTypeArr[i]==="decimal"){
+                    var reg = /^(([0-9]+)|([0-9]+\.[0-9]{1,9}))$/;
+                     if(!reg.test(checkdataArr[i])){
+                         toastr.warning("该字段是decimal类型！ ");
+                         return;
+                     }
+                }
+            }
 
             $.ajax({
                 url: "${ctx}/saveTableData",
                 type: "POST",
                 data: {"olddata": JSON.stringify(olddata), "newdata": JSON.stringify(newdata)},
                 dataType: "json",
-                success: function () {
-                    // alert("保存成功！");
-                    $("#staticUpdateData").modal("hide");
-                    //    修改成功需要更新表中数据 ，1：从数据库查。2：从页面上获得
-                    editTableData(subjectCode, tableName, currentPage);
+                success: function (data) {
+                    if (data.data === "0") {
+                        // alert("更新数据失败！");
+                        //错误消息提示，默认背景为浅红色
+                        toastr.error("更新数据失败!");
+                    } else if (data.data === "1") {
+                        //成功消息提示，默认背景为浅绿色
+                        toastr.success("更新成功!");
+                        // alert("更新成功！");
+                        $("#staticUpdateData").modal("hide");
+                        editTableData(subjectCode, tableName, currentPage);
+                    }
                 },
                 error: function () {
                     alert("error!!!!!");
                 }
             })
-        }
+        };
 
         function loadTree() {
 
