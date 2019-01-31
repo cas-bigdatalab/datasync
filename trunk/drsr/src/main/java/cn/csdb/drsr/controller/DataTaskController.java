@@ -2,6 +2,7 @@ package cn.csdb.drsr.controller;
 
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
+import cn.csdb.drsr.model.FileTreeNode;
 import cn.csdb.drsr.service.*;
 import cn.csdb.drsr.utils.ConfigUtil;
 import cn.csdb.drsr.utils.FtpUtil;
@@ -351,14 +352,23 @@ public class DataTaskController {
     @RequestMapping("")
     public JSONObject getDatataskById(String datataskId){
         JSONObject jsonObject = new JSONObject();
+        List<FileTreeNode> nodeList=new ArrayList<FileTreeNode>();
         DataTask dataTask = dataTaskService.get(datataskId);
 //        DataSrcService dataSrcService=new DataSrcService();
 //        String filePath = fileSourceFileList(dataSourceId);
         if("file".equals(dataTask.getDataTaskType())){
             String filePath=fileResourceService.findById(dataTask.getDataSourceId()).getFilePath();
-            JSONObject jsonObjectsTree = fileResourceService.fileTreeLoading("",filePath);
+            nodeList=fileResourceService.asynLoadingTree("",filePath,"init");
+            String [] checkedFilePath=dataTask.getFilePath().split(";");
+            for(int i=0;i<checkedFilePath.length;i++){
+                for(int j=0;j<nodeList.size();j++){
+                    if(checkedFilePath[i].indexOf(nodeList.get(j).getId())!=-1){
+                        nodeList.get(j).setChecked("true");
+                    }
+                }
+            }
             jsonObject.put("datatask",dataTask);
-            jsonObject.put("jsonObjectsTree",jsonObjectsTree);
+            jsonObject.put("nodeList",nodeList);
         }else {
             jsonObject.put("datatask",dataTask);
         }

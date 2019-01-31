@@ -369,7 +369,7 @@
 
             $.ajax({
                 type:"POST",
-                url: "${ctx}/fileResource/resCatalog",
+                url: "${ctx}/fileResource/newResCatalog",
                 dataType: "json",
                 data: {
                     "data": "",
@@ -385,13 +385,24 @@
                     $("#bdTableLabel").css("display", "block");//显示“选择资源”标签
                     $("#bdDirDiv").css("display", "block");//显示“选择资源”标签
                     $("#bdSubmitButton").css("display", "block"); //显示“提交”按钮
+                    var zTreeObj = $.fn.zTree.init($("#LocalTreeDemo"),setting, data);
+                    //让第一个父节点展开
+                    var rootNode_0 = zTreeObj.getNodeByParam('pid',0,null);
+                    zTreeObj.expandNode(rootNode_0, true, false, false, false);
 
-                    var coreData = eval("["+data.list.toString().replace(/\\/g,"/")+"]");
-                    var zTreeObj = $.fn.zTree.getZTreeObj("LocalTreeDemo");
-                    if(zTreeObj!=null){
-                        zTreeObj.destroy();//用之前先销毁tree
-                    }
-                    $.fn.zTree.init($("#LocalTreeDemo"), setting, coreData);
+
+
+                    // var coreData = eval("["+data.list.toString().replace(/\\/g,"/")+"]");
+                    // debugger
+                    // var zTreeObj = $.fn.zTree.getZTreeObj("LocalTreeDemo");
+                    // if(zTreeObj!=null){
+                    //     zTreeObj.destroy();//用之前先销毁tree
+                    // }
+                    // $.fn.zTree.init($("#LocalTreeDemo"), setting, coreData);
+                    // //让第一个父节点展开
+                    // var rootNode_0 = zTreeObj.getNodeByParam('pid',0,null);
+                    // zTreeObj.expandNode(rootNode_0, true, false, false, false);
+
                     $("#layui-layer-shade"+index+"").remove();
                     $("#layui-layer"+index+"").remove();
                 },
@@ -735,15 +746,27 @@
         }
 
         var setting = {
-            check: {
-                enable: true
+            async: {
+                enable: true,
+                url:"${ctx}/fileResource/asyncGetNodes",
+                autoParam:["id", "pid", "name"],
+                dataFilter: filter
             },
             data: {
                 simpleData: {
-                    enable: true
+                    enable: true,
+                    idKey:'id',
+                    pIdKey:'pid',
+                    rootPId: 0
                 }
+            },
+            check: {
+                enable: true
             }
         };
+        function filter(treeId, parentNode, childNodes) {
+            return childNodes;
+        }
 
         //获取界面中所有被选中的radio
         function getChecedValueInLocalTree() {

@@ -362,73 +362,53 @@
             }
             $(".database-con-file").show();
             $("#fileTitle").html(name);
+            var data ="";
 
-            $('#jstree_show_edit').jstree("destroy");
-            /*
-                        $('#jstree_show_edit').data('jstree', false).empty();
-            */
-            $('#jstree_show_edit').jstree({
-                "core": {
-                    "themes": {
-                        "responsive": false,
-                    },
-                    // so that create works
-                    "check_callback": true,
-                    'data': function (obj, callback) {
-                        var jsonstr = "[]";
-                        var jsonarray = eval('(' + jsonstr + ')');
-                        var children;
-                        if (obj != '#') {
-                            var str = obj.id;
-                            /*var str1 = str.replace("\/","%_%");
-                             str1 = str1.replace("\\", "%_%");*/
-                        }
-                        $.ajax({
-                            type: "GET",
-                            url: "${ctx}/fileResource/resCatalog",
-                            dataType: "json",
-                            data: {"data": str,
-                                /*
-                                                                "filePath":jsonData,
-                                */
-                                "dataSourceId":id
-                            },
-                            async: false,
-                            success: function (result) {
-                                var arrays = result;
-                                for (var i = 0; i < arrays.length; i++) {
-                                    console.log(arrays[i])
-                                    var arr = {
-                                        "id": arrays[i].id,
-                                        "parent": arrays[i].parentId == "root" ? "#" : arrays[i].parentId,
-                                        "text": arrays[i].name,
-                                        "type": arrays[i].type,
-                                        "children":arrays[i].children,
-                                        "state": arrays[i].sta
-                                    }
-                                    jsonarray.push(arr);
-                                    children = jsonarray;
-                                }
-                            }
+            $.ajax({
+                type:"POST",
+                url: "${ctx}/fileResource/newResCatalog",
+                dataType: "json",
+                data: {
+                    "data": "",
+                    "dataSourceId":id
+                },
+                async: true,
+                beforeSend:function(data){
+                    index = layer.load(1, {
+                        shade: [0.5,'#fff'] //0.1透明度的白色背景
+                    });
+                },
+                success: function (data) {
+                    $("#bdTableLabel").css("display", "block");//显示“选择资源”标签
+                    $("#bdDirDiv").css("display", "block");//显示“选择资源”标签
+                    $("#bdSubmitButton").css("display", "block"); //显示“提交”按钮
+                    var zTreeObj = $.fn.zTree.init($("#treeDemo"),changeSetting, data);
+                    //让第一个父节点展开
+                    var rootNode_0 = zTreeObj.getNodeByParam('pid',0,null);
+                    zTreeObj.expandNode(rootNode_0, true, false, false, false);
 
-                        });
-                        generateChildJson(children);
-                        callback.call(this, children);
-                        /*else{
-                         callback.call(this,);
-                         }*/
-                    }
+
+
+                    // var coreData = eval("["+data.list.toString().replace(/\\/g,"/")+"]");
+                    // debugger
+                    // var zTreeObj = $.fn.zTree.getZTreeObj("LocalTreeDemo");
+                    // if(zTreeObj!=null){
+                    //     zTreeObj.destroy();//用之前先销毁tree
+                    // }
+                    // $.fn.zTree.init($("#LocalTreeDemo"), setting, coreData);
+                    // //让第一个父节点展开
+                    // var rootNode_0 = zTreeObj.getNodeByParam('pid',0,null);
+                    // zTreeObj.expandNode(rootNode_0, true, false, false, false);
+
+                    $("#layui-layer-shade"+index+"").remove();
+                    $("#layui-layer"+index+"").remove();
                 },
-                "types": {
-                    "default": {
-                        "icon": "glyphicon glyphicon-flash"
-                    },
-                    "file": {
-                        "icon": "glyphicon glyphicon-ok"
-                    }
-                },
-                "plugins": ["dnd", "state", "types", "checkbox", "wholerow"]
+                error: function (data) {
+                    toastr["error"]("获得本地目录中的文件树失败,请检查文件上路径及数据源！");
+                    console.log("获得本地目录中的文件树失败")
+                }
             })
+
         })
         function generateChildJson(childArray) {
             for (var i = 0; i < childArray.length; i++) {
@@ -778,24 +758,31 @@
 
                         dataFileSrcId=dataTaskCon.dataSourceId
                         $("[Keyid="+dataFileSrcId +"]").prop("selected",true)
-                        var filepath = dataTaskCon.filePath.replace(/%_%/g, "/").split(";");
-
-                        var coreData = eval("["+JSON.parse(data).jsonObjectsTree.list.toString().replace(/\\/g,"/")+"]");
-                        var dataTaskFilePathArray=dataTaskCon.filePath.replace(/%_%/g, "/").split(";");
-                        for(var i=0;i<coreData.length;i++){
-                            for(var j=0;j<dataTaskFilePathArray.length;j++){
-                                if(coreData[i].id==dataTaskFilePathArray[j]){
-                                    coreData[i].checked=true;
-                                    coreData[i].open=true;
-                                }
-                            }
-                        }
 
                         var zTreeObj = $.fn.zTree.getZTreeObj("treeDemo");
                         if(zTreeObj!=null){
                             zTreeObj.destroy();//用之前先销毁tree
                         }
-                        $.fn.zTree.init($("#treeDemo"), setting, coreData);
+                        var fileNodes=JSON.parse(data).nodeList;
+                        // var dataTaskFilePathArray=dataTaskCon.filePath.replace(/%_%/g, "/").split(";");
+                        // for(var i=0;i<dataTaskFilePathArray.length;i++){
+                        //     for(var j=0;j<fileNodes.length;j++){
+                        //         if(dataTaskFilePathArray[i].indexOf(fileNodes[j].id)!=-1){
+                        //             fileNodes[j].checked="true";
+                        //             debugger
+                        //         }
+                        //     }
+                        // }
+
+
+                        var zTreeObj = $.fn.zTree.init($("#treeDemo"),setting,fileNodes);
+                        //让第一个父节点展开
+                        var rootNode_0 = zTreeObj.getNodeByParam('pid',0,null);
+                        zTreeObj.expandNode(rootNode_0, true, false, false, false);
+
+
+
+                        // $.fn.zTree.init($("#treeDemo"), setting, coreData);
                     }
                         $("#layui-layer-shade"+index+"").remove();
                         $("#layui-layer"+index+"").remove();
@@ -898,15 +885,47 @@
         }
 
         var setting = {
-            check: {
-                enable: true
+            async: {
+                enable: true,
+                url:"${ctx}/fileResource/asyncGetNodes?taskid="+sdoId+"",
+                autoParam:["id", "pid", "name"],
+                dataFilter: filter
             },
             data: {
                 simpleData: {
-                    enable: true
+                    enable: true,
+                    idKey:'id',
+                    pIdKey:'pid',
+                    rootPId: 0
                 }
+            },
+            check: {
+                enable: true
             }
         };
+        var changeSetting = {
+            async: {
+                enable: true,
+                url:"${ctx}/fileResource/asyncGetNodes",
+                autoParam:["id", "pid", "name"],
+                dataFilter: filter
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey:'id',
+                    pIdKey:'pid',
+                    rootPId: 0
+                }
+            },
+            check: {
+                enable: true
+            }
+        };
+
+        function filter(treeId, parentNode, childNodes) {
+            return childNodes;
+        }
 
         //获取界面中所有被选中的radio
         function getChecedValueInLocalTree() {
