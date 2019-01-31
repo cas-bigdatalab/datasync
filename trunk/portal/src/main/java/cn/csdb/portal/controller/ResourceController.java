@@ -230,6 +230,7 @@ public class ResourceController {
     @ResponseBody
     @RequestMapping(value = "treeNode")
     public List<JSONObject> treeNode(String filePath) {
+        System.out.println("进入treeNode方法！");
         List<JSONObject> jsonObjects = null;
         jsonObjects = resourceService.fileSourceFileList(filePath.replace("%_%", "\\"));
         return jsonObjects;
