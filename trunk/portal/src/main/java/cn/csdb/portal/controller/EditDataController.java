@@ -56,16 +56,18 @@ public class EditDataController {
 
     @ResponseBody
     @RequestMapping("/showTableData")
-//    public List<Map<String,Object>> test(String subjectCode, String tableName){
         public JSONObject test(String subjectCode, String tableName,@RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
                                @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
         DataSrc datasrc=getDataSrc(subjectCode);
          List<Map<String,Object>> list=new ArrayList<>();
 
-        Map<String,List<String>> map=dataSrcService.getColumnName(datasrc,tableName);
+//        Map<String,List<String>> map=dataSrcService.getColumnName(datasrc,tableName);
+        Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);
         List<String> list3=map.get("COLUMN_NAME");
         List<String> list4=map.get("DATA_TYPE");
         List<String> list5=map.get("COLUMN_COMMENT");
+        List<String> list6=map.get("pkColumn");
+        List<String> list7=map.get("autoAdd");
              list=dataSrcService.getTableData(datasrc,tableName,pageNo,pageSize);
         List<String> list1=new ArrayList<>();
 //         for(int i=0;i<=0;i++){
@@ -87,12 +89,15 @@ public class EditDataController {
          jsonObject.put("columns",list3);
         jsonObject.put("dataType",list4);
         jsonObject.put("columnComment",list5);
+        jsonObject.put("pkColumn",list6);
+        jsonObject.put("autoAdd",list7);
        return jsonObject;
     }
 
     @RequestMapping("/saveTableData")
     @ResponseBody
-    public String saveTableData(@Param("olddata") String olddata, @Param("newdata") String newdata){
+    public JSONObject saveTableData(@Param("olddata") String olddata, @Param("newdata") String newdata){
+        JSONObject jsonObject=new JSONObject();
 
          JSONArray jsonArray1=JSONArray.parseArray(olddata);
          JSONArray jsonArray2=JSONArray.parseArray(newdata);
@@ -113,27 +118,117 @@ public class EditDataController {
         }
   //更新的数据
      String updatestr=" set ";
+        int j=0;
         for(int i=2;i<jsonArray2.size();i++){
             String column=jsonArray2.getJSONObject(i).getString("name");
             String value=jsonArray2.getJSONObject(i).getString("value");
             if(!value.equals(jsonArray1.getJSONObject(i).getString("value"))) {
                 updatestr += "" + column + "= '" + value + "' , ";
+                j++;
             }
+        }
+        if(j==0){
+            jsonObject.put("data","1");
+            return jsonObject;
         }
         int l=conditionstr.length();
         String s1=conditionstr.substring(0,l-5);
         int ll=updatestr.length();
         String s2=updatestr.substring(0,ll-2);
         DataSrc datasrc=getDataSrc(dbName);
-        dataSrcService.updateDate(s1,s2,tableName,datasrc);
-        System.out.println(s2+"............"+ s1);
-
-        return "修改成功";
+        int n=dataSrcService.updateDate(s1,s2,tableName,datasrc);
+//        System.out.println(s2+"............"+ s1);
+        if(n==1){
+            jsonObject.put("data","1");
+        }else{
+            jsonObject.put("data","0");
+        }
+        return jsonObject;
     }
 
     @RequestMapping("/addTableData")
     @ResponseBody
-    public void addTableData(){
-        System.out.println("请求成功！！！！");
+    public JSONObject addTableData(String subjectCode,String tableName,String  addData){
+
+        JSONObject jsonObject=new JSONObject();
+        JSONArray jsonArray=JSONArray.parseArray(addData);
+//        System.out.println("请求成功！！！！"+tableName+"....."+addData+"..."+jsonArray.getJSONObject(1));
+
+        String column="";
+        String values="";
+        DataSrc datasrc=getDataSrc(subjectCode);
+        Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);
+
+        List<String> list1=map.get("pkColumn");
+        List<String> list2=map.get("autoAdd");
+        List<String> list3=map.get("IS_NULLABLE");
+
+//        for(int i=0;i<jsonArray.size();i++){
+//            String col = jsonArray.getJSONObject(i).getString("columnName");
+//            String val = jsonArray.getJSONObject(i).getString("columnValue");
+//
+//            if(list1.get(i).equals("true") && list2.get(i).equals("true")){ //有主键且自增
+//                System.out.println(jsonArray.getJSONObject(i).getString("columnName"));
+//
+//            }else if(list1.get(i).equals("true") && list2.get(i).equals("false")){   //有主键但不自增，判断新增主键是否重复
+//                if(val!=null && !val.equals("")){
+//                   if( dataSrcService.checkPriKey(datasrc,tableName,Integer.parseInt(val),col)==1){
+//                       jsonObject.put("data","0");
+//                       return jsonObject;
+//                   }
+//                    column += "" + col + " ,";
+//                    values += "'" + Integer.parseInt(val) + "' ,";
+//                  }else{
+//                    jsonObject.put("data","-1");
+//                    return jsonObject;
+//                 }
+//            }else {   //无主键
+//                if(val!=null&& !val.equals("")){
+//                    column += "" + col + " ,";
+//                    values += "'" + val + "' ,";
+//                }
+//            }
+//        }
+
+        for(int i=0;i<jsonArray.size();i++){
+            String col = jsonArray.getJSONObject(i).getString("columnName");
+            String val = jsonArray.getJSONObject(i).getString("columnValue");
+
+            if(list1.get(i).equals("PRI") && list2.get(i).equals("auto_increment")){ //有主键且自增
+                System.out.println(jsonArray.getJSONObject(i).getString("columnName"));
+
+            }else if(list1.get(i).equals("PRI") && !list2.get(i).equals("auto_increment")){   //有主键但不自增，判断新增主键是否重复
+                if(val!=null && !val.equals("")){
+                    if( dataSrcService.checkPriKey(datasrc,tableName,Integer.parseInt(val),col)==1){
+                        jsonObject.put("data","0");
+                        return jsonObject;
+                    }
+                    column += "" + col + " ,";
+                    values += "'" + Integer.parseInt(val) + "' ,";
+                }else{
+                    jsonObject.put("data","-1");
+                    return jsonObject;
+                }
+            }else {   //无主键
+                if(val!=null&& !val.equals("")){
+                    column += "" + col + " ,";
+                    values += "'" + val + "' ,";
+                }else if(list3.get(i).equals("NO")){
+                    jsonObject.put("data","-2+"+col);//该列不能为空
+                    return jsonObject;
+                }
+            }
+        }
+
+        column=column.substring(0,column.length()-1);
+        values=values.substring(0,values.length()-1);
+
+        int n=dataSrcService.addData(datasrc,tableName,column,values);
+        if(n==1){
+            jsonObject.put("data","1");
+        }else{
+            jsonObject.put("data","0");
+        }
+          return jsonObject;
     }
 }
