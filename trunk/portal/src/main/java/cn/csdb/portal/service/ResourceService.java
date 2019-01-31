@@ -80,10 +80,13 @@ public class ResourceService {
 /*----------------------------------------------------------------------------------------*/
 
     public List<JSONObject> fileSourceFileList(String filePath) {
+        System.out.println("filePath为"+filePath);
         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
         File file = new File(filePath);
-        if (!file.exists() || !file.isDirectory())
+        if (!file.exists() || !file.isDirectory()) {
             return jsonObjects;
+        }
+        System.out.println("1");
 //        String[] fp = filePath.split(";");
         File[] fp = file.listFiles();
         for (int i = 0; i < fp.length; i++) {
@@ -107,7 +110,9 @@ public class ResourceService {
             }
             jsonObjects.add(jsonObject);
     }
+        System.out.println("2");
         Collections.sort(jsonObjects, new FileComparator());
+        System.out.println("3");
         return jsonObjects;
 
     }
