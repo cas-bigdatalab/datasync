@@ -13,10 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class EditDataController {
@@ -107,24 +104,45 @@ public class EditDataController {
         String tableName= tableNameObjext.getString("value");
         String dbName=dbNameObjext.getString("value");
 
+        DataSrc datasrc=getDataSrc(dbName);
+        Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);
+
+        List<String> list1=map.get("pkColumn");
+        List<String> list2=map.get("autoAdd");
+        List<String> list3=map.get("IS_NULLABLE");
+
+
 //        条件设置,拼串
         String conditionstr=" where ";
         for(int i=2;i<jsonArray1.size();i++){
             String column=jsonArray1.getJSONObject(i).getString("name");
             String value=jsonArray1.getJSONObject(i).getString("value");
-            if(!value.equals("")&& value!=null) {
+            if(!value.equals("")&& value!=null && !value.equals("null")) {
                 conditionstr += "" + column + "= '" + value + "' and ";
             }
+
         }
   //更新的数据
      String updatestr=" set ";
         int j=0;
         for(int i=2;i<jsonArray2.size();i++){
+
             String column=jsonArray2.getJSONObject(i).getString("name");
             String value=jsonArray2.getJSONObject(i).getString("value");
+
+            if(list3.get(i-2).equals("NO") && value.equals("null")||value.equals("")){
+//                System.out.println(list3.get(i-2));
+                jsonObject.put("data","-2+"+column);//该列不能为空
+                return jsonObject;
+            }
+
             if(!value.equals(jsonArray1.getJSONObject(i).getString("value"))) {
-                updatestr += "" + column + "= '" + value + "' , ";
-                j++;
+                if(value.equals("") && jsonArray1.getJSONObject(i).getString("value").equals("null")){
+
+                }else {
+                    updatestr += "" + column + "= '" + value + "' , ";
+                    j++;
+                }
             }
         }
         if(j==0){
@@ -135,9 +153,9 @@ public class EditDataController {
         String s1=conditionstr.substring(0,l-5);
         int ll=updatestr.length();
         String s2=updatestr.substring(0,ll-2);
-        DataSrc datasrc=getDataSrc(dbName);
+//        DataSrc datasrc=getDataSrc(dbName);
         int n=dataSrcService.updateDate(s1,s2,tableName,datasrc);
-//        System.out.println(s2+"............"+ s1);
+//         System.out.println(s2+"............"+ s1);
         if(n==1){
             jsonObject.put("data","1");
         }else{
@@ -219,6 +237,10 @@ public class EditDataController {
                 }
             }
         }
+//        表随机主键
+//        String uuid = UUID.randomUUID().toString();
+//        column+="PORTLID , ";
+//        values+="'"+uuid+"',";
 
         column=column.substring(0,column.length()-1);
         values=values.substring(0,values.length()-1);

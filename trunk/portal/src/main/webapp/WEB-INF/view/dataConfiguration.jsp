@@ -590,7 +590,7 @@
         var S_tableName;
         var S_column;
         var S_dataType;
-        var S_updateData=[];
+        var S_updateData;
 
         $(function () {
             chooseTable(sub, 0);
@@ -664,6 +664,7 @@
                 },
                 dataType: "json",
                 success: function (data) {
+                    S_updateData = [];
                     var arr = data.columns;
                     var dataType = data.dataType;
                     var columnComment = data.columnComment;
@@ -684,16 +685,19 @@
                     var pkColumn = data.pkColumn;
                     var autoAdd = data.autoAdd;
                     var ss = "";
+                    var m = 0;
                     for (var key in dataArry) {
+                        m++;
                         ss += "<tr>";
                         var d = dataArry[key];
 
-                          var eachData = [];
-                          var datajson={};
-                          var eachData2=[];
+                        var eachData = [];
+
                         var i = 0;
                         var j = 0;
+                        var n = 0;
                         for (var k in d) {
+                            n++;
                             if (j <= 15) {
                                 if (k === arr[i]) {
                                     if (dataType[i] === "datetime" && d[k] !== null && d[k] !== " ") {
@@ -701,59 +705,76 @@
                                         d[k] = date[0];
                                     }
                                     ss += "<td title='" + d[k] + "'>" + d[k] + "</td>";
+
+                                    // if (dataType[i] === "text" || dataType === "varchar") {
+                                    //     var reg = new RegExp(",", "g"); //创建正则RegExp对象
+                                    //     // var stringObj="终古人民共和国，终古人民";
+                                    //     // var newstr=stringObj.replace(reg,"中国");
+                                    //     d[k] = d[k].replace(reg, "+++///+++///+++");
+                                    // }
                                     eachData.push(d[k]);
-                                    datajson.colName=arr[i];
-                                    datajson.colValue=d[k];
-                                    eachData2.push(datajson);
+                                    S_updateData.push(d[k]);
+                                    // datajson.colName = arr[i];
+                                    // datajson.colValue = d[k];
+                                    // eachData2.push(datajson);
 
                                 } else {
                                     if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
                                         var date = d[arr[i]].split(".");
                                         d[arr[i]] = date[0];
                                     }
+
                                     ss += "<td title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
+
+
                                     eachData.push(d[arr[i]]);
-                                    datajson.colName=arr[i];
-                                    datajson.colValue=d[arr[i]];
-                                    eachData2.push(datajson);
+                                    S_updateData.push(d[arr[i]]);
                                 }
                                 i++;
                             } else {
                                 if (k === arr[i]) {
+                                    if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
+                                        var date = d[k].split(".");
+                                        d[k] = date[0];
+                                    }
+
                                     eachData.push(d[k]);
-                                    datajson.colName=arr[i];
-                                    datajson.colValue=d[k];
-                                    eachData2.push(datajson);
+                                    S_updateData.push(d[k]);
                                 } else {
+                                    if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
+                                        var date = d[arr[i]].split(".");
+                                        d[arr[i]] = date[0];
+                                    }
+
                                     eachData.push(d[arr[i]]);
-                                    datajson.colName=arr[i];
-                                    datajson.colValue=d[arr[i]];
-                                    eachData2.push(datajson);
+                                    S_updateData.push(d[arr[i]]);
                                 }
                                 i++;
                             }
                             j++;
                         }
-                        ss += "<td ><a src='#' onclick=\" updateData('"+eachData+"','" + arr + "','" + tableName + "','" + subjectCode + "','" + dataType + "','" + columnComment + "','"+eachData2+"')\">修改 | </a><a href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">增加 | </a><a href='#' onclick=\"checkDada('" + eachData + "','" + arr + "','" + dataType + "','" + columnComment + "')\">查看</a></td></tr>";
+                        ss += "<td ><a src='#' onclick=\" updateData('" + arr + "','" + tableName + "','" + subjectCode + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">修改 | </a><a href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">增加 | </a><a href='#' onclick=\"checkDada('" + arr + "','" + dataType + "','" + columnComment + "','"+m+"','"+n+"')\">查看</a></td></tr>";
                     }
                     $("#fileBody").append(ss);
 
                     fun_limit(subjectCode, tableName, data);
-
                 }
             });
         }
 
-        function checkDada(data, columns, dataType, columnComment) {
+        function checkDada(columns, dataType, columnComment,m, n) {
             $("#checkTable tbody").html(" ");
-            var strs = new Array(); //定义一数组
-            strs = data.split(","); //字符分割
+
+            var strs = new Array();
+            for (var i = (m-1)*n; i <m*n; i++) {
+                strs.push(S_updateData[i]);
+            }
             var strs2 = new Array(); //定义一数组
             strs2 = columns.split(",");
             var dataTypeArr = dataType.split(",");
             var columnComments = columnComment.split(",");
             var s = "";
-            for (var i = 0; i < strs.length; i++) {
+            for (var i = 0; i < strs2.length; i++) {
                 s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td>" + strs[i] + "</td><tr>";
             }
             $("#checkTable tbody").append(s);
@@ -789,13 +810,12 @@
             });
         }
 
-        function updateData(data,columns, tableName, subjectCode, dataType, columnComment,data1) {
-               // alert(data);
-           // var dataArr1=data;
-           //  for (var key in data1) {
-           //      var d = data1[key].colName;
-           //      alert(d);
-           //  }
+        function updateData(columns, tableName, subjectCode, dataType, columnComment, m, n) {
+
+            var strs = new Array();
+            for (var i = (m-1)*n; i <m*n; i++) {
+                strs.push(S_updateData[i]);
+            }
 
             $("#form_id").html(" ");
             $("#updateTable tbody").html(" ");
@@ -804,8 +824,6 @@
             //获得当前页码
             var currentPage = $("#currentPageNo").html();
 
-            var strs = new Array(); //定义一数组
-            strs = data.split(","); //字符分割
             var strs2 = new Array(); //定义一数组
             strs2 = columns.split(",");
             var dataTypeArr = dataType.split(",");
@@ -815,10 +833,9 @@
             var ss = "<input type='text' name='tableName'style='display:none;' value=" + tableName + " />";
             ss += "<input type='text' name='subjectCode'style='display:none;' value=" + subjectCode + " />";
 
-            for (var i = 0; i < strs.length; i++) {
+            for (var i = 0; i < strs2.length; i++) {
                 ss += "<input type='text' value='" + strs2[i] + "' readonly='true'/><input type='text'  value='" + dataTypeArr[i] + "' readonly='true'/><input type='text'  value='" + columnComments[i] + "' readonly='true' /><input class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
             }
-            // var s_save= "<div style='margin-top: 20px;margin-left:80%;width:200px;height: 100px;'><input class='eee'id='btn_save'type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataType + "','" + currentPage + "')\"/><input style='width:80px;height:35px;' type='button' value='取消' onclick=\"fun_cancel()\"/></div>";
             var s_save = "<input class='eee'id='btn_save'type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataType + "','" + currentPage + "')\"/>";
 
             $("#div_head").append(s_head);
@@ -832,9 +849,6 @@
 
         //新增数据
         function addTableData(columns, dataType, columnComment, tableName, subjectCode, pkColumn, autoAdd) {
-            // for(var i=0;i<S_updateData.length;i++){
-            //     alert(S_updateData[i]);
-            // }
 
             $("#addTable tbody").html(" ");
 
@@ -899,9 +913,9 @@
                             }
                         }
 
-                        if(S_dataType[i]==="decimal"){
+                        if (S_dataType[i] === "decimal") {
                             var reg = /^(([0-9]+)|([0-9]+\.[0-9]{1,9}))$/;
-                            if(!reg.test(dataArr[i])){
+                            if (!reg.test(dataArr[i])) {
                                 toastr.warning("该字段是decimal类型！ ");
                                 return;
                             }
@@ -1008,7 +1022,7 @@
 
             for (var i = 0; i < checkdataArr.length; i++) {
 
-                if (dataTypeArr[i] === "int" || dataTypeArr[i] === "integer") {
+                if ((dataTypeArr[i] === "int" || dataTypeArr[i] === "integer") && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i]!=="null") {
                     var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                     if (result == null) {
 
@@ -1018,7 +1032,7 @@
                     }
                 }
 
-                if (dataTypeArr[i] === "float" || dataTypeArr[i] === "double") {
+                if ((dataTypeArr[i] === "float" || dataTypeArr[i] === "double") && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i]!=="null") {
                     if (isNaN(checkdataArr[i])) {
                         // alert(checkdataArr[i] + "应是float或double等类型！");
                         toastr.warning("该字段应是float或double等类型！");
@@ -1026,21 +1040,21 @@
                     }
                 }
 
-                if (dataTypeArr[i] === "datetime") {
+                if (dataTypeArr[i] === "datetime" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i]!=="null") {
                     var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
                     var regExp = new RegExp(reg);
-                    if (!regExp.test(checkdataArr[i]) && checkdataArr[i] !== null && checkdataArr[i] !== "") {
+                    if (!regExp.test(checkdataArr[i])) {
                         // alert(checkdataArr[i] + "是时间格式,正确格式应为: xxxx-xx-xx xx:xx:xx ");
                         toastr.warning("该字段是时间格式,正确格式应为: xxxx-xx-xx xx:xx:xx ");
                         return;
                     }
                 }
-                if(dataTypeArr[i]==="decimal"){
+                if (dataTypeArr[i] === "decimal" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i]!=="null") {
                     var reg = /^(([0-9]+)|([0-9]+\.[0-9]{1,9}))$/;
-                     if(!reg.test(checkdataArr[i])){
-                         toastr.warning("该字段是decimal类型！ ");
-                         return;
-                     }
+                    if (!reg.test(checkdataArr[i])) {
+                        toastr.warning("该字段是decimal类型！ ");
+                        return;
+                    }
                 }
             }
 
@@ -1060,6 +1074,11 @@
                         // alert("更新成功！");
                         $("#staticUpdateData").modal("hide");
                         editTableData(subjectCode, tableName, currentPage);
+                    }else{
+                        var arr = data.data.split("+");
+                        if (arr[0] === "-2") {
+                            toastr.error("更新数据失败，" + arr[1] + " 列不能为空！");
+                        }
                     }
                 },
                 error: function () {

@@ -137,6 +137,7 @@ public class DataSrcService {
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
         try{
             String sql="update "+tableName+""+setData+condition;
+            System.out.println("更新："+sql);
             PreparedStatement pst=connection.prepareStatement(sql);
             i= pst.executeUpdate();
         }catch (Exception e){
