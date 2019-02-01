@@ -28,9 +28,9 @@
             <form class="form" id="entry_form" action="${ctx}/login" method="post">
                 <input type="text" placeholder="用户名" id="userName" name="userName" >
                 <input type="password" placeholder="密码" id="password" name="password">
-                <dd <%--style="display: none"--%>>
+                <p <%--style="display: none"--%>>
                     <font color="red">${loginNotice}</font>
-                </dd>
+                </p>
                 <button type="submit" id="entry_btn">登录</button>
                 <div id="prompt" class="prompt"></div>
             </form>
