@@ -291,9 +291,9 @@
                     </div>
 
                     <!--数据编辑-->
-                    <div class="tab-pane" id="editData" style="min-height: 600px;overflow: hidden">
+                    <div class="tab-pane" id="editData" style="min-height: 600px;overflow: scroll">
                         <div id="alltables" class="tab-pane"
-                             style="margin-left:35px;width:1300px;min-height: 300px;overflow: hidden;overflow:scroll;">
+                             style="margin-left:35px;width:1300px;min-height: 300px;overflow: hidden">
 
                         </div>
 
@@ -1171,8 +1171,8 @@
                                 type: "GET",
                                 url: "${ctx}/resource/treeNodeFirst",
                                 dataType: "json",
-                                // data: {"filePath": str1},
-                                data: {"filePath": "H:\\testftp"},
+                                data: {"filePath": str1},
+                                // data: {"filePath": "H:\\testftp"},
                                 async: false,
                                 success: function (data) {
                                     $.each(data, function (k, v) {
