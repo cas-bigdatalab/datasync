@@ -187,12 +187,9 @@ public class ResourceService {
             jsonObject.put("text", fp[i].getName().replaceAll("\\\\", "%_%"));
             if (fp[i].isDirectory()) {
                 jsonObject.put("type", "directory");
-                JSONObject jo = new JSONObject();
-                jo.put("disabled", "true");
                 if (count >= 0) {
                     jsonObject.put("children", treeNodeFirst(fp[i].getPath(), count));
                 }
-                jsonObject.put("state", jo);
             } else {
                 jsonObject.put("type", "file");
             }

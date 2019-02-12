@@ -753,7 +753,7 @@
                             }
                             j++;
                         }
-                        ss += "<td ><a src='#' onclick=\" updateData('" + arr + "','" + tableName + "','" + subjectCode + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">修改 | </a><a href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">增加 | </a><a href='#' onclick=\"checkDada('" + arr + "','" + dataType + "','" + columnComment + "','"+m+"','"+n+"')\">查看</a></td></tr>";
+                        ss += "<td ><a src='#' onclick=\" updateData('" + arr + "','" + tableName + "','" + subjectCode + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">修改 | </a><a href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">增加 | </a><a href='#' onclick=\"checkDada('" + arr + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">查看</a></td></tr>";
                     }
                     $("#fileBody").append(ss);
 
@@ -762,11 +762,11 @@
             });
         }
 
-        function checkDada(columns, dataType, columnComment,m, n) {
+        function checkDada(columns, dataType, columnComment, m, n) {
             $("#checkTable tbody").html(" ");
 
             var strs = new Array();
-            for (var i = (m-1)*n; i <m*n; i++) {
+            for (var i = (m - 1) * n; i < m * n; i++) {
                 strs.push(S_updateData[i]);
             }
             var strs2 = new Array(); //定义一数组
@@ -813,7 +813,7 @@
         function updateData(columns, tableName, subjectCode, dataType, columnComment, m, n) {
 
             var strs = new Array();
-            for (var i = (m-1)*n; i <m*n; i++) {
+            for (var i = (m - 1) * n; i < m * n; i++) {
                 strs.push(S_updateData[i]);
             }
 
@@ -1022,7 +1022,7 @@
 
             for (var i = 0; i < checkdataArr.length; i++) {
 
-                if ((dataTypeArr[i] === "int" || dataTypeArr[i] === "integer") && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i]!=="null") {
+                if ((dataTypeArr[i] === "int" || dataTypeArr[i] === "integer") && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
                     var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                     if (result == null) {
 
@@ -1032,7 +1032,7 @@
                     }
                 }
 
-                if ((dataTypeArr[i] === "float" || dataTypeArr[i] === "double") && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i]!=="null") {
+                if ((dataTypeArr[i] === "float" || dataTypeArr[i] === "double") && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
                     if (isNaN(checkdataArr[i])) {
                         // alert(checkdataArr[i] + "应是float或double等类型！");
                         toastr.warning("该字段应是float或double等类型！");
@@ -1040,7 +1040,7 @@
                     }
                 }
 
-                if (dataTypeArr[i] === "datetime" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i]!=="null") {
+                if (dataTypeArr[i] === "datetime" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
                     var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
                     var regExp = new RegExp(reg);
                     if (!regExp.test(checkdataArr[i])) {
@@ -1049,7 +1049,7 @@
                         return;
                     }
                 }
-                if (dataTypeArr[i] === "decimal" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i]!=="null") {
+                if (dataTypeArr[i] === "decimal" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
                     var reg = /^(([0-9]+)|([0-9]+\.[0-9]{1,9}))$/;
                     if (!reg.test(checkdataArr[i])) {
                         toastr.warning("该字段是decimal类型！ ");
@@ -1074,7 +1074,7 @@
                         // alert("更新成功！");
                         $("#staticUpdateData").modal("hide");
                         editTableData(subjectCode, tableName, currentPage);
-                    }else{
+                    } else {
                         var arr = data.data.split("+");
                         if (arr[0] === "-2") {
                             toastr.error("更新数据失败，" + arr[1] + " 列不能为空！");
@@ -1104,7 +1104,11 @@
                                         return false;
                                     }
                                     var parentURI = selected[0];
-                                    parentURI = parentURI.substring(0, parentURI.lastIndexOf("%_%"));
+                                    if (parentURI.search(/%_%/)) {
+                                        parentURI = parentURI.substring(0, parentURI.lastIndexOf("%_%"));
+                                    } else {
+                                        parentURI = parentURI.substring(0, parentURI.lastIndexOf("/"));
+                                    }
                                     $("#addBrotherDirectory").modal("show");
                                     $("#parentURI").val(parentURI);
                                     $("#brotherDirectorName").val("Customdir-");
@@ -1200,9 +1204,6 @@
                         }
                         generateChildJson(children);
                         callback.call(this, children);
-                        /*else{
-                         callback.call(this,);
-                         }*/
                     }
                 },
                 "types": {
@@ -1257,6 +1258,7 @@
             });
         }
 
+        // 格式化文件树
         function generateChildJson(childArray) {
             for (var i = 0; i < childArray.length; i++) {
                 var child = childArray[i];
