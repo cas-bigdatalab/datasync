@@ -49,8 +49,9 @@ public class DataSrcService {
         List<String> list4=new ArrayList<>();
         List<String> list5=new ArrayList<>();
         List<String> list6=new ArrayList<>();
+        List<String> list7=new ArrayList<>();
         try{
-            String sql="SELECT COLUMN_NAME,IS_NULLABLE,DATA_TYPE,COLUMN_KEY,COLUMN_COMMENT,EXTRA " +
+            String sql="SELECT COLUMN_NAME,IS_NULLABLE,DATA_TYPE,COLUMN_KEY,COLUMN_COMMENT,EXTRA,COLUMN_TYPE " +
                     "FROM information_schema. COLUMNS WHERE table_schema = ? AND table_name = ? ";
 
             PreparedStatement pst=connection.prepareStatement(sql);
@@ -64,6 +65,7 @@ public class DataSrcService {
                 list4.add(set.getString("COLUMN_KEY"));
                 list5.add(set.getString("EXTRA"));
                 list6.add(set.getString("IS_NULLABLE"));
+                list7.add(set.getString("COLUMN_TYPE"));
 
 //                System.out.println(set.getString("COLUMN_KEY")+"..."+set.getString("EXTRA"));
             }
@@ -73,6 +75,7 @@ public class DataSrcService {
             map.put("pkColumn",list4);
             map.put("autoAdd",list5);
             map.put("IS_NULLABLE",list6);
+            map.put("COLUMN_TYPE",list7);
 
         }catch(Exception e){
             e.printStackTrace();

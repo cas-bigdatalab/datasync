@@ -65,6 +65,7 @@ public class EditDataController {
         List<String> list5=map.get("COLUMN_COMMENT");
         List<String> list6=map.get("pkColumn");
         List<String> list7=map.get("autoAdd");
+        List<String> list8=map.get("COLUMN_TYPE");
              list=dataSrcService.getTableData(datasrc,tableName,pageNo,pageSize);
         List<String> list1=new ArrayList<>();
 //         for(int i=0;i<=0;i++){
@@ -88,6 +89,7 @@ public class EditDataController {
         jsonObject.put("columnComment",list5);
         jsonObject.put("pkColumn",list6);
         jsonObject.put("autoAdd",list7);
+        jsonObject.put("columnType",list8);
        return jsonObject;
     }
 
@@ -120,7 +122,6 @@ public class EditDataController {
             if(!value.equals("")&& value!=null && !value.equals("null")) {
                 conditionstr += "" + column + "= '" + value + "' and ";
             }
-
         }
   //更新的数据
      String updatestr=" set ";
@@ -131,7 +132,6 @@ public class EditDataController {
             String value=jsonArray2.getJSONObject(i).getString("value");
 
             if(list3.get(i-2).equals("NO") && (value.equals("null")||value.equals(""))){
-//                System.out.println(list3.get(i-2));
                 jsonObject.put("data","-2+"+column);//该列不能为空
                 return jsonObject;
             }
