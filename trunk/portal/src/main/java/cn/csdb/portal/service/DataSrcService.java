@@ -243,7 +243,11 @@ public class DataSrcService {
            while(set.next()){
                Map<String,Object> map=new HashMap<>();
                for(int i=1;i<=rsm.getColumnCount();i++){
-                       map.put(rsm.getColumnName(i),set.getString(rsm.getColumnName(i)));
+                   if(set.getString(rsm.getColumnName(i))==null){
+                       map.put(rsm.getColumnName(i),"");
+                   }else {
+                       map.put(rsm.getColumnName(i), set.getString(rsm.getColumnName(i)));
+                   }
 //                       System.out.println("第"+i+"列的值"+"列名："+rsm.getColumnName(i)+",,,"+set.getString(rsm.getColumnName(i)));
                }
                listMap.add(map);

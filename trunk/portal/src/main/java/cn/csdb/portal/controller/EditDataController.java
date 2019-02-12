@@ -130,15 +130,16 @@ public class EditDataController {
             String column=jsonArray2.getJSONObject(i).getString("name");
             String value=jsonArray2.getJSONObject(i).getString("value");
 
-            if(list3.get(i-2).equals("NO") && value.equals("null")||value.equals("")){
+            if(list3.get(i-2).equals("NO") && (value.equals("null")||value.equals(""))){
 //                System.out.println(list3.get(i-2));
                 jsonObject.put("data","-2+"+column);//该列不能为空
                 return jsonObject;
             }
 
             if(!value.equals(jsonArray1.getJSONObject(i).getString("value"))) {
-                if(value.equals("") && jsonArray1.getJSONObject(i).getString("value").equals("null")){
-
+                if(value.equals("") && !jsonArray1.getJSONObject(i).getString("value").equals("")){
+                    updatestr += "" + column + "= null , ";
+                    j++;
                 }else {
                     updatestr += "" + column + "= '" + value + "' , ";
                     j++;
@@ -153,9 +154,7 @@ public class EditDataController {
         String s1=conditionstr.substring(0,l-5);
         int ll=updatestr.length();
         String s2=updatestr.substring(0,ll-2);
-//        DataSrc datasrc=getDataSrc(dbName);
         int n=dataSrcService.updateDate(s1,s2,tableName,datasrc);
-//         System.out.println(s2+"............"+ s1);
         if(n==1){
             jsonObject.put("data","1");
         }else{

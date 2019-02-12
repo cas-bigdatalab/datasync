@@ -70,7 +70,7 @@ public class DataBaseSource {
             return "jdbc:oracle:thin:@" + host + ":" + port + ":" + db;
         }
         if (StringUtils.startsWith(driverClass,"com.mysql.jdbc.")) {
-            return "jdbc:mysql://" + host + ":" + port + "/" + db;
+            return "jdbc:mysql://" + host + ":" + port + "/" + db+"?zeroDateTimeBehavior=convertToNull";
         }
         return null;
     }
