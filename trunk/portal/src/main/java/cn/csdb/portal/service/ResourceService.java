@@ -146,9 +146,9 @@ public class ResourceService {
                         jsonObject.put("id", fp[i].getPath().replaceAll(reg, "%_%"));
                         jsonObject.put("text", fp[i].getName().replaceAll(reg, "%_%"));
                         jsonObject.put("type", "directory");
-                        JSONObject jo = new JSONObject();
-                        jo.put("disabled", "true");
-                        jsonObject.put("state", jo);
+//                        JSONObject jo = new JSONObject();
+//                        jo.put("disabled", "true");
+//                        jsonObject.put("state", jo);
                         jsonObjects.add(jsonObject);
                     }
                 }

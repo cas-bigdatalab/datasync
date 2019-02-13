@@ -73,17 +73,17 @@ public class ResourceController {
     @ResponseBody
     @RequestMapping("/getPageData")
     public JSONObject getPageData(/*@RequestParam(value = "subjectCode", required = false) String subjectCode,*/
-                                  @RequestParam(value = "title", required = false) String title,
-                                  @RequestParam(value = "publicType", required = false) String publicType,
-                                  @RequestParam(value = "status", required = false) String resState,
-                                  @RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
-                                  @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                  HttpSession session) {
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "publicType", required = false) String publicType,
+            @RequestParam(value = "status", required = false) String resState,
+            @RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+            HttpSession session) {
         String subjectCode = "";
-        Set<String> roles = (HashSet<String>)(session.getAttribute("roles"));
-        if(roles.contains("系统管理员")){
+        Set<String> roles = (HashSet<String>) (session.getAttribute("roles"));
+        if (roles.contains("系统管理员")) {
             subjectCode = "";
-        }else{
+        } else {
             subjectCode = session.getAttribute("SubjectCode").toString();
             Subject subject = subjectService.findBySubjectCode(subjectCode);
         }
@@ -136,7 +136,7 @@ public class ResourceController {
     @RequestMapping(value = "editResource")
     public ModelAndView resourceEdit(String resourceId) {
         ModelAndView mv = new ModelAndView("editResource");
-        mv.addObject("resourceId",resourceId);
+        mv.addObject("resourceId", resourceId);
         return mv;
     }
 
@@ -232,7 +232,13 @@ public class ResourceController {
     public List<JSONObject> treeNode(String filePath) {
         System.out.println("进入treeNode方法！");
         List<JSONObject> jsonObjects = null;
-        jsonObjects = resourceService.fileSourceFileList(filePath.replace("%_%", "\\"));
+        String separator = File.separator;
+        if (separator.equals("\\")) {
+            filePath = filePath.replace("%_%", "\\");
+        } else {
+            filePath = filePath.replace("%_%", "/");
+        }
+        jsonObjects = resourceService.fileSourceFileList(filePath);
         return jsonObjects;
     }
 
@@ -295,7 +301,7 @@ public class ResourceController {
         ParsePosition pos3 = new ParsePosition(0);
         Date startDate = formatter.parse(startTime, pos1);
         Date endDate = formatter.parse(endTime, pos2);
-        Date createDate = formatter.parse(createTime,pos3);
+        Date createDate = formatter.parse(createTime, pos3);
         resource.setStartTime(startDate);
         resource.setEndTime(endDate);
         resource.setCreateTime(createDate);
@@ -338,7 +344,7 @@ public class ResourceController {
             resource.setToFilesNumber(0);
             resource.setPublicType("mysql");
             List<String> tableList = Arrays.asList(dataList.split(";"));
-            int rowCount = resourceService.getRecordCount(subject.getDbHost(),subject.getDbPort(),subject.getDbUserName(),subject.getDbPassword(),subject.getDbName(),tableList);
+            int rowCount = resourceService.getRecordCount(subject.getDbHost(), subject.getDbPort(), subject.getDbUserName(), subject.getDbPassword(), subject.getDbName(), tableList);
             resource.setToRecordNumber(rowCount);
         } else if (publicType.equals("file")) {
             resource.setPublicType("file");
@@ -359,8 +365,8 @@ public class ResourceController {
                             }
                             sb.append(fp + ";");
                         }
-                    }else{
-                        sb.append(str+";");
+                    } else {
+                        sb.append(str + ";");
                         size += file.length();
                     }
                 }
@@ -369,9 +375,9 @@ public class ResourceController {
             resource.setToMemorySize(String.valueOf(size));
 
         }
-        if(StringUtils.isNotBlank(resource.getUserGroupId())){
+        if (StringUtils.isNotBlank(resource.getUserGroupId())) {
             resource.setStatus("1");
-        }else{
+        } else {
             resource.setStatus("-1");
         }
         String resId = resourceService.save(resource);
@@ -417,12 +423,11 @@ public class ResourceController {
     public JSONObject getResourceById(@RequestParam(name = "resourceId") String resourceId) {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
-        jsonObject.put("resource",resource);
+        jsonObject.put("resource", resource);
         return jsonObject;
     }
 
     /**
-     *
      * Function Description: 编辑资源保存第一步
      *
      * @param: [resourceId, title, imagePath, introduction, keyword, catalogId, createdByOrganization]
@@ -476,9 +481,9 @@ public class ResourceController {
         resource.setPublishOrgnization(publishOrganization);
         resource.setCreateOrgnization(createOrganization);
         resource.setCreatePerson(createPerson);
-        if(StringUtils.isNotBlank(resource.getUserGroupId())){
+        if (StringUtils.isNotBlank(resource.getUserGroupId())) {
             resource.setStatus("1");
-        }else{
+        } else {
             resource.setStatus("-1");
         }
 
@@ -488,7 +493,6 @@ public class ResourceController {
     }
 
     /**
-     *
      * Function Description: 编辑资源保存第二步
      *
      * @param: [resourceId, publicType, dataList]
@@ -500,8 +504,8 @@ public class ResourceController {
     @RequestMapping(value = "editResourceSecondStep")
     public JSONObject editResourceSecondStep(HttpSession session,
                                              @RequestParam(name = "resourceId") String resourceId,
-                                            @RequestParam(name = "publicType") String publicType,
-                                            @RequestParam(name = "dataList") String dataList) {
+                                             @RequestParam(name = "publicType") String publicType,
+                                             @RequestParam(name = "dataList") String dataList) {
         String subjectCode = session.getAttribute("SubjectCode").toString();
         Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
@@ -511,7 +515,7 @@ public class ResourceController {
             resource.setToFilesNumber(0);
             resource.setPublicType("mysql");
             List<String> tableList = Arrays.asList(dataList.split(";"));
-            int rowCount = resourceService.getRecordCount(subject.getDbHost(),subject.getDbPort(),subject.getDbUserName(),subject.getDbPassword(),subject.getDbName(),tableList);
+            int rowCount = resourceService.getRecordCount(subject.getDbHost(), subject.getDbPort(), subject.getDbUserName(), subject.getDbPassword(), subject.getDbName(), tableList);
         } else if (publicType.equals("file")) {
             resource.setPublicType("file");
             StringBuffer sb = new StringBuffer();
@@ -537,9 +541,9 @@ public class ResourceController {
             resource.setFilePath(sb.toString().replace("/", "%_%"));
             resource.setToMemorySize(String.valueOf(size));
         }
-        if(StringUtils.isNotBlank(resource.getUserGroupId())){
+        if (StringUtils.isNotBlank(resource.getUserGroupId())) {
             resource.setStatus("1");
-        }else{
+        } else {
             resource.setStatus("-1");
         }
         String resId = resourceService.save(resource);
@@ -548,7 +552,6 @@ public class ResourceController {
     }
 
     /**
-     *
      * Function Description: 编辑资源保存第三步
      *
      * @param: [resourceId, userGroupIdList]
@@ -560,7 +563,7 @@ public class ResourceController {
     @RequestMapping(value = "editResourceThirdStep")
     public JSONObject editResourceThirdStep(HttpSession session,
                                             @RequestParam(name = "resourceId") String resourceId,
-                                           @RequestParam(name = "userGroupIdList") String userGroupIdList) {
+                                            @RequestParam(name = "userGroupIdList") String userGroupIdList) {
         String subjectCode = session.getAttribute("SubjectCode").toString();
         Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
@@ -571,8 +574,9 @@ public class ResourceController {
         jsonObject.put("resourceId", resId);
         return jsonObject;
     }
+
     //截图并上传
-    @RequestMapping(value = "/uploadHeadImage",method = RequestMethod.POST)
+    @RequestMapping(value = "/uploadHeadImage", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject uploadHeadImage(
             HttpServletRequest request,
@@ -581,21 +585,21 @@ public class ResourceController {
             @RequestParam(value = "h") String h,
             @RequestParam(value = "w") String w,
             @RequestParam(value = "imgFile") MultipartFile imageFile
-    ) throws Exception{
+    ) throws Exception {
         System.out.println("==========Start=============");
         String saveName = "";
         String realPath = request.getSession().getServletContext().getRealPath("/");
-        String resourcePath = "resources"+File.separator+"img"+File.separator+"images"+File.separator;
-        if(imageFile!=null){
-            if(FileUploadUtil.allowUpload(imageFile.getContentType())){
+        String resourcePath = "resources" + File.separator + "img" + File.separator + "images" + File.separator;
+        if (imageFile != null) {
+            if (FileUploadUtil.allowUpload(imageFile.getContentType())) {
                 String fileName = FileUploadUtil.rename(imageFile.getOriginalFilename());
                 int end = fileName.lastIndexOf(".");
-                saveName = fileName.substring(0,end);
+                saveName = fileName.substring(0, end);
                 File dir = new File(realPath + resourcePath);
-                if(!dir.exists()){
+                if (!dir.exists()) {
                     dir.mkdirs();
                 }
-                File file = new File(dir,saveName+"_src.jpg");
+                File file = new File(dir, saveName + "_src.jpg");
                 imageFile.transferTo(file);
                 String srcImagePath = realPath + resourcePath + saveName;
                 int imageX = Double.valueOf(x).intValue();
@@ -604,19 +608,18 @@ public class ResourceController {
                 int imageW = Double.valueOf(w).intValue();
                 //这里开始截取操作
                 System.out.println("==========imageCutStart=============");
-                ImgCut.imgCut(srcImagePath,imageX,imageY,imageW,imageH);
+                ImgCut.imgCut(srcImagePath, imageX, imageY, imageW, imageH);
                 System.out.println("==========imageCutEnd=============");
-                request.getSession().setAttribute("imgSrc",resourcePath + saveName+"_src.jpg");//成功之后显示用
-                request.getSession().setAttribute("imgCut",resourcePath + saveName+"_cut.jpg");//成功之后显示用
+                request.getSession().setAttribute("imgSrc", resourcePath + saveName + "_src.jpg");//成功之后显示用
+                request.getSession().setAttribute("imgCut", resourcePath + saveName + "_cut.jpg");//成功之后显示用
             }
         }
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("saveName",saveName);
+        jsonObject.put("saveName", saveName);
         return jsonObject;
     }
 
     /**
-     *
      * Function Description: 查看资源
      *
      * @param: [resourceId]
@@ -626,12 +629,12 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping(value = "resourceDetail")
-    public JSONObject resourceDetail(String resourceId){
+    public JSONObject resourceDetail(String resourceId) {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         ResCatalog_Mongo resCatalog_mongo = resCatalogService.getLocalResCatalogNodeById(resource.getCatalogId());
-        jsonObject.put("resCatalog",resCatalog_mongo);
-        jsonObject.put("resource",resource);
+        jsonObject.put("resCatalog", resCatalog_mongo);
+        jsonObject.put("resource", resource);
         return jsonObject;
     }
 
@@ -640,12 +643,11 @@ public class ResourceController {
     public JSONObject getUserGroups() {
         JSONObject jsonObject = new JSONObject();
         List<Group> groupList = groupService.getAll();
-        jsonObject.put("groupList",groupList);
+        jsonObject.put("groupList", groupList);
         return jsonObject;
     }
 
     /**
-     *
      * Function Description: 审核资源
      *
      * @param: [resourceId, status, auditContent]
@@ -654,8 +656,8 @@ public class ResourceController {
      * @date: 2018/11/22 11:15
      */
     @ResponseBody
-    @RequestMapping(value="audit")
-    public JSONObject audit(HttpSession session,String resourceId,String status,String auditContent){
+    @RequestMapping(value = "audit")
+    public JSONObject audit(HttpSession session, String resourceId, String status, String auditContent) {
         String auditPerson = session.getAttribute("userName").toString();
         JSONObject jo = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
@@ -667,16 +669,15 @@ public class ResourceController {
         auditMessage.setAuditPerson(auditPerson);
         auditMessageService.save(auditMessage);
         String returnId = resourceService.save(resource);
-        if(StringUtils.isNotBlank(resourceId)){
-            jo.put("result","success");
-        }else{
-            jo.put("result","fail");
+        if (StringUtils.isNotBlank(resourceId)) {
+            jo.put("result", "success");
+        } else {
+            jo.put("result", "fail");
         }
         return jo;
     }
 
     /**
-     *
      * Function Description: 资源审核信息列表
      *
      * @param: [resourceId]
@@ -686,15 +687,14 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping("getAuditMessage")
-    public JSONObject getAuditMessage(String resourceId){
+    public JSONObject getAuditMessage(String resourceId) {
         JSONObject jo = new JSONObject();
         List<AuditMessage> auditMessageList = auditMessageService.getAuditMessageListByResourceId(resourceId);
-        jo.put("auditMessageList",auditMessageList);
+        jo.put("auditMessageList", auditMessageList);
         return jo;
     }
 
     /**
-     *
      * Function Description: 停用
      *
      * @param: [resourceId]
@@ -704,15 +704,15 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping("stopResource")
-    public JSONObject stopResource(String resourceId){
+    public JSONObject stopResource(String resourceId) {
         JSONObject jo = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setStatus("1");
         String newresourceId = resourceService.save(resource);
-        if(StringUtils.isNotBlank(newresourceId)){
-            jo.put("result","success");
-        }else{
-            jo.put("result","fail");
+        if (StringUtils.isNotBlank(newresourceId)) {
+            jo.put("result", "success");
+        } else {
+            jo.put("result", "fail");
         }
         return jo;
     }
@@ -724,8 +724,6 @@ public class ResourceController {
         jsonObject.put("result", dataSrcService.validateSql(sqlStr, dataSourceId));
         return jsonObject;
     }
-
-
 
 
 }
