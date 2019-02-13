@@ -41,6 +41,16 @@ public class ResourceService {
         return resourceDao.save(resource);
     }
 
+    @Transactional
+    public void saveFileInfo(cn.csdb.portal.model.FileInfo fileInfo) {
+        resourceDao.saveFileInfo(fileInfo);
+    }
+
+    @Transactional
+    public void deleteFileInfo(String id) {
+        resourceDao.deleteFileInfo(id);
+    }
+
     /**
      * Function Description: 删除资源
      *

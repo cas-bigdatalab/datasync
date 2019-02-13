@@ -1,9 +1,6 @@
 package cn.csdb.portal.controller;
 
-import cn.csdb.portal.model.AuditMessage;
-import cn.csdb.portal.model.Group;
-import cn.csdb.portal.model.ResCatalog_Mongo;
-import cn.csdb.portal.model.Subject;
+import cn.csdb.portal.model.*;
 import cn.csdb.portal.service.*;
 import cn.csdb.portal.utils.FileUploadUtil;
 import cn.csdb.portal.utils.ImgCut;
@@ -25,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.sql.Connection;
+import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -371,6 +369,26 @@ public class ResourceController {
                     }
                 }
             }
+            String[] filePaths = sb.toString().split(";");
+            //清空以前保存的文件记录
+            resourceService.deleteFileInfo(resourceId);
+            for(String str : filePaths){
+                FileInfo fileInfo = new FileInfo();
+                int one = str.lastIndexOf("/");
+                fileInfo.setFile_name(str.substring((one+1),str.length()));
+                fileInfo.setFile_path(str);
+                File file = new File(str);
+                if(file.exists() && file.isFile()){
+                    Double d = Double.valueOf(file.length())/1024/1024;
+                    NumberFormat nf = NumberFormat.getNumberInstance();
+                    nf.setMaximumFractionDigits(4);
+                    fileInfo.setSize(nf.format(d));
+                }
+                fileInfo.getSize();
+                fileInfo.setResourceId(resourceId);
+                fileInfo.setTime(new Date());
+                resourceService.saveFileInfo(fileInfo);
+            }
             resource.setFilePath(sb.toString().replace("/", "%_%"));
             resource.setToMemorySize(String.valueOf(size));
 
@@ -537,6 +555,26 @@ public class ResourceController {
                         }
                     }
                 }
+            }
+            String[] filePaths = sb.toString().split(";");
+            //清空以前保存的文件记录
+            resourceService.deleteFileInfo(resourceId);
+            for(String str : filePaths){
+                FileInfo fileInfo = new FileInfo();
+                int one = str.lastIndexOf("/");
+                fileInfo.setFile_name(str.substring((one+1),str.length()));
+                fileInfo.setFile_path(str);
+                File file = new File(str);
+                if(file.exists() && file.isFile()){
+                    Double d = Double.valueOf(file.length())/1024/1024;
+                    NumberFormat nf = NumberFormat.getNumberInstance();
+                    nf.setMaximumFractionDigits(4);
+                    fileInfo.setSize(nf.format(d));
+                }
+                fileInfo.getSize();
+                fileInfo.setResourceId(resourceId);
+                fileInfo.setTime(new Date());
+                resourceService.saveFileInfo(fileInfo);
             }
             resource.setFilePath(sb.toString().replace("/", "%_%"));
             resource.setToMemorySize(String.valueOf(size));

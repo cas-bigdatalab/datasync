@@ -1,11 +1,14 @@
 package cn.csdb.portal.repository;
 
+import cn.csdb.portal.model.FileInfo;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -37,6 +40,9 @@ public class ResourceDao {
         return resource.getId();
     }
 
+    public void saveFileInfo(cn.csdb.portal.model.FileInfo fileInfo){
+        mongoTemplate.save(fileInfo);
+    }
 
     /**
      * Function Description: 删除记录
@@ -54,6 +60,13 @@ public class ResourceDao {
 
     public void delete(cn.csdb.portal.model.Resource resource){
         mongoTemplate.remove(resource);
+    }
+
+    public void deleteFileInfo(String id){
+        List<FileInfo> fileInfos= mongoTemplate.find(new Query(Criteria.where("resourceId").is(id)),FileInfo.class);
+        for(FileInfo fileInfo:fileInfos){
+            mongoTemplate.remove(fileInfo);
+        }
     }
 
     /**
