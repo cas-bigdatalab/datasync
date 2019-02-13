@@ -591,7 +591,7 @@
         var S_column;
         var S_dataType;
         var S_updateData;
-
+        var S_columnType;
         $(function () {
             chooseTable(sub, 0);
             loadTree();
@@ -667,6 +667,8 @@
                     S_updateData = [];
                     var arr = data.columns;
                     var dataType = data.dataType;
+                    S_columnType=[];
+                    S_columnType=data.columnType;
                     var columnComment = data.columnComment;
                     var s = "<tr class='tr_class' style='background-color:gainsboro;'>";
                     //表头
@@ -775,7 +777,7 @@
             var columnComments = columnComment.split(",");
             var s = "";
             for (var i = 0; i < strs2.length; i++) {
-                s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td>" + strs[i] + "</td><tr>";
+                s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td>" + strs[i] + "</td><tr>";
             }
             $("#checkTable tbody").append(s);
             $("#staticShowDataDetail").modal("show");
@@ -860,11 +862,11 @@
             var s = "";
             for (var i = 0; i < strs2.length; i++) {
                 if (pkColumnArr[i] === "PRI" && autoAddArr[i] === "auto_increment") {
-                    s += "<tr style='display: none;'><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
+                    s += "<tr style='display: none;'><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
                 } else if (pkColumnArr[i] === "PRI" && autoAddArr[i] !== "auto_increment") {
-                    s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>(主键，不自增)  " + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
+                    s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>(主键，不自增)  " + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
                 } else {
-                    s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
+                    s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
                 }
             }
             $("#addTable tbody").append(s);
@@ -914,10 +916,22 @@
                         }
 
                         if (S_dataType[i] === "decimal") {
-                            var reg = /^(([0-9]+)|([0-9]+\.[0-9]{1,9}))$/;
-                            if (!reg.test(dataArr[i])) {
+
+                            var col_type_str=S_columnType[i].split(",");
+                            var m=col_type_str[0].split("(")[1];
+                            var s=col_type_str[1].split(")")[0];
+                            var n=m-s;
+                            var pattern=/^(-?\d+)(\.\d+)?$/;    //浮点数
+                            var reg = new RegExp(pattern);
+                            if (reg.test(dataArr[i])) {
+                                var ss=dataArr[i].split(".");
+                                if(ss[0].length>n){
+                                    toastr.warning("数据超出范围！ ");
+                                    return ;
+                                }
+                            }else{
                                 toastr.warning("该字段是decimal类型！ ");
-                                return;
+                                return ;
                             }
                         }
 
@@ -1003,7 +1017,7 @@
             $("#staticUpdateData").modal("hide");
         };
 
-        //修改数据
+        //修改数据,保存
         function saveData(tableName, subjectCode, dataType, currentPage) {
             var newdata = $('#form_id').serializeArray();
             var dataTypeArr = dataType.split(",");
@@ -1049,11 +1063,33 @@
                         return;
                     }
                 }
-                if (dataTypeArr[i] === "decimal" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
-                    var reg = /^(([0-9]+)|([0-9]+\.[0-9]{1,9}))$/;
-                    if (!reg.test(checkdataArr[i])) {
+                if (dataTypeArr[i] === "decimal" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i]!=="null") {
+                    // var reg = /^(([0-9]+)|([0-9]+\.[0-9]{1,9}))$/;
+                    // if (!reg.test(checkdataArr[i])) {
+                    //     toastr.warning("该字段是decimal类型！ ");
+                    //     return;
+                    // }
+
+                    var col_type_str=S_columnType[i].split(",");
+                    var m=col_type_str[0].split("(")[1];
+                    var s=col_type_str[1].split(")")[0];
+                    var n=m-s;
+
+                    // var pattern='^(-?[0-9]{1,'+ n +'}\d)([.][0-9]{0,'+s +'})?$';
+                    // var pattern = '^-?[1-9]\\d*$|^-?0\\.\\d*$|^-?[1-9]\\d*\\.\\d*$';
+                    // var pattern='^(-?[1-9]\d{1,'+n+'}+)(\.\d{0,'+s+'}+)?$';
+                   // var pattern= '^(\d{1,'+ n +'}\.\d{0,'+s +'})$|^(\d{1,'+ n +'}\.?)$';
+                    var pattern=/^(-?\d+)(\.\d+)?$/;    //浮点数
+                    var reg = new RegExp(pattern);
+                    if (reg.test(checkdataArr[i])) {
+                        var ss=checkdataArr[i].split(".");
+                           if(ss[0].length>n){
+                               toastr.warning("数据超出范围！ ");
+                               return ;
+                           }
+                    }else{
                         toastr.warning("该字段是decimal类型！ ");
-                        return;
+                        return ;
                     }
                 }
             }
