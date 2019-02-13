@@ -363,7 +363,14 @@ public class DataTaskController {
             for(int i=0;i<checkedFilePath.length;i++){
                 for(int j=0;j<nodeList.size();j++){
                     if(checkedFilePath[i].indexOf(nodeList.get(j).getId())!=-1){
-                        nodeList.get(j).setChecked("true");
+                        File dirFile = new File(nodeList.get(j).getId());
+                        if(dirFile.isDirectory()){//判断是否为路径
+                            if(  checkedFilePath[i].indexOf(nodeList.get(j).getId()+"/")!=-1 || checkedFilePath[i].indexOf(nodeList.get(j).getId()+"\\")!=-1){
+                                nodeList.get(j).setChecked("true");
+                            }
+                        }else {
+                            nodeList.get(j).setChecked("true");
+                        }
                     }
                 }
             }
