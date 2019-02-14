@@ -319,11 +319,11 @@
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:;">
-                            <i class=" icon-drawer"></i>
-                            <span class="title">数据统计管理</span>
-                            <span class="arrow "></span>
-                        </a>
+                            <%--<a href="javascript:;">--%>
+                            <%--<i class=" icon-drawer"></i>--%>
+                            <%--<span class="title">数据统计管理</span>--%>
+                            <%--<span class="arrow "></span>--%>
+                            <%--</a>--%>
                         <ul class="sub-menu">
                             <li>
                                 <a href="${ctx}/relationship/index">
