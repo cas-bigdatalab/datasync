@@ -376,6 +376,8 @@ public class ResourceController {
                 FileInfo fileInfo = new FileInfo();
                 int one = str.lastIndexOf("/");
                 fileInfo.setFile_name(str.substring((one+1),str.length()));
+                int two = str.lastIndexOf(".");
+                fileInfo.setPreviewType(str.substring((two+1),str.length()));
                 fileInfo.setFile_path(str);
                 File file = new File(str);
                 if(file.exists() && file.isFile()){

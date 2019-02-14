@@ -24,6 +24,8 @@ public class FileInfo {
     private String resourceId;
     @Field("time")
     private Date time;
+    @Field("previewType")
+    private String previewType;
 
     public String getId() {
         return id;
@@ -71,5 +73,13 @@ public class FileInfo {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public String getPreviewType() {
+        return previewType;
+    }
+
+    public void setPreviewType(String previewType) {
+        this.previewType = previewType;
     }
 }
