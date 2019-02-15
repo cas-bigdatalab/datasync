@@ -36,9 +36,8 @@ public class FileImportService {
         JSONObject jsonObject = new JSONObject();
 
         // 解析excel 隐藏的sheet，row跳过
-        Map<String, List<List<String>>> mapSheet = new LinkedHashMap<>();
-//        parseExcel(workbook, mapSheet);
-        mapSheet = parseExcel2(tempFilePath);
+        //        parseExcel(workbook, mapSheet);
+        Map<String, List<List<String>>> mapSheet = parseExcel2(tempFilePath);
         int sheetSize = mapSheet.keySet().size();
         if (sheetSize == 0) {
             jsonObject.put("code", "error");
@@ -367,7 +366,7 @@ public class FileImportService {
             }
             sb.append(",");
         }
-        sb.append("PORTALID INT not null AUTO_INCREMENT COMMENT '中心端系统ID', PRIMARY KEY (");
+        sb.append("PORTALID VARCHAR(36) COMMENT '中心端系统ID', PRIMARY KEY (");
         if (primaryKeys.size() != 0) {
             for (String s : primaryKeys) {
                 sb.append("`" + s + "`,");
@@ -420,7 +419,7 @@ public class FileImportService {
                 dropTable(connection, tableName);
                 jsonObject.put("code", "error");
                 jsonObject.put("message", tableName + "导入数据失败");
-                break;
+                return jsonObject;
             }
         }
         jsonObject.put("code", "success");
@@ -453,7 +452,7 @@ public class FileImportService {
             e.printStackTrace();
             return "";
         }
-        sb.replace(sb.length() - 1, sb.length(), ") VALUES");
+        sb.replace(sb.length() - 1, sb.length(), ",PORTALID) VALUES");
         Iterator<List<String>> iterator = value.iterator();
         for (List<String> row : value) {
             sb.append("(");
@@ -465,22 +464,12 @@ public class FileImportService {
                 sb.append(next1);
                 sb.append("' ,");
             }
-            sb.replace(sb.length() - 1, sb.length(), "");
+            String s = UUID.randomUUID().toString();
+            sb.append("'");
+            sb.append(s);
+            sb.append("'");
             sb.append("),");
         }
-        /*while (iterator.hasNext()) {
-            sb.append("(");
-            List<String> next = iterator.next();
-            Iterator<String> iterator1 = next.iterator();
-            while (iterator1.hasNext()) {
-                String next1 = iterator1.next();
-                sb.append("'");
-                sb.append(next1);
-                sb.append("' ,");
-            }
-            sb.replace(sb.length() - 1, sb.length(), "");
-            sb.append("),");
-        }*/
         sb.replace(sb.length() - 1, sb.length(), "");
         return sb.toString();
     }
@@ -613,7 +602,7 @@ public class FileImportService {
             }
         }
         if (sb.toString().endsWith(",")) {
-            sb.replace(sb.length() - 1, sb.length(), " )");
+            sb.replace(sb.length() - 1, sb.length(), " ,PORTALID)");
         }
         sb.append(" VALUES ");
         for (List<String> row : insertValue) {
@@ -622,9 +611,10 @@ public class FileImportService {
                 int j = Integer.parseInt(i);
                 sb.append("'" + row.get(j) + "',");
             }
-            if (sb.toString().endsWith(",")) {
-                sb.replace(sb.length() - 1, sb.length(), "),");
-            }
+            String s = UUID.randomUUID().toString();
+            sb.append("'");
+            sb.append(s);
+            sb.append("'),");
         }
         if (sb.toString().endsWith(",")) {
             sb.replace(sb.length() - 1, sb.length(), "");

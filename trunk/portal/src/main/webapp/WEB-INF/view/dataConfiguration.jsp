@@ -281,7 +281,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" onclick="createTableAndInsertValue(this)"
-                                                data-dismiss="modal" class="btn green">保存
+                                                data-dismiss="modal" class="btn green" id="saveExcelSuccess">保存
                                         </button>
                                         <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
                                     </div>
@@ -1393,6 +1393,9 @@
 
         function removeElement() {
             $("#excelFile").removeAttr("disabled");
+            var $saveExcelSuccess = $("#saveExcelSuccess");
+            $saveExcelSuccess.removeAttr("disabled");
+            $saveExcelSuccess.text("保存");
             $("#tableNamePDiv div").remove();
             $("#tableNameUl li").remove();
             $("#excelFileUpload").show();
@@ -1448,6 +1451,10 @@
                             toastr["error"]("错误！", jsonData.message);
                         } else {
                             toastr["success"]("提示！", jsonData.message);
+                            var $saveExcelSuccess = $("#saveExcelSuccess");
+                            $saveExcelSuccess.text("保存成功");
+                            $saveExcelSuccess.attr('disabled', 'disabled');
+
                         }
                     },
                     complete: function () {
