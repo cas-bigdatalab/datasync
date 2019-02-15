@@ -592,6 +592,8 @@
         var S_dataType;
         var S_updateData;
         var S_columnType;
+        var S_pkColumnArr;
+        var S_autoAddArr;
         $(function () {
             chooseTable(sub, 0);
             loadTree();
@@ -679,84 +681,89 @@
                             s += "<th style='display:none;border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                         }
                     }
-                    s += "<th style='border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:120px;height:60px;'>操作</th></tr>";
-                    $("#thead_id").append(s);
+                    // s += "<th style='border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:120px;height:60px;'>操作</th></tr>";
 
-                    // console.log(data);
                     var dataArry = data.dataDatil;
                     var pkColumn = data.pkColumn;
                     var autoAdd = data.autoAdd;
                     var ss = "";
                     var m = 0;
-                    for (var key in dataArry) {
-                        m++;
-                        ss += "<tr>";
-                        var d = dataArry[key];
 
-                        var eachData = [];
+                    if(dataArry.length>0) {
+                        for (var key in dataArry) {
+                            m++;
+                            ss += "<tr>";
+                            var d = dataArry[key];
 
-                        var i = 0;
-                        var j = 0;
-                        var n = 0;
-                        for (var k in d) {
-                            n++;
-                            if (j <= 15) {
-                                if (k === arr[i]) {
-                                    if (dataType[i] === "datetime" && d[k] !== null && d[k] !== " ") {
-                                        var date = d[k].split(".");
-                                        d[k] = date[0];
+                            var eachData = [];
+
+                            var i = 0;
+                            var j = 0;
+                            var n = 0;
+                            for (var k in d) {
+                                n++;
+                                if (j <= 15) {
+                                    if (k === arr[i]) {
+                                        if (dataType[i] === "datetime" && d[k] !== null && d[k] !== " ") {
+                                            var date = d[k].split(".");
+                                            d[k] = date[0];
+                                        }
+                                        ss += "<td title='" + d[k] + "'>" + d[k] + "</td>";
+
+                                        // if (dataType[i] === "text" || dataType === "varchar") {
+                                        //     var reg = new RegExp(",", "g"); //创建正则RegExp对象
+                                        //     // var stringObj="终古人民共和国，终古人民";
+                                        //     // var newstr=stringObj.replace(reg,"中国");
+                                        // }
+                                        eachData.push(d[k]);
+                                        S_updateData.push(d[k]);
+                                        // datajson.colName = arr[i];
+                                        // datajson.colValue = d[k];
+                                        // eachData2.push(datajson);
+
+                                    } else {
+                                        if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
+                                            var date = d[arr[i]].split(".");
+                                            d[arr[i]] = date[0];
+                                        }
+
+                                        ss += "<td title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
+
+
+                                        eachData.push(d[arr[i]]);
+                                        S_updateData.push(d[arr[i]]);
                                     }
-                                    ss += "<td title='" + d[k] + "'>" + d[k] + "</td>";
-
-                                    // if (dataType[i] === "text" || dataType === "varchar") {
-                                    //     var reg = new RegExp(",", "g"); //创建正则RegExp对象
-                                    //     // var stringObj="终古人民共和国，终古人民";
-                                    //     // var newstr=stringObj.replace(reg,"中国");
-                                    //     d[k] = d[k].replace(reg, "+++///+++///+++");
-                                    // }
-                                    eachData.push(d[k]);
-                                    S_updateData.push(d[k]);
-                                    // datajson.colName = arr[i];
-                                    // datajson.colValue = d[k];
-                                    // eachData2.push(datajson);
-
+                                    i++;
                                 } else {
-                                    if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
-                                        var date = d[arr[i]].split(".");
-                                        d[arr[i]] = date[0];
+                                    if (k === arr[i]) {
+                                        if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
+                                            var date = d[k].split(".");
+                                            d[k] = date[0];
+                                        }
+
+                                        eachData.push(d[k]);
+                                        S_updateData.push(d[k]);
+                                    } else {
+                                        if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
+                                            var date = d[arr[i]].split(".");
+                                            d[arr[i]] = date[0];
+                                        }
+
+                                        eachData.push(d[arr[i]]);
+                                        S_updateData.push(d[arr[i]]);
                                     }
-
-                                    ss += "<td title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
-
-
-                                    eachData.push(d[arr[i]]);
-                                    S_updateData.push(d[arr[i]]);
+                                    i++;
                                 }
-                                i++;
-                            } else {
-                                if (k === arr[i]) {
-                                    if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
-                                        var date = d[k].split(".");
-                                        d[k] = date[0];
-                                    }
-
-                                    eachData.push(d[k]);
-                                    S_updateData.push(d[k]);
-                                } else {
-                                    if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
-                                        var date = d[arr[i]].split(".");
-                                        d[arr[i]] = date[0];
-                                    }
-
-                                    eachData.push(d[arr[i]]);
-                                    S_updateData.push(d[arr[i]]);
-                                }
-                                i++;
+                                j++;
                             }
-                            j++;
+                            ss += "<td ><a src='#' onclick=\" updateData('" + arr + "','" + tableName + "','" + subjectCode + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">修改 | </a><a href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">增加 | </a><a href='#' onclick=\"checkDada('" + arr + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">查看</a></td></tr>";
                         }
-                        ss += "<td ><a src='#' onclick=\" updateData('" + arr + "','" + tableName + "','" + subjectCode + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">修改 | </a><a href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">增加 | </a><a href='#' onclick=\"checkDada('" + arr + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">查看</a></td></tr>";
+                        s += "<th style='border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:120px;height:60px;'>操作</th></tr>";
+                    }else{
+                        s += "<th style='border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:120px;height:60px;'>操作 &nbsp;&nbsp;";
+                        s+="<a style='font-size: 10px;' href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">(增加)</a></th></tr>"
                     }
+                    $("#thead_id").append(s);
                     $("#fileBody").append(ss);
 
                     fun_limit(subjectCode, tableName, data);
@@ -764,7 +771,7 @@
             });
         }
 
-        function checkDada(columns, dataType, columnComment, m, n) {
+        function checkDada(columns, dataType, columnComment,m, n) {
             $("#checkTable tbody").html(" ");
 
             var strs = new Array();
@@ -815,7 +822,7 @@
         function updateData(columns, tableName, subjectCode, dataType, columnComment, m, n) {
 
             var strs = new Array();
-            for (var i = (m - 1) * n; i < m * n; i++) {
+            for (var i = (m-1)*n; i <m*n; i++) {
                 strs.push(S_updateData[i]);
             }
 
@@ -836,7 +843,11 @@
             ss += "<input type='text' name='subjectCode'style='display:none;' value=" + subjectCode + " />";
 
             for (var i = 0; i < strs2.length; i++) {
-                ss += "<input type='text' value='" + strs2[i] + "' readonly='true'/><input type='text'  value='" + dataTypeArr[i] + "' readonly='true'/><input type='text'  value='" + columnComments[i] + "' readonly='true' /><input class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
+                if(strs2[i]==="PORTALID"){
+                    ss += "<input style='display:none;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='display:none;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='display:none;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' />";
+                }else{
+                    ss += "<input type='text' value='" + strs2[i] + "' readonly='true'/><input type='text'  value='" + S_columnType[i] + "' readonly='true'/><input type='text'  value='" + columnComments[i] + "' readonly='true' /><input class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
+                }
             }
             var s_save = "<input class='eee'id='btn_save'type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataType + "','" + currentPage + "')\"/>";
 
@@ -862,11 +873,23 @@
             var s = "";
             for (var i = 0; i < strs2.length; i++) {
                 if (pkColumnArr[i] === "PRI" && autoAddArr[i] === "auto_increment") {
-                    s += "<tr style='display: none;'><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
+                    if(strs2[i]==="PORTALID"){
+                        s += "<input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='0'/>";
+                    }else {
+                        s += "<tr style='display: none;'><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' value='0' name='" + strs2[i] + "'/></td><tr>";
+                    }
                 } else if (pkColumnArr[i] === "PRI" && autoAddArr[i] !== "auto_increment") {
-                    s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>(主键，不自增)  " + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
+                    if(strs2[i]==="PORTALID"){
+                        s += "<input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='0'/>";
+                    }else {
+                        s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>(主键，不自增)  " + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
+                    }
                 } else {
-                    s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
+                    if(strs2[i]==="PORTALID"){
+                        s += "<input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='0'/>";
+                    }else {
+                        s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
+                    }
                 }
             }
             $("#addTable tbody").append(s);
@@ -875,56 +898,81 @@
             S_tableName = tableName;
             S_dataType = dataTypeArr;
             S_column = strs2;
+            S_pkColumnArr=pkColumnArr;
+            S_autoAddArr=autoAddArr;
         }
 
+        //增加数据
         function addTablefuntion() {
             var dataArr = [];
             $('#addTable input').each(function () {
                 dataArr.push($(this).val());
             });
             var data1 = [];
-            // alert(dataArr);
-            for (var i = 0; i < dataArr.length; i++) {
-                if (dataArr[i] !== " " && dataArr[i] !== null) {
-                    var data2 = {};
-                    if (dataArr[i] !== null && dataArr[i] !== "") {
-                        if (S_dataType[i] === "int" || S_dataType[i] === "integer") {
-                            var result = dataArr[i].match(/^(-|\+)?\d+$/);
-                            if (result == null) {
-                                // alert(S_column[i] + "是int或integer等类型！！");
-                                toastr.warning("该字段应是int或integer等类型！");
+            var j=0;
+            var datacon=[];
+            for (var i = 0,ii=0; i < S_column.length; i++) {
+
+                //隐藏字段
+                if (S_column[i] === "PORTALID") {
+                    datacon[i] = "";
+                } else if (S_pkColumnArr[i] === "PRI" && S_autoAddArr[i] === "auto_increment") {
+                    datacon[i] = "";
+                } else {
+                    datacon[i] = dataArr[ii];
+                    ii++;
+                }
+            }
+
+               for(var i = 0; i < S_column.length; i++){
+                   var data2 = {};
+                 if (datacon[i] !== "" && datacon[i] !== null) {
+                        //boolean数据类型判断
+                        // if(S_dataType[i]==="bit"){
+                        //     if(dataArr[i] !=="0" && dataArr[i] !=="1"){
+                        //         toastr.warning("该字段应是boolean类型！");
+                        //         return;
+                        //     }
+                        // }
+
+                        if (datacon[i]!=="" && (S_dataType[i] === "int" || S_dataType[i] === "integer")) {
+                            if(!isNaN(datacon[i])) {
+                                var reg = /^-?\d+$/;
+                                if (!reg.exec(datacon[i])) {
+                                    toastr.warning("该字段应是int或integer等类型！");
+                                    return;
+                                }
+                            }else{
+                                toastr.warning("该字段应是数字类型！");
                                 return;
                             }
                         }
 
-                        if (S_dataType[i] === "float" || S_dataType[i] === "double") {
-                            if (isNaN(dataArr[i])) {
-                                // alert(S_column[i] + "是float或double等类型！！");
+                        if (datacon[i]!=="" && (S_dataType[i] === "float" || S_dataType[i] === "double")) {
+                            if (isNaN(datacon[i])) {
                                 toastr.warning("该字段应是float或double等类型！");
                                 return;
                             }
                         }
 
-                        if (S_dataType[i] === "datetime") {
+                        if (datacon[i]!=="" && S_dataType[i] === "datetime") {
                             var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
                             var regExp = new RegExp(reg);
-                            if (!regExp.test(dataArr[i]) && dataArr[i] !== null && dataArr[i] !== "") {
-                                // alert(S_column[i] + "是时间格式,正确格式为: xxxx-xx-xx xx:xx:xx ");
+                            if (!regExp.test(datacon[i]) && datacon[i] !== null && datacon[i] !== "") {
                                 toastr.warning("该字段是时间格式,正确格式应为: xxxx-xx-xx xx:xx:xx ");
                                 return;
                             }
                         }
 
-                        if (S_dataType[i] === "decimal") {
-
+                        if (datacon[i]!=="" && S_dataType[i] === "decimal") {
                             var col_type_str=S_columnType[i].split(",");
                             var m=col_type_str[0].split("(")[1];
                             var s=col_type_str[1].split(")")[0];
                             var n=m-s;
                             var pattern=/^(-?\d+)(\.\d+)?$/;    //浮点数
                             var reg = new RegExp(pattern);
-                            if (reg.test(dataArr[i])) {
-                                var ss=dataArr[i].split(".");
+                            if (reg.test(datacon[i])) {
+                                var ss=datacon[i].split(".");
                                 if(ss[0].length>n){
                                     toastr.warning("数据超出范围！ ");
                                     return ;
@@ -934,15 +982,13 @@
                                 return ;
                             }
                         }
-
                         data2.columnName = S_column[i];
-                        data2.columnValue = dataArr[i];
+                        data2.columnValue = datacon[i];
                         data1.push(data2);
                     } else {
                         data2.columnName = S_column[i];
-                        data2.columnValue = dataArr[i];
+                        data2.columnValue = datacon[i];
                         data1.push(data2);
-                    }
                 }
             }
 
@@ -980,38 +1026,6 @@
             })
         }
 
-        //格式判断
-        function egx_data(dataType, dataValue) {
-            if (dataType === "int" || dataType === "integer") {
-                var result = dataValue.match(/^(-|\+)?\d+$/);
-                if (result == null) {
-                    alert("不是int或integer等类型！！");
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-
-            if (dataType === "float" || dataType === "double") {
-                if (!isNaN(dataValue)) {
-                    return true;
-                } else {
-                    alert("不是float或double等类型！！");
-                    return false;
-                }
-            }
-            if (dataType === "datetime") {
-                var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
-                var regExp = new RegExp(reg);
-                if (!regExp.test(dataValue) && dataValue !== null && dataValue !== "") {
-                    alert("时间格式不正确,正确格式为: xxxx-xx-xx xx:xx:xx ");
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-        }
-
         //取消事件
         function fun_cancel() {
             $("#staticUpdateData").modal("hide");
@@ -1033,67 +1047,70 @@
                     break;
                 }
             }
-
             for (var i = 0; i < checkdataArr.length; i++) {
 
-                if ((dataTypeArr[i] === "int" || dataTypeArr[i] === "integer") && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
-                    var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
-                    if (result == null) {
+                //boolean数据类型判断
+                if(dataTypeArr[i]==="bit"&& checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null"){
+                   if(checkdataArr[i] !== "0" && checkdataArr[i] !== "1"){
+                       toastr.warning("该字段应是boolean类型！");
+                       return;
+                   }
+                }
 
-                        //警告消息提示，默认背景为橘黄色
+                //整型数据类型判断
+                if ((dataTypeArr[i] === "int" || dataTypeArr[i] === "integer") && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null"){
+                     if (!isNaN(checkdataArr[i])) {
+                     var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
+                     if (result == null) {
+                        //警告消息提示s，默认背景为橘黄色
                         toastr.warning("该字段应是int或integer等类型！");
                         return;
                     }
-                }
-
-                if ((dataTypeArr[i] === "float" || dataTypeArr[i] === "double") && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
-                    if (isNaN(checkdataArr[i])) {
-                        // alert(checkdataArr[i] + "应是float或double等类型！");
-                        toastr.warning("该字段应是float或double等类型！");
-                        return;
-                    }
-                }
-
-                if (dataTypeArr[i] === "datetime" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
-                    var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
-                    var regExp = new RegExp(reg);
-                    if (!regExp.test(checkdataArr[i])) {
-                        // alert(checkdataArr[i] + "是时间格式,正确格式应为: xxxx-xx-xx xx:xx:xx ");
-                        toastr.warning("该字段是时间格式,正确格式应为: xxxx-xx-xx xx:xx:xx ");
-                        return;
-                    }
-                }
-                if (dataTypeArr[i] === "decimal" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i]!=="null") {
-                    // var reg = /^(([0-9]+)|([0-9]+\.[0-9]{1,9}))$/;
-                    // if (!reg.test(checkdataArr[i])) {
-                    //     toastr.warning("该字段是decimal类型！ ");
-                    //     return;
-                    // }
-
-                    var col_type_str=S_columnType[i].split(",");
-                    var m=col_type_str[0].split("(")[1];
-                    var s=col_type_str[1].split(")")[0];
-                    var n=m-s;
-
-                    // var pattern='^(-?[0-9]{1,'+ n +'}\d)([.][0-9]{0,'+s +'})?$';
-                    // var pattern = '^-?[1-9]\\d*$|^-?0\\.\\d*$|^-?[1-9]\\d*\\.\\d*$';
-                    // var pattern='^(-?[1-9]\d{1,'+n+'}+)(\.\d{0,'+s+'}+)?$';
-                   // var pattern= '^(\d{1,'+ n +'}\.\d{0,'+s +'})$|^(\d{1,'+ n +'}\.?)$';
-                    var pattern=/^(-?\d+)(\.\d+)?$/;    //浮点数
-                    var reg = new RegExp(pattern);
-                    if (reg.test(checkdataArr[i])) {
-                        var ss=checkdataArr[i].split(".");
-                           if(ss[0].length>n){
-                               toastr.warning("数据超出范围！ ");
-                               return ;
-                           }
-                    }else{
-                        toastr.warning("该字段是decimal类型！ ");
-                        return ;
-                    }
+                } else {
+                    toastr.warning("该字段应是数字类型！");
+                    return;
                 }
             }
 
+                    //float/double数据类型判断
+                    if ((dataTypeArr[i] === "float" || dataTypeArr[i] === "double") && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                        if (isNaN(checkdataArr[i])) {
+                            // alert(checkdataArr[i] + "应是float或double等类型！");
+                            toastr.warning("该字段应是float或double等类型！");
+                            return;
+                        }
+                    }
+
+                    if (dataTypeArr[i] === "datetime" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                        var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
+                        var regExp = new RegExp(reg);
+                        if (!regExp.test(checkdataArr[i])) {
+                            toastr.warning("该字段是时间格式,正确格式应为: xxxx-xx-xx xx:xx:xx ");
+                            return;
+                        }
+                    }
+
+                    if (dataTypeArr[i] === "decimal" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i]!=="null") {
+                        var col_type_str=S_columnType[i].split(",");
+                        var m=col_type_str[0].split("(")[1];
+                        var s=col_type_str[1].split(")")[0];
+                        var n=m-s;
+                        var pattern=/^(-?\d+)(\.\d+)?$/;    //浮点数
+
+                        var reg = new RegExp(pattern);
+                        if (reg.test(checkdataArr[i])) {
+                            var ss=checkdataArr[i].split(".");
+                               if(ss[0].length>n){
+                                   toastr.warning("数据超出范围！ ");
+                                   return ;
+                               }
+                        }else{
+                            toastr.warning("该字段是decimal类型！ ");
+                            return ;
+                        }
+                    }
+
+            }
             $.ajax({
                 url: "${ctx}/saveTableData",
                 type: "POST",
@@ -1110,7 +1127,7 @@
                         // alert("更新成功！");
                         $("#staticUpdateData").modal("hide");
                         editTableData(subjectCode, tableName, currentPage);
-                    } else {
+                    }else{
                         var arr = data.data.split("+");
                         if (arr[0] === "-2") {
                             toastr.error("更新数据失败，" + arr[1] + " 列不能为空！");
@@ -1140,11 +1157,7 @@
                                         return false;
                                     }
                                     var parentURI = selected[0];
-                                    if (parentURI.search(/%_%/)) {
-                                        parentURI = parentURI.substring(0, parentURI.lastIndexOf("%_%"));
-                                    } else {
-                                        parentURI = parentURI.substring(0, parentURI.lastIndexOf("/"));
-                                    }
+                                    parentURI = parentURI.substring(0, parentURI.lastIndexOf("%_%"));
                                     $("#addBrotherDirectory").modal("show");
                                     $("#parentURI").val(parentURI);
                                     $("#brotherDirectorName").val("Customdir-");
@@ -1240,6 +1253,9 @@
                         }
                         generateChildJson(children);
                         callback.call(this, children);
+                        /*else{
+                         callback.call(this,);
+                         }*/
                     }
                 },
                 "types": {
@@ -1592,6 +1608,7 @@
             });
             $("#excelFile").val("");
         })();
+
     </script>
 </div>
 

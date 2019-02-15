@@ -214,7 +214,7 @@ public class EditDataController {
             if(list1.get(i).equals("PRI") && list2.get(i).equals("auto_increment")){ //有主键且自增
                 System.out.println(jsonArray.getJSONObject(i).getString("columnName"));
 
-            }else if(list1.get(i).equals("PRI") && !list2.get(i).equals("auto_increment")){   //有主键但不自增，判断新增主键是否重复
+            }else if(list1.get(i).equals("PRI") && !list2.get(i).equals("auto_increment") && !col.equals("PORTALID")){   //有主键但不自增，判断新增主键是否重复
                 if(val!=null && !val.equals("")){
                     if( dataSrcService.checkPriKey(datasrc,tableName,Integer.parseInt(val),col)==1){
                         jsonObject.put("data","0");
@@ -226,11 +226,15 @@ public class EditDataController {
                     jsonObject.put("data","-1");
                     return jsonObject;
                 }
-            }else {   //无主键
+            }else if(col.equals("PORTALID")){
+                String uuid = UUID.randomUUID().toString();
+                column+="PORTALID ,";
+                values+="'"+uuid+"' ,";
+            }else{   //不是主键
                 if(val!=null&& !val.equals("")){
                     column += "" + col + " ,";
                     values += "'" + val + "' ,";
-                }else if(list3.get(i).equals("NO")){
+                }else if(!col.equals("PORTALID") && list3.get(i).equals("NO")){
                     jsonObject.put("data","-2+"+col);//该列不能为空
                     return jsonObject;
                 }
@@ -238,8 +242,8 @@ public class EditDataController {
         }
 //        表随机主键
 //        String uuid = UUID.randomUUID().toString();
-//        column+="PORTLID , ";
-//        values+="'"+uuid+"',";
+//        column+="PORTALID";
+//        values+="'"+uuid+"'";
 
         column=column.substring(0,column.length()-1);
         values=values.substring(0,values.length()-1);
