@@ -181,6 +181,18 @@ public class DataTaskController {
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = dataTaskService.get(datataskId);
         DataSrc dataSrc = dataSrcService.findById(datatask.getDataSourceId());
+        String Path="";
+      if("file".equals(datatask.getDataTaskType())){
+           String [] fileArray=datatask.getFilePath().split(";");
+           for(String filePath:fileArray){
+               File file=new File(filePath);
+               if(file.isFile()){
+                   Path=Path+file+";";
+               }
+           }
+
+      }
+        datatask.setFilePath(Path);
         jsonObject.put("datatask",datatask);
         jsonObject.put("dataSrc",dataSrc);
         return jsonObject;
@@ -237,11 +249,15 @@ public class DataTaskController {
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);
         StringBuffer filePath = new StringBuffer("");
+        StringBuffer filePath2 = new StringBuffer("");
         String str1 = "";
+        String str2 ="";
         Boolean containsFile=false;//检查是否全部为空文件夹，是否包含文件
         for (String nodeId : nodes){
             String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
             File file = new File(str);
+            str2=str+";";
+            filePath2.append(str2);//用来存储要保存的路径，区分压包的文件
             if(file.isDirectory()) {
 //                str1 = fileResourceService.traversingFiles(str);
             }else{
@@ -256,7 +272,7 @@ public class DataTaskController {
 //            }
         }
 
-        datatask.setFilePath(filePath.toString());
+        datatask.setFilePath(filePath2.toString());
         datatask.setDataTaskName(datataskName);
         datatask.setCreateTime(new Date());
         datatask.setDataTaskType("file");
@@ -357,23 +373,36 @@ public class DataTaskController {
 //        DataSrcService dataSrcService=new DataSrcService();
 //        String filePath = fileSourceFileList(dataSourceId);
         if("file".equals(dataTask.getDataTaskType())){
-            String filePath=fileResourceService.findById(dataTask.getDataSourceId()).getFilePath();
-            nodeList=fileResourceService.asynLoadingTree("",filePath,"init");
-            String [] checkedFilePath=dataTask.getFilePath().split(";");
+ //           String filePath=fileResourceService.findById(dataTask.getDataSourceId()).getFilePath();
+//            nodeList=fileResourceService.asynLoadingTree("",filePath,"init");
+              String [] checkedFilePath=dataTask.getFilePath().split(";");
+//            for(int i=0;i<checkedFilePath.length;i++){
+//                for(int j=0;j<nodeList.size();j++){
+//                    if(checkedFilePath[i].equals(nodeList.get(j).getId())){
+//                         nodeList.get(j).setChecked("true");
+//                         //nodeList.get(j).setOpen("open");
+//                    }
+//                }
+//            }
+
             for(int i=0;i<checkedFilePath.length;i++){
+                File dirFile = new File(checkedFilePath[i]);
+                if(dirFile.isDirectory()){
+                    if(i==0){
+                        nodeList.add(new FileTreeNode(checkedFilePath[i],"0",checkedFilePath[i],"true","true","false"));
+                    }
+                     nodeList=fileResourceService.loadingTree(checkedFilePath[i],nodeList);
+                }
+            }
+
+             for(int i=0;i<checkedFilePath.length;i++){
                 for(int j=0;j<nodeList.size();j++){
-                    if(checkedFilePath[i].indexOf(nodeList.get(j).getId())!=-1){
-                        File dirFile = new File(nodeList.get(j).getId());
-                        if(dirFile.isDirectory()){//判断是否为路径
-                            if(  checkedFilePath[i].indexOf(nodeList.get(j).getId()+"/")!=-1 || checkedFilePath[i].indexOf(nodeList.get(j).getId()+"\\")!=-1){
-                                nodeList.get(j).setChecked("true");
-                            }
-                        }else {
-                            nodeList.get(j).setChecked("true");
-                        }
+                    if(checkedFilePath[i].equals(nodeList.get(j).getId())){
+                         nodeList.get(j).setChecked("true");
                     }
                 }
             }
+
             jsonObject.put("datatask",dataTask);
             jsonObject.put("nodeList",nodeList);
         }else {
@@ -446,10 +475,14 @@ public class DataTaskController {
                 datatask.setFilePath(filePath.toString());
             }else{
                 StringBuffer filePathBuffer = new StringBuffer("");
+                StringBuffer filePathBuffer2 = new StringBuffer("");
                 String str1 = "";
+                String str2 = "";
                 for (String nodeId : nodes){
                     String str = nodeId.replaceAll("%_%", Matcher.quoteReplacement(File.separator));
                     File file = new File(str);
+                    str2=str+";";
+                    filePathBuffer2.append(str2);
                     if(file.isDirectory()) {
                         //str1 = fileResourceService.traversingFiles(str);
                     }else{
@@ -464,7 +497,7 @@ public class DataTaskController {
                     }
                 }
                 filePath = filePathBuffer.toString();
-                datatask.setFilePath(filePathBuffer.toString());
+                datatask.setFilePath(filePathBuffer2.toString());
             }
         }else{
             for (String unionNode : attr) {

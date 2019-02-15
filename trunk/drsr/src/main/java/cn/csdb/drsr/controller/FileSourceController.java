@@ -320,25 +320,18 @@ public class FileSourceController {
         List<FileTreeNode> nodeList = new ArrayList<FileTreeNode>();
         nodeList=fileResourceService.asynLoadingTree("",id,"false");
         String taskid=req.getParameter("taskid");
-        if(taskid!=null && taskid!=""){
-            DataTask dataTask = dataTaskService.get(taskid);
-           String[] checkedFilePath=dataTask.getFilePath().split(";");
-    //        String [] checkedFilePath=dataTask.getFilePath().split(";");
-            for(int i=0;i<checkedFilePath.length;i++){
-                for(int j=0;j<nodeList.size();j++){
-                    if(checkedFilePath[i].indexOf(nodeList.get(j).getId())!=-1){
-                        File dirFile = new File(nodeList.get(j).getId());
-                        if(dirFile.isDirectory()){//判断是否为路径
-                            if(  checkedFilePath[i].indexOf(nodeList.get(j).getId()+"/")!=-1 || checkedFilePath[i].indexOf(nodeList.get(j).getId()+"\\")!=-1){
-                                nodeList.get(j).setChecked("true");
-                            }
-                        }else {
-                            nodeList.get(j).setChecked("true");
-                        }
-                    }
-                }
-            }
-        }
+//        if(taskid!=null && taskid!=""){
+//            DataTask dataTask = dataTaskService.get(taskid);
+//           String[] checkedFilePath=dataTask.getFilePath().split(";");
+//    //        String [] checkedFilePath=dataTask.getFilePath().split(";");
+//            for(int i=0;i<checkedFilePath.length;i++){
+//                for(int j=0;j<nodeList.size();j++){
+//                    if(checkedFilePath[i].equals(nodeList.get(j).getId())){
+//                        nodeList.get(j).setChecked("true");
+//                    }
+//                }
+//            }
+//        }
         return nodeList;
     }
 

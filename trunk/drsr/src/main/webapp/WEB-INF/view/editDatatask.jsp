@@ -614,7 +614,7 @@
                     url:"${ctx}/datatask/updateFileDatatask",
                     type:"POST",
                     aysnc:true,
-                    timeout:30000,
+                    timeout:600000,
                     traditional: true,
                     data:{"dataSourceId":dataFileSrcId,
                         "datataskName":$("#dataTaskName").val(),
@@ -901,8 +901,14 @@
             },
             check: {
                 enable: true
+            },
+            callback : {
+                onAsyncSuccess: zTreeOnAsyncSuccess,//异步加载完成调用
+                aOnAsyncError : zTreeOnAsyncError,//加载错误的fun
+                onCheck : onCheck
             }
         };
+
         var changeSetting = {
             async: {
                 enable: true,
@@ -937,6 +943,89 @@
             }
             return pathsOfCheckedFiles;
         }
+
+        //选中checkbox后执行的事件
+        function zTreeOnCheck(event, treeId, treeNode, clickFlag){
+
+        }
+
+        function onCheck(event, treeId, treeNode){
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            if(treeNode.isParent){
+                if (!treeNode.open){
+                    zTree.expandNode(treeNode, true, true, false);
+                    onExpand(event, treeId, treeNode);
+                    setTimeout(function(){
+                        var children=treeNode.children;
+                        for(var i=0;i<children.length;i++){
+                            if(children[i].isParent ){
+                                zTree.expandNode(children[i], false, false, false);
+                            }
+                        }
+                        //zTree.expandNode(treeNode, false, false, false);
+                    },1000);//延时1秒
+                }else{
+                    var children=treeNode.children;
+                    for(var i=0;i<children.length;i++){
+                        if(children[i].isParent ){
+                            if (!children[i].open){
+                                zTree.expandNode(children[i], true, true, false);
+                                onExpand(event, treeId, children[i]);
+                            }
+                        }
+                    }
+                    setTimeout(function(){
+                        var children=treeNode.children;
+                        for(var i=0;i<children.length;i++){
+                            if(children[i].isParent ){
+                                zTree.expandNode(children[i], false, false, false);
+                            }
+                        }
+                    },1000);//延时1.5秒
+                }
+            }
+        };
+
+        function onExpand(event, treeId, treeNode) {
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            var checked=treeNode.checked;
+            setTimeout(function(){
+                var children=treeNode.children;
+                for(var i=0;i<children.length;i++){
+                    zTree.checkNode(children[i],checked,checked);
+                    if(children[i].isParent){
+                        if (!children[i].open){
+                            zTree.expandNode(children[i], true, true, false);
+                            onExpand(event, treeId, children[i]);
+                            console.log(children[i]);
+                            zTree.expandNode(children[i], false, false, false);
+                        }
+                    }
+                }
+            },1200);//延时1.2秒
+        };
+
+        /* 获取返回的数据，进行预操作，treeId是treeDemo,异步加载完之后走这个方法，responseData为后台返回数据  */
+        function filter2(treeId, parentNode, responseData) {
+//        responseData = responseData.jsonArray;
+            if (!responseData){
+                return null;
+            }
+            return responseData;
+        }
+
+        //异步加载完成时运行
+        function zTreeOnAsyncSuccess(event, treeId, treeNode, msg)  {
+
+        }
+
+        //异步加载失败
+        function zTreeOnAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown)  {
+            alertMsg.error("异步加载节点失败!");
+        }
+
+
+
     </script>
 </div>
 
