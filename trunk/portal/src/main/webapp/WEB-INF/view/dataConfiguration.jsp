@@ -934,6 +934,17 @@
                         //         return;
                         //     }
                         // }
+                     if(datacon[i] !== null && datacon[i] !== ""&& S_dataType[i]==="tinyint"){
+                         if (!isNaN(datacon[i])) {
+                             if(parseInt(datacon[i])>127 || parseInt(datacon[i])<-128){
+                                 toastr.warning("该字段超出范围！");
+                                 return;
+                             }
+                         }else{
+                             toastr.warning("该字段应是tinyint等类型！");
+                             return;
+                         }
+                     }
 
                         if (datacon[i]!=="" && (S_dataType[i] === "int" || S_dataType[i] === "integer")) {
                             if(!isNaN(datacon[i])) {
@@ -948,12 +959,27 @@
                             }
                         }
 
-                        if (datacon[i]!=="" && (S_dataType[i] === "float" || S_dataType[i] === "double")) {
+                        if (datacon[i]!=="" && S_dataType[i] === "float" ) {
                             if (isNaN(datacon[i])) {
                                 toastr.warning("该字段应是float或double等类型！");
                                 return;
                             }
                         }
+                     if (datacon[i]!=="" &&  S_dataType[i] === "double") {
+                         if (isNaN(datacon[i])) {
+                             toastr.warning("该字段应是float或double等类型！");
+                             return;
+                         }
+                     }
+                     if (S_dataType[i] === "date" && datacon[i] !== null && datacon[i] !== "" && datacon[i] !== "null") {
+                         // var reg = /^(\d{4})-(\d{2})-(\d{2})$/;
+                         var reg=/^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+                         var regExp = new RegExp(reg);
+                         if (!regExp.test(datacon[i])) {
+                             toastr.warning("该字段是时间格式,正确格式应为: xxxx-xx-xx ");
+                             return;
+                         }
+                     }
 
                         if (datacon[i]!=="" && S_dataType[i] === "datetime") {
                             var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
@@ -1050,11 +1076,23 @@
             for (var i = 0; i < checkdataArr.length; i++) {
 
                 //boolean数据类型判断
-                if(dataTypeArr[i]==="bit"&& checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null"){
+                if(checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null" && dataTypeArr[i]==="bit"){
                    if(checkdataArr[i] !== "0" && checkdataArr[i] !== "1"){
                        toastr.warning("该字段应是boolean类型！");
                        return;
                    }
+                }
+
+                if(checkdataArr[i] !== null && checkdataArr[i] !== ""&& dataTypeArr[i]==="tinyint"){
+                    if (!isNaN(checkdataArr[i])) {
+                        if(parseInt(checkdataArr[i])>127 || parseInt(checkdataArr[i])<-128){
+                            toastr.warning("该字段超出范围！");
+                            return;
+                        }
+                    }else{
+                        toastr.warning("该字段应是tinyint等类型！");
+                        return;
+                    }
                 }
 
                 //整型数据类型判断
@@ -1065,7 +1103,12 @@
                         //警告消息提示s，默认背景为橘黄色
                         toastr.warning("该字段应是int或integer等类型！");
                         return;
-                    }
+                    }else{
+                         if(parseInt(checkdataArr[i])>2147483647 || parseInt(checkdataArr[i])<-2147483648){
+                             toastr.warning("该字段超出范围！");
+                             return;
+                         }
+                     }
                 } else {
                     toastr.warning("该字段应是数字类型！");
                     return;
@@ -1073,13 +1116,29 @@
             }
 
                     //float/double数据类型判断
-                    if ((dataTypeArr[i] === "float" || dataTypeArr[i] === "double") && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                    if (dataTypeArr[i] === "float" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
                         if (isNaN(checkdataArr[i])) {
-                            // alert(checkdataArr[i] + "应是float或double等类型！");
                             toastr.warning("该字段应是float或double等类型！");
                             return;
                         }
                     }
+
+                if (dataTypeArr[i] === "double" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                    if (isNaN(checkdataArr[i])) {
+                        toastr.warning("该字段应是float或double等类型！");
+                        return;
+                    }
+                }
+
+                if (dataTypeArr[i] === "date" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                    // var reg = /^(\d{4})-(\d{2})-(\d{2})$/;
+                    var reg=/^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+                    var regExp = new RegExp(reg);
+                    if (!regExp.test(checkdataArr[i])) {
+                        toastr.warning("该字段是时间格式,正确格式应为: xxxx-xx-xx ");
+                        return;
+                    }
+                }
 
                     if (dataTypeArr[i] === "datetime" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
                         var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
