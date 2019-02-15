@@ -1,6 +1,7 @@
 package cn.csdb.portal.controller;
 
 import cn.csdb.portal.model.*;
+import cn.csdb.portal.repository.TableFieldComsDao;
 import cn.csdb.portal.service.*;
 import cn.csdb.portal.utils.FileUploadUtil;
 import cn.csdb.portal.utils.ImgCut;
@@ -49,6 +50,8 @@ public class ResourceController {
     private AuditMessageService auditMessageService;
     @Resource
     private DataSrcService dataSrcService;
+    @Resource
+    private TableFieldComsDao tableFieldComsDao;
 
     private Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
@@ -157,7 +160,11 @@ public class ResourceController {
                 subject.getDbUserName(), subject.getDbPassword(), subject.getDbName());
         if (connection == null)
             return null;
-        List<String> list = dataSource.getTableList(connection);
+        List<String> list = new ArrayList<>(10);
+        List<Described_Table> list_describe = tableFieldComsDao.queryDescribeTable(subject.getDbName());
+        for (Described_Table described_table : list_describe) {
+            list.add(described_table.getTableName());
+        }
         jsonObject.put("list", list);
 //        jsonObject.put("dataSourceName", dataSrc.getDataSourceName());
         return jsonObject;
@@ -372,16 +379,16 @@ public class ResourceController {
             String[] filePaths = sb.toString().split(";");
             //清空以前保存的文件记录
             resourceService.deleteFileInfo(resourceId);
-            for(String str : filePaths){
+            for (String str : filePaths) {
                 FileInfo fileInfo = new FileInfo();
                 int one = str.lastIndexOf("/");
-                fileInfo.setFile_name(str.substring((one+1),str.length()));
+                fileInfo.setFile_name(str.substring((one + 1), str.length()));
                 int two = str.lastIndexOf(".");
-                fileInfo.setPreviewType(str.substring((two+1),str.length()));
+                fileInfo.setPreviewType(str.substring((two + 1), str.length()));
                 fileInfo.setFile_path(str);
                 File file = new File(str);
-                if(file.exists() && file.isFile()){
-                    Double d = Double.valueOf(file.length())/1024/1024;
+                if (file.exists() && file.isFile()) {
+                    Double d = Double.valueOf(file.length()) / 1024 / 1024;
                     NumberFormat nf = NumberFormat.getNumberInstance();
                     nf.setMaximumFractionDigits(4);
                     fileInfo.setSize(nf.format(d));
@@ -561,14 +568,14 @@ public class ResourceController {
             String[] filePaths = sb.toString().split(";");
             //清空以前保存的文件记录
             resourceService.deleteFileInfo(resourceId);
-            for(String str : filePaths){
+            for (String str : filePaths) {
                 FileInfo fileInfo = new FileInfo();
                 int one = str.lastIndexOf("/");
-                fileInfo.setFile_name(str.substring((one+1),str.length()));
+                fileInfo.setFile_name(str.substring((one + 1), str.length()));
                 fileInfo.setFile_path(str);
                 File file = new File(str);
-                if(file.exists() && file.isFile()){
-                    Double d = Double.valueOf(file.length())/1024/1024;
+                if (file.exists() && file.isFile()) {
+                    Double d = Double.valueOf(file.length()) / 1024 / 1024;
                     NumberFormat nf = NumberFormat.getNumberInstance();
                     nf.setMaximumFractionDigits(4);
                     fileInfo.setSize(nf.format(d));
