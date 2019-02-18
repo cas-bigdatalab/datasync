@@ -118,11 +118,16 @@ public class EditDataController {
         String conditionstr=" where ";
         for(int i=2;i<jsonArray1.size();i++){
             String column=jsonArray1.getJSONObject(i).getString("name");
-            String value=jsonArray1.getJSONObject(i).getString("value");
-            if(!value.equals("")&& value!=null && !value.equals("null")) {
-                conditionstr += "" + column + "= '" + value + "' and ";
+//            String value=jsonArray1.getJSONObject(i).getString("value");
+//            if(!value.equals("")&& value!=null && !value.equals("null")) {
+//                conditionstr += "" + column + "= '" + value + "' and ";
+//            }
+            if("PORTALID".equals(column)) {
+                String value=jsonArray1.getJSONObject(i).getString("value");
+                conditionstr += " PORTALID  = '" + value + "' ";
             }
         }
+
   //更新的数据
      String updatestr=" set ";
         int j=0;
@@ -151,7 +156,8 @@ public class EditDataController {
             return jsonObject;
         }
         int l=conditionstr.length();
-        String s1=conditionstr.substring(0,l-5);
+//        String s1=conditionstr.substring(0,l-5);
+        String s1=conditionstr;
         int ll=updatestr.length();
         String s2=updatestr.substring(0,ll-2);
         int n=dataSrcService.updateDate(s1,s2,tableName,datasrc);
