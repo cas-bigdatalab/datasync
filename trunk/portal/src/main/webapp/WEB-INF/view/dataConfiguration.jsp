@@ -927,13 +927,92 @@
                for(var i = 0; i < S_column.length; i++){
                    var data2 = {};
                  if (datacon[i] !== "" && datacon[i] !== null) {
-                        //boolean数据类型判断
-                        // if(S_dataType[i]==="bit"){
-                        //     if(dataArr[i] !=="0" && dataArr[i] !=="1"){
-                        //         toastr.warning("该字段应是boolean类型！");
-                        //         return;
-                        //     }
-                        // }
+
+                     //char类型判断
+                     if(datacon[i] !== null && datacon[i] !== "" && datacon[i] !== "null" && S_dataType[i]==="char"){
+                         var bytesCount=0;
+                         var str=datacon[i];
+                         for(var j=0;j<datacon[i].length;j++){
+                             var c =str.charAt(j);
+                             if (/^[\u0000-\u00ff]$/.test(c)) {          //匹配双字节
+                                 bytesCount += 1;
+                             } else if(/^[\u4e00-\u9fa5]$/.test(c)){
+                                 bytesCount += 2;
+                             }else{
+                                 bytesCount += 1;
+                             }
+                         }
+                         if(bytesCount.length>255){
+                             toastr.warning("该字段超出范围！");
+                             return;
+                         }
+                     }
+
+                     //text类型判断
+                     if(datacon[i] !== null && datacon[i] !== "" && datacon[i] !== "null" && S_dataType[i]==="text"){
+                         var bytesCount=0;
+                         var str=datacon[i];
+                         for(var j=0;j<datacon[i].length;j++){
+                             var c =str.charAt(j);
+                             if (/^[\u0000-\u00ff]$/.test(c)) {          //匹配双字节
+                                 bytesCount += 1;
+                             } else if(/^[\u4e00-\u9fa5]$/.test(c)){
+                                 bytesCount += 2;
+                             }else{
+                                 bytesCount += 1;
+                             }
+                         }
+                         if(bytesCount>65535){
+                             toastr.warning("该字段超出范围！");
+                             return;
+                         }
+                     }
+                     //longtext类型判断
+                     if(datacon[i] !== null && datacon[i] !== "" && datacon[i] !== "null" && S_dataType[i]==="longtext"){
+                         var bytesCount=0;
+                         var str=datacon[i];
+                         for(var j=0;j<datacon[i].length;j++){
+                             var c =str.charAt(j);
+                             if (/^[\u0000-\u00ff]$/.test(c)) {          //匹配双字节
+                                 bytesCount += 1;
+                             } else if(/^[\u4e00-\u9fa5]$/.test(c)){
+                                 bytesCount += 2;
+                             }else{
+                                 bytesCount += 1;
+                             }
+                         }
+                         if(bytesCount>4294967295){
+                             toastr.warning("该字段超出范围！");
+                             return;
+                         }
+                     }
+                     //mediumtext类型判断
+                     if(datacon[i] !== null && datacon[i] !== "" && datacon[i] !== "null" && S_dataType[i]==="mediumtext"){
+                         var bytesCount=0;
+                         var str=datacon[i];
+                         for(var j=0;j<datacon[i].length;j++){
+                             var c =str.charAt(j);
+                             if (/^[\u0000-\u00ff]$/.test(c)) {          //匹配双字节
+                                 bytesCount += 1;
+                             } else if(/^[\u4e00-\u9fa5]$/.test(c)){
+                                 bytesCount += 2;
+                             }else{
+                                 bytesCount += 1;
+                             }
+                         }
+                         if(bytesCount>16777215){
+                             toastr.warning("该字段超出范围！");
+                             return;
+                         }
+                     }
+
+                     // bit数据类型判断
+                        if(dataArr[i] !=="" && datacon[i] !== null&& S_dataType[i]==="bit"){
+                            if(dataArr[i] !=="0" && dataArr[i] !=="1"){
+                                toastr.warning("该字段应是boolean类型！");
+                                return;
+                            }
+                        }
                      if(datacon[i] !== null && datacon[i] !== ""&& S_dataType[i]==="tinyint"){
                          if (!isNaN(datacon[i])) {
                              if(parseInt(datacon[i])>127 || parseInt(datacon[i])<-128){
@@ -1074,15 +1153,92 @@
                 }
             }
             for (var i = 0; i < checkdataArr.length; i++) {
+                //char类型判断
+                if(checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null" && dataTypeArr[i]==="char"){
+                    var bytesCount=0;
+                    var str=checkdataArr[i];
+                    for(var j=0;j<checkdataArr[i].length;j++){
+                        var c =str.charAt(j);
+                        if (/^[\u0000-\u00ff]$/.test(c)) {          //匹配双字节
+                            bytesCount += 1;
+                        } else if(/^[\u4e00-\u9fa5]$/.test(c)){
+                            bytesCount += 2;
+                        }else{
+                            bytesCount += 1;
+                        }
+                    }
+                    if(bytesCount.length>255){
+                        toastr.warning("该字段超出范围！");
+                        return;
+                    }
+                }
+
+                //text类型判断
+                if(checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null" && dataTypeArr[i]==="text"){
+                    var bytesCount=0;
+                    var str=checkdataArr[i];
+                    for(var j=0;j<checkdataArr[i].length;j++){
+                        var c =str.charAt(j);
+                        if (/^[\u0000-\u00ff]$/.test(c)) {          //匹配双字节
+                            bytesCount += 1;
+                        } else if(/^[\u4e00-\u9fa5]$/.test(c)){
+                            bytesCount += 2;
+                        }else{
+                            bytesCount += 1;
+                        }
+                    }
+                    if(bytesCount>65535){
+                        toastr.warning("该字段超出范围！");
+                        return;
+                    }
+                }
+                //longtext类型判断
+                if(checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null" && dataTypeArr[i]==="longtext"){
+                    var bytesCount=0;
+                    var str=checkdataArr[i];
+                    for(var j=0;j<checkdataArr[i].length;j++){
+                        var c =str.charAt(j);
+                        if (/^[\u0000-\u00ff]$/.test(c)) {          //匹配双字节
+                            bytesCount += 1;
+                        } else if(/^[\u4e00-\u9fa5]$/.test(c)){
+                            bytesCount += 2;
+                        }else{
+                            bytesCount += 1;
+                        }
+                    }
+                    if(bytesCount>4294967295){
+                        toastr.warning("该字段超出范围！");
+                        return;
+                    }
+                }
+                //mediumtext类型判断
+                if(checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null" && dataTypeArr[i]==="mediumtext"){
+                    var bytesCount=0;
+                    var str=checkdataArr[i];
+                    for(var j=0;j<checkdataArr[i].length;j++){
+                        var c =str.charAt(j);
+                        if (/^[\u0000-\u00ff]$/.test(c)) {          //匹配双字节
+                            bytesCount += 1;
+                        } else if(/^[\u4e00-\u9fa5]$/.test(c)){
+                            bytesCount += 2;
+                        }else{
+                            bytesCount += 1;
+                        }
+                    }
+                    if(bytesCount>16777215){
+                        toastr.warning("该字段超出范围！");
+                        return;
+                    }
+                }
 
                 //boolean数据类型判断
                 if(checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null" && dataTypeArr[i]==="bit"){
                    if(checkdataArr[i] !== "0" && checkdataArr[i] !== "1"){
-                       toastr.warning("该字段应是boolean类型！");
+                       toastr.warning("该字段应是bit类型！");
                        return;
                    }
                 }
-
+                //tinyint数据类型判断
                 if(checkdataArr[i] !== null && checkdataArr[i] !== ""&& dataTypeArr[i]==="tinyint"){
                     if (!isNaN(checkdataArr[i])) {
                         if(parseInt(checkdataArr[i])>127 || parseInt(checkdataArr[i])<-128){
@@ -1115,21 +1271,21 @@
                 }
             }
 
-                    //float/double数据类型判断
+                    //float数据类型判断
                     if (dataTypeArr[i] === "float" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
                         if (isNaN(checkdataArr[i])) {
                             toastr.warning("该字段应是float或double等类型！");
                             return;
                         }
                     }
-
+                //double数据类型判断
                 if (dataTypeArr[i] === "double" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
                     if (isNaN(checkdataArr[i])) {
                         toastr.warning("该字段应是float或double等类型！");
                         return;
                     }
                 }
-
+                //date数据类型判断
                 if (dataTypeArr[i] === "date" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
                     // var reg = /^(\d{4})-(\d{2})-(\d{2})$/;
                     var reg=/^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
@@ -1139,7 +1295,7 @@
                         return;
                     }
                 }
-
+                //datetime数据类型判断
                     if (dataTypeArr[i] === "datetime" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
                         var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
                         var regExp = new RegExp(reg);
@@ -1148,7 +1304,7 @@
                             return;
                         }
                     }
-
+                //decimal数据类型判断
                     if (dataTypeArr[i] === "decimal" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i]!=="null") {
                         var col_type_str=S_columnType[i].split(",");
                         var m=col_type_str[0].split("(")[1];
