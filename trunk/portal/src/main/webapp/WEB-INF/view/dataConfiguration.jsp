@@ -1025,6 +1025,65 @@
                          }
                      }
 
+                     //smallint数据类型判断
+                     if ( S_dataType[i] === "smallint" && datacon[i] !== null && datacon[i] !== "" && datacon[i] !== "null"){
+                         if (!isNaN(datacon[i])) {
+                             var result = datacon[i].match(/^(-|\+)?\d+$/);
+                             if (result == null) {
+                                 //警告消息提示s，默认背景为橘黄色
+                                 toastr.warning("该字段应是smallint类型！");
+                                 return;
+                             }else{
+                                 if(parseInt(datacon[i])>32767 || parseInt(datacon[i])<-32768){
+                                     toastr.warning("该字段超出范围！");
+                                     return;
+                                 }
+                             }
+                         } else {
+                             toastr.warning("该字段应是数字类型！");
+                             return;
+                         }
+                     }
+
+                     //mediumint数据类型判断
+                     if ( S_dataType[i] === "mediumint" && datacon[i] !== null && datacon[i] !== "" && datacon[i] !== "null"){
+                         if (!isNaN(datacon[i])) {
+                             var result = datacon[i].match(/^(-|\+)?\d+$/);
+                             if (result == null) {
+                                 //警告消息提示s，默认背景为橘黄色
+                                 toastr.warning("该字段应是mediumint类型！");
+                                 return;
+                             }else{
+                                 if(parseInt(datacon[i])>8388607 || parseInt(datacon[i])<-8388608){
+                                     toastr.warning("该字段超出范围！");
+                                     return;
+                                 }
+                             }
+                         } else {
+                             toastr.warning("该字段应是数字类型！");
+                             return;
+                         }
+                     }
+                     //bigint数据类型判断
+                     if ( S_dataType[i] === "bigint" && datacon[i] !== null && datacon[i] !== "" && datacon[i] !== "null"){
+                         if (!isNaN(datacon[i])) {
+                             var result = datacon[i].match(/^(-|\+)?\d+$/);
+                             if (result == null) {
+                                 //警告消息提示s，默认背景为橘黄色
+                                 toastr.warning("该字段应是bigint类型！");
+                                 return;
+                             }else{
+                                 if(datacon[i]>'9223372036854775807' || datacon[i]>'-9223372036854775808'){
+                                     toastr.warning("该字段超出范围！");
+                                     return;
+                                 }
+                             }
+                         } else {
+                             toastr.warning("该字段应是数字类型！");
+                             return;
+                         }
+                     }
+                        //int数据类型
                         if (datacon[i]!=="" && (S_dataType[i] === "int" || S_dataType[i] === "integer")) {
                             if(!isNaN(datacon[i])) {
                                 var reg = /^-?\d+$/;
@@ -1231,7 +1290,7 @@
                     }
                 }
 
-                //boolean数据类型判断
+                //bit数据类型判断
                 if(checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null" && dataTypeArr[i]==="bit"){
                    if(checkdataArr[i] !== "0" && checkdataArr[i] !== "1"){
                        toastr.warning("该字段应是bit类型！");
@@ -1251,7 +1310,65 @@
                     }
                 }
 
-                //整型数据类型判断
+                //smallint数据类型判断
+                if ( dataTypeArr[i] === "smallint" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null"){
+                    if (!isNaN(checkdataArr[i])) {
+                        var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
+                        if (result == null) {
+                            //警告消息提示s，默认背景为橘黄色
+                            toastr.warning("该字段应是smallint类型！");
+                            return;
+                        }else{
+                            if(parseInt(checkdataArr[i])>32767 || parseInt(checkdataArr[i])<-32768){
+                                toastr.warning("该字段超出范围！");
+                                return;
+                            }
+                        }
+                    } else {
+                        toastr.warning("该字段应是数字类型！");
+                        return;
+                    }
+                }
+
+                //mediumint数据类型判断
+                if ( dataTypeArr[i] === "mediumint" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null"){
+                    if (!isNaN(checkdataArr[i])) {
+                        var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
+                        if (result == null) {
+                            //警告消息提示s，默认背景为橘黄色
+                            toastr.warning("该字段应是mediumint类型！");
+                            return;
+                        }else{
+                            if(parseInt(checkdataArr[i])>8388607 || parseInt(checkdataArr[i])<-8388608){
+                                toastr.warning("该字段超出范围！");
+                                return;
+                            }
+                        }
+                    } else {
+                        toastr.warning("该字段应是数字类型！");
+                        return;
+                    }
+                }
+                //bigint数据类型判断
+                if ( dataTypeArr[i] === "bigint" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null"){
+                    if (!isNaN(checkdataArr[i])) {
+                        var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
+                        if (result == null) {
+                            //警告消息提示s，默认背景为橘黄色
+                            toastr.warning("该字段应是bigint类型！");
+                            return;
+                        }else{
+                            if(checkdataArr[i]>'9223372036854775807' || checkdataArr[i]>'-9223372036854775808'){
+                                toastr.warning("该字段超出范围！");
+                                return;
+                            }
+                        }
+                    } else {
+                        toastr.warning("该字段应是数字类型！");
+                        return;
+                    }
+                }
+                //int数据类型判断
                 if ((dataTypeArr[i] === "int" || dataTypeArr[i] === "integer") && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null"){
                      if (!isNaN(checkdataArr[i])) {
                      var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
@@ -1277,6 +1394,8 @@
                             toastr.warning("该字段应是float或double等类型！");
                             return;
                         }
+                        // if(parseFloat(checkdataArr[i]>)){
+                        // }
                     }
                 //double数据类型判断
                 if (dataTypeArr[i] === "double" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
