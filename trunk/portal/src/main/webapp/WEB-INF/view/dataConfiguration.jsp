@@ -79,8 +79,8 @@
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            width: 65px;
-            height: 65px;
+            width: 30px;
+            height: 60px;
         }
 
         table {
@@ -291,13 +291,13 @@
                     </div>
 
                     <!--数据编辑-->
-                    <div class="tab-pane" id="editData" style="min-height: 600px;overflow: scroll">
+                    <div class="tab-pane" id="editData" style="min-height: 600px;min-width:600px">
                         <div id="alltables" class="tab-pane"
-                             style="margin-left:35px;width:1300px;min-height: 300px;overflow: hidden">
+                             style="margin-left:35px;min-width:600px;min-height: 300px;overflow: scroll;">
 
                         </div>
 
-                        <div id="tableDatil" style="width:1400px;min-height: 300px;overflow: hidden;margin-top:2px;">
+                        <div id="tableDatil" style="min-width:600px;min-height: 300px;overflow: scroll;margin-top:2px;">
                             <div class="portlet-title" style="width:1370px; height:500px; ">
                                 <table border="1" id="table1" class="table_class">
                                     <thead id="thead_id">
@@ -341,11 +341,12 @@
 
                     </div>
 
-                    <div class="modal-body" style="overflow-x:scroll;">
+                    <div class="modal-body" style="overflow:scroll;">
 
                         <div class="tab-content"
                              style="background-color: white;min-height:300px;max-height:50%;padding-top: 20px ;">
-                            <div style="margin-left: 5%;">
+                            <div>
+                                <%--style="margin-left: 5%;"--%>
                                 <div id="div_head">
 
                                 </div>
@@ -410,7 +411,7 @@
 
                     </div>
 
-                    <div class="modal-body" style="overflow-x:scroll;">
+                    <div class="modal-body" style="overflow:scroll;">
                         <div class="tab-content"
                              style="background-color: white;min-height:300px;max-height:60%;padding-top: 20px ;">
                             <div class="tab-pane active" id="adddata" style=" ">
