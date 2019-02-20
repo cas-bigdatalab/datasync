@@ -14,13 +14,15 @@ var curSQLStrIndex = 0;
 var sqlNum = 1;
 var curRefer = null;
 var ctx = '${ctx}';
+var S_flag="0";
 /**
  *
  * @param obj
  * @param dataSourceId
  * @param tableName
  */
-function staticSourceTableChoice(editIsChoiceTableOrSql, obj, subjectCode, tableNameOrSql, refer) {
+function staticSourceTableChoice(editIsChoiceTableOrSql, obj, subjectCode, tableNameOrSql, refer,flag) {
+    S_flag=flag;
     if (refer == "dataService" || !obj || obj.checked) {
         $('#editTableFieldComsId').html("");
         $('#previewTableDataAndComsId').html("");
@@ -192,6 +194,14 @@ function getEditTableOrSqlFieldComs() {
 function saveTableFieldComs(curDataSubjectCode, tableInfos) {
     var state = "1";
     for (var index in tableInfos) {
+        for (var key in tableInfos[index].tableInfos)
+            if (S_flag === "1" && (tableInfos[index].tableInfos[key].columnComment === "" || tableInfos[index].tableInfos[key].columnComment === null)) {
+                toastr["warning"]("注释不能为空");
+                return;
+            }
+    }
+
+    for (var index in tableInfos) {
         for(var key in tableInfos[index].tableInfos)
             if(tableInfos[index].tableInfos[key].columnComment==""){
                 state = "0";
@@ -309,5 +319,5 @@ function editSqlFieldComs(sqlNum) {
     }
     curSQLStrIndex = sqlNum;
     var sqlStr = $("#" + sqlStrId).val();
-    staticSourceTableChoice(2, null, sub, sqlStr, "dataResource");
+    staticSourceTableChoice(2, null, sub, sqlStr, "dataResource",S_flag);
 }
