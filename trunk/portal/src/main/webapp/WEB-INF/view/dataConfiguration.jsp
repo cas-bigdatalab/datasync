@@ -293,13 +293,13 @@
                     </div>
 
                     <!--数据编辑-->
-                    <div class="tab-pane" id="editData" style="min-height: 600px;min-width:600px">
+                    <div class="tab-pane" id="editData" style="min-height: 600px;min-width:600px;overflow: hidden;" >
                         <div id="alltables" class="tab-pane"
-                             style="margin-left:35px;min-width:600px;min-height: 300px;overflow-x: scroll;">
+                             style="margin-left:35px;min-width:600px;height: 250px;overflow: auto;">
 
                         </div>
 
-                        <div id="tableDatil" style="min-width:600px;min-height: 300px;overflow-x: scroll;margin-top:2px;">
+                        <div id="tableDatil" style="min-width:600px;min-height: 300px;overflow-x: auto;margin-top:2px;">
                             <div class="portlet-title" style="width:1370px; height:500px; ">
                                 <table border="1" id="table1" class="table_class">
                                     <thead id="thead_id">
