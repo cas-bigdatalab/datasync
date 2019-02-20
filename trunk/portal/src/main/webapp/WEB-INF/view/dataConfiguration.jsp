@@ -295,11 +295,11 @@
                     <!--数据编辑-->
                     <div class="tab-pane" id="editData" style="min-height: 600px;min-width:600px">
                         <div id="alltables" class="tab-pane"
-                             style="margin-left:35px;min-width:600px;min-height: 300px;overflow: scroll;">
+                             style="margin-left:35px;min-width:600px;min-height: 300px;overflow-x: scroll;">
 
                         </div>
 
-                        <div id="tableDatil" style="min-width:600px;min-height: 300px;overflow: scroll;margin-top:2px;">
+                        <div id="tableDatil" style="min-width:600px;min-height: 300px;overflow-x: scroll;margin-top:2px;">
                             <div class="portlet-title" style="width:1370px; height:500px; ">
                                 <table border="1" id="table1" class="table_class">
                                     <thead id="thead_id">
@@ -347,7 +347,7 @@
 
                         <div class="tab-content"
                              style="background-color: white;min-height:300px;max-height:50%;padding-top: 20px ;">
-                            <div>
+                            <div style="margin-left: 5%;">
                                 <%--style="margin-left: 5%;"--%>
                                 <div id="div_head">
 
@@ -621,7 +621,7 @@
                         "<div class='icheck-list' style='padding-top: 7px'>";
                     var list = data.list;
                     for (var i = 0; i < list.length; i++) {
-                        html += "<label class='col-md-6' style='padding-left: 0px'><input type='checkbox' name='mapTable' onclick=\"staticSourceTableChoice(1,this" + ",'" + sub1 + "','" + list[i] + "','dataResource')\" value='" + list[i] + "'>&nbsp;" + list[i] + "</label>"
+                        html += "<label class='col-md-6' style='padding-left: 0px'><input type='radio' name='mapTable' onclick=\"staticSourceTableChoice(1,this" + ",'" + sub1 + "','" + list[i] + "','dataResource')\" value='" + list[i] + "'>&nbsp;" + list[i] + "</label>"
                     }
                     html += "</div><input type='text' class='form-control' name='maptableinput' id='maptableinput' style='display:none;'/></div></div>";
                     if (flag == '0') {
@@ -677,9 +677,15 @@
                     var columnComment = data.columnComment;
                     var s = "<tr class='tr_class' style='background-color:gainsboro;'>";
                     //表头
+                    var il=0;
                     for (var i = 0; i < arr.length; i++) {
-                        if (i <= 15) {
-                            s += "<th style='border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                        if (il<= 15) {
+                            if(arr[i]==="PORTALID"){
+                                s += "<th style='display:none;border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                            }else {
+                                s += "<th style='border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                             il++;
+                            }
                         } else {
                             s += "<th style='display:none;border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                         }
@@ -711,8 +717,12 @@
                                             var date = d[k].split(".");
                                             d[k] = date[0];
                                         }
-                                        ss += "<td title='" + d[k] + "'>" + d[k] + "</td>";
-
+                                        if(arr[i]==="PORTALID"){
+                                            ss += "<td  style='display:none;' title='" + d[k] + "'>" + d[k] + "</td>";
+                                        }else {
+                                            ss += "<td title='" + d[k] + "'>" + d[k] + "</td>";
+                                            j++;
+                                        }
                                         // if (dataType[i] === "text" || dataType === "varchar") {
                                         //     var reg = new RegExp(",", "g"); //创建正则RegExp对象
                                         //     // var stringObj="终古人民共和国，终古人民";
@@ -730,8 +740,12 @@
                                             d[arr[i]] = date[0];
                                         }
 
-                                        ss += "<td title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
-
+                                        if(arr[i]==="PORTALID"){
+                                            ss += "<td style='display:none;' title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
+                                        }else {
+                                            ss += "<td title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
+                                            j++;
+                                        }
 
                                         eachData.push(d[arr[i]]);
                                         S_updateData.push(d[arr[i]]);
@@ -743,7 +757,6 @@
                                             var date = d[k].split(".");
                                             d[k] = date[0];
                                         }
-
                                         eachData.push(d[k]);
                                         S_updateData.push(d[k]);
                                     } else {
@@ -751,13 +764,11 @@
                                             var date = d[arr[i]].split(".");
                                             d[arr[i]] = date[0];
                                         }
-
                                         eachData.push(d[arr[i]]);
                                         S_updateData.push(d[arr[i]]);
                                     }
                                     i++;
                                 }
-                                j++;
                             }
                             ss += "<td ><a src='#' onclick=\" updateData('" + arr + "','" + tableName + "','" + subjectCode + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">修改 | </a><a href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">增加 | </a><a href='#' onclick=\"checkDada('" + arr + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">查看</a></td></tr>";
                         }
@@ -787,7 +798,11 @@
             var columnComments = columnComment.split(",");
             var s = "";
             for (var i = 0; i < strs2.length; i++) {
-                s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td>" + strs[i] + "</td><tr>";
+                if(strs2[i]==="PORTALID"){
+                    s += "<tr style='display:none;'><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td>" + strs[i] + "</td><tr>";
+                }else {
+                    s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td>" + strs[i] + "</td><tr>";
+                }
             }
             $("#checkTable tbody").append(s);
             $("#staticShowDataDetail").modal("show");
@@ -840,7 +855,7 @@
             strs2 = columns.split(",");
             var dataTypeArr = dataType.split(",");
             var columnComments = columnComment.split(",");
-            var s_head = "<input type='text' value='字段名' readonly='true'/><input type='text'  value='字段类型' readonly='true'/><input type='text'  value='注释' readonly='true'/><input type='text'  value='字段值' readonly='true'/><br/>";
+            var s_head = "<input style='width:22%;' type='text' value='字段名' readonly='true'/><input style='width:22%;' type='text'  value='字段类型' readonly='true'/><input style='width:22%;' type='text'  value='注释' readonly='true'/><input style='width:22%;' type='text'  value='字段值' readonly='true'/><br/>";
 
             var ss = "<input type='text' name='tableName'style='display:none;' value=" + tableName + " />";
             ss += "<input type='text' name='subjectCode'style='display:none;' value=" + subjectCode + " />";
@@ -849,7 +864,7 @@
                 if (strs2[i] === "PORTALID") {
                     ss += "<input style='display:none;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='display:none;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='display:none;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' />";
                 } else {
-                    ss += "<input type='text' value='" + strs2[i] + "' readonly='true'/><input type='text'  value='" + S_columnType[i] + "' readonly='true'/><input type='text'  value='" + columnComments[i] + "' readonly='true' /><input class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
+                    ss += "<input style='width:22%;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='width:22%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='width:22%;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input style='width:22%;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
                 }
             }
             var s_save = "<input class='eee'id='btn_save'type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataType + "','" + currentPage + "')\"/>";
