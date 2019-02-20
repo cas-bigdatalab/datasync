@@ -251,19 +251,21 @@
                     <!--excel 导入数据库-->
                     <div class="tab-pane" id="excelUpload" style="min-height: 400px;overflow: hidden">
                         <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
+                            <a href="${ctx}/fileImport/getExcelTemplate">点击下载Excel模板</a>
                             <input id="excelFile" type="file" name="file" class="cus-input">
+                            <%--<input id="excelTemplate" type="button" onclick="getExcelTemplate()">--%>
                             <input id="excelFileUpload" type="button" class="btn btn-default" onclick="doUpload();"
                                    value="上传"/>
                             <input id="excelFileReset" type="reset" class="btn btn-default" style="display: none;"
                                    onclick="removeElement()" value="重置"/>
                         </form>
-                        <div tabindex="-1" data-width="200">
+                        <div tabindex="-1" data-width="200" id="ExcelData" hidden="hidden">
                             <div class="" style="width:auto">
                                 <div class="">
                                     <div class="">
                                         <h4 class="modal-title" id="4"></h4>
                                     </div>
-                                    <div class="modal-body">
+                                    <div class="modal-body ">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="portlet box green-haze" style="border:0;">
@@ -1607,7 +1609,8 @@
                                 $("#" + k).append(tableField);
                             })
 
-                        })
+                        });
+                        $("#ExcelData").show();
                     }
                 },
                 complete: function () {
@@ -1631,6 +1634,19 @@
             $("#tableNameUl li").remove();
             $("#excelFileUpload").show();
             $("#excelFileReset").hide();
+            $("#ExcelData").hide();
+        }
+
+        function getExcelTemplate() {
+            /*$.ajax({
+                url:"
+            ${ctx}/fileImport/getExcelTemplate",
+                type: 'post',
+                success:function(data){
+
+                }
+            })*/
+            window.open("${ctx}/fileImport/getExcelTemplate");
         }
 
         /**

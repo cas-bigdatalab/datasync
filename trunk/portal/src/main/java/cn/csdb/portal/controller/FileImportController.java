@@ -15,10 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -148,5 +146,32 @@ public class FileImportController {
             del = f.delete();
         }
         return del;
+    }
+
+    /**
+     * 将上传的Excel模板保存在系统中以供用户下载使用
+     */
+    @RequestMapping(value = "/getExcelTemplate")
+    public void downloads(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String realPath = request.getServletContext().getRealPath("/");
+        String path = realPath + File.separator + "template" + File.separator;
+        String fileName = "Excel上传模板.zip";
+        File file = new File(path, fileName);
+
+        response.reset();
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-Type", "multipart/form-data");
+        fileName = new String(fileName.getBytes("gb2312"), "ISO8859-1");
+        response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
+        InputStream input = new FileInputStream(file);
+        OutputStream out = response.getOutputStream();
+        byte[] buff = new byte[1024];
+        int index = 0;
+        while ((index = input.read(buff)) != -1) {
+            out.write(buff, 0, index);
+            out.flush();
+        }
+        out.close();
+        input.close();
     }
 }
