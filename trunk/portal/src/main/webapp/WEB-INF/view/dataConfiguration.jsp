@@ -647,9 +647,6 @@
                         html += "<span style='display:inline-block;width: 300px'><label><input type='radio' name='mapTable'  value='" + list[i] + "' onclick=\"editTableData('" + sub1 + "','" + list[i] + "')\">&nbsp;" + list[i] + "</label></span>"
                     }
                     $("#alltables").append(html);
-                },
-                error: function () {
-                    alert("error!!!!!!")
                 }
             })
         }
@@ -679,7 +676,7 @@
                     //表头
                     var il=0;
                     for (var i = 0; i < arr.length; i++) {
-                        if (il<= 15) {
+                        if (il<= 5) {
                             if(arr[i]==="PORTALID"){
                                 s += "<th style='display:none;border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                             }else {
@@ -711,7 +708,7 @@
                             var n = 0;
                             for (var k in d) {
                                 n++;
-                                if (j <= 15) {
+                                if (j <= 5) {
                                     if (k === arr[i]) {
                                         if (dataType[i] === "datetime" && d[k] !== null && d[k] !== " ") {
                                             var date = d[k].split(".");
