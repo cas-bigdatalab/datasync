@@ -86,6 +86,8 @@ public class Resource {
     private String createOrgnization;
     @Field("createPerson")
     private String createPerson;
+    @Field("creator_createTime")
+    private Date creatorCreateTime;
     @Field("createTime")
     private Date createTime;
 
@@ -375,5 +377,13 @@ public class Resource {
 
     public void setUserGroupId(String userGroupId) {
         this.userGroupId = userGroupId;
+    }
+
+    public Date getCreatorCreateTime() {
+        return creatorCreateTime;
+    }
+
+    public void setCreatorCreateTime(Date creatorCreateTime) {
+        this.creatorCreateTime = creatorCreateTime;
     }
 }

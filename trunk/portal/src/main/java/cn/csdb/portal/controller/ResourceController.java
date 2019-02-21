@@ -309,7 +309,8 @@ public class ResourceController {
         Date createDate = formatter.parse(createTime, pos3);
         resource.setStartTime(startDate);
         resource.setEndTime(endDate);
-        resource.setCreateTime(createDate);
+        resource.setCreatorCreateTime(createDate);
+        resource.setCreateTime(new Date());
         resource.setEmail(email);
         resource.setPhoneNum(phoneNum);
         resource.setSubjectCode(subject.getSubjectCode());
@@ -499,7 +500,8 @@ public class ResourceController {
         Date createDate = formatter.parse(endTime, pos3);
         resource.setStartTime(startDate);
         resource.setEndTime(endDate);
-        resource.setCreateTime(createDate);
+        resource.setCreatorCreateTime(createDate);
+        resource.setCreateTime(new Date());
         resource.setEmail(email);
         resource.setPhoneNum(phoneNum);
         resource.setSubjectCode(subject.getSubjectCode());
