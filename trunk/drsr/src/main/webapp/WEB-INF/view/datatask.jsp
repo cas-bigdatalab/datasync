@@ -386,7 +386,7 @@
                         uploadListFlag.append("<span name="+keyID+" valFlag='false'></span>")
                         if(keyType =="mysql"){
 
-                            console.log("ddddddddddddddddddd")
+                            console.log("mysql数据源")
                             $.ajax({
                                 url:"${ctx}/datatask/" + souceID,
                                 type:"POST",
@@ -442,7 +442,7 @@
                                 }
                             })
                         }else{
-                            console.log("cccccccccccccccc")
+                            console.log("文件数据源")
                             $.ajax({
                                 url:"${ctx}/ftpUpload",
                                 type:"POST",

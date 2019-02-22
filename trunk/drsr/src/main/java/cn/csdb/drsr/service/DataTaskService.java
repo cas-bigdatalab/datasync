@@ -154,6 +154,7 @@ public class DataTaskService {
             logger.info("导出成功，result = " + result+ "\n");
             pw.println(current+":"+"=========================导出流程结束========================" + "\n");
             logger.info("=========================导出流程结束========================" + "\n");
+            connection.close();
         } catch (Exception ex) {
             now = new Date();
             dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式

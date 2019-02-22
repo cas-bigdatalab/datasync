@@ -20,7 +20,7 @@ public class LoginService
         //1、访问中心端验证登录是否成功
         int loginStatus = 0;
 
-        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String configFilePath = LoginService.class.getClassLoader().getResource("drsr.properties").getFile();
 
         try {
             String portalUrl = ConfigUtil.getConfigItem(configFilePath, "PortalUrl");

@@ -135,7 +135,7 @@ public class DataSyncController {
                    return 4;
                }
                 result = ftpUtil.upload(localFileList, dataTaskId,ftpRootPath,dataTask,subjectCode).toString();
-                if(result.equals("File_Exits")){
+                if(result.equals("File_Exits") || result.equals("Remote_Bigger_Local")){
                     ftpUtil.removeDirectory(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId());
                     ftpUtil.deleteFile(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+".zip");
                     result = ftpUtil.upload(localFileList, dataTaskId,ftpRootPath,dataTask,subjectCode).toString();
@@ -154,11 +154,12 @@ public class DataSyncController {
                 String remoteFilepath = ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+"_sql/";
                 String[] localFileList = {dataTask.getFilePath()};
                 result = ftpUtil.upload(localFileList, processId,remoteFilepath,dataTask,subjectCode+"_sql").toString();
-                if(result.equals("File_Exits")){
+                if(result.equals("File_Exits") || result.equals("Remote_Bigger_Local")){
 //                    有时候会因为同一个ftp连接在删除文件后无法创建目录，所以此处重新建立连接ftp
                     ftpUtil.disconnect();
                     ftpUtil.connect(host, Integer.parseInt(port), userName, password,dataTaskId);
                     ftpUtil.removeDirectory(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+"_sql");
+                    ftpUtil.deleteFile(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+"_sql/"+dataTask.getDataTaskId()+".zip");
                     result = ftpUtil.upload(localFileList, processId,remoteFilepath,dataTask,subjectCode).toString();
                 }
                 if(localFileList.length == 0){
