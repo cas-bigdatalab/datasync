@@ -81,7 +81,7 @@
             white-space: nowrap;
             text-overflow: ellipsis;
             width: 30px;
-            height: 60px;
+            height: 39px;
         }
 
         table {
@@ -94,7 +94,7 @@
             text-align: center;
             border: 1px solid #cad9ea;
             color: #666;
-            height: 30px;
+            height: 39px;
             width: 200px;
         }
 
@@ -118,6 +118,7 @@
 
         #form_id input {
             width: 200px;
+            height: 39px;
             border-collapse: collapse;
             text-align: center;
         }
@@ -294,14 +295,14 @@
                     </div>
 
                     <!--数据编辑-->
-                    <div class="tab-pane" id="editData" style="min-height: 600px;min-width:600px;overflow: hidden;" >
+                    <div class="tab-pane" id="editData" style="min-height: 600px;overflow: hidden;" >
                         <div id="alltables" class="tab-pane"
-                             style="margin-left:35px;min-width:600px;max-height: 300px;overflow: auto;">
+                             style="margin-left:35px;max-width:1300px;max-height: 300px;overflow: auto;">
 
                         </div>
 
-                        <div id="tableDatil" style="min-width:600px;min-height: 300px;overflow-x: auto;margin-top:2px;">
-                            <div class="portlet-title" style="width:1370px; height:500px; ">
+                        <div id="tableDatil" style="margin-top:2px; margin-left: 2.5%;">
+                            <div class="portlet-title" style="max-width:1300px; min-height:500px;overflow-x: auto">
                                 <div id="nodata" style="display:none;margin-left: 25%;margin-top: 8%;">
                                     <span id="span1" style="font-size: 25px">该表暂时没有数据</span>
                                     <span id="span2" style="margin-left: 5%"></span>
@@ -315,13 +316,13 @@
                                 </table>
                                 <div class="review-item clearfix">
 
-                                    <div id="page_div" style="padding-top: 25px; float: left;margin-left: 2.5%; display: none;">
+                                    <div id="page_div" style="padding-top: 25px; float: left; display: none;">
                                         当前第<span style="color:blue;" id="currentPageNo"></span>页,共<span
                                             style="color:blue;"
                                             id="totalPages"></span>页,<span
                                             style="color:blue;" id="totalCount"></span>条数据
                                     </div>
-                                    <div style="float: right;margin-right: 2.5%;" >
+                                    <div style="float: right;" >
                                         <div id="pagination"></div>
                                     </div>
 
@@ -649,7 +650,7 @@
                     var html = "";
                     var list = data.list;
                     for (var i = 0; i < list.length; i++) {
-                        html += "<span style='display:inline-block;width: 300px'><label><input type='radio' name='mapTable'  value='" + list[i] + "' onclick=\"editTableData('" + sub1 + "','" + list[i] + "')\">&nbsp;" + list[i] + "</label></span>"
+                        html += "<span style='display:inline-block;width: 320px'><label><input type='radio' name='mapTable'  value='" + list[i] + "' onclick=\"editTableData('" + sub1 + "','" + list[i] + "')\">&nbsp;" + list[i] + "</label></span>"
                     }
                     $("#alltables").append(html);
                 }
@@ -688,13 +689,13 @@
                         for (var i = 0; i < arr.length; i++) {
                             if (il <= 5) {
                                 if (arr[i] === "PORTALID") {
-                                    s += "<th style='display:none;border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                    s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                                 } else {
-                                    s += "<th style='border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                    s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                                     il++;
                                 }
                             } else {
-                                s += "<th style='display:none;border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                             }
                         }
                     }
@@ -782,7 +783,7 @@
                              }
                              ss += "<td ><a src='#' onclick=\" updateData('" + arr + "','" + tableName + "','" + subjectCode + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">修改 | </a><a href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">增加 | </a><a href='#' onclick=\"checkDada('" + arr + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">查看</a></td></tr>";
                          }
-                         s += "<th style='border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:120px;height:60px;'>操作</th></tr>";
+                         s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:100px;height:60px;'>操作</th></tr>";
                          $("#page_div").show();
                          $("#pagination").show();
                          fun_limit(subjectCode, tableName, data);
@@ -873,6 +874,7 @@
             strs2 = columns.split(",");
             var dataTypeArr = dataType.split(",");
             var columnComments = columnComment.split(",");
+            var alert_column=[];
             var s_head = "<input style='width:22%;' type='text' value='字段名' readonly='true'/><input style='width:22%;' type='text'  value='字段类型' readonly='true'/><input style='width:22%;' type='text'  value='注释' readonly='true'/><input style='width:22%;' type='text'  value='字段值' readonly='true'/><br/>";
 
             var ss = "<input type='text' name='tableName'style='display:none;' value=" + tableName + " />";
@@ -884,8 +886,9 @@
                 } else {
                     ss += "<input style='width:22%;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='width:22%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='width:22%;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input title='" + strs[i] + "'style='width:22%;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
                 }
+             alert_column.push(strs2[i]);
             }
-            var s_save = "<input class='eee'id='btn_save'type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataType + "','" + currentPage + "')\"/>";
+            var s_save = "<input class='eee'id='btn_save'type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataType + "','" + currentPage + "','"+alert_column+"')\"/>";
 
             $("#div_head").append(s_head);
             $("#form_id").append(ss);
@@ -979,7 +982,7 @@
                             }
                         }
                         if (bytesCount.length > 255) {
-                            toastr.warning("该字段超出范围！");
+                            toastr.warning(S_column[i]+"字段超出范围！");
                             return;
                         }
                     }
@@ -999,7 +1002,7 @@
                             }
                         }
                         if (bytesCount > 65535) {
-                            toastr.warning("该字段超出范围！");
+                            toastr.warning(S_column[i]+" 字段超出范围！");
                             return;
                         }
                     }
@@ -1018,7 +1021,7 @@
                             }
                         }
                         if (bytesCount > 4294967295) {
-                            toastr.warning("该字段超出范围！");
+                            toastr.warning(S_column[i]+" 字段超出范围！");
                             return;
                         }
                     }
@@ -1037,7 +1040,7 @@
                             }
                         }
                         if (bytesCount > 16777215) {
-                            toastr.warning("该字段超出范围！");
+                            toastr.warning(S_column[i]+" 字段超出范围！");
                             return;
                         }
                     }
@@ -1045,18 +1048,18 @@
                     // bit数据类型判断
                     if (dataArr[i] !== "" && datacon[i] !== null && S_dataType[i] === "bit") {
                         if (dataArr[i] !== "0" && dataArr[i] !== "1") {
-                            toastr.warning("该字段应是boolean类型！");
+                            toastr.warning(S_column[i]+" 字段应是boolean类型！");
                             return;
                         }
                     }
                     if (datacon[i] !== null && datacon[i] !== "" && S_dataType[i] === "tinyint") {
                         if (!isNaN(datacon[i])) {
                             if (parseInt(datacon[i]) > 127 || parseInt(datacon[i]) < -128) {
-                                toastr.warning("该字段超出范围！");
+                                toastr.warning(S_column[i]+" 字段超出范围！");
                                 return;
                             }
                         } else {
-                            toastr.warning("该字段应是tinyint等类型！");
+                            toastr.warning(S_column[i]+" 字段应是tinyint类型！");
                             return;
                         }
                     }
@@ -1067,16 +1070,16 @@
                             var result = datacon[i].match(/^(-|\+)?\d+$/);
                             if (result == null) {
                                 //警告消息提示s，默认背景为橘黄色
-                                toastr.warning("该字段应是smallint类型！");
+                                toastr.warning(S_column[i]+" 字段应是smallint类型！");
                                 return;
                             } else {
                                 if (parseInt(datacon[i]) > 32767 || parseInt(datacon[i]) < -32768) {
-                                    toastr.warning("该字段超出范围！");
+                                    toastr.warning(S_column[i]+" 字段超出范围！");
                                     return;
                                 }
                             }
                         } else {
-                            toastr.warning("该字段应是数字类型！");
+                            toastr.warning(S_column[i]+" 字段应是数字类型！");
                             return;
                         }
                     }
@@ -1087,16 +1090,16 @@
                             var result = datacon[i].match(/^(-|\+)?\d+$/);
                             if (result == null) {
                                 //警告消息提示s，默认背景为橘黄色
-                                toastr.warning("该字段应是mediumint类型！");
+                                toastr.warning(S_column[i]+" 字段应是mediumint类型！");
                                 return;
                             } else {
                                 if (parseInt(datacon[i]) > 8388607 || parseInt(datacon[i]) < -8388608) {
-                                    toastr.warning("该字段超出范围！");
+                                    toastr.warning(S_column[i]+" 字段超出范围！");
                                     return;
                                 }
                             }
                         } else {
-                            toastr.warning("该字段应是数字类型！");
+                            toastr.warning(S_column[i]+" 字段应是数字类型！");
                             return;
                         }
                     }
@@ -1106,16 +1109,17 @@
                             var result = datacon[i].match(/^(-|\+)?\d+$/);
                             if (result == null) {
                                 //警告消息提示s，默认背景为橘黄色
-                                toastr.warning("该字段应是bigint类型！");
+                                toastr.warning(S_column[i]+" 字段应是bigint类型！");
                                 return;
-                            } else {
-                                if (datacon[i] > '9223372036854775807' || datacon[i] > '-9223372036854775808') {
-                                    toastr.warning("该字段超出范围！");
-                                    return;
-                                }
                             }
+                            // else {
+                            //     if (datacon[i] > '9223372036854775807' || datacon[i] > '-9223372036854775808') {
+                            //         toastr.warning(S_column[i]+" 字段超出范围！");
+                            //         return;
+                            //     }
+                            // }
                         } else {
-                            toastr.warning("该字段应是数字类型！");
+                            toastr.warning(S_column[i]+" 字段应是数字类型！");
                             return;
                         }
                     }
@@ -1124,24 +1128,24 @@
                         if (!isNaN(datacon[i])) {
                             var reg = /^-?\d+$/;
                             if (!reg.exec(datacon[i])) {
-                                toastr.warning("该字段应是int或integer等类型！");
+                                toastr.warning(S_column[i]+" 字段应是int或integer类型！");
                                 return;
                             }
                         } else {
-                            toastr.warning("该字段应是数字类型！");
+                            toastr.warning(S_column[i]+" 字段应是数字类型！");
                             return;
                         }
                     }
 
                     if (datacon[i] !== "" && S_dataType[i] === "float") {
                         if (isNaN(datacon[i])) {
-                            toastr.warning("该字段应是float或double等类型！");
+                            toastr.warning(S_column[i]+" 字段应是float类型！");
                             return;
                         }
                     }
                     if (datacon[i] !== "" && S_dataType[i] === "double") {
                         if (isNaN(datacon[i])) {
-                            toastr.warning("该字段应是float或double等类型！");
+                            toastr.warning(S_column[i]+" 字段应是double类型！");
                             return;
                         }
                     }
@@ -1150,7 +1154,7 @@
                         var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
                         var regExp = new RegExp(reg);
                         if (!regExp.test(datacon[i])) {
-                            toastr.warning("该字段是时间格式,正确格式应为: xxxx-xx-xx ");
+                            toastr.warning(S_column[i]+" 字段是时间格式,正确格式应为: xxxx-xx-xx ");
                             return;
                         }
                     }
@@ -1159,7 +1163,7 @@
                         var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
                         var regExp = new RegExp(reg);
                         if (!regExp.test(datacon[i]) && datacon[i] !== null && datacon[i] !== "") {
-                            toastr.warning("该字段是时间格式,正确格式应为: xxxx-xx-xx xx:xx:xx ");
+                            toastr.warning(S_column[i]+" 字段正确格式应为: xxxx-xx-xx xx:xx:xx ");
                             return;
                         }
                     }
@@ -1174,11 +1178,11 @@
                         if (reg.test(datacon[i])) {
                             var ss = datacon[i].split(".");
                             if (ss[0].length > n) {
-                                toastr.warning("数据超出范围！ ");
+                                toastr.warning(S_column[i]+" 数据超出范围！ ");
                                 return;
                             }
                         } else {
-                            toastr.warning("该字段是decimal类型！ ");
+                            toastr.warning(S_column[i]+" 字段是decimal类型！ ");
                             return;
                         }
                     }
@@ -1232,9 +1236,10 @@
         };
 
         //修改数据,保存
-        function saveData(tableName, subjectCode, dataType, currentPage) {
+        function saveData(tableName, subjectCode, dataType, currentPage,alert_column) {
             var newdata = $('#form_id').serializeArray();
             var dataTypeArr = dataType.split(",");
+            var columnName=alert_column.split(",");
             var form1 = document.getElementById("form_id");
             var kk = 5;
             var checkdataArr = [];
@@ -1263,7 +1268,7 @@
                         }
                     }
                     if (bytesCount.length > 255) {
-                        toastr.warning("该字段超出范围！");
+                        toastr.warning(columnName[i]+" 字段超出范围！");
                         return;
                     }
                 }
@@ -1283,7 +1288,7 @@
                         }
                     }
                     if (bytesCount > 65535) {
-                        toastr.warning("该字段超出范围！");
+                        toastr.warning(columnName[i]+" 字段超出范围！");
                         return;
                     }
                 }
@@ -1302,7 +1307,7 @@
                         }
                     }
                     if (bytesCount > 4294967295) {
-                        toastr.warning("该字段超出范围！");
+                        toastr.warning(columnName[i]+" 字段超出范围！");
                         return;
                     }
                 }
@@ -1321,7 +1326,7 @@
                         }
                     }
                     if (bytesCount > 16777215) {
-                        toastr.warning("该字段超出范围！");
+                        toastr.warning(columnName[i]+" 字段超出范围！");
                         return;
                     }
                 }
@@ -1329,7 +1334,7 @@
                 //bit数据类型判断
                 if (checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null" && dataTypeArr[i] === "bit") {
                     if (checkdataArr[i] !== "0" && checkdataArr[i] !== "1") {
-                        toastr.warning("该字段应是bit类型！");
+                        toastr.warning(columnName[i]+" 字段应是bit类型！");
                         return;
                     }
                 }
@@ -1337,11 +1342,11 @@
                 if (checkdataArr[i] !== null && checkdataArr[i] !== "" && dataTypeArr[i] === "tinyint") {
                     if (!isNaN(checkdataArr[i])) {
                         if (parseInt(checkdataArr[i]) > 127 || parseInt(checkdataArr[i]) < -128) {
-                            toastr.warning("该字段超出范围！");
+                            toastr.warning(columnName[i]+" 字段超出范围！");
                             return;
                         }
                     } else {
-                        toastr.warning("该字段应是tinyint等类型！");
+                        toastr.warning(columnName[i]+" 字段应是tinyint等类型！");
                         return;
                     }
                 }
@@ -1352,16 +1357,16 @@
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
                             //警告消息提示s，默认背景为橘黄色
-                            toastr.warning("该字段应是smallint类型！");
+                            toastr.warning(columnName[i]+" 字段应是smallint类型！");
                             return;
                         } else {
                             if (parseInt(checkdataArr[i]) > 32767 || parseInt(checkdataArr[i]) < -32768) {
-                                toastr.warning("该字段超出范围！");
+                                toastr.warning(columnName[i]+" 字段超出范围！");
                                 return;
                             }
                         }
                     } else {
-                        toastr.warning("该字段应是数字类型！");
+                        toastr.warning(columnName[i]+" 该字段应是数字类型！");
                         return;
                     }
                 }
@@ -1372,16 +1377,16 @@
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
                             //警告消息提示s，默认背景为橘黄色
-                            toastr.warning("该字段应是mediumint类型！");
+                            toastr.warning(columnName[i]+" 字段应是mediumint类型！");
                             return;
                         } else {
                             if (parseInt(checkdataArr[i]) > 8388607 || parseInt(checkdataArr[i]) < -8388608) {
-                                toastr.warning("该字段超出范围！");
+                                toastr.warning(columnName[i]+" 字段超出范围！");
                                 return;
                             }
                         }
                     } else {
-                        toastr.warning("该字段应是数字类型！");
+                        toastr.warning(columnName[i]+" 字段应是数字类型！");
                         return;
                     }
                 }
@@ -1391,16 +1396,17 @@
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
                             //警告消息提示s，默认背景为橘黄色
-                            toastr.warning("该字段应是bigint类型！");
+                            toastr.warning(columnName[i]+" 字段应是bigint类型！");
                             return;
-                        } else {
-                            if (checkdataArr[i] > '9223372036854775807' || checkdataArr[i] > '-9223372036854775808') {
-                                toastr.warning("该字段超出范围！");
-                                return;
-                            }
                         }
+                        // else {
+                        //     if (checkdataArr[i] > '9223372036854775807' || checkdataArr[i] > '-9223372036854775808') {
+                        //         toastr.warning(columnName[i]+" 字段超出范围！");
+                        //         return;
+                        //     }
+                        // }
                     } else {
-                        toastr.warning("该字段应是数字类型！");
+                        toastr.warning(columnName[i]+" 字段应是数字类型！");
                         return;
                     }
                 }
@@ -1410,16 +1416,16 @@
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
                             //警告消息提示s，默认背景为橘黄色
-                            toastr.warning("该字段应是int或integer等类型！");
+                            toastr.warning(columnName[i]+" 字段应是int或integer等类型！");
                             return;
                         } else {
                             if (parseInt(checkdataArr[i]) > 2147483647 || parseInt(checkdataArr[i]) < -2147483648) {
-                                toastr.warning("该字段超出范围！");
+                                toastr.warning(columnName[i]+" 字段超出范围！");
                                 return;
                             }
                         }
                     } else {
-                        toastr.warning("该字段应是数字类型！");
+                        toastr.warning(columnName[i]+" 字段应是数字类型！");
                         return;
                     }
                 }
@@ -1427,7 +1433,7 @@
                 //float数据类型判断
                 if (dataTypeArr[i] === "float" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
                     if (isNaN(checkdataArr[i])) {
-                        toastr.warning("该字段应是float或double等类型！");
+                        toastr.warning(columnName[i]+" 字段应是float类型！");
                         return;
                     }
                     // if(parseFloat(checkdataArr[i]>)){
@@ -1436,7 +1442,7 @@
                 //double数据类型判断
                 if (dataTypeArr[i] === "double" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
                     if (isNaN(checkdataArr[i])) {
-                        toastr.warning("该字段应是float或double等类型！");
+                        toastr.warning(columnName[i]+" 字段应是double类型！");
                         return;
                     }
                 }
@@ -1446,7 +1452,7 @@
                     var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
                     var regExp = new RegExp(reg);
                     if (!regExp.test(checkdataArr[i])) {
-                        toastr.warning("该字段是时间格式,正确格式应为: xxxx-xx-xx ");
+                        toastr.warning(columnName[i]+" 字段是时间格式,正确格式应为: xxxx-xx-xx ");
                         return;
                     }
                 }
@@ -1455,7 +1461,7 @@
                     var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
                     var regExp = new RegExp(reg);
                     if (!regExp.test(checkdataArr[i])) {
-                        toastr.warning("该字段是时间格式,正确格式应为: xxxx-xx-xx xx:xx:xx ");
+                        toastr.warning(columnName[i]+" 字段正确格式应为: xxxx-xx-xx xx:xx:xx ");
                         return;
                     }
                 }
@@ -1471,11 +1477,11 @@
                     if (reg.test(checkdataArr[i])) {
                         var ss = checkdataArr[i].split(".");
                         if (ss[0].length > n) {
-                            toastr.warning("数据超出范围！ ");
+                            toastr.warning(columnName[i]+" 字段数据超出范围！ ");
                             return;
                         }
                     } else {
-                        toastr.warning("该字段是decimal类型！ ");
+                        toastr.warning(columnName[i]+" 字段是decimal类型！ ");
                         return;
                     }
                 }
