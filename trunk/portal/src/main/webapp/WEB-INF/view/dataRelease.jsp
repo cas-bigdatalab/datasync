@@ -426,10 +426,10 @@
                             <label class="col-sm-3 control-label">实体文件路径:</label>
                             <div class="col-sm-8 modediv" id="file-filePath"></div>
                         </div>
-                        <div class="form-group">
+                        <%--<div class="form-group">
                             <label class="col-sm-3 control-label">实体文件名称:</label>
                             <div class="col-sm-8 modediv" id="file-fileName"></div>
-                        </div>
+                        </div>--%>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">总存储量:</label>
                         <div class="col-sm-8 modediv" id="file-toMemorySize"></div>
