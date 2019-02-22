@@ -19,7 +19,7 @@
             主题库后台管理系统
         </shiro:hasRole>
         <shiro:hasRole name="admin">
-            烟草科研主题库构建与发布工具
+            集中式数据管理与定制化融合发布工具
         </shiro:hasRole>
     </title>
 
@@ -248,7 +248,7 @@
             主题库后台管理系统
         </shiro:hasRole>
         <shiro:hasRole name="admin">
-            烟草科研主题库构建与发布工具
+            集中式数据管理与定制化融合发布工具
         </shiro:hasRole>
 <%--
         <button class="btn blue" style="float: right;margin-top: 28px;" ><i class="icon-user"></i>登录</button>
@@ -282,13 +282,13 @@
                             <span class="arrow"></span>
                         </a>
                     </li>
-                    <li class="startProject">
+                    <%--<li class="startProject">
                         <a href="${ctx}/subjectMgmt/subjectDes">
                             <i class="icon-user"></i>
                             <span class="title">专业库注册管理</span>
                             <span class="arrow"></span>
                         </a>
-                    </li>
+                    </li>--%>
                     <%-- <shiro:hasRole name="Register">--%>
                     <li>
                         <a href="${ctx}/resCatalog">
