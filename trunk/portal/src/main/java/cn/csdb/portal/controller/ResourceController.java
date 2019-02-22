@@ -355,7 +355,7 @@ public class ResourceController {
         } else if (publicType.equals("file")) {
             resource.setPublicType("file");
             StringBuffer sb = new StringBuffer();
-            long size = 0L;
+            Double size = 0.00;
             if (StringUtils.isNoneBlank(dataList)) {
                 String[] s = dataList.split(";");
                 for (String str : s) {
@@ -402,7 +402,10 @@ public class ResourceController {
                 i++;
             }
             resource.setFilePath(sb.toString().replace("/", "%_%"));
-            resource.setToMemorySize(String.valueOf(size));
+            Double toMemorySize = size / 1024 / 1024;
+            NumberFormat nf = NumberFormat.getNumberInstance();
+            nf.setMaximumFractionDigits(4);
+            resource.setToMemorySize(nf.format(toMemorySize)+"MB");
             resource.setToRecordNumber(0);
             resource.setToFilesNumber(i);
         }
@@ -552,7 +555,7 @@ public class ResourceController {
         } else if (publicType.equals("file")) {
             resource.setPublicType("file");
             StringBuffer sb = new StringBuffer();
-            long size = 0L;
+            Double size = 0.00;
             if (StringUtils.isNoneBlank(dataList)) {
                 String[] s = dataList.split(";");
                 for (String str : s) {
@@ -594,7 +597,10 @@ public class ResourceController {
                 i++;
             }
             resource.setFilePath(sb.toString().replace("/", "%_%"));
-            resource.setToMemorySize(String.valueOf(size));
+            Double toMemorySize = size / 1024 / 1024;
+            NumberFormat nf = NumberFormat.getNumberInstance();
+            nf.setMaximumFractionDigits(4);
+            resource.setToMemorySize(nf.format(toMemorySize)+"MB");
             resource.setToRecordNumber(0);
             resource.setToFilesNumber(i);
         }
