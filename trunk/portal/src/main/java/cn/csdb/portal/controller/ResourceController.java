@@ -405,7 +405,7 @@ public class ResourceController {
             Double toMemorySize = size / 1024 / 1024;
             NumberFormat nf = NumberFormat.getNumberInstance();
             nf.setMaximumFractionDigits(4);
-            resource.setToMemorySize(nf.format(toMemorySize)+"MB");
+            resource.setToMemorySize(nf.format(toMemorySize));
             resource.setToRecordNumber(0);
             resource.setToFilesNumber(i);
         }
@@ -600,7 +600,7 @@ public class ResourceController {
             Double toMemorySize = size / 1024 / 1024;
             NumberFormat nf = NumberFormat.getNumberInstance();
             nf.setMaximumFractionDigits(4);
-            resource.setToMemorySize(nf.format(toMemorySize)+"MB");
+            resource.setToMemorySize(nf.format(toMemorySize));
             resource.setToRecordNumber(0);
             resource.setToFilesNumber(i);
         }
