@@ -58,6 +58,9 @@ public class LoginFilter  implements Filter {
         if("/login".equals(urlPath)){
             flg = true;
         }
+        if("/ftpUploadProcess".equals(urlPath)){
+            flg = true;
+        }
 
         if(flg){
             chain.doFilter(req, res);
