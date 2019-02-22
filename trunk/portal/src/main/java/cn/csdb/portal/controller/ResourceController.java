@@ -380,6 +380,7 @@ public class ResourceController {
             String[] filePaths = sb.toString().split(";");
             //清空以前保存的文件记录
             resourceService.deleteFileInfo(resourceId);
+            int i = 0;
             for (String str : filePaths) {
                 FileInfo fileInfo = new FileInfo();
                 int one = str.lastIndexOf("/");
@@ -398,10 +399,12 @@ public class ResourceController {
                 fileInfo.setResourceId(resourceId);
                 fileInfo.setTime(new Date());
                 resourceService.saveFileInfo(fileInfo);
+                i++;
             }
             resource.setFilePath(sb.toString().replace("/", "%_%"));
             resource.setToMemorySize(String.valueOf(size));
-
+            resource.setToRecordNumber(0);
+            resource.setToFilesNumber(i);
         }
         if (StringUtils.isNotBlank(resource.getUserGroupId())) {
             resource.setStatus("1");
@@ -545,6 +548,7 @@ public class ResourceController {
             resource.setPublicType("mysql");
             List<String> tableList = Arrays.asList(dataList.split(";"));
             int rowCount = resourceService.getRecordCount(subject.getDbHost(), subject.getDbPort(), subject.getDbUserName(), subject.getDbPassword(), subject.getDbName(), tableList);
+            resource.setToRecordNumber(rowCount);
         } else if (publicType.equals("file")) {
             resource.setPublicType("file");
             StringBuffer sb = new StringBuffer();
@@ -570,6 +574,7 @@ public class ResourceController {
             String[] filePaths = sb.toString().split(";");
             //清空以前保存的文件记录
             resourceService.deleteFileInfo(resourceId);
+            int i = 0;
             for (String str : filePaths) {
                 FileInfo fileInfo = new FileInfo();
                 int one = str.lastIndexOf("/");
@@ -586,9 +591,12 @@ public class ResourceController {
                 fileInfo.setResourceId(resourceId);
                 fileInfo.setTime(new Date());
                 resourceService.saveFileInfo(fileInfo);
+                i++;
             }
             resource.setFilePath(sb.toString().replace("/", "%_%"));
             resource.setToMemorySize(String.valueOf(size));
+            resource.setToRecordNumber(0);
+            resource.setToFilesNumber(i);
         }
         if (StringUtils.isNotBlank(resource.getUserGroupId())) {
             resource.setStatus("1");
