@@ -219,7 +219,7 @@ function saveTableFieldComs(curDataSubjectCode, tableInfos) {
             },
             dataType: "json",
             success: function () {
-                toastr["success"]("操作成功");
+                toastr["success"]("保存成功！");
                 chooseTable(curDataSubjectCode,0);
             }
         });
