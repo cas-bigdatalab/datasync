@@ -73,7 +73,7 @@ public class Resource {
     @Field("citation")
     private String citation; //引用格式
     @Field("toMemorySize")
-    private Double toMemorySize;  //总存储量
+    private String toMemorySize;  //总存储量
     @Field("toFilesNumber")
     private long toFilesNumber;  //总文件数
     @Field("toRecordNumber")
@@ -347,11 +347,11 @@ public class Resource {
         this.citation = citation;
     }
 
-    public Double getToMemorySize() {
+    public String getToMemorySize() {
         return toMemorySize;
     }
 
-    public void setToMemorySize(Double toMemorySize) {
+    public void setToMemorySize(String toMemorySize) {
         this.toMemorySize = toMemorySize;
     }
 
