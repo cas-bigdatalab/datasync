@@ -258,7 +258,7 @@
                             <div class="col-sm-8 modediv" id="rel-publicContent"></div>
                         </div>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">总存储量:</label>
+                        <label class="col-sm-3 control-label">总存储量(MB):</label>
                         <div class="col-sm-8 modediv" id="rel-toMemorySize"></div>
                     </div>
                     <div class="form-group">
@@ -431,7 +431,7 @@
                             <div class="col-sm-8 modediv" id="file-fileName"></div>
                         </div>--%>
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">总存储量:</label>
+                        <label class="col-sm-3 control-label">总存储量(MB):</label>
                         <div class="col-sm-8 modediv" id="file-toMemorySize"></div>
                     </div>
                     <div class="form-group">
