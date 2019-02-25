@@ -68,7 +68,7 @@
             table-layout: fixed;
             white-space: normal;
             word-break: break-all;
-            width: 1300px;
+            /*width: 1300px;*/
         }
 
         #tableDatil table td {
@@ -297,12 +297,12 @@
                     <!--数据编辑-->
                     <div class="tab-pane" id="editData" style="min-height: 600px;overflow: hidden;" >
                         <div id="alltables" class="tab-pane"
-                             style="margin-left:35px;max-width:1300px;max-height: 300px;overflow: auto;">
+                             style="margin-left:1%;max-width:98%;margin-right:1%;max-height: 300px;overflow: auto;">
 
                         </div>
 
-                        <div id="tableDatil" style="margin-top:2px; margin-left: 2.5%;">
-                            <div class="portlet-title" style="max-width:1300px; min-height:500px;overflow-x: auto">
+                        <div id="tableDatil" style="margin-top:2px;">
+                            <div class="portlet-title" style="max-width:98%;margin-left: 1%;margin-right: 1%;; min-height:500px;overflow-x: auto">
                                 <div id="nodata" style="display:none;margin-left: 25%;margin-top: 8%;">
                                     <span id="span1" style="font-size: 25px">该表暂时没有数据</span>
                                     <span id="span2" style="margin-left: 5%"></span>
@@ -650,7 +650,7 @@
                     var html = "";
                     var list = data.list;
                     for (var i = 0; i < list.length; i++) {
-                        html += "<span style='display:inline-block;width: 320px'><label><input type='radio' name='mapTable'  value='" + list[i] + "' onclick=\"editTableData('" + sub1 + "','" + list[i] + "')\">&nbsp;" + list[i] + "</label></span>"
+                        html += "<span style='display:inline-block;width:16%;'><label><input type='radio' name='mapTable'  value='" + list[i] + "' onclick=\"editTableData('" + sub1 + "','" + list[i] + "')\">&nbsp;" + list[i] + "</label></span>"
                     }
                     $("#alltables").append(html);
                 }
@@ -689,20 +689,16 @@
                         for (var i = 0; i < arr.length; i++) {
                             if (il <= 5) {
                                 if (arr[i] === "PORTALID") {
-                                    s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                    s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13.5%;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                                 } else {
-                                    s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                    s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13.5%;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                                     il++;
                                 }
                             } else {
-                                s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:65px;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13.5%;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                             }
                         }
                     }
-                    // else{
-                    //     $("#nodata").show();
-                    // }
-
                     var pkColumn = data.pkColumn;
                     var autoAdd = data.autoAdd;
                     var ss = "";
@@ -734,17 +730,8 @@
                                              ss += "<td title='" + d[k] + "'>" + d[k] + "</td>";
                                              j++;
                                          }
-                                         // if (dataType[i] === "text" || dataType === "varchar") {
-                                         //     var reg = new RegExp(",", "g"); //创建正则RegExp对象
-                                         //     // var stringObj="终古人民共和国，终古人民";
-                                         //     // var newstr=stringObj.replace(reg,"中国");
-                                         // }
                                          eachData.push(d[k]);
                                          S_updateData.push(d[k]);
-                                         // datajson.colName = arr[i];
-                                         // datajson.colValue = d[k];
-                                         // eachData2.push(datajson);
-
                                      } else {
                                          if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
                                              var date = d[arr[i]].split(".");
@@ -783,12 +770,11 @@
                              }
                              ss += "<td ><a src='#' onclick=\" updateData('" + arr + "','" + tableName + "','" + subjectCode + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">修改 | </a><a href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">增加 | </a><a href='#' onclick=\"checkDada('" + arr + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">查看</a></td></tr>";
                          }
-                         s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:100px;height:60px;'>操作</th></tr>";
+                         s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:19%;height:60px;'>操作</th></tr>";
                          $("#page_div").show();
                          $("#pagination").show();
                          fun_limit(subjectCode, tableName, data);
                      }else {
-                        // s += "<th style='border:1px #fbe6c6 solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:120px;height:60px;'>操作 &nbsp;&nbsp;";
                         var t= "<a style='font-size: 17px;background-color: whitesmoke' href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">增加数据</a></th></tr>";
                          $("#nodata").show();
                          $("#span2").append(t);

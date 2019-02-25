@@ -76,10 +76,12 @@ public class DataSrcService {
             map.put("autoAdd",list5);
             map.put("IS_NULLABLE",list6);
             map.put("COLUMN_TYPE",list7);
-
+          pst.close();
+          set.close();
         }catch(Exception e){
             e.printStackTrace();
         }finally {
+
             try{ connection.close();}catch (Exception e){
                 e.printStackTrace();
             }
@@ -143,6 +145,7 @@ public class DataSrcService {
             System.out.println("更新："+sql);
             PreparedStatement pst=connection.prepareStatement(sql);
             i= pst.executeUpdate();
+            pst.close();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -167,6 +170,7 @@ public class DataSrcService {
             i= pst.executeUpdate();
 
             System.out.println("影响数据行："+i);
+            pst.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -193,6 +197,7 @@ public class DataSrcService {
                i= rs.getInt("num");
                System.out.println("是否重复"+i);
             }
+            pst.close();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -218,6 +223,8 @@ public class DataSrcService {
             while(rs.next()){
                 count=rs.getInt("num");
             }
+            pst.close();
+            rs.close();
         }catch (Exception e){
             e.printStackTrace();
         }finally {
@@ -255,6 +262,8 @@ public class DataSrcService {
                }
                listMap.add(map);
            }
+           pst.close();
+           set.close();
        }catch (Exception e){
            e.printStackTrace();
        }finally {
