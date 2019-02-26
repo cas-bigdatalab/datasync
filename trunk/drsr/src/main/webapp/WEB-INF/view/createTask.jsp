@@ -329,7 +329,7 @@
             }
             $(".database-con-rel").show();
             $("#resTitle").html(name);
-            console.log("aaaaaaaaaaa")
+            console.log("设置数据任务->关系型数据库列表加载！")
             $.ajax({
                 url:"${ctx}/relationship/relationalDatabaseTableList",
                 type:"POST",
@@ -785,6 +785,9 @@
         }
 
         function onCheck(event, treeId, treeNode){
+            index = layer.load(1, {
+                shade: [0.5,'#fff'] //0.1透明度的白色背景
+            });
             var zTree = $.fn.zTree.getZTreeObj("LocalTreeDemo");
             if(treeNode.isParent){
                 if (!treeNode.open){
@@ -819,6 +822,9 @@
                     },1000);//延时1.5秒
                 }
             }
+            debugger
+            $("#layui-layer-shade"+index+"").remove();
+            $("#layui-layer"+index+"").remove();
         };
 
         function onExpand(event, treeId, treeNode) {
@@ -826,18 +832,20 @@
             var checked=treeNode.checked;
             setTimeout(function(){
                 var children=treeNode.children;
-                for(var i=0;i<children.length;i++){
-                    zTree.checkNode(children[i],checked,checked);
-                    if(children[i].isParent){
-                        if (!children[i].open){
-                            zTree.expandNode(children[i], true, true, false);
-                            onExpand(event, treeId, children[i]);
-                            console.log(children[i]);
-                            zTree.expandNode(children[i], false, false, false);
+                if(children!=null){
+                    for(var i=0;i<children.length;i++){
+                        zTree.checkNode(children[i],checked,checked);
+                        if(children[i].isParent){
+                            if (!children[i].open){
+                                zTree.expandNode(children[i], true, true, false);
+                                onExpand(event, treeId, children[i]);
+                                console.log(children[i]);
+                                zTree.expandNode(children[i], false, false, false);
+                            }
                         }
                     }
                 }
-            },1200);//延时1.2秒
+            },900);//延时1.2秒
         };
 
         /* 获取返回的数据，进行预操作，treeId是treeDemo,异步加载完之后走这个方法，responseData为后台返回数据  */

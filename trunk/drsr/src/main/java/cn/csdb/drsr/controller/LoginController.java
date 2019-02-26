@@ -63,7 +63,7 @@ public class LoginController {
         if (loginStatus == 1)
         {
             request.getSession().setAttribute("userName", userName);
-            retView = "redirect:/index";
+            retView = "redirect:/subjectInfo";
         }
         else if(loginStatus == 2){
             retView = "redirect:/";

@@ -70,6 +70,12 @@ public class FileSourceController {
         datasrc.setCreateTime(currentTime);
         datasrc.setFilePath(filePath.replace("%_%",File.separator));
         datasrc.setSubjectCode(SubjectCode);
+        List<DataSrc> dataSrcsList=fileResourceService.queryData();
+        for(DataSrc data : dataSrcsList){
+           if(dataSourceName.trim().equals(data.getDataSourceName())){
+               return "2";//数据源名称相同
+           }
+        }
         return fileResourceService.addData(datasrc);
 
     }

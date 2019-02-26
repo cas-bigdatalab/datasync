@@ -12,6 +12,18 @@
 <head>
     <title>系统</title>
     <link href="${ctx}/resources/css/dataSource.css" rel="stylesheet" type="text/css"/>
+    <style>
+        .custom-error{
+            color:#a94442!important;
+            border-color:#a94442!important;
+        }
+        .custom-error1{
+            color:#a94442!important;
+        }
+        .custom-error2{
+            border-color:#a94442!important;
+        }
+    </style>
 </head>
 <body>
 <div class="page-content">
@@ -158,11 +170,11 @@
                                 <div class="form-body">
                                     <div class="form-group">
                                         <label class="col-md-3 control-label">数据源名称<span class="required">
-													* </span></label>
+													 </span></label>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control" placeholder="请输入数据源名称"
                                                    id="dataSourceNameE"
-                                                   name="dataSourceNameE"/>
+                                                   name="dataSourceNameE" disabled/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -549,6 +561,9 @@
                                     tableConfiguration();
                                 }else if(jsonData == '2') {
                                     toastr["error"]("数据库连接失败");
+                                }else if(jsonData=="3"){
+                                    $("#dataSourceName").addClass("custom-error");
+                                    toastr["error"]("数据源名称已存在！");
                                 }else {
                                     toastr["error"]("新增失败");
                                 }
