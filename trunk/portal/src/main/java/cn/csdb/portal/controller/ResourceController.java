@@ -321,6 +321,8 @@ public class ResourceController {
         resource.setCreateOrgnization(createOrganization);
         resource.setCreatePerson(createPerson);
         resource.setStatus("-1");
+        resource.setdCount(0);
+        resource.setvCount(0);
         String resourceId = resourceService.save(resource);
         jsonObject.put("resourceId", resourceId);
         return jsonObject;

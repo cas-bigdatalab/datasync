@@ -90,6 +90,10 @@ public class Resource {
     private Date creatorCreateTime;
     @Field("createTime")
     private Date createTime;
+    @Field("vCount") //浏览次数
+    private Integer vCount;
+    @Field("dCount") //下载次数
+    private Integer dCount;
 
     public String getPublishOrgnization() {
         return publishOrgnization;
@@ -385,5 +389,21 @@ public class Resource {
 
     public void setCreatorCreateTime(Date creatorCreateTime) {
         this.creatorCreateTime = creatorCreateTime;
+    }
+
+    public Integer getvCount() {
+        return vCount;
+    }
+
+    public void setvCount(Integer vCount) {
+        this.vCount = vCount;
+    }
+
+    public Integer getdCount() {
+        return dCount;
+    }
+
+    public void setdCount(Integer dCount) {
+        this.dCount = dCount;
     }
 }
