@@ -67,7 +67,7 @@
                             <label  >状态</label>
                             <select  id="dataStatusList" class="form-control" style="width: 150px">
                                 <option value="">全部</option>
-                                <option value="1">上传完成</option>
+                                <option value="1">上传/导入完成</option>
                                 <option value="0">未上传</option>
                             </select>
                         </div>
@@ -372,14 +372,15 @@
         $("#upload-list").delegate(".upload-data","click",function () {
             var isres = $(this).attr("resupload")
             var $this = $(this)
-            $this.css("background-color","dimgrey");
-            $this.attr("disabled","disabled");
+
             var souceID = $this.attr("keyIdTd");
             var keyID = souceID + new Date().getTime();
             var keyType=$this.attr("keyDataType");
             if(isres == "two"){
                 bootbox.confirm("<span style='font-size: 16px'>确认要重新上传吗?</span>",function (r) {
                     if(r){
+                        $this.css("background-color","dimgrey");
+                        $this.attr("disabled","disabled");
                         $("[kkid="+souceID+"Loading]")[0].style.display="block";
                         $("[kkid="+souceID+"]")[0].style.width="0%";
                         $("[kkid="+souceID+"Text]")[0].textContent="0%";
@@ -649,7 +650,7 @@
                         listSpan(datatask.sqlTableNameEn,";",$sqlTableNameEn)
                         /*$("#pre-sqlTableNameEn").html(datatask.sqlTableNameEn)*/
                        /* $("#pre-filePath").html(datatask.filePath)*/
-                        $("#pre-createTime").html(convertMilsToDateString(datatask.createTime))
+                        $("#pre-createTime").html(convertMilsToDateTimeString(datatask.createTime))
                         $("#pre-creator").html(datatask.creator)
                         if(datatask.status == 1){
                             $("#pre-status").html("导入完成")
@@ -667,7 +668,7 @@
                         var str = datatask.filePath.replace(/%_%/g, "/");
                         listSpan(str,";",$filePath)
                         /*$("#file-filePath").html(datatask.filePath)*/
-                        $("#file-createTime").html(convertMilsToDateString(datatask.createTime))
+                        $("#file-createTime").html(convertMilsToDateTimeString(datatask.createTime))
                         $("#file-creator").html(datatask.creator)
                         if(datatask.status == 1){
                             $("#file-status").html("导入完成")

@@ -69,6 +69,13 @@ public class RelationSourceController {
         datasrc.setUserName(userName);
         datasrc.setPassword(password);
         datasrc.setCreateTime(currentTime);
+        logger.info("查看数据源名称是否相同");
+        List<DataSrc> dataSrcsList=relationShipService.queryData();
+        for(DataSrc data : dataSrcsList){
+            if(dataSourceName.trim().equals(data.getDataSourceName())){
+                return "3";//数据源名称相同
+            }
+        }
         logger.info("测试新增或编辑的数据能否连通数据库");
         String flag = relationShipService.testCon(host, port, userName, password, dataBaseName);
         if (flag == "success") {
