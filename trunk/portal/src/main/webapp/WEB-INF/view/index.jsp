@@ -48,7 +48,7 @@
         <h3><b>欢迎使用主题库后台管理系统</b></h3>
     </shiro:hasRole>
     <shiro:hasRole name="admin">
-        <h3><b>欢迎使用烟草科研主题库构建与发布工具</b></h3>
+        <h3><b>欢迎使用集中式数据管理与定制化融合发布工具</b></h3>
         <hr>
         <div class="task-title" style="font-size: 16px; font-weight: bold; padding-right:250px;text-align: center;">
             <span>主题库信息</span>
