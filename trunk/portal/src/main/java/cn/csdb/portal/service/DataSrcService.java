@@ -5,20 +5,17 @@ import cn.csdb.portal.repository.DataSrcDao;
 import cn.csdb.portal.utils.SqlUtil;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
-import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPReply;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.util.*;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by huangwei on 2016/4/6.
@@ -30,13 +27,27 @@ public class DataSrcService {
     @Autowired
     private DataSrcDao dataSrcDao;
 
+    private Logger logger = LoggerFactory.getLogger(DataSrcService.class);
+
 
     public List<String> relationalDatabaseTableList(DataSrc dataSrc) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
-        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
-        if (connection == null)
-            return null;
-        return dataSource.getTableList(connection);
+        Connection connection = null;
+        try {
+            connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+            if (connection == null)
+                return null;
+            return dataSource.getTableList(connection);
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    logger.error("数据库连接关闭异常");
+                }
+            }
+        }
     }
 //    表结构
     public  Map<String,List<String>> getTableStructure(DataSrc dataSrc,String tableName){

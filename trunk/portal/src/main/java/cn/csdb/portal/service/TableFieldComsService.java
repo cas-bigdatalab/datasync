@@ -311,7 +311,7 @@ public class TableFieldComsService {
      * @throws FileNotFoundException
      * @throws UnsupportedEncodingException
      */
-    private void executeScript(Connection connection, String scriptName, String realPath) throws FileNotFoundException, UnsupportedEncodingException {
+    private void executeScript(Connection connection, String scriptName, String realPath) throws IOException {
         ScriptRunner runner = new ScriptRunner(connection);
         // 下面配置不要随意更改，否则会出现各种问题
         // 自动提交
@@ -321,8 +321,11 @@ public class TableFieldComsService {
         runner.setDelimiter(";");
         runner.setSendFullScript(false);
         runner.setStopOnError(false);
-        runner.runScript(new InputStreamReader(new FileInputStream(realPath + scriptName), "utf-8"));
+        FileInputStream fileInputStream = new FileInputStream(realPath + scriptName);
+        runner.runScript(new InputStreamReader(fileInputStream, "utf-8"));
+        fileInputStream.close();
         File f = new File(realPath + scriptName);
-        f.delete();
+        boolean delete = f.delete();
+        System.out.println(delete);
     }
 }
