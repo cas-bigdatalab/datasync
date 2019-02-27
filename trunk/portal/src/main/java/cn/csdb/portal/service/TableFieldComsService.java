@@ -10,22 +10,26 @@ import cn.csdb.portal.repository.TableFieldComsDao;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.PropertyFilter;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 import com.google.common.hash.Hashing;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.jdbc.ScriptRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.sql.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 
 /**
@@ -201,4 +205,124 @@ public class TableFieldComsService {
         return Joiner.on(URISPLIT).skipNulls().join(host, port, databaseName, tableName);
     }
 
+    /**
+     * 同步注释到MySQL
+     *
+     * @param curDataSubjectCode
+     * @param tableName
+     * @param tableInfosList
+     * @param realPath
+     * @return
+     */
+    public JSONObject syncMySQLComment(String curDataSubjectCode, String tableName, List<TableInfo> tableInfosList, String realPath) {
+        JSONObject jsonObject = new JSONObject();
+        Subject subject = checkUserDao.getSubjectByCode(curDataSubjectCode);
+        DataSrc datasrc = new DataSrc();
+        datasrc.setDatabaseName(subject.getDbName());
+        datasrc.setDatabaseType("mysql");
+        datasrc.setHost(subject.getDbHost());
+        datasrc.setPort(subject.getDbPort());
+        datasrc.setUserName(subject.getDbUserName());
+        datasrc.setPassword(subject.getDbPassword());
+        Connection connection = null;
+
+        try {
+            IDataSource dataSource = DataSourceFactory.getDataSource(datasrc.getDatabaseType());
+            connection = dataSource.getConnection(datasrc.getHost(), datasrc.getPort(), datasrc.getUserName(), datasrc.getPassword(), datasrc.getDatabaseName());
+            String scriptName = getSqlScript(curDataSubjectCode, tableName, connection, realPath, tableInfosList);
+            executeScript(connection, scriptName, realPath);
+        } catch (FileNotFoundException f) {
+            f.printStackTrace();
+            logger.error("MySQL注释同步失败：执行脚本失败");
+        } catch (IOException i) {
+            i.printStackTrace();
+            logger.error("MySQL注释同步失败：修改注释的脚本文件生成失败");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            logger.error("MySQL注释同步失败：获取数据库连接失败");
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                logger.warn("MySQL注释同步成功：但关闭数据库连接失败");
+            }
+        }
+        return jsonObject;
+    }
+
+    /**
+     * 生成 修改注释的语句脚本
+     *
+     * @param curDataSubjectCode 当前库
+     * @param tableName          当前表
+     * @param connection         连接
+     * @throws SQLException
+     */
+    private String getSqlScript(String curDataSubjectCode, String tableName, Connection connection, String realPath, List<TableInfo> tableInfosList) throws SQLException, IOException {
+        StringBuffer sb = new StringBuffer();
+        String getTableMate = "select column_name `name`, COLUMN_TYPE `type`, COLUMN_COMMENT `comment`  from information_schema.`COLUMNS` where TABLE_SCHEMA='" + curDataSubjectCode + "'AND TABLE_NAME='" + tableName + "'";
+        PreparedStatement preparedStatement = connection.prepareStatement(getTableMate);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        // 生成alert 语句
+        Map<String, String> map = new HashMap<>(16);
+        for (TableInfo info : tableInfosList) {
+            map.put(info.getColumnName(), info.getColumnComment());
+        }
+        while (resultSet.next()) {
+            sb.append("alter table " + tableName + " modify ");
+            String name = resultSet.getString("name");
+            sb.append(" " + name + " ");
+            String type = resultSet.getString("type");
+            sb.append(" " + type + " ");
+            String comment = map.get(name);
+            sb.append(" comment '" + comment + "'; \n ");
+        }
+
+        // 写入临时文件
+        File f = new File(realPath);
+        if (!f.exists()) {
+            f.mkdir();
+        }
+        String scriptName = UUID.randomUUID().toString() + ".sql";
+        File tempFile = new File(realPath + scriptName);
+        if (!tempFile.exists()) {
+            tempFile.createNewFile();
+        }
+        ByteArrayInputStream bis = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"));
+        FileOutputStream fos = new FileOutputStream(tempFile);
+        byte[] b = new byte[1024];
+        int i = 0;
+        while ((i = bis.read(b)) != -1) {
+            fos.write(b);
+        }
+        fos.flush();
+        fos.close();
+        return scriptName;
+    }
+
+    /**
+     * 执行注释修改脚本，完成后删除脚本
+     *
+     * @param connection
+     * @param scriptName
+     * @throws FileNotFoundException
+     * @throws UnsupportedEncodingException
+     */
+    private void executeScript(Connection connection, String scriptName, String realPath) throws FileNotFoundException, UnsupportedEncodingException {
+        ScriptRunner runner = new ScriptRunner(connection);
+        // 下面配置不要随意更改，否则会出现各种问题
+        // 自动提交
+        runner.setAutoCommit(true);
+        runner.setFullLineDelimiter(false);
+        // 每条命令间的分隔符
+        runner.setDelimiter(";");
+        runner.setSendFullScript(false);
+        runner.setStopOnError(false);
+        runner.runScript(new InputStreamReader(new FileInputStream(realPath + scriptName), "utf-8"));
+        File f = new File(realPath + scriptName);
+        f.delete();
+    }
 }
