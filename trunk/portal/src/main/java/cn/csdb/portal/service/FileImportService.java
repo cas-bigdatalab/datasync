@@ -49,52 +49,57 @@ public class FileImportService {
             return jsonObject;
         }
 
-        // 获取当前用户的MySQL连接
-        DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
-        Connection connection = getConnection(dataSrc);
-        if (connection == null) {
-            jsonObject.put("code", "error");
-            jsonObject.put("message", "数据库连接异常");
-            return jsonObject;
-
-        }
-        // sheet中  第一行为字段中文名称，第二行为数据库字段名称， sheet页名称为表名称
-        //判断表是否存在 存在则判断字段是否对应   不存在则新增数据表
-        List<Map<String, List<List<String>>>> resultList = new LinkedList<>();
-        Iterator<Map.Entry<String, List<List<String>>>> iterator = mapSheet.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, List<List<String>>> next = iterator.next();
-            String key = next.getKey();
-            List<List<String>> value = next.getValue();
-            if (value == null || value.size() == 0) {
+        Connection connection = null;
+        try {
+            // 获取当前用户的MySQL连接
+            DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
+            connection = getConnection(dataSrc);
+            if (connection == null) {
                 jsonObject.put("code", "error");
-                jsonObject.put("message", key + "页签中数据为空，请查验");
+                jsonObject.put("message", "数据库连接异常");
                 return jsonObject;
             }
+            // sheet中  第一行为字段中文名称，第二行为数据库字段名称， sheet页名称为表名称
+            //判断表是否存在 存在则判断字段是否对应   不存在则新增数据表
+            List<Map<String, List<List<String>>>> resultList = new LinkedList<>();
+            Iterator<Map.Entry<String, List<List<String>>>> iterator = mapSheet.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<String, List<List<String>>> next = iterator.next();
+                String key = next.getKey();
+                List<List<String>> value = next.getValue();
+                if (value == null || value.size() == 0) {
+                    jsonObject.put("code", "error");
+                    jsonObject.put("message", key + "页签中数据为空，请查验");
+                    return jsonObject;
+                }
 
-            // excel当前表存在比较数据库字段 与 excel字段 顺序、字段名称
-            boolean tableIsExist = tableIsExist(connection, null, dataSrc.getDatabaseName(), key);
-            Map<String, Map<String, List<String>>> tableResult = new LinkedHashMap<>();
-            Map<String, List<String>> stringListMap = new LinkedHashMap<>();
-            if (tableIsExist) {
-                stringListMap = tableField(key, connection);
+                // excel当前表存在比较数据库字段 与 excel字段 顺序、字段名称
+                boolean tableIsExist = tableIsExist(connection, null, dataSrc.getDatabaseName(), key);
+                Map<String, Map<String, List<String>>> tableResult = new LinkedHashMap<>();
+                Map<String, List<String>> stringListMap = new LinkedHashMap<>();
+                if (tableIsExist) {
+                    stringListMap = tableField(key, connection);
+                }
+                // excel当前表不存在 选择字段类型、长度、是否主键
+                stringListMap.put("excelField", value.get(1));
+                stringListMap.put("excelComment", value.get(0));
+                tableResult.put(key, stringListMap);
+                Map<String, List<List<String>>> resultMap = formatterResult(tableResult);
+                resultList.add(resultMap);
             }
-            // excel当前表不存在 选择字段类型、长度、是否主键
-            stringListMap.put("excelField", value.get(1));
-            stringListMap.put("excelComment", value.get(0));
-            tableResult.put(key, stringListMap);
-            Map<String, List<List<String>>> resultMap = formatterResult(tableResult);
-            resultList.add(resultMap);
-        }
-        jsonObject.put("data", resultList);
-        try {
-            connection.close();
-        } catch (SQLException e) {
+            jsonObject.put("data", resultList);
+        } catch (Exception e) {
             e.printStackTrace();
             logger.error("Error:数据连接关闭错误");
             jsonObject.put("code", "error");
             jsonObject.put("message", "数据连接关闭错误");
             return jsonObject;
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         jsonObject.put("code", "success");
         return jsonObject;
@@ -108,34 +113,45 @@ public class FileImportService {
 
         // 获取当前用户的MySQL连接
         DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
-        Connection connection = getConnection(dataSrc);
-        if (connection == null) {
-            jsonObject.put("code", "error");
-            jsonObject.put("message", "数据库连接异常");
-            return jsonObject;
+        Connection connection = null;
+        try {
+            connection = getConnection(dataSrc);
+            if (connection == null) {
+                jsonObject.put("code", "error");
+                jsonObject.put("message", "数据库连接异常");
+                return jsonObject;
 
-        }
-        // 创建表
-        Boolean createTable = createTableSql(connection, tableName, tableFields);
-        if (!createTable) {
-            jsonObject.put("code", "error");
-            jsonObject.put("message", "创建表失败");
-            return jsonObject;
-        }
-
-        // 插入数据
-        Set<Map.Entry<String, List<List<String>>>> entries = mapSheet.entrySet();
-        Iterator<Map.Entry<String, List<List<String>>>> iterator = entries.iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, List<List<String>>> next = iterator.next();
-            List<List<String>> value = next.getValue();
-            jsonObject = insertValue2(connection, tableName, value);
-            if ("error".equals(jsonObject.get("code"))) {
+            }
+            // 创建表
+            Boolean createTable = createTableSql(connection, tableName, tableFields);
+            if (!createTable) {
+                jsonObject.put("code", "error");
+                jsonObject.put("message", "创建表失败");
                 return jsonObject;
             }
+
+            // 插入数据
+            Set<Map.Entry<String, List<List<String>>>> entries = mapSheet.entrySet();
+            Iterator<Map.Entry<String, List<List<String>>>> iterator = entries.iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<String, List<List<String>>> next = iterator.next();
+                List<List<String>> value = next.getValue();
+                jsonObject = insertValue2(connection, tableName, value);
+                if ("error".equals(jsonObject.get("code"))) {
+                    return jsonObject;
+                }
+            }
+            jsonObject.put("code", "success");
+            jsonObject.put("message", tableName + "创建成功，数据增添成功");
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        jsonObject.put("code", "success");
-        jsonObject.put("message", tableName + "创建成功，数据增添成功");
         return jsonObject;
     }
 
@@ -146,22 +162,33 @@ public class FileImportService {
         mapSheet = parseExcel2(tempFilePath);
         // 获取当前用户的MySQL连接
         DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
-        Connection connection = getConnection(dataSrc);
-        if (connection == null) {
-            jsonObject.put("code", "error");
-            jsonObject.put("message", "数据库连接异常");
-            return jsonObject;
-        }
-        Iterator<Map.Entry<String, List<List<String>>>> iterator = mapSheet.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, List<List<String>>> next = iterator.next();
-            List<List<String>> value = next.getValue();
-            jsonObject = onlyInsertSql(tableName, tableFields, value, connection);
-            if ("error".equals(jsonObject.get("code"))) {
+        Connection connection = null;
+        try {
+            connection = getConnection(dataSrc);
+            if (connection == null) {
+                jsonObject.put("code", "error");
+                jsonObject.put("message", "数据库连接异常");
                 return jsonObject;
             }
+            Iterator<Map.Entry<String, List<List<String>>>> iterator = mapSheet.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<String, List<List<String>>> next = iterator.next();
+                List<List<String>> value = next.getValue();
+                jsonObject = onlyInsertSql(tableName, tableFields, value, connection);
+                if ("error".equals(jsonObject.get("code"))) {
+                    return jsonObject;
+                }
+            }
+            jsonObject.put("code", "success");
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        jsonObject.put("code", "success");
         return jsonObject;
     }
 
@@ -621,5 +648,38 @@ public class FileImportService {
         }
         String sql = sb.toString();
         return sql;
+    }
+
+    public JSONObject deleteTableName(String tableName, String subjectCode) {
+        JSONObject jsonObject = new JSONObject();
+        DataSrc mysql = getDataSrc(subjectCode, "mysql");
+        Connection connection = null;
+        try {
+            connection = getConnection(mysql);
+            if (connection == null) {
+                jsonObject.put("code", "error");
+                jsonObject.put("message", "数据库连接异常");
+            } else {
+                String sql = "drop table ".concat(tableName);
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.execute();
+                jsonObject.put("code", "success");
+                jsonObject.put("message", "“" + tableName + "”表删除成功");
+            }
+        } catch (SQLException e) {
+            jsonObject.put("code", "error");
+            jsonObject.put("message", "执行异常");
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    jsonObject.put("code", "error");
+                    jsonObject.put("message", "关闭异常");
+                    e.printStackTrace();
+                }
+            }
+        }
+        return jsonObject;
     }
 }

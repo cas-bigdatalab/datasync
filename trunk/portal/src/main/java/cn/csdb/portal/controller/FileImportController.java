@@ -174,4 +174,13 @@ public class FileImportController {
         out.close();
         input.close();
     }
+
+    @PostMapping("/deleteTable")
+    @ResponseBody
+    public JSONObject deleteTableName(HttpServletRequest request) {
+        String tableName = request.getParameter("tableName");
+        String subjectCode = request.getParameter("subjectCode");
+        JSONObject jsonObject = fileImportService.deleteTableName(tableName, subjectCode);
+        return jsonObject;
+    }
 }
