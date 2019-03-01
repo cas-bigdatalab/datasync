@@ -6,6 +6,7 @@ import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.service.ConfigPropertyService;
 import cn.csdb.portal.service.DataTaskService;
 import cn.csdb.portal.service.SubjectMgmtService;
+import cn.csdb.portal.utils.FileUtil;
 import cn.csdb.portal.utils.SqlUtil;
 import cn.csdb.portal.utils.ZipUtil;
 import com.alibaba.fastjson.JSON;
@@ -47,6 +48,7 @@ public class HttpServiceController {
         String subjectCode = requestJson.get("subjectCode").toString();
         String dataTaskString = requestJson.get("dataTask").toString();
         DataTask dataTask = JSON.parseObject(dataTaskString, DataTask.class);
+//        String realPath = dataTask.getRealPath();
         Subject subject = subjectMgmtService.findByCode(subjectCode);
         String siteFtpPath = subject.getFtpFilePath();
         dataTask.setSubjectCode(subject.getSubjectCode());
@@ -78,6 +80,8 @@ public class HttpServiceController {
                 ZipUtil zipUtil = new ZipUtil();
                 try {
                     zipUtil.unZip(sqlfiles, siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId()+"_sql");
+                    zipFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId()+"_sql";
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -89,7 +93,11 @@ public class HttpServiceController {
                 zipFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + ".zip";
                 System.out.println("+++++++++" + zipFile);
 //                System.out.println("=========="+fileName);
-                unZipPath = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId();
+                unZipPath = siteFtpPath + File.separator +"file" + File.separator  + subjectCode + "_" + dataTask.getDataTaskId();
+                File f = new File(siteFtpPath + File.separator +"file" + File.separator);
+                if(!f.exists()){
+                    f.mkdirs();
+                }
 
             }
         }
@@ -118,6 +126,11 @@ public class HttpServiceController {
         }
         dataTask.setDataTaskId(null);
         dataTaskService.insertDataTask(dataTask);
+
+        // 删除上传无用的源文件
+        JSONObject jsonObject = FileUtil.deleteFolder(zipFile);
+        System.out.println("文件路径：" + zipFile);
+        System.out.println("文件删除状态：" + jsonObject.get("code"));
         return 1;
 
 

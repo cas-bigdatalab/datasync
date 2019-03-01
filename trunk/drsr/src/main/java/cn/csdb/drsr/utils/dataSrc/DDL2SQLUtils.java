@@ -7,6 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.jar.JarEntry;
 
 /**
  * @description: generate ddl from table or sql string
@@ -21,6 +22,7 @@ public class DDL2SQLUtils {
     public static String generateDDLFromTable(Connection jdbcConnection, String catalog, String schema,
                                         String table) {
         StringBuilder sb = new StringBuilder();
+        boolean portalIdExist = portalIdExist(jdbcConnection, table, "table");
         sb.append("DROP TABLE IF EXISTS " + table + " ; \n");
         sb.append("CREATE TABLE " + table + "(");
 
@@ -73,7 +75,9 @@ public class DDL2SQLUtils {
 
                 sb.append(",");
             }
-            sb.append("PORTALID VARCHAR(36) COMMENT '中心端系统ID',");
+            if(portalIdExist){
+                sb.append("PORTALID VARCHAR(36) COMMENT '中心端系统ID',");
+            }
         } catch (Exception e) {
             System.out.println(
                     "Error: could not retrieve column metadata for the table '" + table + "' from the backend.");
@@ -149,6 +153,7 @@ public class DDL2SQLUtils {
     public static String generateDDLFromSql(Connection jdbcConnection, String sql, String logicTable) {
         StringBuilder sb = new StringBuilder();
         try {
+            boolean portalIdExist = portalIdExist(jdbcConnection, sql, "sql");
             sb.append("DROP TABLE IF EXISTS " + logicTable + " ;\n ");
             sb.append("CREATE TABLE " + logicTable + "(");
             DatabaseMetaData meta = jdbcConnection.getMetaData();
@@ -229,6 +234,9 @@ public class DDL2SQLUtils {
             if (sb.toString().endsWith(",")) {
                 sb.replace(sb.length()-1, sb.length(), " ");
             }
+            if(portalIdExist){
+                sb.append(", \nPORTALID VARCHAR(36) COMMENT '中心端系统ID'");
+            }
             sb.append("\n);\n");
 
         } catch (Exception e) {
@@ -244,6 +252,7 @@ public class DDL2SQLUtils {
     public static String generateInsertSqlFromSQL(Connection jdbcConnection,  String sql, String logicTable) {
         StringBuilder result = new StringBuilder();
         try {
+            boolean portalIdExist = portalIdExist(jdbcConnection, sql, "sql");
             PreparedStatement stmt = jdbcConnection.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
@@ -263,6 +272,10 @@ public class DDL2SQLUtils {
                         outputValue = outputValue.replaceAll("'", "''");
                         result.append("'" + outputValue + "'");
                     }
+                }
+                if(portalIdExist){
+                    String s = UUID.randomUUID().toString();
+                    result.append(",'" + s + "'");
                 }
                 result.append(");\n");
             }
@@ -285,6 +298,7 @@ public class DDL2SQLUtils {
         StringBuilder result = new StringBuilder();
         //result.append("DELETE FROM " + table + ";");
         try {
+            boolean portalIdExist = portalIdExist(jdbcConnection, table, "table");
             PreparedStatement stmt = jdbcConnection.prepareStatement("SELECT * FROM " + table);
             ResultSet rs = stmt.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
@@ -294,8 +308,10 @@ public class DDL2SQLUtils {
                 for (int j = 1; j <= columnCount; j++) {
                     result.append(metaData.getColumnLabel(j) + ",");
                 }
-                if (result.toString().endsWith(",")) {
+                if (portalIdExist) {
                     result.replace(result.length() - 1, result.length(), ",PORTALID)");
+                } else {
+                    result.replace(result.length() - 1, result.length(), ")");
                 }
                 result.append("VALUES (");
                 for (int i = 0; i < columnCount; i++) {
@@ -311,7 +327,9 @@ public class DDL2SQLUtils {
                         result.append("'" + outputValue + "'");
                     }
                 }
-                result.append(",'" + UUID.randomUUID().toString() + "'");
+                if (portalIdExist) {
+                    result.append(",'" + UUID.randomUUID().toString() + "'");
+                }
                 result.append(");\n");
             }
             rs.close();
@@ -346,4 +364,28 @@ public class DDL2SQLUtils {
         return false;
     }
 
+    private static boolean portalIdExist(Connection jdbcConnection, String string, String type) {
+        String sql = "";
+        if ("table".equals(type)) {
+            sql = "DESC " + string;
+        } else {
+            sql = string;
+        }
+        boolean k = true;
+        try {
+            PreparedStatement preparedStatement = jdbcConnection.prepareStatement(sql);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName = metaData.getColumnName(i);
+                if ("PORTALID".equals(columnName)) {
+                    k = false;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return k;
+    }
 }
