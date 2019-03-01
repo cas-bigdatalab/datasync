@@ -96,6 +96,7 @@
             color: #666;
             height: 39px;
             width: 200px;
+            overflow: hidden;
         }
 
         table thead th {
@@ -297,12 +298,12 @@
                     <!--数据编辑-->
                     <div class="tab-pane" id="editData" style="min-height: 600px;overflow: hidden;" >
                         <div id="alltables" class="tab-pane"
-                             style="margin-left:35px;max-width:1300px;max-height: 300px;overflow: auto;">
+                             style="margin-left:1%;max-width:98%;margin-right:1%;max-height: 300px;overflow: auto;">
 
                         </div>
 
-                        <div id="tableDatil" style="margin-top:2px; margin-left: 2.5%;">
-                            <div class="portlet-title" style="max-width:1300px; min-height:500px;overflow-x: auto">
+                        <div id="tableDatil" style="margin-top:2px;">
+                            <div class="portlet-title" style="max-width:98%;margin-left: 1%;margin-right: 1%;; min-height:500px;overflow-x: auto">
                                 <div id="nodata" style="display:none;margin-left: 25%;margin-top: 8%;">
                                     <span id="span1" style="font-size: 25px">该表暂时没有数据</span>
                                     <span id="span2" style="margin-left: 5%"></span>
@@ -650,7 +651,7 @@
                     var html = "";
                     var list = data.list;
                     for (var i = 0; i < list.length; i++) {
-                        html += "<span style='display:inline-block;width: 320px'><label><input type='radio' name='mapTable'  value='" + list[i] + "' onclick=\"editTableData('" + sub1 + "','" + list[i] + "')\">&nbsp;" + list[i] + "</label></span>"
+                        html += "<span style='display:inline-block;width:16%;'><label><input type='radio' name='mapTable'  value='" + list[i] + "' onclick=\"editTableData('" + sub1 + "','" + list[i] + "')\">&nbsp;" + list[i] + "</label></span>"
                     }
                     $("#alltables").append(html);
                 }
@@ -681,6 +682,8 @@
                     S_columnType = data.columnType;
                     var columnComment = data.columnComment;
                     var dataArry = data.dataDatil;
+                    console.log(dataArry);
+                    var delPORTALID;
                     var s = "<tr class='tr_class' style='background-color:gainsboro;'>";
                     //表头
                     var il = 0;
@@ -689,13 +692,13 @@
                         for (var i = 0; i < arr.length; i++) {
                             if (il <= 5) {
                                 if (arr[i] === "PORTALID") {
-                                    s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13.5%;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                    s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13.5%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                                 } else {
-                                    s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13.5%;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                    s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13.5%;height:70px;'title=" + arr[i] + ">" + arr[i] + "<br/><p title="+columnComment[i]+">"+ columnComment[i]+"</p></th>";
                                     il++;
                                 }
                             } else {
-                                s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13.5%;height:60px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13.5%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                             }
                         }
                     }
@@ -713,30 +716,6 @@
 
                             var eachData = [];
 
-                             var i = 0;
-                             var j = 0;
-                             var n = 0;
-                             for (var k in d) {
-                                 n++;
-                                 if (j <= 5) {
-                                     if (k === arr[i]) {
-                                         if (dataType[i] === "datetime" && d[k] !== null && d[k] !== " ") {
-                                             var date = d[k].split(".");
-                                             d[k] = date[0];
-                                         }
-                                         if (arr[i] === "PORTALID") {
-                                             ss += "<td  style='display:none;' title='" + d[k] + "'>" + d[k] + "</td>";
-                                         } else {
-                                             ss += "<td title='" + d[k] + "'>" + d[k] + "</td>";
-                                             j++;
-                                         }
-                                         eachData.push(d[k]);
-                                         S_updateData.push(d[k]);
-                                     } else {
-                                         if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
-                                             var date = d[arr[i]].split(".");
-                                             d[arr[i]] = date[0];
-                                         }
                             var i = 0;
                             var j = 0;
                             var n = 0;
@@ -748,71 +727,72 @@
                                             var date = d[k].split(".");
                                             d[k] = date[0];
                                         }
-                                        if (arr[i] === "PORTALID") {
+                                        if (k === "PORTALID") {
+                                            delPORTALID = d[k];
                                             ss += "<td  style='display:none;' title='" + d[k] + "'>" + d[k] + "</td>";
                                         } else {
                                             ss += "<td title='" + d[k] + "'>" + d[k] + "</td>";
                                             j++;
                                         }
-                                        // if (dataType[i] === "text" || dataType === "varchar") {
-                                        //     var reg = new RegExp(",", "g"); //创建正则RegExp对象
-                                        //     // var stringObj="终古人民共和国，终古人民";
-                                        //     // var newstr=stringObj.replace(reg,"中国");
-                                        // }
                                         eachData.push(d[k]);
                                         S_updateData.push(d[k]);
-                                        // datajson.colName = arr[i];
-                                        // datajson.colValue = d[k];
-                                        // eachData2.push(datajson);
-
                                     } else {
                                         if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
                                             var date = d[arr[i]].split(".");
                                             d[arr[i]] = date[0];
                                         }
-
                                         if (arr[i] === "PORTALID") {
+                                            delPORTALID = d[arr[i]];
                                             ss += "<td style='display:none;' title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
                                         } else {
                                             ss += "<td title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
                                             j++;
                                         }
+                                        eachData.push(d[arr[i]]);
+                                        S_updateData.push(d[arr[i]]);
+                                    }
+                                    i++;
+                                } else {
+                                    if (k === arr[i]) {
+                                        if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
+                                            var date = d[k].split(".");
+                                            d[k] = date[0];
+                                        }
+                                        if (k === "PORTALID") {
+                                            delPORTALID = d[k];
+                                        }
+                                        eachData.push(d[k]);
+                                        S_updateData.push(d[k]);
+                                    } else {
+                                        if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
+                                            var date = d[arr[i]].split(".");
+                                            d[arr[i]] = date[0];
+                                        }
+                                        if (arr[i] === "PORTALID") {
+                                            delPORTALID = d[arr[i]];
+                                        }
+                                        eachData.push(d[arr[i]]);
+                                        S_updateData.push(d[arr[i]]);
+                                    }
+                                    i++;
+                                }
+                            }
 
-                                         eachData.push(d[arr[i]]);
-                                         S_updateData.push(d[arr[i]]);
-                                     }
-                                     i++;
-                                 } else {
-                                     if (k === arr[i]) {
-                                         if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
-                                             var date = d[k].split(".");
-                                             d[k] = date[0];
-                                         }
-                                         eachData.push(d[k]);
-                                         S_updateData.push(d[k]);
-                                     } else {
-                                         if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
-                                             var date = d[arr[i]].split(".");
-                                             d[arr[i]] = date[0];
-                                         }
-                                         eachData.push(d[arr[i]]);
-                                         S_updateData.push(d[arr[i]]);
-                                     }
-                                     i++;
-                                 }
-                             }
-                             ss += "<td ><a src='#' onclick=\" updateData('" + arr + "','" + tableName + "','" + subjectCode + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">修改 | </a><a href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">增加 | </a><a href='#' onclick=\"checkDada('" + arr + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">查看</a></td></tr>";
-                         }
-                         s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:19%;height:60px;'>操作</th></tr>";
-                         $("#page_div").show();
-                         $("#pagination").show();
-                         fun_limit(subjectCode, tableName, data);
-                     }else {
-                        var t= "<a style='font-size: 17px;background-color: whitesmoke' href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">增加数据</a></th></tr>";
-                         $("#nodata").show();
-                         $("#span2").append(t);
-                         $("#pagination").hide();
-                     }
+                            ss += "<td ><a src='#' onclick=\" updateData('" + arr + "','" + tableName + "','" + subjectCode + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">修改 | </a>" +
+                                "<a href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">增加 | </a>" +
+                                "<a href='#' onclick=\"checkDada('" + arr + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">查看 | </a>" +
+                                "<a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">删除</a></td></tr>";
+                        }
+                        s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:19%;height:60px;'>操作</th></tr>";
+                        $("#page_div").show();
+                        $("#pagination").show();
+                        fun_limit(subjectCode, tableName, data);
+                    } else {
+                        var t = "<a style='font-size: 17px;background-color: whitesmoke' href='#' onclick=\"addTableData('" + arr + "','" + dataType + "','" + columnComment + "','" + tableName + "','" + subjectCode + "','" + pkColumn + "','" + autoAdd + "')\">增加数据</a></th></tr>";
+                        $("#nodata").show();
+                        $("#span2").append(t);
+                        $("#pagination").hide();
+                    }
 
                     $("#thead_id").append(s);
                     $("#fileBody").append(ss);
@@ -820,6 +800,36 @@
 
                 }
             });
+        }
+
+        //删除数据
+        function deleteDate(delPORTALID, tableName, subjectCode) {
+
+            bootbox.confirm("<span style='font-size: 16px'>确认要删除此条记录吗?</span>", function (r) {
+                if (r) {
+                    //获得当前页码
+                    var currentPage = $("#currentPageNo").html();
+                    $.ajax({
+                        url: "${ctx}/deleteData",
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            "subjectCode": subjectCode,
+                            "tableName": tableName,
+                            "delPORTALID": delPORTALID
+                        },
+                        success: function (data) {
+                            if (data.data === "1") {
+                                toastr.success("删除成功!");
+                                editTableData(subjectCode, tableName, currentPage);
+                            }
+                            if (data.data === "0") {
+                                toastr.error("删除失败！");
+                            }
+                        }
+                    })
+                }
+            })
         }
 
         function checkDada(columns, dataType, columnComment, m, n) {
@@ -893,7 +903,7 @@
             strs2 = columns.split(",");
             var dataTypeArr = dataType.split(",");
             var columnComments = columnComment.split(",");
-            var alert_column=[];
+            var alert_column = [];
             var s_head = "<input style='width:22%;' type='text' value='字段名' readonly='true'/><input style='width:22%;' type='text'  value='字段类型' readonly='true'/><input style='width:22%;' type='text'  value='注释' readonly='true'/><input style='width:22%;' type='text'  value='字段值' readonly='true'/><br/>";
 
             var ss = "<input type='text' name='tableName'style='display:none;' value=" + tableName + " />";
@@ -905,9 +915,9 @@
                 } else {
                     ss += "<input style='width:22%;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='width:22%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='width:22%;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input title='" + strs[i] + "'style='width:22%;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
                 }
-             alert_column.push(strs2[i]);
+                alert_column.push(strs2[i]);
             }
-            var s_save = "<input class='eee'id='btn_save'type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataType + "','" + currentPage + "','"+alert_column+"')\"/>";
+            var s_save = "<input class='eee'id='btn_save'type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataType + "','" + currentPage + "','" + alert_column + "')\"/>";
 
             $("#div_head").append(s_head);
             $("#form_id").append(ss);
@@ -962,6 +972,8 @@
 
         //增加数据
         function addTablefuntion() {
+            //获得当前页码
+            var currentPage = $("#currentPageNo").html();
             var dataArr = [];
             $('#addTable input').each(function () {
                 dataArr.push($(this).val());
@@ -1001,7 +1013,7 @@
                             }
                         }
                         if (bytesCount.length > 255) {
-                            toastr.warning(S_column[i]+"字段超出范围！");
+                            toastr.warning(S_column[i] + "字段超出范围！");
                             return;
                         }
                     }
@@ -1021,7 +1033,7 @@
                             }
                         }
                         if (bytesCount > 65535) {
-                            toastr.warning(S_column[i]+" 字段超出范围！");
+                            toastr.warning(S_column[i] + " 字段超出范围！");
                             return;
                         }
                     }
@@ -1040,7 +1052,7 @@
                             }
                         }
                         if (bytesCount > 4294967295) {
-                            toastr.warning(S_column[i]+" 字段超出范围！");
+                            toastr.warning(S_column[i] + " 字段超出范围！");
                             return;
                         }
                     }
@@ -1059,7 +1071,7 @@
                             }
                         }
                         if (bytesCount > 16777215) {
-                            toastr.warning(S_column[i]+" 字段超出范围！");
+                            toastr.warning(S_column[i] + " 字段超出范围！");
                             return;
                         }
                     }
@@ -1067,18 +1079,18 @@
                     // bit数据类型判断
                     if (dataArr[i] !== "" && datacon[i] !== null && S_dataType[i] === "bit") {
                         if (dataArr[i] !== "0" && dataArr[i] !== "1") {
-                            toastr.warning(S_column[i]+" 字段应是boolean类型！");
+                            toastr.warning(S_column[i] + " 字段应是boolean类型！");
                             return;
                         }
                     }
                     if (datacon[i] !== null && datacon[i] !== "" && S_dataType[i] === "tinyint") {
                         if (!isNaN(datacon[i])) {
                             if (parseInt(datacon[i]) > 127 || parseInt(datacon[i]) < -128) {
-                                toastr.warning(S_column[i]+" 字段超出范围！");
+                                toastr.warning(S_column[i] + " 字段超出范围！");
                                 return;
                             }
                         } else {
-                            toastr.warning(S_column[i]+" 字段应是tinyint类型！");
+                            toastr.warning(S_column[i] + " 字段应是tinyint类型！");
                             return;
                         }
                     }
@@ -1089,16 +1101,16 @@
                             var result = datacon[i].match(/^(-|\+)?\d+$/);
                             if (result == null) {
                                 //警告消息提示s，默认背景为橘黄色
-                                toastr.warning(S_column[i]+" 字段应是smallint类型！");
+                                toastr.warning(S_column[i] + " 字段应是smallint类型！");
                                 return;
                             } else {
                                 if (parseInt(datacon[i]) > 32767 || parseInt(datacon[i]) < -32768) {
-                                    toastr.warning(S_column[i]+" 字段超出范围！");
+                                    toastr.warning(S_column[i] + " 字段超出范围！");
                                     return;
                                 }
                             }
                         } else {
-                            toastr.warning(S_column[i]+" 字段应是数字类型！");
+                            toastr.warning(S_column[i] + " 字段应是数字类型！");
                             return;
                         }
                     }
@@ -1109,16 +1121,16 @@
                             var result = datacon[i].match(/^(-|\+)?\d+$/);
                             if (result == null) {
                                 //警告消息提示s，默认背景为橘黄色
-                                toastr.warning(S_column[i]+" 字段应是mediumint类型！");
+                                toastr.warning(S_column[i] + " 字段应是mediumint类型！");
                                 return;
                             } else {
                                 if (parseInt(datacon[i]) > 8388607 || parseInt(datacon[i]) < -8388608) {
-                                    toastr.warning(S_column[i]+" 字段超出范围！");
+                                    toastr.warning(S_column[i] + " 字段超出范围！");
                                     return;
                                 }
                             }
                         } else {
-                            toastr.warning(S_column[i]+" 字段应是数字类型！");
+                            toastr.warning(S_column[i] + " 字段应是数字类型！");
                             return;
                         }
                     }
@@ -1128,7 +1140,7 @@
                             var result = datacon[i].match(/^(-|\+)?\d+$/);
                             if (result == null) {
                                 //警告消息提示s，默认背景为橘黄色
-                                toastr.warning(S_column[i]+" 字段应是bigint类型！");
+                                toastr.warning(S_column[i] + " 字段应是bigint类型！");
                                 return;
                             }
                             // else {
@@ -1138,7 +1150,7 @@
                             //     }
                             // }
                         } else {
-                            toastr.warning(S_column[i]+" 字段应是数字类型！");
+                            toastr.warning(S_column[i] + " 字段应是数字类型！");
                             return;
                         }
                     }
@@ -1147,11 +1159,11 @@
                         if (!isNaN(datacon[i])) {
                             var reg = /^-?\d+$/;
                             if (!reg.exec(datacon[i])) {
-                                toastr.warning(S_column[i]+" 字段应是int或integer类型！");
+                                toastr.warning(S_column[i] + " 字段应是int或integer类型！");
                                 return;
                             }
                         } else {
-                            toastr.warning(S_column[i]+" 字段应是数字类型！");
+                            toastr.warning(S_column[i] + " 字段应是数字类型！");
                             return;
                         }
                     }
