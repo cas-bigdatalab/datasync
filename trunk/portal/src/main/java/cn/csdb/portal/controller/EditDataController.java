@@ -262,4 +262,20 @@ public class EditDataController {
         }
           return jsonObject;
     }
+
+    @RequestMapping("deleteData")
+    @ResponseBody
+    public JSONObject deleteData(String subjectCode,String tableName,String delPORTALID){
+        JSONObject jsonObject=new JSONObject();
+        System.out.println(subjectCode+",,,"+tableName+",,,"+delPORTALID);
+        DataSrc datasrc=getDataSrc(subjectCode);
+        int i=dataSrcService.deleteDate(tableName,delPORTALID,datasrc);
+        if(i==1){
+            jsonObject.put("data","1");
+        }else{
+            jsonObject.put("data","0");
+        }
+        return jsonObject;
+    }
+
 }
