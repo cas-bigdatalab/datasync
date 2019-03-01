@@ -926,6 +926,11 @@
             },
             check: {
                 enable: true
+            },
+            callback : {
+                onAsyncSuccess: zTreeOnAsyncSuccess,//异步加载完成调用
+                aOnAsyncError : zTreeOnAsyncError,//加载错误的fun
+                onCheck : onCheck
             }
         };
 

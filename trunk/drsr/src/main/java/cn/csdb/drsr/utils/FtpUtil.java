@@ -51,16 +51,17 @@ public class FtpUtil {
         Download_New_Failed;    //全新下载文件失败
     }
 
-    public static FTPClient ftpClient = new FTPClient();
+    public  FTPClient ftpClient;
 
     public boolean connect(String hostname, int port, String username, String password,String taskID) throws IOException {
-        ftpClient.connect(hostname, port);
-        ftpClient.setControlEncoding("GBK");
-        if (FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
-            if (ftpClient.login(username, password)) {
+        ftpClient=new FTPClient();
+            ftpClient.connect(hostname, port);
+            ftpClient.setControlEncoding("GBK");
+            if (FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
+                if (ftpClient.login(username, password)) {
 //                ftpClientList.put(taskID,ftpClient);
-                return true;
-            }
+                    return true;
+                }
         }
         disconnect();
         return false;
@@ -68,7 +69,7 @@ public class FtpUtil {
 
     public void disconnect() throws IOException {
             if (ftpClient.isConnected()) {
-            ftpClient.disconnect();
+                ftpClient.disconnect();
         }
     }
 

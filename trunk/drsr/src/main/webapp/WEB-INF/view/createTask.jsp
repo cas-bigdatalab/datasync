@@ -822,7 +822,6 @@
                     },1000);//延时1.5秒
                 }
             }
-            debugger
             $("#layui-layer-shade"+index+"").remove();
             $("#layui-layer"+index+"").remove();
         };

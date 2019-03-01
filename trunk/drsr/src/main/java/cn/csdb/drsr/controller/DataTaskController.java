@@ -163,7 +163,34 @@ public class DataTaskController {
     @RequestMapping(value="/delete")
     @ResponseBody
     public int deleteDatatask(String datataskId){
-        return dataTaskService.deleteDatataskById(datataskId);
+        List<DataTask> dataTaskList=dataTaskService.getdatataskById(datataskId);
+        //删除本地生成的文件夹
+        if(dataTaskList.size()!=0){
+            if("file".equals(dataTaskList.get(0).getDataTaskType())){
+                File file=new File(dataTaskList.get(0).getSqlFilePath().replaceAll("%_%","/"));
+                if(file.exists()){
+                    file.delete();
+                }
+            }else{
+                String path=dataTaskList.get(0).getFilePath().replaceAll("%_%","/");
+                File file=new File(path.substring(0,path.lastIndexOf("/")));
+                File[] fs = file.listFiles();
+                for(File f:fs){
+                    if(f.exists()){
+                        f.delete();
+                    }
+                }
+                if(file.exists()){
+                    file.delete();//删除文件夹
+                }
+
+            }
+        }
+        int result=dataTaskService.deleteDatataskById(datataskId);
+        if("1".equals(result+"")){
+            //dataTaskService.get
+        }
+        return result;
     }
 
     /**

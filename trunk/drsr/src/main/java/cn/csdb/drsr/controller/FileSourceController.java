@@ -56,6 +56,12 @@ public class FileSourceController {
     @ResponseBody
     String add(String dataSourceName, String dataSourceType, String fileType, String filePath) {
         logger.debug("新增功能开始");
+        filePath=filePath.replace("%_%",File.separator);
+        int start=filePath.length()-1;
+        int end=filePath.length();
+        if(filePath.substring(start,end).equals(File.separator+"") || filePath.substring(start,end).equals("/")){
+            filePath=filePath.substring(0,filePath.length()-1);
+        }
         String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
         String SubjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         Date current_date = new Date();

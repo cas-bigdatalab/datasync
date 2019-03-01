@@ -193,5 +193,15 @@ public class DataTaskDao {
         return flag;
     }
 
+    public List<DataTask> getDataTaskById(String taskId){
+        StringBuffer sql = new StringBuffer("select * from t_datatask where DataTaskId=?");
+        List<Object> params = Lists.newArrayList();
+        params.add(taskId);
+        List<DataTask> list = jdbcTemplate.query(sql.toString(), params.toArray(), new DataTaskMapper());
+        //DataTask dataTask=
+        return list;
+
+    }
+
 
 }

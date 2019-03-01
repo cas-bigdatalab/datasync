@@ -283,22 +283,22 @@
                 {{if value.logPath  == ""}}
                 <button type="button" kkid="{{value.dataTaskId}}Pause" style="display: none;" class="btn red btn-xs" onclick="pauseUpLoading('{{value.dataTaskId}}',new Date().getTime());"><i class="glyphicon glyphicon-pause"></i>&nbsp;暂停</button>
                 <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}" resupload="one"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
-                <button type="button" class="btn purple btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
+                <button type="button" kkid="{{value.dataTaskId}}Edit" class="btn purple btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
                 <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}','{{value.dataSrc.dataSourceName}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-                <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+                <button type="button" kkid="{{value.dataTaskId}}Delete" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 {{else if value.logPath  != "" }}
                 <button type="button" kkid="{{value.dataTaskId}}Pause" style="display: none;"  class="btn red btn-xs" onclick="pauseUpLoading('{{value.dataTaskId}}',new Date().getTime());"><i class="glyphicon glyphicon-pause"></i>&nbsp;暂停</button>
                 <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}" resupload="one"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
-                <button type="button" class="btn purple btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
+                <button type="button" kkid="{{value.dataTaskId}}Edit" class="btn purple btn-xs" onclick="editData('{{value.dataTaskId}}');"><i class="fa fa-edit"></i>&nbsp;编辑</button>
                 <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}','{{value.dataSrc.dataSourceName}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-                <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+                <button type="button" kkid="{{value.dataTaskId}}Delete" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="window.location.href='${ctx}/fileResource/downloadFile?dataTaskId={{value.dataTaskId}}'"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
             {{/if}}
             {{else if value.status  == 1 }}
                 <button type="button" kkid="{{value.dataTaskId}}Pause" style="display: none;"  class="btn red btn-xs" onclick="pauseUpLoading('{{value.dataTaskId}}',new Date().getTime());"><i class="glyphicon glyphicon-pause"></i>&nbsp;暂停</button>
                 <button type="button" class="btn green upload-data btn-xs" keyIdTd="{{value.dataTaskId}}" keyDataType="{{value.dataTaskType}}" resupload="two"><i class="glyphicon glyphicon-upload"></i>&nbsp;上传</button>
                 <button type="button" class="btn  edit-data btn-xs blue" onclick="showData('{{value.dataTaskId}}','{{value.dataTaskType}}','{{value.dataSrc.dataSourceName}}')" ><i class="glyphicon glyphicon-eye-open"></i>&nbsp;查看</button>
-                <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
+                <button type="button" kkid="{{value.dataTaskId}}Delete" class="btn  btn-xs red remove-data" onclick="removeData('{{value.dataTaskId}}');"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                 <button type="button" class="btn  btn-xs yellow-lemon remove-data" onclick="window.location.href='${ctx}/fileResource/downloadFile?dataTaskId={{value.dataTaskId}}'"><i class="glyphicon glyphicon-book"></i>&nbsp;日志</button>
             {{/if}}
 
@@ -313,8 +313,9 @@
     <script type="text/javascript">
         var taskProcessStr="";
         var requestStr="";
-        var dataSourceName=""
-        var dataSourceStatus=""
+        var dataSourceName="";
+        var pageNum=1;
+        var dataSourceStatus="";
         var uploadListFlag = $("#uploadListFlag")
         function relCreateTask(){
             window.location.href="${ctx}/createTask";
@@ -407,7 +408,7 @@
                                                     if(data =="1"){
                                                         toastr["success"]("导入成功！");
                                                         $("."+souceID).text("已导入")
-                                                        tableConfiguration2(1,dataSourceName,dataSourceStatus)
+                                                        tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
                                                         return
                                                     }else {
                                                         $("."+souceID).text("导入失败")
@@ -417,7 +418,7 @@
                                                     if(data =="1"){
                                                         toastr["success"]("上传成功！");
                                                         $("."+souceID).text("已上传")
-                                                        tableConfiguration2(1,dataSourceName,dataSourceStatus)
+                                                        tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
                                                         return
                                                     }else {
                                                         $("."+souceID).text("上传失败")
@@ -457,7 +458,7 @@
                                         if(data =="1"){
                                             toastr["success"]("导入成功！");
                                             $("."+souceID).text("已导入")
-                                            tableConfiguration2(1,dataSourceName,dataSourceStatus)
+                                            tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
                                         }else {
                                             $("."+souceID).text("导入失败")
                                             return
@@ -466,7 +467,7 @@
                                         if(data =="1"){
                                             toastr["success"]("上传成功！");
                                             $("."+souceID).text("已上传")
-                                            tableConfiguration2(1,dataSourceName,dataSourceStatus)
+                                            tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
                                         }else if(data =="3"){
                                            // toastr["error"]("暂停成功！");
                                         }else if(data=="0"){
@@ -517,21 +518,21 @@
                                             if(data =="1"){
                                                 toastr["success"]("导入成功！");
                                                 $("."+souceID).text("已导入")
-                                                tableConfiguration2(1,dataSourceName,dataSourceStatus)
-                                                return
+                                                tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
+                                              //  return
                                             }else {
                                                 $("."+souceID).text("导入失败")
-                                                return
+                                             //   return
                                             }
                                         }else {
                                             if(data =="1"){
                                                 toastr["success"]("上传成功！");
                                                 $("."+souceID).text("已上传")
-                                                tableConfiguration2(1,dataSourceName,dataSourceStatus)
-                                                return
+                                                tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
+                                               // return
                                             }else {
                                                 $("."+souceID).text("上传失败")
-                                                return
+                                             //   return
                                             }
                                         }
                                     },
@@ -563,21 +564,21 @@
                                 if(data =="1"){
                                     toastr["success"]("导入成功！");
                                     $("."+souceID).text("已导入")
-                                    tableConfiguration2(1,dataSourceName,dataSourceStatus)
+                                    tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
                                 }else {
                                     $("."+souceID).text("导入失败")
-                                    return
+                                   // return
                                 }
                             }else {
                                 if(data =="1"){
                                     toastr["success"]("上传成功！");
                                     $("."+souceID).text("已上传")
                                     // window.location.reload();
-                                    tableConfiguration2(1,dataSourceName,dataSourceStatus)
+                                    tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
                                 }else if(data=="0"){
                                     stopSetOuts();
                                     toastr["error"]("连接FTP出错：请检查网络连接！");
-                                    tableConfiguration2(1,dataSourceName,dataSourceStatus)
+                                    tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
                                     $("[kkid="+souceID+"Loading]")[0].style.display="none";
                                     $("[kkid="+souceID+"LoadingFail]")[0].style.display="block";
                                     $("."+souceID).text("ftp断开")
@@ -586,7 +587,7 @@
                                     $("."+souceID).text("上传失败")
                                 }else {
                                     $("."+souceID).text("上传失败")
-                                    return
+                                 //   return
                                 }
                             }
 
@@ -709,7 +710,7 @@
         var setouts;
         var blockListSize=0;
         function getProcess(keyID,souceID) {
-            setout= setInterval(function () {
+            setouts= setInterval(function () {
                 $.ajax({
                     url:"${ctx}/ftpUploadProcess",
                     type:"POST",
@@ -723,36 +724,55 @@
                         if(dataJson.blockList.length>=blockListSize){
                             blockListSize=dataJson.blockList.length;
                         }else if(dataJson.blockList.length<blockListSize){
-                            window.location.reload();
+                            // tableConfiguration2(2)
+                            // stopSetOuts();
+                            // window.location.reload();
+                          //  tableConfiguration2(pageNum,dataSourceName,dataSourceStatus);
                         }
 
                         if(dataJson.process[0] >= 100 && dataJson.blockList.length==0){
                             $("."+souceID).text("上传成功")
                             stopSetOuts();
-                            window.location.reload();
+                            // window.location.reload();
+                            tableConfiguration2(pageNum,dataSourceName,dataSourceStatus);
                         }
-                       if(dataJson.process[0]==0 && dataJson.process[0]!=99){
-                           $("."+souceID).text("正在上传");
-                           $("[kkid="+souceID+"Loading]")[0].style.display="block";
-                           $("[kkid="+souceID+"Pause]")[0].style.display="inline";
-                           $("[keyIdTd="+souceID+"]")[0].style.display="none";
-                       }else if(dataJson.process[0]==99){
-                           $("."+souceID).text("解压中...");
-                           $("[kkid="+souceID+"Unziping]")[0].style.display="block";
-                           $("[kkid="+souceID+"Pause]")[0].style.display="none";
-                       }else{
-                           $("."+souceID).text("正在上传");
-                           $("[keyIdTd="+souceID+"]")[0].style.display="none";
-                           $("[kkid="+souceID+"Loading]")[0].style.display="none";
-                           $("[kkid="+souceID+"Pause]")[0].style.display="inline";
-                            $("[kkid="+souceID+"]")[0].style.width=dataJson.process[0]+"%";
-                            $("[kkid="+souceID+"Text]")[0].textContent=dataJson.process[0]+"%";
-                       }
+
+                        try{
+                            if(dataJson.process[0]==0 && dataJson.process[0]!=99){
+                                $("."+souceID).text("正在上传");
+                                $("[kkid="+souceID+"Loading]")[0].style.display="block";
+                                $("[kkid="+souceID+"Pause]")[0].style.display="inline";
+                                $("[kkid="+souceID+"Delete]")[0].style.display="none";//隐藏删除按钮
+                              //  $("[kkid="+souceID+"Edit]")[0].style.display="none";//隐藏编辑按钮
+                                $("[keyIdTd="+souceID+"]")[0].style.display="none";
+                            }else if(dataJson.process[0]==99){
+                                $("."+souceID).text("解压中...");
+                                $("[kkid="+souceID+"Unziping]")[0].style.display="block";
+                                $("[kkid="+souceID+"Pause]")[0].style.display="none";
+                                $("[kkid="+souceID+"Delete]")[0].style.display="none";//隐藏删除按钮
+                                $("[kkid="+souceID+"Edit]")[0].style.display="none";//隐藏编辑按钮
+                            }else{
+                                $("."+souceID).text("正在上传");
+                                $("[keyIdTd="+souceID+"]")[0].style.display="none";
+                                $("[kkid="+souceID+"Loading]")[0].style.display="none";
+                                $("[kkid="+souceID+"Pause]")[0].style.display="inline";
+                                $("[kkid="+souceID+"Delete]")[0].style.display="none";//隐藏删除按钮
+                                if($("[kkid="+souceID+"Edit]").length!=0){//第二次上传不需要隐藏
+                                    $("[kkid="+souceID+"Edit]")[0].style.display="none";//隐藏编辑按钮
+                                }
+                                $("[kkid="+souceID+"]")[0].style.width=dataJson.process[0]+"%";
+                                $("[kkid="+souceID+"Text]")[0].textContent=dataJson.process[0]+"%";
+                            }
+                        }catch (e) {
+                            requestStr="";
+                            stopSetOuts();
+                            console.log(e);
+                        }
 
                     }
                 })
             },1000)
-            setouts=setout;
+           // setouts=setout;
         }
 
         function stopSetOuts(){
@@ -763,6 +783,8 @@
         }
 
         function tableConfiguration2(num,datataskType,status) {
+            stopSetOuts();
+            pageNum=num;
             $.ajax({
                 url:"${ctx}/datatask/list",
                 type:"GET",
@@ -853,6 +875,8 @@
 
         //暂停
        function pauseUpLoading(taskId,time){
+           // clearInterval();
+           stopSetOuts();
            $("."+taskId).text("已暂停");
            $.ajax({
                url:"${ctx}/pauseUpLoading",
@@ -862,7 +886,8 @@
                    time:time
                },
                success:function (data) {
-                  //toastr["success"]("任务"+taskId+":  已暂停");
+                  toastr["success"]("任务"+taskId+":  已暂停");
+                  tableConfiguration2(pageNum,dataSourceName,dataSourceStatus);
                },
                error:function () {
                    console.log("请求失败")

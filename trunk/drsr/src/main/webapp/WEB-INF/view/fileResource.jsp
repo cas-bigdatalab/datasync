@@ -408,7 +408,6 @@
                                         tableConfiguration();
                                     }else if(jsonData=="2"){
                                         $("#dataSourceName");
-                                        debugger
                                         toastr["error"]("数据源名称已存在！");
                                     } else {
                                         toastr["error"]("编辑失败");

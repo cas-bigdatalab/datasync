@@ -56,7 +56,7 @@ public class DataSyncController {
 
     private Logger logger = LoggerFactory.getLogger(DataSyncController.class);
 
-    private  static FtpUtil ftpUtil=new FtpUtil();
+    public FtpUtil ftpUtil=new FtpUtil();
 
 
 
@@ -231,7 +231,7 @@ public class DataSyncController {
                         }
                         dataTask.setStatus("1");
 //                        ftpUtil.removeDirectory(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+".zip");
-                        ftpUtil.deleteFile(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+".zip");
+                       // ftpUtil.deleteFile(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+".zip");
                         dataTaskService.update(dataTask);
                         ftpUtil.numberOfRequest.remove(dataTask.getDataTaskId()+"Block");
                         ftpUtil.progressMap.put(dataTask.getDataTaskId(),Long.valueOf(100));
