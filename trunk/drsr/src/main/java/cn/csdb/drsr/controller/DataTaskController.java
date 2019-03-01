@@ -264,6 +264,7 @@ public class DataTaskController {
         if(flag < 0){
             return  jsonObject;
         }
+         executeTask(datataskName);
         return jsonObject;
     }
 
@@ -466,6 +467,7 @@ public class DataTaskController {
         if(flag < 0){
             return  jsonObject;
         }
+        executeTask(datataskId);
         return jsonObject;
     }
 

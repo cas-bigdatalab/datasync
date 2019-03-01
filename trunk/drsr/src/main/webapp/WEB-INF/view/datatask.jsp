@@ -387,62 +387,41 @@
                         $("[kkid="+souceID+"Text]")[0].textContent="0%";
                         uploadListFlag.append("<span name="+keyID+" valFlag='false'></span>")
                         if(keyType =="mysql"){
-
                             console.log("mysql数据源")
                             $.ajax({
-                                url:"${ctx}/datatask/" + souceID,
+                                url:"${ctx}/ftpUpload",
                                 type:"POST",
-                                dataType:"JSON",
+                                data:{dataTaskId:souceID,processId:keyID},
                                 success:function (data) {
-                                    console.log("aaaaaaaaaaaaa")
-                                    if (data.result == 'true') {
-
-                                        $.ajax({
-                                            url:"${ctx}/ftpUpload",
-                                            type:"POST",
-                                            data:{dataTaskId:souceID,processId:keyID},
-                                            success:function (data) {
-                                                var data =JSON.parse(data)
-                                                $("[name="+keyID+"]").attr("valFlag","true")
-                                                if(keyType == "mysql"){
-                                                    if(data =="1"){
-                                                        toastr["success"]("导入成功！");
-                                                        $("."+souceID).text("已导入")
-                                                        tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
-                                                        return
-                                                    }else {
-                                                        $("."+souceID).text("导入失败")
-                                                        return
-                                                    }
-                                                }else {
-                                                    if(data =="1"){
-                                                        toastr["success"]("上传成功！");
-                                                        $("."+souceID).text("已上传")
-                                                        tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
-                                                        return
-                                                    }else {
-                                                        $("."+souceID).text("上传失败")
-                                                        return
-                                                    }
-                                                }
-
-
-                                            },
-                                            error:function () {
-                                                console.log("请求失败")
-                                            }
-                                        })
-                                       // $("."+souceID).text("正在上传");
-                                        getProcess(keyID,souceID);
-
+                                    var data =JSON.parse(data)
+                                    $("[name="+keyID+"]").attr("valFlag","true")
+                                    if(keyType == "mysql"){
+                                        if(data =="1"){
+                                            toastr["success"]("导入成功！");
+                                            $("."+souceID).text("已导入")
+                                            tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
+                                            return
+                                        }else {
+                                            $("."+souceID).text("导入失败")
+                                            return
+                                        }
                                     }else {
-                                        return
+                                        if(data =="1"){
+                                            toastr["success"]("上传成功！");
+                                            $("."+souceID).text("已上传")
+                                            tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
+                                            return
+                                        }else {
+                                            $("."+souceID).text("上传失败")
+                                            return
+                                        }
                                     }
                                 },
                                 error:function () {
                                     console.log("请求失败")
                                 }
                             })
+
                         }else{
                             console.log("文件数据源")
                             $.ajax({
@@ -501,50 +480,33 @@
                 uploadListFlag.append("<span name="+keyID+" valFlag='false'></span>")
                 if(keyType =="mysql"){
                     $.ajax({
-                        url:"${ctx}/datatask/" + souceID,
+                        url:"${ctx}/ftpUpload",
                         type:"POST",
-                        dataType:"JSON",
+                        timeout:600000,
+                        data:{dataTaskId:souceID,processId:keyID},
                         success:function (data) {
-                            if (data.result == 'true') {
-                                $.ajax({
-                                    url:"${ctx}/ftpUpload",
-                                    type:"POST",
-                                    timeout:600000,
-                                    data:{dataTaskId:souceID,processId:keyID},
-                                    success:function (data) {
-                                        var data =JSON.parse(data)
-                                        $("[name="+keyID+"]").attr("valFlag","true")
-                                        if(keyType == "mysql"){
-                                            if(data =="1"){
-                                                toastr["success"]("导入成功！");
-                                                $("."+souceID).text("已导入")
-                                                tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
-                                              //  return
-                                            }else {
-                                                $("."+souceID).text("导入失败")
-                                             //   return
-                                            }
-                                        }else {
-                                            if(data =="1"){
-                                                toastr["success"]("上传成功！");
-                                                $("."+souceID).text("已上传")
-                                                tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
-                                               // return
-                                            }else {
-                                                $("."+souceID).text("上传失败")
-                                             //   return
-                                            }
-                                        }
-                                    },
-                                    error:function () {
-                                        console.log("请求失败")
-                                    }
-                                })
-                               // $("."+souceID).text("正在上传");
-                                getProcess(keyID,souceID);
-
+                            var data =JSON.parse(data)
+                            $("[name="+keyID+"]").attr("valFlag","true")
+                            if(keyType == "mysql"){
+                                if(data =="1"){
+                                    toastr["success"]("导入成功！");
+                                    $("."+souceID).text("已导入")
+                                    tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
+                                    //  return
+                                }else {
+                                    $("."+souceID).text("导入失败")
+                                    //   return
+                                }
                             }else {
-                                return
+                                if(data =="1"){
+                                    toastr["success"]("上传成功！");
+                                    $("."+souceID).text("已上传")
+                                    tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
+                                    // return
+                                }else {
+                                    $("."+souceID).text("上传失败")
+                                    //   return
+                                }
                             }
                         },
                         error:function () {
