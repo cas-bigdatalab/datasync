@@ -77,17 +77,21 @@
             border-style: solid;
             /*border-color: #fbe6e6;*/
             border-color: #ddd;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
             width: 30px;
             height: 39px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
 
         table {
+            table-layout:fixed;
             border-collapse: collapse;
             margin: 0 auto;
             text-align: center;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
 
         table td, table th {
@@ -96,7 +100,15 @@
             color: #666;
             height: 39px;
             width: 200px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
             overflow: hidden;
+        }
+        #fileBody tr td{
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            /*border: 1px red solid;*/
         }
 
         table thead th {
@@ -118,7 +130,7 @@
         }
 
         #form_id input {
-            width: 200px;
+            /*width: 200px;*/
             height: 39px;
             border-collapse: collapse;
             text-align: center;
@@ -303,12 +315,12 @@
                         </div>
 
                         <div id="tableDatil" style="margin-top:2px;">
-                            <div class="portlet-title" style="max-width:98%;margin-left: 1%;margin-right: 1%;; min-height:500px;overflow-x: auto">
+                            <div class="portlet-title" style="max-width:98%;margin-left: 1%;margin-right: 1%; max-height:800px;overflow-x: auto">
                                 <div id="nodata" style="display:none;margin-left: 25%;margin-top: 8%;">
                                     <span id="span1" style="font-size: 25px">该表暂时没有数据</span>
                                     <span id="span2" style="margin-left: 5%"></span>
                                 </div>
-                                <table border="1" id="table1" class="table table-bordered data-table">
+                                <table border="1" id="table1" class="table table-bordered data-table" style="width:100%;">
                                     <thead id="thead_id">
                                     </thead>
 
@@ -354,7 +366,7 @@
 
                         <div class="tab-content"
                              style="background-color: white;min-height:300px;max-height:50%;padding-top: 20px ;">
-                            <div style="margin-left: 5%;">
+                            <div style="margin-left: 1%;margin-right: 1%;width:98%;">
                                 <%--style="margin-left: 5%;"--%>
                                 <div id="div_head">
 
@@ -386,16 +398,16 @@
 
                     </div>
 
-                    <div class="modal-body" style="overflow-x:scroll;">
+                    <div class="modal-body" style="overflow:scroll;max-height:600px;">
                         <div class="tab-content"
-                             style="background-color: white;min-height:300px;max-height:60%;padding-top: 20px ;">
-                            <div class="tab-pane active" id="checkData1" style=" ">
+                             style="background-color: white;padding-top: 20px ;">
+                            <div class="tab-pane active" id="checkData1" style="width: 98%;margin-right: 1%;margin-left: 1%; ">
                                 <table border="1" id="checkTable">
                                     <thead>
-                                    <th>字段名</th>
-                                    <th>字段类型</th>
-                                    <th>注释</th>
-                                    <th>字段值</th>
+                                    <th style="width:20%;" >字段名</th>
+                                    <th style="width:20%;">字段类型</th>
+                                    <th style="width:20%;">注释</th>
+                                    <th style="width:40%;">字段值</th>
                                     </thead>
                                     <tbody>
 
@@ -426,10 +438,10 @@
                             <div class="tab-pane active" id="adddata" style=" ">
                                 <table border="1" id="addTable">
                                     <thead>
-                                    <th>字段名</th>
-                                    <th>字段类型</th>
-                                    <th>注释</th>
-                                    <th>字段值</th>
+                                    <th style="width:20%;">字段名</th>
+                                    <th style="width:20%;">字段类型</th>
+                                    <th style="width:20%;">注释</th>
+                                    <th style="width:40%;">字段值</th>
                                     </thead>
                                     <tbody>
 
@@ -731,7 +743,7 @@
                                             delPORTALID = d[k];
                                             ss += "<td  style='display:none;' title='" + d[k] + "'>" + d[k] + "</td>";
                                         } else {
-                                            ss += "<td title='" + d[k] + "'>" + d[k] + "</td>";
+                                            ss += "<td title='" + d[k] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp>" + d[k] + "</xmp></td>";
                                             j++;
                                         }
                                         eachData.push(d[k]);
@@ -745,7 +757,7 @@
                                             delPORTALID = d[arr[i]];
                                             ss += "<td style='display:none;' title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
                                         } else {
-                                            ss += "<td title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
+                                            ss += "<td title='" + d[arr[i]] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp>" + d[arr[i]] + "</xmp></td>";
                                             j++;
                                         }
                                         eachData.push(d[arr[i]]);
@@ -846,9 +858,9 @@
             var s = "";
             for (var i = 0; i < strs2.length; i++) {
                 if (strs2[i] === "PORTALID") {
-                    s += "<tr style='display:none;'><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td>" + strs[i] + "</td><tr>";
+                    s += "<tr style='display:none;'><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td>" + strs[i] + "</td></tr>";
                 } else {
-                    s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td title='" + strs[i] + "'>" + strs[i] + "</td><tr>";
+                    s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td title='" + strs[i] + "'>" + strs[i] + "</td></tr>";
                 }
             }
             $("#checkTable tbody").append(s);
@@ -904,7 +916,7 @@
             var dataTypeArr = dataType.split(",");
             var columnComments = columnComment.split(",");
             var alert_column = [];
-            var s_head = "<input style='width:22%;' type='text' value='字段名' readonly='true'/><input style='width:22%;' type='text'  value='字段类型' readonly='true'/><input style='width:22%;' type='text'  value='注释' readonly='true'/><input style='width:22%;' type='text'  value='字段值' readonly='true'/><br/>";
+            var s_head = "<input style='width:20%;' type='text' value='字段名' readonly='true'/><input style='width:20%;' type='text'  value='字段类型' readonly='true'/><input style='width:20%;' type='text'  value='注释' readonly='true'/><input style='width:40%;' type='text'  value='字段值' readonly='true'/><br/>";
 
             var ss = "<input type='text' name='tableName'style='display:none;' value=" + tableName + " />";
             ss += "<input type='text' name='subjectCode'style='display:none;' value=" + subjectCode + " />";
@@ -912,8 +924,13 @@
             for (var i = 0; i < strs2.length; i++) {
                 if (strs2[i] === "PORTALID") {
                     ss += "<input style='display:none;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='display:none;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='display:none;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' />";
-                } else {
-                    ss += "<input style='width:22%;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='width:22%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='width:22%;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input title='" + strs[i] + "'style='width:22%;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
+                } else if(dataTypeArr[i]==="text"||dataTypeArr[i]==="longtext"){
+                    // ss += "<input style='width:20%;height:60px;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='width:20%;height:60px;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='width:20%;height:60px;' type='text'  value='" + columnComments[i] + "' readonly='true' /><textarea title='" + strs[i] + "'style='width:40%;'rows='1' class='" + dataTypeArr[i] + "'  name=" + strs2[i] + " value='" + strs[i] + "' >"+ strs[i] +"</textarea><br/>";
+                    ss += "<input style='width:20%;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input type='text' title='" + strs[i] + "'style='width:40%;'rows='1' class='" + dataTypeArr[i] + "'  name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
+                    // ss += "<tr><td><input style='width:20%;height:60px;' type='text' value='" + strs2[i] + "' readonly='true'/></td><td><input style='width:20%;height:60px;' type='text'  value='" + S_columnType[i] + "' readonly='true'/></td><td><input style='width:20%;height:60px;' type='text'  value='" + columnComments[i] + "' readonly='true' /></td><td><textarea title='" + strs[i] + "'style='width:40%;height:60px;' class='" + dataTypeArr[i] + "'  name=" + strs2[i] + " value='" + strs[i] + "' >"+ strs[i] +"</textarea></td></tr>";
+                }else{
+                    ss += "<input style='width:20%;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input title='" + strs[i] + "'style='width:40%;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
+                    // ss += "<tr><td><input style='width:20%;' type='text' value='" + strs2[i] + "' readonly='true'/></td><td><input style='width:20%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/></td><td><input style='width:20%;' type='text'  value='" + columnComments[i] + "' readonly='true' /></td><td><input title='" + strs[i] + "'style='width:40%;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /></td></tr>";
                 }
                 alert_column.push(strs2[i]);
             }
@@ -944,19 +961,19 @@
                     if (strs2[i] === "PORTALID") {
                         s += "<input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='0'/>";
                     } else {
-                        s += "<tr style='display: none;'><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' value='0' name='" + strs2[i] + "'/></td><tr>";
+                        s += "<tr style='display: none;'><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' value='0' name='" + strs2[i] + "'/></td></tr>";
                     }
                 } else if (pkColumnArr[i] === "PRI" && autoAddArr[i] !== "auto_increment") {
                     if (strs2[i] === "PORTALID") {
                         s += "<input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='0'/>";
                     } else {
-                        s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>(主键，不自增)  " + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
+                        s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>  " + columnComments[i] + "</td><td><input class='addClass' style='width: 100%;height:100%;' value='' name='" + strs2[i] + "'/></td></tr>";
                     }
                 } else {
                     if (strs2[i] === "PORTALID") {
                         s += "<input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='0'/>";
                     } else {
-                        s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' value='' name='" + strs2[i] + "'/></td><tr>";
+                        s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' style='width: 100%;height:100%;' value='' name='" + strs2[i] + "'/></td></tr>";
                     }
                 }
             }
