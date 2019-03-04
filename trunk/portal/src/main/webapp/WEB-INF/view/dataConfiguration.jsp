@@ -663,7 +663,7 @@
                     var html = "";
                     var list = data.list;
                     for (var i = 0; i < list.length; i++) {
-                        html += "<span style='display:inline-block;width:16%;'><label><input type='radio' name='mapTable'  value='" + list[i] + "' onclick=\"editTableData('" + sub1 + "','" + list[i] + "')\">&nbsp;" + list[i] + "</label></span>"
+                        html += "<span style='display:inline-block;width:25%;'><label><input type='radio' name='mapTable'  value='" + list[i] + "' onclick=\"editTableData('" + sub1 + "','" + list[i] + "')\">&nbsp;" + list[i] + "</label></span>"
                     }
                     $("#alltables").append(html);
                 }
@@ -704,13 +704,13 @@
                         for (var i = 0; i < arr.length; i++) {
                             if (il <= 5) {
                                 if (arr[i] === "PORTALID") {
-                                    s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13.5%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                    s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                                 } else {
-                                    s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13.5%;height:70px;'title=" + arr[i] + ">" + arr[i] + "<br/><p title="+columnComment[i]+">"+ columnComment[i]+"</p></th>";
+                                    s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "<br/><p title="+columnComment[i]+">"+ columnComment[i]+"</p></th>";
                                     il++;
                                 }
                             } else {
-                                s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13.5%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                             }
                         }
                     }
@@ -795,7 +795,7 @@
                                 "<a href='#' onclick=\"checkDada('" + arr + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">查看 | </a>" +
                                 "<a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">删除</a></td></tr>";
                         }
-                        s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:19%;height:60px;'>操作</th></tr>";
+                        s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:22%;height:60px;'>操作</th></tr>";
                         $("#page_div").show();
                         $("#pagination").show();
                         fun_limit(subjectCode, tableName, data);
@@ -917,6 +917,7 @@
             var columnComments = columnComment.split(",");
             var alert_column = [];
             var s_head = "<input style='width:20%;' type='text' value='字段名' readonly='true'/><input style='width:20%;' type='text'  value='字段类型' readonly='true'/><input style='width:20%;' type='text'  value='注释' readonly='true'/><input style='width:40%;' type='text'  value='字段值' readonly='true'/><br/>";
+            // var s_head = "<table><tr><td><input style='width:20%;' type='text' value='字段名' readonly='true'/></td><td><input style='width:20%;' type='text'  value='字段类型' readonly='true'/></td><td><input style='width:20%;' type='text'  value='注释' readonly='true'/></td><td><input style='width:40%;' type='text'  value='字段值' readonly='true'/></td></tr>";//<br/>
 
             var ss = "<input type='text' name='tableName'style='display:none;' value=" + tableName + " />";
             ss += "<input type='text' name='subjectCode'style='display:none;' value=" + subjectCode + " />";
@@ -926,12 +927,13 @@
                     ss += "<input style='display:none;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='display:none;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='display:none;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' />";
                 } else if(dataTypeArr[i]==="text"||dataTypeArr[i]==="longtext"){
                     // ss += "<input style='width:20%;height:60px;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='width:20%;height:60px;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='width:20%;height:60px;' type='text'  value='" + columnComments[i] + "' readonly='true' /><textarea title='" + strs[i] + "'style='width:40%;'rows='1' class='" + dataTypeArr[i] + "'  name=" + strs2[i] + " value='" + strs[i] + "' >"+ strs[i] +"</textarea><br/>";
-                    ss += "<input style='width:20%;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input type='text' title='" + strs[i] + "'style='width:40%;'rows='1' class='" + dataTypeArr[i] + "'  name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
-                    // ss += "<tr><td><input style='width:20%;height:60px;' type='text' value='" + strs2[i] + "' readonly='true'/></td><td><input style='width:20%;height:60px;' type='text'  value='" + S_columnType[i] + "' readonly='true'/></td><td><input style='width:20%;height:60px;' type='text'  value='" + columnComments[i] + "' readonly='true' /></td><td><textarea title='" + strs[i] + "'style='width:40%;height:60px;' class='" + dataTypeArr[i] + "'  name=" + strs2[i] + " value='" + strs[i] + "' >"+ strs[i] +"</textarea></td></tr>";
+                    // ss += "<input style='width:20%;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input type='text' title='" + strs[i] + "'style='width:40%;'rows='1' class='" + dataTypeArr[i] + "'  name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
+                    ss += "<table ><tr><td  ><input style='width:100%;height:100%;' type='text' value='" + strs2[i] + "' readonly='true'/></td><td><input style='width:100%;height:100%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/></td><td><input  style='width:100%;height:100%;' type='text'  value='" + columnComments[i] + "' readonly='true' /></td><td style='width: 40%;'><textarea  style='width:100%;height:100%'  title='" + strs[i] + "' class='" + dataTypeArr[i] + "'  name=" + strs2[i] + " value='" + strs[i] + "' >"+ strs[i] +"</textarea></td></tr>";
                 }else{
-                    ss += "<input style='width:20%;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input title='" + strs[i] + "'style='width:40%;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
-                    // ss += "<tr><td><input style='width:20%;' type='text' value='" + strs2[i] + "' readonly='true'/></td><td><input style='width:20%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/></td><td><input style='width:20%;' type='text'  value='" + columnComments[i] + "' readonly='true' /></td><td><input title='" + strs[i] + "'style='width:40%;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /></td></tr>";
+                    // ss += "<input style='width:20%;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input title='" + strs[i] + "'style='width:40%;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
+                    ss += "<tr><td><input style='width:20%;' type='text' value='" + strs2[i] + "' readonly='true'/></td><td><input style='width:20%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/></td><td><input style='width:20%;' type='text'  value='" + columnComments[i] + "' readonly='true' /></td><td><input title='" + strs[i] + "' style='width:40%;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /></td></tr>";
                 }
+                ss+="</table>"
                 alert_column.push(strs2[i]);
             }
             var s_save = "<input class='eee'id='btn_save'type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataType + "','" + currentPage + "','" + alert_column + "')\"/>";
