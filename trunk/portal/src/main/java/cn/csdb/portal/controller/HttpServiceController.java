@@ -99,6 +99,22 @@ public class HttpServiceController {
                     f.mkdirs();
                 }
 
+            } else if(dataTask.getDataTaskType().equals("oracle")){
+                String sqlZip = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() +"_sql"+ File.separator + dataTask.getDataTaskId() + ".zip";
+//                System.out.println("-------sqlZip"+sqlZip);
+                File sqlfiles = new File(sqlZip);
+                ZipUtil zipUtil = new ZipUtil();
+                try {
+                    zipUtil.unZip(sqlfiles, siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId()+"_sql");
+                    zipFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId()+"_sql";
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                dataDBFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + "data.sql";
+                structDBFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + "struct.sql";
+                System.out.println("dataDBFile---------" + dataDBFile);
+                System.out.println("structDBFile---------" + structDBFile);
             }
         }
         dataTask.setSqlFilePath(sqlfilePathBuffer.toString());
