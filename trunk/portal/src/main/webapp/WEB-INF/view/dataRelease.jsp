@@ -491,7 +491,7 @@
                                                     * </span>
                             </label>
                             <div class="col-md-7" style="padding-top:13px">
-                                                    <textarea  type="text" class="form-control" cols="30" rows="4"  placeholder="请输入审核结果理由，不少于20个字符"
+                                                    <textarea  type="text" class="form-control" cols="30" rows="4"  placeholder="请输入审核结果理由，不少于6个字符"
                                                                id="audit_content" name="audit_content"  required="required" ></textarea>
 
                             </div>
@@ -691,9 +691,9 @@
                     bytesCount += 1;
                 }
             }
-            var workFlag = bytesCount <20 ?false:true
+            var workFlag = bytesCount <6 ?false:true
             return this.optional(element)||($("#dataDescribeID").val()==""|| workFlag);
-        }, "最少输入20个字符");
+        }, "最少输入6个字符");
         $("#submit_form1").validate(validData)
 
         function remValidate() {
@@ -729,7 +729,7 @@
         $("#auditId").click(function () {
             // var auditContent = $("#audit_content").val();
             if(statusres==="2"){
-                $("#audit_content").val("信息无误，审核为通过！");
+                $("#audit_content").val("审核通过！");
             }
             // alert("备注信息："+auditContent);
             if(!$("#submit_form1").valid()){
