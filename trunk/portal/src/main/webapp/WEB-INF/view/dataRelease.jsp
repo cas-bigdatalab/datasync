@@ -45,7 +45,7 @@
 </head>
 
 <body>
-
+<input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
 <div class="page-content">
     <div>
         <%--<div class="uplod-head">
@@ -788,15 +788,20 @@
                         var list = JSON.parse(data).auditMessageList[0]
                         console.log(list)
                         if(type=="mysql" || type==""){
-                            $("#mysqlComments").show()
                             $("#mysqlCommentsName").html(list.auditPerson)
                             $("#mysqlCommentsTime").html(convertMilsToDateTimeString(list.auditTime))
                             $("#mysqlCommentsContent").html(list.auditCom)
                         }else {
-                            $("#fileComments").show()
                             $("#fileCommentsName").html(list.auditPerson)
                             $("#fileCommentsTime").html(convertMilsToDateTimeString(list.auditTime))
                             $("#fileCommentsContent").html(list.auditCom)
+                        }
+                        // 当前登录为系统管理员 不显示未通过审核原因
+                        var currentUser = $("#subjectCode").val();
+                        if(currentUser !== ""){
+                            $("#mysqlComments").show();
+                        }else {
+                            $("#mysqlComments").hide();
                         }
                     },
                     error:function () {
