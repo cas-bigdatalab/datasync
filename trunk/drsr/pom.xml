@@ -125,4 +125,12 @@
         </dependency>
 
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>PlanetMirror</id>
+            <name>Planet Mirror</name>
+            <url>http://nexus.talanlabs.com/content/repositories/releases/</url>
+        </repository>
+    </repositories>
 </project>
