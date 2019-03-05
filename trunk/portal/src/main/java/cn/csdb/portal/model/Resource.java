@@ -38,6 +38,8 @@ public class Resource {
     private String fieldComs; //字段注释
     @Field("subjectCode")
     private String subjectCode; //主题库代码
+    @Field("auditTime")
+    private Date auditTime; // 审核时间
 
     //以下是元数据信息
     @Field("pid")
@@ -405,5 +407,13 @@ public class Resource {
 
     public void setdCount(Integer dCount) {
         this.dCount = dCount;
+    }
+
+    public Date getAuditTime() {
+        return auditTime;
+    }
+
+    public void setAuditTime(Date auditTime) {
+        this.auditTime = auditTime;
     }
 }

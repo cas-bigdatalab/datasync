@@ -748,6 +748,9 @@ public class ResourceController {
         JSONObject jo = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setStatus(status);
+        long currentTimeMillis = System.currentTimeMillis();
+        Date date = new Date(currentTimeMillis);
+        resource.setAuditTime(date);
         AuditMessage auditMessage = new AuditMessage();
         auditMessage.setAuditTime(new Date());
         auditMessage.setAuditCom(auditContent);
