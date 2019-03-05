@@ -60,6 +60,7 @@
                             <select  id="dataSourceList" class="form-control" style="width: 150px">
                                 <option value="">全部</option>
                                 <option value="mysql">mysql</option>
+                                <option value="oracle">oracle</option>
                                 <option value="file">file</option>
                             </select>
                         </div>
@@ -478,7 +479,7 @@
                 })
             }else{
                 uploadListFlag.append("<span name="+keyID+" valFlag='false'></span>")
-                if(keyType =="mysql"){
+                if(keyType =="mysql" || keyType=="oracle"){
                     $.ajax({
                         url:"${ctx}/ftpUpload",
                         type:"POST",
@@ -600,7 +601,7 @@
                 success:function (data) {
                     var datatask = JSON.parse(data).datatask
                     console.log(datatask)
-                    if(type=="mysql"){
+                    if(type=="mysql" || type=="oracle"){
                         $("#pre-dataTaskName").html(datatask.dataTaskName)
                         $("#pre-dataSourceId").html(name)
                         var $tableName=$("#pre-tableName")

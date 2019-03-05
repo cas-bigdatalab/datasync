@@ -20,19 +20,19 @@ public class OracleDataSource extends IDataSource {
 
     @Override
     public Connection getConnection(String host, String port, String userName, String password, String databaseName) {
-//        try {
-//            Class.forName("oracle.jdbc.driver.OracleDriver");
-//            String url = "jdbc:oracle:thin:@" + host + ":" + port + ":" + databaseName;
-//            Connection connection = DriverManager.getConnection(url, userName, password);
-//            return connection;
-//        } catch (ClassNotFoundException e) {
-//            logger.error("无法加载驱动类", e);
-//            return null;
-//        } catch (SQLException e) {
-//            logger.error("获取连接失败", e);
-//            return null;
-//        }
-        return DataBaseSource.getConnection("oracle.jdbc.driver.OracleDriver", host, port, userName, password, databaseName);
+        Connection connection=null;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            String url = "jdbc:oracle:thin:@" + host + ":" + port + ":" + databaseName;
+            connection = DriverManager.getConnection(url, userName, password);
+            return connection;
+        } catch (ClassNotFoundException e) {
+            logger.error("无法加载驱动类", e);
+            return null;
+        } catch (SQLException e) {
+            logger.error("获取连接失败", e);
+            return null;
+        }
     }
 
     @Override

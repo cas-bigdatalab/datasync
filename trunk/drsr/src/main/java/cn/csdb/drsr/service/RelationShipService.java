@@ -120,22 +120,42 @@ public class RelationShipService {
     }
 
     public String testCon(String host, String port, String userName, String password, String databaseName) {
-        String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, userName, password);
-            con.close();
-            return "success";
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return "false";
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "false";
-        }catch (Exception e) {
-            e.printStackTrace();
-            return "false";
+        if("3306".equals(port)){
+            String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName;
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                Connection con = DriverManager.getConnection(url, userName, password);
+                con.close();
+                return "success";
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                return "false";
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return "false";
+            }catch (Exception e) {
+                e.printStackTrace();
+                return "false";
+            }
+        }else if("1521".equals(port)){
+            String url="jdbc:oracle:thin:@"+host+":1521:"+databaseName+"";
+            try {
+                Class.forName("oracle.jdbc.driver.OracleDriver");
+                Connection con = DriverManager.getConnection(url, userName, password);
+                con.close();
+                return "success";
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                return "false";
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return "false";
+            }catch (Exception e) {
+                e.printStackTrace();
+                return "false";
+            }
         }
+        return "false";
     }
 
     public List<DataSrc> findAllBySubjectCode(String subjectCode) {
@@ -312,6 +332,53 @@ public class RelationShipService {
         return maps;
 
     }
+
+
+
+    @Transactional(readOnly = true)
+    public Map<String, List<TableInfo>> getTableComsBySql(int dataSourceId, String sqlStr) {
+        Map<String, List<TableInfo>> map=new HashMap<String, List<TableInfo>>();
+        if (StringUtils.isBlank(sqlStr) || !StringUtils.startsWithIgnoreCase(sqlStr.trim(), "select ")) {
+            return null;
+        }
+        DataSrc dataSrc = relationDao.findById(dataSourceId);
+        if (dataSrc == null) {
+            return null;
+        }
+        Map<String, List<TableInfo>> fieldComsByTableNames = Maps.newHashMap();
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        PreparedStatement preparedStatement = dataSource.getPaginationSql(connection, sqlStr, null, 0, 1);
+        try {
+           Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sqlStr);
+            ResultSetMetaData ramd = rs.getMetaData();
+            List<TableInfo> tableInfoList=new ArrayList<TableInfo>();
+            for(int i=1;i<=ramd.getColumnCount();i++){//获取列的数量
+                TableInfo tableInfo=new TableInfo();
+                tableInfo.setColumnName(ramd.getColumnName(i));
+                tableInfo.setColumnNameLabel(ramd.getColumnName(i));
+                tableInfo.setDataType(ramd.getColumnTypeName(i)+"");
+                tableInfoList.add(tableInfo);
+            }
+            fieldComsByTableNames.put(UUID.randomUUID()+"",tableInfoList);
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        } finally{
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                System.out.println("数据库连接关闭失败！");
+                e.printStackTrace();
+            }
+        }
+
+        return fieldComsByTableNames;
+
+    }
+
+
 
 
 }

@@ -205,7 +205,7 @@ public class FtpUtil {
                 fileName = localFilepath.substring(localFilepath.lastIndexOf("%_%")+3);
                 System.out.println("-------fileName"+fileName);
             }*/
-            if(dataTask.getDataTaskType().equals("mysql")){
+            if("mysql".equals(dataTask.getDataTaskType()) || "oracle".equals(dataTask.getDataTaskType())){
                 fileName = dataTask.getDataTaskId()+".zip";
             }else{
                 fileName = subjectCode + "_" +dataTask.getDataTaskId()+".zip";

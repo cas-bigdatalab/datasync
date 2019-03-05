@@ -150,7 +150,7 @@ public class DataSyncController {
                     ftpUtil.numberOfRequest.remove(dataTaskId+"Block");
                     return 0;
                 }
-            }else if(dataTask.getDataTaskType().equals("mysql")){
+            }else if(dataTask.getDataTaskType().equals("mysql") || dataTask.getDataTaskType().equals("oracle")){
                 String remoteFilepath = ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+"_sql/";
                 String[] localFileList = {dataTask.getFilePath()};
                 result = ftpUtil.upload(localFileList, processId,remoteFilepath,dataTask,subjectCode+"_sql").toString();
@@ -185,7 +185,7 @@ public class DataSyncController {
                 HttpPost postMethod = null;
                 HttpResponse response = null;
                 try {
-                    if("mysql".equals(dataTask.getDataTaskType())){
+                    if("mysql".equals(dataTask.getDataTaskType()) || "oracle".equals(dataTask.getDataTaskType())){
                         now = new Date();
                         dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
                         String current1 = dateFormat.format(now);
@@ -215,7 +215,7 @@ public class DataSyncController {
                     EntityUtils.consume(httpEntity);//释放资源
                     System.out.println("响应内容：" + reponseContent);
                     if(reponseContent.equals("1")){
-                        if("mysql".equals(dataTask.getDataTaskType())){
+                        if("mysql".equals(dataTask.getDataTaskType()) || "oracle".equals(dataTask.getDataTaskType())){
                             now = new Date();
                             dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
                             String current1 = dateFormat.format(now);
@@ -237,7 +237,7 @@ public class DataSyncController {
                         ftpUtil.progressMap.put(dataTask.getDataTaskId(),Long.valueOf(100));
                         return 1;
                     }else{
-                        if("mysql".equals(dataTask.getDataTaskType())){
+                        if("mysql".equals(dataTask.getDataTaskType()) || "oracle".equals(dataTask.getDataTaskType())){
                             now = new Date();
                             dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
                             String current1 = dateFormat.format(now);
@@ -259,7 +259,7 @@ public class DataSyncController {
                 } catch (IOException e) {
                     ftpUtil.disconnect();
                     e.printStackTrace();
-                    if("mysql".equals(dataTask.getDataTaskType())){
+                    if("mysql".equals(dataTask.getDataTaskType()) || "oracle".equals(dataTask.getDataTaskType())){
                         now = new Date();
                         dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
                         String current1 = dateFormat.format(now);

@@ -239,7 +239,7 @@ public class RelationSourceController {
             @RequestParam(required = false, defaultValue = "10") int pageSize) {
         logger.info("预览表数据");
         JSONObject jsonObject = new JSONObject();
-        Map<String, List<TableInfo>> maps = relationShipService.getDefaultFieldComsBySql(Integer.parseInt(dataSourceId), sqlStr);
+        Map<String, List<TableInfo>> maps = relationShipService.getTableComsBySql(Integer.parseInt(dataSourceId), sqlStr);
         List<List<Object>> datas = relationShipService.getDataBySql(sqlStr, maps, Integer.valueOf(dataSourceId), 0, pageSize);
         jsonObject.put("datas", datas);
         jsonObject.put("maps", maps);

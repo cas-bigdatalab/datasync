@@ -101,11 +101,12 @@
                                                 <option value="Oracle">Oracle</option>
                                                 <option value="SqlServer">SqlServer</option>--%>
                                                 <option value="mysql">MySql</option>
+                                                <option value="oracle">Oracle</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="databaseName" class="col-sm-3 control-label">数据库名称<span class="required">
+                                        <label for="databaseName" class="col-sm-3 control-label" id="dataBaseName">数据库名称<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control" id="databaseName" name="databaseName" placeholder="请输入数据库名称">
@@ -186,6 +187,7 @@
                                                 <option value="Oracle">Oracle</option>
                                                 <option value="SqlServer">SqlServer</option>--%>
                                                 <option value="mysql">MySql</option>
+                                                <option value="oracle">Oracle</option>
                                             </select>
                                         </div>
                                     </div>
@@ -578,8 +580,9 @@
             var db = $("#dataBaseType option:selected").val();
             if(db=='DB2'){
                 $("#port").val("5000");
-            }else if(db=='Oracle'){
+            }else if(db=='oracle'){
                 $("#port").val("1521");
+                $("#dataBaseName")[0].innerHTML="服务名<span style='color: red;'>\t\t\t\t\t\t\t\t\t\t\t\t\t* </span>";
             }else if(db=='SqlServer'){
                 $("#port").val("1433");
             }else{

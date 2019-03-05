@@ -251,7 +251,14 @@ public class DataTaskController {
         datatask.setSqlString(dataRelSqlList);
         datatask.setSqlTableNameEn(sqlTableNameEnList);
         datatask.setCreateTime(new Date());
-        datatask.setDataTaskType("mysql");
+        DataSrc dataSrc=dataSrcService.findById(dataSourceId);
+        if(dataSrc!=null){
+            if("mysql".equals(dataSrc.getDatabaseType())){
+                datatask.setDataTaskType("mysql");
+            }else if("oracle".equals(dataSrc.getDatabaseType())){
+                datatask.setDataTaskType("oracle");
+            }
+        }
         datatask.setStatus("0");
         datatask.setSubjectCode(subjectCode);
         /*Calendar rightNow = Calendar.getInstance();
@@ -458,7 +465,14 @@ public class DataTaskController {
         datatask.setSqlString(dataRelSqlList);
         datatask.setSqlTableNameEn(sqlTableNameEnList);
         datatask.setCreateTime(new Date());
-        datatask.setDataTaskType("mysql");
+        DataSrc dataSrc=dataSrcService.findById(dataSourceId);
+        if(dataSrc!=null){
+            if("mysql".equals(dataSrc.getDatabaseType())){
+                datatask.setDataTaskType("mysql");
+            }else if("oracle".equals(dataSrc.getDatabaseType())){
+                datatask.setDataTaskType("oracle");
+            }
+        }
         datatask.setStatus("0");
         datatask.setSubjectCode(subjectCode);
         datatask.setCreateTime(new Date());

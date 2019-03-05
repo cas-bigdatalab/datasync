@@ -694,7 +694,7 @@
                     console.log(JSON.parse(data))
                     var dataTaskCon = JSON.parse(data).datatask
                     $("#dataTaskName").val(dataTaskCon.dataTaskName)
-                    var typeNum = dataTaskCon.dataTaskType =="mysql"?0:1
+                    var typeNum = dataTaskCon.dataTaskType =="file"?1:0;
                     $("[name='ways']:eq("+ typeNum+")").prop("checked",true)
                    if(typeNum ==1){
                         $("#bbb").click()
@@ -752,6 +752,55 @@
                             }
                         }
 
+                    }else if(dataTaskCon.dataTaskType == "oracle"){
+                        dataRelSrcId=dataTaskCon.dataSourceId
+                        $("#"+dataRelSrcId).prop("selected",true)
+                        $.ajax({
+                            url:"${ctx}/relationship/relationalDatabaseTableList",
+                            type:"POST",
+                            data:{
+                                dataSourceId:dataRelSrcId
+                            },
+                            success:function (data) {
+                                $("#db-table").empty();
+                                var List =JSON.parse(data);
+                                var tabCon = template("dataRelationshipList2", List);
+                                $("#db-table").append(tabCon);
+                                var fileId=dataTaskCon.tableName
+                                fileId = fileId.substr(0, fileId.length - 1);
+                                var publicContentList = fileId.split(";")
+                                console.log(publicContentList)
+                                if(publicContentList[0] ==""){
+
+                                }else {
+                                    for(var i=0;i<publicContentList.length;i++){
+                                        $("[relname="+publicContentList[i] +"]").prop("checked",true)
+                                    }
+                                }
+
+                            },
+                            error:function () {
+                                console.log("请求失败")
+                            }
+                        })
+                        var sqllist=dataTaskCon.sqlString
+                        var sqlnamelist=dataTaskCon.sqlTableNameEn
+                        sqllist = sqllist.substr(0, sqllist.length - 1);
+                        sqlnamelist = sqlnamelist.substr(0, sqlnamelist.length - 1);
+                        var sqlArr = sqllist.split(";")
+                        var sqlNameArr = sqlnamelist.split(";")
+                        if(sqlArr.length==1){
+                            $(".sqlStatements:eq(0)").val(sqlArr[0]);
+                            $("[name='sqlTableName']:eq(0)").val(sqlNameArr[0])
+                        }else {
+                            for(var i=0;i<sqlArr.length-1;i++){
+                                addSql2()
+                            }
+                            for(var i=0;i<sqlArr.length;i++){
+                                $(".sqlStatements:eq("+i+")").val(sqlArr[i]);
+                                $("[name='sqlTableName']:eq("+i+")").val(sqlNameArr[i])
+                            }
+                        }
                     }else {
                         $(".select-database").hide();
                         $(".select-local").show();
