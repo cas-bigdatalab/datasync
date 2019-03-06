@@ -118,7 +118,7 @@ public class HttpServiceController {
             }
         }
         dataTask.setSqlFilePath(sqlfilePathBuffer.toString());
-        if (dataTask.getDataTaskType().equals("mysql")) {
+        if (dataTask.getDataTaskType().equals("mysql") || "oracle".equals(dataTask.getDataTaskType())) {
             String username = configPropertyService.getProperty("db.username");
             String password = configPropertyService.getProperty("db.password");
             String dbName = subject.getDbName();
