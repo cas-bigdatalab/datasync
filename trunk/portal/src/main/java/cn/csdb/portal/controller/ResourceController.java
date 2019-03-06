@@ -5,6 +5,7 @@ import cn.csdb.portal.repository.TableFieldComsDao;
 import cn.csdb.portal.service.*;
 import cn.csdb.portal.utils.FileUploadUtil;
 import cn.csdb.portal.utils.ImgCut;
+import cn.csdb.portal.utils.TreeNode;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
@@ -12,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +55,12 @@ public class ResourceController {
     private DataSrcService dataSrcService;
     @Resource
     private TableFieldComsDao tableFieldComsDao;
+
+    @Value("#{systemPro['ftpRootPath']}")
+    private String ftpRootPath;
+
+    @Value("#{systemPro['ftpFilePath']}")
+    private String ftpFilePath;
 
     private Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
@@ -740,6 +748,9 @@ public class ResourceController {
         JSONObject jo = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setStatus(status);
+        long currentTimeMillis = System.currentTimeMillis();
+        Date date = new Date(currentTimeMillis);
+        resource.setAuditTime(date);
         AuditMessage auditMessage = new AuditMessage();
         auditMessage.setAuditTime(new Date());
         auditMessage.setAuditCom(auditContent);
@@ -803,5 +814,19 @@ public class ResourceController {
         return jsonObject;
     }
 
+    @PostMapping(value = "/treeNodeAsync")
+    @ResponseBody
+    public JSONObject treeNodes(HttpServletRequest request){
+        String subName = request.getParameter("subName");
+        String asyncString = request.getParameter("async");
+        boolean async = true;
+        if(!"async".equals(asyncString)){
+            async = false;
+        }
+        String rootPath = ftpRootPath + "ftpUser" +subName + ftpFilePath;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject = new TreeNode().jsTreeNodes(rootPath, async);
+        return jsonObject;
+    }
 
 }

@@ -549,8 +549,12 @@
                             onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')"><i
                             class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
                     </button>
-                        <button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;编辑
-                        </button>
+            </shiro:hasRole>
+            {{if value.status != '2'}}
+            <shiro:hasRole name="admin">
+                <button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i
+                        class="fa fa-edit"></i>&nbsp;编辑
+                </button>
             </shiro:hasRole>
 
             <shiro:hasRole name="admin">
@@ -558,6 +562,7 @@
                             class="glyphicon glyphicon-trash"></i>&nbsp;删除
                     </button>
             </shiro:hasRole>
+            {{/if}}
             <shiro:hasRole name="root">
                 {{if value.status == '-1'}}
                         <button type="button" class="btn  edit-data btn-xs blue" style="margin-right: 66px"
