@@ -14,6 +14,7 @@ import java.util.List;
 public class TreeNode {
 
 
+    private int countJsNodes = 0;
     /**
      * 获取当前目录下所有的目录（不包含文件），
      * 如果为异步加载则只获取当前目录，不深度遍历。
@@ -26,14 +27,22 @@ public class TreeNode {
         JSONObject jsonObject = new JSONObject();
         List<JsTreeNode> jsTreeNodes = new ArrayList<>(36);
         File rootFile = new File(rootPath);
+        boolean directory = false;
         if(!rootFile.exists()){
             jsonObject.put("code","error");
             jsonObject.put("message",rootFile.getPath()+":不存在");
             return jsonObject;
         }
+        if (countJsNodes == 0) {
+            String rootFilePath = rootFile.getPath();
+            String rootFileName = rootFile.getName();
+            String rootParentPath = rootFile.getParentFile().getPath();
+            jsTreeNodes.add(new TreeNode.JsTreeNode(rootFilePath, rootParentPath, rootFileName, "true", "", "false"));
+            countJsNodes++;
+        }
         File[] files = rootFile.listFiles();
         for (File file : files) {
-            boolean directory = file.isDirectory();
+            directory = file.isDirectory();
             String path = file.getPath();
             String name = file.getName();
             if(directory){
@@ -43,7 +52,7 @@ public class TreeNode {
             // 是否异步加载目录
             // async = false 深度查找所有目录
             if (!async && directory) {
-                JSONObject jsonObject1 = new TreeNode().jsTreeNodes(path, false);
+                JSONObject jsonObject1 = jsTreeNodes(path, false);
                 jsTreeNodes.addAll((List<JsTreeNode>) jsonObject1.get("data"));
             }
         }
@@ -51,6 +60,7 @@ public class TreeNode {
         jsonObject.put("message","节点生成成功");
         jsonObject.put("data",jsTreeNodes);
         return jsonObject;
+
     }
 
     /**

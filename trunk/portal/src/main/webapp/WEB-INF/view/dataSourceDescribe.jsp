@@ -229,7 +229,7 @@
                                             <label class="control-label col-md-3" for="select2_tags">关键词<span class="required">
                                                     * </span></label>
                                             <div class="checkbox-list col-md-5" style="padding-top:14px">
-                                                    <input type="text" class="form-control" id="select2_tags" value="" name="select2_tags" required="required"  placeholder="至少两个关键词">
+                                                    <input type="text" class="form-control" id="select2_tags" value="" name="select2_tags" required="required"  placeholder="至少三个关键词">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -263,8 +263,10 @@
                                                 <div class="col-md-5" style="padding-top:13px">
 
 
-                                                    <textarea  type="text" class="form-control" cols="30" rows="4"  placeholder="不少于50字"
-                                                               id="dataDescribeID" name="dataDescribeID"  required="required" ></textarea>
+                                                    <textarea type="text" class="form-control" cols="30" rows="4"
+                                                              placeholder="数据集简介信息"
+                                                              id="dataDescribeID" name="dataDescribeID"
+                                                              required="required"></textarea>
 
                                                 </div>
                                             </div>
@@ -297,7 +299,9 @@
                                                                 <input type="button" onclick="doUpload();"/>
                                                         </span>
                                                         </form>
-                                                        <div class="timeVili3" style="display: none">请上传选择图片</div>
+                                                        <div class="timeVili3" style="display: none">
+                                                            请上传选择图片,图片规格为800*600
+                                                        </div>
                                                         <div class="clearfix margin-top-10">
                                                  <%--   <span class="label label-danger">
                                                 注意! </span>
@@ -314,7 +318,9 @@
                                                 <label class="control-label col-md-3" for="select2_tags">关键词<span class="required">
                                                     * </span></label>
                                                 <div class="checkbox-list col-md-5" style="padding-top:13px">
-                                                    <input type="text" class="form-control" id="select2_tags" value="" name="select2_tags" required="required"  placeholder="至少两个关键词">
+                                                    <input type="text" class="form-control" id="select2_tags" value=""
+                                                           name="select2_tags" required="required"
+                                                           placeholder="至少三个关键词">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -334,10 +340,12 @@
                                                 <div class="col-md-5"  style="padding-top:13px">
                                                     <div class="input-group input-daterange">
                                                         <input type="text" class="form-control selectData"
-                                                               data-date-format="yyyy-mm-dd" placeholder="起始时间" readonly>
+                                                               data-date-format="yyyy-mm-dd" name="startTime"
+                                                               placeholder="起始时间">
                                                         <div class="input-group-addon">to</div>
                                                         <input type="text" class="form-control selectData"
-                                                               data-date-format="yyyy-mm-dd" placeholder="起始时间" readonly>
+                                                               data-date-format="yyyy-mm-dd" name="endTime"
+                                                               placeholder="结束时间">
                                                     </div>
                                                     <div class="timeVili" style="display: none">请正确选择时间</div>
                                                 </div>
@@ -378,7 +386,7 @@
                                                 <div class="col-md-5"  style="padding-top:13px">
                                                     <div class="input-group input-daterange">
                                                         <input type="text" class="form-control selectData" id="createTime"
-                                                               data-date-format="yyyy-mm-dd" placeholder="创建日期" readonly>
+                                                               data-date-format="yyyy-mm-dd" placeholder="创建日期">
                                                     </div>
                                                 </div>
                                             </div>
@@ -611,20 +619,23 @@
             ignore: "", // validate all fields including form hidden input
             rules: {
                 Task_dataName: {
-                    required: true
+                    required: true,
+                    minlength: 15
                 },
                 dataDescribeID: {
                     required: true,
-                    minWords:true
+                    minlength: 50
                 }
             },
             messages: {
                 Task_dataName: {
-                    required: "请输入数据集名称"
+                    required: "请输入数据集名称",
+                    minlength: "不少于15个字符"
                 },
 
                 dataDescribeID: {
-                    required: "请输入简介信息"
+                    required: "请输入简介信息",
+                    minlength: "不少于50个字符"
                 },
             },
             errorPlacement: function (error, element) { // render error placement for each input type
@@ -652,7 +663,13 @@
             rules: {
                 select2_tags: {
                     required: true,
-                    minTwoKey:true
+                    minThreeKey: true
+                },
+                startTime: {
+                    required: true
+                },
+                endTime: {
+                    required: true
                 },
                 create_Organization:{
                     required: true,
@@ -667,10 +684,22 @@
                     required: true,
                     isEmail:true
                 },
+                centerCatalogId: {
+                    resourceDir: true
+                }
             },
             messages: {
                 select2_tags: {
-                    required: "至少添加两个关键词"
+                    required: "至少添加三个关键词"
+                },
+                startTime: {
+                    required: "请输入起始时间"
+                },
+                endTime: {
+                    required: "请输入结束时间"
+                },
+                create_Organization: {
+                    required: true,
                 },
                 create_Organization:{
                     required: "请输入机构名",
@@ -712,15 +741,15 @@
             return this.optional(element) || winPath.test(value);
         }, "请输入正确邮箱地址");
 
-        jQuery.validator.addMethod("minTwoKey", function (value, element) {
-            var keyFlag = $("#select2_tags").val().split(",").length <2?false:true
+        jQuery.validator.addMethod("minThreeKey", function (value, element) {
+            var keyFlag = $("#select2_tags").val().split(",").length < 3 ? false : true
             return keyFlag;
-        }, "至少输入两个关键词");
+        }, "至少输入三个关键词");
 
-        jQuery.validator.addMethod("minWords", function (value, element) {
-            var workFlag = $("#dataDescribeID").val().length <50 ?false:true
-            return this.optional(element)||($("#dataDescribeID").val()==""|| workFlag);
-        }, "最少输入50个字符");
+        jQuery.validator.addMethod("resourceDir", function () {
+            var resurceDir = $.trim($("#centerCatalogId").val()).length === 0 ? false : true;
+            return resurceDir;
+        }, "请选择资源目录");
 
         $("#select2_tags").change(function () {
             $("#submit_form2").validate(validData2).element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
@@ -1096,7 +1125,13 @@
                 return
             }
             var keywordStr = $("#select2_tags").val()
-
+            var createTime = "";
+            if ($.trim($("#createTime").val()).length === 0) {
+                var date = new Date();
+                createTime = date.Format("yyyy-MM-dd");
+            } else {
+                createTime = $.trim($("#createTime").val());
+            }
             $.ajax({
                 url:ctx+"/resource/editResourceFirstStep",
                 type:"POST",
@@ -1112,7 +1147,7 @@
                     endTime:$('.selectData:eq(1)').val(),
                     email:$("#Task_email").val(),
                     phoneNum:$("#Task_phone").val(),
-                    createTime:$("#createTime").val(),
+                    createTime: createTime,
                     publishOrganization:$("#publish_Organization").val(),
                     createOrganization:$("#create_Organization").val(),
                     createPerson:$("#create_person").val()
