@@ -30,4 +30,10 @@ public class portalPages {
         ModelAndView modelAndView = new ModelAndView("dataConfiguration");
         return modelAndView;
     }
+
+    @RequestMapping("/statisticalDataDetail")
+    public ModelAndView index6(){
+        ModelAndView modelAndView=new ModelAndView("statisticalDataDetail");
+        return modelAndView;
+    }
 }
