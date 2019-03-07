@@ -1,16 +1,21 @@
 package cn.csdb.portal.repository;
 
 import cn.csdb.portal.model.FileInfo;
+import cn.csdb.portal.model.Subject;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
+//import cn.csdb.portal.model.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -24,7 +29,7 @@ import java.util.regex.Pattern;
  **/
 @Repository
 public class ResourceDao {
-    @Resource
+    @javax.annotation.Resource
     private MongoTemplate mongoTemplate;
 
     /**
@@ -128,4 +133,49 @@ public class ResourceDao {
         return mongoTemplate.findById(resourceId, cn.csdb.portal.model.Resource.class);
     }
 
+
+//    根据subjectCode查询
+    public long getBySubject(String subjectCode){
+        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)),cn.csdb.portal.model.Resource.class);
+//        Aggregation aggregation=Aggregation.newAggregation(Aggregation.match(Criteria.where("subjectCode").is(subjectCode)),
+//                                Aggregation.group("subjectCode").sum("vCount").as("visitCount"));
+//        AggregationResults<cn.csdb.portal.model.Resource> result=
+//                                    mongoTemplate.aggregate(aggregation,"resource",cn.csdb.portal.model.Resource.class);
+//        List<cn.csdb.portal.model.Resource> list=result.getMappedResults();
+        long l=0;
+        if(list.size()>0){
+            for(cn.csdb.portal.model.Resource r:list){
+                l+=r.getvCount();
+            }
+        }
+        return l;
+    }
+
+
+    public long getDownladCount(String subjectCode){
+        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)),cn.csdb.portal.model.Resource.class);
+        long l=0;
+        if(list.size()>0){
+            for(cn.csdb.portal.model.Resource r:list){
+                l+=r.getdCount();
+            }
+        }
+        return l;
+    }
+
+//    统计数据集访问量
+    public List<cn.csdb.portal.model.Resource> getResourceVisit(){
+        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query().with(new Sort(Sort.Direction.DESC,
+                                                  "vCount")),cn.csdb.portal.model.Resource.class);
+
+        return list;
+    }
+
+//    统计数据集下载量
+    public List<cn.csdb.portal.model.Resource> getResourceDown(){
+        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query().with(new Sort(Sort.Direction.DESC,
+                "dCount")),cn.csdb.portal.model.Resource.class);
+
+        return list;
+    }
 }

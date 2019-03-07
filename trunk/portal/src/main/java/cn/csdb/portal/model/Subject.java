@@ -45,6 +45,25 @@ public class Subject {
     @Field("dbPort")
     private String dbPort;
 
+    private long visitCount;
+    private long downCont;
+
+    public long getVisitCount() {
+        return visitCount;
+    }
+
+    public void setVisitCount(long visitCount) {
+        this.visitCount = visitCount;
+    }
+
+    public long getDownCont() {
+        return downCont;
+    }
+
+    public void setDownCont(long downCont) {
+        this.downCont = downCont;
+    }
+
     public String getId() {
         return id;
     }
