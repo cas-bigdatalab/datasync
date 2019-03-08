@@ -19,10 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -350,12 +347,23 @@ public class FileSourceController {
     @RequestMapping("/newResCatalog")
     public
     @ResponseBody
-    List<FileTreeNode> newResCatalog(String data,Integer dataSourceId) {
+    JSONObject newResCatalog(String data,Integer dataSourceId) {
         logger.info("加载文件树");
+        JSONObject jsonObject=new JSONObject();
         List<FileTreeNode> nodeList=new ArrayList<FileTreeNode>();
         String filePath = fileSourceFileList(dataSourceId);
         nodeList=fileResourceService.asynLoadingTree(data,filePath,"init");
-        return nodeList;
+            String jsonObjectStr=null;
+        try {
+            jsonObjectStr=fileResourceService.LoadingRemoteTree();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        jsonObject.put("nodeList",nodeList);
+        jsonObject.put("jsonObjectStr",jsonObjectStr);
+
+
+        return jsonObject;
 
 //        JSONObject jsonObjects = fileResourceService.fileTreeLoading(data,filePath);
 //        return jsonObjects;

@@ -24,6 +24,17 @@ public class DataTask {
     private String status;
     private String LogPath;
     private DataSrc dataSrc;
+    private String remoteuploadpath;
+
+    public String getRemoteuploadpath() {
+        return remoteuploadpath;
+    }
+
+    public void setRemoteuploadpath(String remoteuploadpath) {
+        this.remoteuploadpath = remoteuploadpath;
+    }
+
+
 
     public String getSubjectCode() {
         return subjectCode;
