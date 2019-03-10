@@ -5,6 +5,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @program: DataSync
@@ -96,6 +98,10 @@ public class Resource {
     private Integer vCount;
     @Field("dCount") //下载次数
     private Integer dCount;
+
+    //用户自定义的扩展元数据项
+    @Field("extMetadata")
+    private List<Map<String, Object>> extMetadata;
 
     public String getPublishOrgnization() {
         return publishOrgnization;
@@ -415,5 +421,13 @@ public class Resource {
 
     public void setAuditTime(Date auditTime) {
         this.auditTime = auditTime;
+    }
+
+    public List<Map<String, Object>> getExtMetadata() {
+        return extMetadata;
+    }
+
+    public void setExtMetadata(List<Map<String, Object>> extMetadata) {
+        this.extMetadata = extMetadata;
     }
 }
