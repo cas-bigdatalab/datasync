@@ -164,6 +164,10 @@
     </div>
 </script>
 
+<script type="text/html" id="demoIs">
+
+</script>
+
 <script type="text/html" id="tableFieldNotExist">
     <div class="tab-pane">
         <table class="table table-hover table-bordered">
@@ -213,4 +217,58 @@
             </tbody>
         </table>
     </div>
+</script>
+<script type="text/html" id="demoNot">
+    <div class="tab-pane">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr style="word-break: keep-all">
+                <th>序号</th>
+                <th>excel字段名称</th>
+                <th>excel字段注释</th>
+                <th>字段类型</th>
+                <th>字段长度</th>
+                <th>
+                    是否主键
+                    <button id="clearPK" class="btn btn-default" type="button">清除</button>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {{each data as v i}}
+            {{if i > 0}}
+            <tr>
+                <td>{{i}}</td>
+
+                {{each v as vv ii}}
+                {{if ii > 2}}
+                <td>
+                    <input name={{vv}} value={{vv}}/>
+                </td>
+                {{/if}}
+                {{/each}}
+
+                <td>
+                    <select fieldType={{v[0]}}>
+                        <option value="0" selected>请选择字段类型</option>
+                        <option value="varchar">varchar</option>
+                        <option value="int">int</option>
+                        <option value="text">text</option>
+                    </select>
+                </td>
+
+                <td>
+                    <input placeholder="请输入字段长度" fieldLength={{v[0]}}/>
+                </td>
+                <td><input type="radio" name="isPK" fieldPk={{v[0]}}/></td>
+            </tr>
+            {{/if}}
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <button type="button" onclick="createTableAndInsertValue(this)" data-dismiss="modal" class="btn green"
+            id="saveExcelSuccess" tablename="{{tableName}}">保存
+    </button>
+
 </script>

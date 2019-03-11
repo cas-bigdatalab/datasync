@@ -25,21 +25,14 @@ public class Excel2ListIncludeNull {
 
     private static StylesTable stylesTable;
 
-    public static void main(String[] args) {
-        Excel2ListIncludeNull excel2ListIncludeNull = new Excel2ListIncludeNull();
-        try {
-            Map<String, List<List<String>>> map = excel2ListIncludeNull.processOneSheet("C:/Users/admin/Desktop/基础导入数据.xlsx");
-            Set<String> strings = map.keySet();
-            for (String s : strings) {
-                List<List<String>> lists = map.get(s);
-                List<String> list = lists.get(0);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Map<String, List<List<String>>> processOneSheet(String fileName) throws Exception {
+    /**
+     * 可解析多sheet页
+     *
+     * @param fileName 待解析Excel绝对路径
+     * @return
+     * @throws Exception
+     */
+    public Map<String, List<List<String>>> processSheet(String fileName) throws Exception {
         Map<String, List<List<String>>> map = new HashMap<>();
         OPCPackage pkg = OPCPackage.open(fileName);
         XSSFReader r = new XSSFReader(pkg);
@@ -47,6 +40,7 @@ public class Excel2ListIncludeNull {
         SharedStringsTable sst = r.getSharedStringsTable();
         XMLReader parser = fetchSheetParser(sst);
 
+        // 获取sheet相关属性
         XSSFReader.SheetIterator sheetsData = (XSSFReader.SheetIterator) r.getSheetsData();
         while (sheetsData.hasNext()) {
             InputStream next = sheetsData.next();
@@ -54,7 +48,11 @@ public class Excel2ListIncludeNull {
             String sheetName = sheetsData.getSheetName();
             parser.parse(sheetSource);
             SheetHandler contentHandler = (SheetHandler) parser.getContentHandler();
-            List<List<String>> allList = contentHandler.getAllList();
+
+            // 分割sheet页
+            List<List<String>> allList = new LinkedList<>();
+            allList = contentHandler.getAllList();
+            contentHandler.setAllList2Null();
             map.put(sheetName, allList);
         }
         pkg.close();
@@ -62,7 +60,7 @@ public class Excel2ListIncludeNull {
     }
 
     /**
-     * 获取解析器
+     * 获取自定义解析器
      */
     public XMLReader fetchSheetParser(SharedStringsTable sst) throws SAXException {
         XMLReader parser = XMLReaderFactory.createXMLReader("org.apache.xerces.parsers.SAXParser");
@@ -72,6 +70,9 @@ public class Excel2ListIncludeNull {
         return parser;
     }
 
+    /**
+     * 自定义解析器
+     */
     private static class SheetHandler extends DefaultHandler {
 
         private final DataFormatter formatter = new DataFormatter();
@@ -96,6 +97,10 @@ public class Excel2ListIncludeNull {
 
         public List<List<String>> getAllList() {
             return allList;
+        }
+
+        private void setAllList2Null() {
+            this.allList = new ArrayList<List<String>>(1024);
         }
 
         /**

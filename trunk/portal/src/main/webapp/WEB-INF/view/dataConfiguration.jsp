@@ -1813,6 +1813,7 @@
                         var tableName = template("tableNameLi", {"data": data});
                         $("#tableNameUl").html("");
                         $("#tableNameUl").html(tableName);
+
                         var tableNameDiv = template("tableNameDiv", {"data": data});
                         $("#tableNamePDiv").html("");
                         $("#tableNamePDiv").html(tableNameDiv);
@@ -1821,9 +1822,9 @@
                                 var tableField;
                                 var exist = v[0][0];
                                 if (exist === "isExist") {
-                                    tableField = template("tableFieldIsExist", {"data": v});
+                                    tableField = template("tableFieldIsExist", {"data": v, "tableName": k});
                                 } else {
-                                    tableField = template("tableFieldNotExist", {"data": v});
+                                    tableField = template("tableFieldNotExist", {"data": v, "tableName": k});
                                 }
                                 $("#" + k).html("");
                                 $("#" + k).append(tableField);
