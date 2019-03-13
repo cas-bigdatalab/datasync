@@ -2169,13 +2169,29 @@
 
         // 测试活动页签
         function c() {
+            // 活动页签的ID 不可重复
+            var id = "table_id1";
+            // 活动页签的名称
+            var name = "table_name";
             // 当前页签是否允许关闭 true：允许关闭
             var closable = false;
             // 模板HTML
             var template = "<p>这是内容</p>";
-            var item = {'id': '1', 'name': '首页', 'closable': closable, 'template': template};
+            var item = {'id': id, 'name': name, 'closable': closable, 'template': template};
+            // 执行创建页签
             closableTab.addTab(item);
         }
+
+        /**
+         * 关闭前确认
+         * @param i 被关闭的当前元素
+         */
+        function remove(i) {
+            bootbox.confirm("<span style='font-size: 16px'>确认要关闭此条记录吗?</span>", function () {
+                closableTab.closeTab(i)
+            })
+        }
+
     </script>
 </div>
 
