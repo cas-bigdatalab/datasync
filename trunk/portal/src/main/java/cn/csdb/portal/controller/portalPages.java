@@ -2,6 +2,7 @@ package cn.csdb.portal.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class portalPages {
@@ -34,6 +35,16 @@ public class portalPages {
     @RequestMapping("/statisticalDataDetail")
     public ModelAndView index6(){
         ModelAndView modelAndView=new ModelAndView("statisticalDataDetail");
+        return modelAndView;
+    }
+    @RequestMapping("/datatest")
+    public ModelAndView  testData(){
+        ModelAndView modelAndView=new ModelAndView("editDataTest");
+        return modelAndView;
+    }
+    @RequestMapping("/statisticalDataTotal")
+    public ModelAndView  statisticalDataTotal(){
+        ModelAndView modelAndView=new ModelAndView("statisticalDataTotal");
         return modelAndView;
     }
 }
