@@ -6,7 +6,7 @@
 			edit: {
 				enable: true,
 				showRemoveBtn: false,
-				showRenameBtn: true
+				showRenameBtn: false
 			},
 			data: {
 				simpleData: {
@@ -49,7 +49,7 @@
 
             y += document.body.scrollTop;
             x += document.body.scrollLeft;
-            rMenu.css({"top":y+"px", "left":x+"px", "visibility":"visible"});
+            rMenu.css({"top":y-40+"px", "left":x+"px", "visibility":"visible"});
 
 			$("body").bind("mousedown", onBodyMouseDown);
 		}
@@ -64,7 +64,6 @@
 		}
 		var addCount = 1;
 		function addTreeNode(e) {
-			debugger
 			hideRMenu();
 			var newNode = { name:"新建文件夹" + (addCount++)};
 			if (remoteZTree.getSelectedNodes()[0]) {
