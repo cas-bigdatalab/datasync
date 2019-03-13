@@ -266,6 +266,16 @@
                             </p>
                         </form>
                         <div id="jstree_show"></div>
+
+                        <!--测试活动页签-->
+                        <div id="asd">
+                            <!-- 此处是相关代码 -->
+                            <ul class="nav nav-tabs" role="tablist">
+                            </ul>
+                            <div class="tab-content" style="width:100%;">
+                            </div>
+                            <!-- 相关代码结束 -->
+                        </div>
                     </div>
 
                     <!--excel 导入数据库-->
@@ -658,6 +668,7 @@
     <script src="${ctx}/resources/bundles/bootstrap-fileinput/js/fileinput.min.js"></script>
     <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
     <script src="${ctx}/resources/bundles/layerJs/layer.js"></script>
+    <script src="${ctx}/resources/bundles/bootstrap-closable-tab/bootstrap-closable-tab.js"></script>
     <%--
         <script src="${ctx}/resources/js/metaTemplate.js"></script>
     --%>
@@ -2156,6 +2167,15 @@
             })
         }
 
+        // 测试活动页签
+        function c() {
+            // 当前页签是否允许关闭 true：允许关闭
+            var closable = false;
+            // 模板HTML
+            var template = "<p>这是内容</p>";
+            var item = {'id': '1', 'name': '首页', 'closable': closable, 'template': template};
+            closableTab.addTab(item);
+        }
     </script>
 </div>
 
