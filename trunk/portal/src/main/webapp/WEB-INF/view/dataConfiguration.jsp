@@ -240,6 +240,11 @@
                         <a href="#editData" data-toggle="tab">
                             数据编辑</a>
                     </li>
+
+                    <li value="5">
+                        <a href="#FileOnNet" data-toggle="tab" onclick="fileNet('')">
+                            网盘功能</a>
+                    </li>
                 </ul>
                 <!--tab content-->
                 <div class="tab-content">
@@ -340,6 +345,58 @@
                                     </div>
 
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 网盘功能-->
+                    <div class="tab-pane" id="FileOnNet" style="min-height: 600px;overflow: hidden;">
+                        <div class="alert alert-info" role="alert">
+                            <!--查询条件 -->
+                            <div class="row">
+                                <form class="form-inline" style="margin-bottom: 0px">
+
+                                    <input type="text" class="form-control" id="resourceName" placeholder="检索您的文件">
+                                    <button type="button" class="btn blue btn-sm" style="margin-left: 20px"><i
+                                            class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询
+                                    </button>
+
+                                    <button type="button" class="btn green btn-sm"
+                                            style="float: right;margin-right: 15px"><i
+                                            class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;上&nbsp;&nbsp;传
+                                    </button>
+                                    <button type="button" class="btn green btn-sm"
+                                            style="float: right;margin-right: 15px" onclick=""><i
+                                            class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增文件夹
+                                    </button>
+                                    <button type="button" class="btn green btn-sm"
+                                            style="float: right;margin-right: 15px" onclick=""><i
+                                            class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;下&nbsp;&nbsp;载
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="upload-table">
+                            <div class="table-message">列表加载中......</div>
+                            <table class="table table-bordered data-table" id="upload-list">
+                                <thead>
+                                <tr>
+                                    <th width="5px"></th>
+                                    <th width="22%">文件名称</th>
+                                    <%--<th width="13%">类型</th>--%>
+                                    <%-- <th width="10%">来源位置</th>--%>
+                                    <th width="20%">大小</th>
+                                    <th width="16%">修改时间</th>
+                                </tr>
+                                </thead>
+                                <tbody id="bd-data">
+                                </tbody>
+                            </table>
+
+                            <div class="row margin-top-20 ">
+                                <div class="page-message"
+                                     style="float: left;padding-left: 20px; line-height: 56px"></div>
+                                <div class="page-list" style="float: right; padding-right: 15px;"></div>
                             </div>
                         </div>
                     </div>
@@ -565,6 +622,7 @@
     </div>
 </div>
 <input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
+<input type="hidden" id="FtpFilePath" value="${sessionScope.FtpFilePath}"/>
 <%@ include file="./tableFieldComsTmpl.jsp" %>
 
 <script type="text/html" id="systemTmpl">
@@ -2041,13 +2099,62 @@
             })
         })();
 
-        // 初始化 主键清除按钮事件
         (function () {
-            $("body").on("click", "#clearPK", function () {
+            var $body = $("body");
+            // excel上传模块  主键清除按钮事件
+            $body.on("click", "#clearPK", function () {
                 $("[name=isPK]").prop("checked", false);
             });
             $("#excelFile").val("");
+
+            // 网盘功能模块  双击事件
+            $body.on("dblclick", "#bd-data td.fileName", function (item) {
+                var $td = $(item.target);
+                var fileType = $td.attr("class").split(" ")[0];
+                if (fileType === "dir") {
+                    // 类型为目录的打开
+                    var selectPath = $td.attr("path");
+                    fileNet(selectPath);
+                } else {
+                    // 类型为文件的询问是否下载
+                    var fileName = $td.text();
+                    bootbox.confirm("<span style='font-size: 16px'>是否下载  " + fileName + "</span>", function (r) {
+                        if (r) {
+                            $.ajax({
+                                type: "post",
+                                url: "${ctx}/file/downloadFile",
+                                dataType: "json",
+                                data: {
+                                    "selectPath": selectPath
+                                },
+                                success: function () {
+
+                                }
+
+                            })
+                        }
+                    })
+                }
+                // console.log("双击事件");
+            })
         })();
+
+        // 网盘功能木块  目录获取
+        function fileNet(selectPath) {
+            $.ajax({
+                url: "${ctx}/fileNet/getCurrentFile",
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "rootPath": selectPath
+                },
+                success: function (data) {
+                    var html = template("fileNetList", {"data": data.data});
+                    $("#bd-data").html("");
+                    $("#bd-data").append(html);
+                }
+            })
+        }
 
     </script>
 </div>
