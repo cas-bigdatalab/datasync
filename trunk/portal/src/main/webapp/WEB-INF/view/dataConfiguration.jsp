@@ -362,11 +362,11 @@
                                     </button>
 
                                     <button type="button" class="btn green btn-sm"
-                                            style="float: right;margin-right: 15px"><i
+                                            style="float: right;margin-right: 15px" onclick="showUploadFileTmp()"><i
                                             class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;上&nbsp;&nbsp;传
                                     </button>
                                     <button type="button" class="btn green btn-sm"
-                                            style="float: right;margin-right: 15px" onclick=""><i
+                                            style="float: right;margin-right: 15px" onclick="showAddFileTmp()"><i
                                             class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增文件夹
                                     </button>
                                     <button type="button" class="btn green btn-sm"
@@ -377,8 +377,7 @@
                             </div>
                         </div>
                         <div class="upload-table">
-                            <div class="table-message">列表加载中......</div>
-                            <table class="table table-bordered data-table" id="upload-list">
+                            <table class="table table-bordered data-table" id="fileList">
                                 <thead>
                                 <tr>
                                     <th width="5px"></th>
@@ -1777,12 +1776,12 @@
                 toastr["warning"]("警告！", "请输入目录名称");
                 return;
             }
-            var regDirName = /^Customdir-/g;
+            /*var regDirName = /^Customdir-/g;
             if (!regDirName.test(dirName)) {
                 toastr["warning"]("警告！", "目录前缀不可更改");
                 $("#brotherDirectorName").val("Customdir-");
                 return;
-            }
+            }*/
             $.ajax({
                 type: "POST",
                 url: "${ctx}/fileUpload/addDirectory",
@@ -1800,6 +1799,7 @@
                         $("#addBrotherDirectory").modal("hide");
                         var jt = $("#jstree_show").jstree(true);
                         jt.refresh();
+                        fileNet(parentURI);
                     }
                 }
             });
@@ -2096,6 +2096,7 @@
             }).on("fileuploaded", function (event, data) {
                 var jt = $("#jstree_show").jstree(true);
                 jt.refresh();
+                fileNet($("#parentURI").val());
             })
         })();
 
@@ -2111,35 +2112,41 @@
             $body.on("dblclick", "#bd-data td.fileName", function (item) {
                 var $td = $(item.target);
                 var fileType = $td.attr("class").split(" ")[0];
+                var selectPath = $td.attr("path");
                 if (fileType === "dir") {
                     // 类型为目录的打开
-                    var selectPath = $td.attr("path");
                     fileNet(selectPath);
                 } else {
                     // 类型为文件的询问是否下载
                     var fileName = $td.text();
                     bootbox.confirm("<span style='font-size: 16px'>是否下载  " + fileName + "</span>", function (r) {
                         if (r) {
-                            $.ajax({
-                                type: "post",
-                                url: "${ctx}/file/downloadFile",
-                                dataType: "json",
-                                data: {
-                                    "selectPath": selectPath
-                                },
-                                success: function () {
+                            // downloadFile(selectPath);
+                            downloadFile("");
 
-                                }
-
-                            })
                         }
                     })
                 }
                 // console.log("双击事件");
             })
+
+            $body.on("click", ".fileNetCheck", function (item) {
+                var $target = $(item.target);
+                var id = $target.attr("id");
+                if (id !== "undefind" && id == "all") {
+                    console.log("全选")
+                } else {
+                    console.log("单选")
+                }
+            })
         })();
 
-        // 网盘功能木块  目录获取
+
+        /**
+         *网盘功能模块  目录获取
+         *
+         * @param selectPath 被选中的路径
+         */
         function fileNet(selectPath) {
             $.ajax({
                 url: "${ctx}/fileNet/getCurrentFile",
@@ -2156,6 +2163,42 @@
             })
         }
 
+        /**
+         * 显示创建目录的弹窗
+         * 将当前父路径赋值到指定位置
+         */
+        function showAddFileTmp() {
+            var parentPath = $("#FileOnNet #fileList tbody tr:eq(0) td:eq(1)").attr("path");
+            $("#parentURI").val(parentPath);
+            $("#addSonDirectory").modal("show");
+        }
+
+        /**
+         * 显示文件上传的弹窗
+         * 将当前父路径赋值到指定位置
+         */
+        function showUploadFileTmp() {
+            var parentPath = $("#FileOnNet #fileList tbody tr:eq(0) td:eq(1)").attr("path");
+            $("#parentURI").val(parentPath);
+            $("#addFile").modal("show");
+        }
+
+        /**
+         * 选中文件
+         */
+        function selectFile() {
+
+        }
+
+        /**
+         * 下载选择的文件
+         * @param selectPath
+         */
+        function downloadFile(selectPath) {
+            selectPath = encodeURIComponent(selectPath);
+            var uri = "${ctx}/fileNet/downloadFile?selectPath=" + selectPath;
+            window.open(uri);
+        }
     </script>
 </div>
 

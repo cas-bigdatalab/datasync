@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 
@@ -49,4 +51,33 @@ public class FileNetController {
         jsonObject.put("code", "success");
         return jsonObject;
     }
+
+    /**
+     * @param response   返回文件
+     * @param selectPath 选中需要下载的文件全路径
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("/downloadFile")
+    public HttpServletResponse downloadFile(HttpServletResponse response, String selectPath) throws IOException {
+        File file = new File(selectPath);
+        String fileName = file.getName();
+        response.reset();
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-Type", "multipart/form-data");
+        fileName = new String(fileName.getBytes("gb2312"), "ISO8859-1");
+        response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
+        InputStream input = new FileInputStream(file);
+        OutputStream out = response.getOutputStream();
+        byte[] buff = new byte[1024];
+        int index = 0;
+        while ((index = input.read(buff)) != -1) {
+            out.write(buff, 0, index);
+            out.flush();
+        }
+        out.close();
+        input.close();
+        return response;
+    }
+
 }
