@@ -593,7 +593,8 @@
             var db = $("#dataBaseTypeE option:selected").val();
             if(db=='DB2'){
                 $("#portE").val("5000");
-            }else if(db=='Oracle'){
+
+            }else if(db=='oracle'){
                 $("#portE").val("1521");
             }else if(db=='SqlServer'){
                 $("#portE").val("1433");
