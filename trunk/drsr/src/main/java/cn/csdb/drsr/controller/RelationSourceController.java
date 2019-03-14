@@ -24,8 +24,10 @@ import javax.annotation.Resource;
 import javax.management.relation.RelationService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.Date;
 
 /**
  * Created by shiba on 2018/10/8.
@@ -245,5 +247,47 @@ public class RelationSourceController {
         jsonObject.put("maps", maps);
         return jsonObject;
     }
+
+
+    /**
+     * Function Description: preview RelationalDatabase By SQL
+     *
+     * @param: [dataSourceId, sqlStr, tableInfosListStr, pageSize]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @auther: hw
+     * @date: 2018/10/23 10:29
+     */
+    @ResponseBody
+    @RequestMapping(value = "/loadMysqlDatabaseList")
+    public JSONObject loadMysqlDatabaseList(String dataBaseType,String host,String port,String userName,String password ) throws ClassNotFoundException, SQLException {
+        JSONObject jsonObject=new JSONObject();
+        List<Object> databaseList;
+        Connection connection = null;
+        String result="1";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            String url = "jdbc:mysql://" + host + ":" + port + "" ;
+            connection = DriverManager.getConnection(url, userName, password);
+        } catch (ClassNotFoundException e) {
+            result="0";
+            System.out.println("数据库连接异常");
+        } catch (SQLException e) {
+            result="0";
+            System.out.println("数据库连接异常");
+        }finally {
+            if(connection!=null){
+                connection.close();
+            }
+        }
+        if("1".equals(result)){//数据库参数连接正常后加载数据库列表
+            databaseList= relationShipService.loadMysqlDatabaseList(dataBaseType,host,port,userName,password);
+            jsonObject.put("databaseList",databaseList);
+        }
+        jsonObject.put("result",result);
+        return jsonObject;
+    }
+
+
+
 
 }
