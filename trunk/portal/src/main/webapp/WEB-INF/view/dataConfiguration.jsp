@@ -85,7 +85,7 @@
         }
 
         table {
-            table-layout:fixed;
+            table-layout: fixed;
             border-collapse: collapse;
             margin: 0 auto;
             text-align: center;
@@ -96,7 +96,7 @@
 
         table td, table th {
             text-align: center;
-            border: 1px solid #cad9ea;
+            /*border: 1px solid #cad9ea;*/
             color: #666;
             height: 39px;
             width: 200px;
@@ -104,7 +104,8 @@
             text-overflow: ellipsis;
             overflow: hidden;
         }
-        #fileBody tr td{
+
+        #fileBody tr td {
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
@@ -313,19 +314,21 @@
                     </div>
 
                     <!--数据编辑-->
-                    <div class="tab-pane" id="editData" style="min-height: 600px;overflow: hidden;" >
+                    <div class="tab-pane" id="editData" style="min-height: 600px;overflow: hidden;">
                         <div id="alltables" class="tab-pane"
                              style="margin-left:1%;max-width:98%;margin-right:1%;max-height: 300px;overflow: auto;">
 
                         </div>
 
                         <div id="tableDatil" style="margin-top:2px;">
-                            <div class="portlet-title" style="max-width:98%;margin-left: 1%;margin-right: 1%; max-height:800px;overflow-x: auto">
+                            <div class="portlet-title"
+                                 style="max-width:98%;margin-left: 1%;margin-right: 1%; max-height:800px;overflow-x: auto">
                                 <div id="nodata" style="display:none;margin-left: 25%;margin-top: 8%;">
                                     <span id="span1" style="font-size: 25px">该表暂时没有数据</span>
                                     <span id="span2" style="margin-left: 5%"></span>
                                 </div>
-                                <table border="1" id="table1" class="table table-bordered data-table" style="width:100%;">
+                                <table border="1" id="table1" class="table table-bordered data-table"
+                                       style="width:100%;">
                                     <thead id="thead_id">
                                     </thead>
 
@@ -340,7 +343,7 @@
                                             id="totalPages"></span>页,<span
                                             style="color:blue;" id="totalCount"></span>条数据
                                     </div>
-                                    <div style="float: right;" >
+                                    <div style="float: right;">
                                         <div id="pagination"></div>
                                     </div>
 
@@ -377,10 +380,12 @@
                             </div>
                         </div>
                         <div class="upload-table">
+                            <div id="fileBar"></div>
                             <table class="table table-bordered data-table" id="fileList">
                                 <thead>
                                 <tr>
-                                    <th width="5px"></th>
+                                    <th width="5px"><span>全选</span> &nbsp;&nbsp;<input type="checkbox" id="all"
+                                                                                       class="fileNetCheck"/></th>
                                     <th width="22%">文件名称</th>
                                     <%--<th width="13%">类型</th>--%>
                                     <%-- <th width="10%">来源位置</th>--%>
@@ -457,10 +462,11 @@
                     <div class="modal-body" style="overflow:scroll;max-height:600px;">
                         <div class="tab-content"
                              style="background-color: white;padding-top: 20px ;">
-                            <div class="tab-pane active" id="checkData1" style="width: 98%;margin-right: 1%;margin-left: 1%; ">
+                            <div class="tab-pane active" id="checkData1"
+                                 style="width: 98%;margin-right: 1%;margin-left: 1%; ">
                                 <table border="1" id="checkTable">
                                     <thead>
-                                    <th style="width:20%;" >字段名</th>
+                                    <th style="width:20%;">字段名</th>
                                     <th style="width:20%;">字段类型</th>
                                     <th style="width:20%;">注释</th>
                                     <th style="width:40%;">字段值</th>
@@ -697,7 +703,7 @@
                         "<div class='icheck-list' style='padding-top: 7px'>";
                     var list = data.list;
                     for (var i = 0; i < list.length; i++) {
-                        html += "<label class='col-md-6' style='padding-left: 0px'><input type='radio' name='mapTable' onclick=\"staticSourceTableChoice(1,this" + ",'" + sub1 + "','" + list[i] + "','dataResource','"+ flag +"')\" value='" + list[i] + "'>&nbsp;" + list[i] + "</label>"
+                        html += "<label class='col-md-6' style='padding-left: 0px'><input type='radio' name='mapTable' onclick=\"staticSourceTableChoice(1,this" + ",'" + sub1 + "','" + list[i] + "','dataResource','" + flag + "')\" value='" + list[i] + "'>&nbsp;" + list[i] + "</label>"
                     }
                     html += "</div><input type='text' class='form-control' name='maptableinput' id='maptableinput' style='display:none;'/></div></div>";
                     if (flag == '0') {
@@ -763,7 +769,7 @@
                                 if (arr[i] === "PORTALID") {
                                     s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                                 } else {
-                                    s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "<br/><p title="+columnComment[i]+">"+ columnComment[i]+"</p></th>";
+                                    s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "<br/><p title=" + columnComment[i] + ">" + columnComment[i] + "</p></th>";
                                     il++;
                                 }
                             } else {
@@ -982,15 +988,15 @@
             for (var i = 0; i < strs2.length; i++) {
                 if (strs2[i] === "PORTALID") {
                     ss += "<input style='display:none;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='display:none;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='display:none;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' />";
-                } else if(dataTypeArr[i]==="text"||dataTypeArr[i]==="longtext"){
+                } else if (dataTypeArr[i] === "text" || dataTypeArr[i] === "longtext") {
                     // ss += "<input style='width:20%;height:60px;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='width:20%;height:60px;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='width:20%;height:60px;' type='text'  value='" + columnComments[i] + "' readonly='true' /><textarea title='" + strs[i] + "'style='width:40%;'rows='1' class='" + dataTypeArr[i] + "'  name=" + strs2[i] + " value='" + strs[i] + "' >"+ strs[i] +"</textarea><br/>";
                     // ss += "<input style='width:20%;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input type='text' title='" + strs[i] + "'style='width:40%;'rows='1' class='" + dataTypeArr[i] + "'  name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
-                    ss += "<table ><tr><td  ><input style='width:100%;height:100%;' type='text' value='" + strs2[i] + "' readonly='true'/></td><td><input style='width:100%;height:100%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/></td><td><input  style='width:100%;height:100%;' type='text'  value='" + columnComments[i] + "' readonly='true' /></td><td style='width: 40%;'><textarea  style='width:100%;height:100%'  title='" + strs[i] + "' class='" + dataTypeArr[i] + "'  name=" + strs2[i] + " value='" + strs[i] + "' >"+ strs[i] +"</textarea></td></tr>";
-                }else{
+                    ss += "<table ><tr><td  ><input style='width:100%;height:100%;' type='text' value='" + strs2[i] + "' readonly='true'/></td><td><input style='width:100%;height:100%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/></td><td><input  style='width:100%;height:100%;' type='text'  value='" + columnComments[i] + "' readonly='true' /></td><td style='width: 40%;'><textarea  style='width:100%;height:100%'  title='" + strs[i] + "' class='" + dataTypeArr[i] + "'  name=" + strs2[i] + " value='" + strs[i] + "' >" + strs[i] + "</textarea></td></tr>";
+                } else {
                     // ss += "<input style='width:20%;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/><input style='width:20%;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input title='" + strs[i] + "'style='width:40%;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /><br/>";
                     ss += "<tr><td><input style='width:20%;' type='text' value='" + strs2[i] + "' readonly='true'/></td><td><input style='width:20%;' type='text'  value='" + S_columnType[i] + "' readonly='true'/></td><td><input style='width:20%;' type='text'  value='" + columnComments[i] + "' readonly='true' /></td><td><input title='" + strs[i] + "' style='width:40%;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /></td></tr>";
                 }
-                ss+="</table>"
+                ss += "</table>"
                 alert_column.push(strs2[i]);
             }
             var s_save = "<input class='eee'id='btn_save'type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataType + "','" + currentPage + "','" + alert_column + "')\"/>";
@@ -1246,13 +1252,13 @@
 
                     if (datacon[i] !== "" && S_dataType[i] === "float") {
                         if (isNaN(datacon[i])) {
-                            toastr.warning(S_column[i]+" 字段应是float类型！");
+                            toastr.warning(S_column[i] + " 字段应是float类型！");
                             return;
                         }
                     }
                     if (datacon[i] !== "" && S_dataType[i] === "double") {
                         if (isNaN(datacon[i])) {
-                            toastr.warning(S_column[i]+" 字段应是double类型！");
+                            toastr.warning(S_column[i] + " 字段应是double类型！");
                             return;
                         }
                     }
@@ -1261,7 +1267,7 @@
                         var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
                         var regExp = new RegExp(reg);
                         if (!regExp.test(datacon[i])) {
-                            toastr.warning(S_column[i]+" 字段是时间格式,正确格式应为: xxxx-xx-xx ");
+                            toastr.warning(S_column[i] + " 字段是时间格式,正确格式应为: xxxx-xx-xx ");
                             return;
                         }
                     }
@@ -1270,7 +1276,7 @@
                         var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
                         var regExp = new RegExp(reg);
                         if (!regExp.test(datacon[i]) && datacon[i] !== null && datacon[i] !== "") {
-                            toastr.warning(S_column[i]+" 字段正确格式应为: xxxx-xx-xx xx:xx:xx ");
+                            toastr.warning(S_column[i] + " 字段正确格式应为: xxxx-xx-xx xx:xx:xx ");
                             return;
                         }
                     }
@@ -1285,11 +1291,11 @@
                         if (reg.test(datacon[i])) {
                             var ss = datacon[i].split(".");
                             if (ss[0].length > n) {
-                                toastr.warning(S_column[i]+" 数据超出范围！ ");
+                                toastr.warning(S_column[i] + " 数据超出范围！ ");
                                 return;
                             }
                         } else {
-                            toastr.warning(S_column[i]+" 字段是decimal类型！ ");
+                            toastr.warning(S_column[i] + " 字段是decimal类型！ ");
                             return;
                         }
                     }
@@ -1343,10 +1349,10 @@
         };
 
         //修改数据,保存
-        function saveData(tableName, subjectCode, dataType, currentPage,alert_column) {
+        function saveData(tableName, subjectCode, dataType, currentPage, alert_column) {
             var newdata = $('#form_id').serializeArray();
             var dataTypeArr = dataType.split(",");
-            var columnName=alert_column.split(",");
+            var columnName = alert_column.split(",");
             var form1 = document.getElementById("form_id");
             var kk = 5;
             var checkdataArr = [];
@@ -1375,7 +1381,7 @@
                         }
                     }
                     if (bytesCount.length > 255) {
-                        toastr.warning(columnName[i]+" 字段超出范围！");
+                        toastr.warning(columnName[i] + " 字段超出范围！");
                         return;
                     }
                 }
@@ -1395,7 +1401,7 @@
                         }
                     }
                     if (bytesCount > 65535) {
-                        toastr.warning(columnName[i]+" 字段超出范围！");
+                        toastr.warning(columnName[i] + " 字段超出范围！");
                         return;
                     }
                 }
@@ -1414,7 +1420,7 @@
                         }
                     }
                     if (bytesCount > 4294967295) {
-                        toastr.warning(columnName[i]+" 字段超出范围！");
+                        toastr.warning(columnName[i] + " 字段超出范围！");
                         return;
                     }
                 }
@@ -1433,7 +1439,7 @@
                         }
                     }
                     if (bytesCount > 16777215) {
-                        toastr.warning(columnName[i]+" 字段超出范围！");
+                        toastr.warning(columnName[i] + " 字段超出范围！");
                         return;
                     }
                 }
@@ -1441,7 +1447,7 @@
                 //bit数据类型判断
                 if (checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null" && dataTypeArr[i] === "bit") {
                     if (checkdataArr[i] !== "0" && checkdataArr[i] !== "1") {
-                        toastr.warning(columnName[i]+" 字段应是bit类型！");
+                        toastr.warning(columnName[i] + " 字段应是bit类型！");
                         return;
                     }
                 }
@@ -1449,11 +1455,11 @@
                 if (checkdataArr[i] !== null && checkdataArr[i] !== "" && dataTypeArr[i] === "tinyint") {
                     if (!isNaN(checkdataArr[i])) {
                         if (parseInt(checkdataArr[i]) > 127 || parseInt(checkdataArr[i]) < -128) {
-                            toastr.warning(columnName[i]+" 字段超出范围！");
+                            toastr.warning(columnName[i] + " 字段超出范围！");
                             return;
                         }
                     } else {
-                        toastr.warning(columnName[i]+" 字段应是tinyint等类型！");
+                        toastr.warning(columnName[i] + " 字段应是tinyint等类型！");
                         return;
                     }
                 }
@@ -1464,16 +1470,16 @@
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
                             //警告消息提示s，默认背景为橘黄色
-                            toastr.warning(columnName[i]+" 字段应是smallint类型！");
+                            toastr.warning(columnName[i] + " 字段应是smallint类型！");
                             return;
                         } else {
                             if (parseInt(checkdataArr[i]) > 32767 || parseInt(checkdataArr[i]) < -32768) {
-                                toastr.warning(columnName[i]+" 字段超出范围！");
+                                toastr.warning(columnName[i] + " 字段超出范围！");
                                 return;
                             }
                         }
                     } else {
-                        toastr.warning(columnName[i]+" 该字段应是数字类型！");
+                        toastr.warning(columnName[i] + " 该字段应是数字类型！");
                         return;
                     }
                 }
@@ -1484,16 +1490,16 @@
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
                             //警告消息提示s，默认背景为橘黄色
-                            toastr.warning(columnName[i]+" 字段应是mediumint类型！");
+                            toastr.warning(columnName[i] + " 字段应是mediumint类型！");
                             return;
                         } else {
                             if (parseInt(checkdataArr[i]) > 8388607 || parseInt(checkdataArr[i]) < -8388608) {
-                                toastr.warning(columnName[i]+" 字段超出范围！");
+                                toastr.warning(columnName[i] + " 字段超出范围！");
                                 return;
                             }
                         }
                     } else {
-                        toastr.warning(columnName[i]+" 字段应是数字类型！");
+                        toastr.warning(columnName[i] + " 字段应是数字类型！");
                         return;
                     }
                 }
@@ -1503,7 +1509,7 @@
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
                             //警告消息提示s，默认背景为橘黄色
-                            toastr.warning(columnName[i]+" 字段应是bigint类型！");
+                            toastr.warning(columnName[i] + " 字段应是bigint类型！");
                             return;
                         }
                         // else {
@@ -1513,7 +1519,7 @@
                         //     }
                         // }
                     } else {
-                        toastr.warning(columnName[i]+" 字段应是数字类型！");
+                        toastr.warning(columnName[i] + " 字段应是数字类型！");
                         return;
                     }
                 }
@@ -1523,16 +1529,16 @@
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
                             //警告消息提示s，默认背景为橘黄色
-                            toastr.warning(columnName[i]+" 字段应是int或integer等类型！");
+                            toastr.warning(columnName[i] + " 字段应是int或integer等类型！");
                             return;
                         } else {
                             if (parseInt(checkdataArr[i]) > 2147483647 || parseInt(checkdataArr[i]) < -2147483648) {
-                                toastr.warning(columnName[i]+" 字段超出范围！");
+                                toastr.warning(columnName[i] + " 字段超出范围！");
                                 return;
                             }
                         }
                     } else {
-                        toastr.warning(columnName[i]+" 字段应是数字类型！");
+                        toastr.warning(columnName[i] + " 字段应是数字类型！");
                         return;
                     }
                 }
@@ -1540,7 +1546,7 @@
                 //float数据类型判断
                 if (dataTypeArr[i] === "float" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
                     if (isNaN(checkdataArr[i])) {
-                        toastr.warning(columnName[i]+" 字段应是float类型！");
+                        toastr.warning(columnName[i] + " 字段应是float类型！");
                         return;
                     }
                     // if(parseFloat(checkdataArr[i]>)){
@@ -1549,7 +1555,7 @@
                 //double数据类型判断
                 if (dataTypeArr[i] === "double" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
                     if (isNaN(checkdataArr[i])) {
-                        toastr.warning(columnName[i]+" 字段应是double类型！");
+                        toastr.warning(columnName[i] + " 字段应是double类型！");
                         return;
                     }
                 }
@@ -1559,7 +1565,7 @@
                     var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
                     var regExp = new RegExp(reg);
                     if (!regExp.test(checkdataArr[i])) {
-                        toastr.warning(columnName[i]+" 字段是时间格式,正确格式应为: xxxx-xx-xx ");
+                        toastr.warning(columnName[i] + " 字段是时间格式,正确格式应为: xxxx-xx-xx ");
                         return;
                     }
                 }
@@ -1568,7 +1574,7 @@
                     var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
                     var regExp = new RegExp(reg);
                     if (!regExp.test(checkdataArr[i])) {
-                        toastr.warning(columnName[i]+" 字段正确格式应为: xxxx-xx-xx xx:xx:xx ");
+                        toastr.warning(columnName[i] + " 字段正确格式应为: xxxx-xx-xx xx:xx:xx ");
                         return;
                     }
                 }
@@ -1584,11 +1590,11 @@
                     if (reg.test(checkdataArr[i])) {
                         var ss = checkdataArr[i].split(".");
                         if (ss[0].length > n) {
-                            toastr.warning(columnName[i]+" 字段数据超出范围！ ");
+                            toastr.warning(columnName[i] + " 字段数据超出范围！ ");
                             return;
                         }
                     } else {
-                        toastr.warning(columnName[i]+" 字段是decimal类型！ ");
+                        toastr.warning(columnName[i] + " 字段是decimal类型！ ");
                         return;
                     }
                 }
@@ -1784,7 +1790,7 @@
             }*/
             $.ajax({
                 type: "POST",
-                url: "${ctx}/fileUpload/addDirectory",
+                url: "${ctx}/fileNet/addDirectory",
                 data: {
                     "dirName": dirName,
                     "parentURI": parentURI
@@ -2074,7 +2080,7 @@
             $("#file-5").fileinput({
                 language: "zh",
                 theme: 'fas',
-                uploadUrl: "${ctx}/fileUpload/addFile",
+                uploadUrl: "${ctx}/fileNet/addFile",
                 showUpload: true,
                 showCaption: false,
                 // browseClass: "btn btn-primary btn-lg",
@@ -2108,9 +2114,15 @@
             });
             $("#excelFile").val("");
 
+
             // 网盘功能模块  双击事件
             $body.on("dblclick", "#bd-data td.fileName", function (item) {
-                var $td = $(item.target);
+                var $td = "";
+                if ($(item.target).is("a")) {
+                    $td = $(item.target).parent();
+                } else {
+                    $td = $(item.target);
+                }
                 var fileType = $td.attr("class").split(" ")[0];
                 var selectPath = $td.attr("path");
                 if (fileType === "dir") {
@@ -2121,25 +2133,55 @@
                     var fileName = $td.text();
                     bootbox.confirm("<span style='font-size: 16px'>是否下载  " + fileName + "</span>", function (r) {
                         if (r) {
-                            // downloadFile(selectPath);
-                            downloadFile("");
-
+                            downloadFile(selectPath);
                         }
                     })
                 }
-                // console.log("双击事件");
-            })
+            });
 
+
+            // 选择多选框触发事件
             $body.on("click", ".fileNetCheck", function (item) {
                 var $target = $(item.target);
                 var id = $target.attr("id");
-                if (id !== "undefind" && id == "all") {
-                    console.log("全选")
+                if (id !== "undefined" && id === "all") {
+                    var all = $target.is(":checked");
+                    $("#FileOnNet table input.fileNetCheck").attr("checked", all);
                 } else {
-                    console.log("单选")
+                    var current = $target.is(":checked");
+                    if (!current) {
+                        $("#FileOnNet table #all").attr("checked", false);
+                    }
                 }
             })
+
+
+            // 鼠标右键替换
+            $body.on("mousedown", "#FileOnNet table tr", function (e) {
+                alert(e.which) // 1 = 鼠标左键 left; 2 = 鼠标中键; 3 = 鼠标右键
+                return false;//阻止链接跳转
+            })
         })();
+
+
+        // file address bar
+        function fileAddressBar(data) {
+            var a = "<a path='" + data.parent.filePath + "' onclick='returnParent(this)'>返回上级</a>&nbsp;|&nbsp;";
+            var parentModules = data.parentModules;
+            var l = parentModules.length;
+            var modules = "";
+            for (--l; l >= 0; l--) {
+                var v = parentModules[l];
+                if (l != 0) {
+                    modules += "<a path='" + v.path + "' class='modules' onclick='returnParent(this)'>" + v.name + "</a>&nbsp;>&nbsp;"
+                } else {
+                    modules += "<span path=" + v.path + " class='modules'>" + v.name + "</span>"
+                }
+            }
+            $("#fileBar").html("");
+            $("#fileBar").append(a);
+            $("#fileBar").append(modules);
+        }
 
 
         /**
@@ -2156,39 +2198,55 @@
                     "rootPath": selectPath
                 },
                 success: function (data) {
-                    var html = template("fileNetList", {"data": data.data});
+                    var fileListHTML = template("fileNetList", {"data": data.data});
                     $("#bd-data").html("");
-                    $("#bd-data").append(html);
+                    $("#bd-data").append(fileListHTML);
+                    fileAddressBar(data);
+                    $("#FileOnNet table #all").attr("checked", false);
                 }
             })
         }
+
+
+        /**
+         * 返回到指定父级目录
+         * @param item
+         */
+        function returnParent(item) {
+            var $a = $(item);
+            fileNet($a.attr("path"));
+        }
+
 
         /**
          * 显示创建目录的弹窗
          * 将当前父路径赋值到指定位置
          */
         function showAddFileTmp() {
-            var parentPath = $("#FileOnNet #fileList tbody tr:eq(0) td:eq(1)").attr("path");
+            var parentPath = $("#FileOnNet #fileBar span.modules").attr("path");
             $("#parentURI").val(parentPath);
             $("#addSonDirectory").modal("show");
         }
+
 
         /**
          * 显示文件上传的弹窗
          * 将当前父路径赋值到指定位置
          */
         function showUploadFileTmp() {
-            var parentPath = $("#FileOnNet #fileList tbody tr:eq(0) td:eq(1)").attr("path");
+            var parentPath = $("#FileOnNet #fileBar span.modules").attr("path");
             $("#parentURI").val(parentPath);
             $("#addFile").modal("show");
         }
+
 
         /**
          * 选中文件
          */
         function selectFile() {
-
+            var $checked = $("#FileOnNet table input:checked");
         }
+
 
         /**
          * 下载选择的文件
