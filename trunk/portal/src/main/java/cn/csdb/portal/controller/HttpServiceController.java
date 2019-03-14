@@ -99,7 +99,13 @@ public class HttpServiceController {
                 zipFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + ".zip";
                 System.out.println("+++++++++" + zipFile);
 //                System.out.println("=========="+fileName);
-                unZipPath = siteFtpPath + File.separator + "file" + File.separator + subjectCode + "_" + dataTask.getDataTaskId();
+//                unZipPath = siteFtpPath + File.separator + "file" + File.separator + subjectCode + "_" + dataTask.getDataTaskId();
+                unZipPath = dataTask.getRemoteuploadpath();
+                File tempFile = new File(unZipPath);
+                if (!tempFile.exists()) {
+                    tempFile.mkdirs();
+                }
+
                 File f = new File(siteFtpPath + File.separator + "file" + File.separator);
                 if (!f.exists()) {
                     f.mkdirs();

@@ -24,6 +24,12 @@ public class StatisticalDataService {
     @Autowired
     private ResourceDao resourceDao;
 
+//    查询所有的专题
+    public  List<Subject> findAllSubject(){
+        List<Subject> list=subjectDao.findAllsubject();
+        return list;
+    }
+
 //    主题库浏览量统计
     public List<Subject> statisDataDatil(){
         List<Subject> list=subjectDao.findAllsubject();
@@ -53,13 +59,9 @@ public class StatisticalDataService {
 //        for(Subject s:list1){
 //            System.out.println(s.getSubjectCode()+"的浏览量："+s.getVisitCount());
 //        }
-        for(int i=0;i<list1.size();i++){
-            if(i>=10){
-                list1.remove(i);
-            }
-        }
         return list1;
     }
+
     //    主题库下载量统计
 public List<Subject> getDownloadCount(){
     List<Subject> list=subjectDao.findAllsubject();
@@ -86,14 +88,6 @@ public List<Subject> getDownloadCount(){
             return -1;
         }
     });
-//    for(Subject s:list1){
-//        System.out.println(s.getSubjectCode()+"的下载量："+s.getDownCont());
-//    }
-    for(int i=0;i<list1.size();i++){
-        if(i>=10){
-            list1.remove(i);
-        }
-    }
     return list1;
 }
 
@@ -103,6 +97,23 @@ public List<Subject> getDownloadCount(){
    }
     public List<Resource> getResourcDown(){
         List<Resource> list=resourceDao.getResourceDown();
+        return list;
+    }
+
+    public List<Resource> getResouceVisitBySCode(String subjectCode){
+        List<Resource> list=resourceDao.getResouceVisitBySCode(subjectCode);
+        return list;
+    }
+    /**
+     * Function Description: 根据专题库统计该专题库内各数据集的访问量
+     *
+     * @param:
+     * @return:
+     * @auther:zcy
+     * @date:   2019/3/13 9:36
+     */
+    public List<Resource> getResouceDownBySCode(String subjectCode){
+        List<Resource> list=resourceDao.getResouceDownBySCode(subjectCode);
         return list;
     }
 

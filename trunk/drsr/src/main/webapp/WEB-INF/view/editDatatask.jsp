@@ -227,6 +227,32 @@
     </ul>
 </div>
 
+<div class="modal fade" id="createFileMModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 66%;top: 156px;margin: 0 auto;">
+            <div class="modal-header" style="height: 48px;">
+                <h5 class="modal-title" id="createFileTitle" style="float: left;">创建文件夹</h5>
+                <button type="button" class="close" onclick="hidenFileNameModal()">
+                    <span >&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="fileName" class="col-form-label">文件夹名称</label>
+                        <input type="text" autofocus class="form-control" id="fileName">
+                        <span id="promptInf" style="color: red;"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="createFileSureBut" onclick="addFilePath()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script type="text/html" id="previewTableDataAndComsTmpl">
     <div class="skin skin-minimal">
         <table class="table table-hover table-bordered">
@@ -849,11 +875,24 @@
                         }
                         jsonObjectStr=eval(JSON.parse(data).jsonObjectStr);//远程目录
                         var remotePath=JSON.parse(data).datatask.remoteuploadpath;
+                        // var result=false;
                         for(var i=0;i<jsonObjectStr.length;i++){
                             if(jsonObjectStr[i].id==remotePath){
+                                // result=true;
                                 jsonObjectStr[i].checked="true";
                             }
                         }
+                        // if(result!=true){
+                        //     debugger
+                        //     var arr= {
+                        //          "checked": "true",
+                        //          "id": remotePath,
+                        //          "isParent": "true",
+                        //          "name": remotePath.substring(remotePath.lastIndexOf("/")+1,remotePath.length+1),
+                        //          "open": "true",
+                        //          "pid": remotePath.substring(0,remotePath.lastIndexOf("/"))};
+                        //     jsonObjectStr.push(arr);
+                        // }
 
                         var fileNodes=JSON.parse(data).nodeList;
                         var ztreeObjRemote=$.fn.zTree.init($("#remoteTree"),remoteSetting,jsonObjectStr);
@@ -1120,6 +1159,47 @@
                 pathsOfCheckedFiles.push(nodes[i].pid+"/"+nodes[i].name);
             }
             return pathsOfCheckedFiles;
+        }
+
+        function addFilePath(){
+            var inputFileName = $("#fileName").val().trim();
+            if(inputFileName==null || inputFileName==""){
+                $("#promptInf")[0].textContent="文件夹名称不能为空！";
+                $("#fileName")[0].style.borderColor="red";
+                return;
+            }
+            var newNode = { name:""+inputFileName+""};
+            if (remoteZTree.getSelectedNodes()[0]) {
+                newNode.checked = false;
+                newNode.isParent=true;
+                newNode.id=remoteZTree.getSelectedNodes()[0].id+"/"+newNode.name;
+                remoteZTree.addNodes(remoteZTree.getSelectedNodes()[0], newNode);
+            } else {
+                newNode.isParent=true;
+                newNode.id=remoteZTree.getSelectedNodes()[0].id+"/"+newNode.name;
+                remoteZTree.addNodes(null, newNode);
+            }
+            $("#createFileMModal").modal("hide");
+        }
+
+        function addTreeNode(e) {
+            hideRMenu();
+            ShowCreateModal();
+        }
+        // 修改弹出框的title, 显示弹框
+        function ShowCreateModal(title){
+            if(remoteZTree.getSelectedNodes()<=0){
+                toastr["error"]("请选择父节点！");
+                return;
+            }
+            $("#createFileTitle").text(title);
+            $("#promptInf")[0].textContent="";
+            $("#fileName")[0].style.borderColor="#d2c3c3";
+            $('#createFileMModal').modal('show');
+        }
+
+        function hidenFileNameModal() {
+            $("#createFileMModal").modal("hide");
         }
 
 

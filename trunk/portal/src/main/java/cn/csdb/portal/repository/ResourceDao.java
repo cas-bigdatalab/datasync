@@ -178,4 +178,18 @@ public class ResourceDao {
 
         return list;
     }
+
+//根据专题统计该专题内访问量
+    public List <cn.csdb.portal.model.Resource> getResouceVisitBySCode(String subjectCode){
+        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)).with(new Sort(Sort.Direction.DESC,
+                "vCount")),cn.csdb.portal.model.Resource.class);
+        return list;
+    }
+
+    //根据专题统计该专题内访问量
+    public List <cn.csdb.portal.model.Resource> getResouceDownBySCode(String subjectCode){
+        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)).with(new Sort(Sort.Direction.DESC,
+                "dCount")),cn.csdb.portal.model.Resource.class);
+        return list;
+    }
 }
