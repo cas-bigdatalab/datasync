@@ -417,6 +417,21 @@
                                                            id="Task_phone" >
                                                 </div>
                                             </div>
+
+                                            <div id="divExtMetadata">
+                                                <div><br/>自定义扩展的元数据信息：</div>
+                                                <c:forEach items="${list}" var ="item" >
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3" >${item.extFieldName}<span style="margin-left: 13px"></span>
+                                                    </label>
+                                                    <div class="col-md-5" style="padding-top:13px">
+                                                        <input type="text" class="form-control" name=${item.extField} placeholder="请输入${item.extFieldName}"
+                                                               id=${item.extField} >
+                                                    </div>
+                                                </div>
+                                                </c:forEach>
+
+                                            </div>
                                         </form>
 
                                 </div>
@@ -1009,6 +1024,17 @@
                 return
             }
 
+            //xiajl20190310
+            var d={};
+            var t=$("#submit_form2").serializeArray();
+            $.each(t,function(){
+                console.log(this.name);
+                if (this.name.indexOf("ext_") >=0) {
+                    d[this.name] = this.value;
+                }
+            });
+            var extData = JSON.stringify(d);
+
             var keywordStr = $("#select2_tags").val()
             $.ajax({
                 url:ctx+"/resource/addResourceFirstStep",
@@ -1027,7 +1053,8 @@
                     createTime:$("#createTime").val(),
                     publishOrganization:$("#publish_Organization").val(),
                     createOrganization:$("#create_Organization").val(),
-                    createPerson:$("#create_person").val()
+                    createPerson:$("#create_person").val(),
+                    extMetadata:extData
                 },
                 success:function (data) {
                     var data = JSON.parse(data)

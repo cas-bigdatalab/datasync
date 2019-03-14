@@ -52,9 +52,6 @@
     <link rel="shortcut icon" href="${ctx}/resources/img/favicon.ico"/>
 
     <style>
-        /*.myactive{
-            background-color: #b7ecfe!important;
-        }*/
         .page-sidebar .page-sidebar-menu > li > a{
             padding: 8px 15px;
         }
@@ -63,165 +60,12 @@
             padding-bottom: 10px;
         }
     </style>
-
 </head>
 
 <body>
-<%--<div class="main-wrap">
-    <div class="page-head">
-        <div class="head-left">
-            <img src="${ctx}/resources/img/u7.png" >
-        </div>
-        <div class="head-right-center">
-            <div class="head-banner-center">
-                <span style="font-weight:700;font-family: '新細明體-ExtB Bold', '新細明體-ExtB Regular', '新細明體-ExtB'">DataSync</span>
-                <span style="font-weight:400;">&nbsp;&nbsp;&nbsp;中国烟草质量中心平台</span>
-            </div>
-            <div class="login-btn">
-                请登录
-            </div>
-        </div>
-    </div>
-    <div class="page-body">
-        <div class="body-left">
-            <ul class="list-ul center1" style="display: none">
-                <li><a href="${ctx}/ccc">专业库管理</a></li>
-                <li><a href="${ctx}/subjectMgmt/sdgsdfs?currentPage=1">用户组管理</a></li>
-                <li><a href="${ctx}/subjectMgmt/sdgsdfs?currentPage=1">资源分类管理</a></li>
-                <li><a href="${ctx}/subjectMgmt/zasda?currentPage=1">数据发布管理</a></li>
-                <li><a href="${ctx}/subjectMgmt/dsa?currentPage=1">统计管理</a></li>
-                <li><a href="${ctx}/subjectMgmt/querySubject?currentPage=1">all数据发布管理</a></li>
-            </ul>
-            <ul class="list-ul center2"  style="display: none">
-                <li><a href="${ctx}/aaa">数据配置</a></li>
-                <li><a href="${ctx}/subjectMgmt/sdgsdfs?currentPage=1">数据发布管理</a></li>
-            </ul>
 
-        </div>
-        <div class="body-right" style="min-height: 500px">
-            <sitemesh:write property="body"/>
-            &lt;%&ndash;<div class="setting-head">
-                <span>DataSync / 数据配置</span>
-            </div>
-            <div class="setting-title">
-                <span>数据配置</span>
-            </div>
-            <div class="container-fluid setting-table" >
-                <div class="row">
-                    <div class="col-md-2" style="font-size: 20px">选择表资源</div>
-                    <div class="col-md-9" >
-                        <div class="row" >
-                            <!--<div class="col-md-4">
-                                <label>
-                                    <input type="radio" name="data-table"> aw_day
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <label>
-                                    <input type="radio" name="data-table"> Remember mesadad
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <label>
-                                    <input type="radio" name="data-table"> Remember me
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <label>
-                                    <input type="radio" name="data-table"> Remember me
-                                </label>
-                            </div>
-                            <div class="col-md-4">
-                                <label>
-                                    <input type="radio" name="data-table"> Remember me
-                                </label>
-                            </div>-->
-                            <table class="table">
-                                <tr>
-                                    <td><label>
-                                        <input type="radio" name="data-table"> aw_dadsadaday
-                                    </label></td>
-                                    <td><label>
-                                        <input type="radio" name="data-table"> aw_day
-                                    </label></td>
-                                    <td><label>
-                                        <input type="radio" name="data-table"> aw_day
-                                    </label></td>
-                                </tr>
-                                <tr>
-                                    <td><label>
-                                        <input type="radio" name="data-table"> aw_dadsadaday
-                                    </label></td>
-                                    <td><label>
-                                        <input type="radio" name="data-table"> aw_day
-                                    </label></td>
-                                    <td><label>
-                                        <input type="radio" name="data-table"> aw_day
-                                    </label></td>
-                                </tr>
-                                <tr>
-                                    <td><label>
-                                        <input type="radio" name="data-table"> aw_day
-                                    </label></td>
-                                    <td><label>
-                                        <input type="radio" name="data-table"> aw_day
-                                    </label></td>
-                                    <td><label>
-                                        <input type="radio" name="data-table"> aw_day
-                                    </label></td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>&ndash;%&gt;
-        </div>
-    </div>
-</div>--%>
+
 <div class="top_div">
-
-            <%--<ul class="nav navbar-nav pull-right">
-                <!-- BEGIN USER LOGIN DROPDOWN -->
-                <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
-                <li class="dropdown dropdown-user">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
-                       data-close-others="true">
-                        <i class="glyphicon glyphicon-user"></i>
-                        <span class="username username-hide-on-mobile">
-                           &lt;%&ndash;<shiro:user>&ndash;%&gt;
-                               欢迎您！${sessionScope.userName} &nbsp;&nbsp;
-                               &lt;%&ndash;<span>角色:${sessionScope.roleNames} </span>&ndash;%&gt;
-                           &lt;%&ndash;</shiro:user>&ndash;%&gt;
-                        </span>
-                        <i class="fa fa-angle-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-default">
-                        <li><a href="logout"><i class="icon-key"></i>&nbsp;安全退出</a></li>
-&lt;%&ndash;
-                        <li><a href="#">Another action</a></li>
-&ndash;%&gt;
-                        &lt;%&ndash;<shiro:guest>
-                            <li>
-                                <a href="${applicationScope.systemPro['cas.url.prefix']}/login?service=${applicationScope.systemPro['drsr.url']}/shiro-cas">
-                                    <i class="icon-rocket"></i>用户登录
-                                </a>
-                            </li>
-                        </shiro:guest>
-                        <shiro:user>
-                            <li>
-                                <a target='_blank'
-                                   href="${applicationScope.systemPro['cas.url.prefix']}/reg01004Action.do?userID=<%=CasURLCode.encode(session.getAttribute("loginId").toString())%>">
-                                    <i class="icon-calendar"></i>用户信息</a>
-                            </li>
-                            <li>
-                                <a href="${applicationScope.systemPro['cas.url.prefix']}/logout?service=${applicationScope.systemPro['drsr.url']}/logout">
-                                    <i class="icon-key"></i>退出</a>
-                            </li>
-                        </shiro:user>&ndash;%&gt;
-                    </ul>
-                </li>
-                <!-- END USER LOGIN DROPDOWN -->
-            </ul>--%>
     <ul class="cus_ul">
         <li>
             <a href="#" id="cus_User_id">
@@ -282,14 +126,7 @@
                             <span class="arrow"></span>
                         </a>
                     </li>
-                    <%--<li class="startProject">
-                        <a href="${ctx}/subjectMgmt/subjectDes">
-                            <i class="icon-user"></i>
-                            <span class="title">专业库注册管理</span>
-                            <span class="arrow"></span>
-                        </a>
-                    </li>--%>
-                    <%-- <shiro:hasRole name="Register">--%>
+
                     <li>
                         <a href="${ctx}/resCatalog">
                             <i class="icon-settings"></i>
@@ -297,13 +134,13 @@
                             <span class="arrow "></span>
                         </a>
                     </li>
-                    <%--<li>
-                        <a href="${ctx}/createTask">
+                    <li>
+                        <a href="${ctx}/admin/metadata">
                             <i class="icon-list"></i>
-                            <span class="title">元素结构管理</span>
+                            <span class="title">元数据管理</span>
                             <span class="arrow "></span>
                         </a>
-                    </li>--%>
+                    </li>
                     <li>
                         <a href="${ctx}/group/list">
                             <i class="icon-user"></i>

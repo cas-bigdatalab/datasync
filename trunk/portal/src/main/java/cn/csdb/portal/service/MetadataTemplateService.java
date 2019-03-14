@@ -22,4 +22,22 @@ public class MetadataTemplateService {
     public  List<MetadataTemplate> getAll(){
         return metadataTemplateDao.getAll();
     }
+
+    public void save(MetadataTemplate metadataTemplate){
+        metadataTemplateDao.save(metadataTemplate);
+    }
+
+    public void delete(String id){
+        metadataTemplateDao.delete(id);
+    }
+
+    public MetadataTemplate get(String id){
+        return metadataTemplateDao.get(id);
+    }
+
+    //根据字段名、字段中文名称查询
+    public  List<MetadataTemplate> getList(String extField, String extFieldName){
+
+        return metadataTemplateDao.getList(extField,extFieldName);
+    }
 }
