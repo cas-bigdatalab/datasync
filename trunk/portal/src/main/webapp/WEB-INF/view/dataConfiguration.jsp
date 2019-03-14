@@ -245,6 +245,10 @@
                         <a href="#FileOnNet" data-toggle="tab" onclick="fileNet('')">
                             网盘功能</a>
                     </li>
+                    <li value="6">
+                        <a href="#activeTab" data-toggle="tab" onclick="fileNet('')">
+                            动态页签</a>
+                    </li>
                 </ul>
                 <!--tab content-->
                 <div class="tab-content">
@@ -266,16 +270,6 @@
                             </p>
                         </form>
                         <div id="jstree_show"></div>
-
-                        <!--测试活动页签-->
-                        <div id="asd">
-                            <!-- 此处是相关代码 -->
-                            <ul class="nav nav-tabs" role="tablist">
-                            </ul>
-                            <div class="tab-content" style="width:100%;">
-                            </div>
-                            <!-- 相关代码结束 -->
-                        </div>
                     </div>
 
                     <!--excel 导入数据库-->
@@ -411,6 +405,18 @@
                         </div>
                     </div>
 
+                    <!--动态页签-->
+                    <div class="tab-pane" id="activeTab">
+                        <!--测试活动页签-->
+                        <div id="asd">
+                            <!-- 此处是相关代码 -->
+                            <ul class="nav nav-tabs activeTabs" role="tablist">
+                            </ul>
+                            <div class="tab-content activeTabs" style="width:100%;">
+                            </div>
+                            <!-- 相关代码结束 -->
+                        </div>
+                    </div>
                     <script type="text/html" id="resourceTmp1">
 
                      </script>
@@ -2169,14 +2175,15 @@
 
         // 测试活动页签
         function c() {
+            var random = Math.round(Math.random() * 100);
             // 活动页签的ID 不可重复
-            var id = "table_id1";
+            var id = "table_id1" + random;
             // 活动页签的名称
-            var name = "table_name";
+            var name = "table_name" + random;
             // 当前页签是否允许关闭 true：允许关闭
-            var closable = false;
+            var closable = true;
             // 模板HTML
-            var template = "<p>这是内容</p>";
+            var template = "<p>这是内容 随机数为：" + random + "</p>";
             var item = {'id': id, 'name': name, 'closable': closable, 'template': template};
             // 执行创建页签
             closableTab.addTab(item);

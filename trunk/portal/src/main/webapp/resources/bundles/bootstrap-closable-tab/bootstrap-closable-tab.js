@@ -23,8 +23,8 @@ var closableTab = {
                 '</div>';
 
 
-            $('.nav-tabs').append(li_tab);
-            $('.tab-content').append(tabpanel);
+            $('.nav-tabs.activeTabs').append(li_tab);
+            $('.tab-content.activeTabs').append(tabpanel);
         }
         $("#" + id).addClass("active");
         $("#" + container).addClass("active");
