@@ -117,6 +117,10 @@ public class ResourceController {
     @ResponseBody
     public JSONObject delete(@PathVariable("id") String id) {
         JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(id);
+        if("2".equals(resource.getStatus())){
+            resourceService.saveDeleteId(resource.getId());
+        }
         resourceService.delete(id);
         jsonObject.put("result", "ok");
         return jsonObject;

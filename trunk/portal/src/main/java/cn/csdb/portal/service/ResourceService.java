@@ -46,6 +46,12 @@ public class ResourceService {
         resourceDao.saveFileInfo(fileInfo);
     }
 
+    //在表中将删除的已审核数据集id记录下来
+    @Transactional
+    public void saveDeleteId(String id){
+        resourceDao.saveDeleteId(id);
+    }
+
     @Transactional
     public void deleteFileInfo(String id) {
         resourceDao.deleteFileInfo(id);

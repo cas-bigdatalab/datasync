@@ -1,6 +1,7 @@
 package cn.csdb.portal.repository;
 
 import cn.csdb.portal.model.FileInfo;
+import cn.csdb.portal.model.ResourceDelete;
 import cn.csdb.portal.model.Subject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
@@ -49,6 +50,11 @@ public class ResourceDao {
         mongoTemplate.save(fileInfo);
     }
 
+    public void saveDeleteId(String id){
+        ResourceDelete resourceDelete = new ResourceDelete();
+        resourceDelete.setResourceId(id);
+        mongoTemplate.save(resourceDelete);
+    }
     /**
      * Function Description: 删除记录
      *
