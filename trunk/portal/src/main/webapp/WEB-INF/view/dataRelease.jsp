@@ -556,13 +556,13 @@
                         class="fa fa-edit"></i>&nbsp;编辑
                 </button>
             </shiro:hasRole>
-
+            {{/if}}
             <shiro:hasRole name="admin">
                     <button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.id}}');"><i
                             class="glyphicon glyphicon-trash"></i>&nbsp;删除
                     </button>
             </shiro:hasRole>
-            {{/if}}
+
             <shiro:hasRole name="root">
                 {{if value.status == '-1'}}
                         <button type="button" class="btn  edit-data btn-xs blue" style="margin-right: 66px"
