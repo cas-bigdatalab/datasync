@@ -38,6 +38,13 @@ public class MetadataTemplateDao {
     }
 
     public void save(MetadataTemplate metadataTemplate){
+        if (!metadataTemplate.getExtField().startsWith("ext_")){
+            String str = metadataTemplate.getExtField();
+            metadataTemplate.setExtField("ext_" + str);
+        }
+        if (!metadataTemplate.getType().equals("List")){
+            metadataTemplate.setEnumdata("");
+        }
         mongoTemplate.save(metadataTemplate);
     }
 
@@ -73,4 +80,35 @@ public class MetadataTemplateDao {
     public List<MetadataTemplate> findAll(){
         return mongoTemplate.findAll(MetadataTemplate.class);
     }
+
+
+    public boolean exist(String extField){
+        boolean result = false;
+        QueryBuilder queryBuilder = QueryBuilder.start();
+
+        if (org.apache.commons.lang.StringUtils.isNotEmpty(extField)){
+            queryBuilder = queryBuilder.and("extField").is(extField);
+        }
+
+        DBObject dbObject = queryBuilder.get();
+        BasicQuery basicQuery = new BasicQuery(dbObject);
+        List<MetadataTemplate> list = mongoTemplate.find(basicQuery,MetadataTemplate.class);
+        if (list.size() > 0){
+            result = true;
+        }
+        return result;
+    }
+
+    //获取最大的序列号
+    public Integer getMaxSortOrder(){
+        List<MetadataTemplate> list = findAll();
+        if (list.size() == 0)
+        {
+            return 0;
+        }else
+        {
+            return list.get(list.size()-1).getSortOrder();
+        }
+    }
+
 }

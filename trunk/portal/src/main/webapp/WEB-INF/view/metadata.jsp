@@ -64,7 +64,7 @@
     <div class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
 
         <div class="table-message-group">列表加载中......</div>
-        <div class="table-scrollable">
+        <div class="table-scrollable" style="padding-top: 0px;">
 
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
@@ -76,12 +76,12 @@
                     <th style="width: 5%;">
                         字段类型
                     </th>
-                    <th style="width: 15%;">元数据中文名称</th>
+                    <th style="width: 10%;">元数据中文名</th>
                     <th style="width: 5%;">排序</th>
-                    <th style="width: 5%;">是否必填</th>
-                    <th style="width: 20%;">枚举值</th>
+                    <th style="width: 8%;">是否必填</th>
+                    <th style="width: 25%;">枚举值</th>
                     <%--<th style="width: 20%;">备注</th>--%>
-                    <th style="width: 15%;">操作</th>
+                    <th style="width: 18%;">操作</th>
                 </tr>
                 </thead>
                 <tbody id="metadataList">
@@ -112,10 +112,10 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="isMustAdd" class="col-sm-3 control-label">字段类型<span class="required">*
+                        <label for="typeAdd" class="col-sm-3 control-label">字段类型<span class="required">*
 													</span></label>
                         <div class="col-sm-8">
-                            <select style="width: 368px;height: 34px;" id="typeAdd" name="type" placeholder="请输入元数据字段类型">
+                            <select class="form-control" style="width: 368px;height: 34px;" id="typeAdd" name="type" placeholder="请输入元数据字段类型">
                                 <option  value="String">字符串(String)</option>
                                 <option  value="Integer">整型数值(Integer)</option>
                                 <option  value="Double">精度型数值(Double)</option>
@@ -126,8 +126,7 @@
                     </div>
 
                     <div id="divEnumdata" class="form-group" style="display:none;">
-                        <label for="enumdataAdd" class="col-sm-3 control-label">枚举项值<span class="required">
-													*</span></label>
+                        <label for="enumdataAdd" class="col-sm-3 control-label">枚举项值</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="enumdataAdd" name="enumdata" placeholder="请输入枚举值,各枚举项值以英文逗号(,)隔开">
                         </div>
@@ -152,7 +151,7 @@
                         <label for="isMustAdd" class="col-sm-3 control-label">是否必填项<span class="required">
 													</span></label>
                         <div class="col-sm-8">
-                            <select style="width: 368px;height: 34px;" id="isMustAdd" name="isMust" placeholder="请选择元数据字段值是否必填项">
+                            <select class="form-control" style="width: 368px;height: 34px;" id="isMustAdd" name="isMust" placeholder="请选择元数据字段值是否必填项">
                                 <option  value="0">否</option>
                                 <option  value="1">是</option>
                             </select>
@@ -160,7 +159,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="sortOrderAdd" class="col-sm-3 control-label">备注<span class="required">
+                        <label for="remarkAdd" class="col-sm-3 control-label">备注<span class="required">
 													</span></label>
                         <div class="col-sm-8">
                             <input  type="text" class="form-control"  id="remarkAdd" name="remark" placeholder="请输入备注信息" />
@@ -179,37 +178,77 @@
     </div>
 </div>
 
-<!--修改用户组Group-->
+<!--修改元数据-->
 <div class="modal fade" tabindex="-1" role="dialog" id="editModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">修改用户组</h4>
+                <h4 class="modal-title">修改元数据</h4>
             </div>
             <div class="modal-body" style="min-height: 150px">
-                <form class="form-horizontal" id="editGroupForm" method="post" accept-charset="utf-8" role="form"  onfocusout="true">
+                <form class="form-horizontal" id="editMetadataForm" method="post" accept-charset="utf-8" role="form"  onfocusout="true">
+
+                    <input type="hidden" id="metadataid" name="id">
                     <div class="form-group">
-
-                        <input type="hidden" class="form-control"
-                               id="groupId"
-                               name="id" value=""/>
-
-                        <input type="hidden" class="form-control"
-                               id="groupUsers"
-                               name="users" />
-
-                        <label for="groupNameEdit" class="col-sm-3 control-label">用户组名称<span class="required">
+                        <label for="extFieldEdit" class="col-sm-3 control-label">元数据英文名<span class="required">
 													*</span></label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="groupNameEdit" name="groupName" placeholder="请输入用户组名称" readonly  required="required" >
+                            <input type="text" class="form-control" id="extFieldEdit" name="extField" placeholder="请输入元数据英文名(首字母小字)"  readonly required="required" >
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="descEdit" class="col-sm-3 control-label">描述<span class="required">
+                        <label for="typeEdit" class="col-sm-3 control-label">字段类型<span class="required">*
+													</span></label>
+                        <div class="col-sm-8">
+                            <select class="form-control" style="width: 368px;height: 34px;" id="typeEdit" name="type" placeholder="请选择元数据字段类型">
+                                <option  value="String">字符串(String)</option>
+                                <option  value="Integer">整型数值(Integer)</option>
+                                <option  value="Double">精度型数值(Double)</option>
+                                <option  value="DateTime">日期时间(DateTime)</option>
+                                <option  value="List">枚举值</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="divEditEnumdata" class="form-group" style="display:none;">
+                        <label for="enumdataEdit" class="col-sm-3 control-label">枚举项值</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="enumdataEdit" name="enumdata" placeholder="请输入枚举值,各枚举项值以英文逗号(,)隔开">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="extFieldNameEdit" class="col-sm-3 control-label">元数据中文名称<span class="required">
 													*</span></label>
                         <div class="col-sm-8">
-                            <textarea  type="text" class="form-control" cols="30" rows="5" id="descEdit" name="desc" placeholder="请输入用户组描述信息" required="required"></textarea>
+                            <input type="text" class="form-control" id="extFieldNameEdit" name="extFieldName" placeholder="请输入元数据中文名称"  required="required" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sortOrderEdit" class="col-sm-3 control-label">排序<span class="required">
+													</span></label>
+                        <div class="col-sm-8">
+                            <input  type="text" class="form-control"  id="sortOrderEdit" name="sortOrder" placeholder="请输入元数据排列顺序" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="isMustEdit" class="col-sm-3 control-label">是否必填项<span class="required">
+													</span></label>
+                        <div class="col-sm-8">
+                            <select class="form-control" style="width: 368px;height: 34px;" id="isMustEdit" name="isMust" placeholder="请选择元数据字段值是否必填项">
+                                <option  value="0">否</option>
+                                <option  value="1">是</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="remarkEdit" class="col-sm-3 control-label">备注<span>
+													</span></label>
+                        <div class="col-sm-8">
+                            <input  type="text" class="form-control"  id="remarkEdit" name="remark" placeholder="请输入备注信息" />
                         </div>
                     </div>
                 </form>
@@ -224,50 +263,6 @@
     </div>
 </div>
 
-<!--用户组Group, 添加用户-->
-<div class="modal fade" tabindex="-1" role="dialog" id="groupModalForAddUser">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">用户组添加用户</h4>
-            </div>
-            <div class="modal-body" style="min-height: 150px">
-                <form class="form-horizontal" id="groupFormForAdduser" method="post" accept-charset="utf-8" role="form"  onfocusout="true">
-                    <div class="form-group" style="margin-bottom:2px;">
-                        <input type="hidden" id="spanGroupId">
-                        <label class="col-sm-3 control-label">用户组名称:</label>
-                        <div class="col-sm-8" style="padding-top: 7px;" >
-                            <span id="spanGroupName"></span>
-                        </div>
-                    </div>
-                    <div class="form-group" style="margin-bottom:2px;">
-                        <label  class="col-sm-3 control-label">描述:</label>
-                        <div class="col-sm-8" style="padding-top: 7px;" >
-                            <span id="spanDesc"></span>
-                        </div>
-                    </div>
-                    <div class="form-group" style="margin-bottom:2px;">
-                        <label  class="col-sm-3 control-label">本组己有用户:</label>
-                        <div class="col-sm-8" style="padding-top: 7px;" >
-                            <select class='form-control select2me' name='users' id='users' multiple>
-                                <c:forEach  var="item"  items="${list}">
-                                    <option value="${item.id}" id="${item.id}" >${item.userName}</option>
-                                </c:forEach>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn green" onclick="submitAddUser();" ><i
-                        class="glyphicon glyphicon-ok"></i>保存
-                </button>
-                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- 元数据 -->
 <script type="text/html" id="metadataTmpl">
@@ -319,15 +314,12 @@
 
     <script type="text/javascript">
         var ctx = '${ctx}';
-        var validatorAdd;
-        var groupUsersSelect2;
+        //var groupUsersSelect2;
         var validAddData;
         var validEditData;
 
         $(function () {
-            //template.helper("dateFormat", formatDate);
             getData();
-
             $(".search-text").keydown(function (event) {
                 if (event.keyCode == 13) {
                     getData();
@@ -349,17 +341,24 @@
                 "hideMethod": "fadeOut"
             };
 
+            // 只能输入英文
+            jQuery.validator.addMethod("english", function(value, element) {
+                var chrnum = /^([a-zA-Z]+)$/;
+                return this.optional(element) || (chrnum.test(value));
+            }, "只能输入字母");
+
             validAddData = {
                 errorElement: 'span', //default input error message container
                 errorClass: 'help-block help-block-error', // default input error message class
                 focusInvalid: false, // do not focus the last invalid input
                 ignore: "", // validate all fields including form hidden input
                 rules: {
-                    groupName: {
+                    extField: {
                         required: true,
+                        english:true,
                         remote:
                             {
-                                url: "isExist",
+                                url:  ctx + "/admin/metadata/isExist",
                                 type: "get",
                                 dataType: "json",
                                 data:
@@ -370,17 +369,31 @@
                                     }
                             }
                     },
-                    desc: {
+                    type: {
                         required: true
+                    },
+                    extFieldName: {
+                        required: true
+                    },
+                    sortOrder:{
+                        digits:true
                     }
+
                 },
                 messages: {
-                    groupName: {
-                        required: "请输入用户组名称",
-                        remote: "此用户组名称己存在"
+                    extField: {
+                        required: "请输入元数据英文名称",
+                        english:"请输入英文字母",
+                        remote: "此元数据英文名称己存在"
                     },
-                    desc: {
-                        required: "请输入用户组描述信息"
+                    type: {
+                        required: "请选择元数据英文名字段类型"
+                    },
+                    extFieldName: {
+                        required: "请输入元数据中文名称"
+                    },
+                    sortOrder:{
+                        digits:"只能输入整数"
                     }
                 },
                 errorPlacement: function (error, element) { // render error placement for each input type
@@ -407,19 +420,25 @@
                 focusInvalid: false, // do not focus the last invalid input
                 ignore: "", // validate all fields including form hidden input
                 rules: {
-                    groupName: {
+                    type: {
                         required: true
                     },
-                    desc: {
+                    extFieldName: {
                         required: true
+                    },
+                    sortOrder:{
+                        digits:true
                     }
                 },
                 messages: {
-                    groupName: {
-                        required: "请输入用户组名称"
+                    type: {
+                        required: "请选择元数据英文名字段类型"
                     },
-                    desc: {
-                        required: "请输入用户组描述信息"
+                    extFieldName: {
+                        required: "请输入元数据中文名称"
+                    },
+                    sortOrder:{
+                        digits:"只能输入整数"
                     }
                 },
                 errorPlacement: function (error, element) { // render error placement for each input type
@@ -441,13 +460,12 @@
             };
 
             $("#addMetadataForm").validate(validAddData);
-            $("#editGroupForm").validate(validEditData);
+            $("#editMetadataForm").validate(validEditData);
 
-            //getAllUserList();
-            groupUsersSelect2 = $('#users').select2({
+            /*groupUsersSelect2 = $('#users').select2({
                 placeholder: "请选择用户",
                 allowClear: true
-            });
+            });*/
 
         });
 
@@ -468,9 +486,7 @@
                     "extFieldName":$.trim($("#queryExtFieldName").val())
                 },
                 success: function (data) {
-                    console.log("-----------------");
                     console.log(data);
-
                     var html = template("metadataTmpl", data);
                     $(".table-message-group").html("");
                     $("#metadataList").empty();
@@ -478,25 +494,21 @@
                     if(data.list.length ==0){
                         $(".table-message-group").html("暂时没有数据");
                     }
-
                 }
             });
         }
 
         function deleteData(id) {
-
             bootbox.confirm("<span style='font-size:16px;'>确定要删除此条记录吗？</span>", function (r) {
                 if (r) {
                     $.ajax({
-                        url: ctx + "/group/delete/" + id,
+                        url: ctx + "/admin/metadata/delete/" + id,
                         type: "post",
                         dataType: "json",
                         success: function (data) {
                             if (data.result == 'ok') {
                                 toastr["success"]("删除成功！", "数据删除");
-                                getData(currentPageNo);
-                                //删除用户组的同时,刷新用户列表信息
-                                searchUser();
+                                getData();
                             }
                             else {
                                 toastr["error"]("删除失败！", "数据删除");
@@ -511,13 +523,47 @@
         }
 
         $("#btnAdd").click(function () {
-            $("#groupNameAdd").val("");
-            $("#descAdd").val("");
+            $("#extFieldAdd").val("");
+            $("#extFieldNameAdd").val("");
+            $("#typeAdd").val("String");
+            $("#typeAdd").change();
+            $("#isMustAdd").val(0);
+
+            $.ajax({
+                type: "get",
+                url: '${ctx}/admin/metadata/getMaxOrder',
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    $("#sortOrderAdd").val(data.data);
+                }
+            });
             resetData();
             $("#addModal").modal('show');
         });
 
-        //重置校验窗体xiajl20181117
+        $("#typeAdd").change(function () {
+            if ($("#typeAdd").val() == 'List'){
+                $("#divEnumdata").show();
+                $("#enumdataAdd").attr("required","required");
+            }
+            else{
+                $("#divEnumdata").hide();
+                $("#enumdataAdd").removeAttrs("required");
+            }
+        });
+
+        $("#typeEdit").change(function () {
+            if ($("#typeEdit").val() == 'List'){
+                $("#divEditEnumdata").show();
+                $("#enumdataEdit").attr("required","required");
+            }
+            else{
+                $("#divEditEnumdata").hide();
+                $("#enumdataEdit").removeAttrs("required");
+            }
+        });
+
         function resetData() {
             $("#addMetadataForm").validate().resetForm();
             $("#addMetadataForm").validate().clean();
@@ -530,80 +576,60 @@
             }
             $.ajax({
                 type: "POST",
-                url: '${ctx}/group/add',
+                url: '${ctx}/admin/metadata/add',
                 data: $("#addMetadataForm").serialize(),
                 dataType: "json",
                 success: function (data) {
                     if (data.result == 'ok') {
-                        toastr["success"]("添加成功！", "添加用户组");
+                        toastr["success"]("添加成功！", "添加元数据");
                         $("#addModal").modal("hide");
-                        $("#groupNameAdd").val("");
-                        $("#descAdd").val("");
-                        getData(currentPageNo);
+                        getData();
                     } else {
-                        toastr["error"]("添加失败！", "添加用户组");
+                        toastr["error"]("添加失败！", "添加元数据");
                     }
                 }
             });
         }
 
-        <!--编辑用户组-->
+        <!--编辑元数据-->
         function editData(id) {
             $.ajax({
                 type: "GET",
-                url: '${ctx}/group/info',
+                url: '${ctx}/admin/metadata/info',
                 data: {"id": id},
                 dataType: "json",
                 success: function (data) {
                     $("#editModal").modal("show");
-                    $("#groupNameEdit").val(data.group.groupName);
-                    $("#descEdit").val(data.group.desc);
-                    $("#groupId").val(data.group.id);
+                    $("#metadataid").val(data.metadata.id);
+                    $("#extFieldEdit").val(data.metadata.extField);
+                    $("#extFieldNameEdit").val(data.metadata.extFieldName);
+                    $("#typeEdit").val(data.metadata.type);
+                    $("#enumdataEdit").val(data.metadata.enumdata);
+                    $("#sortOrderEdit").val(data.metadata.sortOrder);
+                    $("#remarkEdit").val(data.metadata.remark);
                 }
             });
         }
 
 
-        <!--用户组中增加用户界面-->
-        function addUserData(id) {
-            $.ajax({
-                type: "GET",
-                url: '${ctx}/group/info',
-                data: {"id": id},
-                dataType: "json",
-                success: function (data) {
-                    console.log(data);
-                    $("#groupModalForAddUser").modal("show");
-                    $("#spanGroupName").html(data.group.groupName);
-                    $("#spanDesc").html(data.group.desc);
-                    $("#spanGroupId").val(data.group.id);
-                    //编辑显示己增加的用户
-                    //编辑显示己增加的用户
-                    console.log(data.group.users);
-                    console.log(JSON.stringify(data.group.users));
 
-                    $("#users").select2().val(JSON.parse(data.group.users)).trigger("change");
-
-                }
-            });
-        }
 
         function submitEditData() {
-            if (!$("#editGroupForm").valid()) {
+            if (!$("#editMetadataForm").valid()) {
                 return;
             }
             $.ajax({
                 type: "POST",
-                url: '${ctx}/group/update',
-                data: $("#editGroupForm").serialize(),
+                url: '${ctx}/admin/metadata/update',
+                data: $("#editMetadataForm").serialize(),
                 dataType: "json",
                 success: function (data) {
                     if (data.result == 'ok') {
-                        toastr["success"]("编辑成功！", "用户组编辑");
+                        toastr["success"]("编辑成功！", "元数据编辑");
                         $("#editModal").modal("hide");
-                        getData(currentPageNo);
+                        getData();
                     } else {
-                        toastr["error"]("编辑失败！", "用户组编辑");
+                        toastr["error"]("编辑失败！", "元数据编辑");
                     }
                 }
             });

@@ -40,4 +40,15 @@ public class MetadataTemplateService {
 
         return metadataTemplateDao.getList(extField,extFieldName);
     }
+
+
+    public boolean isExist(String extField)
+    {
+        return metadataTemplateDao.exist(extField);
+    }
+
+    public Integer getMaxSortOrder()
+    {
+        return metadataTemplateDao.getMaxSortOrder();
+    }
 }
