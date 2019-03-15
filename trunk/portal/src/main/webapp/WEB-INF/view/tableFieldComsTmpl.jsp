@@ -230,9 +230,9 @@
 <script type="text/html" id="fileNetList">
     {{each data as v i}}
     <tr>
-        <td>
-            <input type="checkbox" id="{{v.filePath}}" class="fileNetCheck"/>
-        </td>
+        <%-- <td> 暂时注释选中框
+             <input type="checkbox" path="{{v.filePath}}" class="fileNetCheck"/>
+         </td>--%>
         <td path="{{v.filePath}}" class="{{v.fileType}} fileName"><a href="javaScript:void(0)">{{v.fileName}}</a></td>
         <td>{{v.fileLength}}</td>
         <td>{{v.fileLastModified}}</td>

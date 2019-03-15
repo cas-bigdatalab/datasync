@@ -1,5 +1,6 @@
 package cn.csdb.portal.service;
 
+import cn.csdb.portal.utils.FileUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.fileupload.FileItem;
 import org.springframework.stereotype.Service;
@@ -223,18 +224,15 @@ public class FileNetService {
             FileItem fileItem = ((CommonsMultipartFile) value).getFileItem();
             String fileName = fileItem.getName();
             try {
-//                OutputStream outputStream = fileItem.getOutputStream();
                 InputStream inputStream = fileItem.getInputStream();
                 File f = new File(parentURI + File.separator + fileName);
                 OutputStream outputStream = new FileOutputStream(f);
-                int bytesWritten = 0;
                 int byteCount = 0;
 
                 byte[] bytes = new byte[1024];
 
                 while ((byteCount = inputStream.read(bytes)) != -1) {
                     outputStream.write(bytes, 0, bytes.length);
-//                    bytesWritten += byteCount;
                 }
                 inputStream.close();
                 outputStream.close();
@@ -242,6 +240,16 @@ public class FileNetService {
                 e.printStackTrace();
             }
         }
+        return jsonObject;
+    }
+
+    public JSONObject renameFile(String currentPath, String newName) {
+        JSONObject jsonObject = FileUtil.renameFolder(currentPath, newName);
+        return jsonObject;
+    }
+
+    public JSONObject copyFolder(String oldFile, String newFile) {
+        JSONObject jsonObject = FileUtil.copyFolder(oldFile, newFile);
         return jsonObject;
     }
 }

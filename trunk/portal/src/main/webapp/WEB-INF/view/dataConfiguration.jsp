@@ -148,13 +148,13 @@
          <span>DataSync / 传输信息</span>
      </div>--%>
     <div>
-        <!-- Nav tabs -->
+        <%-- Nav tabs --%>
         <%--<ul class="nav nav-tabs" role="tablist" id="tabDescribe">
             <li role="presentation" class="active" value="0"><a href="#undescribe" aria-controls="undescribe" role="tab" data-toggle="tab">待描述数据表</a></li>
             <li role="presentation" value="1"><a href="#isdescribe" aria-controls="isdescribe" role="tab" data-toggle="tab">已描述数据表</a></li>
             <li role="presentation" value="2"><a href="#filedata" aria-controls="filedata" role="tab" data-toggle="tab">文件数据</a></li>
         </ul>--%>
-        <!-- Tab panes -->
+        <%-- Tab panes --%>
         <%--<div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="undescribe">
                 &lt;%&ndash;<div class="col-md-3" style="font-size: 18px">
@@ -219,7 +219,7 @@
 
         <div class="col-md-12">
             <div class="tabbable-custom ">
-                <!-- tab header --->
+                <%-- tab header --%>
                 <ul class="nav nav-tabs " id="tabDescribe">
                     <li class="active" value="0">
                         <a href="#undescribe" data-toggle="tab">
@@ -247,15 +247,15 @@
                             网盘功能</a>
                     </li>
                 </ul>
-                <!--tab content-->
+                <%--tab content--%>
                 <div class="tab-content">
 
-                    <!--用户管理标签页-->
+                    <%--用户管理标签页--%>
                     <div class="tab-pane active" id="undescribe" style="min-height: 400px;overflow: hidden">
 
                     </div>
 
-                    <!--group tab-->
+                    <%--group tab--%>
                     <div class="tab-pane" id="isdescribe" style="min-height: 400px;overflow: hidden">
 
                     </div>
@@ -269,7 +269,7 @@
                         <div id="jstree_show"></div>
                     </div>
 
-                    <!--excel 导入数据库-->
+                    <%--excel 导入数据库--%>
                     <div class="tab-pane" id="excelUpload" style="min-height: 400px;overflow: hidden">
                         <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
                             <a href="${ctx}/fileImport/getExcelTemplate">点击下载Excel模板</a>
@@ -313,7 +313,7 @@
                         </div>
                     </div>
 
-                    <!--数据编辑-->
+                    <%--数据编辑--%>
                     <div class="tab-pane" id="editData" style="min-height: 600px;overflow: hidden;">
                         <div id="alltables" class="tab-pane"
                              style="margin-left:1%;max-width:98%;margin-right:1%;max-height: 300px;overflow: auto;">
@@ -352,10 +352,10 @@
                         </div>
                     </div>
 
-                    <!-- 网盘功能-->
+                    <%-- 网盘功能--%>
                     <div class="tab-pane" id="FileOnNet" style="min-height: 600px;overflow: hidden;">
                         <div class="alert alert-info" role="alert">
-                            <!--查询条件 -->
+                            <%--查询条件 --%>
                             <div class="row">
                                 <form class="form-inline" style="margin-bottom: 0px">
 
@@ -372,20 +372,24 @@
                                             style="float: right;margin-right: 15px" onclick="showAddFileTmp()"><i
                                             class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增文件夹
                                     </button>
-                                    <button type="button" class="btn green btn-sm"
-                                            style="float: right;margin-right: 15px" onclick=""><i
-                                            class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;下&nbsp;&nbsp;载
-                                    </button>
+                                    <%--暂时注释下载按钮--%>
+                                    <%-- <button type="button" class="btn green btn-sm"
+                                             style="float: right;margin-right: 15px" onclick=""><i
+                                             class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;下&nbsp;&nbsp;载
+                                     </button>--%>
                                 </form>
                             </div>
                         </div>
                         <div class="upload-table">
                             <div id="fileBar"></div>
+                            <input type="hidden" id="currentPath">
+                            <input type="hidden" id="currentName">
+                            <input type="hidden" id="copyCache">
                             <table class="table table-bordered data-table" id="fileList">
                                 <thead>
                                 <tr>
-                                    <th width="5px"><span>全选</span> &nbsp;&nbsp;<input type="checkbox" id="all"
-                                                                                       class="fileNetCheck"/></th>
+                                    <%--<th width="5px"><span>全选</span> &nbsp;&nbsp;<input type="checkbox" id="all"    暂时注释选中框
+                                                                                       class="fileNetCheck"/></th>--%>
                                     <th width="22%">文件名称</th>
                                     <%--<th width="13%">类型</th>--%>
                                     <%-- <th width="10%">来源位置</th>--%>
@@ -569,7 +573,7 @@
             </div>
         </div>
 
-        <!--文件树创建目录弹窗页-->
+        <%--文件树创建目录弹窗页--%>
         <div id="addSonDirectory" class="modal fade" tabindex="-1" data-width="200">
             <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
                 <div class="modal-content">
@@ -605,7 +609,7 @@
                 </div>
             </div>
         </div>
-        <!--文件树新增文件弹窗页-->
+        <%--文件树新增文件弹窗页--%>
         <div id="addFile" class="modal fade" tabindex="-1" data-width="200">
             <div class="modal-dialog" style="min-width:400px;width:auto;max-width: 35%">
                 <div class="modal-content">
@@ -620,6 +624,23 @@
                                 </div>
                             </div>
                         </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%--重命名文件弹窗页--%>
+        <div id="renameDialog" class="modal fade" tabindex="-1" data-width="200">
+            <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">重命名文件</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input id="newName" placeholder="请输入新名称"/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" onclick="reNameFile(this)" class="btn green">确定重命名
+                        </button>
                     </div>
                 </div>
             </div>
@@ -649,7 +670,7 @@
     {{/each}}
 </script>
 </body>
-<!--为了加快页面加载速度，请把js文件放到这个div里-->
+<%--为了加快页面加载速度，请把js文件放到这个div里--%>
 <div id="siteMeshJavaScript">
     <script src="${ctx}/resources/bundles/artTemplate/template.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.min.js"></script>
@@ -663,6 +684,7 @@
     <script src="${ctx}/resources/bundles/bootstrap-fileinput/js/fileinput.min.js"></script>
     <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
     <script src="${ctx}/resources/bundles/layerJs/layer.js"></script>
+    <script src="${ctx}/resources/bundles/context/context.js"></script>
     <%--
         <script src="${ctx}/resources/js/metaTemplate.js"></script>
     --%>
@@ -2153,13 +2175,47 @@
                         $("#FileOnNet table #all").attr("checked", false);
                     }
                 }
-            })
+            });
 
 
-            // 鼠标右键替换
-            $body.on("mousedown", "#FileOnNet table tr", function (e) {
-                alert(e.which) // 1 = 鼠标左键 left; 2 = 鼠标中键; 3 = 鼠标右键
-                return false;//阻止链接跳转
+            // 鼠标点击事件
+            $body.on("mousedown", "#FileOnNet table", function (e) {
+                var which = e.which;
+                console.log(which); // 1 = 鼠标左键 left; 2 = 鼠标中键; 3 = 鼠标右键
+                if (which === 1) {
+                    // 选中当前行
+                    /*var $check = $(e.currentTarget).find("input");
+                    var flag = $check.attr("checked");
+                    flag = flag === undefined ? true : false
+                    $check.attr("checked", flag);*/
+                } else if (which === 3) {
+                    // 鼠标左键选中操作 右键替换默认菜单
+                    context.init({preventDoubleContext: false});
+                    var copyCache = $("#copyCache").data("copyCache");
+                    var menus = [{header: 'Compressed Menu'},
+                        {
+                            text: "重命名", action: function (e) {
+                                showRenameDialog(e)
+                            }
+                        },
+                        {
+                            text: "复制", action: function () {
+                                copyPath()
+                            }
+                        }
+                    ];
+                    if (copyCache !== undefined && copyCache !== "") {
+                        var copy = {
+                            text: "粘贴", action: function () {
+                                pasteFile()
+                            }
+                        };
+                        menus.push(copy);
+                    }
+                    context.attach("#FileOnNet #fileList tr td", menus);
+                }
+
+                // return false;// 阻止链接跳转
             })
         })();
 
@@ -2172,15 +2228,16 @@
             var modules = "";
             for (--l; l >= 0; l--) {
                 var v = parentModules[l];
-                if (l != 0) {
+                if (l !== 0) {
                     modules += "<a path='" + v.path + "' class='modules' onclick='returnParent(this)'>" + v.name + "</a>&nbsp;>&nbsp;"
                 } else {
                     modules += "<span path=" + v.path + " class='modules'>" + v.name + "</span>"
                 }
             }
-            $("#fileBar").html("");
-            $("#fileBar").append(a);
-            $("#fileBar").append(modules);
+            var $fileBar = $("#fileBar");
+            $fileBar.html("");
+            $fileBar.append(a);
+            $fileBar.append(modules);
         }
 
 
@@ -2199,8 +2256,9 @@
                 },
                 success: function (data) {
                     var fileListHTML = template("fileNetList", {"data": data.data});
-                    $("#bd-data").html("");
-                    $("#bd-data").append(fileListHTML);
+                    var $bd = $("#bd-data");
+                    $bd.html("");
+                    $bd.append(fileListHTML);
                     fileAddressBar(data);
                     $("#FileOnNet table #all").attr("checked", false);
                 }
@@ -2256,6 +2314,88 @@
             selectPath = encodeURIComponent(selectPath);
             var uri = "${ctx}/fileNet/downloadFile?selectPath=" + selectPath;
             window.open(uri);
+        }
+
+
+        /**
+         * 显示重命名对话框 并赋值当前文件名称
+         */
+        function showRenameDialog() {
+            var name = $.trim($("#currentName").data("currentName")).split(".")[0];
+            $("#newName").val(name);
+            $("#renameDialog").modal("show");
+        }
+
+        /**
+         * 重命名文件
+         *
+         * @param currentPath
+         * @param newName
+         */
+        function reNameFile() {
+            var currentPath = $("#currentPath").data("currentPath");
+            var newName = $.trim($("#newName").val());
+            if (newName === "") {
+                toastr["warning"]("请输入新名称", "警告！");
+                return false;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "${ctx}/fileNet/renameFile",
+                dataType: "JSON",
+                data: {
+                    "currentPath": currentPath,
+                    "newName": newName
+                },
+                success: function (data) {
+                    if (data.code === "success") {
+                        toastr["success"]("重命名成功", "成功!");
+                        fileNet($("#fileBar span").attr("path"));
+                        $("#renameDialog").modal("hide");
+                    } else {
+                        toastr["error"](data.message, "重命名未成功");
+                    }
+                }
+
+            });
+        }
+
+
+        /**
+         * 获取被复制文件路径
+         */
+        function copyPath() {
+            $("#copyCache").data("copyCache", $("#currentPath").data("currentPath"));
+        }
+
+        /**
+         *将复制的文件粘贴到当前目录下
+         */
+        function pasteFile() {
+            var currentPath = $("#fileBar span").attr("path");
+            var copyCache = $("#copyCache").data("copyCache");
+            if (typeof copyCache === "undefined" || copyCache === "") {
+                toastr["info"]("请选择要粘贴的文件", "提示！");
+                return false;
+            }
+            $.ajax({
+                type: "POST",
+                url: "${ctx}/fileNet/copyPasteFile",
+                data: {
+                    "oldFile": copyCache,
+                    "newFile": currentPath
+                },
+                success: function (data) {
+                    if (data.code === "error") {
+                        toastr["error"](data.message, "错误！");
+                    } else {
+                        $("#copyCache").data("copyCache", "");
+                        toastr["success"](data.message, "成功！");
+                        fileNet($("#fileBar span").attr("path"));
+                    }
+                }
+            })
         }
     </script>
 </div>
