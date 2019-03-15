@@ -222,12 +222,12 @@ public class EditDataController {
 
             }else if(list1.get(i).equals("PRI") && !list2.get(i).equals("auto_increment") && !col.equals("PORTALID")){   //有主键但不自增，判断新增主键是否重复
                 if(val!=null && !val.equals("")){
-                    if( dataSrcService.checkPriKey(datasrc,tableName,Integer.parseInt(val),col)==1){
+                    if( dataSrcService.checkPriKey(datasrc,tableName,val,col)==1){
                         jsonObject.put("data","0");
                         return jsonObject;
                     }
                     column += "" + col + " ,";
-                    values += "'" + Integer.parseInt(val) + "' ,";
+                    values += "'" + val + "' ,";
                 }else{
                     jsonObject.put("data","-1");
                     return jsonObject;
@@ -278,4 +278,98 @@ public class EditDataController {
         return jsonObject;
     }
 
+
+    @ResponseBody
+    @RequestMapping("/toaddTableData")
+    public JSONObject toaddTableData(String subjectCode,String tableName){
+        JSONObject jsonObject=new JSONObject();
+        DataSrc datasrc=getDataSrc(subjectCode);
+        Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);
+        List<String> list1=map.get("COLUMN_NAME");//列明
+        List<String> list2=map.get("DATA_TYPE");//字段类型
+        List<String> list3=map.get("COLUMN_COMMENT"); //注释
+        List<String> list4=map.get("autoAdd");  //自增
+        List<String> list5=map.get("pkColumn");  //键
+        jsonObject.put("COLUMN_NAME",list1);
+        jsonObject.put("DATA_TYPE",list2);
+        jsonObject.put("COLUMN_COMMENT",list3);
+        jsonObject.put("autoAdd",list4);
+        jsonObject.put("pkColumn",list5);
+        return jsonObject;
+    }
+    @RequestMapping("toupdateTableData")
+    @ResponseBody
+    public JSONObject toupdateTableData(String subjectCode,String tableName,String PORTALID){
+        JSONObject jsonObject=new JSONObject();
+        DataSrc datasrc=getDataSrc(subjectCode);
+        Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);
+        List<String> list2=map.get("DATA_TYPE");//字段类型
+        List<String> list3=map.get("COLUMN_COMMENT"); //注释
+        List<String> list4=map.get("autoAdd");  //自增
+        List<String> list5=map.get("pkColumn");  //键
+        List<String> list6=map.get("COLUMN_TYPE"); //列类型
+
+        jsonObject.put("DATA_TYPE",list2);
+        jsonObject.put("COLUMN_COMMENT",list3);
+        jsonObject.put("autoAdd",list4);
+        jsonObject.put("pkColumn",list5);
+        jsonObject.put("COLUMN_TYPE",list6);
+        List<String> list=dataSrcService.getDataByPORTALID(datasrc,tableName,PORTALID);
+        jsonObject.put("data",list);
+        return jsonObject;
+    }
+
+
+    @RequestMapping("/saveTableDataTest")
+    @ResponseBody
+    public JSONObject saveTableDataTest(@Param("newdata") String newdata,String subjectCode,String tableName,String PORTALID){
+        JSONObject jsonObject=new JSONObject();
+
+
+        JSONArray jsonArray2=JSONArray.parseArray(newdata);
+        DataSrc datasrc=getDataSrc(subjectCode);
+        Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);
+
+        List<String> list1=map.get("pkColumn");
+        List<String> list2=map.get("autoAdd");
+        List<String> list3=map.get("IS_NULLABLE");
+
+
+//        条件设置,拼串
+        String conditionstr=" where ";
+                conditionstr += " PORTALID  = '" + PORTALID + "' ";
+
+
+        //更新的数据
+        String updatestr=" set ";
+        int j=0;
+        for(int i=2;i<jsonArray2.size();i++){
+
+            String column=jsonArray2.getJSONObject(i).getString("name");
+            String value=jsonArray2.getJSONObject(i).getString("value");
+
+            if(list3.get(i-2).equals("NO") && (value.equals("null")||value.equals(""))){
+                jsonObject.put("data","-2+"+column);//该列不能为空
+                return jsonObject;
+            }
+
+                    updatestr += "" + column + "= '" + value + "' , ";
+        }
+        if(j==0){
+            jsonObject.put("data","1");
+            return jsonObject;
+        }
+        int l=conditionstr.length();
+//        String s1=conditionstr.substring(0,l-5);
+        String s1=conditionstr;
+        int ll=updatestr.length();
+        String s2=updatestr.substring(0,ll-2);
+        int n=dataSrcService.updateDate(s1,s2,tableName,datasrc);
+        if(n==1){
+            jsonObject.put("data","1");
+        }else{
+            jsonObject.put("data","0");
+        }
+        return jsonObject;
+    }
 }

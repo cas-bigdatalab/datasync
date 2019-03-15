@@ -779,13 +779,13 @@
                         for (var i = 0; i < arr.length; i++) {
                             if (il <= 5) {
                                 if (arr[i] === "PORTALID") {
-                                    s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                    s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                                 } else {
-                                    s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "<br/><p title="+columnComment[i]+">"+ columnComment[i]+"</p></th>";
+                                    s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "<br/><p title="+columnComment[i]+">"+ columnComment[i]+"</p></th>";
                                     il++;
                                 }
                             } else {
-                                s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                s += "<th style='display:none;border:1px #ddd solid;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
                             }
                         }
                     }
@@ -870,7 +870,7 @@
                                 "<a href='#' onclick=\"checkDada('" + arr + "','" + dataType + "','" + columnComment + "','" + m + "','" + n + "')\">查看 | </a>" +
                                 "<a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">删除</a></td></tr>";
                         }
-                        s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:22%;height:60px;'>操作</th></tr>";
+                        s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;text-align: center;width:22%;height:60px;'>操作</th></tr>";
                         $("#page_div").show();
                         $("#pagination").show();
                         fun_limit(subjectCode, tableName, data);
