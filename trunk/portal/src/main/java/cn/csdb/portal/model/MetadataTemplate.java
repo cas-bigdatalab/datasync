@@ -1,8 +1,13 @@
 package cn.csdb.portal.model;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @program: DataSync
@@ -28,6 +33,8 @@ public class MetadataTemplate {
     private String enumdata;
     @Field("remark")
     private String remark;
+    private List<String> enumdataList;
+
 
     public String getId() {
         return id;
@@ -92,4 +99,14 @@ public class MetadataTemplate {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    public List<String> getEnumdataList() {
+        List<String> list = new ArrayList<>();
+        if (StringUtils.isNotEmpty(enumdata)){
+            String[] data = enumdata.split(",");
+            list = Lists.newArrayList(data);
+        }
+         return list;
+    }
+
 }

@@ -125,18 +125,18 @@
                         </div>
                     </div>
 
-                    <div id="divEnumdata" class="form-group" style="display:none;">
-                        <label for="enumdataAdd" class="col-sm-3 control-label">枚举项值</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="enumdataAdd" name="enumdata" placeholder="请输入枚举值,各枚举项值以英文逗号(,)隔开">
-                        </div>
-                    </div>
-
                     <div class="form-group">
                         <label for="extFieldNameAdd" class="col-sm-3 control-label">元数据中文名称<span class="required">
 													*</span></label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="extFieldNameAdd" name="extFieldName" placeholder="请输入元数据中文名称"  required="required" >
+                        </div>
+                    </div>
+
+                    <div id="divEnumdata" class="form-group" style="display:none;">
+                        <label for="enumdataAdd" class="col-sm-3 control-label">枚举项值</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="enumdataAdd" name="enumdata" placeholder="请输入枚举值,各枚举项值以英文逗号(,)隔开">
                         </div>
                     </div>
 
@@ -211,18 +211,18 @@
                         </div>
                     </div>
 
-                    <div id="divEditEnumdata" class="form-group" style="display:none;">
-                        <label for="enumdataEdit" class="col-sm-3 control-label">枚举项值</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="enumdataEdit" name="enumdata" placeholder="请输入枚举值,各枚举项值以英文逗号(,)隔开">
-                        </div>
-                    </div>
-
                     <div class="form-group">
                         <label for="extFieldNameEdit" class="col-sm-3 control-label">元数据中文名称<span class="required">
 													*</span></label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="extFieldNameEdit" name="extFieldName" placeholder="请输入元数据中文名称"  required="required" >
+                        </div>
+                    </div>
+
+                    <div id="divEditEnumdata" class="form-group" style="display:none;">
+                        <label for="enumdataEdit" class="col-sm-3 control-label">枚举项值</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="enumdataEdit" name="enumdata" placeholder="请输入枚举值,各枚举项值以英文逗号(,)隔开">
                         </div>
                     </div>
 
@@ -593,6 +593,7 @@
 
         <!--编辑元数据-->
         function editData(id) {
+            resetData();
             $.ajax({
                 type: "GET",
                 url: '${ctx}/admin/metadata/info',
@@ -603,8 +604,11 @@
                     $("#metadataid").val(data.metadata.id);
                     $("#extFieldEdit").val(data.metadata.extField);
                     $("#extFieldNameEdit").val(data.metadata.extFieldName);
+                    $("#extFieldNameEdit").blur();
                     $("#typeEdit").val(data.metadata.type);
+                    $("#typeEdit").change();
                     $("#enumdataEdit").val(data.metadata.enumdata);
+                    $("#enumdataEdit").blur();
                     $("#sortOrderEdit").val(data.metadata.sortOrder);
                     $("#remarkEdit").val(data.metadata.remark);
                 }

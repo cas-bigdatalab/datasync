@@ -419,14 +419,50 @@
                                             </div>
 
                                             <div id="divExtMetadata">
-                                                <div><br/>自定义扩展的元数据信息：</div>
+                                                <div><br/>自定义扩展元数据信息：</div>
                                                 <c:forEach items="${list}" var ="item" >
                                                 <div class="form-group">
-                                                    <label class="control-label col-md-3" >${item.extFieldName}<span style="margin-left: 13px"></span>
+                                                    <label class="control-label col-md-3" >${item.extFieldName}
+                                                        <c:if test="${item.isMust eq 1}">
+                                                            <span class="required"> * </span>
+                                                        </c:if>
+                                                        <c:if test="${item.isMust != 1}">
+                                                            <span style="margin-left:13px"></span>
+                                                        </c:if>
+
                                                     </label>
                                                     <div class="col-md-5" style="padding-top:13px">
-                                                        <input type="text" class="form-control" name=${item.extField} placeholder="请输入${item.extFieldName}"
-                                                               id=${item.extField} >
+                                                        <c:choose>
+                                                            <c:when test="${item.type eq 'List'}">
+                                                                <select class="form-control enumdataclass" data="${item.enumdata}" name=${item.extField} placeholder="请输入${item.extFieldName}"
+                                                                        id=${item.extField}  <c:if test="${item.isMust eq 1}"> required='required'</c:if>  >
+                                                                    <c:forEach items="${item.enumdataList}" var="data">
+                                                                        <option value="${data}">${data}</option>
+                                                                    </c:forEach>
+
+                                                                </select>
+                                                            </c:when>
+                                                            <c:when test="${item.type eq 'DateTime'}">
+                                                                <input type="text" class="form-control selectData" name=${item.extField}  <c:if test="${item.isMust eq 1}"> required='required'</c:if>
+                                                                       id=${item.extField}  data-date-format="yyyy-mm-dd" placeholder=${item.extFieldName} >
+                                                            </c:when>
+
+                                                            <c:when test="${item.type eq 'Integer'}">
+                                                                <input type="text" class="form-control" name=${item.extField} placeholder="请输入${item.extFieldName}"
+                                                                       id=${item.extField}  digits="true"  <c:if test="${item.isMust eq 1}"> required='required'</c:if> >
+                                                            </c:when>
+
+                                                            <c:when test="${item.type eq 'Double'}">
+                                                                <input type="text" class="form-control" name=${item.extField} placeholder="请输入${item.extFieldName}"
+                                                                       id=${item.extField}  number="true"  <c:if test="${item.isMust eq 1}"> required='required'</c:if> >
+                                                            </c:when>
+                                                            <c:otherwise>
+
+                                                                <input type="text" class="form-control" name=${item.extField} placeholder="请输入${item.extFieldName}"
+                                                                       id=${item.extField} <c:if test="${item.isMust eq 1}"> required='required'</c:if> >
+                                                            </c:otherwise>
+                                                        </c:choose>
+
                                                     </div>
                                                 </div>
                                                 </c:forEach>
@@ -603,6 +639,15 @@
         var firstTime ;
         var lastTime ;
         var api = null;
+
+        $.extend($.validator.messages, {
+            required: "这是必填字段",
+            date: "请输入有效的日期",
+            number: "请输入有效的数字",
+            digits: "只能输入数字",
+        });
+
+
         //将图片截图并上传功能
         $('.selectData').datepicker({
             language:'zh-CN'
