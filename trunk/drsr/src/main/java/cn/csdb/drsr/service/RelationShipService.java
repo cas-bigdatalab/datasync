@@ -378,6 +378,10 @@ public class RelationShipService {
 
     }
 
+    public  List<Object> loadMysqlDatabaseList(String dataBaseType,String host,String port,String userName,String password ) throws SQLException {
+        return relationDao.loadMysqlDatabaseList(dataBaseType,host,port,userName,password);
+    }
+
 
 
 
