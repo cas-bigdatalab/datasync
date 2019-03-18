@@ -3,7 +3,6 @@ var closableTab = {
     //添加tab
     //tabItem = {id：页签ID,name：页签名称,closable：是否可关闭,template：显示内容HTML}
     addTab: function (tabItem) {
-
         var id = "tab_seed_" + tabItem.id;
         var container = "tab_container_" + tabItem.id;
 
@@ -21,8 +20,6 @@ var closableTab = {
             var tabpanel = '<div role="tabpanel" class="tab-pane" id="' + container + '" style="width: 100%;">' +
                 tabItem.template +
                 '</div>';
-
-
             $('.nav-tabs.activeTabs').append(li_tab);
             $('.tab-content.activeTabs').append(tabpanel);
         }

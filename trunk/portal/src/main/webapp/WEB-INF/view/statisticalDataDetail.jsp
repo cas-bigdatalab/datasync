@@ -44,27 +44,29 @@
             margin-left: 10%;
             margin-right: 10%;
         }
-        /*#datacollectionvisit {*/
-            /*width: 35%;*/
-            /*height: 100%;*/
-            /*float: left;*/
-            /*margin-left: 10%;*/
-        /*}*/
 
-        /*#datacollectiondown {*/
-            /*width: 35%;*/
-            /*height: 100%;*/
-            /*float: left;*/
-            /*margin-left: 10%;*/
-            /*margin-right: 10%;*/
-        /*}*/
+        button { /* 按钮美化 */
+            width: 270px; /* 宽度 */
+            height: 40px; /* 高度 */
+            border-width: 0px; /* 边框宽度 */
+            border-radius: 3px; /* 边框半径 */
+            background: #0d957a; /* 背景颜色 #1E90FF */
+            cursor: pointer; /* 鼠标移入按钮范围时出现手势 */
+            outline: none; /* 不显示轮廓线 */
+            font-family: Microsoft YaHei; /* 设置字体 */
+            color: white; /* 字体颜色 */
+            font-size: 17px; /* 字体大小 */
+        }
+        button:hover { /* 鼠标移入按钮范围时改变颜色 */
+            background: #5599FF;
+        }
     </style>
 </head>
 <body>
 <div class="page-content">
     <div id="div1" style="width: 100%;height:40%;" >
-        <div><span style="background-color: #0d957a;color: #FFFFFF;height:2%;">专题库访问量下载量top10统计</span>
-            <span style="background-color: #0d957a;height:2%;margin-left: 30%;"><a href="#" style="color: #FFFFFF;" onclick="func_moreDetail()">查看更多详情</a></span>
+        <div><span style="background-color: #0d957a;color: #FFFFFF;height: 30px;">专题库访问量下载量top10统计</span>
+            <span style="background-color: #0d957a;margin-left: 30%;height: 30px;"><a href="#" style="color: #FFFFFF;" onclick="func_moreDetail()">查看更多详情</a></span>
         </div>
         <div id="datashowvisit" class="css_chartsleft"></div>
         <div id="datashowdown" class="css_charts"></div>
@@ -75,7 +77,7 @@
 <%-- 专题详情--%>
     <div id="div2" style="width: 100%;height:70%; display: none;">
         <div><span style="background-color: #0d957a;color: #FFFFFF;height:2%;">专题库访问量下载量统计</span>
-            <span style="background-color: #0d957a;height:2%;margin-left: 30%;"><a href="#" style="color: #FFFFFF;" onclick="func_toTopTen()"><<<<</a></span>
+            <span style="background-color: #0d957a;height:2%;margin-left: 30%;height: 30px;"><a href="#" style="color: #FFFFFF;" onclick="func_toTopTen()"><<<<</a></span>
         </div>
         <div id="datashowvisitTotal"></div>
         <div id="datashowdownTotal"></div>
@@ -97,7 +99,7 @@
     <div id="themeDetail" style="width: 100%;height:70%;margin-top: 5%;display: none;margin-bottom: 3%;">
         <div style="width: 100%;height: 10%;">
         <span style="float: left;background-color: #0d957a;color: #FFFFFF;height:3%;width: 200px;height: 30px;">按专题库查看访问量下载量</span>
-        <span style="float: left;margin-left: 30%;"><a><button id="reback_id" style="background-color: #0d957a;color: #FFFFFF;height:3%;width: 200px;height: 30px;" ><<<</button></a></span>
+        <span style="float: left;margin-left: 30%;"><a><button id="reback_id" style="background-color: #0d957a;color: #FFFFFF;height:3%;width: 100px;height: 30px;" ><<<</button></a></span>
         </div>
         <div id="themeDetail111" style="width: 80%;margin-top:1%;margin-left: 10%;height: 30%;">
 
@@ -130,7 +132,7 @@
         <br/>
         <p>{{value.subjectName}}</p>
     </span>
-    <span style="float: left;">{{value.contact}}</span>
+    <span style="float: left;">简介：{{value.contact}}</span>
     {{/each}}
 </script>
 
@@ -468,6 +470,7 @@
                 dataType: "json",
                 data:{"subjectCode":subjectCode},
                 success: function (data) {
+
                     var chart = echarts.init(document.getElementById('singlethemeChartsV'));
                     var option = {
                         // color: ['#5182bb', '#be4f4f', '#9bbb5e', '#8064a1', '#4facc5', '#2d4d74'],
