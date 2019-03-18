@@ -46,16 +46,16 @@ public class FileUtil {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            jsonObject.put("code","error");
-            jsonObject.put("message","文件删除异常！");
-            logger.error("删除异常路径："+folderPath);
+            jsonObject.put("code", "error");
+            jsonObject.put("message", "文件删除异常！");
+            logger.error("删除异常路径：" + folderPath);
         }
-        if(key){
-            jsonObject.put("code","success");
-            jsonObject.put("message","删除成功！");
+        if (key) {
+            jsonObject.put("code", "success");
+            jsonObject.put("message", "删除成功！");
         } else {
-            jsonObject.put("code","error");
-            jsonObject.put("message","文件删除失败！");
+            jsonObject.put("code", "error");
+            jsonObject.put("message", "文件删除失败！");
         }
         return jsonObject;
     }
@@ -87,15 +87,17 @@ public class FileUtil {
                     String tempPath = oldPath + File.separator + s;
                     copyFolder(tempPath, newPath);
                 }
+            } else {
+
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            jsonObject.put("code","error");
-            jsonObject.put("message","文件复制失败！");
-            logger.error("《"+oldPath+"》复制到=》《"+newPath+"》异常！");
+            jsonObject.put("code", "error");
+            jsonObject.put("message", "文件复制失败！");
+            logger.error("《" + oldPath + "》复制到=》《" + newPath + "》异常！");
         }
-        jsonObject.put("code","success");
-        jsonObject.put("message","文件复制成功！");
+        jsonObject.put("code", "success");
+        jsonObject.put("message", "文件复制成功！");
         return jsonObject;
     }
 
@@ -111,6 +113,9 @@ public class FileUtil {
         String name = oldFile.getName();
         String newPath = newFile.getAbsolutePath();
         File tempFile = new File(newPath, name);
+        if (!tempFile.getParentFile().exists()) {
+            tempFile.getParentFile().mkdirs();
+        }
         if (tempFile.exists()) {
             jsonObject.put("code", "error");
             jsonObject.put("message", "当前文件下已存在" + name);

@@ -95,6 +95,43 @@ public class DataSrcService {
         return map;
     }
 
+//    根据PORTALID查询数据
+    public List<String> getDataByPORTALID(DataSrc dataSrc, String tableName,String PORTALID){
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        List<String> list=new ArrayList<>();
+        try {
+            String sql = "SELECT * from " + tableName + " where PORTALID=?";
+
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setString(1,PORTALID);
+            ResultSet set = pst.executeQuery();
+            ResultSetMetaData rsm = set.getMetaData();
+            while (set.next()) {
+                for (int i = 1; i <= rsm.getColumnCount(); i++) {
+                    if (set.getString(rsm.getColumnName(i)) == null){
+                        list.add(set.getString(" "));
+                    }else {
+//                    System.out.println("aaaaaaaallll"+set.getString(rsm.getColumnName(i)));
+                        list.add(set.getString(rsm.getColumnName(i)));
+                    }
+                }
+            }
+
+            pst.close();
+            set.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+
+            try {
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
     //    删除表数据
     public int deleteDate(String tableName, String delPORTALID, DataSrc dataSrc) {
         int i = 0;
@@ -218,7 +255,7 @@ public class DataSrcService {
     }
 
     //判断主键是否重复
-    public int checkPriKey(DataSrc dataSrc, String tableName, int primaryKey, String colName) {
+    public int checkPriKey(DataSrc dataSrc, String tableName, String primaryKey, String colName) {
         int i = 0;
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
@@ -226,7 +263,7 @@ public class DataSrcService {
             String sql = "select count(" + colName + ") as num " + "from " + tableName + " where " + colName + "= ?";
             System.out.println("判断主键是否重复：" + sql);
             PreparedStatement pst = connection.prepareStatement(sql);
-            pst.setInt(1, primaryKey);
+            pst.setObject(1, primaryKey);
             ResultSet rs = pst.executeQuery();
             while (rs.next()) {
                 i = rs.getInt("num");
@@ -314,6 +351,52 @@ public class DataSrcService {
         }
         return listMap;
     }
+
+
+    //    连接mysql数据库，根据表明查出所有数据，供编辑
+    public List<List<Object>> getTableData1(DataSrc dataSrc, String tableName, int pageNo, int pageSize) {
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        List<List<Object>> list = new ArrayList<>();
+        int start = pageSize * (pageNo - 1);
+        try {
+//           select COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT from information_schema.COLUMNS where table_name = '表名' and table_schema = '数据库名称';
+            String sql = "select * from " + tableName + " limit " + start + " ," + pageSize + "";
+
+            //         时间格式的数据怎么获得
+            PreparedStatement pst = connection.prepareStatement(sql);
+            ResultSet set = pst.executeQuery();
+            ResultSetMetaData rsm = set.getMetaData();
+
+            while (set.next()) {
+//                Map<String, Object> map = new HashMap<>();
+                List<Object> list1=new ArrayList<>();
+                for (int i = 1; i <= rsm.getColumnCount(); i++) {
+//                    if (set.getString(rsm.getColumnName(i)) == null) {
+//                        map.put(rsm.getColumnName(i), "");
+//                    } else {
+//                        map.put(rsm.getColumnName(i), set.getString(rsm.getColumnName(i)));
+//                    }
+                    list1.add(rsm.getColumnName(i));
+//                       System.out.println("第"+i+"列的值"+"列名："+rsm.getColumnName(i)+",,,"+set.getString(rsm.getColumnName(i)));
+                }
+//                listMap.add(map);
+                list.add(list1);
+            }
+            pst.close();
+            set.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
 
     public boolean validateSql(String sql, int dataSourceId) {
         if (!SqlUtil.validateSelectSql(sql)) {
