@@ -170,7 +170,8 @@ li.l3-menu > a:hover i, li.l3-menu > a.active i {
     background: #f1f1f1;
     float: right;
     padding: 20px;
-    height: 60%;
+    /*height: 60%;*/
+    height: 80%;
     overflow-y: auto;
 }
 

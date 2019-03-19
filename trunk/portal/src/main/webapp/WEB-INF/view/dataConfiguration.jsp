@@ -2424,7 +2424,7 @@
             }
             $.ajax({
                 type: "POST",
-                url: "${ctx}/fileNet/copyPasteFile",
+                url: "${ctx}/fileNet/operationFile",
                 data: {
                     "oldFile": copyCache,
                     "newFile": currentPath

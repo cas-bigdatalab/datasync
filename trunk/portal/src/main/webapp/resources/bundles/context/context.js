@@ -105,7 +105,8 @@ var context = context || (function () {
             var findPath = $(e.currentTarget).find("td").attr("path");
             $("#currentPath").data("currentPath", findPath);
             // 获取触发事件元素的name
-            var findName = $(e.currentTarget).find("a").text();
+            debugger
+            var findName = $(e.currentTarget).find(".text_name").text();
             $("#currentName").data("currentName", findName);
             $('.dropdown-context:not(.dropdown-context-sub)').hide();
 

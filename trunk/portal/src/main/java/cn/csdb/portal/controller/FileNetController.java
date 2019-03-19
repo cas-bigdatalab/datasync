@@ -167,20 +167,25 @@ public class FileNetController {
 
 
     /**
-     * 复制 粘贴文件
+     * 复制 || 移动文件
      *
-     * @param oldFile 被复制项
-     * @param newFile 粘贴位置
+     * @param oldFile 源文件
+     * @param newFile 目标文件
      * @return
      */
-    @RequestMapping(value = "/copyPasteFile")
+    @RequestMapping(value = "/operationFile")
     @ResponseBody
-    public JSONObject copyPasteFile(HttpServletRequest request, String oldFile, String newFile) {
+    public JSONObject operationFile(HttpServletRequest request, String oldFile, String newFile, String operationType) {
         JSONObject jsonObject = new JSONObject();
         String ftpRootPath = splitFtpRootPathEnd(request);
         oldFile = fileNetService.decodePath(oldFile, ftpRootPath);
         newFile = fileNetService.decodePath(newFile, ftpRootPath);
         jsonObject = fileNetService.copyFolder(oldFile, newFile);
+        if ("deleteFile".equals(operationType)) {
+            JSONObject deleteFolder = fileNetService.deleteFolder(oldFile);
+            jsonObject.put("code", deleteFolder.get("code"));
+            jsonObject.put("message", "移动成功");
+        }
         return jsonObject;
     }
 }
