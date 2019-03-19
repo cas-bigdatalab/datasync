@@ -102,7 +102,7 @@ var context = context || (function () {
             e.preventDefault();
             e.stopPropagation();
             // 获取触发事件元素的path
-            var findPath = $(e.currentTarget).attr("path");
+            var findPath = $(e.currentTarget).find("td").attr("path");
             $("#currentPath").data("currentPath", findPath);
             // 获取触发事件元素的name
             var findName = $(e.currentTarget).find("a").text();
