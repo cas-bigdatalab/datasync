@@ -21,7 +21,7 @@
             width: 36.666667% !important;
         }
         .col-md-2 {
-            width: 8.666667% !important;
+            width: 12.666667% !important;
         }
         .ztree{
             width: 100% !important;
