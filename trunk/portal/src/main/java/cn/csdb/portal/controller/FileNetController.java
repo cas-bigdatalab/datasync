@@ -59,7 +59,7 @@ public class FileNetController {
     String splitFtpRootPathEnd(HttpServletRequest request) {
         String ftpRootPath = (String) request.getSession().getAttribute("FtpFilePath");
         // TODO 部署时候请注释下一行
-//        ftpRootPath = "H:\\Cache\\file\\";
+        ftpRootPath = "H:\\Cache\\file\\";
 
         boolean linux = ftpRootPath.endsWith("/");
         boolean win = ftpRootPath.endsWith("\\");
