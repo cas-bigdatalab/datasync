@@ -307,4 +307,8 @@ public class DataTaskService {
             e.printStackTrace();
         }
     }
+
+    public List<DataTask> getdatataskById(String taskId){
+        return  dataTaskDao.getDataTaskById(taskId);
+    }
 }

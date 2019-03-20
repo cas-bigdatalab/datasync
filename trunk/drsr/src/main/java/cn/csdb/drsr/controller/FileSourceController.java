@@ -19,10 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,6 +53,12 @@ public class FileSourceController {
     @ResponseBody
     String add(String dataSourceName, String dataSourceType, String fileType, String filePath) {
         logger.debug("新增功能开始");
+        filePath=filePath.replace("%_%",File.separator);
+        int start=filePath.length()-1;
+        int end=filePath.length();
+        if(filePath.substring(start,end).equals(File.separator+"") || filePath.substring(start,end).equals("/")){
+            filePath=filePath.substring(0,filePath.length()-1);
+        }
         String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
         String SubjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         Date current_date = new Date();
@@ -70,6 +73,12 @@ public class FileSourceController {
         datasrc.setCreateTime(currentTime);
         datasrc.setFilePath(filePath.replace("%_%",File.separator));
         datasrc.setSubjectCode(SubjectCode);
+        List<DataSrc> dataSrcsList=fileResourceService.queryData();
+        for(DataSrc data : dataSrcsList){
+           if(dataSourceName.trim().equals(data.getDataSourceName())){
+               return "2";//数据源名称相同
+           }
+        }
         return fileResourceService.addData(datasrc);
 
     }
@@ -338,12 +347,23 @@ public class FileSourceController {
     @RequestMapping("/newResCatalog")
     public
     @ResponseBody
-    List<FileTreeNode> newResCatalog(String data,Integer dataSourceId) {
+    JSONObject newResCatalog(String data,Integer dataSourceId) {
         logger.info("加载文件树");
+        JSONObject jsonObject=new JSONObject();
         List<FileTreeNode> nodeList=new ArrayList<FileTreeNode>();
         String filePath = fileSourceFileList(dataSourceId);
         nodeList=fileResourceService.asynLoadingTree(data,filePath,"init");
-        return nodeList;
+            String jsonObjectStr=null;
+        try {
+            jsonObjectStr=fileResourceService.LoadingRemoteTree();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        jsonObject.put("nodeList",nodeList);
+        jsonObject.put("jsonObjectStr",jsonObjectStr);
+
+
+        return jsonObject;
 
 //        JSONObject jsonObjects = fileResourceService.fileTreeLoading(data,filePath);
 //        return jsonObjects;

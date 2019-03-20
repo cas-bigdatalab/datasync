@@ -2,14 +2,13 @@ package cn.csdb.drsr.repository;
 
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.repository.mapper.DataSrcMapper;
+import cn.csdb.drsr.service.RelationShipService;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.*;
 
 
@@ -163,6 +162,30 @@ public class RelationDao{
         String sql = "select * from t_datasource where DataSourceId=? and SubjectCode=?";
         DataSrc dataSrc = jdbcTemplate.queryForObject(sql, new Object[]{id,subjectCode}, new int[]{Types.INTEGER}, new DataSrcMapper());
         return dataSrc;
+    }
+
+    public  List<Object> loadMysqlDatabaseList(String dataBaseType,String host,String port,String userName,String password ) throws SQLException {
+        List<Object> list=new ArrayList<>();
+        Connection connection=null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            String url = "jdbc:mysql://" + host + ":" + port + "" ;
+            connection = DriverManager.getConnection(url, userName, password);
+            DatabaseMetaData dm = connection.getMetaData();
+            ResultSet rs = dm.getCatalogs();
+            while (rs.next()) {
+                String name = rs.getString("TABLE_CAT");
+                list.add(name);
+            }
+            System.out.println();
+        } catch (ClassNotFoundException e) {
+            System.out.println("数据库连接异常");
+        } catch (SQLException e) {
+            System.out.println("数据库连接异常");
+        }finally {
+            connection.close();
+        }
+        return list;
     }
 
 }

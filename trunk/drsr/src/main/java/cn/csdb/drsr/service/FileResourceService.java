@@ -4,18 +4,22 @@ import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
 import cn.csdb.drsr.model.FileTreeNode;
 import cn.csdb.drsr.repository.FileResourceDao;
-import cn.csdb.drsr.repository.RelationDao;
 import cn.csdb.drsr.utils.ConfigUtil;
+import cn.csdb.drsr.utils.TreeNode;
 import cn.csdb.drsr.utils.ZipUtils;
-import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
-import cn.csdb.drsr.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPObject;
 import com.google.common.io.Files;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,16 +28,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
+import top.jfunc.json.JsonArray;
+import top.jfunc.json.impl.JSONArray;
 
 /**
  * @program: DataSync
@@ -409,6 +410,33 @@ public class FileResourceService {
         }
 
         return nodeList;
+    }
+
+    public String LoadingRemoteTree() throws IOException {
+        String configFilePath = LoginService.class.getClassLoader().getResource("drsr.properties").getFile();
+        String portalUrl = ConfigUtil.getConfigItem(configFilePath, "PortalUrl");
+        String loginApiPath = "/service/treeNodeAsync";
+
+        String configFilePath2 = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String ftpUserName= ConfigUtil.getConfigItem(configFilePath2, "FtpUser");
+
+        org.apache.http.client.HttpClient httpClient = null;
+        HttpPost postMethod = null;
+        HttpGet getMethod = null;
+        HttpResponse response = null;
+        httpClient = HttpClients.createDefault();
+        getMethod = new HttpGet("http://"+portalUrl+loginApiPath+"?" + "subName=" + ftpUserName + "&async=" + "2async");
+        getMethod.addHeader("Content-type", "application/json; charset=utf-8");
+        response = httpClient.execute(getMethod);//获取响应
+        int statusCode = response.getStatusLine().getStatusCode();
+        System.out.println(statusCode);
+        HttpEntity entity = response.getEntity();
+        String reponseContent = EntityUtils.toString(entity);
+        JSONArray jsonArray=new JSONArray("["+reponseContent+"]");
+        Object json= jsonArray.get(0);
+        String jsonStr=((JSONObject) json).get("data").toString();
+
+        return jsonStr;
     }
 
 }

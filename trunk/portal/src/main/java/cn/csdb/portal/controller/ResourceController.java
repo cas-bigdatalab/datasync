@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -52,6 +53,8 @@ public class ResourceController {
     private DataSrcService dataSrcService;
     @Resource
     private TableFieldComsDao tableFieldComsDao;
+
+
 
     private Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
@@ -156,18 +159,30 @@ public class ResourceController {
         Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
         IDataSource dataSource = DataSourceFactory.getDataSource("mysql");
-        Connection connection = dataSource.getConnection(subject.getDbHost(), subject.getDbPort(),
-                subject.getDbUserName(), subject.getDbPassword(), subject.getDbName());
-        if (connection == null)
-            return null;
-        List<String> list = new ArrayList<>(10);
-        List<Described_Table> list_describe = tableFieldComsDao.queryDescribeTable(subject.getDbName());
-        for (Described_Table described_table : list_describe) {
-            list.add(described_table.getTableName());
-        }
-        jsonObject.put("list", list);
+        Connection connection = null;
+        try {
+            connection = dataSource.getConnection(subject.getDbHost(), subject.getDbPort(),
+                    subject.getDbUserName(), subject.getDbPassword(), subject.getDbName());
+            if (connection == null)
+                return null;
+            List<String> list = new ArrayList<>(10);
+            List<Described_Table> list_describe = tableFieldComsDao.queryDescribeTable(subject.getDbName());
+            for (Described_Table described_table : list_describe) {
+                list.add(described_table.getTableName());
+            }
+            jsonObject.put("list", list);
 //        jsonObject.put("dataSourceName", dataSrc.getDataSourceName());
-        return jsonObject;
+            return jsonObject;
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    logger.error("数据库连接关闭异常");
+                }
+            }
+        }
     }
 
     /**
@@ -321,6 +336,8 @@ public class ResourceController {
         resource.setCreateOrgnization(createOrganization);
         resource.setCreatePerson(createPerson);
         resource.setStatus("-1");
+        resource.setdCount(0);
+        resource.setvCount(0);
         String resourceId = resourceService.save(resource);
         jsonObject.put("resourceId", resourceId);
         return jsonObject;
@@ -725,6 +742,9 @@ public class ResourceController {
         JSONObject jo = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setStatus(status);
+        long currentTimeMillis = System.currentTimeMillis();
+        Date date = new Date(currentTimeMillis);
+        resource.setAuditTime(date);
         AuditMessage auditMessage = new AuditMessage();
         auditMessage.setAuditTime(new Date());
         auditMessage.setAuditCom(auditContent);

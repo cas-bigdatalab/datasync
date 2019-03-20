@@ -5,6 +5,8 @@ import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -83,5 +85,11 @@ public class SubjectDao {
 
         return loginStatus;
     }
+
+       // 查询t_subject主题库
+     public List<Subject> findAllsubject(){
+        List<Subject> list=mongoTemplate.findAll(Subject.class);
+        return list;
+     }
 
 }

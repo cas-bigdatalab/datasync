@@ -16,13 +16,25 @@
     <link href="${ctx}/resources/bundles/zTree_v3/css/demo.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/layerJs/theme/default/layer.css" rel="stylesheet" type="text/css"/>
-    <style>
+    <style type="text/css">
         .col-md-5 {
-            width: 66.666667% !important;
+            width: 36.666667% !important;
+        }
+        .col-md-2 {
+            width: 8.666667% !important;
         }
         .ztree{
             width: 100% !important;
         }
+        div#rMenu {position:absolute; visibility:hidden; top:0; background-color: #555;text-align: left;padding: 2px;}
+        div#rMenu ul li{
+            margin: 1px 0;
+            padding: 0 5px;
+            cursor: pointer;
+            list-style: none outside none;
+            background-color: #DFDFDF;
+        }
+
     </style>
 </head>
 <body>
@@ -114,8 +126,10 @@
                                 <div class="row" id="file-table"></div>
 --%>
                             </div>
-                            <div class="col-md-5" style="margin-top: 6px">
-
+                            <div class="col-md-5" style="margin: 6px 0px 0px 100px">
+                                <div id="remoteTreeDiv">
+                                    <ul  class="ztree" id="remoteTree"></ul>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-12 ">
@@ -201,6 +215,40 @@
     </div>
 </div>
 
+<div id="rMenu">
+    <ul>
+        <li id="m_add" onclick="addTreeNode(this);">增加节点</li>
+        <li id="m_del" onclick="removeTreeNode();">删除节点</li>
+        <%--<li id="m_check" onclick="checkTreeNode(true);">Check节点</li>--%>
+        <%--<li id="m_unCheck" onclick="checkTreeNode(false);">unCheck节点</li>--%>
+        <li id="m_reset" onclick="resetTree();">恢复初始目录</li>
+    </ul>
+</div>
+<div class="modal fade" id="createFileMModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 66%;top: 156px;margin: 0 auto;">
+            <div class="modal-header" style="height: 48px;">
+                <h5 class="modal-title" id="createFileTitle" style="float: left;">创建文件夹</h5>
+                <button type="button" class="close" onclick="hidenFileNameModal()">
+                    <span >&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="fileName" class="col-form-label">文件夹名称</label>
+                        <input type="text" autofocus class="form-control" id="fileName">
+                        <span id="promptInf" style="color: red;"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="createFileSureBut" onclick="addFilePath()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/html" id="previewTableDataAndComsTmpl">
     <div class="skin skin-minimal">
         <table class="table table-hover table-bordered">
@@ -272,7 +320,7 @@
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.min.js"></script>
     <script src="${ctx}/resources/bundles/layerJs/layer.js"></script>
     <script src="${ctx}/resources/bundles/zTree_v3/js/jquery.ztree.all.js"></script>
-    <%--<script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>--%>
+    <script src="${ctx}/resources/bundles/zTree_v3/js/rightClick.js"></script>
 
     <script>
         var dataRelSrcId;
@@ -284,6 +332,8 @@
         var dateDef = new Date();
         var taskNameFlag=false
         var validSql = true;
+        var remoteZTree, rMenu;
+        var jsonObjectStr;
         dateDef = dateDef.Format("yyyyMMddhhmmss");
         $("#dataTaskName").val(dateDef)
         $("#dataTaskName").change(function () {
@@ -329,7 +379,7 @@
             }
             $(".database-con-rel").show();
             $("#resTitle").html(name);
-            console.log("aaaaaaaaaaa")
+            console.log("设置数据任务->关系型数据库列表加载！")
             $.ajax({
                 url:"${ctx}/relationship/relationalDatabaseTableList",
                 type:"POST",
@@ -385,7 +435,12 @@
                     $("#bdTableLabel").css("display", "block");//显示“选择资源”标签
                     $("#bdDirDiv").css("display", "block");//显示“选择资源”标签
                     $("#bdSubmitButton").css("display", "block"); //显示“提交”按钮
-                    var zTreeObj = $.fn.zTree.init($("#LocalTreeDemo"),setting, data);
+                    jsonObjectStr=eval(data.jsonObjectStr);
+                    var ztreeObjRemote=$.fn.zTree.init($("#remoteTree"),remoteSetting,jsonObjectStr);
+                    var zTreeObj = $.fn.zTree.init($("#LocalTreeDemo"),setting, data.nodeList);
+
+                    remoteZTree = $.fn.zTree.getZTreeObj("remoteTree");
+                    rMenu = $("#rMenu");
                     //让第一个父节点展开
                     var rootNode_0 = zTreeObj.getNodeByParam('pid',0,null);
                     zTreeObj.expandNode(rootNode_0, true, false, false, false);
@@ -575,7 +630,12 @@
              var $eleChecked = $("[name='fileTable']:checked")
             // var getCheckedFile = getChecedValueInLocalTree();//获取选中的文件
             var nodes = getChecedValueInLocalTree();//获取选中的文件
+            var remotePath=getChecedValueInRemoteTree();//获取上传路径
              var numChecked = $eleChecked.size();
+             if(remotePath.length==0){
+                 toastr["error"]( "请选择上传路径！","提示！");
+                 return
+             }
             if($("#dataTaskName").val() ==""){
                 toastr["error"]("提示！", "请创建任务名");
                 return
@@ -604,9 +664,11 @@
                 aysnc:true,
                 timeout:600000,
                 traditional: true,
-                data:{"dataSourceId":dataFileSrcId,
+                data:{
+                    "dataSourceId":dataFileSrcId,
                     "datataskName":$("#dataTaskName").val(),
                     "nodes":nodes,
+                    "remotePath":remotePath
                 },
                 success:function (data) {
                     var jsonlist=JSON.parse(data);
@@ -769,6 +831,7 @@
                 onCheck : onCheck
             }
         };
+
         function filter(treeId, parentNode, childNodes) {
             return childNodes;
         }
@@ -784,7 +847,22 @@
             return pathsOfCheckedFiles;
         }
 
+        //获取界面中所有被选中的radio
+        function getChecedValueInRemoteTree() {
+            var pathsOfCheckedFiles = new Array();
+            var treeObj=$.fn.zTree.getZTreeObj("remoteTree"),
+                nodes=treeObj.getCheckedNodes(true),v="";
+            for(var i=0;i<nodes.length;i++){
+                debugger
+                pathsOfCheckedFiles.push(nodes[i].pid+"/"+nodes[i].name);
+            }
+            return pathsOfCheckedFiles;
+        }
+
         function onCheck(event, treeId, treeNode){
+            index = layer.load(1, {
+                shade: [0.5,'#fff'] //0.1透明度的白色背景
+            });
             var zTree = $.fn.zTree.getZTreeObj("LocalTreeDemo");
             if(treeNode.isParent){
                 if (!treeNode.open){
@@ -819,6 +897,8 @@
                     },1000);//延时1.5秒
                 }
             }
+            $("#layui-layer-shade"+index+"").remove();
+            $("#layui-layer"+index+"").remove();
         };
 
         function onExpand(event, treeId, treeNode) {
@@ -826,18 +906,20 @@
             var checked=treeNode.checked;
             setTimeout(function(){
                 var children=treeNode.children;
-                for(var i=0;i<children.length;i++){
-                    zTree.checkNode(children[i],checked,checked);
-                    if(children[i].isParent){
-                        if (!children[i].open){
-                            zTree.expandNode(children[i], true, true, false);
-                            onExpand(event, treeId, children[i]);
-                            console.log(children[i]);
-                            zTree.expandNode(children[i], false, false, false);
+                if(children!=null){
+                    for(var i=0;i<children.length;i++){
+                        zTree.checkNode(children[i],checked,checked);
+                        if(children[i].isParent){
+                            if (!children[i].open){
+                                zTree.expandNode(children[i], true, true, false);
+                                onExpand(event, treeId, children[i]);
+                                console.log(children[i]);
+                                zTree.expandNode(children[i], false, false, false);
+                            }
                         }
                     }
                 }
-            },1200);//延时1.2秒
+            },900);//延时1.2秒
         };
 
         /* 获取返回的数据，进行预操作，treeId是treeDemo,异步加载完之后走这个方法，responseData为后台返回数据  */
@@ -857,6 +939,47 @@
         //异步加载失败
         function zTreeOnAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown)  {
             alertMsg.error("异步加载节点失败!");
+        }
+
+        function addFilePath(){
+            var inputFileName = $("#fileName").val().trim();
+            if(inputFileName==null || inputFileName==""){
+                $("#promptInf")[0].textContent="文件夹名称不能为空！";
+                $("#fileName")[0].style.borderColor="red";
+                return;
+            }
+            var newNode = { name:""+inputFileName+""};
+            if (remoteZTree.getSelectedNodes()[0]) {
+                newNode.checked = false;
+                newNode.isParent=true;
+                newNode.id=remoteZTree.getSelectedNodes()[0].id+"/"+newNode.name;
+                remoteZTree.addNodes(remoteZTree.getSelectedNodes()[0], newNode);
+            } else {
+                newNode.isParent=true;
+                newNode.id=remoteZTree.getSelectedNodes()[0].id+"/"+newNode.name;
+                remoteZTree.addNodes(null, newNode);
+            }
+            $("#createFileMModal").modal("hide");
+        }
+
+        function addTreeNode(e) {
+            hideRMenu();
+            ShowCreateModal();
+        }
+        // 修改弹出框的title, 显示弹框
+        function ShowCreateModal(title){
+            if(remoteZTree.getSelectedNodes()<=0){
+                toastr["error"]("请选择父节点！");
+                return;
+            }
+            $("#createFileTitle").text(title);
+            $("#promptInf")[0].textContent="";
+            $("#fileName")[0].style.borderColor="#d2c3c3";
+            $('#createFileMModal').modal('show');
+        }
+
+        function hidenFileNameModal() {
+            $("#createFileMModal").modal("hide");
         }
 
     </script>

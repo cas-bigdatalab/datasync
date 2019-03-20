@@ -39,14 +39,14 @@ public class DataTaskDao {
                 "DataSourceId=?,DataTaskName=?,DataTaskType=?," +
                 "TableName=?,SqlString=?,SqlTableNameEn=?," +
                 "SqlFilePath=?,FilePath=?,Creator=?," +
-                "Status=?,SubjectCode=?,LogPath=?,CreateTime=?" +
+                "Status=?,SubjectCode=?,LogPath=?,CreateTime=?,RemoteUploadPath=?   " +
                 "where DataTaskId=? ";
         int i = jdbcTemplate.update(sql, new Object[]{
                 dataTask.getDataSourceId(), dataTask.getDataTaskName(), dataTask.getDataTaskType(),
                 dataTask.getTableName(), dataTask.getSqlString(), dataTask.getSqlTableNameEn(),
                 dataTask.getSqlFilePath(), dataTask.getFilePath(), dataTask.getCreator(),
                 dataTask.getStatus(), dataTask.getSubjectCode(),dataTask.getLogPath(),dataTask.getCreateTime(),
-                dataTask.getDataTaskId()});
+                dataTask.getRemoteuploadpath(),dataTask.getDataTaskId()});
         if (i >= 0) {
             result = true;
         }
@@ -132,8 +132,8 @@ public class DataTaskDao {
                 "dataSourceId,dataTaskName,dataTaskType," +
                 "tableName,sqlString,sqlTableNameEn," +
                 "sqlFilePath,filePath,createTime," +
-                "creator,status,datataskId,subjectCode) " +
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                "creator,status,datataskId,subjectCode,remoteuploadpath) " +
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 //        int i = jdbcTemplate.update(sql, new Object[]{datatask.getDataSourceId(),datatask.getDataTaskName(),
 //                datatask.getDataTaskType(), datatask.getTableName(), datatask.getSqlString(),
 //                datatask.getSqlTableNameEn(), datatask.getSqlFilePath(), datatask.getFilePath(),
@@ -160,6 +160,7 @@ public class DataTaskDao {
                 ps.setString(11,datatask.getStatus());
                 ps.setString(12,datatask.getDataTaskId());
                 ps.setString(13,datatask.getSubjectCode());
+                ps.setString(14,datatask.getRemoteuploadpath());
                 return ps;
 
             }
@@ -191,6 +192,16 @@ public class DataTaskDao {
         Object[] arg = new Object[] {path,dataTaskId};
         int flag = jdbcTemplate.update(updateSql,arg);
         return flag;
+    }
+
+    public List<DataTask> getDataTaskById(String taskId){
+        StringBuffer sql = new StringBuffer("select * from t_datatask where DataTaskId=?");
+        List<Object> params = Lists.newArrayList();
+        params.add(taskId);
+        List<DataTask> list = jdbcTemplate.query(sql.toString(), params.toArray(), new DataTaskMapper());
+        //DataTask dataTask=
+        return list;
+
     }
 
 

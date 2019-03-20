@@ -37,6 +37,8 @@ public class DataTask {
     private String creator;
     @Field("status")
     private String status;
+    @Field("remoteuploadpath")
+    private String remoteuploadpath;
 
 
     public String getSubjectCode() {
@@ -133,5 +135,13 @@ public class DataTask {
 
     public void setSqlFilePath(String sqlFilePath) {
         this.sqlFilePath = sqlFilePath;
+    }
+
+    public String getRemoteuploadpath() {
+        return remoteuploadpath;
+    }
+
+    public void setRemoteuploadpath(String remoteuploadpath) {
+        this.remoteuploadpath = remoteuploadpath;
     }
 }

@@ -123,19 +123,18 @@ public class FileImportController {
         File fileTemp = new File(realPath);
         if (!fileTemp.exists()) {
             fileTemp.mkdirs();
-        } else {
-            File f = new File(realPath + name);
-            if (!f.exists()) {
-                f.createNewFile();
-            }
-            FileOutputStream fos = new FileOutputStream(f);
-            while ((flg = inputStream.read(b, 0, 16)) != -1) {
-                fos.write(b, 0, 16);
-            }
-            fos.flush();
-            fos.close();
-            tempFilePath = f.getPath();
         }
+        File f = new File(realPath + name);
+        if (!f.exists()) {
+            f.createNewFile();
+        }
+        FileOutputStream fos = new FileOutputStream(f);
+        while ((flg = inputStream.read(b, 0, 16)) != -1) {
+            fos.write(b, 0, 16);
+        }
+        fos.flush();
+        fos.close();
+        tempFilePath = f.getPath();
         return tempFilePath;
     }
 
@@ -173,5 +172,14 @@ public class FileImportController {
         }
         out.close();
         input.close();
+    }
+
+    @PostMapping("/deleteTable")
+    @ResponseBody
+    public JSONObject deleteTableName(HttpServletRequest request) {
+        String tableName = request.getParameter("tableName");
+        String subjectCode = request.getParameter("subjectCode");
+        JSONObject jsonObject = fileImportService.deleteTableName(tableName, subjectCode);
+        return jsonObject;
     }
 }

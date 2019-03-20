@@ -118,5 +118,25 @@
             <version>3.0-beta-10</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>classes12</artifactId>
+            <version>10.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/top.jfunc.common/converter -->
+        <dependency>
+            <groupId>top.jfunc.common</groupId>
+            <artifactId>converter</artifactId>
+            <version>1.8.0</version>
+        </dependency>
+
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>PlanetMirror</id>
+            <name>Planet Mirror</name>
+            <url>http://nexus.talanlabs.com/content/repositories/releases/</url>
+        </repository>
+    </repositories>
 </project>

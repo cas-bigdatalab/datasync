@@ -141,11 +141,11 @@
                                 <div class="form-body">
                                     <div class="form-group">
                                         <label for = "dataSourceNameE" class="col-md-3 control-label"><span class="required">
-													* </span>数据源名称</label>
+													</span>数据源名称</label>
                                         <div class="col-md-9">
                                             <input type="text" class="form-control"
                                                    id="dataSourceNameE"
-                                                   name="dataSourceNameE" placeholder="请输入数据源名称"/>
+                                                   name="dataSourceNameE" placeholder="请输入数据源名称" disabled/>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -406,6 +406,9 @@
                                         formValid.resetForm();
 */
                                         tableConfiguration();
+                                    }else if(jsonData=="2"){
+                                        $("#dataSourceName");
+                                        toastr["error"]("数据源名称已存在！");
                                     } else {
                                         toastr["error"]("编辑失败");
                                     }
@@ -445,6 +448,9 @@
                                         formValid.resetForm();
 */
                                         tableConfiguration();
+                                    }else if(jsonData == '2'){
+                                        $("#dataSourceName").addClass("custom-error");
+                                        toastr["error"]("数据源名称已存在！");
                                     } else {
                                         toastr["error"]("新增失败");
                                     }

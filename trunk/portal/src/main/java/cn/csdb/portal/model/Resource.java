@@ -38,6 +38,8 @@ public class Resource {
     private String fieldComs; //字段注释
     @Field("subjectCode")
     private String subjectCode; //主题库代码
+    @Field("auditTime")
+    private Date auditTime; // 审核时间
 
     //以下是元数据信息
     @Field("pid")
@@ -90,6 +92,10 @@ public class Resource {
     private Date creatorCreateTime;
     @Field("createTime")
     private Date createTime;
+    @Field("vCount") //浏览次数
+    private Integer vCount;
+    @Field("dCount") //下载次数
+    private Integer dCount;
 
     public String getPublishOrgnization() {
         return publishOrgnization;
@@ -385,5 +391,29 @@ public class Resource {
 
     public void setCreatorCreateTime(Date creatorCreateTime) {
         this.creatorCreateTime = creatorCreateTime;
+    }
+
+    public Integer getvCount() {
+        return vCount;
+    }
+
+    public void setvCount(Integer vCount) {
+        this.vCount = vCount;
+    }
+
+    public Integer getdCount() {
+        return dCount;
+    }
+
+    public void setdCount(Integer dCount) {
+        this.dCount = dCount;
+    }
+
+    public Date getAuditTime() {
+        return auditTime;
+    }
+
+    public void setAuditTime(Date auditTime) {
+        this.auditTime = auditTime;
     }
 }

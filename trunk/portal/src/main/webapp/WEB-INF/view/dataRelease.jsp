@@ -45,7 +45,7 @@
 </head>
 
 <body>
-
+<input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
 <div class="page-content">
     <div>
         <%--<div class="uplod-head">
@@ -127,7 +127,7 @@
                 <h4 class="modal-title">数据集详情查看</h4>
             </div>
             <div class="modal-body" style="max-height: 500px;overflow: auto">
-                <div class="commentsList" id="mysqlComments" style="display: none">
+                <div class="commentsList" id="mysqlComments" style="display: none; ">
                     <form class="form-horizontal">
                         <div class="form-group">
                             <label  class="col-sm-3 control-label">审核人姓名&nbsp;&nbsp;:</label>
@@ -470,25 +470,28 @@
                     <form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"  onfocusout="true"
                           method="POST">
                         <div class="form-group">
-                            <label class="control-label col-md-3" for="audit_status" >审核结果 <span class="required">
+                            <label class="control-label col-md-3" >审核结果 <span class="required">
                                                     * </span>
                             </label>
                             <div class="col-md-7" style="padding-top:13px">
-                                <%--<input type="text" class="form-control" name="Task_dataName" required="required"
-                                       id="Task_dataName" placeholder="请输入名称">--%>
-                                    <select id="audit_status" class="form-control" name="audit_status">
-                                        <option value="2" selected="selected">审核通过</option>
-                                        <option value="0">审核未通过</option>
-                                    </select>
+                                <%--<input type="text" class="form-control" name="Task_dataName" required="required"--%>
+                                      <%--id="Task_dataName" placeholder="请输入名称"/>--%>
+                                    <%--<select id="audit_status" class="form-control" name="audit_status">--%>
+                                        <%--<option value="2" selected="selected">审核通过</option>--%>
+                                        <%--<option value="0">审核未通过</option>--%>
+                                    <%--</select>--%>
+                                    <span style="margin-right:10%"> <input id="radio1" type="radio" name="audit_status" value="2" checked/>审核通过</span>
+                                    <span><input id="radio2" type="radio" name="audit_status" value="0"/>审核未通过</span>
+
                             </div>
 
                         </div>
-                        <div class="form-group ">
+                        <div id="releas_remark" class="form-group "  style="display: none;">
                             <label class="control-label col-md-3" for="audit_content">审核详情<span class="required">
                                                     * </span>
                             </label>
                             <div class="col-md-7" style="padding-top:13px">
-                                                    <textarea  type="text" class="form-control" cols="30" rows="4"  placeholder="请输入审核结果理由，不少于20字"
+                                                    <textarea  type="text" class="form-control" cols="30" rows="4"  placeholder="请输入审核结果理由，不少于6个字符"
                                                                id="audit_content" name="audit_content"  required="required" ></textarea>
 
                             </div>
@@ -546,8 +549,12 @@
                             onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')"><i
                             class="glyphicon glyphicon-eye-open"></i>&nbsp;查看
                     </button>
-                        <button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i class="fa fa-edit"></i>&nbsp;编辑
-                        </button>
+            </shiro:hasRole>
+            {{if value.status != '2'}}
+            <shiro:hasRole name="admin">
+                <button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i
+                        class="fa fa-edit"></i>&nbsp;编辑
+                </button>
             </shiro:hasRole>
 
             <shiro:hasRole name="admin">
@@ -555,6 +562,7 @@
                             class="glyphicon glyphicon-trash"></i>&nbsp;删除
                     </button>
             </shiro:hasRole>
+            {{/if}}
             <shiro:hasRole name="root">
                 {{if value.status == '-1'}}
                         <button type="button" class="btn  edit-data btn-xs blue" style="margin-right: 66px"
@@ -616,6 +624,7 @@
         var publicType = ""
         var resourceState = ""
         var resourceName=""
+        var statusres="2";
         $(function(){
             template.helper("dateFormat", formatDate);
             tableConfiguration2(1,"","","")
@@ -675,9 +684,21 @@
             }
         };
         jQuery.validator.addMethod("minWords", function (value, element) {
-            var workFlag = $("#audit_content").val().length <20 ?false:true
+            var str=$("#audit_content").val();
+            var bytesCount=0;
+            for(var i=0;i<str.length;i++){
+                var c = str.charAt(i);
+                if (/^[\u0000-\u00ff]$/.test(c)) {          //匹配双字节
+                    bytesCount += 1;
+                } else if (/^[\u4e00-\u9fa5]$/.test(c)) {
+                    bytesCount += 2;
+                } else {
+                    bytesCount += 1;
+                }
+            }
+            var workFlag = bytesCount <6 ?false:true
             return this.optional(element)||($("#dataDescribeID").val()==""|| workFlag);
-        }, "最少输入50个字符");
+        }, "最少输入6个字符");
         $("#submit_form1").validate(validData)
 
         function remValidate() {
@@ -711,12 +732,18 @@
 
         }
         $("#auditId").click(function () {
+            // var auditContent = $("#audit_content").val();
+            if(statusres==="2"){
+                $("#audit_content").val("审核通过！");
+            }
+            // alert("备注信息："+auditContent);
             if(!$("#submit_form1").valid()){
                 return
             }
-            var id = $(this).attr("auditId")
-            var status=$("#audit_status").val()
-            var auditContent = $("#audit_content").val()
+            var id = $(this).attr("auditId");
+            // var status=$("#audit_status").val()
+            var auditContent = $("#audit_content").val();
+            var status=statusres;
             $.ajax({
                 url:"${ctx}/resource/audit",
                 type:"POST",
@@ -766,15 +793,20 @@
                         var list = JSON.parse(data).auditMessageList[0]
                         console.log(list)
                         if(type=="mysql" || type==""){
-                            $("#mysqlComments").show()
                             $("#mysqlCommentsName").html(list.auditPerson)
                             $("#mysqlCommentsTime").html(convertMilsToDateTimeString(list.auditTime))
                             $("#mysqlCommentsContent").html(list.auditCom)
                         }else {
-                            $("#fileComments").show()
                             $("#fileCommentsName").html(list.auditPerson)
                             $("#fileCommentsTime").html(convertMilsToDateTimeString(list.auditTime))
                             $("#fileCommentsContent").html(list.auditCom)
+                        }
+                        // 当前登录为系统管理员 不显示未通过审核原因
+                        var currentUser = $("#subjectCode").val();
+                        if(currentUser !== ""){
+                            $("#mysqlComments").show();
+                        }else {
+                            $("#mysqlComments").hide();
                         }
                     },
                     error:function () {
@@ -1057,6 +1089,22 @@
             ele.empty()
             ele.append(arrListStr)
         }
+        
+    //    审核提示框
+        $(function () {
+            $(":radio").click(function () {
+                if(this.checked){
+                    if($(this).attr("id")==="radio1"){
+                        $("#releas_remark").hide();
+                        statusres="2";
+                    }
+                    if($(this).attr("id")==="radio2"){
+                        $("#releas_remark").show();
+                        statusres="0";
+                    }
+                }
+            })
+        })
     </script>
 </div>
 

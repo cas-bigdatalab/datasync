@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.io.IOException;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -163,7 +164,34 @@ public class DataTaskController {
     @RequestMapping(value="/delete")
     @ResponseBody
     public int deleteDatatask(String datataskId){
-        return dataTaskService.deleteDatataskById(datataskId);
+        List<DataTask> dataTaskList=dataTaskService.getdatataskById(datataskId);
+        //删除本地生成的文件夹
+        if(dataTaskList.size()!=0){
+            if("file".equals(dataTaskList.get(0).getDataTaskType())){
+                File file=new File(dataTaskList.get(0).getSqlFilePath().replaceAll("%_%","/"));
+                if(file.exists()){
+                    file.delete();
+                }
+            }else{
+                String path=dataTaskList.get(0).getFilePath().replaceAll("%_%","/");
+                File file=new File(path.substring(0,path.lastIndexOf("/")));
+                File[] fs = file.listFiles();
+                for(File f:fs){
+                    if(f.exists()){
+                        f.delete();
+                    }
+                }
+                if(file.exists()){
+                    file.delete();//删除文件夹
+                }
+
+            }
+        }
+        int result=dataTaskService.deleteDatataskById(datataskId);
+        if("1".equals(result+"")){
+            //dataTaskService.get
+        }
+        return result;
     }
 
     /**
@@ -224,7 +252,14 @@ public class DataTaskController {
         datatask.setSqlString(dataRelSqlList);
         datatask.setSqlTableNameEn(sqlTableNameEnList);
         datatask.setCreateTime(new Date());
-        datatask.setDataTaskType("mysql");
+        DataSrc dataSrc=dataSrcService.findById(dataSourceId);
+        if(dataSrc!=null){
+            if("mysql".equals(dataSrc.getDatabaseType())){
+                datatask.setDataTaskType("mysql");
+            }else if("oracle".equals(dataSrc.getDatabaseType())){
+                datatask.setDataTaskType("oracle");
+            }
+        }
         datatask.setStatus("0");
         datatask.setSubjectCode(subjectCode);
         /*Calendar rightNow = Calendar.getInstance();
@@ -237,12 +272,13 @@ public class DataTaskController {
         if(flag < 0){
             return  jsonObject;
         }
+         executeTask(datataskName);
         return jsonObject;
     }
 
     @ResponseBody
     @RequestMapping(value="saveFileDatatask",method = RequestMethod.POST)
-    public JSONObject saveFileDatatask(int dataSourceId, String datataskName,String[] nodes){
+    public JSONObject saveFileDatatask(int dataSourceId, String datataskName,String[] nodes,String[] remotePath){
         String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
         String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         JSONObject jsonObject = new JSONObject();
@@ -278,6 +314,7 @@ public class DataTaskController {
         datatask.setDataTaskType("file");
         datatask.setStatus("0");
         datatask.setSubjectCode(subjectCode);
+        datatask.setRemoteuploadpath(remotePath[0]);
         /*Calendar rightNow = Calendar.getInstance();
         StringBuffer sb = new StringBuffer();
         Format dateFormat = new SimpleDateFormat("MMddHHmmssS");
@@ -370,21 +407,11 @@ public class DataTaskController {
         JSONObject jsonObject = new JSONObject();
         List<FileTreeNode> nodeList=new ArrayList<FileTreeNode>();
         DataTask dataTask = dataTaskService.get(datataskId);
+        String jsonObjectStr=null;
 //        DataSrcService dataSrcService=new DataSrcService();
-//        String filePath = fileSourceFileList(dataSourceId);
+    //    String filePath =new FileSourceController().fileSourceFileList(datataskId)；
         if("file".equals(dataTask.getDataTaskType())){
- //           String filePath=fileResourceService.findById(dataTask.getDataSourceId()).getFilePath();
-//            nodeList=fileResourceService.asynLoadingTree("",filePath,"init");
               String [] checkedFilePath=dataTask.getFilePath().split(";");
-//            for(int i=0;i<checkedFilePath.length;i++){
-//                for(int j=0;j<nodeList.size();j++){
-//                    if(checkedFilePath[i].equals(nodeList.get(j).getId())){
-//                         nodeList.get(j).setChecked("true");
-//                         //nodeList.get(j).setOpen("open");
-//                    }
-//                }
-//            }
-
             for(int i=0;i<checkedFilePath.length;i++){
                 File dirFile = new File(checkedFilePath[i]);
                 if(dirFile.isDirectory()){
@@ -403,8 +430,15 @@ public class DataTaskController {
                 }
             }
 
+            try {
+                jsonObjectStr=fileResourceService.LoadingRemoteTree();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             jsonObject.put("datatask",dataTask);
             jsonObject.put("nodeList",nodeList);
+            jsonObject.put("jsonObjectStr",jsonObjectStr);
         }else {
             jsonObject.put("datatask",dataTask);
         }
@@ -430,7 +464,14 @@ public class DataTaskController {
         datatask.setSqlString(dataRelSqlList);
         datatask.setSqlTableNameEn(sqlTableNameEnList);
         datatask.setCreateTime(new Date());
-        datatask.setDataTaskType("mysql");
+        DataSrc dataSrc=dataSrcService.findById(dataSourceId);
+        if(dataSrc!=null){
+            if("mysql".equals(dataSrc.getDatabaseType())){
+                datatask.setDataTaskType("mysql");
+            }else if("oracle".equals(dataSrc.getDatabaseType())){
+                datatask.setDataTaskType("oracle");
+            }
+        }
         datatask.setStatus("0");
         datatask.setSubjectCode(subjectCode);
         datatask.setCreateTime(new Date());
@@ -439,17 +480,19 @@ public class DataTaskController {
         if(flag < 0){
             return  jsonObject;
         }
+        executeTask(datataskId);
         return jsonObject;
     }
 
     @ResponseBody
     @RequestMapping(value="updateFileDatatask",method = RequestMethod.POST)
-    public JSONObject updateFileDatatask(String datataskId,int dataSourceId, String datataskName,String[] nodes,String[] attr){
+    public JSONObject updateFileDatatask(String datataskId,int dataSourceId, String datataskName,String[] nodes,String[] attr,String[] remotePath){
         String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
         String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = dataTaskService.get(datataskId);
         datatask.setDataSourceId(dataSourceId);
+        datatask.setRemoteuploadpath(remotePath[0]);
         Boolean containsFile=false;//检查是否全部为空文件夹，是否包含文件
         String filePath = "";
         if(nodes!=null) {
@@ -525,6 +568,7 @@ public class DataTaskController {
             String zipFile = System.getProperty("drsr.framework.root") + "zipFile" + File.separator + fileName + ".zip";
             DataTask dt = dataTaskService.get(datataskId);
             dt.setSqlFilePath(zipFile.replace(File.separator,"%_%"));
+            dt.setRemoteuploadpath(remotePath[0]);
             int upresult = dataTaskService.update(dt);
             jsonObject.put("result",true);
             return  jsonObject;

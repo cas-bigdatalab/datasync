@@ -71,36 +71,35 @@
 </script>
 
 
-
 <script type="text/html" id="tableNameLi">
-        {{each data as value i}}
-        {{each value as v key}}
-            {{if i == 0}}
-            <li class="active">
-                <a href={{"#"+key}} data-toggle="tab" aria-expanded="true"> {{key}} </a>
-            </li>
-            {{else}}
-            <li>
-                <a href={{"#"+key}} data-toggle="tab"> {{key}} </a>
-            </li>
-            {{/if}}
-        {{/each}}
+    {{each data as value i}}
+    {{each value as v key}}
+    {{if i == 0}}
+    <li class="active">
+        <a href={{"#"+key}} data-toggle="tab" aria-expanded="true"> {{key}} </a>
+    </li>
+    {{else}}
+    <li>
+        <a href={{"#"+key}} data-toggle="tab"> {{key}} </a>
+    </li>
+    {{/if}}
+    {{/each}}
     {{/each}}
 </script>
 
 <script type="text/html" id="tableNameDiv">
     {{each data as value i}}
-        {{each value as v key}}
-            {{if i== 0}}
-            <div class="tab-pane active" >
-                <form id={{key}}></form>
-            </div>
-            {{else}}
-            <div class="tab-pane">
-                <form id={{key}}></form>
-            </div>
-            {{/if}}
-        {{/each}}
+    {{each value as v key}}
+    {{if i== 0}}
+    <div class="tab-pane active">
+        <form id={{key}}></form>
+    </div>
+    {{else}}
+    <div class="tab-pane">
+        <form id={{key}}></form>
+    </div>
+    {{/if}}
+    {{/each}}
     {{/each}}
 </script>
 
@@ -131,15 +130,15 @@
 
                 <td>
                     <select>
-                        <option  value="-1">不匹配任何字段</option>
+                        <option value="-1">不匹配任何字段</option>
                         {{each data as vd id}}
                         {{if id > 0 && vd[3] != ""}}
-                                {{if id == i}}
-                                <option selected="selected" value={{vd[3]}}>{{vd[3]}}</option>
-                                {{else}}
-                                <option value={{vd[3]}}>{{vd[3]}}</option>
-                                {{/if}}
-                            {{/if}}
+                        {{if id == i}}
+                        <option selected="selected" value={{vd[3]}}>{{vd[3]}}</option>
+                        {{else}}
+                        <option value={{vd[3]}}>{{vd[3]}}</option>
+                        {{/if}}
+                        {{/if}}
                         {{/each}}
                     </select>
                 </td>
@@ -154,7 +153,7 @@
                 {{if v[2] == "PRI"}}
                 <td><input type="radio" name="isPK" fieldPk={{v[0]}} checked disabled/></td>
                 {{else }}
-                <td><input type="radio" name="isPK"  disabled/></td>
+                <td><input type="radio" name="isPK" disabled/></td>
                 {{/if}}
             </tr>
             {{/if}}
@@ -189,7 +188,7 @@
                 {{each v as vv ii}}
                 {{if ii > 2}}
                 <td>
-                    <input name={{vv}} value={{vv}} />
+                    <input name={{vv}} value={{vv}}/>
                 </td>
                 {{/if}}
                 {{/each}}
@@ -204,13 +203,39 @@
                 </td>
 
                 <td>
-                    <input placeholder="请输入字段长度" fieldLength={{v[0]}} />
+                    <input placeholder="请输入字段长度" fieldLength={{v[0]}}/>
                 </td>
-                <td><input type="radio" name="isPK" fieldPk={{v[0]}} /></td>
+                <td><input type="radio" name="isPK" fieldPk={{v[0]}}/></td>
             </tr>
             {{/if}}
             {{/each}}
             </tbody>
         </table>
     </div>
+</script>
+
+
+<%--网盘功能  目录列表--%>
+<script type="text/html" id="fileBarTemplate">
+    {{each data as v i}}
+    {{if i == 0}}
+    &nbsp;|&nbsp;<span path="{{v.path}}" class="modules">{{v.name}}</span>
+    {{else}}
+    &nbsp;>&nbsp;<a path="{{v.path}}" class="modules">{{v.name}}</a>
+    {{/if}}
+    {{/each}}
+</script>
+
+<%--网盘功能 列表--%>
+<script type="text/html" id="fileNetList">
+    {{each data as v i}}
+    <tr>
+        <%-- <td> 暂时注释选中框
+             <input type="checkbox" path="{{v.filePath}}" class="fileNetCheck"/>
+         </td>--%>
+        <td path="{{v.filePath}}" class="{{v.fileType}} fileName"><a href="javaScript:void(0)">{{v.fileName}}</a></td>
+        <td>{{v.fileLength}}</td>
+        <td>{{v.fileLastModified}}</td>
+    </tr>
+    {{/each}}
 </script>

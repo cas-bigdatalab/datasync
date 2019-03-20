@@ -5,12 +5,9 @@ package cn.csdb.portal.controller;
  */
 
 import cn.csdb.portal.model.TableInfo;
-import cn.csdb.portal.model.TableInfoR;
 import cn.csdb.portal.service.TableFieldComsService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Maps;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -19,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -51,13 +48,19 @@ public class TableFieldComsController {
 
     @ResponseBody
     @RequestMapping(value = "saveTableFieldComs")
-    public JSONObject saveTableFieldComs(@RequestParam(required = false) String curDataSubjectCode,
+    public JSONObject saveTableFieldComs(HttpServletRequest request,
+                                         @RequestParam(required = false) String curDataSubjectCode,
                                          @RequestParam(required = false) String tableName,
                                          @RequestParam(required = false) String tableInfos,
                                          @RequestParam(required = false) String state ) {
         JSONObject jsonObject = new JSONObject();
         List<TableInfo> tableInfosList = JSON.parseArray(tableInfos, TableInfo.class);
         boolean result = tableFieldComsService.insertTableFieldComs(curDataSubjectCode, tableName, tableInfosList, state);
+        // 注释完整之后更新MySQL中的注释
+        if ("1".equals(state)) {
+            String realPath = request.getRealPath("/") + "temp/";
+            tableFieldComsService.syncMySQLComment(curDataSubjectCode, tableName, tableInfosList, realPath);
+        }
         jsonObject.put("result", result);
         return jsonObject;
     }
