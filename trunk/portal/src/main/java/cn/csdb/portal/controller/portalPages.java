@@ -27,7 +27,7 @@ public class portalPages {
     }
     @RequestMapping("/dataConfiguration")
     public ModelAndView index5() {
-        ModelAndView modelAndView = new ModelAndView("dataConfiguration");
+        ModelAndView modelAndView = new ModelAndView("dataRealtion_editeFiled");
         return modelAndView;
     }
 

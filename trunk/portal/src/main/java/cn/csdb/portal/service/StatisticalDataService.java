@@ -100,9 +100,19 @@ public List<Subject> getDownloadCount(){
         return list;
     }
 
-    public List<Resource> getResouceVisitBySCode(String subjectCode){
-        List<Resource> list=resourceDao.getResouceVisitBySCode(subjectCode);
+    public List<Resource> getResouceVisitBySCode(String subjectCode,int pageNum,int pageSize){
+        List<Resource> list=resourceDao.getResouceVisitBySCode(subjectCode,pageNum,pageSize);
         return list;
+    }
+    public List<Resource> getResouceVisitBySCodeASC(String subjectCode,int pageNum,int pageSize){
+        List<Resource> list=resourceDao.getResouceVisitBySCodeASC(subjectCode,pageNum,pageSize);
+        return list;
+    }
+
+    //    根据专题统计该专题内数据集数量
+    public int  countBySubjectCode(String subjectCode){
+        int totalNum=resourceDao.countBySubjectCode(subjectCode);
+        return totalNum;
     }
     /**
      * Function Description: 根据专题库统计该专题库内各数据集的访问量
@@ -112,8 +122,13 @@ public List<Subject> getDownloadCount(){
      * @auther:zcy
      * @date:   2019/3/13 9:36
      */
-    public List<Resource> getResouceDownBySCode(String subjectCode){
-        List<Resource> list=resourceDao.getResouceDownBySCode(subjectCode);
+    public List<Resource> getResouceDownBySCode(String subjectCode,int pageNo,int pageSize){
+        List<Resource> list=resourceDao.getResouceDownBySCode(subjectCode,pageNo,pageSize);
+        return list;
+    }
+
+    public List<Resource> getResouceDownBySCodeASC(String subjectCode,int pageNo,int pageSize){
+        List<Resource> list=resourceDao.getResouceDownBySCodeASC(subjectCode,pageNo,pageSize);
         return list;
     }
 
