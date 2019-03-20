@@ -93,20 +93,20 @@
 
 <div class="con_div">
 
-    <div class=" container tatle_div">
+    <%--<div class=" container tatle_div">
         <shiro:hasRole name="root">
             主题库后台管理系统
         </shiro:hasRole>
         <shiro:hasRole name="admin">
             集中式数据管理与定制化融合发布工具
         </shiro:hasRole>
-    </div>
+    </div>--%>
 
-    <div class="page-container" style="min-height: 550px;width: 90%;margin: 0 auto">
+    <div class="page-container" style="min-height: 550px;width: 100%;margin: 0 auto;">
         <!-- BEGIN SIDEBAR -->
         <div class="page-sidebar-wrapper">
             <%--NEW BAR ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！--%>
-            <div class="page-sidebar" style="width: auto;height:auto;right: 20px">
+            <div class="page-sidebar" style="width: 18%;height:auto;right: 20px;">
                 <div class="left_bottom">
                     <div class="left_top"><img src="${ctx}/resources/img/logo.png"></div>
                     <div class="user_div">
@@ -117,7 +117,7 @@
                             </tr>
                             <tr>
                                 <td>欢迎您！赵树理</td>
-                                <td class="tuichu"><a href="">退出</a></td>
+                                <td class="tuichu"><a href="${ctx}/logout">退出</a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -151,15 +151,27 @@
                         </shiro:hasRole>
                         <shiro:hasRole name="admin">
                             <ul>
+                                <li><a href="javaScript:void(0);"><i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                    关系数据管理</a>
+                                    <ul>
+                                        <li class="l2-menu"><a href="${ctx}/"><i class="fa fa-bars"></i>数据字段配置</a></li>
+                                        <li class="l2-menu"><a href="${ctx}/"><i class="fa fa-bars"></i>导入式建表</a></li>
+                                        <li class="l2-menu"><a href="${ctx}/datatest"><i
+                                                class="fa fa-bars"></i>数据记录管理</a>
+                                            <div id="alltableName"
+                                                 style="width: 100%;height:500px;overflow-y: scroll;display:none;margin-top:1%;"></div>
+                                        </li>
+                                        </li>
+                                    </ul>
+                                </li>
                                 <li><a class="active" href="${ctx}/dataConfiguration"><i class="fa fa-cog"
                                                                                          aria-hidden="true"></i> 数据配置管理</a>
                                 </li>
                                 <li><a href="${ctx}/dataRelease"><i class="fa fa-file-text-o" aria-hidden="true"></i>
                                     数据发布管理</a></li>
-                                <li><a href="#"><i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                    数据记录管理</a></li>
                                 <li><a href="${ctx}/fileMange"><i class="fa fa-file-text-o" aria-hidden="true"></i>
                                     文件管理</a></li>
+
                             </ul>
                         </shiro:hasRole>
 
@@ -274,6 +286,8 @@
                 }
             }
         });
+
+        $(".page-content").css("margin-left", $(".page-sidebar").width());
     });
 
     function editTableData(i) {
