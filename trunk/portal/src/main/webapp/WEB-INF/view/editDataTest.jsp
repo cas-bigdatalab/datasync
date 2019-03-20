@@ -271,15 +271,7 @@
     <script type="text/javascript">
 
         var subjectCode = '${sessionScope.SubjectCode}';
-
-        // var S_subjectCode;
-        // var S_tableName;
-        // var S_column;
-        // var S_dataType;
         var S_updateData;
-        // var S_columnType;
-        // var S_pkColumnArr;
-        // var S_autoAddArr;
         var olddata = {};
 
         $.ajax({
@@ -297,6 +289,137 @@
                 $("#alltableName").show();
             }
         });
+
+        function editTable_func(subjectCode, tableName, pageNo) {
+            var ids = "#tab_container_" + tableName;
+            $.ajax({
+                type: "post",
+                url: "${ctx}/showTableData",
+                data: {"subjectCode": subjectCode, "tableName": tableName, "pageNo": pageNo},
+                dataType: "json",
+                success: function (data) {
+                    S_updateData = [];
+                    var arr = data.columns;
+                    var dataType = data.dataType;
+                    var columnComment = data.columnComment;
+                    var dataArry = data.dataDatil;
+                    console.log(dataArry);
+                    var delPORTALID;
+                    var tabs = "";
+                    var s = " ";
+                    s = "<table id='" + tableName + "' class='table table-bordered data-table' style='width:100%;'><thead ><tr class='tr_class' style='background-color:gainsboro;'>";
+                    //表头
+                    var il = 0;
+                    if (dataArry.length > 0) {
+                        for (var i = 0; i < arr.length; i++) {
+                            if (il < 5) {
+                                if (arr[i] === "PORTALID") {
+                                    s += "<th style='display:none;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                } else {
+                                    s += "<th style='overflow: hidden;white-space: nowrap;text-overflow: ellipsis;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "<br/><p title=" + columnComment[i] + ">" + columnComment[i] + "</p></th>";
+                                    il++;
+                                }
+                            } else {
+                                s += "<th style='display:none;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                            }
+                        }
+                    }
+                    var ss = "";
+                    var m = 0;
+                    if (dataArry.length > 0) {
+                        for (var key in dataArry) {
+                            m++;
+                            ss += "<tbody><tr>";
+                            var d = dataArry[key];
+                            var eachData = [];
+                            var i = 0;
+                            var j = 0;
+                            var n = 0;
+                            for (var k in d) {
+                                n++;
+                                if (j < 5) {
+                                    if (k === arr[i]) {
+                                        if (dataType[i] === "datetime" && d[k] !== null && d[k] !== " ") {
+                                            var date = d[k].split(".");
+                                            d[k] = date[0];
+                                        }
+                                        if (k === "PORTALID") {
+                                            delPORTALID = d[k];
+                                            ss += "<td  style='display:none;' title='" + d[k] + "'>" + d[k] + "</td>";
+                                        } else {
+                                            ss += "<td title='" + d[k] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp>" + d[k] + "</xmp></td>";
+                                            j++;
+                                        }
+                                        eachData.push(d[k]);
+                                        S_updateData.push(d[k]);
+                                    } else {
+                                        if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
+                                            var date = d[arr[i]].split(".");
+                                            d[arr[i]] = date[0];
+                                        }
+                                        if (arr[i] === "PORTALID") {
+                                            delPORTALID = d[arr[i]];
+                                            ss += "<td style='display:none;' title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
+                                        } else {
+                                            ss += "<td title='" + d[arr[i]] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp>" + d[arr[i]] + "</xmp></td>";
+                                            j++;
+                                        }
+                                        eachData.push(d[arr[i]]);
+                                        S_updateData.push(d[arr[i]]);
+                                    }
+                                    i++;
+                                } else {
+                                    if (k === arr[i]) {
+                                        if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
+                                            var date = d[k].split(".");
+                                            d[k] = date[0];
+                                        }
+                                        if (k === "PORTALID") {
+                                            delPORTALID = d[k];
+                                        }
+                                        eachData.push(d[k]);
+                                        S_updateData.push(d[k]);
+                                    } else {
+                                        if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
+                                            var date = d[arr[i]].split(".");
+                                            d[arr[i]] = date[0];
+                                        }
+                                        if (arr[i] === "PORTALID") {
+                                            delPORTALID = d[arr[i]];
+                                        }
+                                        eachData.push(d[arr[i]]);
+                                        S_updateData.push(d[arr[i]]);
+                                    }
+                                    i++;
+                                }
+                            }
+                            ss += "<td ><a src='#' onclick=\" updateData('" + arr + "','" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">修改 | </a>" +
+                                "<a href='#' onclick=\"checkDada('" + arr + "','" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">查看 | </a>" +
+                                "<a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">删除</a></td></tr>";
+                        }
+                        ss += "</tbody>";
+                        s += "<th style='border:1px #ddd solid;overflow: hidden;white-space: nowrap;ext-overflow: ellipsis;text-align: center;width:22%;height:60px;'>操作</th></tr></thead>";
+                        tabs = s + ss + "</table>";
+
+                        tabs += "<div class='review-item clearfix'><div id='page_div" + tableName + "' style='padding-top: 25px; float: left;'>" +
+                            "当前第<span style='color:blue;' id='currentPageNo" + tableName + "'></span>页,共<span style='color:blue;' id='totalPages" + tableName + "'></span>页,<span style='color:blue;' id='totalCount" + tableName + "'></span>" +
+                            "条数据</div><div style='float: right;' ><div id='pagination" + tableName + "'></div></div></div>";
+
+                        var item = {'id': tableName, 'name': tableName, 'closable': true, 'template': tabs};
+                        closableTab.addTab(item); // 执行创建页签
+                        fun_limit(subjectCode, tableName, data);
+                    } else {
+                        tabs = "";
+                        $(ids).html(" ");
+                        var item = {'id': tableName, 'name': tableName, 'closable': true, 'template': tabs};
+                        // 执行创建页签
+                        closableTab.addTab(item);
+                        var click = " <h5 style='font-size: 20px;text-align: center;margin-right: 30%;'>该表暂时没有数据</h5>";
+                        $(ids).append(click);
+                    }
+                }
+            });
+        }
 
         /**
          * 关闭前确认
@@ -509,13 +632,13 @@
                             if (strs2[i] === "PORTALID") {
                                 s += "<input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='0'/>";
                             } else {
-                                s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>  " + columnComments[i] + "</td><td><input class='addClass' style='width: 100%;height:100%;' value='' name='" + strs2[i] + "'/></td></tr>";
+                                s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>  " + columnComments[i] + "</td><td><input class='addClass' style='width: 100%;height:100%;' value='' name='" + strs2[i] + "'/></td></tr>";
                             }
                         } else {
                             if (strs2[i] === "PORTALID") {
                                 s += "<input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='0'/>";
                             } else {
-                                s += "<tr><td>" + strs2[i] + "</td><td>" + S_columnType[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' style='width: 100%;height:100%;' value='' name='" + strs2[i] + "'/></td></tr>";
+                                s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td><input class='addClass' style='width: 100%;height:100%;' value='' name='" + strs2[i] + "'/></td></tr>";
                             }
                         }
                     }
