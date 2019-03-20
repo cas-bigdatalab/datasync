@@ -185,17 +185,38 @@ public class ResourceDao {
         return list;
     }
 
-//根据专题统计该专题内访问量
-    public List <cn.csdb.portal.model.Resource> getResouceVisitBySCode(String subjectCode){
+//根据专题统计该专题内访问量,降序
+    public List <cn.csdb.portal.model.Resource> getResouceVisitBySCode(String subjectCode,int pageNum,int pageSize){
         List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)).with(new Sort(Sort.Direction.DESC,
-                "vCount")),cn.csdb.portal.model.Resource.class);
+                "vCount")).skip((pageNum-1)*pageSize).limit(pageSize),cn.csdb.portal.model.Resource.class);
+        return list;
+    }
+
+    //根据专题统计该专题内访问量,升序序
+    public List <cn.csdb.portal.model.Resource> getResouceVisitBySCodeASC(String subjectCode,int pageNum,int pageSize){
+        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)).with(new Sort(Sort.Direction.ASC,
+                "vCount")).skip((pageNum-1)*pageSize).limit(pageSize),cn.csdb.portal.model.Resource.class);
+        return list;
+    }
+
+
+    //    根据专题统计该专题内数据集数量
+public int  countBySubjectCode(String subjectCode){
+    List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)),cn.csdb.portal.model.Resource.class);
+    return list.size();
+}
+
+    //根据专题统计该专题内访问量
+    public List <cn.csdb.portal.model.Resource> getResouceDownBySCode(String subjectCode,int pageNo,int pageSize){
+        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)).with(new Sort(Sort.Direction.DESC,
+                "dCount")).skip((pageNo-1)*pageSize).limit(pageSize),cn.csdb.portal.model.Resource.class);
         return list;
     }
 
     //根据专题统计该专题内访问量
-    public List <cn.csdb.portal.model.Resource> getResouceDownBySCode(String subjectCode){
-        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)).with(new Sort(Sort.Direction.DESC,
-                "dCount")),cn.csdb.portal.model.Resource.class);
+    public List <cn.csdb.portal.model.Resource> getResouceDownBySCodeASC(String subjectCode,int pageNo,int pageSize){
+        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)).with(new Sort(Sort.Direction.ASC,
+                "dCount")).skip((pageNo-1)*pageSize).limit(pageSize),cn.csdb.portal.model.Resource.class);
         return list;
     }
 }

@@ -132,7 +132,7 @@
                         <div class="tab-content"
                              style="background-color: white;min-height:300px;max-height:60%;padding-top: 20px ;">
                             <div class="tab-pane active" id="adddata" style=" ">
-                                <table border="1" id="addTable">
+                                <table id="addTable" class="table table-bordered data-table">
                                     <thead>
                                     <th style="width:20%;">字段名</th>
                                     <th style="width:20%;">字段类型</th>
@@ -170,14 +170,26 @@
                              style="background-color: white;min-height:300px;max-height:50%;padding-top: 20px ;">
                             <div style="margin-left: 1%;margin-right: 1%;width:98%;">
                                 <%--style="margin-left: 5%;"--%>
-                                <div id="div_head">
+                                <%--<div id="div_head">--%>
 
-                                </div>
-                                <div>
-                                    <form id="form_id" action="#" method="post" name="form_id">
+                                <%--</div>--%>
+                                <%--<div>--%>
+                                    <%--<form id="form_id" action="#" method="post" name="form_id">--%>
 
-                                    </form>
-                                </div>
+                                    <%--</form>--%>
+                                <%--</div>--%>
+                                    <table class="table table-bordered data-table" border="0">
+                                        <thead>
+                                        <tr>
+                                        <th>字段名</th>
+                                        <th>字段类型</th>
+                                        <th>注释</th>
+                                        <th>字段值</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="update_tbody"></tbody>
+                                    </table>
+
                             </div>
                         </div>
                     </div>
@@ -337,6 +349,7 @@
             });
         }
 
+        //各个页签分页
         function clickPageButton(subjectCode, tableName, num) {
             var ids = "#tab_container_" + tableName;
             $(ids).html("");
@@ -818,11 +831,11 @@
 
         function updateData(columns, delPORTALID,tableName,subjectCode) {
             $("#form_id").html(" ");
-            $("#updateTable tbody").html(" ");
-            $("#div_head").html("");
+            $("#update_tbody").html(" ");
+            // $("#div_head").html("");
             $("#update_div").html("");
             //获得当前页码
-            var currentPage = $("#currentPageNo").html();
+            var currentPage = $("#currentPageNo"+tableName +"").html();
 
             var strs2 = new Array(); //定义一数组
             strs2 = columns.split(",");
@@ -839,24 +852,36 @@
                     var COLUMN_TYPE = data.COLUMN_TYPE;
                     var strs = data.data;
                     var delPORTALID="";
-                    var s_head = "<input style='width:20%;' type='text' value='字段名' readonly='true'/><input style='width:20%;' type='text'  value='字段类型' readonly='true'/><input style='width:20%;' type='text'  value='注释' readonly='true'/><input style='width:40%;' type='text'  value='字段值' readonly='true'/><br/>";
-                    var ss = "<input type='text' name='tableName'style='display:none;' value=" + tableName + " />";
-                    ss += "<input type='text' name='subjectCode'style='display:none;' value=" + subjectCode + " />";
+                    // var s_head = "<input style='width:20%;' type='text' value='字段名' readonly='true'/><input style='width:20%;' type='text'  value='字段类型' readonly='true'/><input style='width:20%;' type='text'  value='注释' readonly='true'/><input style='width:40%;' type='text'  value='字段值' readonly='true'/><br/>";
+                    // var ss = "<input type='text' name='tableName'style='display:none;' value=" + tableName + " />";
+                    // ss += "<input type='text' name='subjectCode'style='display:none;' value=" + subjectCode + " />";
 
+                    // for (var i = 0; i < strs2.length; i++) {
+                    //     if (strs2[i] === "PORTALID") {
+                    //         delPORTALID=strs[i];
+                    //         ss += "<input style='display:none;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='display:none;' type='text'  value='" + COLUMN_TYPE[i] + "' readonly='true'/><input style='display:none;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' />";
+                    //     } else if (dataTypeArr[i] === "text" || dataTypeArr[i] === "longtext") {
+                    //         ss += "<table ><tr><td  ><input style='width:100%;height:100%;' type='text' value='" + strs2[i] + "' readonly='true'/></td><td><input style='width:100%;height:100%;' type='text'  value='" + COLUMN_TYPE[i] + "' readonly='true'/></td><td><input  style='width:100%;height:100%;' type='text'  value='" + columnComments[i] + "' readonly='true' /></td><td style='width: 40%;'><textarea  style='width:100%;height:100%'  title='" + strs[i] + "' class='" + dataTypeArr[i] + "'  name=" + strs2[i] + " value='" + strs[i] + "' >" + strs[i] + "</textarea></td></tr>";
+                    //     } else {
+                    //         ss += "<tr><td><input style='width:20%;' type='text' value='" + strs2[i] + "' readonly='true'/></td><td><input style='width:20%;' type='text'  value='" + COLUMN_TYPE[i] + "' readonly='true'/></td><td><input style='width:20%;' type='text'  value='" + columnComments[i] + "' readonly='true' /></td><td><input title='" + strs[i] + "' style='width:40%;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /></td></tr>";
+                    //     }
+                    //     ss += "</table>";
+                    //     var s_save = "<input class='eee' id='btn_save' type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveDataTest('" + tableName + "','" + subjectCode + "','" + dataTypeArr + "','" + currentPage + "','" + strs2 + "','"+delPORTALID+"')\"/>";
+                    // }
+
+                    var s_tbody="";
                     for (var i = 0; i < strs2.length; i++) {
                         if (strs2[i] === "PORTALID") {
-                            delPORTALID=strs[i];
-                            ss += "<input style='display:none;' type='text' value='" + strs2[i] + "' readonly='true'/><input style='display:none;' type='text'  value='" + COLUMN_TYPE[i] + "' readonly='true'/><input style='display:none;' type='text'  value='" + columnComments[i] + "' readonly='true' /><input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' />";
-                        } else if (dataTypeArr[i] === "text" || dataTypeArr[i] === "longtext") {
-                            ss += "<table ><tr><td  ><input style='width:100%;height:100%;' type='text' value='" + strs2[i] + "' readonly='true'/></td><td><input style='width:100%;height:100%;' type='text'  value='" + COLUMN_TYPE[i] + "' readonly='true'/></td><td><input  style='width:100%;height:100%;' type='text'  value='" + columnComments[i] + "' readonly='true' /></td><td style='width: 40%;'><textarea  style='width:100%;height:100%'  title='" + strs[i] + "' class='" + dataTypeArr[i] + "'  name=" + strs2[i] + " value='" + strs[i] + "' >" + strs[i] + "</textarea></td></tr>";
-                        } else {
-                            ss += "<tr><td><input style='width:20%;' type='text' value='" + strs2[i] + "' readonly='true'/></td><td><input style='width:20%;' type='text'  value='" + COLUMN_TYPE[i] + "' readonly='true'/></td><td><input style='width:20%;' type='text'  value='" + columnComments[i] + "' readonly='true' /></td><td><input title='" + strs[i] + "' style='width:40%;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /></td></tr>";
+                            delPORTALID = strs[i];
+                        }else{
+                            s_tbody+= "<tr><td style='width:20%;'>" + strs2[i] + "</td><td style='width:20%;'> " + COLUMN_TYPE[i] + "</td><td style='width:20%;'>" + columnComments[i] + "</td><td><input title='" + strs[i] + "' style='width:100%;height=100%' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='" + strs[i] + "' /></td></tr>";
                         }
-                        ss += "</table>";
-                        var s_save = "<input class='eee' id='btn_save' type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveData('" + tableName + "','" + subjectCode + "','" + dataTypeArr + "','" + currentPage + "','" + strs2 + "','"+delPORTALID+"')\"/>";
                     }
-                    $("#div_head").append(s_head);
-                    $("#form_id").append(ss);
+                        var s_save = "<input class='eee' id='btn_save' type='button' value='保存' style='width:80px;height:35px;' onclick=\" saveDataTest('" + tableName + "','" + subjectCode + "','" + dataTypeArr + "','" + currentPage + "','" + strs2 + "','"+delPORTALID+"')\"/>";
+
+                    // $("#div_head").append(s_head);
+                    // $("#form_id").append(ss);
+                    $("#update_tbody").append(s_tbody);
                     $("#update_div").append(s_save);
                     $("#staticUpdateData").modal("show");
                 }
@@ -864,7 +889,7 @@
         }
         
         //修改数据点击保存
-        function saveData(tableName, subjectCode, dataType, currentPage,alert_column,delPORTALID) {
+        function saveDataTest(tableName, subjectCode, dataType, currentPage,alert_column,delPORTALID) {
             var newdata = $('#form_id').serializeArray();
             var dataTypeArr = dataType.split(",");
             var columnName=alert_column.split(",");
@@ -1133,9 +1158,8 @@
                     } else if (data.data === "1") {
                         //成功消息提示，默认背景为浅绿色
                         toastr.success("更新成功!");
-                        // alert("更新成功！");
                         $("#staticUpdateData").modal("hide");
-                        editTableData(subjectCode, tableName, currentPage);
+                        clickPageButton(subjectCode, tableName, currentPage);
                     } else {
                         var arr = data.data.split("+");
                         if (arr[0] === "-2") {
