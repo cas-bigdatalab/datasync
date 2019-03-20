@@ -105,111 +105,69 @@
     <div class="page-container" style="min-height: 550px;width: 90%;margin: 0 auto">
         <!-- BEGIN SIDEBAR -->
         <div class="page-sidebar-wrapper">
-            <div class="page-sidebar navbar-collapse" style="min-height: 500px">
-                <!-- BEGIN SIDEBAR MENU -->
-                <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
-                <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
-                <!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
-                <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
-                <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
-                <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-                <ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
-                    <li>
-                        <div style="height: 70px"></div>
-                    </li>
-
-                    <shiro:hasRole name="root">
-
-
-                        <li class="start">
-                            <a href="${ctx}/subjectMgmt/subjectIndex">
-                                <i class="icon-user"></i>
-                                <span class="title">主题库注册管理</span>
-                                <span class="arrow"></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="${ctx}/resCatalog">
-                                <i class="icon-settings"></i>
-                                <span class="title">数据分类管理</span>
-                                <span class="arrow "></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="${ctx}/group/list">
-                                <i class="icon-user"></i>
-                                <span class="title">用户与组管理</span>
-                                <span class="arrow "></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="${ctx}/dataRelease">
-                                <i class="icon-layers"></i>
-                                <span class="title">发布审核管理</span>
-                                <span class="arrow "></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);">
-                                <i class=" icon-drawer"></i>
-                                <span class="title">数据统计管理</span>
-                                <span class="arrow "></span>
-                            </a>
-                            <ul class="sub-menu">
-                                <li>
-                                    <a href="${ctx}/statisticalDataDetail">
-                                        专题detail</a>
+            <%--NEW BAR ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！--%>
+            <div class="page-sidebar" style="width: auto;height:auto;right: 20px">
+                <div class="left_bottom">
+                    <div class="left_top"><img src="${ctx}/resources/img/logo.png"></div>
+                    <div class="user_div">
+                        <table width="150" cellspacing="0" cellpadding="0" border="0" align="center">
+                            <tbody>
+                            <tr>
+                                <td colspan="2"><img src="${ctx}/resources/img/user.png" width="65" height="65"></td>
+                            </tr>
+                            <tr>
+                                <td>欢迎您！赵树理</td>
+                                <td class="tuichu"><a href="">退出</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="left_div">
+                        <shiro:hasRole name="root">
+                            <ul>
+                                <li><a class="active" href="${ctx}/subjectMgmt/subjectIndex"><i class="fa fa-cog"
+                                                                                                aria-hidden="true"></i>
+                                    主题库注册管理</a>
                                 </li>
-                                <li>
-                                    <a href="${ctx}/statisticalDataTotal">
-                                        专题total</a>
+                                <li><a class="" href="${ctx}/resCatalog"><i class="fa fa-cog"
+                                                                            aria-hidden="true"></i> 数据分类管理</a>
+                                </li>
+                                <li><a class="" href="${ctx}/group/list"><i class="fa fa-cog"
+                                                                            aria-hidden="true"></i> 用户与组管理</a>
+                                </li>
+                                <li><a class="" href="${ctx}/dataRelease"><i class="fa fa-cog"
+                                                                             aria-hidden="true"></i> 发布审核管理</a>
+                                </li>
+                                <li><a class="" href="javaScript:void(0);"><i class="fa fa-cog"
+                                                                              aria-hidden="true"></i> 数据统计管理</a>
+                                    <ul>
+                                        <li class="l2-menu"><a href="${ctx}/statisticalDataDetail"><i
+                                                class="fa fa-bars"></i> 专题detail</a></li>
+                                        </li>
+                                    </ul>
                                 </li>
                             </ul>
-                        </li>
-                    </shiro:hasRole>
-                    <shiro:hasRole name="admin">
 
-                        <li>
-                            <a href="${ctx}/dataConfiguration">
-                                <i class="icon-wrench"></i>
-                                <span class="title">数据配置管理</span>
-                                <span class="arrow "></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="${ctx}/dataRelease">
-                                <i class="icon-layers"></i>
-                                <span class="title">数据发布管理</span>
-                                <span class="arrow "></span>
-                            </a>
-                        </li>
-                        <li>
-                                <%--<a href="${ctx}/datatest">--%>
-                            <a href="${ctx}/fileMange">
-                                <i class="icon-layers"></i>
-                                <span class="title">测试</span>
-                                <span class="arrow "></span>
-                            </a>
-                            <div id="alltableName"
-                                 style="width: 100%;height:500px;overflow-y: scroll;display:none;margin-top:1%;">
+                        </shiro:hasRole>
+                        <shiro:hasRole name="admin">
+                            <ul>
+                                <li><a class="active" href="${ctx}/dataConfiguration"><i class="fa fa-cog"
+                                                                                         aria-hidden="true"></i> 数据配置管理</a>
+                                </li>
+                                <li><a href="${ctx}/dataRelease"><i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                    数据发布管理</a></li>
+                                <li><a href="#"><i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                    数据记录管理</a></li>
+                                <li><a href="${ctx}/fileMange"><i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                    文件管理</a></li>
+                            </ul>
+                        </shiro:hasRole>
 
-                            </div>
-
-                        </li>
-
-                        <li>
-                            <a href="javascript:void(0);">
-                                <i class="icon-layers"></i>
-                                <span class="title">ssssssss</span>
-                                <span class="arrow "></span>
-                            </a>
-                        </li>
-                    </shiro:hasRole>
-
-                </ul>
-                <!-- END SIDEBAR MENU -->
+                    </div>
+                </div>
             </div>
             <%--NEW BAR ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！--%>
+
         </div>
         <!-- END SIDEBAR -->
 
@@ -324,8 +282,6 @@
         var pageNo = 1;
         editTable_func(subjectCode, tableName, pageNo);
     }
-
-
 
 
 </script>
