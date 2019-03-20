@@ -36,12 +36,12 @@ public class FileNetController {
      * @param rootPath 编码后需要展开的目录路径
      * @return
      */
-    @RequestMapping(value = "/getCurrentFile")
+    @RequestMapping(value = "/fileList")
     @ResponseBody
     public JSONObject getDirectoryUnderCurrent(HttpServletRequest request, String rootPath) {
         JSONObject jsonObject = new JSONObject();
         String parentPath = "";
-        String ftpRootPath = splitFtpRootPathEnd(request);
+        String ftpRootPath = removeFtpRootLastSeparator(request);
         if ("".equals(rootPath)) {
             parentPath = ftpRootPath;
         } else {
@@ -52,11 +52,7 @@ public class FileNetController {
         return jsonObject;
     }
 
-    /**
-     * @param request 获取session中的"FtpFilePath"并处理
-     * @return
-     */
-    String splitFtpRootPathEnd(HttpServletRequest request) {
+    private String removeFtpRootLastSeparator(HttpServletRequest request) {
         String ftpRootPath = (String) request.getSession().getAttribute("FtpFilePath");
         // TODO 部署时候请注释下一行
         ftpRootPath = "H:\\Cache\\file\\";
@@ -64,8 +60,8 @@ public class FileNetController {
         boolean linux = ftpRootPath.endsWith("/");
         boolean win = ftpRootPath.endsWith("\\");
         if (linux || win) {
-            String substring = ftpRootPath.substring(0, ftpRootPath.length() - 1);
-            return substring;
+            ftpRootPath = ftpRootPath.substring(0, ftpRootPath.length() - 1);
+            return ftpRootPath;
         }
         return ftpRootPath;
     }
@@ -79,7 +75,7 @@ public class FileNetController {
      */
     @RequestMapping(value = "/downloadFile")
     public HttpServletResponse downloadFile(HttpServletRequest request, HttpServletResponse response, String selectPath) throws IOException {
-        String ftpRootPath = splitFtpRootPathEnd(request);
+        String ftpRootPath = removeFtpRootLastSeparator(request);
         selectPath = fileNetService.decodePath(selectPath, ftpRootPath);
         File file = new File(selectPath);
         String fileName = file.getName();
@@ -115,7 +111,7 @@ public class FileNetController {
         String dirName = request.getParameter("dirName");
         String s = request.getParameter("parentURI");
         String parentURI = s.replace("%_%", File.separator);
-        String ftpRootPath = splitFtpRootPathEnd(request);
+        String ftpRootPath = removeFtpRootLastSeparator(request);
         parentURI = fileNetService.decodePath(parentURI, ftpRootPath);
         jsonObject = fileNetService.addDirectory(dirName, parentURI);
         return jsonObject;
@@ -131,7 +127,7 @@ public class FileNetController {
     @ResponseBody
     public JSONObject addFile(HttpServletRequest request) {
         String parentURI = request.getParameter("parentURI");
-        String ftpRootPath = splitFtpRootPathEnd(request);
+        String ftpRootPath = removeFtpRootLastSeparator(request);
         parentURI = parentURI.replace("%_%", File.separator);
         parentURI = fileNetService.decodePath(parentURI, ftpRootPath);
         MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request;
@@ -159,7 +155,7 @@ public class FileNetController {
     @ResponseBody
     public JSONObject renameFile(HttpServletRequest request, String currentPath, String newName) {
         JSONObject jsonObject = new JSONObject();
-        String ftpRootPath = splitFtpRootPathEnd(request);
+        String ftpRootPath = removeFtpRootLastSeparator(request);
         currentPath = fileNetService.decodePath(currentPath, ftpRootPath);
         jsonObject = fileNetService.renameFile(currentPath, newName);
         return jsonObject;
@@ -173,19 +169,36 @@ public class FileNetController {
      * @param newFile 目标文件
      * @return
      */
-    @RequestMapping(value = "/operationFile")
+    @RequestMapping(value = "/copyFile")
     @ResponseBody
-    public JSONObject operationFile(HttpServletRequest request, String oldFile, String newFile, String operationType) {
+    public JSONObject copyFile(HttpServletRequest request, String oldFile, String newFile, String operationType) {
         JSONObject jsonObject = new JSONObject();
-        String ftpRootPath = splitFtpRootPathEnd(request);
+        String ftpRootPath = removeFtpRootLastSeparator(request);
         oldFile = fileNetService.decodePath(oldFile, ftpRootPath);
         newFile = fileNetService.decodePath(newFile, ftpRootPath);
         jsonObject = fileNetService.copyFolder(oldFile, newFile);
-        if ("deleteFile".equals(operationType)) {
-            JSONObject deleteFolder = fileNetService.deleteFolder(oldFile);
-            jsonObject.put("code", deleteFolder.get("code"));
-            jsonObject.put("message", "移动成功");
-        }
         return jsonObject;
     }
+
+    @RequestMapping(value = "/moveFile")
+    @ResponseBody
+    public JSONObject moveFile(HttpServletRequest request, String oldFile, String newFile) {
+        JSONObject jsonObject = new JSONObject();
+        String ftpRootPath = removeFtpRootLastSeparator(request);
+        oldFile = fileNetService.decodePath(oldFile, ftpRootPath);
+        newFile = fileNetService.decodePath(newFile, ftpRootPath);
+        jsonObject = fileNetService.moveFile(oldFile, newFile);
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/deleteFile")
+    @ResponseBody
+    public JSONObject deleteFile(HttpServletRequest request, String deletePath) {
+        JSONObject jsonObject = new JSONObject();
+        String ftpRootPath = removeFtpRootLastSeparator(request);
+        deletePath = fileNetService.decodePath(deletePath, ftpRootPath);
+        jsonObject = fileNetService.deleteFolder(deletePath);
+        return jsonObject;
+    }
+
 }

@@ -2265,7 +2265,7 @@
          */
         function fileNet(selectPath) {
             $.ajax({
-                url: "${ctx}/fileNet/getCurrentFile",
+                url: "${ctx}/fileNet/fileList",
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -2424,7 +2424,7 @@
             }
             $.ajax({
                 type: "POST",
-                url: "${ctx}/fileNet/operationFile",
+                url: "${ctx}/fileNet/copyFile",
                 data: {
                     "oldFile": copyCache,
                     "newFile": currentPath

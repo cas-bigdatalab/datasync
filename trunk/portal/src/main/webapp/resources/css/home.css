@@ -167,7 +167,7 @@ li.l3-menu > a:hover i, li.l3-menu > a.active i {
 /*.right_div{ width:82%; background:#f1f1f1; float:right; padding:20px; height: 100%; overflow-y: auto;}*/
 .right_div {
     width: 100%;
-    background: #f1f1f1;
+    /*background: #f1f1f1;*/
     float: right;
     padding: 20px;
     /*height: 60%;*/

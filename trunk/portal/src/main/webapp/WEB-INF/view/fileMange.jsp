@@ -33,7 +33,6 @@
                 <div class="modal-footer">
                     <button type="button" onclick="addDirectory(this)" class="btn green">创建目录
                     </button>
-                    <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
                 </div>
             </div>
         </div>
@@ -96,6 +95,10 @@
         </tr>
         {{/if}}
     </script>
+
+        <script type="text/html" id="fileModules">
+            ss
+        </script>
     <%--模板结束--%>
 
     <div class="right_div">
@@ -105,13 +108,14 @@
         <div class="form" id="FileOnNet">
             <div class="row">
                 <div class="col-xs-6">
-                    <button type="button" class="btn btn-primary" onclick="showUploadFileTmp()"><i
+                    <button type="button" class="btn btn-primary"
+                            onclick='showUploadFileDialog($("#FileOnNet #fileBar span.modules").attr("path"))'><i
                             class="fa fa-upload"></i> 上传
                     </button>
-                    <button type="button" class="btn btn-default" onclick="showAddFileTmp()"><i
+                    <button type="button" class="btn btn-default" onclick="showAddFileDialog()"><i
                             class="fa fa-folder"></i> 新建文件夹
                     </button>
-                    <button type="button" class="btn btn-default"><i class="fa fa-download"></i> 下载</button>
+                    <%--<button type="button" class="btn btn-default"><i class="fa fa-download"></i> 下载</button>--%>
                 </div>
                 <div class="col-xs-6 text-right file-search">
                     <input type="text" placeholder="搜索您的文件">
@@ -122,15 +126,11 @@
             <div class="file-nav row">
                 <div class="col-xs-12"><%--原值为：9--%>
                     <div id="fileBar">
-                        <%--<a href="#">返回上一级</a> | <a href="#">全部文件</a> | 工作项目申请2018--%>
                     </div>
                     <input type="hidden" id="currentPath">
                     <input type="hidden" id="currentName">
                     <input type="hidden" id="copyCache">
                 </div>
-                <%--<div class="col-xs-3 text-right">
-                    全部加载 共6个
-                </div>--%>
             </div>
             <div class="file-list">
                 <table>
@@ -143,30 +143,6 @@
                     </tr>
                     </thead>
                     <tbody id="bd-data">
-                    <tr>
-                        <%--<td></td>--%>
-                        <td class="file-name">
-                            <div>科协知识服务平台</div>
-                        </td>
-                        <td class="text-center">567MB</td>
-                        <td class="text-center">2019年1月20日</td>
-                    </tr>
-                    <tr>
-                        <%--<td></td>--%>
-                        <td class="file-name">
-                            <div>科协知识服务平台</div>
-                        </td>
-                        <td class="text-center">567MB</td>
-                        <td class="text-center">2019年1月20日</td>
-                    </tr>
-                    <tr>
-                        <%--<td></td>--%>
-                        <td class="file-name">
-                            <div>科协知识服务平台</div>
-                        </td>
-                        <td class="text-center">567MB</td>
-                        <td class="text-center">2019年1月20日</td>
-                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -232,44 +208,54 @@
                 var which = e.which;
                 console.log(which); // 1 = 鼠标左键 left; 2 = 鼠标中键; 3 = 鼠标右键
                 changeSelect(e);
-                if (which === 1) {
-                } else if (which === 3) {
-                    // 鼠标左键选中操作 右键替换默认菜单
-                    context.init({preventDoubleContext: false});
-                    var copyCache = $("#copyCache").data("copyCache");
-                    var menus = [
-                        {
-                            text: "打开", action: function () {
-                            },
-                            href: "javaScript:void(0);"
-                        },
-                        {
-                            text: "上传到目录", action: function () {
-                            },
-                            href: "javaScript:void(0);"
-                        },
-                        {divider: true},
 
+                function getMenus() {
+                    if (isDir) {
+                        menus = menus.concat([
+                            {
+                                text: "打开", action: function () {
+                                    fileNet($("#currentPath").data("currentPath"));
+                                },
+                                href: "javaScript:void(0);"
+                            },
+                            {
+                                text: "上传到目录", action: function () {
+                                    showUploadFileDialog($("#currentPath").data("currentPath"));
+                                },
+                                href: "javaScript:void(0);"
+                            },
+                            {divider: true}
+                        ])
+                    } else if (isFile) {
+                    } else if (isFile) {
+                        menus = menus.concat([
+                            {
+                                text: "下载", action: function () {
+                                    downloadFile($("#currentPath").data("currentPath"));
+                                }
+                            }
+                        ])
+                    }
+                    menus = menus.concat([
                         {
                             text: "复制到", action: function () {
-                                copyPath("copyFile")
+                                copyPath("copy")
                             },
                             href: "javaScript:void(0);"
                         },
                         {
                             text: "移动到", action: function () {
-                                copyPath("moveFile")
+                                copyPath("move")
                             },
                             href: "javaScript:void(0);"
                         }
-                    ];
+                    ]);
                     if (copyCache !== undefined && copyCache !== "") {
-                        var copy = {
+                        menus = menus.concat([{
                             text: "粘贴", action: function () {
                                 pasteFile()
                             }
-                        };
-                        menus.push(copy);
+                        }]);
                     }
                     menus = menus.concat([
                         {divider: true},
@@ -281,11 +267,21 @@
                         },
                         {
                             text: "删除", action: function () {
-                                deleteFile();
+                                deleteFile($("#currentPath").data("currentPath"));
                             },
                             href: "javaScript:void(0);"
                         }
                     ]);
+                }
+
+                if (which === 3) {
+                    // 鼠标左键选中操作 右键替换默认菜单
+                    context.init({preventDoubleContext: false});
+                    var menus = [];
+                    var copyCache = $("#copyCache").data("copyCache");
+                    var isDir = $(e.currentTarget).find("td:eq(0).dir")[0];
+                    var isFile = $(e.currentTarget).find("td:eq(0).file")[0];
+                    getMenus();
                     context.destroy("#FileOnNet tbody tr");
                     context.attach("#FileOnNet tbody tr", menus);
                 }
@@ -342,9 +338,9 @@
          */
         function fileNet(selectPath) {
             $.ajax({
-                url: "${ctx}/fileNet/getCurrentFile",
                 type: "POST",
-                dataType: "json",
+                url: "${ctx}/fileNet/fileList",
+                dataType: "JSON",
                 data: {
                     "rootPath": selectPath
                 },
@@ -396,7 +392,7 @@
          * 显示创建目录的弹窗
          * 将当前父路径赋值到指定位置
          */
-        function showAddFileTmp() {
+        function showAddFileDialog() {
             var parentPath = $("#FileOnNet #fileBar span.modules").attr("path");
             $("#parentURI").val(parentPath);
             $("#addSonDirectory").modal("show");
@@ -417,6 +413,7 @@
             $.ajax({
                 type: "POST",
                 url: "${ctx}/fileNet/addDirectory",
+                dataType: "JSON",
                 data: {
                     "dirName": dirName,
                     "parentURI": parentURI
@@ -440,9 +437,10 @@
          * 显示文件上传的弹窗
          * 将当前父路径赋值到指定位置
          */
-        function showUploadFileTmp() {
-            var parentPath = $("#FileOnNet #fileBar span.modules").attr("path");
+        function showUploadFileDialog(parentPath) {
+            // var parentPath = $("#FileOnNet #fileBar span.modules").attr("path");
             $("#parentURI").val(parentPath);
+            console.log(parentPath);
             $("#uploadFile").modal("show");
         }
 
@@ -522,17 +520,27 @@
             var currentPath = $("#fileBar span").attr("path");
             var copyCache = $("#copyCache").data("copyCache");
             var operationType = $("#copyCache").data("operationType");
+            var url = "";
             if (typeof copyCache === "undefined" || copyCache === "") {
                 toastr["info"]("请选择要粘贴的文件", "提示！");
                 return false;
             }
+            if ("copy" === operationType) {
+                url = "/fileNet/copyFile";
+            } else if ("move" === operationType) {
+                url = "/fileNet/moveFile"
+            }
+            if (url === "") {
+                toastr["error"]("错误！");
+                return false;
+            }
             $.ajax({
                 type: "POST",
-                url: "${ctx}/fileNet/operationFile",
+                dataType: "JSON",
+                url: "${ctx}" + url,
                 data: {
                     "oldFile": copyCache,
-                    "newFile": currentPath,
-                    "operationType": operationType
+                    "newFile": currentPath
                 },
                 beforeSend: function () {
                     index = layer.load(1, {
@@ -540,7 +548,6 @@
                     });
                 },
                 success: function (data) {
-                    data = JSON.parse(data);
                     if (data.code === "error") {
                         toastr["error"](data.message, "错误！");
                     } else {
@@ -565,9 +572,46 @@
         /**
          * 删除选定的文件
          */
-        function deleteFile() {
+        function deleteFile(deletePath) {
+            if (typeof deletePath === "undefined") {
+                toastr["warning"]("当前未选中文件", "警告！");
+                return false;
+            }
             bootbox.confirm("<span style='font-size: 16px'>确认要删除此条记录吗?</span>", function (r) {
-
+                if (r) {
+                    $.ajax({
+                        type: "POST",
+                        url: "${ctx}/fileNet/deleteFile",
+                        dataType: "JSON",
+                        data: {
+                            "deletePath": deletePath
+                        },
+                        beforeSend: function () {
+                            index = layer.load(1, {
+                                shade: [0.5, '#fff'] //0.1透明度的白色背景
+                            });
+                        },
+                        success: function (data) {
+                            if (data.code === "error") {
+                                toastr["error"](data.message, "错误！");
+                            } else {
+                                $("#copyCache").data("copyCache", "");
+                                toastr["success"](data.message, "成功！");
+                                fileNet($("#fileBar span").attr("path"));
+                            }
+                        },
+                        complete: function () {
+                            fileNet($("#FileOnNet #fileBar span.modules").attr("path"));
+                            $("#layui-layer-shade" + index + "").remove();
+                            $("#layui-layer" + index + "").remove();
+                        },
+                        error: function (returndata) {
+                            $("#layui-layer-shade" + index + "").remove();
+                            $("#layui-layer" + index + "").remove();
+                            toastr["error"]("错误！", returndata);
+                        }
+                    })
+                }
             })
         }
     </script>

@@ -257,4 +257,12 @@ public class FileNetService {
         JSONObject jsonObject = FileUtil.deleteFolder(oldFile);
         return jsonObject;
     }
+
+    public JSONObject moveFile(String oldFile, String newFile) {
+        JSONObject jsonObject1 = FileUtil.copyFolder(oldFile, newFile);
+        JSONObject jsonObject = FileUtil.deleteFolder(oldFile);
+        jsonObject.put("message", "移动完成");
+        return jsonObject;
+
+    }
 }
