@@ -106,7 +106,7 @@
         <!-- BEGIN SIDEBAR -->
         <div class="page-sidebar-wrapper">
             <%--NEW BAR ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！--%>
-            <div class="page-sidebar" style="width: 18%;height:auto;right: 20px;">
+            <div class="page-sidebar" style="height:auto;right: 20px;">
                 <div class="left_bottom">
                     <div class="left_top"><img src="${ctx}/resources/img/logo.png"></div>
                     <div class="user_div">

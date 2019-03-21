@@ -56,6 +56,7 @@ public class portalPages {
     @RequestMapping("/createTableAndImportData")
     public ModelAndView createTableAndImportData() {
         ModelAndView modelAndView = new ModelAndView("dataRelation_createTableAndImportData");
+//        ModelAndView modelAndView = new ModelAndView("dataConfiguration");
         return modelAndView;
     }
 }
