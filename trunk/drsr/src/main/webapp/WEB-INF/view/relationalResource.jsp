@@ -12,6 +12,7 @@
 <head>
     <title>系统</title>
     <link href="${ctx}/resources/css/dataSource.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/ComBoSelect/css/combo.select.css" rel="stylesheet" type="text/css"/>
     <style>
         .custom-error{
             color:#a94442!important;
@@ -23,6 +24,7 @@
         .custom-error2{
             border-color:#a94442!important;
         }
+        .jq22 { width: 400px; margin: 100px auto;}
     </style>
 </head>
 <body>
@@ -106,13 +108,6 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="databaseName" class="col-sm-3 control-label" id="dataBaseName">数据库名称<span class="required">
-													* </span></label></label>
-                                        <div class="col-md-9">
-                                            <input type="text" class="form-control" id="databaseName" name="databaseName" placeholder="请输入数据库名称">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
                                         <label for="host" class="col-sm-3 control-label">主机<span class="required">
 													* </span></label></label>
                                         <div class="col-md-9">
@@ -140,13 +135,23 @@
                                             <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码">
                                         </div>
                                     </div>
+                                    <div class="form-group" id="dataBaseNameDiv" >
+                                        <label for="databaseName" class="col-sm-3 control-label" id="dataBaseName">数据库名称<span class="required">
+													* </span></label></label>
+                                        <div class="col-md-9" id="dataBaseNameDiv2">
+                                            <%--<input type="text" class="form-control" id="databaseName" name="databaseName" placeholder="请输入数据库名称">--%>
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn green">
+                        <button type="submit" class="btn green" id="saveButton" style="display: none;">
                             <i class="glyphicon glyphicon-ok"></i>保存</button>
+                        <button type="button" class="btn green" id="checkButton" onclick="loadMysqlDatabaseList()">
+                            <i class="glyphicon glyphicon-ok"></i>加载数据库列表</button>
                         <button type="button" data-dismiss="modal" class="btn btn-danger" onclick="cancelButton();">取消</button>
                     </div>
                 </form>
@@ -274,8 +279,11 @@
         <script src="${ctx}/resources/bundles/jquery-validation/js/jquery.validate.js"></script>
         <script src="${ctx}/resources/bundles/jquery-validation/js/localization/messages_zh.min.js"></script>
         <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
+        <script src="${ctx}/resources/bundles/ComBoSelect/js/jquery.combo.select.js"></script>
     <script>
         $(function(){
+            $("#databaseName").comboSelect();//加载combox
+            $("#dataBaseNameDiv")[0].style.display="none";//显示数据库输入框
             tableConfiguration();
         });
         /*get data table*/
@@ -502,6 +510,7 @@
                         var userName = $("#userNameE").val();
                         var password = $("#passwordE").val();
                         var dataSourceId = $("#idHidden").val();
+
                         $.ajax({
                             type: 'post',
                             async: false,
@@ -540,6 +549,10 @@
                         var port = $("#port").val();
                         var userName = $("#userName").val();
                         var password = $("#password").val();
+                        if(dataBaseName==null || dataBaseName==""){
+                            $("#databaseName").style.border="red";
+                            return;
+                        }
                         $.ajax({
                             type: 'post',
                             url: "${ctx}/relationship/add",
@@ -582,18 +595,30 @@
                 $("#port").val("5000");
             }else if(db=='oracle'){
                 $("#port").val("1521");
+                $("#dataBaseNameDiv2").empty();//清空div中的html
+
+                $("#dataBaseNameDiv2").append(" <input type=\"text\" class=\"form-control\" id=\"databaseName\" name=\"databaseName\" placeholder=\"请输入数据库名称\">");
+                $("#dataBaseNameDiv")[0].style.display="block";//显示数据库输入框
+                $("#saveButton")[0].style.display="inline";//显示保存按钮
+                $("#checkButton")[0].style.display="none";//隐藏检查按钮
                 $("#dataBaseName")[0].innerHTML="服务名<span style='color: red;'>\t\t\t\t\t\t\t\t\t\t\t\t\t* </span>";
             }else if(db=='SqlServer'){
                 $("#port").val("1433");
-            }else{
+            }else if(db=='mysql'){
+                $("#databaseName").empty();//初始化select
                 $("#port").val("3306");
+                $("#dataBaseNameDiv")[0].style.display="none";//隐藏数据库输入框
+                $("#saveButton")[0].style.display="none";//隐藏保存按钮
+                $("#checkButton")[0].style.display="inline";//显示检查按钮
+                $("#dataBaseName")[0].innerHTML="数据库名称<span style='color: red;'>\t\t\t\t\t\t\t\t\t\t\t\t\t* </span>";
             }
         }
         function dbSelectE(){
             var db = $("#dataBaseTypeE option:selected").val();
             if(db=='DB2'){
                 $("#portE").val("5000");
-            }else if(db=='Oracle'){
+
+            }else if(db=='oracle'){
                 $("#portE").val("1521");
             }else if(db=='SqlServer'){
                 $("#portE").val("1433");
@@ -611,6 +636,64 @@
          var lnxPath = /^([\/][\w-]+)*$/;
          return this.optional(element) || winPath.test(value) || lnxPath.test(value);
          }, "请正确填写路径");*/
+
+        //加载MySQL数据库列表
+        function loadMysqlDatabaseList() {
+            var dataBaseType = $("#dataBaseType").val();
+            var host = $("#host").val();
+            var port = $("#port").val();
+            var userName = $("#userName").val();
+            var password = $("#password").val();
+            debugger
+            if(host=="" || host==null){
+                toastr["warning"]("请输入正确主机地址！");
+                return;
+            }
+            if(port=="" || port==null){
+                toastr["warning"]("请输入正确端口号！");
+                return;
+            }
+            if(userName=="" || userName==null){
+                toastr["warning"]("请输入正确用户名！");
+                return;
+            }
+            if(password=="" || password==null){
+                toastr["warning"]("请输入正确密码！");
+                return;
+            }
+
+            $.ajax({
+                type: 'post',
+                url: "${ctx}/relationship/loadMysqlDatabaseList",
+                async: false,
+                data: {
+                    "dataBaseType": dataBaseType,
+                    "host": host,
+                    "port": port,
+                    "userName": userName,
+                    "password": password
+                },
+                success: function (result) {
+                    var jsonData = JSON.parse(result);
+                    if(jsonData.result==0){
+                        toastr["error"]("数据库连接失败，请检查连接信息！");
+                        return;
+                    }else{
+                        $("#dataBaseNameDiv2").empty();//初始化div
+                        $("#dataBaseNameDiv2").append(" <select name=\"databaseName\" id=\"databaseName\" > </select>");
+                        for(var i=0;i<jsonData.databaseList.length;i++){
+                            $("#databaseName").append("<option value='"+jsonData.databaseList[i]+"'>"+jsonData.databaseList[i]+"</option>");
+                        }
+                        $("#databaseName").comboSelect();//加载combox
+                        $("#dataBaseNameDiv")[0].style.display="block";//显示数据库输入框
+                        $("#saveButton")[0].style.display="inline";//显示保存按钮
+                        $("#checkButton")[0].style.display="none";//隐藏检查按钮
+                    }
+
+                }
+            })
+
+        }
     </script>
 </div>
 

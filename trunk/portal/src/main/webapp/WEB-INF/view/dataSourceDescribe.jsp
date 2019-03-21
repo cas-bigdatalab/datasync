@@ -1177,16 +1177,35 @@
                 "checkbox", "wholerow"
             ]
         }).bind('select_node.jstree', function (e, data) {
-            var fileId = data.node.id;
-            var str = fileId.replace(/%_%/g, "/");
+            data.instance.open_all(data.node.id);
+            /*var fileId = data.node.id;
+            var str = fileId.replace(/%_%/g, "/");*/
             /*var isContain = false;*/
-            $("#fileDescribeDiv").append("<div name="+ fileId+"><span>"+str +"</span></div>")
+           //$("#fileDescribeDiv").append("<div name="+ fileId+"><span>"+str +"</span></div>")
             /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
         }).bind("deselect_node.jstree", function (e, data) {
-            var fileId = data.node.id;
+            $("#fileDescribeDiv").html("");
+            var ref = $('#fileContainerTree').jstree(true);//获得整个树
+            var sel = ref.get_selected(false);
+            for(var i = 0; i <sel.length; i++){
+                var str = sel[i].replace(/%_%/g, "/");
+                $("#fileDescribeDiv").append("<div name="+ str+"><span>"+str +"</span></div>")
+            }
+            /*var fileId = data.node.id;
             var fileName = data.node.text;
-            $("div[name='" + fileId + "']").remove();
+            $("div[name='" + fileId + "']").remove();*/
             /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
+        }).bind("after_open.jstree", function (e ,data) {
+            $("#fileDescribeDiv").html("");
+            var ref = $('#fileContainerTree').jstree(true);//获得整个树
+            var sel = ref.get_selected(false);
+            //var str = sel.replace(/%_%/g, "/");
+            //var str1 = sel.split("，");
+            for(var i = 0; i <sel.length; i++){
+                var str = sel[i].replace(/%_%/g, "/");
+                $("#fileDescribeDiv").append("<div name="+ str+"><span>"+str +"</span></div>")
+            }
+            /*var isContain = false;*/
         });
         function initFileTree() {
             var root;

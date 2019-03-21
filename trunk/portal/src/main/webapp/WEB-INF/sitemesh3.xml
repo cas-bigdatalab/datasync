@@ -1,5 +1,6 @@
 <sitemesh defaultdir="">
-    <mapping path="/*" decorator="/WEB-INF/decorators/admin.jsp"/>
+    <mapping path="/*" decorator="/WEB-INF/decorators/admin_new.jsp"/>
+    <!--<mapping path="/*" decorator="/WEB-INF/decorators/admin.jsp"/>-->
     <mapping path="/resources/*" exclue="true"/>
     <mapping path="/global/*" exclue="true"/>
     <mapping path="/upload/*" exclue="true"/>

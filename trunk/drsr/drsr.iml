@@ -30,6 +30,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: top.jfunc.common:converter:1.8.0" level="project" />
+    <orderEntry type="library" name="Maven: top.jfunc.json:json-fastjson:1.8.0" level="project" />
+    <orderEntry type="library" name="Maven: top.jfunc.json:json-common:1.8.0" level="project" />
     <orderEntry type="library" name="Maven: org.sitemesh:sitemesh:3.0.1" level="project" />
     <orderEntry type="library" name="Maven: dom4j:dom4j:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: xml-apis:xml-apis:1.0.b2" level="project" />
@@ -54,6 +57,9 @@
     <orderEntry type="library" name="Maven: commons-net:commons-net:3.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.ibatis:ibatis-sqlmap:3.0-beta-10" level="project" />
     <orderEntry type="library" name="Maven: com.oracle:classes12:10.2" level="project" />
+    <orderEntry type="library" name="Maven: top.jfunc.common:converter:1.8.0" level="project" />
+    <orderEntry type="library" name="Maven: top.jfunc.json:json-fastjson:1.8.0" level="project" />
+    <orderEntry type="library" name="Maven: top.jfunc.json:json-common:1.8.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-core:4.3.19.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:4.3.19.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:4.3.19.RELEASE" level="project" />

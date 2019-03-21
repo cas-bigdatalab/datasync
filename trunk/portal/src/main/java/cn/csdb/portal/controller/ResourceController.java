@@ -115,6 +115,10 @@ public class ResourceController {
     @ResponseBody
     public JSONObject delete(@PathVariable("id") String id) {
         JSONObject jsonObject = new JSONObject();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(id);
+        if("2".equals(resource.getStatus())){
+            resourceService.saveDeleteId(resource.getId());
+        }
         resourceService.delete(id);
         jsonObject.put("result", "ok");
         return jsonObject;
@@ -379,7 +383,7 @@ public class ResourceController {
                     str = str.replaceAll("%_%", "/");
                     File file = new File(str);
                     if (file.isDirectory()) {
-                        Collection<File> files = FileUtils.listFiles(file, null, true);
+                        /*Collection<File> files = FileUtils.listFiles(file, null, true);
                         for (File file1 : files) {
                             String fp = file1.getPath();
                             size += file1.length();
@@ -387,7 +391,7 @@ public class ResourceController {
                                 fp = fp.replaceAll("\\\\", "/");
                             }
                             sb.append(fp + ";");
-                        }
+                        }*/
                     } else {
                         sb.append(str + ";");
                         size += file.length();

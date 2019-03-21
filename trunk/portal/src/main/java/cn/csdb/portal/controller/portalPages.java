@@ -27,13 +27,35 @@ public class portalPages {
     }
     @RequestMapping("/dataConfiguration")
     public ModelAndView index5() {
-        ModelAndView modelAndView = new ModelAndView("dataConfiguration");
+        ModelAndView modelAndView = new ModelAndView("dataRealtion_editeFiled");
         return modelAndView;
     }
 
     @RequestMapping("/statisticalDataDetail")
     public ModelAndView index6(){
         ModelAndView modelAndView=new ModelAndView("statisticalDataDetail");
+        return modelAndView;
+    }
+    @RequestMapping("/datatest")
+    public ModelAndView  testData(){
+        ModelAndView modelAndView=new ModelAndView("editDataTest");
+        return modelAndView;
+    }
+    @RequestMapping("/statisticalDataTotal")
+    public ModelAndView  statisticalDataTotal(){
+        ModelAndView modelAndView=new ModelAndView("statisticalDataTotal");
+        return modelAndView;
+    }
+
+    @RequestMapping("/fileMange")
+    public ModelAndView fileMange() {
+        ModelAndView modelAndView = new ModelAndView("fileMange");
+        return modelAndView;
+    }
+
+    @RequestMapping("/createTableAndImportData")
+    public ModelAndView createTableAndImportData() {
+        ModelAndView modelAndView = new ModelAndView("dataRelation_createTableAndImportData");
         return modelAndView;
     }
 }

@@ -272,3 +272,29 @@
     </button>
 
 </script>
+
+
+<%--网盘功能  目录列表--%>
+<script type="text/html" id="fileBarTemplate">
+    {{each data as v i}}
+    {{if i == 0}}
+    &nbsp;|&nbsp;<span path="{{v.path}}" class="modules">{{v.name}}</span>
+    {{else}}
+    &nbsp;>&nbsp;<a path="{{v.path}}" class="modules">{{v.name}}</a>
+    {{/if}}
+    {{/each}}
+</script>
+
+<%--网盘功能 列表--%>
+<script type="text/html" id="fileNetList">
+    {{each data as v i}}
+    <tr>
+        <%-- <td> 暂时注释选中框
+             <input type="checkbox" path="{{v.filePath}}" class="fileNetCheck"/>
+         </td>--%>
+        <td path="{{v.filePath}}" class="{{v.fileType}} fileName"><a href="javaScript:void(0)">{{v.fileName}}</a></td>
+        <td>{{v.fileLength}}</td>
+        <td>{{v.fileLastModified}}</td>
+    </tr>
+    {{/each}}
+</script>
