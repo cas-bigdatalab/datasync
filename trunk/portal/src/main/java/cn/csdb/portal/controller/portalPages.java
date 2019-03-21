@@ -52,4 +52,10 @@ public class portalPages {
         ModelAndView modelAndView = new ModelAndView("fileMange");
         return modelAndView;
     }
+
+    @RequestMapping("/createTableAndImportData")
+    public ModelAndView createTableAndImportData() {
+        ModelAndView modelAndView = new ModelAndView("dataRelation_createTableAndImportData");
+        return modelAndView;
+    }
 }

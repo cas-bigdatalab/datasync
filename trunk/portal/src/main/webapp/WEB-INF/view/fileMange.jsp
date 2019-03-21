@@ -1,9 +1,9 @@
 <%--
   Created by IntelliJ IDEA.
-  User: admin
+  User: mengjinbao
   Date: 2019/3/18
   Time: 16:32
-  To change this template use File | Settings | File Templates.
+  用户管理文档
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -102,9 +102,8 @@
     <%--模板结束--%>
 
     <div class="right_div">
-        <div class="time_div"><a href=""><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 数据管理</a>--&gt;<a
-                href="">文件管理</a></div>
-        <div class="fabu_div"><h4>文件管理</h4></div>
+        <div class="time_div"><a><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 文件数据管理</a></div>
+        <div class="fabu_div"><h4>文件数据管理</h4></div>
         <div class="form" id="FileOnNet">
             <div class="row">
                 <div class="col-xs-6">
