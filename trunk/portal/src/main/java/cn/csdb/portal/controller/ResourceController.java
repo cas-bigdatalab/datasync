@@ -3,6 +3,7 @@ package cn.csdb.portal.controller;
 import cn.csdb.portal.model.*;
 import cn.csdb.portal.repository.TableFieldComsDao;
 import cn.csdb.portal.service.*;
+import cn.csdb.portal.utils.FileTreeNode;
 import cn.csdb.portal.utils.FileUploadUtil;
 import cn.csdb.portal.utils.ImgCut;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
@@ -392,6 +393,8 @@ public class ResourceController {
                             }
                             sb.append(fp + ";");
                         }*/
+                        sb.append(str + ";");
+                        size += file.length();
                     } else {
                         sb.append(str + ";");
                         size += file.length();
@@ -812,5 +815,57 @@ public class ResourceController {
         return jsonObject;
     }
 
+    /**
+     * Function Description: 获取砖题库文件列表
+     *
+     * @param: []
+     * @return: java.util.List<com.alibaba.fastjson.JSONObject>
+     * @auther: caohq
+     * @date: 2019/03/15 10:43
+     */
+    @ResponseBody
+    @RequestMapping(value = "fileSourceZtreeFileList")
+    public JSONObject fileSourceZtreeFileList(String resourceId ) {
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        String[] filePathArry = new String[0];
 
+        List<FileTreeNode> nodeList=new ArrayList<FileTreeNode>();
+        String filePath="D:\\workspace";
+        File dirFile = new File(filePath);
+        JSONObject jsonObject = new JSONObject();
+        if(resource!=null){
+            if(resource.getFilePath()!=null){//库内被选中字段
+                filePathArry=resource.getFilePath().replace("%_%",File.separator).split(";");
+                for(String fileStr:filePathArry){
+                    File file= new File(fileStr);
+                    if(file.isDirectory()){
+                        nodeList=resourceService.loadingFileTree(file.getPath(),nodeList);
+                    }
+                }
+            }
+
+            if(dirFile.isDirectory()){
+                nodeList.add(new FileTreeNode(filePath,"0",filePath,"true","true","init"));
+                nodeList=resourceService.loadingFileTree(filePath,nodeList);
+            }
+            for(String filestr:filePathArry){
+                for(FileTreeNode ftn:nodeList){
+                    if(filestr.equals(ftn.getId())){
+                        ftn.setChecked("true");
+                    }
+                }
+            }
+
+            jsonObject.put("nodeList",nodeList);
+        }
+        return jsonObject;
+    }
+
+    @RequestMapping(value="ZTreeNode")
+    @ResponseBody
+    public List<FileTreeNode> ZTreeNode(String id, String path, String name, String taskId, HttpServletRequest req){
+        List<FileTreeNode> nodeList = new ArrayList<FileTreeNode>();
+        nodeList=resourceService.asynLoadingTree("",id,"false");//此处id为文件节点（文件路径）
+        return nodeList;
+    }
 }
