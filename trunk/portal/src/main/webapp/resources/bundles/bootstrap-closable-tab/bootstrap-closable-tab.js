@@ -30,17 +30,19 @@ var closableTab = {
 
     //关闭tab
     closeTab: function (item) {
-        bootbox.confirm("<span style='font-size: 16px'>确认要关闭此条记录吗?</span>", function () {
-            var val = $(item).attr('tabclose');
-            var containerId = "tab_container_" + val.substring(9);
+        bootbox.confirm("<span style='font-size: 16px'>确认要关闭此条记录吗?</span>", function (r) {
+            if (r) {
+                var val = $(item).attr('tabclose');
+                var containerId = "tab_container_" + val.substring(9);
 
-            if ($('#' + containerId).hasClass('active')) {
-                $('#' + val).prev().addClass('active');
-                $('#' + containerId).prev().addClass('active');
+                if ($('#' + containerId).hasClass('active')) {
+                    $('#' + val).prev().addClass('active');
+                    $('#' + containerId).prev().addClass('active');
+                }
+                $("#" + val).remove();
+                $("#" + containerId).remove();
+                closableTab.afterCloseTab(item);
             }
-            $("#" + val).remove();
-            $("#" + containerId).remove();
-            closableTab.afterCloseTab(item);
         })
     },
 
