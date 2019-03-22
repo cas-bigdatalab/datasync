@@ -38,7 +38,7 @@ public class portalPages {
     }
     @RequestMapping("/datatest")
     public ModelAndView  testData(){
-        ModelAndView modelAndView=new ModelAndView("editDataTest");
+        ModelAndView modelAndView=new ModelAndView("dataRealtion_recordManage");
         return modelAndView;
     }
     @RequestMapping("/statisticalDataTotal")

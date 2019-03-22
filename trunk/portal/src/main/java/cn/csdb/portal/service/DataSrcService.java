@@ -109,12 +109,12 @@ public class DataSrcService {
             ResultSetMetaData rsm = set.getMetaData();
             while (set.next()) {
                 for (int i = 1; i <= rsm.getColumnCount(); i++) {
-                    if (set.getString(rsm.getColumnName(i)) == null){
-                        list.add(set.getString(" "));
+                    if (set.getString(rsm.getColumnName(i)) == null||set.getString(rsm.getColumnName(i)).equals("")){
+                        list.add(" ");
                     }else {
-//                    System.out.println("aaaaaaaallll"+set.getString(rsm.getColumnName(i)));
                         list.add(set.getString(rsm.getColumnName(i)));
                     }
+                    System.out.println("aaaaaaaallll"+set.getString(rsm.getColumnName(i)));
                 }
             }
 
@@ -309,6 +309,33 @@ public class DataSrcService {
             }
         }
         return count;
+    }
+
+//    根据主键查询数据条数
+    public int countByPrimaryKey(DataSrc dataSrc, String tableName,String columnName,Object pkus){
+        int n=0;
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        try {
+         String sql="select count(*) as num from  "+ tableName + " where  "+columnName +"= ?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setObject(1,pkus);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                n = rs.getInt("num");
+            }
+            pst.close();
+            rs.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return n;
     }
 
     //    连接mysql数据库，根据表明查出所有数据，供编辑

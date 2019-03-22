@@ -77,6 +77,9 @@
         .page-content table tbody tr:hover {
             background: #dddddd;
         }
+        .user_div table{
+            margin-left: 26%;
+        }
     </style>
 
 </head>

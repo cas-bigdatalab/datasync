@@ -322,51 +322,60 @@ public class EditDataController {
 
     @RequestMapping("/saveTableDataTest")
     @ResponseBody
-    public JSONObject saveTableDataTest(@Param("newdata") String newdata,String subjectCode,String tableName,String PORTALID){
+    public JSONObject saveTableDataTest(@Param("newdata") String newdata,String subjectCode,String tableName,String delPORTALID){
         JSONObject jsonObject=new JSONObject();
+//        System.out.println(newdata);
         JSONArray jsonArray2=JSONArray.parseArray(newdata);
         DataSrc datasrc=getDataSrc(subjectCode);
         Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);
+//        旧数据
+        List<String> list=dataSrcService.getDataByPORTALID(datasrc,tableName,delPORTALID);
+        List<String> list1=map.get("pkColumn");    //主键
+        List<String> list2=map.get("autoAdd");
+        List<String> list3=map.get("IS_NULLABLE");  //不为空
+
+        //更新的数据
+        String updatestr=" set ";
+//        条件设置,拼串
+        String conditionstr=" where ";
+                conditionstr += " PORTALID  = '" + delPORTALID + "' ";
 //
-//        List<String> list1=map.get("pkColumn");
-//        List<String> list2=map.get("autoAdd");
-//        List<String> list3=map.get("IS_NULLABLE");
-//
-//
-////        条件设置,拼串
-//        String conditionstr=" where ";
-//                conditionstr += " PORTALID  = '" + PORTALID + "' ";
-//
-//
-//        //更新的数据
-//        String updatestr=" set ";
-//        int j=0;
-//        for(int i=2;i<jsonArray2.size();i++){
-//
-//            String column=jsonArray2.getJSONObject(i).getString("name");
-//            String value=jsonArray2.getJSONObject(i).getString("value");
-//
-//            if(list3.get(i-2).equals("NO") && (value.equals("null")||value.equals(""))){
-//                jsonObject.put("data","-2+"+column);//该列不能为空
-//                return jsonObject;
-//            }
-//
-//                    updatestr += "" + column + "= '" + value + "' , ";
-//        }
-//        if(j==0){
-//            jsonObject.put("data","1");
-//            return jsonObject;
-//        }
-//        int l=conditionstr.length();
-//        String s1=conditionstr;
-//        int ll=updatestr.length();
-//        String s2=updatestr.substring(0,ll-2);
-//        int n=dataSrcService.updateDate(s1,s2,tableName,datasrc);
-//        if(n==1){
-//            jsonObject.put("data","1");
-//        }else{
-//            jsonObject.put("data","0");
-//        }
+        for(int i=0;i<jsonArray2.size();i++){
+            String column=jsonArray2.getJSONObject(i).getString("name");
+            String value=jsonArray2.getJSONObject(i).getString("value");
+
+            if(list3.get(i).equals("NO") && (value.equals("null")||value.equals(""))){
+                jsonObject.put("data","-2+");           //该列不能为空
+                jsonObject.put("col",column);
+                return jsonObject;
+            }
+            if(list1.get(i).equals("PRI")){
+              int n=dataSrcService.checkPriKey(datasrc,tableName,value,column);
+              if(n>1){
+//                  System.out.println("主键重复"+n);
+                  jsonObject.put("data","-1");           //该列不能为空
+                  return jsonObject;
+              }
+            }
+            if(list.get(i).equals(value)){
+
+            }else if((list.get(i).equals("")||list.get(i)==null)&&(value.equals("")||value==null)){
+
+            }else {
+                updatestr += "" + column + "= '" + value + "' , ";
+            }
+        }
+        int ll=updatestr.length();
+        String s2=updatestr.substring(0,ll-2);
+        String s1=conditionstr;
+        System.out.println(s2+";;;;;"+s1);
+
+        int n=dataSrcService.updateDate(s1,s2,tableName,datasrc);
+        if(n==1){
+            jsonObject.put("data","1");
+        }else{
+            jsonObject.put("data","0");
+        }
         return jsonObject;
     }
 }
