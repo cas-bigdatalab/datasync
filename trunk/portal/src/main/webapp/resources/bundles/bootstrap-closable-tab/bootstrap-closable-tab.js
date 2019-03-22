@@ -9,24 +9,20 @@ var closableTab = {
         $("li[id^=tab_seed_]").removeClass("active");
         $("div[id^=tab_container_]").removeClass("active");
 
-        try {
-            if (!$('#' + id)[0]) {
-                /*a:style="position: relative;padding:2px 20px 2px 15px"*/
-                var li_tab = '<li role="presentation" class="" id="' + id + '"><a href="#' + container + '"  role="tab" data-toggle="tab" >' + tabItem.name;
-                if (tabItem.closable) {
-                    li_tab = li_tab + '<i class="glyphicon glyphicon-remove small" tabclose="' + id + '" style="position: absolute;right:4px;top: 4px;"  onclick="closableTab.closeTab(this)"></i></a></li> ';
-                } else {
-                    li_tab = li_tab + '</a></li>';
-                }
-
-                var tabpanel = '<div role="tabpanel" class="tab-pane" id="' + container + '" style="width: 100%;">' +
-                    tabItem.template +
-                    '</div>';
-                $('.nav-tabs.activeTabs').append(li_tab);
-                $('.tab-content.activeTabs').append(tabpanel);
+        if (!$('#' + id)[0]) {
+            /*a:style="position: relative;padding:2px 20px 2px 15px"*/
+            var li_tab = '<li role="presentation" class="" id="' + id + '"><a href="#' + container + '"  role="tab" data-toggle="tab" >' + tabItem.name;
+            if (tabItem.closable) {
+                li_tab = li_tab + '<i class="glyphicon glyphicon-remove small" tabclose="' + id + '" style="position: absolute;right:4px;top: 4px;"  onclick="closableTab.closeTab(this)"></i></a></li> ';
+            } else {
+                li_tab = li_tab + '</a></li>';
             }
-        } catch (e) {
-            console.log("捕获异常")
+
+            var tabpanel = '<div role="tabpanel" class="tab-pane" id="' + container + '">' +
+                tabItem.template +
+                '</div>';
+            $('.nav-tabs.activeTabs').append(li_tab);
+            $('.tab-content.activeTabs').append(tabpanel);
         }
         $("#" + id).addClass("active");
         $("#" + container).addClass("active");

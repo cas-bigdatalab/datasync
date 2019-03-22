@@ -17,7 +17,8 @@
     <title>统计管理detail</title>
     <link href="${ctx}/resources/css/dataUpload.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" href="${ctx}/resources/bundles/font-awesome/font-awesome.css">
+    <link rel="stylesheet" href="${ctx}/resources/bundles/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="${ctx}/resources/bundles/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="${ctx}/resources/bundles/bootstrapv3.3/css/bootstrap.css">
     <link href="${ctx}/resources/css/home.css" type="text/css"/>
     <style type="text/css">
@@ -292,7 +293,13 @@
                         x: 'center',
                         top: 'bottom'
                     },
-
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                        }
+                    },
                     xAxis: [{
                         type: 'category',
                         data: data.name,
@@ -357,7 +364,13 @@
                         x: 'center',
                         top: 'bottom'
                     },
-
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                        }
+                    },
                     xAxis: [{
                         type: 'category',
                         data: data.name,
@@ -423,7 +436,13 @@
                         x: 'center',
                         top: 'bottom'
                     },
-
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                        }
+                    },
                     xAxis: [{
                         type: 'category',
                         data: data.name,
@@ -492,6 +511,14 @@
                         x: 'center',
                         top: 'bottom'
                     },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            magicType: {show: true, type: ['line', 'bar']},
+                        }
+                    },
+
                     xAxis: [{
                         type: 'category',
                         data: data.name,
@@ -739,213 +766,6 @@
             });
         }
 
-        <%--var $table=$("#singleThemeTable").bootstrapTable({--%>
-        <%--url: "${ctx}/SingleSortTable",                      //请求后台的URL（*）--%>
-        <%--method: 'post',                      //请求方式（*）--%>
-        <%--striped: true,                      //是否显示行间隔色--%>
-        <%--cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）--%>
-        <%--pagination: true,                   //是否显示分页（*）--%>
-        <%--sortable: true,                     //是否启用排序--%>
-        <%--sortOrder: "asc",                   //排序方式--%>
-        <%--sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）--%>
-        <%--pageNumber: 1,                      //初始化加载第一页，默认第一页,并记录--%>
-        <%--pageSize: rows,                     //每页的记录行数（*）--%>
-        <%--pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）--%>
-        <%--search: false,                      //是否显示表格搜索--%>
-        <%--strictSearch: true,--%>
-        <%--showColumns: true,                  //是否显示所有的列（选择显示的列）--%>
-        <%--showRefresh: true,                  //是否显示刷新按钮--%>
-        <%--minimumCountColumns: 2,             //最少允许的列数--%>
-        <%--clickToSelect: true,                //是否启用点击选中行--%>
-        <%--//height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度--%>
-        <%--uniqueId: "ID",                     //每一行的唯一标识，一般为主键列--%>
-        <%--showToggle: true,                   //是否显示详细视图和列表视图的切换按钮--%>
-        <%--cardView: false,                    //是否显示详细视图--%>
-        <%--detailView: false,                  //是否显示父子表--%>
-        <%--//得到查询的参数--%>
-        <%--queryParams : function (params) {--%>
-        <%--//这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的--%>
-        <%--var temp = {--%>
-        <%--rows: params.limit,                         //页面大小--%>
-        <%--page: (params.offset / params.limit) + 1,   //页码--%>
-        <%--sort: params.sort,      //排序列名--%>
-        <%--sortOrder: params.order //排位命令（desc，asc）--%>
-        <%--};--%>
-        <%--return temp;--%>
-        <%--},--%>
-        <%--columns:[--%>
-        <%--{--%>
-        <%--title: "数据集名",--%>
-        <%--field: "title",--%>
-        <%--align: "center",--%>
-        <%--valign: "middle",--%>
-        <%--formatter: function (value, row, index) {--%>
-        <%--//通过formatter可以自定义列显示的内容--%>
-        <%--//value：当前field的值，即id--%>
-        <%--//row：当前行的数据--%>
-        <%--var a = '<a href="/home/edit?id='+value+'" >"+value+"</a>';--%>
-        <%--return a;--%>
-        <%--}--%>
-        <%--},--%>
-        <%--{--%>
-        <%--field:'vCount',--%>
-        <%--title:'访问量',--%>
-        <%--sortable:true,--%>
-        <%--valign: "middle"--%>
-        <%--},--%>
-        <%--{--%>
-        <%--field:'dCount',--%>
-        <%--title:'下载量',--%>
-        <%--valign: "middle",--%>
-        <%--sortable:true--%>
-        <%--},--%>
-        <%--],--%>
-        <%--pagination: true--%>
-        <%--});--%>
-
-        <%--$.ajax({--%>
-        <%--url: "${ctx}/singlethemeChartsVisit",--%>
-        <%--type: "post",--%>
-        <%--dataType: "json",--%>
-        <%--data:{"subjectCode":subjectCode},--%>
-        <%--success: function (data) {--%>
-
-        <%--var chart = echarts.init(document.getElementById('singlethemeChartsV'));--%>
-        <%--var option = {--%>
-        <%--// color: ['#5182bb', '#be4f4f', '#9bbb5e', '#8064a1', '#4facc5', '#2d4d74'],--%>
-        <%--title: {--%>
-        <%--text: '该专题内的访问量',--%>
-        <%--left: 'center'--%>
-        <%--},--%>
-        <%--tooltip: {--%>
-        <%--trigger: 'axis',--%>
-        <%--axisPointer: {--%>
-        <%--type: 'shadow',--%>
-        <%--label: {--%>
-        <%--show: true--%>
-        <%--}--%>
-        <%--}--%>
-        <%--},--%>
-        <%--legend: {--%>
-        <%--data: data.name,--%>
-        <%--x: 'center',--%>
-        <%--top: 'bottom'--%>
-        <%--},--%>
-
-        <%--xAxis: [{--%>
-        <%--type: 'category',--%>
-        <%--data: data.title,--%>
-        <%--axisLabel: {--%>
-        <%--interval: 0,--%>
-        <%--rotate: 45,//倾斜度 -90 至 90 默认为0--%>
-        <%--margin: 2,--%>
-        <%--textStyle: {--%>
-        <%--// fontWeight: "bolder",--%>
-        <%--// color: "#000000"--%>
-        <%--}--%>
-        <%--},--%>
-        <%--splitLine:{--%>
-        <%--show:false--%>
-        <%--}--%>
-        <%--}],--%>
-        <%--yAxis: [--%>
-        <%--{--%>
-        <%--type: 'value'--%>
-        <%--}],--%>
-        <%--series: [{--%>
-        <%--name: '访问量',--%>
-        <%--type: 'bar',--%>
-        <%--barWidth : 25,--%>
-        <%--data: data.vcount,--%>
-        <%--//配置样式--%>
-        <%--itemStyle: {--%>
-        <%--//通常情况下：--%>
-        <%--normal: {--%>
-        <%--//每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组--%>
-        <%--color: function (params) {--%>
-        <%--var colorList = ['rgb(164,205,238)','rgb(120,190,238)','rgb(80,170,227)', 'rgb(42,150,227)',--%>
-        <%--'rgb(42,130,227)','rgb(42,100,227)','rgb(42,75,227)','rgb(20,20,200)','rgb(42,46,150)',--%>
-        <%--'rgb(25,46,94)'];--%>
-        <%--return colorList[params.dataIndex];--%>
-        <%--}--%>
-        <%--}--%>
-        <%--}--%>
-        <%--}]--%>
-        <%--};--%>
-        <%--chart.setOption(option);--%>
-        <%--}--%>
-        <%--});--%>
-
-        <%--$.ajax({--%>
-        <%--url: "${ctx}/singlethemeChartsDown",--%>
-        <%--type: "post",--%>
-        <%--dataType: "json",--%>
-        <%--data:{"subjectCode":subjectCode},--%>
-        <%--success: function (data) {--%>
-        <%--var chart = echarts.init(document.getElementById('singlethemeChartsD'));--%>
-        <%--var option = {--%>
-        <%--// color: ['#5182bb', '#be4f4f', '#9bbb5e', '#8064a1', '#4facc5', '#2d4d74'],--%>
-        <%--title: {--%>
-        <%--text: '该专题内的下载量',--%>
-        <%--left: 'center'--%>
-        <%--},--%>
-        <%--tooltip: {--%>
-        <%--trigger: 'axis',--%>
-        <%--axisPointer: {--%>
-        <%--type: 'shadow',--%>
-        <%--label: {--%>
-        <%--show: true--%>
-        <%--}--%>
-        <%--}--%>
-        <%--},--%>
-        <%--legend: {--%>
-        <%--data: data.name,--%>
-        <%--x: 'center',--%>
-        <%--top: 'bottom'--%>
-        <%--},--%>
-        <%--xAxis: [{--%>
-        <%--type: 'category',--%>
-        <%--data: data.title,--%>
-        <%--axisLabel: {     //横坐标字体倾斜展示--%>
-        <%--interval: 0,--%>
-        <%--rotate: 45,//倾斜度 -90 至 90 默认为0--%>
-        <%--margin: 2--%>
-        <%--},--%>
-        <%--splitLine:{     //去掉网格线--%>
-        <%--show:false--%>
-        <%--}--%>
-        <%--}],--%>
-        <%--yAxis: [--%>
-        <%--{--%>
-        <%--type: 'value'--%>
-        <%--}],--%>
-        <%--series: [{--%>
-        <%--name: '下载量',--%>
-        <%--type: 'bar',--%>
-        <%--//设置柱子的宽度--%>
-        <%--barWidth : 25,--%>
-        <%--data: data.dcount,--%>
-        <%--//配置样式--%>
-        <%--itemStyle: {--%>
-        <%--//通常情况下：--%>
-        <%--normal: {--%>
-        <%--//每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组--%>
-        <%--color: function (params) {--%>
-        <%--var colorList = ['rgb(164,205,238)','rgb(120,190,238)','rgb(80,170,227)', 'rgb(42,150,227)',--%>
-        <%--'rgb(42,130,227)','rgb(42,100,227)','rgb(42,75,227)',--%>
-        <%--'rgb(20,20,200)','rgb(42,46,150)','rgb(25,46,94)'];--%>
-        <%--// ['rgb(42,46,150)','rgb(20,20,200)','rgb(42,75,227)','rgb(42,100,227)','rgb(42,130,227)',--%>
-        <%--// 'rgb(42,150,227)','rgb(80,170,227)','rgb(120,190,238)','rgb(164,205,238)','rgb(195,200,235)'];--%>
-        <%--return colorList[params.dataIndex];--%>
-        <%--}--%>
-        <%--}--%>
-        <%--}--%>
-        <%--}]--%>
-        <%--};--%>
-        <%--chart.setOption(option);--%>
-        <%--}--%>
-        <%--});--%>
-
         function func_moreDetail() {
             $("#div1").hide();
             $.ajax({
@@ -973,7 +793,13 @@
                             x: 'center',
                             top: 'bottom'
                         },
-
+                        toolbox: {
+                            show : true,
+                            feature : {
+                                dataView : {show: true, readOnly: false},
+                                magicType: {show: true, type: ['line', 'bar']},
+                            }
+                        },
                         xAxis: [{
                             type: 'category',
                             data: data.name,
@@ -993,7 +819,7 @@
                         series: [{
                             name: '访问量',
                             type: 'bar',
-                            barWidth: 25,
+                            barWidth: 22,
                             data: data.visitCount,
                             //配置样式
                             itemStyle: {
@@ -1037,7 +863,13 @@
                             x: 'center',
                             top: 'bottom'
                         },
-
+                        toolbox: {
+                            show : true,
+                            feature : {
+                                dataView : {show: true, readOnly: false},
+                                magicType: {show: true, type: ['line', 'bar']},
+                            }
+                        },
                         xAxis: [{
                             type: 'category',
                             data: data.name,
@@ -1057,7 +889,7 @@
                         series: [{
                             name: '下载量',
                             type: 'bar',
-                            barWidth: 25,
+                            barWidth: 22,
                             data: data.downCount,
                             //配置样式
                             itemStyle: {
