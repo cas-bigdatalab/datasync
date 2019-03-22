@@ -51,15 +51,24 @@
         <%--<div class="uplod-head">
             <span>数据发布管理</span>
         </div>--%>
+        <div class="time_div"><a><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 数据管理</a>--&gt;<a>
             <shiro:hasRole name="admin">
-                <h3>数据发布管理</h3>
+                数据发布管理
             </shiro:hasRole>
             <shiro:hasRole name="root">
-                <h3>发布审核管理</h3>
+                发布审核管理
             </shiro:hasRole>
-
-            <hr>
-        <div class="alert alert-info" role="alert">
+        </a>
+        </div>
+        <div class="fabu_div"><h4>
+            <shiro:hasRole name="admin">
+                数据发布管理
+            </shiro:hasRole>
+            <shiro:hasRole name="root">
+                发布审核管理
+            </shiro:hasRole>
+        </h4></div>
+        <div class="alert alert-info fabu_div" role="alert">
             <!--查询条件 -->
             <div class="row">
                 <form class="form-inline" style="margin-bottom: 0px">
@@ -1089,8 +1098,8 @@
             ele.empty()
             ele.append(arrListStr)
         }
-        
-    //    审核提示框
+
+        //    审核提示框
         $(function () {
             $(":radio").click(function () {
                 if(this.checked){

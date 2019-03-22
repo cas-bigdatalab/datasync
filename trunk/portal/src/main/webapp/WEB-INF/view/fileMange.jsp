@@ -131,7 +131,7 @@
                     <input type="hidden" id="copyCache">
                 </div>
             </div>
-            <div class="file-list">
+            <div class="file-list" style="overflow-y: scroll;max-height: 600px;">
                 <table>
                     <thead>
                     <tr>

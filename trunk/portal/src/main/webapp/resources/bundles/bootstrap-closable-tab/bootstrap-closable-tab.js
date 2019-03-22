@@ -36,8 +36,13 @@ var closableTab = {
                 var containerId = "tab_container_" + val.substring(9);
 
                 if ($('#' + containerId).hasClass('active')) {
-                    $('#' + val).prev().addClass('active');
-                    $('#' + containerId).prev().addClass('active');
+                    if ($('#' + val).prev()[0]) {
+                        $('#' + val).prev().addClass('active');
+                        $('#' + containerId).prev().addClass('active');
+                    } else {
+                        $('#' + val).next().addClass('active');
+                        $('#' + containerId).next().addClass('active');
+                    }
                 }
                 $("#" + val).remove();
                 $("#" + containerId).remove();

@@ -139,7 +139,8 @@
                                     关系数据管理</a>
                                     <ul>
                                         <li class="l2-menu"><a href="${ctx}/dataConfiguration"><i class="fa fa-bars"></i>数据字段配置</a></li>
-                                        <li class="l2-menu"><a href="${ctx}/"><i class="fa fa-bars"></i>导入式建表</a></li>
+                                        <li class="l2-menu"><a href="${ctx}/createTableAndImportData"><i
+                                                class="fa fa-bars"></i>导入式建表</a></li>
                                         <li class="l2-menu"><a href="${ctx}/datatest"><i
                                                 class="fa fa-bars"></i>数据记录管理</a>
                                             <div id="alltableName" style="height:400px;overflow-y: scroll;display:none;margin-top:1%;">
@@ -219,19 +220,6 @@
         return date.Format("yyyy-MM-dd");
     }
 
-    $("#cus_User_id").click(function (ev) {
-        if ($(".cus_drop").is(":hidden")) {
-            $(".cus_drop").show();
-        } else {
-            $(".cus_drop").hide();
-        }
-        $("#cus_User_id").css("background-color", "#eee");
-        ev.stopPropagation()
-    });
-    $("body:not(.cus_ul)").click(function () {
-        $(".cus_drop").hide();
-        $("#cus_User_id").css("background-color", "")
-    });
     toastr.options = {
         "closeButton": true,
         "debug": false,
