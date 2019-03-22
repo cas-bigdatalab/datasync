@@ -13,7 +13,7 @@ var closableTab = {
             /*a:style="position: relative;padding:2px 20px 2px 15px"*/
             var li_tab = '<li role="presentation" class="" id="' + id + '"><a href="#' + container + '"  role="tab" data-toggle="tab" >' + tabItem.name;
             if (tabItem.closable) {
-                li_tab = li_tab + '<i class="glyphicon glyphicon-remove small" tabclose="' + id + '" style="position: absolute;right:4px;top: 4px;" ></i></a></li> ';
+                li_tab = li_tab + '<i class="glyphicon glyphicon-remove small" tabclose="' + id + '" style="position: absolute;right:4px;top: 4px;"  onclick="closableTab.closeTab(this)"></i></a></li> ';
             } else {
                 li_tab = li_tab + '</a></li>';
             }
