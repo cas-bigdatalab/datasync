@@ -172,7 +172,7 @@ li.l3-menu > a:hover i, li.l3-menu > a.active i {
     padding: 20px;
     /*height: 60%;*/
     height: 100%;
-    overflow-y: auto;
+    /*overflow-y: auto;*/
 }
 
 

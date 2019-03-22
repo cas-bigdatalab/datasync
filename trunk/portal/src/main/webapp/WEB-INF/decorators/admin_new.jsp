@@ -5,7 +5,7 @@
   Time: 15:02
   To change this template use File | Settings | File Templates.
 
-  TODO: replace admin.jsp
+  replace admin.jsp
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -64,60 +64,44 @@
             padding-top: 10px;
             padding-bottom: 10px;
         }
+
+        .btn {
+            border-radius: 6px !important;
+        }
+
+        table td, table th {
+            border-right: none !important;
+            border-left: none !important;
+        }
+
+        .page-content table tbody tr:hover {
+            background: #dddddd;
+        }
     </style>
 
 </head>
 
 
 <body>
-<div class="top_div">
-
-    <ul class="cus_ul">
-        <li>
-            <a href="#" id="cus_User_id">
-                <i class="glyphicon glyphicon-user"></i>
-                &nbsp;&nbsp;
-                <span>欢迎您！${sessionScope.userName}</span>
-                &nbsp;
-                <i class="fa fa-angle-down"></i>
-            </a>
-            <ul class="cus_drop">
-                <li>
-                    <a href="logout"><i class="icon-key"></i>&nbsp;安全退出</a>
-                </li>
-            </ul>
-        </li>
-    </ul>
-
-</div>
 
 <div class="con_div">
-
-    <%--<div class=" container tatle_div">
-        <shiro:hasRole name="root">
-            主题库后台管理系统
-        </shiro:hasRole>
-        <shiro:hasRole name="admin">
-            集中式数据管理与定制化融合发布工具
-        </shiro:hasRole>
-    </div>--%>
 
     <div class="page-container" style="min-height: 550px;width: 100%;margin: 0 auto;">
         <!-- BEGIN SIDEBAR -->
         <div class="page-sidebar-wrapper">
             <%--NEW BAR ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！--%>
-            <div class="page-sidebar" style="height:auto;right: 20px;">
+            <div class="page-sidebar" style="width: 18%">
                 <div class="left_bottom">
                     <div class="left_top"><img src="${ctx}/resources/img/logo.png"></div>
                     <div class="user_div">
-                        <table width="150" cellspacing="0" cellpadding="0" border="0" align="center">
+                        <table cellspacing="0" cellpadding="0" border="0" align="center">
                             <tbody>
                             <tr>
                                 <td colspan="2"><img src="${ctx}/resources/img/user.png" width="65" height="65"></td>
                             </tr>
                             <tr>
-                                <td>欢迎您！赵树理</td>
-                                <td class="tuichu"><a href="${ctx}/logout">退出</a></td>
+                                <td>欢迎您！${sessionScope.userName}</td>
+                                <td class="tuichu"><a style="border-radius: 6px" href="${ctx}/logout">退出</a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -165,13 +149,10 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li><a class="active" href="${ctx}/dataConfiguration"><i class="fa fa-cog"
-                                                                                         aria-hidden="true"></i> 数据配置管理</a>
-                                </li>
                                 <li><a href="${ctx}/dataRelease"><i class="fa fa-file-text-o" aria-hidden="true"></i>
                                     数据发布管理</a></li>
                                 <li><a href="${ctx}/fileMange"><i class="fa fa-file-text-o" aria-hidden="true"></i>
-                                    文件管理</a></li>
+                                    文件数据管理</a></li>
 
                             </ul>
                         </shiro:hasRole>
