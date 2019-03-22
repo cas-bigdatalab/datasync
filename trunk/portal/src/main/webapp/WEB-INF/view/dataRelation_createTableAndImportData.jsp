@@ -126,7 +126,7 @@
                 </tbody>
             </table>
         </div>
-        <button type="button" onclick="insertValue(this)" data-dismiss="modal"
+        <button type="button" onclick="createTableAndInsertValue(this)" data-dismiss="modal"
                 class="saveExcelSuccess btn bule" tablename="{{tableName}}">上传数据
         </button>
     </script>
@@ -137,21 +137,6 @@
     <div class="right_div">
         <div class="time_div"><a><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 关系数据管理</a>--&gt;<a
         >导入式建表</a></div>
-        <div class="fabu_div">
-            <table class="fabu_div_table" cellspacing="0" cellpadding="0" border="0">
-                <tbody>
-                <tr>
-                    <td>数据集名称：</td>
-                    <td><input type="text" class="form-control" aria-label="..."></td>
-                    <td>数据类型：</td>
-                    <td><select class="form-control input-lg"></select></td>
-                    <td>状态：</td>
-                    <td><select class="form-control input-lg"></select></td>
-                    <td id="ser_div"><a href=""><i class="fa fa-search" aria-hidden="true"></i> 查询</a></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
         <div id="excelTableList">
             <div class="qiehuan_div">
                 <ul class="nav nav-tabs activeTabs" role="tablist">
@@ -186,20 +171,31 @@
     <script>
 
         var sub = '${sessionScope.SubjectCode}';
+
+
         (function () {
             initExcelUpload();
+
+            closableTab.afterCloseTab = function (item) {
+                if (!$(".nav.nav-tabs.activeTabs li")[0]) {
+                    initExcelUpload();
+                }
+            }
         })();
+
 
         function initExcelUpload() {
             $("#uploadExcel").show();
-            $("#excel").val("");
+            $("#excelFile").val("");
             $("#excelTableList").hide();
         }
+
 
         function showExcelTables() {
             $("#uploadExcel").hide();
             $("#excelTableList").show();
         }
+
 
         function uploadExcel() {
             var formData = new FormData($("#fileForm")[0]);
@@ -230,7 +226,6 @@
                     index = layer.load(1, {
                         shade: [0.5, '#fff'] //0.1透明度的白色背景
                     });
-                    $("#excelFile").attr("disabled", "disabled");
                 },
                 success: function (result) {
                     var resultJson = JSON.parse(result);
@@ -285,7 +280,7 @@
                 var data = new FormData($("#fileForm")[0]);
                 var s = JSON.stringify(tableData.data);
                 data.append("tableData", s);
-                data.append("subjectCode", $.trim($("#subjectCode").val()));
+                data.append("subjectCode", sub);
                 data.append("tableName", tableName);
 
                 var requestUrl = "";
@@ -313,7 +308,7 @@
                             toastr["error"]("错误！", jsonData.message);
                         } else {
                             toastr["success"]("提示！", jsonData.message);
-                            var $saveExcelSuccess = $("#saveExcelSuccess");
+                            var $saveExcelSuccess = $(_this);
                             $saveExcelSuccess.text("保存成功");
                             $saveExcelSuccess.attr('disabled', 'disabled');
 
@@ -327,11 +322,7 @@
             }
         }
 
-        /**
-         * 将表格数据转化为 json格式
-         * @param table
-         * @returns {*}
-         */
+
         function parseTableData2Json(table) {
             var result = {};
             var rows = table.rows;
@@ -346,14 +337,14 @@
                 * 5：比对数据库已存在表字段 与excel新导入字段 导入新增数据
                 * */
                 if (cellLength === 6) {
-                    var b = serializeTableFor6(cellLength, cells, trl, i);
+                    var b = serializeTableForCreate(cellLength, cells, trl, i);
                     if (b === false) {
                         return b;
                     }
                     result["type"] = "createAndInsert";
                 }
                 if (cellLength === 5) {
-                    serializeTableFor5(cellLength, cells, trl, i);
+                    serializeTableForInsert(cellLength, cells, trl, i);
                     result["type"] = "insert";
                 }
             }
@@ -361,7 +352,8 @@
             return result;
         }
 
-        function serializeTableFor6(cellLength, cells, trl, i) {
+
+        function serializeTableForCreate(cellLength, cells, trl, i) {
             var tdl = {};
             for (var j = 0; j < cellLength; j++) {
                 if (j === 1) {
@@ -401,7 +393,8 @@
             trl.push(tdl);
         }
 
-        function serializeTableFor5(cellLength, cells, trl, i) {
+
+        function serializeTableForInsert(cellLength, cells, trl, i) {
             var tdl = {};
             for (var j = 0; j < cellLength; j++) {
                 if (j === 0) {
@@ -416,19 +409,7 @@
             trl.push(tdl);
         }
 
-        function insertValue(_this) {
 
-        }
-
-        /**
-         * 关闭前确认
-         * @param i 被关闭的当前元素
-         */
-        function closeTable(i) {
-            bootbox.confirm("<span style='font-size: 16px'>确认要关闭此条记录吗?</span>", function () {
-                closableTab.closeTab(i)
-            })
-        }
     </script>
 </div>
 <%--js 结束--%>

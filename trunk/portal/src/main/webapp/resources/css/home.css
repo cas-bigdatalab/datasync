@@ -600,7 +600,7 @@ p.pic {
 
 .file-list td.file-file div {
     padding-left: 25px;
-    background: url("../img/folder.png") 0 center no-repeat;
+    background: url("../img/file.png") 0 center no-repeat;
     cursor: pointer;
 }
 
