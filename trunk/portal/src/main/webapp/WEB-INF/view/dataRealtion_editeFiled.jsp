@@ -21,17 +21,6 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/fileinput.min.css">
     <link href="${ctx}/resources/bundles/layerJs/theme/default/layer.css" rel="stylesheet" type="text/css"/>
     <style type="text/css">
-        .cus-input {
-            font-size: 14px;
-            font-weight: normal;
-            color: #333333;
-            background-color: white;
-            border: 1px solid #e5e5e5;
-        }
-
-        .tr_class {
-            text-align: center;
-        }
     </style>
 </head>
 

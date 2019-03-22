@@ -28,7 +28,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
 
-    <link href="${ctx}/resources/bundles/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="${ctx}/resources/bundles/font-awesome-4.7.0/css/font-awesome.min.css">
     <link href="${ctx}/resources/bundles/bootstrapv3.3/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/metronic/global/css/components.css" rel="stylesheet" type="text/css"/>
@@ -138,13 +138,13 @@
                                 <li><a href="javaScript:void(0);"><i class="fa fa-file-text-o" aria-hidden="true"></i>
                                     关系数据管理</a>
                                     <ul>
-                                        <li class="l2-menu"><a href="${ctx}/"><i class="fa fa-bars"></i>数据字段配置</a></li>
-                                        <li class="l2-menu"><a href="${ctx}/createTableAndImportData"><i
-                                                class="fa fa-bars"></i>导入式建表</a></li>
+                                        <li class="l2-menu"><a href="${ctx}/dataConfiguration"><i class="fa fa-bars"></i>数据字段配置</a></li>
+                                        <li class="l2-menu"><a href="${ctx}/"><i class="fa fa-bars"></i>导入式建表</a></li>
                                         <li class="l2-menu"><a href="${ctx}/datatest"><i
                                                 class="fa fa-bars"></i>数据记录管理</a>
-                                            <div id="alltableName"
-                                                 style="width: 100%;height:500px;overflow-y: scroll;display:none;margin-top:1%;"></div>
+                                            <div id="alltableName" style="height:400px;overflow-y: scroll;display:none;margin-top:1%;">
+
+                                            </div>
                                         </li>
                                         </li>
                                     </ul>
@@ -177,7 +177,7 @@
 <div class="foot_div">2018-2020 &copy; 中国科学院计算机网络信息中心.版权所有.</div>
 <script type="text/html" id="tableNameTempl">
     {{each list as value i}}
-    <li style="text-align: center; border-bottom: 1px #cad9ea solid"><a href="javaScript:void(0)"
+    <li class="l3-menu" style=" border-bottom: 1px #cad9ea solid"><a href="javaScript:void(0)"
                                                                         onclick="editTableData(this,1)" id="{{value}}">{{value}}</a>
     </li>
     {{/each}}
