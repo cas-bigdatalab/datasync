@@ -580,9 +580,10 @@
 
         //点击增加按钮增加数据
         function addTablefuntion(dataTypeArr,strs2,pkColumnArr,autoAddArr) {
-            //获得当前页码
-            // var currentPage = $("#currentPageNo").html();
             var tableName = $("#ul_div111 li.active a").text();
+            //获得当前页码
+            var currentPage = $("#currentPageNo"+tableName +"").html();
+
             var dataArr = [];
             var S_dataType=dataTypeArr.split(",");
             var S_column=strs2.split(",");
@@ -853,7 +854,7 @@
                     } else if (data.data === "1") {
 
                         toastr.success("添加成功!");
-                        clickPageButton(subjectCode, tableName, 1);
+                        clickPageButton(subjectCode, tableName, currentPage);
                         $("#staticAddData").modal("hide");
                     } else if (data.data === "-1") {
 
@@ -911,12 +912,12 @@
                                 }
                             }else if(dataTypeArr[i]==="date"){
                                 if(strs[i]!==" " && strs[i]!==null){
-                                    s_tbody+="<td  style='width:40%;'><input class='datainp' id='"+strs2[i] +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' onClick=\"jeDate({dateCell:'#'+'"+strs2[i] +"',isTime:true,format:'YYYY-MM-DD'})\" /></td></tr>";
+                                    s_tbody+="<td  style='width:40%;'><input class='datainp' id='"+ strs2[i] +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' onClick=\"jeDate({dateCell:'#'+'"+strs2[i] +"',isTime:true,format:'YYYY-MM-DD'})\" /></td></tr>";
                                 }else{
-                                    s_tbody+="<td  style='width:40%;'><input class='datainp' id='"+strs2[i] +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' onClick=\"jeDate({dateCell:'#'+'"+strs2[i] +"',isTime:true,format:'YYYY-MM-DD'})\" /></td></tr>";
+                                    s_tbody+="<td  style='width:40%;'><input class='datainp' id='"+ strs2[i] +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' onClick=\"jeDate({dateCell:'#'+'"+strs2[i] +"',isTime:true,format:'YYYY-MM-DD'})\" /></td></tr>";
                                 }
                             }else{
-                                s_tbody+="<td  style='width:40%;'><input title='" + strs[i] + "' id='"+strs2[i] +"' style='width:100%;height=100%'   name=" + strs2[i] + " value='" + strs[i] + "' dataType='"+dataTypeArr[i] +"' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 5px;'></p></td></tr>";
+                                s_tbody+="<td  style='width:40%;'><input title='" + strs[i] + "' id='"+ strs2[i] +"' style='width:100%;height=100%'   name=" + strs2[i] + " value='" + strs[i] + "' dataType='" + dataTypeArr[i] +"' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 5px;'></p></td></tr>";
                             }
                         }
                     }
@@ -1534,7 +1535,8 @@
             bootbox.confirm("<span style='font-size: 16px'>确认要删除此条记录吗?</span>", function (r) {
                 if (r) {
                     //获得当前页码
-                    var currentPage = $("#currentPageNo").html();
+                    //获得当前页码
+                    var currentPage = $("#currentPageNo"+tableName +"").html();
                     $.ajax({
                         url: "${ctx}/deleteData",
                         type: "POST",
