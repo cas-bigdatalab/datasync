@@ -110,7 +110,7 @@ public class DataSrcService {
             while (set.next()) {
                 for (int i = 1; i <= rsm.getColumnCount(); i++) {
                     if (set.getString(rsm.getColumnName(i)) == null||set.getString(rsm.getColumnName(i)).equals("")){
-                        list.add(" ");
+                        list.add("");
                     }else {
                         list.add(set.getString(rsm.getColumnName(i)));
                     }
