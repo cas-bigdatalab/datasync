@@ -48,7 +48,7 @@
 <div class="page-content">
     <div class="right_div">
         <div class="time_div"><a><i class="fa fa-chevron-circle-right" aria-hidden="true"></i>关系数据管理</a>--><a>数据记录管理</a></div>
-            <div class="fabu_div2">数据配置</div>
+            <div class="fabu_div2">数据记录管理</div>
         <div style="">
 
 

@@ -19,8 +19,9 @@
 
 <body>
     <div class="page-content">
-        <h3>主题库注册管理</h3>
-        <hr />
+        <div class="right_div">
+            <div class="time_div"><a href=""><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> DataSync</a>--><a href="">主题库注册管理</a></div>
+            <div class="fabu_div2">主题库注册管理</div>
 
         <!--专业库筛选条件-->
         <div class="alert alert-info" role="alert">
@@ -69,7 +70,7 @@
             </div>
         </div>
     </div>
-
+    </div>
     <script type="text/html" id="subjectListTable">
         {{each list}}
         <tr>
@@ -355,440 +356,437 @@
             </div>
         </div>
     </div>--%>
+</body>
 
+<!--为了加快页面加载速度，请把js文件放到这个div里-->
+<div id="siteMeshJavaScript">
+    <script type="text/javascript" src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/form-validation/form-validation.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/artTemplate/template.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootbox/bootbox.min.js"></script>
+    <script type="text/javascript">
+        var nextSerialNo = 1;
+        var currentPage = 1;
 
-    <!--为了加快页面加载速度，请把js文件放到这个div里-->
-    <div>
-        <script type="text/javascript" src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-        <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
-        <script type="text/javascript" src="${ctx}/resources/bundles/form-validation/form-validation.js"></script>
-        <script type="text/javascript" src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.js"></script>
-        <script type="text/javascript" src="${ctx}/resources/bundles/artTemplate/template.js"></script>
-        <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
-        <script type="text/javascript" src="${ctx}/resources/bundles/bootbox/bootbox.min.js"></script>
-        <script type="text/javascript">
-            var nextSerialNo = 1;
-            var currentPage = 1;
+        //初始化
+        $(function () {
+            console.log("主题库页面初始化");
+            getSubject(1);
 
-            //初始化
-            $(function () {
-                console.log("主题库页面初始化");
-                getSubject(1);
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
 
-                toastr.options = {
-                    "closeButton": true,
-                    "debug": false,
-                    "positionClass": "toast-top-right",
-                    "onclick": null,
-                    "showDuration": "1000",
-                    "hideDuration": "1000",
-                    "timeOut": "5000",
-                    "extendedTimeOut": "1000",
-                    "showEasing": "swing",
-                    "hideEasing": "linear",
-                    "showMethod": "fadeIn",
-                    "hideMethod": "fadeOut"
-                };
-
-                //新建、修改专业库对话框的验证
-                var addSubjectValid = {
-                    errorElement: "span",
-                    errorClass: "error-message",
-                    focusInvalid: false,
-                    rules: {
-                        subjectName: "required",
-                        subjectCode: {
-                            required: true,
-                            remote:
-                                {
-                                    url: "${ctx}/subjectMgmt/querySubjectCode",
-                                    type: "get",
-                                    data:
+            //新建、修改专业库对话框的验证
+            var addSubjectValid = {
+                errorElement: "span",
+                errorClass: "error-message",
+                focusInvalid: false,
+                rules: {
+                    subjectName: "required",
+                    subjectCode: {
+                        required: true,
+                        remote:
+                            {
+                                url: "${ctx}/subjectMgmt/querySubjectCode",
+                                type: "get",
+                                data:
+                                    {
+                                        'subjectCode': function()
                                         {
-                                            'subjectCode': function()
-                                            {
-                                                return $("#subjectCode").val();
-                                            }
-                                        },
-                                    dataType: "json"
-                                }
-                        },
-                        image: "required",
-                        admin: {
-                            required: true,
-                            remote:
-                                {
-                                    url: "${ctx}/subjectMgmt/queryAdmin",
-                                    type: "get",
-                                    data:
+                                            return $("#subjectCode").val();
+                                        }
+                                    },
+                                dataType: "json"
+                            }
+                    },
+                    image: "required",
+                    admin: {
+                        required: true,
+                        remote:
+                            {
+                                url: "${ctx}/subjectMgmt/queryAdmin",
+                                type: "get",
+                                data:
+                                    {
+                                        'admin': function()
                                         {
-                                            'admin': function()
-                                            {
-                                                return $("#admin").val();
-                                            }
-                                        },
-                                    dataType: "json"
-                                }
-                        },
-                        adminPasswd: {
-                            required: true,
-                            minlength: 6
-                        },
-                        contact: "required",
-                        phone:
+                                            return $("#admin").val();
+                                        }
+                                    },
+                                dataType: "json"
+                            }
+                    },
+                    adminPasswd: {
+                        required: true,
+                        minlength: 6
+                    },
+                    contact: "required",
+                    phone:
                         {
                             required: true,
                             maxlength:11,
                             maxlength:11,
                             isphoneNum:true
                         },
-                        email: {
-                            required: false,
-                            email: true
-                        },
-                        serialNo: "required"
+                    email: {
+                        required: false,
+                        email: true
                     },
-                    messages: {
-                        subjectName: "请输入主题库名称",
-                        subjectCode: {
-                            required: "请输入主题库代码",
-                            remote: "此主题库代码已经存在！"
-                        },
-                        image: "请选择一个图片",
-                        admin: {
-                            required: "请输入主题库管理员账号",
-                            remote: "此主题库管理员账号已经存在！"
-                        },
-                        adminPasswd: {
-                            required: "请输入主题库管理密码",
-                            minlength: "密码至少为6位"
-                        },
-                        contact: "请输入主题库联系人",
-                        phone: {
-                            required:"请输入手机号",
-                            maxlength:"请填写11位的手机号",
-                            minlength:"请填写11位的手机号",
-                            isphoneNum:"请填写正确的手机号码"
-                        },
-                        email: "请输入一个正确的email",
-                        serialNo: "请输入主题库的序号"
-                    }
-                };
+                    serialNo: "required"
+                },
+                messages: {
+                    subjectName: "请输入主题库名称",
+                    subjectCode: {
+                        required: "请输入主题库代码",
+                        remote: "此主题库代码已经存在！"
+                    },
+                    image: "请选择一个图片",
+                    admin: {
+                        required: "请输入主题库管理员账号",
+                        remote: "此主题库管理员账号已经存在！"
+                    },
+                    adminPasswd: {
+                        required: "请输入主题库管理密码",
+                        minlength: "密码至少为6位"
+                    },
+                    contact: "请输入主题库联系人",
+                    phone: {
+                        required:"请输入手机号",
+                        maxlength:"请填写11位的手机号",
+                        minlength:"请填写11位的手机号",
+                        isphoneNum:"请填写正确的手机号码"
+                    },
+                    email: "请输入一个正确的email",
+                    serialNo: "请输入主题库的序号"
+                }
+            };
 
-                jQuery.validator.addMethod("isphoneNum", function(value, element) {
-                    debugger
-                    var length = value.length;
-                    var mobile = /^1[0-9]{1}[0-9]{9}$/;
-                    return this.optional(element) || (length == 11 && mobile.test(value));
-                }, "请填写正确的手机号码");
+            jQuery.validator.addMethod("isphoneNum", function(value, element) {
+                debugger
+                var length = value.length;
+                var mobile = /^1[0-9]{1}[0-9]{9}$/;
+                return this.optional(element) || (length == 11 && mobile.test(value));
+            }, "请填写正确的手机号码");
 
-                var updateSubjectValid = {
-                    errorElement: 'span',
-                    errorClass: 'error-message',
-                    focusInvalid: false,
-                    rules: {
-                        subjectName: "required",
-                        subjectCode: "required",
-                        admin: "required",
-                        adminPasswd: {
+            var updateSubjectValid = {
+                errorElement: 'span',
+                errorClass: 'error-message',
+                focusInvalid: false,
+                rules: {
+                    subjectName: "required",
+                    subjectCode: "required",
+                    admin: "required",
+                    adminPasswd: {
+                        required: true,
+                        minlength: 6
+                    },
+                    contact: "required",
+                    phone:
+                        {
                             required: true,
-                            minlength: 6
+                            maxlength:11,
+                            maxlength:11,
+                            isphoneNum:true
                         },
-                        contact: "required",
-                        phone:
-                            {
-                                required: true,
-                                maxlength:11,
-                                maxlength:11,
-                                isphoneNum:true
-                            },
-                        email: {
-                            required: false,
-                            email: true
-                        },
-                        serialNo: "required"
+                    email: {
+                        required: false,
+                        email: true
                     },
-                    messages: {
-                        subjectName: "请输入主题库名称",
-                        subjectCode: "请输入主题库代码",
-                        admin: "请输入主题库管理员账号",
-                        adminPasswd: {
-                            required: "请输入主题库管理密码",
-                            minlength: "密码至少为6位"
-                        },
-                        contact: "请输入主题库联系人",
-                        phone: {
-                            required:"请输入手机号",
-                            maxlength:"请填写11位的手机号",
-                            minlength:"请填写11位的手机号",
-                            isphoneNum:"请填写正确的手机号码"
-                        },
-                        email: "请输入一个正确的email",
-                        serialNo: "请输入主题库的序号"
+                    serialNo: "required"
+                },
+                messages: {
+                    subjectName: "请输入主题库名称",
+                    subjectCode: "请输入主题库代码",
+                    admin: "请输入主题库管理员账号",
+                    adminPasswd: {
+                        required: "请输入主题库管理密码",
+                        minlength: "密码至少为6位"
+                    },
+                    contact: "请输入主题库联系人",
+                    phone: {
+                        required:"请输入手机号",
+                        maxlength:"请填写11位的手机号",
+                        minlength:"请填写11位的手机号",
+                        isphoneNum:"请填写正确的手机号码"
+                    },
+                    email: "请输入一个正确的email",
+                    serialNo: "请输入主题库的序号"
+                }
+            };
+            $("#addSubjectForm").validate(addSubjectValid);
+            $("#updateSubjectForm").validate(updateSubjectValid);
+        });
+
+        //专业库名称的模糊搜索
+        function searchSubject()
+        {
+            getSubject(1);
+        }
+
+        //查询专业库
+        function getSubject(pageNum) {
+            console.log("getSubject请求已经发送了");
+            $.ajax({
+                url: "${ctx}/subjectMgmt/querySubject",
+                type: "get",
+                data: {
+                    "subjectNameFilter": $("#subjectNameFilter").val().trim(),
+                    "pageNum": pageNum
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log("获得subject成功！");
+                    console.log("success - data = " + data);
+
+                    var totalSubject = data.total;
+                    if (totalSubject == 0)
+                    {
+                        $("#pagination").off();
+                        $(".table-message").show();
+                        $(".table-message").html("暂时没有数据");
+                        $(".page-message").hide();
+                        $(".page-list").hide();
+                        $("#subjectList").hide();
                     }
-                };
-                $("#addSubjectForm").validate(addSubjectValid);
-                $("#updateSubjectForm").validate(updateSubjectValid);
+                    else
+                    {
+                        $(".table-message").hide();
+                        $(".page-message").show();
+                        $(".page-list").show();
+                        $("#subjectList").show();
+
+                        var html = template("subjectListTable", data);
+                        $("#subjectList").empty();
+                        $("#subjectList").append(html);
+
+                        $("#pageNum").html(data.pageNum);
+                        currentPage = pageNum;
+                        $("#totalPages").html(data.totalPages);
+                        $("#total").html(data.total);
+
+
+                        //分页
+                        if ($("#pagination .bootpag").length != 0) {
+                            $("#pagination").off();
+                            $('#pagination').empty();
+                        }
+                        $('#pagination').bootpag({
+                            total: data.totalPages,
+                            page: data.pageNum,
+                            maxVisible: 5,
+                            leaps: true,
+                            firstLastUse: true,
+                            first: '首页',
+                            last: '尾页',
+                            wrapClass: 'pagination',
+                            activeClass: 'active',
+                            disabledClass: 'disabled',
+                            nextClass: 'next',
+                            prevClass: 'prev',
+                            lastClass: 'last',
+                            firstClass: 'first'
+                        }).on('page', function (event, num) {
+                            getSubject(num);
+                            currentPage = num;
+                        });
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    console.log("textStatus = " + textStatus);
+                    console.log("errorThrown = " + errorThrown);
+                }
+            });
+        }
+
+        function addSubject()
+        {
+            $.ajax({
+                url: "${ctx}/subjectMgmt/getNextSerialNo",
+                type: "get",
+                data: {},
+                dataType: "json",
+                success: function (data) {
+                    $("#serialNo").val(data);
+                    $("#addSubjectDialog").modal("show");
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    console.log("textStatus = " + textStatus);
+                    console.log("errorThrown = " + errorThrown);
+                }
+            });
+        }
+
+        //添加专业库
+        function agreeAddSubject()
+        {
+            if (!$("#addSubjectForm").valid()) {
+                return;
+            }
+
+            var formData = new FormData();
+
+            formData.append("subjectName", $("#subjectName").val());
+            formData.append("subjectCode", $("#subjectCode").val());
+            formData.append('image', $('#image').get(0).files[0]);
+            formData.append('brief', $("#brief").val());
+            formData.append("admin", $("#admin").val());
+            formData.append("adminPasswd", $("#adminPasswd").val());
+            formData.append("contact", $("#contact").val());
+            formData.append("phone", $("#phone").val());
+            formData.append("email", $("#email").val());
+            formData.append("serialNo", $("#serialNo").val());
+
+            $.ajax({
+                url: "${ctx}/subjectMgmt/addSubject",
+                type: "post",
+                contentType:false,
+                processData:false,
+                data: formData,
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    $("#addSubjectDialog").modal("hide");
+                    getSubject(1); //没有搜索条件的情况下，显示第一页
+                    location.reload();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown){
+                    console.log("textStatus = " + textStatus);
+                    console.log("errorThrown = " + errorThrown);
+                }
             });
 
-            //专业库名称的模糊搜索
-            function searchSubject()
-            {
-                getSubject(1);
-            }
+        }
 
-            //查询专业库
-            function getSubject(pageNum) {
-                console.log("getSubject请求已经发送了");
-                $.ajax({
-                    url: "${ctx}/subjectMgmt/querySubject",
-                    type: "get",
-                    data: {
-                        "subjectNameFilter": $("#subjectNameFilter").val().trim(),
-                        "pageNum": pageNum
-                    },
-                    dataType: "json",
-                    success: function (data) {
-                        console.log("获得subject成功！");
-                        console.log("success - data = " + data);
+        //更新专业库
+        function updateSubject(updateBtn) {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: '${ctx}/subjectMgmt/querySubjectById',
+                data: {id: $(updateBtn).parent().attr("id")},
+                dataType: "json",
+                success: function (data){
+                    $("#idM").val(data.id);
+                    $("#subjectNameM").val(data.subjectName);
+                    $("#subjectCodeM").val(data.subjectCode);
+                    $("#imageM").attr("src", data.imagePath)
+                    $("#briefM").val(data.brief);
+                    $("#adminM").val(data.admin);
+                    $("#adminPasswdM").val(data.adminPasswd);
+                    $("#contactM").val(data.contact);
+                    $("#phoneM").val(data.phone);
+                    $("#emailM").val(data.email);
+                    $("#serialNoM").val(data.serialNo);
 
-                        var totalSubject = data.total;
-                        if (totalSubject == 0)
-                        {
-                            $("#pagination").off();
-                            $(".table-message").show();
-                            $(".table-message").html("暂时没有数据");
-                            $(".page-message").hide();
-                            $(".page-list").hide();
-                            $("#subjectList").hide();
-                        }
-                        else
-                        {
-                            $(".table-message").hide();
-                            $(".page-message").show();
-                            $(".page-list").show();
-                            $("#subjectList").show();
-
-                            var html = template("subjectListTable", data);
-                            $("#subjectList").empty();
-                            $("#subjectList").append(html);
-
-                            $("#pageNum").html(data.pageNum);
-                            currentPage = pageNum;
-                            $("#totalPages").html(data.totalPages);
-                            $("#total").html(data.total);
-
-
-                            //分页
-                            if ($("#pagination .bootpag").length != 0) {
-                                $("#pagination").off();
-                                $('#pagination').empty();
-                            }
-                            $('#pagination').bootpag({
-                                total: data.totalPages,
-                                page: data.pageNum,
-                                maxVisible: 5,
-                                leaps: true,
-                                firstLastUse: true,
-                                 first: '首页',
-                                 last: '尾页',
-                                 wrapClass: 'pagination',
-                                 activeClass: 'active',
-                                 disabledClass: 'disabled',
-                                 nextClass: 'next',
-                                 prevClass: 'prev',
-                                 lastClass: 'last',
-                                 firstClass: 'first'
-                            }).on('page', function (event, num) {
-                                getSubject(num);
-                                currentPage = num;
-                            });
-                        }
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown){
-                        console.log("textStatus = " + textStatus);
-                        console.log("errorThrown = " + errorThrown);
-                    }
-                });
-            }
-
-            function addSubject()
-            {
-                $.ajax({
-                    url: "${ctx}/subjectMgmt/getNextSerialNo",
-                    type: "get",
-                    data: {},
-                    dataType: "json",
-                    success: function (data) {
-                        $("#serialNo").val(data);
-                        $("#addSubjectDialog").modal("show");
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown){
-                        console.log("textStatus = " + textStatus);
-                        console.log("errorThrown = " + errorThrown);
-                    }
-                });
-            }
-
-            //添加专业库
-            function agreeAddSubject()
-            {
-                if (!$("#addSubjectForm").valid()) {
-                    return;
+                    $("#updateSubjectDialog").modal("show");
+                },
+                error: function(data) {
+                    console.log(data);
                 }
-
-                var formData = new FormData();
-
-                formData.append("subjectName", $("#subjectName").val());
-                formData.append("subjectCode", $("#subjectCode").val());
-                formData.append('image', $('#image').get(0).files[0]);
-                formData.append('brief', $("#brief").val());
-                formData.append("admin", $("#admin").val());
-                formData.append("adminPasswd", $("#adminPasswd").val());
-                formData.append("contact", $("#contact").val());
-                formData.append("phone", $("#phone").val());
-                formData.append("email", $("#email").val());
-                formData.append("serialNo", $("#serialNo").val());
-
-                $.ajax({
-                    url: "${ctx}/subjectMgmt/addSubject",
-                    type: "post",
-                    contentType:false,
-                    processData:false,
-                    data: formData,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        $("#addSubjectDialog").modal("hide");
-                        getSubject(1); //没有搜索条件的情况下，显示第一页
-                        location.reload();
-                    },
-                    error: function(XMLHttpRequest, textStatus, errorThrown){
-                        console.log("textStatus = " + textStatus);
-                        console.log("errorThrown = " + errorThrown);
-                    }
-                });
-
+            });
+        }
+        function agreeUpdateSubject()
+        {
+            if (!$("#updateSubjectForm").valid()) {
+                return;
             }
 
-            //更新专业库
-            function updateSubject(updateBtn) {
-                $.ajax({
-                    type: "GET",
-                    async: false,
-                    url: '${ctx}/subjectMgmt/querySubjectById',
-                    data: {id: $(updateBtn).parent().attr("id")},
-                    dataType: "json",
-                    success: function (data){
-                        $("#idM").val(data.id);
-                        $("#subjectNameM").val(data.subjectName);
-                        $("#subjectCodeM").val(data.subjectCode);
-                        $("#imageM").attr("src", data.imagePath)
-                        $("#briefM").val(data.brief);
-                        $("#adminM").val(data.admin);
-                        $("#adminPasswdM").val(data.adminPasswd);
-                        $("#contactM").val(data.contact);
-                        $("#phoneM").val(data.phone);
-                        $("#emailM").val(data.email);
-                        $("#serialNoM").val(data.serialNo);
+            var formData = new FormData();
+            formData.append("id", $("#idM").val());
+            formData.append("subjectName", $("#subjectNameM").val());
+            formData.append("subjectCode", $("#subjectCodeM").val());
+            formData.append('image', $('#imageM').get(0).files[0]);
+            formData.append('brief', $("#briefM").val());
+            formData.append("admin", $("#adminM").val());
+            formData.append("adminPasswd", $("#adminPasswdM").val());
+            formData.append("contact", $("#contactM").val());
+            formData.append("phone", $("#phoneM").val());
+            formData.append("email", $("#emailM").val());
+            formData.append("serialNo", $("#serialNoM").val());
 
-                        $("#updateSubjectDialog").modal("show");
-                    },
-                    error: function(data) {
-                        console.log(data);
-                    }
-                });
-            }
-            function agreeUpdateSubject()
-            {
-                if (!$("#updateSubjectForm").valid()) {
-                    return;
+            console.log("agreeUpdateSubject - formData = " + formData);
+
+            $.ajax({
+                url: "${ctx}/subjectMgmt/updateSubject",
+                type: "post",
+                contentType:false,
+                processData:false,
+                data: formData,
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    $("#updateSubjectDialog").modal("hide");
+                    getSubject(1); //没有搜索条件的情况下，显示第一页
+                    location.reload();
+                },
+                error: function(data) {
+
                 }
+            });
+        }
 
-                var formData = new FormData();
-                formData.append("id", $("#idM").val());
-                formData.append("subjectName", $("#subjectNameM").val());
-                formData.append("subjectCode", $("#subjectCodeM").val());
-                formData.append('image', $('#imageM').get(0).files[0]);
-                formData.append('brief', $("#briefM").val());
-                formData.append("admin", $("#adminM").val());
-                formData.append("adminPasswd", $("#adminPasswdM").val());
-                formData.append("contact", $("#contactM").val());
-                formData.append("phone", $("#phoneM").val());
-                formData.append("email", $("#emailM").val());
-                formData.append("serialNo", $("#serialNoM").val());
+        //删除专业库
+        function deleteSubject(deleteBtn)
+        {
+            var id = $(deleteBtn).parent().attr("id");
 
-                console.log("agreeUpdateSubject - formData = " + formData);
+            console.log("idOfSubjectToBeDeleted = " + id);
 
-                $.ajax({
-                    url: "${ctx}/subjectMgmt/updateSubject",
-                    type: "post",
-                    contentType:false,
-                    processData:false,
-                    data: formData,
-                    dataType: "json",
-                    success: function (data) {
-                        console.log(data);
-                        $("#updateSubjectDialog").modal("hide");
-                        getSubject(1); //没有搜索条件的情况下，显示第一页
-                        location.reload();
-                    },
-                    error: function(data) {
-
-                    }
-                });
-            }
-
-            //删除专业库
-            function deleteSubject(deleteBtn)
-            {
-                var id = $(deleteBtn).parent().attr("id");
-
-                console.log("idOfSubjectToBeDeleted = " + id);
-
-                bootbox.confirm("<span style='font-size: 16px'>确认要删除此条记录吗?</span>",
-                    function (result)
+            bootbox.confirm("<span style='font-size: 16px'>确认要删除此条记录吗?</span>",
+                function (result)
+                {
+                    if (result)
                     {
-                        if (result)
-                        {
-                            bootbox.confirm("<span style='font-size: 16px'>专题库相关信息很重要，请再次确认要删除吗?</span>", function(result)
+                        bootbox.confirm("<span style='font-size: 16px'>专题库相关信息很重要，请再次确认要删除吗?</span>", function(result)
+                            {
+                                if (result)
                                 {
-                                    if (result)
-                                    {
-                                        var deleteUrl = "${ctx}/subjectMgmt/deleteSubject?id=" + id + "&pageNum=" + 1;
-                                        $.ajax({
-                                            url: deleteUrl,
-                                            type: "get",
-                                            dataType: "text",
-                                            success: function (data) {
-                                                console.log(data);
-                                                console.log("typeof data = " + (typeof data));
-                                                if (data.trim() == "1") {
-                                                    toastr["success"]("删除成功！", "数据删除");
-                                                    getSubject(currentPage);
-                                                }
-                                                else {
-                                                    toastr["error"]("删除失败！", "数据删除");
-                                                }
-                                            },
-                                            error: function(data)
-                                            {
-                                                console.log(data);
+                                    var deleteUrl = "${ctx}/subjectMgmt/deleteSubject?id=" + id + "&pageNum=" + 1;
+                                    $.ajax({
+                                        url: deleteUrl,
+                                        type: "get",
+                                        dataType: "text",
+                                        success: function (data) {
+                                            console.log(data);
+                                            console.log("typeof data = " + (typeof data));
+                                            if (data.trim() == "1") {
+                                                toastr["success"]("删除成功！", "数据删除");
+                                                getSubject(currentPage);
+                                            }
+                                            else {
                                                 toastr["error"]("删除失败！", "数据删除");
                                             }
-                                        });
-                                    }
+                                        },
+                                        error: function(data)
+                                        {
+                                            console.log(data);
+                                            toastr["error"]("删除失败！", "数据删除");
+                                        }
+                                    });
                                 }
-                            );
-                        }
+                            }
+                        );
                     }
-                );
-            }
+                }
+            );
+        }
 
-        </script>
-    </div>
-</body>
-
-
+    </script>
+</div>
 </html>

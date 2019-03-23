@@ -50,23 +50,6 @@
             margin-left: 4%;
             /*margin-right: 10%;*/
         }
-
-        /*button { !* 按钮美化 *!*/
-            /*width: 270px; !* 宽度 *!*/
-            /*height: 40px; !* 高度 *!*/
-            /*border-width: 0px; !* 边框宽度 *!*/
-            /*border-radius: 3px; !* 边框半径 *!*/
-            /*background: #0d957a; !* 背景颜色 #1E90FF *!*/
-            /*cursor: pointer; !* 鼠标移入按钮范围时出现手势 *!*/
-            /*outline: none; !* 不显示轮廓线 *!*/
-            /*font-family: Microsoft YaHei; !* 设置字体 *!*/
-            /*color: white; !* 字体颜色 *!*/
-            /*font-size: 17px; !* 字体大小 *!*/
-        /*}*/
-
-        /*button:hover { !* 鼠标移入按钮范围时改变颜色 *!*/
-            /*background: #5599FF;*/
-        /*}*/
         .report-title{border-bottom: #ccc 1px solid; height: 20px;}
         .report-title h4{background-color: #fff; float:left; font-size: 18px; color:#296ebf; padding-right: 5px;}
         .report-title div{float: left; width: 25px; height: 20px; border-bottom: #296ebf 1px solid;}
@@ -78,6 +61,7 @@
 <div class="page-content">
     <div class="right_div">
         <div class="time_div"><a href=""><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> DataSync</a>--><a href="">统计管理</a></div>
+        <div class="fabu_div2">专题detail</div>
         <div class="tap_div" style="margin-top:15px;">
         <div id="div1" style="width: 100%;height:400px;">
             <div class="report-title">
