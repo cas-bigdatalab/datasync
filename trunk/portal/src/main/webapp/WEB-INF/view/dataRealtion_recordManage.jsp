@@ -20,6 +20,9 @@
     <link rel="Stylesheet" href="${ctx}/resources/css/jquery.jerichotab.css"/>
     <link href="${ctx}/resources/bundles/bootstrap-fileinput/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="${ctx}/resources/bundles/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">
+    <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
     <%--<link rel="stylesheet" href="${ctx}/resources/bundles/font-awesome/css/font-awesome.css">--%>
     <%--<link rel="stylesheet" href="${ctx}/resources/bundles/bootstrapv3.3/css/bootstrap.css">--%>
     <link href="${ctx}/resources/css/home.css" type="text/css"/>
@@ -191,14 +194,17 @@
 </body>
 <div id="siteMeshJavaScript">
     <script src="${ctx}/resources/bundles/bootstrap-closable-tab/bootstrap-closable-tab.js"></script>
-    <script src="${ctx}/resources/bundles/jedate/jedate.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+
+<%--<script src="${ctx}/resources/bundles/jedate/jedate.min.js"></script>--%>
     <script type="text/javascript">
 
         var subjectCode = '${sessionScope.SubjectCode}';
         closableTab.afterCloseTab = function (item){
 
-        }
-
+        };
         $.ajax({
             url: "${ctx}/showTable",
             type: "post",
@@ -372,7 +378,6 @@
             $(totalCount).html(data.totalCount);
 
             var s = pagination + " .bootpag";
-            // alert(s)
             if ($(s).length != 0) {
                 $(pagination).off();
                 $(pagination).empty();
@@ -561,9 +566,9 @@
                                 s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td>" ;
 
                             if(dataTypeArr[i]==="datetime") {
-                                    s += "<td><input class='datainp' style='width: 100%;height:100%;' id='" + strs2[i] + "' type='text'  placeholder='请选择'   onClick=\"jeDate({dateCell:'#'+'" + strs2[i] + "',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})\" /></td></tr>";
+                                    s += "<td><input class='selectDataTime' style='width: 100%;height:100%;' id='" + strs2[i] + "' type='text'  placeholder='请选择'  /></td></tr>";
                             }else if(dataTypeArr[i]==="date"){
-                                    s +="<td><input class='datainp'  style='width: 100%;height:100%;' id='"+strs2[i] +"' type='text'  placeholder='请选择'  onClick=\"jeDate({dateCell:'#'+'"+strs2[i] +"',isTime:true,format:'YYYY-MM-DD'})\" /></td></tr>";
+                                    s +="<td><input class='selectData'  style='width: 100%;height:100%;' id='"+strs2[i] +"' type='text'  placeholder='请选择'/></td></tr>";
                             }else{
                                 s+="<td><input  id='"+strs2[i] +"' style='width:100%;height=100%'  name=" + strs2[i] + "  dataType='"+dataTypeArr[i] +"' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 5px;'></p></td></tr>";
                             }
@@ -574,6 +579,20 @@
                     $("#addTable tbody").append(s);
                     $("#add_div").append(s_add);
                     $("#staticAddData").modal("show");
+                    $('.selectData').datepicker({
+                        language:'zh-CN',
+                        autoclose: true,//选中之后自动隐藏日期选择框
+                        clearBtn: true,//清除按钮
+                        todayBtn: false,//今日按钮
+                        format: "yyyy-mm-dd"
+                    });
+                    $('.selectDataTime').datetimepicker({
+                        language:'zh-CN',
+                        autoclose: true,//选中之后自动隐藏日期选择框
+                        clearBtn: true,//清除按钮
+                        todayBtn: false,//今日按钮
+                        format: "yyyy-mm-dd hh:ii:ss"
+                    });
                 }
             })
         }
@@ -849,7 +868,6 @@
                 dataType: "json",
                 success: function (data) {
                     if (data.data === "0") {
-                        // alert("添加数据失败，主键重复！");
                         toastr.error("添加数据失败，主键重复！");
                     } else if (data.data === "1") {
 
@@ -906,16 +924,19 @@
                                 if(strs[i]!==" " && strs[i]!==null) {
                                     var date = strs[i].split(".");
                                     strs[i] = date[0];
-                                    s_tbody += "<td style='width:40%;'><input class='datainp' id='" + strs2[i] + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' onClick=\"jeDate({dateCell:'#'+'" + strs2[i] + "',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})\" /></td></tr>";
+                                    // s_tbody += "<td style='width:40%;'><input class='datainp' id='" + strs2[i] + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' onClick=\"jeDate({dateCell:'#'+'" + strs2[i] + "',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})\" /></td></tr>";
+                                    s_tbody += "<td style='width:40%;'><input class='selectDataTime' id='" + strs2[i] + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
                                 }else{
-                                    s_tbody += "<td  style='width:40%;'><input class='datainp' id='" + strs2[i] + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' onClick=\"jeDate({dateCell:'#'+'" + strs2[i] + "',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})\" /></td></tr>";
+                                    s_tbody += "<td  style='width:40%;'><input class='selectDataTime' id='" + strs2[i] + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
                                 }
                             }else if(dataTypeArr[i]==="date"){
-                                if(strs[i]!==" " && strs[i]!==null){
-                                    s_tbody+="<td  style='width:40%;'><input class='datainp' id='"+ strs2[i] +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' onClick=\"jeDate({dateCell:'#'+'"+strs2[i] +"',isTime:true,format:'YYYY-MM-DD'})\" /></td></tr>";
-                                }else{
-                                    s_tbody+="<td  style='width:40%;'><input class='datainp' id='"+ strs2[i] +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' onClick=\"jeDate({dateCell:'#'+'"+strs2[i] +"',isTime:true,format:'YYYY-MM-DD'})\" /></td></tr>";
-                                }
+                                // if(strs[i]!==" " && strs[i]!==null){
+                                    // s_tbody+="<td  style='width:40%;'><input class='datainp' id='"+ strs2[i] +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' onClick=\"jeDate({dateCell:'#'+'"+strs2[i] +"',isTime:true,format:'YYYY-MM-DD'})\" /></td></tr>";
+                                    // s_tbody+="<td  style='width:40%;'><input class='datepicker' id='"+ strs2[i] +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
+                                // }else{
+                                    // s_tbody+="<td  style='width:40%;'><input class='datainp' id='"+ strs2[i] +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' onClick=\"jeDate({dateCell:'#'+'"+strs2[i] +"',isTime:true,format:'YYYY-MM-DD'})\" /></td></tr>";}
+                                   //}
+                                s_tbody+="<td  style='width:40%;'><input class='selectData' id='"+ strs2[i] +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "'  /></td></tr>";
                             }else{
                                 s_tbody+="<td  style='width:40%;'><input title='" + strs[i] + "' id='"+ strs2[i] +"' style='width:100%;height=100%'   name=" + strs2[i] + " value='" + strs[i] + "' dataType='" + dataTypeArr[i] +"' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 5px;'></p></td></tr>";
                             }
@@ -925,6 +946,23 @@
                     $("#update_tbody").append(s_tbody);
                     $("#update_div").append(s_save);
                     $("#staticUpdateData").modal("show");
+
+                    $('.selectData').datepicker({
+                        language:'zh-CN',
+                        autoclose: true,//选中之后自动隐藏日期选择框
+                        clearBtn: true,//清除按钮
+                        todayBtn: false,//今日按钮
+                        format: "yyyy-mm-dd"
+                    });
+                    $('.selectDataTime').datetimepicker({
+                        language:'zh-CN',
+                        autoclose: true,//选中之后自动隐藏日期选择框
+                        clearBtn: true,//清除按钮
+                        todayBtn: false,//今日按钮
+                        format: "yyyy-mm-dd hh:ii:ss",
+                        minView: 0,
+                        minuteStep:1
+                    });
                 }
             });
         }
@@ -1355,8 +1393,7 @@
                 }
 
                 //smallint数据类型判断
-                if (dataTypeArr[i] === "smallint" && checkdataArr[i] !== null && checkdataArr[i] !==" " ) {
-                    alert(checkdataArr[i]);
+                if (checkdataArr[i] !== null && checkdataArr[i] !=="" && dataTypeArr[i] === "smallint") {
                     if (!isNaN(checkdataArr[i])) {
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
@@ -1376,7 +1413,7 @@
                 }
 
                 //mediumint数据类型判断
-                if (dataTypeArr[i] === "mediumint" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                if (checkdataArr[i] !== null && checkdataArr[i] !== "" && dataTypeArr[i] === "mediumint") {
                     if (!isNaN(checkdataArr[i])) {
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
@@ -1396,7 +1433,7 @@
                 }
 
                 //bigint数据类型判断
-                if (dataTypeArr[i] === "bigint" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                if (checkdataArr[i] !== null && checkdataArr[i] !== "" && dataTypeArr[i] === "bigint") {
                     if (!isNaN(checkdataArr[i])) {
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
@@ -1411,7 +1448,7 @@
                 }
 
                 //int数据类型判断
-                if ((dataTypeArr[i] === "int" || dataTypeArr[i] === "integer") && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                if ((dataTypeArr[i] === "int" || dataTypeArr[i] === "integer") && checkdataArr[i] !== null && checkdataArr[i] !== "") {
                     if (!isNaN(checkdataArr[i])) {
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
@@ -1431,7 +1468,7 @@
                 }
 
                 //float数据类型判断
-                if (dataTypeArr[i] === "float" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                if ( checkdataArr[i] !== null && checkdataArr[i] !== "" && dataTypeArr[i] === "float" ) {
                     if (isNaN(checkdataArr[i])) {
                         toastr.warning(columnName[i]+" 字段应是float类型！");
                         return;
@@ -1439,7 +1476,7 @@
                 }
 
                 //double数据类型判断
-                if (dataTypeArr[i] === "double" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                if ( checkdataArr[i] !== null && checkdataArr[i] !== "" && dataTypeArr[i] === "double" ) {
                     if (isNaN(checkdataArr[i])) {
                         toastr.warning(columnName[i]+" 字段应是double类型！");
                         return;
@@ -1468,7 +1505,7 @@
                 // }
 
                 //decimal数据类型判断
-                if (dataTypeArr[i] === "decimal" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                if ( checkdataArr[i] !== null && checkdataArr[i] !== "" && dataTypeArr[i] === "decimal" ) {
                     // var col_type_str = S_columnType[i].split(",");
                     // var m = col_type_str[0].split("(")[1];
                     // var s = col_type_str[1].split(")")[0];
@@ -1506,7 +1543,6 @@
                 dataType: "json",
                 success: function (data) {
                     if (data.data === "0") {
-                        // alert("更新数据失败！");
                         //错误消息提示，默认背景为浅红色
                         toastr.error("更新数据失败!");
                     } else if (data.data === "1") {
@@ -1517,7 +1553,6 @@
                     } else if(data.data === "-1"){
                         toastr.error("主键重复！");
                     }else{
-                        // var arr = data.data.split("+");
                         if (data.data === "-2") {
                             toastr.error("更新数据失败，" + data.col + " 列不能为空！");
                         }
@@ -1563,7 +1598,6 @@
 
         //查看详情
         function checkDada(columns, delPORTALID,tableName,subjectCode) {
-            // alert(delPORTALID);
             $("#checkTable tbody").html(" ");
             var strs2 = new Array(); //定义一数组
             strs2 = columns.split(",");
@@ -1597,27 +1631,6 @@
                 }
             });
         }
-
-
-        $('.tab-close').on('click', function (ev) {
-            var ev = window.event || ev;
-            ev.stopPropagation();
-            //先判断当前要关闭的tab选项卡有没有active类，再判断当前选项卡是否最后一个，
-            // 如果是则给前一个选项卡以及内容添加active，否则给下一个添加active类
-            var gParent = $(this).parent().parent(),
-                parent = $(this).parent();
-            if (gParent.hasClass('active')) {
-                if (gParent.index() == gParent.length) {
-                    gParent.prev().addClass('active');
-                    $(parent.attr('href')).prev().addClass('active');
-                } else {
-                    gParent.next().addClass('active');
-                    $(parent.attr('href')).next().addClass('active');
-                }
-            }
-            gParent.remove();
-            $(parent.attr('href')).remove();
-        });
 
     </script>
 </div>
