@@ -10,15 +10,6 @@
             text-align: center;
         }
 
-       #dataList  th {
-            background-color: #64aed9;
-            text-align: center;
-            font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
-            font-weight: 700;
-            font-style: normal;
-            font-size: 18px;
-            color: #FFFFFF;
-        }
 
         .error-message {
             color: red;

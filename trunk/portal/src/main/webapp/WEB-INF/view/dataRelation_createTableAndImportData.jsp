@@ -152,9 +152,9 @@
             </div>
         </div>
         <div id="uploadExcel" style="height: 200px;background: #dddddd">
-            <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
-                <a href="${ctx}/fileImport/getExcelTemplate">点击下载Excel模板</a>
-                <input id="excelFile" type="file" name="file" class="cus-input">
+            <form name="form" id="fileForm" method="post" style="text-align: center;">
+                <a href="${ctx}/fileImport/getExcelTemplate">点击下载Excel模板</a><br/>
+                <input id="excelFile" style="display: inline;margin-left: 7%;" type="file" name="file"/><br/>
                 <input id="excelFileUpload" type="button" class="btn btn-default" onclick="uploadExcel();"
                        value="上传"/>
             </form>

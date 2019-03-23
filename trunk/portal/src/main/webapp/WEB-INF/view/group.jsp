@@ -25,23 +25,14 @@
             height: 830px;
             min-height: 830px;
         }
-        #table_List1 th,#table_List2 th{
-            background-color: #64aed9;
-            text-align: center;
-            font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
-            font-weight: 700;
-            font-style: normal;
-            font-size: 18px;
-            color: #FFFFFF;
-        }
     </style>
 </head>
 
 <body>
 
 <div style="height: 850px;min-height: 850px;" class="page-content" >
-    <h3>&nbsp;&nbsp;用户与组管理</h3>
-    <hr />
+    <div class="time_div"><a href=""><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 用户与组管理</a></div>
+    <div class="fabu_div2">用户与组管理</div>
 
     <div class="col-md-12">
         <div class="tabbable-custom ">
@@ -92,7 +83,7 @@
                                             <button id="searchUserBtn" name="searchUserBtn" onclick="searchUser();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                                         </div>
                                         <div style="float: left;width: 21%;">
-                                            <button id="addUserBtn" name="addUserBtn" style="float: right;"
+                                            <button id="addUserBtn" name="addUserBtn"
                                                     class="btn info green btn-sm" onclick="addUser()" ><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增用户</button>
                                         </div>
                                             <%--<label class="control-label">用户账号:</label>
@@ -152,7 +143,9 @@
 
                                         <button id="btnSearch" name="btnSearch" onclick="search();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查询</button>
                                         &nbsp;&nbsp;
-                                        <button id="btnAdd" name="btnAdd" style="float: right" onclick="" class="btn info green btn-sm"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增用户组</button>
+                                        <button id="btnAdd" name="btnAdd" onclick="" class="btn info green btn-sm"><i
+                                                class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增用户组
+                                        </button>
                                     </div>
                                 </div>
 

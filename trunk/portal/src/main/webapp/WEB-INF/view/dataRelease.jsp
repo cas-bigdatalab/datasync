@@ -48,10 +48,7 @@
 <input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
 <div class="page-content">
     <div>
-        <%--<div class="uplod-head">
-            <span>数据发布管理</span>
-        </div>--%>
-        <div class="time_div"><a><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 数据管理</a>--&gt;<a>
+        <div class="time_div"><a><i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
             <shiro:hasRole name="admin">
                 数据发布管理
             </shiro:hasRole>
@@ -96,7 +93,8 @@
 
                     <button type="button" class="btn blue btn-sm" style="margin-left: 20px" id="seachResource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                     <shiro:hasRole name="admin">
-                    <button type="button" class="btn green btn-sm" style="float: right;margin-right: 15px" onclick="newRelease()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据发布
+                        <button type="button" class="btn green btn-sm" style="margin-right: 15px"
+                                onclick="newRelease()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据发布
                     </button>
                     </shiro:hasRole>
                 </form>

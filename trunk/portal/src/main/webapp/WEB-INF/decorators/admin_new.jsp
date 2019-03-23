@@ -77,8 +77,21 @@
         .page-content table tbody tr:hover {
             background: #dddddd;
         }
+
         .user_div table{
             margin-left: 26%;
+        }
+
+        .alert.alert-info {
+            background-color: #cbe2fc !important;
+        }
+
+        #upload-list th, #dataList th, #table_List1 th, #table_List2 th {
+            background-color: #cbe2fc;
+            text-align: center;
+            font-size: 14px;
+            font-weight: normal;
+            color: #000;
         }
     </style>
 
@@ -178,7 +191,7 @@
     </div>
 </div>
 
-<div class="foot_div">2018-2020 &copy; 中国科学院计算机网络信息中心.版权所有.</div>
+<%--<div class="foot_div">2018-2020 &copy; 中国科学院计算机网络信息中心.版权所有.</div>--%>
 <script type="text/html" id="tableNameTempl">
     {{each list as value i}}
     <li class="l3-menu" style=" border-bottom: 1px #cad9ea solid"><a href="javaScript:void(0)"
@@ -276,7 +289,6 @@
                 href = href.substring(0, href.indexOf('?'));
             }
             if (href === path) {
-                debugger
                 $(this).addClass("active");
                 var level2 = $(this).parent().is("[class='l2-menu']");
                 var level3 = $(this).parent().is("[class='l3-menu']");
