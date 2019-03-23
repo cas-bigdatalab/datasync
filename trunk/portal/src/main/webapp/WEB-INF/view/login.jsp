@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="${ctx}/resources/bundles/font-awesome-4.7.0/css/font-awesome.min.css">
     <link href="${ctx}/resources/bundles/bootstrapv3.3/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/css/home.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css"/>
+    <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
+    <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
 </head>
 <body>
 <div class="loginbg"></div>
@@ -41,15 +44,70 @@
 
         <div class="row">
             <div class="col-xs-6">
-                <input type="checkbox" id="rememberPassWord"> <label for="rememberPassWord">记住密码</label>
+                <input type="checkbox" id="rememberPassword" name="rememberPassword"> <label
+                    for="rememberPassword">记住密码</label>
             </div>
             <div class="col-xs-6 text-right">
                 <a href="#">注册</a>
                 <input type="submit" id="loginButton" value="登录" class="submit_btn"
-                       style="width:40%;font-size:16px;background:#296ebf;color:#f8f8f8;height: 30px;border: none;border-radius: 6px;""/>
+                       style="width:40%;font-size:16px;background:#296ebf;color:#f8f8f8;height: 30px;border: none;border-radius: 6px;"/>
             </div>
         </div>
     </form>
 </div>
 </body>
+<script>
+
+    $(function () {
+        $("#rememberPassword").click(function () {
+            var isChecked = $(this).is(":checked");
+            var loginId = $("#loginId").val();
+            var password = $("#password").val();
+            if (isChecked) {
+                if (loginId === "") {
+                    toastr["warning"]("用户名不能为空", "警告！");
+                    return false;
+                }
+                if (password === "") {
+                    toastr["warning"]("密码不能为空", "警告！");
+                    return false;
+                }
+                setCookie("loginId", loginId);
+                setCookie("password", password);
+            } else {
+                delCookie("loginId");
+                delCookie("password");
+            }
+        });
+
+        $("#loginId").blur(function () {
+            var cookie = getCookie($(this).val());
+            $("#password").val(cookie);
+        })
+    });
+
+    //写cookies
+    function setCookie(name, value) {
+        var Days = 30;
+        var exp = new Date();
+        exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+        document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+    }
+
+    //读取cookies
+    function getCookie(name) {
+        var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg)) return unescape(arr[2]);
+        else return null;
+    }
+
+    //删除cookies
+    function delCookie(name) {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval = getCookie(name);
+        if (cval != null) document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+    }
+
+</script>
 </html>
