@@ -60,7 +60,7 @@
 <body>
 <div class="page-content">
     <div class="right_div">
-        <div class="time_div"><a href=""><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> DataSync</a>--><a href="">统计管理</a></div>
+        <div class="time_div"><a href=""><i class="fa fa-chevron-circle-right" aria-hidden="true"></i>数据统计管理</a>--><a href="">专题detail</a></div>
         <div class="fabu_div2">专题detail</div>
         <div class="tap_div" style="margin-top:15px;">
         <div id="div1" style="width: 100%;height:400px;">

@@ -20,7 +20,7 @@
 <body>
     <div class="page-content">
         <div class="right_div">
-            <div class="time_div"><a href=""><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> DataSync</a>--><a href="">主题库注册管理</a></div>
+            <div class="time_div"><a href=""><i class="fa fa-chevron-circle-right" aria-hidden="true"></i>主题库注册管理</a></div>
             <div class="fabu_div2">主题库注册管理</div>
 
         <!--专业库筛选条件-->

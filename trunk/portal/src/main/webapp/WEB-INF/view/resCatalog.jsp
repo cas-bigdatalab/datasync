@@ -20,7 +20,7 @@
 <body>
 <div class="page-content" style="min-height: 700px;">
     <div class="right_div">
-        <div class="time_div"><a href=""><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> DataSync</a>--><a href="">数据分类管理</a></div>
+        <div class="time_div"><a href=""><i class="fa fa-chevron-circle-right" aria-hidden="true"></i>数据分类管理</a></div>
         <div class="fabu_div2">数据分类管理</div>
     <div class="col-md-4" >
             <button type="button" class="btn btn-success btn-sm" style="margin-bottom:5px" onclick="editTree();"><i
