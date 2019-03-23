@@ -186,33 +186,6 @@ public class EditDataController {
         List<String> list2=map.get("autoAdd");
         List<String> list3=map.get("IS_NULLABLE");
 
-//        for(int i=0;i<jsonArray.size();i++){
-//            String col = jsonArray.getJSONObject(i).getString("columnName");
-//            String val = jsonArray.getJSONObject(i).getString("columnValue");
-//
-//            if(list1.get(i).equals("true") && list2.get(i).equals("true")){ //有主键且自增
-//                System.out.println(jsonArray.getJSONObject(i).getString("columnName"));
-//
-//            }else if(list1.get(i).equals("true") && list2.get(i).equals("false")){   //有主键但不自增，判断新增主键是否重复
-//                if(val!=null && !val.equals("")){
-//                   if( dataSrcService.checkPriKey(datasrc,tableName,Integer.parseInt(val),col)==1){
-//                       jsonObject.put("data","0");
-//                       return jsonObject;
-//                   }
-//                    column += "" + col + " ,";
-//                    values += "'" + Integer.parseInt(val) + "' ,";
-//                  }else{
-//                    jsonObject.put("data","-1");
-//                    return jsonObject;
-//                 }
-//            }else {   //无主键
-//                if(val!=null&& !val.equals("")){
-//                    column += "" + col + " ,";
-//                    values += "'" + val + "' ,";
-//                }
-//            }
-//        }
-
         for(int i=0;i<jsonArray.size();i++){
             String col = jsonArray.getJSONObject(i).getString("columnName");
             String val = jsonArray.getJSONObject(i).getString("columnValue");
@@ -344,7 +317,7 @@ public class EditDataController {
             String column=jsonArray2.getJSONObject(i).getString("name");
             String value=jsonArray2.getJSONObject(i).getString("value");
 
-            if(list3.get(i).equals("NO") && (value.equals("null")||value.equals(""))){
+            if(list3.get(i).equals("NO") && (value ==null ||value.equals(""))){
                 jsonObject.put("data","-2+");           //该列不能为空
                 jsonObject.put("col",column);
                 return jsonObject;
@@ -365,6 +338,11 @@ public class EditDataController {
                 updatestr += "" + column + "= '" + value + "' , ";
             }
         }
+        if(updatestr.equals(" set ")){
+            jsonObject.put("data","1");
+            return jsonObject;
+        }
+
         int ll=updatestr.length();
         String s2=updatestr.substring(0,ll-2);
         String s1=conditionstr;
