@@ -28,7 +28,7 @@
 
 <div class="page-content">
     <div class="right_div">
-        <div class="time_div"><a href=""><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 数据管理</a>--><a href="">专题库</a></div>
+        <div class="time_div"><a><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 数据管理</a>--><a>专题库</a></div>
         <div class="fabu_div2">数据配置</div>
         <div class="qiehuan_div">
             <ul id="tabDescribe">
