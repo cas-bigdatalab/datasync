@@ -1393,7 +1393,7 @@
                 }
 
                 //smallint数据类型判断
-                if (dataTypeArr[i] === "smallint" && checkdataArr[i] !== null && checkdataArr[i] !==" " ) {
+                if (checkdataArr[i] !== null && checkdataArr[i] !=="" && dataTypeArr[i] === "smallint") {
                     if (!isNaN(checkdataArr[i])) {
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
@@ -1413,7 +1413,7 @@
                 }
 
                 //mediumint数据类型判断
-                if (dataTypeArr[i] === "mediumint" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                if (checkdataArr[i] !== null && checkdataArr[i] !== "" && dataTypeArr[i] === "mediumint") {
                     if (!isNaN(checkdataArr[i])) {
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
@@ -1433,7 +1433,7 @@
                 }
 
                 //bigint数据类型判断
-                if (dataTypeArr[i] === "bigint" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                if (checkdataArr[i] !== null && checkdataArr[i] !== "" && dataTypeArr[i] === "bigint") {
                     if (!isNaN(checkdataArr[i])) {
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
@@ -1448,7 +1448,7 @@
                 }
 
                 //int数据类型判断
-                if ((dataTypeArr[i] === "int" || dataTypeArr[i] === "integer") && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                if ((dataTypeArr[i] === "int" || dataTypeArr[i] === "integer") && checkdataArr[i] !== null && checkdataArr[i] !== "") {
                     if (!isNaN(checkdataArr[i])) {
                         var result = checkdataArr[i].match(/^(-|\+)?\d+$/);
                         if (result == null) {
@@ -1468,7 +1468,7 @@
                 }
 
                 //float数据类型判断
-                if (dataTypeArr[i] === "float" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                if ( checkdataArr[i] !== null && checkdataArr[i] !== "" && dataTypeArr[i] === "float" ) {
                     if (isNaN(checkdataArr[i])) {
                         toastr.warning(columnName[i]+" 字段应是float类型！");
                         return;
@@ -1476,7 +1476,7 @@
                 }
 
                 //double数据类型判断
-                if (dataTypeArr[i] === "double" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                if ( checkdataArr[i] !== null && checkdataArr[i] !== "" && dataTypeArr[i] === "double" ) {
                     if (isNaN(checkdataArr[i])) {
                         toastr.warning(columnName[i]+" 字段应是double类型！");
                         return;
@@ -1505,7 +1505,7 @@
                 // }
 
                 //decimal数据类型判断
-                if (dataTypeArr[i] === "decimal" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
+                if ( checkdataArr[i] !== null && checkdataArr[i] !== "" && dataTypeArr[i] === "decimal" ) {
                     // var col_type_str = S_columnType[i].split(",");
                     // var m = col_type_str[0].split("(")[1];
                     // var s = col_type_str[1].split(")")[0];
