@@ -30,7 +30,8 @@ public class CheckUserController {
             UsernamePasswordToken token = new UsernamePasswordToken(user.getLoginId(), user.getPassword());
             try {
                 if(user.getUserName()==null&&user.getPassword()==null){
-                    return "loginNew";
+//                    return "loginNew";
+                    return "login";
                 }else {
                     //为当前用户进行认证，授权
                     subject.login(token);
@@ -38,7 +39,7 @@ public class CheckUserController {
                     boolean flag = false;
                     if(u.getRole()==""||u.getRole()==null){
                         request.setAttribute("errorMsg", "请为该账号赋予可用角色！");
-                        return "loginNew";
+                        return "login";
                     }
                     Set<String> roles = new HashSet<>();
                         roles.add(u.getRole());
@@ -51,7 +52,7 @@ public class CheckUserController {
                         }
                     if(!flag){
                         request.setAttribute("errorMsg", "请为该账号赋予可用角色！");
-                        return "loginNew";
+                        return "login";
                     }
                     if (u.getSubjectCode() != null) {
                         cn.csdb.portal.model.Subject sub = checkUserService.getSubjectByCode(u.getSubjectCode());
@@ -83,7 +84,7 @@ public class CheckUserController {
                 }else {
                     request.setAttribute("errorMsg", "用户名或密码错误！");
                 }
-                return "loginNew";
+                return "login";
             }
         }
 

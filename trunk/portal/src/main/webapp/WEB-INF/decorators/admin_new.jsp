@@ -112,8 +112,8 @@
                     <div class="left_div">
                         <shiro:hasRole name="root">
                             <ul>
-                                <li><a class="active" href="${ctx}/subjectMgmt/subjectIndex"><i class="fa fa-cog"
-                                                                                                aria-hidden="true"></i>
+                                <li><a href="${ctx}/subjectMgmt/subjectIndex"><i class="fa fa-cog"
+                                                                                 aria-hidden="true"></i>
                                     主题库注册管理</a>
                                 </li>
                                 <li><a class="" href="${ctx}/resCatalog"><i class="fa fa-cog"
@@ -238,6 +238,16 @@
         "hideMethod": "fadeOut"
     };
     jQuery(document).ready(function () {
+        $("li ul").hide();
+        $("div.left_div a[href='javaScript:void(0);']").click(function () {
+            var sonUl = $(this).next();
+            var sonUlIsHidden = sonUl.is(":hidden");
+            if (sonUlIsHidden) {
+                sonUl.show();
+            } else {
+                sonUl.hide();
+            }
+        });
         scrolltotop.init('${ctx}');
         Layout.init();
         bootbox.setLocale("zh_CN");
@@ -256,6 +266,30 @@
                     $(this).parent().parent().parent().addClass("active");
                 } else {
                     $(this).parent().children("a").append('<span class="selected"></span>');
+                }
+            }
+        });
+
+        $("div.left_div ul a").each(function () {
+            var href = $(this).attr("href");
+            if (href.indexOf('?') > -1) {
+                href = href.substring(0, href.indexOf('?'));
+            }
+            if (href === path) {
+                debugger
+                $(this).addClass("active");
+                var level2 = $(this).parent().is("[class='l2-menu']");
+                var level3 = $(this).parent().is("[class='l3-menu']");
+                if (level3) {
+                    $(this).parent().parent().show();
+                    $(this).parent().parent().prev().addClass("active");
+
+                    $(this).parent().parent().parent().show();
+                    $(this).parent().parent().parent().prev().addClass("active");
+                } else if (level2) {
+                    $(this).parent().parent().show();
+                    $(this).parent().parent().prev().addClass("active");
+                } else {
                 }
             }
         });

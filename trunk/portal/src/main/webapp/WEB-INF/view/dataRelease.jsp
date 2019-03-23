@@ -60,14 +60,14 @@
             </shiro:hasRole>
         </a>
         </div>
-        <div class="fabu_div"><h4>
+        <div class="fabu_div2">
             <shiro:hasRole name="admin">
                 数据发布管理
             </shiro:hasRole>
             <shiro:hasRole name="root">
                 发布审核管理
             </shiro:hasRole>
-        </h4></div>
+        </div>
         <div class="alert alert-info fabu_div" role="alert">
             <!--查询条件 -->
             <div class="row">

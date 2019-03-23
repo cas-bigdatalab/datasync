@@ -103,7 +103,7 @@
 
     <div class="right_div">
         <div class="time_div"><a><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 文件数据管理</a></div>
-        <div class="fabu_div"><h4>文件数据管理</h4></div>
+        <div class="fabu_div2">文件数据管理</div>
         <div class="form" id="FileOnNet">
             <div class="row">
                 <div class="col-xs-6">

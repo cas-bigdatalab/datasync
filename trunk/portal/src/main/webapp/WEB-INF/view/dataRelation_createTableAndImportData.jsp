@@ -137,6 +137,7 @@
     <div class="right_div">
         <div class="time_div"><a><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 关系数据管理</a>--&gt;<a
         >导入式建表</a></div>
+        <div class="fabu_div2">导入式建表</div>
         <div id="excelTableList">
             <div class="qiehuan_div">
                 <ul class="nav nav-tabs activeTabs" role="tablist">
