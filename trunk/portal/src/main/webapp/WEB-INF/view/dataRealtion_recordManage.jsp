@@ -197,6 +197,7 @@
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
 
 <%--<script src="${ctx}/resources/bundles/jedate/jedate.min.js"></script>--%>
     <script type="text/javascript">
@@ -551,11 +552,7 @@
                     var s = "";
                     for (var i = 0; i < strs2.length; i++) {
                         if (pkColumnArr[i] === "PRI" && autoAddArr[i] === "auto_increment") {
-                            if (strs2[i] === "PORTALID") {
-                                s += "<input style='display:none;'  type='text' name=" + strs2[i] + " value='0'/>";
-                            } else {
-                                s += "<input style='display:none;'  type='text' name=" + strs2[i] + " value='0'/>";
-                            }
+                            s += "<input style='display:none;'  type='text' name=" + strs2[i] + " value='0'/>";
                         } else if (pkColumnArr[i] === "PRI" && autoAddArr[i] !== "auto_increment") {
                             if (strs2[i] === "PORTALID") {
                                 s += "<input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='0'/>";
@@ -563,14 +560,20 @@
                                 s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td><input style='width: 100%;height:100%;' value='' name='" + strs2[i] + "'/></td></tr>";
                             }
                         } else {
-                                s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td>" ;
+                            if(strs2[i] === "PORTALID"){
+                                s += "<input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='0'/>";
+                            }else {
+                                s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td>";
 
-                            if(dataTypeArr[i]==="datetime") {
+                                if (dataTypeArr[i] === "datetime") {
                                     s += "<td><input class='selectDataTime' style='width: 100%;height:100%;' id='" + strs2[i] + "' type='text'  placeholder='请选择'  /></td></tr>";
-                            }else if(dataTypeArr[i]==="date"){
-                                    s +="<td><input class='selectData'  style='width: 100%;height:100%;' id='"+strs2[i] +"' type='text'  placeholder='请选择'/></td></tr>";
-                            }else{
-                                s+="<td><input  id='"+strs2[i] +"' style='width:100%;height=100%'  name=" + strs2[i] + "  dataType='"+dataTypeArr[i] +"' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 5px;'></p></td></tr>";
+                                } else if (dataTypeArr[i] === "date") {
+                                    s += "<td><input class='selectData'  style='width: 100%;height:100%;' id='" + strs2[i] + "' type='text'  placeholder='请选择'/></td></tr>";
+                                } else if(dataTypeArr[i] === "time"){
+                                    s += "<td><input class='DataTime' style='width: 100%;height:100%;' id='" + strs2[i] + "' type='text'  placeholder='请选择'  /></td></tr>";
+                                }else{
+                                    s += "<td><input  id='" + strs2[i] + "' style='width:100%;height=100%'  name=" + strs2[i] + "  dataType='" + dataTypeArr[i] + "' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 5px;'></p></td></tr>";
+                                }
                             }
                         }
                     }
@@ -591,7 +594,19 @@
                         autoclose: true,//选中之后自动隐藏日期选择框
                         clearBtn: true,//清除按钮
                         todayBtn: false,//今日按钮
+                        minuteStep:1,
                         format: "yyyy-mm-dd hh:ii:ss"
+                    });
+                    $('.DataTime').datetimepicker({
+                        //第一种
+                        language:'zh-CN',
+                        autoclose: true,//选中之后自动隐藏日期选择框
+                        clearBtn: true,//清除按钮
+                        todayBtn: false,//今日按钮
+                        format: "hh:ii:ss",
+                        minView: 0,
+                        minuteStep:1,
+                        startView: 0
                     });
                 }
             })
@@ -629,7 +644,6 @@
             for (var i = 0; i < S_column.length; i++) {
                 var data2 = {};
                 if (datacon[i] !== "" && datacon[i] !== null) {
-
                     //char类型判断
                     if (datacon[i] !== null && datacon[i] !== "" && datacon[i] !== "null" && S_dataType[i] === "char") {
                         var bytesCount = 0;
@@ -868,15 +882,15 @@
                 dataType: "json",
                 success: function (data) {
                     if (data.data === "0") {
-                        toastr.error("添加数据失败，主键重复！");
+                        toastr.error("添加数据失败，"+ data.prikey+"的值已存在！");
                     } else if (data.data === "1") {
-
                         toastr.success("添加成功!");
                         clickPageButton(subjectCode, tableName, currentPage);
                         $("#staticAddData").modal("hide");
                     } else if (data.data === "-1") {
-
-                        toastr.error("添加数据失败，主键不能为空！");
+                        toastr.error("添加数据失败，"+ data.prikey +"不能为空！");
+                    }else if(data.data==="-3"){
+                        toastr.error("添加数据失败！");
                     } else {
                         var arr = data.data.split("+");
                         if (arr[0] === "-2") {
@@ -930,13 +944,9 @@
                                     s_tbody += "<td  style='width:40%;'><input class='selectDataTime' id='" + strs2[i] + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
                                 }
                             }else if(dataTypeArr[i]==="date"){
-                                // if(strs[i]!==" " && strs[i]!==null){
-                                    // s_tbody+="<td  style='width:40%;'><input class='datainp' id='"+ strs2[i] +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' onClick=\"jeDate({dateCell:'#'+'"+strs2[i] +"',isTime:true,format:'YYYY-MM-DD'})\" /></td></tr>";
-                                    // s_tbody+="<td  style='width:40%;'><input class='datepicker' id='"+ strs2[i] +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
-                                // }else{
-                                    // s_tbody+="<td  style='width:40%;'><input class='datainp' id='"+ strs2[i] +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' onClick=\"jeDate({dateCell:'#'+'"+strs2[i] +"',isTime:true,format:'YYYY-MM-DD'})\" /></td></tr>";}
-                                   //}
                                 s_tbody+="<td  style='width:40%;'><input class='selectData' id='"+ strs2[i] +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "'  /></td></tr>";
+                            }else if(dataTypeArr[i]==="time"){
+                                s_tbody += "<td  style='width:40%;'><input class='DataTime' id='" + strs2[i] + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
                             }else{
                                 s_tbody+="<td  style='width:40%;'><input title='" + strs[i] + "' id='"+ strs2[i] +"' style='width:100%;height=100%'   name=" + strs2[i] + " value='" + strs[i] + "' dataType='" + dataTypeArr[i] +"' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 5px;'></p></td></tr>";
                             }
@@ -955,6 +965,7 @@
                         format: "yyyy-mm-dd"
                     });
                     $('.selectDataTime').datetimepicker({
+                        //第一种
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
                         clearBtn: true,//清除按钮
@@ -962,6 +973,32 @@
                         format: "yyyy-mm-dd hh:ii:ss",
                         minView: 0,
                         minuteStep:1
+
+                        //第二种
+                        // format: 'yyyy-mm-dd hh:ii:ss',
+                        // autoclose: true,
+                        // minView: 0,
+                        // minuteStep:1
+
+                    //    第三种
+                    //     language:  'zh-CN',
+                    //     dateFormat: 'yyyy-mm-dd',//日期显示格式
+                    //     timeFormat:'HH:mm:ss',//时间显示格式
+                    //     todayBtn:  1,
+                    //     autoclose: 1,
+                    //     minView:0,  //0表示可以选择小时、分钟   1只可以选择小时
+                    //     minuteStep:1//分钟间隔1分钟
+                    });
+                    $('.DataTime').datetimepicker({
+                        //第一种
+                        language:'zh-CN',
+                        autoclose: true,//选中之后自动隐藏日期选择框
+                        clearBtn: true,//清除按钮
+                        todayBtn: false,//今日按钮
+                        format: "hh:ii:ss",
+                        minView: 0,
+                        minuteStep:1,
+                        startView: 0
                     });
                 }
             });

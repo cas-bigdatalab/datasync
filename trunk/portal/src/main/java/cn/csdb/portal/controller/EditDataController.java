@@ -197,12 +197,14 @@ public class EditDataController {
                 if(val!=null && !val.equals("")){
                     if( dataSrcService.checkPriKey(datasrc,tableName,val,col)==1){
                         jsonObject.put("data","0");
+                        jsonObject.put("prikey",col);
                         return jsonObject;
                     }
                     column += "" + col + " ,";
                     values += "'" + val + "' ,";
                 }else{
                     jsonObject.put("data","-1");
+                    jsonObject.put("prikey",col);
                     return jsonObject;
                 }
             }else if(col.equals("PORTALID")){
@@ -231,7 +233,7 @@ public class EditDataController {
         if(n==1){
             jsonObject.put("data","1");
         }else{
-            jsonObject.put("data","0");
+            jsonObject.put("data","-3");
         }
           return jsonObject;
     }

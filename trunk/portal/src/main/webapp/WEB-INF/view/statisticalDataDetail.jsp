@@ -77,12 +77,6 @@
 
         <%-- 专题详情--%>
         <div id="div2" style="width: 100%;height:700px; display: none;">
-            <%--<div>--%>
-                <%--<span style="background-color: #0d957a;color: #FFFFFF;height:2%;">专题库访问量下载量统计</span>--%>
-                <%--<span style="background-color: #0d957a;height:2%;margin-left: 30%;height: 30px;">--%>
-                    <%--<a href="#" style="color: #FFFFFF;" onclick="func_toTopTen()"><<<<</a>--%>
-                <%--</span>--%>
-            <%--</div>--%>
                 <div class="report-title">
                     <h4><i class="fa fa-caret-right"></i>专题库访问量下载量统计</h4>
                     <div></div>
@@ -94,12 +88,8 @@
 
         <%--数据集Top10--%>
         <div style="width: 100%;height:400px;margin-top: 100px;">
-            <%--<div>--%>
-            <%--<span style="background-color: #0d957a;color: #FFFFFF;height:2%;">数据集访问量下载量top10统计</span>--%>
-            <%--</div>--%>
             <div class="report-title">
                 <h4><i class="fa fa-caret-right"></i>数据集访问量下载量TOP10统计</h4>
-                <%--<div></div>--%>
                 <a href="#" class="more"></a>
             </div>
             <div style="width: 100%;height:100%;margin-top: 2%;" class="report-content row">
