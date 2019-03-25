@@ -25,15 +25,11 @@
 
 <div class="page-content">
 
-    <div class="task-head">
-
-    </div>
-
-    <div class="task-title">
+    <div class="task-title" style="margin-top: 4% !important;">
         <span>数据节点信息认证管理</span>
     </div>
 
-    <div class="messageCon" >
+    <div class="messageCon" style="top: 20% !important;" >
 
         <form class="form-horizontal">
 

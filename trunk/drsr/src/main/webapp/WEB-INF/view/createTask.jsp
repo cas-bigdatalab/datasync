@@ -29,10 +29,22 @@
         div#rMenu {position:absolute; visibility:hidden; top:0; background-color: #555;text-align: left;padding: 2px;}
         div#rMenu ul li{
             margin: 1px 0;
-            padding: 0 5px;
+            padding: 3px 5px;
             cursor: pointer;
             list-style: none outside none;
             background-color: #DFDFDF;
+        }
+        /*.form-control {*/
+          /*border-radius: 6px !important;*/
+        /*}*/
+        .red.btn,.form-control,.btn-primary ,.blue.btn ,.green.btn{
+            border-radius: 6px !important;
+        }
+        .btn-primary {
+            background-color: #137450 !important;
+        }
+        hr {
+            margin: 10px 0 !important;
         }
 
     </style>
@@ -72,7 +84,7 @@
                 <div class="row">
                     <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
                     <div class="col-md-9 dataHead2" id="resTitle" style="display: none"></div>
-                    <div class="col-md-12" style="margin: 0 -15px">
+                    <div class="col-md-12" style="margin: 0 -15px;height: 54%;overflow: auto;">
                         <div class="col-md-2" style="margin: 0 -15px">选择表资源</div>
                         <div class="col-md-10" >
                             <div style="text-align: center" id="dataUp">数据加载中......</div>
@@ -80,7 +92,7 @@
                         </div>
                     </div>
                     <div id="totalList">
-                        <div class="col-md-12" style="margin-bottom: 10px" >
+                        <div class="col-md-12" style="margin-bottom: 10px;padding-top: 10px;" >
                             <div class="col-md-2" style="text-align: right">sql查询</div>
                             <div class="col-md-4">
                                 <input type="text" class="form-control sqlStatements inputVili" >
@@ -154,10 +166,10 @@
     <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
         <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
             <div class="modal-content">
-                <div class="modal-header bg-primary">
+                <div class="modal-header bg-primary" style="background-color: #1e8753 !important;">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                             id="editTableFieldComsCloseId"></button>
-                    <h4 class="modal-title" id="relationalDatabaseModalTitle">预览数据</h4>
+                    <h4 class="modal-title" id="relationalDatabaseModalTitle" style="color: white;font-size: 18px;font-weight: 500;">预览数据</h4>
                 </div>
                 <%--<div class="form">--%>
                 <%--<form class="form-horizontal" role="form" action="addRelationalDatabase" method="post"--%>
@@ -217,11 +229,11 @@
 
 <div id="rMenu">
     <ul>
-        <li id="m_add" onclick="addTreeNode(this);">增加节点</li>
-        <li id="m_del" onclick="removeTreeNode();">删除节点</li>
+        <li id="m_add" onclick="addTreeNode(this);"><span class="glyphicon glyphicon-plus"></span>&nbsp;增加节点</li>
+        <li id="m_del" onclick="removeTreeNode();"><span class="glyphicon glyphicon-trash"></span>&nbsp;删除节点</li>
         <%--<li id="m_check" onclick="checkTreeNode(true);">Check节点</li>--%>
         <%--<li id="m_unCheck" onclick="checkTreeNode(false);">unCheck节点</li>--%>
-        <li id="m_reset" onclick="resetTree();">恢复初始目录</li>
+        <li id="m_reset" onclick="resetTree();"><span class="glyphicon glyphicon-refresh"></span>&nbsp;恢复初始目录</li>
     </ul>
 </div>
 <div class="modal fade" id="createFileMModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -26,18 +26,64 @@
         .custom-error2{
             border-color:#a94442!important;
         }
+        .alert-info {
+            background-color: #e0e0e0 !important;
+            border: none !important;
+            /*border-left: #0e6445 8px solid !important;*/
+        }
+        .page-content-wrapper .page-content{
+            padding: 0px 0px 0px 0px !important;
+        }
+        .source-head,.source-table{
+            padding:0px 20px !important;
+        }
+        #dataSourceList th {
+            background-color: #f1f1f1;
+            color: black;
+            font-size: 14px;
+            border-left: none !important;
+            border-right: none !important;
+            font-weight: normal;
+        }
+        #dataSourceList td {
+            border-left: none !important;
+            border-right: none !important;
+        }
+        .purple.btn,.red.btn,.green.btn ,.btn-danger{
+            border-radius: 6px !important;
+        }
+        .col-sm-3 {
+            width: 25% !important;
+        }
+        .form-group {
+            margin-bottom: 2.6% !important;
+        }
+        .form-control{
+            border-radius:6px !important; ;
+        }
+        .bg-primary {
+            background-color: #1e8753;
+        }
+        .form-control:focus {
+            border-color: #66afe9 !important;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6) !important;
+        }
+        .table-bordered > tbody > tr:hover {
+            background-color: #f5f5f5;
+        }
+
     </style>
 </head>
 <body>
 <div class="page-content">
     <div class="source-head">
-        <h3>文件数据源</h3>
-        <hr>
+        <h3 style="font-size: 17px">文件数据源</h3>
+        <%--<hr>--%>
     </div>
     <%--<div class="source-title">
         <span>文件数据源信息管理</span>
     </div>--%>
-    <div class="alert alert-info" role="alert" style="margin:0  33px">
+    <div class="alert alert-info" role="alert" style="padding: 14px 20px !important;margin-left: 20px;">
         <!--查询条件 -->
         <div class="row">
             <%--<div class="col-md-9">
@@ -61,7 +107,7 @@
                 <th>操作</th>
             </tr>
             </thead>
-            <tbody id="fileBody">
+            <tbody id="fileBody" style="background-color: #ffffff;">
             </tbody>
         </table>
         <div class="page-message" style="float: left">
