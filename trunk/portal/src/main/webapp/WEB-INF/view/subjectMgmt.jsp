@@ -360,14 +360,9 @@
 
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
-    <script type="text/javascript" src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/form-validation/form-validation.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/bundles/artTemplate/template.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/bundles/bootbox/bootbox.min.js"></script>
     <script type="text/javascript">
         var nextSerialNo = 1;
         var currentPage = 1;

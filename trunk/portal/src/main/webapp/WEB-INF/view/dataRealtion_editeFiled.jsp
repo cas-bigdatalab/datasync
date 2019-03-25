@@ -228,7 +228,6 @@
         var filePath = '${FtpFilePath}';
         $(function () {
             chooseTable(sub, 0);
-            loadTree();
         });
 
         var sub1 = '${sessionScope.SubjectCode}';
