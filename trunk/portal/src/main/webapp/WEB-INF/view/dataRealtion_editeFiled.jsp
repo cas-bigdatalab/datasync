@@ -108,76 +108,78 @@
     </div>
 </div>
 
-<%--文件树创建目录弹窗页--%>
-<div id="addSonDirectory" class="modal fade" tabindex="-1" data-width="200">
-    <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">子集目录名称</h4>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="parentURI">
-                <input id="directorName" placeholder="请输入目录名称"/>
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick="addDirectory(this)" class="btn green">创建目录
-                </button>
-                <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="addBrotherDirectory" class="modal fade" tabindex="-1" data-width="200">
-    <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">同级目录名称</h4>
-            </div>
-            <div class="modal-body">
-                <input id="brotherDirectorName" placeholder="请输入目录名称"/>
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick="addDirectory('brother')" class="btn green">创建目录
-                </button>
-                <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
-            </div>
-        </div>
-    </div>
-</div>
-<%--文件树新增文件弹窗页--%>
-<div id="addFile" class="modal fade" tabindex="-1" data-width="200">
-    <div class="modal-dialog" style="min-width:400px;width:auto;max-width: 35%">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">选择文件并上传</h4>
-            </div>
-            <div class="modal-body" style="height: 600px">
-                <form enctype="multipart/form-data">
-                    <div style="height: 400px">
-                        <div class="file-loading">
-                            <input id="file-5" type="file" multiple>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<%--重命名文件弹窗页--%>
-<div id="renameDialog" class="modal fade" tabindex="-1" data-width="200">
-    <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">重命名文件</h4>
-            </div>
-            <div class="modal-body">
-                <input id="newName" placeholder="请输入新名称"/>
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick="reNameFile(this)" class="btn green">确定重命名
-                </button>
-            </div>
-        </div>
+        <%--文件树创建目录弹窗页--%>
+        <%--<div id="addSonDirectory" class="modal fade" tabindex="-1" data-width="200">--%>
+            <%--<div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">--%>
+                <%--<div class="modal-content">--%>
+                    <%--<div class="modal-header">--%>
+                        <%--<h4 class="modal-title">子集目录名称</h4>--%>
+                    <%--</div>--%>
+                    <%--<div class="modal-body">--%>
+                        <%--<input type="hidden" id="parentURI">--%>
+                        <%--<input id="directorName" placeholder="请输入目录名称"/>--%>
+                    <%--</div>--%>
+                    <%--<div class="modal-footer">--%>
+                        <%--<button type="button" onclick="addDirectory(this)" class="btn green">创建目录--%>
+                        <%--</button>--%>
+                        <%--&lt;%&ndash;<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>&ndash;%&gt;--%>
+                    <%--</div>--%>
+                <%--</div>--%>
+            <%--</div>--%>
+        <%--</div>--%>
+        <%--<div id="addBrotherDirectory" class="modal fade" tabindex="-1" data-width="200">--%>
+            <%--<div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">--%>
+                <%--<div class="modal-content">--%>
+                    <%--<div class="modal-header">--%>
+                        <%--<h4 class="modal-title">同级目录名称</h4>--%>
+                    <%--</div>--%>
+                    <%--<div class="modal-body">--%>
+                        <%--<input id="brotherDirectorName" placeholder="请输入目录名称"/>--%>
+                    <%--</div>--%>
+                    <%--<div class="modal-footer">--%>
+                        <%--<button type="button" onclick="addDirectory('brother')" class="btn green">创建目录--%>
+                        <%--</button>--%>
+                        <%--&lt;%&ndash;<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>&ndash;%&gt;--%>
+                    <%--</div>--%>
+                <%--</div>--%>
+            <%--</div>--%>
+        <%--</div>--%>
+        <%--&lt;%&ndash;文件树新增文件弹窗页&ndash;%&gt;--%>
+        <%--<div id="addFile" class="modal fade" tabindex="-1" data-width="200">--%>
+            <%--<div class="modal-dialog" style="min-width:400px;width:auto;max-width: 35%">--%>
+                <%--<div class="modal-content">--%>
+                    <%--<div class="modal-header">--%>
+                        <%--<h4 class="modal-title">选择文件并上传</h4>--%>
+                    <%--</div>--%>
+                    <%--<div class="modal-body" style="height: 600px">--%>
+                        <%--<form enctype="multipart/form-data">--%>
+                            <%--<div style="height: 400px">--%>
+                                <%--<div class="file-loading">--%>
+                                    <%--<input id="file-5" type="file" multiple>--%>
+                                <%--</div>--%>
+                            <%--</div>--%>
+                        <%--</form>--%>
+                    <%--</div>--%>
+                <%--</div>--%>
+            <%--</div>--%>
+        <%--</div>--%>
+        <%--&lt;%&ndash;重命名文件弹窗页&ndash;%&gt;--%>
+        <%--<div id="renameDialog" class="modal fade" tabindex="-1" data-width="200">--%>
+            <%--<div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">--%>
+                <%--<div class="modal-content">--%>
+                    <%--<div class="modal-header">--%>
+                        <%--<h4 class="modal-title">重命名文件</h4>--%>
+                    <%--</div>--%>
+                    <%--<div class="modal-body">--%>
+                        <%--<input id="newName" placeholder="请输入新名称"/>--%>
+                    <%--</div>--%>
+                    <%--<div class="modal-footer">--%>
+                        <%--<button type="button" onclick="reNameFile(this)" class="btn green">确定重命名--%>
+                        <%--</button>--%>
+                    <%--</div>--%>
+                <%--</div>--%>
+            <%--</div>--%>
+        <%--</div>--%>
     </div>
 </div>
 <input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
