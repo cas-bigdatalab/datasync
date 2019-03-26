@@ -58,6 +58,7 @@
     <style>
         .page-content-wrapper .page-content {
             padding: unset !important;
+            background-color: #f1f1f1;
         }
 
         .right_div {
@@ -223,7 +224,6 @@
 
 
 <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
-<%--<script src="${ctx}/resources/bundles/artTemplate/template.js"></script>--%>
 <script src="${ctx}/resources/bundles/jquery/jquery-migrate.min.js"></script>
 <script src="${ctx}/resources/bundles/bootstrapv3.3/js/bootstrap.min.js"></script>
 <script src="${ctx}/resources/bundles/frontend/layout/scripts/back-to-top.js"></script>
@@ -243,7 +243,6 @@
 
 <script type="text/javascript">
     var userName = "${sessionScope.userName}";
-    // var S_columnType;
 
     template.helper("dateFormat", convertMilsToDateString);
     template.helper("dateTimeFormat", convertMilsToDateTimeString);
@@ -287,8 +286,9 @@
         Layout.init();
         bootbox.setLocale("zh_CN");
         var path = window.location.pathname;
-        if (path.indexOf('?') > -1)
+        if (path.indexOf('?') > -1) {
             path = path.substring(0, path.indexOf('?'));
+        }
 
         $("div.left_div ul a").each(function () {
             var href = $(this).attr("href");
@@ -333,6 +333,13 @@
             }
         });
 
+        if (path === "/dataSourceDescribe") {
+            $(".time_div").append("<a>数据发布管理</a>--&gt;<a>新增数据发布</a>");
+        } else if (path === "/loginSuccess") {
+            $(".time_div").append("<a>节点信息</a>");
+            $(".fabu_div2").append("<a>节点信息</a>");
+        }
+
         // 根据显示器重置 div.page-content 实际内容区域大小
         $(".page-content").css("margin-left", $(".page-sidebar").width());
 
@@ -344,7 +351,6 @@
 
 </script>
 <sitemesh:write property="div.siteMeshJavaScript"/>
-<sitemesh:write property="div.artTemplate"/>
 
 
 </body>

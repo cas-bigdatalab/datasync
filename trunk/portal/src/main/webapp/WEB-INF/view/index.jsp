@@ -9,7 +9,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-<c:set value="${pageContext.request.contextPath}" var="ctx"/>
 
 <html>
 
@@ -43,7 +42,6 @@
 
 <body>
 
-<div class="page-content">
     <shiro:hasRole name="root">
         <h3><b>欢迎使用主题库后台管理系统</b></h3>
     </shiro:hasRole>
@@ -101,16 +99,12 @@
         </div>
 
     </shiro:hasRole>
-</div>
 
 </body>
 
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
 
-    <script type="text/javascript">
-        var ctx = '${ctx}';
-    </script>
 </div>
 
 </html>

@@ -61,7 +61,6 @@
 
 <body>
 
-<div class="page-content">
     <div class="row">
         <div class="col-md-12">
             <div class="portlet box blue" id="form_wizard_1">
@@ -370,7 +369,6 @@
             </div>
         </div>
     </div>
-</div>
 <input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
 <input type="hidden" id="imgPath" val="">
 <script type="text/html" id="dataRelationshipList">

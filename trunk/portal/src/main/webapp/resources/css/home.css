@@ -548,7 +548,7 @@ p.pic {
     border: #296ebf 1px solid;
     padding: 4px 14px;
     width: 300px;
-    border-radius: 20px;
+    border-radius: 20px !important;
     background: url("../img/search.png") 270px center no-repeat;
 }
 
