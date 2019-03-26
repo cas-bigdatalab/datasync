@@ -13,29 +13,28 @@
 <c:set value="${pageContext.request.contextPath}" var="ctx"/>
 <html>
 <head>
-    <title>数据编辑关于替换页面</title>
-    <link href="${ctx}/resources/css/dataUpload.css" rel="stylesheet" type="text/css"/>
+    <title>数据记录管理</title>
+    <%--<link href="${ctx}/resources/css/dataUpload.css" rel="stylesheet" type="text/css"/>--%>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
     <link rel="Stylesheet" href="${ctx}/resources/css/common.css"/>
     <link rel="Stylesheet" href="${ctx}/resources/css/jquery.jerichotab.css"/>
-    <link href="${ctx}/resources/bundles/bootstrap-fileinput/css/bootstrap.min.css"/>
+    <%--<link href="${ctx}/resources/bundles/bootstrap-fileinput/css/bootstrap.min.css"/>--%>
     <link rel="stylesheet" href="${ctx}/resources/bundles/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">
-    <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
+    <%--<link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>--%>
     <link href="${ctx}/resources/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
-    <%--<link rel="stylesheet" href="${ctx}/resources/bundles/font-awesome/css/font-awesome.css">--%>
-    <%--<link rel="stylesheet" href="${ctx}/resources/bundles/bootstrapv3.3/css/bootstrap.css">--%>
     <link href="${ctx}/resources/css/home.css" type="text/css"/>
 
     <style type="text/css">
-        .datainp{border:1px #ccc solid;}
-        .datep{ margin-bottom:40px;}
-        .jedatebox{
-            z-index:10052 !important;
-        }
-        .user_div{
+        /*.datainp{border:1px #ccc solid;}*/
+        /*.datep{ margin-bottom:40px;}*/
+        /*.jedatebox{*/
+            /*z-index:10052 !important;*/
+        /*}*/
+        /*.user_div{*/
 
-        }
+        /*}*/
+        /*超出隐藏*/
         #content_id table{
             table-layout: fixed;
         }
@@ -44,6 +43,7 @@
             text-overflow: ellipsis;
             overflow: hidden;
         }
+
     </style>
 
 </head>
@@ -179,6 +179,13 @@
     </div>
 
 </div>
+<script type="text/html" id="tableNameTempl">
+    {{each list as value i}}
+    <li class="l3-menu">
+        <a href="javaScript:void(0)" onclick="editTableData(this,1)" id="{{value}}"><i class="fa fa-angle-right"></i>{{value}}</a>
+    </li>
+    {{/each}}
+</script>
 
 <script type="text/html" id="showDataTmpl">
     {{each dataDatil as value i}}
@@ -216,6 +223,13 @@
             }
         });
 
+        function editTableData(i) {
+            var tableName = $(i).attr("id");
+            var subjectCode = userName;
+            var pageNo = 1;
+            editTable_func(subjectCode, tableName, pageNo);
+        }
+
         //数据编辑
         function editTable_func(subjectCode, tableName, pageNo) {
             var ids = "#tab_container_" + tableName;
@@ -233,7 +247,7 @@
                     var delPORTALID;
                     var tabs = "";
                     var s = " ";
-                    s = "<table id='" + tableName + "' class='table table-hover biaoge' spellcheck='0' border='0' style='width:100%;'>" +
+                    s = "<table id='" + tableName + "' class='table table-hover biaoge' spellcheck='0' border='0'>" +
                         "<thead ><tr class='table_tr'>";
                     //表头
                     var il = 0;
@@ -241,25 +255,22 @@
                         for (var i = 0; i < arr.length; i++) {
                             if (il < 5) {
                                 if (arr[i] === "PORTALID") {
-                                    s += "<th style='display:none;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                    s += "<td style='display:none;'title=" + arr[i] + ">" + arr[i] + "</td>";
                                 } else {
-                                    s += "<th style='text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "<br/><p title=" + columnComment[i] + ">" + columnComment[i] + "</p></th>";
+                                    s += "<td style='width:15%;'>" + arr[i] + "<br/><p title=" + columnComment[i] + ">" + columnComment[i] + "</p></td>";
                                     il++;
                                 }
                             } else {
-                                s += "<th style='display:none;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                s += "<td style='display:none;'title=" + arr[i] + ">" + arr[i] + "</td>";
                             }
                         }
                     }
                     var ss = "";
-                    var m = 0;
                     if (dataArry.length > 0) {
                         ss += "<tbody>";
                         for (var key in dataArry) {
-                            m++;
                             ss+="<tr>";
                             var d = dataArry[key];
-                            var eachData = [];
                             var i = 0;
                             var j = 0;
                             var n = 0;
@@ -278,7 +289,6 @@
                                             ss += "<td title='" + d[k] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp>" + d[k] + "</xmp></td>";
                                             j++;
                                         }
-                                        eachData.push(d[k]);
                                     } else {
                                         if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
                                             var date = d[arr[i]].split(".");
@@ -291,28 +301,17 @@
                                             ss += "<td title='" + d[arr[i]] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp>" + d[arr[i]] + "</xmp></td>";
                                             j++;
                                         }
-                                        eachData.push(d[arr[i]]);
                                     }
                                     i++;
                                 } else {
                                     if (k === arr[i]) {
-                                        if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
-                                            var date = d[k].split(".");
-                                            d[k] = date[0];
-                                        }
                                         if (k === "PORTALID") {
                                             delPORTALID = d[k];
                                         }
-                                        eachData.push(d[k]);
                                     } else {
-                                        if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
-                                            var date = d[arr[i]].split(".");
-                                            d[arr[i]] = date[0];
-                                        }
                                         if (arr[i] === "PORTALID") {
                                             delPORTALID = d[arr[i]];
                                         }
-                                        eachData.push(d[arr[i]]);
                                     }
                                     i++;
                                 }
@@ -326,7 +325,7 @@
                                 "<i class='fa fa-trash-o fa-fw' aria-hidden='true'></i>删除</a></td></tr></table></td></tr>";
                         }
                         ss += "</tbody>";
-                        s += "<th style='text-align: center;width:22%;height:60px;'>操作</th></tr></thead>";
+                        s += "<td style='width:22%;'>操作</td></tr></thead>";
                         tabs = s + ss + "</table>";
 
                         tabs += "<div class='review-item clearfix'><div id='page_div" + tableName + "' style='padding-top: 25px; float: left;'>" +
@@ -442,7 +441,6 @@
                             m++;
                             ss += "<tbody><tr>";
                             var d = dataArry[key];
-                            var eachData = [];
                             var i = 0;
                             var j = 0;
                             var n = 0;
@@ -461,7 +459,6 @@
                                             ss += "<td title='" + d[k] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp>" + d[k] + "</xmp></td>";
                                             j++;
                                         }
-                                        eachData.push(d[k]);
                                     } else {
                                         if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
                                             var date = d[arr[i]].split(".");
@@ -474,7 +471,6 @@
                                             ss += "<td title='" + d[arr[i]] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp>" + d[arr[i]] + "</xmp></td>";
                                             j++;
                                         }
-                                        eachData.push(d[arr[i]]);
                                     }
                                     i++;
                                 } else {
@@ -486,7 +482,6 @@
                                         if (k === "PORTALID") {
                                             delPORTALID = d[k];
                                         }
-                                        eachData.push(d[k]);
                                     } else {
                                         if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
                                             var date = d[arr[i]].split(".");
@@ -495,7 +490,6 @@
                                         if (arr[i] === "PORTALID") {
                                             delPORTALID = d[arr[i]];
                                         }
-                                        eachData.push(d[arr[i]]);
                                     }
                                     i++;
                                 }
@@ -553,7 +547,7 @@
                             if (strs2[i] === "PORTALID") {
                                 s += "<input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='0'/>";
                             } else {
-                                s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td><input style='width: 100%;height:100%;' value='' name='" + strs2[i] + "'/></td></tr>";
+                                s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td><input class='form-control' style='width: 100%;height:100%;' value='' name='" + strs2[i] + "'/></td></tr>";
                             }
                         } else {
                             if(strs2[i] === "PORTALID"){
@@ -568,27 +562,27 @@
                                 } else if(dataTypeArr[i] === "time"){
                                     s += "<td><input class='DataTime' style='width: 100%;height:100%;' id='" + strs2[i] + "' type='text'  placeholder='请选择'  /></td></tr>";
                                 }else{
-                                    s += "<td><input  id='" + strs2[i] + "' style='width:100%;height=100%'  name=" + strs2[i] + "  dataType='" + dataTypeArr[i] + "' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 5px;'></p></td></tr>";
+                                    s += "<td><input  id='" + strs2[i] + "' class='form-control' style='width:100%;height=100%'  name=" + strs2[i] + "  dataType='" + dataTypeArr[i] + "' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 5px;'></p></td></tr>";
                                 }
                             }
                         }
                     }
 
-                    var s_add=" <button id='addbtn' style='width: 80px;height: 30px; border: 1px solid #cad9ea;' onclick=\"addTablefuntion('"+dataTypeArr+"','"+strs2+"','"+pkColumnArr+"','"+autoAddArr+"')\">保存</button>";
+                    var s_add=" <button id='addbtn' class='btn btn-success' data-dismiss='modal' onclick=\"addTablefuntion('"+dataTypeArr+"','"+strs2+"','"+pkColumnArr+"','"+autoAddArr+"')\">保存</button>";
                     $("#addTable tbody").append(s);
                     $("#add_div").append(s_add);
                     $("#staticAddData").modal("show");
                     $('.selectData').datepicker({
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
-                        clearBtn: true,//清除按钮
+                        // clearBtn: true,//清除按钮
                         todayBtn: false,//今日按钮
                         format: "yyyy-mm-dd"
                     });
                     $('.selectDataTime').datetimepicker({
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
-                        clearBtn: true,//清除按钮
+                        // clearBtn: true,//清除按钮
                         todayBtn: false,//今日按钮
                         minuteStep:1,
                         format: "yyyy-mm-dd hh:ii:ss"
@@ -597,7 +591,7 @@
                         //第一种
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
-                        clearBtn: true,//清除按钮
+                        // clearBtn: true,//清除按钮
                         todayBtn: false,//今日按钮
                         format: "hh:ii:ss",
                         minView: 0,
@@ -934,7 +928,6 @@
                                 if(strs[i]!==" " && strs[i]!==null) {
                                     var date = strs[i].split(".");
                                     strs[i] = date[0];
-                                    // s_tbody += "<td style='width:40%;'><input class='datainp' id='" + strs2[i] + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' onClick=\"jeDate({dateCell:'#'+'" + strs2[i] + "',isTime:true,format:'YYYY-MM-DD hh:mm:ss'})\" /></td></tr>";
                                     s_tbody += "<td style='width:40%;'><input class='selectDataTime' id='" + strs2[i] + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
                                 }else{
                                     s_tbody += "<td  style='width:40%;'><input class='selectDataTime' id='" + strs2[i] + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
@@ -944,11 +937,11 @@
                             }else if(dataTypeArr[i]==="time"){
                                 s_tbody += "<td  style='width:40%;'><input class='DataTime' id='" + strs2[i] + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
                             }else{
-                                s_tbody+="<td  style='width:40%;'><input title='" + strs[i] + "' id='"+ strs2[i] +"' style='width:100%;height=100%'   name=" + strs2[i] + " value='" + strs[i] + "' dataType='" + dataTypeArr[i] +"' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 5px;'></p></td></tr>";
+                                s_tbody+="<td  style='width:40%;'><input title='" + strs[i] + "' class='form-control'  id='"+ strs2[i] +"' style='width:100%;height=100%'   name=" + strs2[i] + " value='" + strs[i] + "' dataType='" + dataTypeArr[i] +"' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 10px;'></p></td></tr>";
                             }
                         }
                     }
-                    var s_save = "<button id='btn_save'  style='width:80px;height:35px;' onclick=\" saveDataTest('" + tableName + "','" + subjectCode + "','" + dataTypeArr + "','" + currentPage + "','" + strs2 + "','"+delPORTALID+"')\">保存</button> ";
+                    var s_save = "<button id='btn_save'  class='btn btn-success' data-dismiss='modal' onclick=\" saveDataTest('" + tableName + "','" + subjectCode + "','" + dataTypeArr + "','" + currentPage + "','" + strs2 + "','"+delPORTALID+"')\">保存</button> ";
                     $("#update_tbody").append(s_tbody);
                     $("#update_div").append(s_save);
                     $("#staticUpdateData").modal("show");
@@ -956,7 +949,7 @@
                     $('.selectData').datepicker({
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
-                        clearBtn: true,//清除按钮
+                        // clearBtn: true,//清除按钮
                         todayBtn: false,//今日按钮
                         format: "yyyy-mm-dd"
                     });
@@ -964,18 +957,16 @@
                         //第一种
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
-                        clearBtn: true,//清除按钮
+                        // clearBtn: true,//清除按钮
                         todayBtn: false,//今日按钮
                         format: "yyyy-mm-dd hh:ii:ss",
                         minView: 0,
                         minuteStep:1
-
                         //第二种
                         // format: 'yyyy-mm-dd hh:ii:ss',
                         // autoclose: true,
                         // minView: 0,
                         // minuteStep:1
-
                     //    第三种
                     //     language:  'zh-CN',
                     //     dateFormat: 'yyyy-mm-dd',//日期显示格式
@@ -989,7 +980,7 @@
                         //第一种
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
-                        clearBtn: true,//清除按钮
+                        // clearBtn: true,//清除按钮
                         todayBtn: false,//今日按钮
                         format: "hh:ii:ss",
                         minView: 0,

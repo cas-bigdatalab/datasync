@@ -174,8 +174,7 @@
                                                 class="fa fa-bars"></i>导入式建表</a></li>
                                         <li class="l2-menu"><a href="${ctx}/datatest"><i
                                                 class="fa fa-bars"></i>数据记录管理</a>
-                                            <div id="alltableName"
-                                                 style="height:400px;overflow-y: scroll;display:none;margin-top:1%;">
+                                            <div  id="alltableName" style="height:280px;overflow-y: scroll;display:none;margin-top:1%;">
 
                                             </div>
                                         </li>
@@ -221,13 +220,7 @@
 </div>
 
 <%--<div class="foot_div">2018-2020 &copy; 中国科学院计算机网络信息中心.版权所有.</div>--%>
-<script type="text/html" id="tableNameTempl">
-    {{each list as value i}}
-    <li class="l3-menu" style=" border-bottom: 1px #cad9ea solid"><a href="javaScript:void(0)"
-                                                                     onclick="editTableData(this,1)" id="{{value}}">{{value}}</a>
-    </li>
-    {{/each}}
-</script>
+
 
 <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
 <%--<script src="${ctx}/resources/bundles/artTemplate/template.js"></script>--%>
@@ -346,12 +339,7 @@
         $("#content").css("height", $(".page-content").height() - $("#content-top").height() - parseInt($(".fabu_div2").css("margin-bottom")) - parseInt($("div.right_div").css("padding-top")))
     });
 
-    function editTableData(i) {
-        var tableName = $(i).attr("id");
-        var subjectCode = userName;
-        var pageNo = 1;
-        editTable_func(subjectCode, tableName, pageNo);
-    }
+
 
 
 </script>
