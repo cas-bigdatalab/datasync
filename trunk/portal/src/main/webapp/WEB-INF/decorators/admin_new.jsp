@@ -58,6 +58,7 @@
     <style>
         .page-content-wrapper .page-content {
             padding: unset !important;
+            background-color: #f1f1f1;
         }
 
         .right_div {
@@ -338,9 +339,6 @@
 
         $("#content").css("height", $(".page-content").height() - $("#content-top").height() - parseInt($(".fabu_div2").css("margin-bottom")) - parseInt($("div.right_div").css("padding-top")))
     });
-
-
-
 
 </script>
 <sitemesh:write property="div.siteMeshJavaScript"/>

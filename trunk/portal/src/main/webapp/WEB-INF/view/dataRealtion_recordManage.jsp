@@ -255,7 +255,7 @@
                         for (var i = 0; i < arr.length; i++) {
                             if (il < 5) {
                                 if (arr[i] === "PORTALID") {
-                                    s += "<td style='display:none;'title=" + arr[i] + ">" + arr[i] + "</td>";
+                                    s += "<td style='display:none;' title=" + arr[i] + ">" + arr[i] + "</td>";
                                 } else {
                                     s += "<td style='width:15%;'>" + arr[i] + "<br/><p title=" + columnComment[i] + ">" + columnComment[i] + "</p></td>";
                                     il++;
@@ -273,9 +273,7 @@
                             var d = dataArry[key];
                             var i = 0;
                             var j = 0;
-                            var n = 0;
                             for (var k in d) {
-                                n++;
                                 if (j < 5) {
                                     if (k === arr[i]) {
                                         if (dataType[i] === "datetime" && d[k] !== null && d[k] !== " ") {
@@ -424,28 +422,24 @@
                         for (var i = 0; i < arr.length; i++) {
                             if (il < 5) {
                                 if (arr[i] === "PORTALID") {
-                                    s += "<th style='display:none;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                    s += "<td style='display:none;' title=" + arr[i] + ">" + arr[i] + "</td>";
                                 } else {
-                                    s += "<th style='text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "<br/><p title=" + columnComment[i] + ">" + columnComment[i] + "</p></th>";
+                                    s += "<td style='width:15%;'>" + arr[i] + "<br/><p title=" + columnComment[i] + ">" + columnComment[i] + "</p></td>";
                                     il++;
                                 }
                             } else {
-                                s += "<th style='display:none;text-align: center;width:13%;height:70px;'title=" + arr[i] + ">" + arr[i] + "</th>";
+                                s += "<td style='display:none;'title=" + arr[i] + ">" + arr[i] + "</td>";
                             }
                         }
                     }
                     var ss = "";
-                    var m = 0;
                     if (dataArry.length > 0) {
                         for (var key in dataArry) {
-                            m++;
                             ss += "<tbody><tr>";
                             var d = dataArry[key];
                             var i = 0;
                             var j = 0;
-                            var n = 0;
                             for (var k in d) {
-                                n++;
                                 if (j < 5) {
                                     if (k === arr[i]) {
                                         if (dataType[i] === "datetime" && d[k] !== null && d[k] !== " ") {
@@ -475,18 +469,10 @@
                                     i++;
                                 } else {
                                     if (k === arr[i]) {
-                                        if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
-                                            var date = d[k].split(".");
-                                            d[k] = date[0];
-                                        }
                                         if (k === "PORTALID") {
                                             delPORTALID = d[k];
                                         }
                                     } else {
-                                        if (dataType[i] === "datetime" && d[arr[i]] !== null && d[arr[i]] !== " ") {
-                                            var date = d[arr[i]].split(".");
-                                            d[arr[i]] = date[0];
-                                        }
                                         if (arr[i] === "PORTALID") {
                                             delPORTALID = d[arr[i]];
                                         }
@@ -503,7 +489,7 @@
                                 "<i class='fa fa-trash-o fa-fw' aria-hidden='true'></i>删除</a></td></tr></table></td></tr>";
                         }
                         ss += "</tbody>";
-                        s += "<th style='text-align: center;width:22%;height:60px;'>操作</th></tr></thead>";
+                        s += "<td style='width:22%;'>操作</td></tr></thead>";
                         tabs = s + ss + "</table>";
 
                         tabs += "<div class='review-item clearfix'><div id='page_div" + tableName + "' style='padding-top: 25px; float: left;'>" +
@@ -918,6 +904,7 @@
                     var delPORTALID="";
                     var s_tbody="";
                     for (var i = 0; i < strs2.length; i++) {
+                        var getinput_id=strs2[i]+"_coldata";
                         if (strs2[i] === "PORTALID") {
                             delPORTALID = strs[i];
                         }else{
@@ -928,16 +915,16 @@
                                 if(strs[i]!==" " && strs[i]!==null) {
                                     var date = strs[i].split(".");
                                     strs[i] = date[0];
-                                    s_tbody += "<td style='width:40%;'><input class='selectDataTime' id='" + strs2[i] + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
+                                    s_tbody += "<td style='width:40%;'><input class='selectDataTime' id='" + getinput_id + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
                                 }else{
-                                    s_tbody += "<td  style='width:40%;'><input class='selectDataTime' id='" + strs2[i] + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
+                                    s_tbody += "<td  style='width:40%;'><input class='selectDataTime' id='" + getinput_id + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
                                 }
                             }else if(dataTypeArr[i]==="date"){
-                                s_tbody+="<td  style='width:40%;'><input class='selectData' id='"+ strs2[i] +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "'  /></td></tr>";
+                                s_tbody+="<td  style='width:40%;'><input class='selectData' id='"+ getinput_id +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "'  /></td></tr>";
                             }else if(dataTypeArr[i]==="time"){
-                                s_tbody += "<td  style='width:40%;'><input class='DataTime' id='" + strs2[i] + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
+                                s_tbody += "<td  style='width:40%;'><input class='DataTime' id='" + getinput_id + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
                             }else{
-                                s_tbody+="<td  style='width:40%;'><input title='" + strs[i] + "' class='form-control'  id='"+ strs2[i] +"' style='width:100%;height=100%'   name=" + strs2[i] + " value='" + strs[i] + "' dataType='" + dataTypeArr[i] +"' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 10px;'></p></td></tr>";
+                                s_tbody+="<td  style='width:40%;'><input title='" + strs[i] + "' class='form-control'  type='text' id='"+ getinput_id +"' style='width:100%;height=100%'   name=" + strs2[i] + " value='" + strs[i] + "' dataType='" + dataTypeArr[i] +"' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 10px;'></p></td></tr>";
                             }
                         }
                     }
@@ -1309,7 +1296,7 @@
                     checkdataArrs.push(coldata);
                     checkdataArr.push(delPORTALID);
                 }else{
-                   var s= document.getElementById(columnName[i]).value;
+                   var s= document.getElementById(columnName[i]+"_coldata").value;
                     var coldata={};
                     coldata["name"]=columnName[i];
                     coldata["value"]=s;
@@ -1357,6 +1344,7 @@
                         return;
                     }
                 }
+
                 //longtext类型判断
                 if (checkdataArr[i] !== null && checkdataArr[i] !== "" &&  dataTypeArr[i] === "longtext") {
                     var bytesCount = 0;
