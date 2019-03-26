@@ -30,9 +30,6 @@
 
 <body>
 
-<div style="height: 850px;min-height: 850px;" class="page-content" >
-    <div class="time_div"><a href=""><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 用户与组管理</a></div>
-    <div class="fabu_div2">用户与组管理</div>
 
     <div class="col-md-12">
         <div class="tabbable-custom ">
@@ -182,7 +179,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <!--新增用户组Group-->
 <div class="modal fade" tabindex="-1" role="dialog" id="addModal">

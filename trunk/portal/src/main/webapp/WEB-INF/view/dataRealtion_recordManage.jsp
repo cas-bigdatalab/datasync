@@ -48,140 +48,136 @@
 
 </head>
 <body>
-<div class="page-content">
-    <div class="right_div">
-        <div class="time_div"><a><i class="fa fa-chevron-circle-right" aria-hidden="true"></i>关系数据管理</a>--><a>数据记录管理</a></div>
-            <div class="fabu_div2">数据记录管理</div>
-        <div style="">
+<div style="">
 
 
-            <!-- 此处是相关代码 -->
-            <div style="float: left; width: 88%;overflow: hidden;">
-                <ul style="" id="ul_div111" class="nav nav-tabs activeTabs" role="tablist">
+    <!-- 此处是相关代码 -->
+    <div style="float: left; width: 88%;overflow: hidden;">
+        <ul style="" id="ul_div111" class="nav nav-tabs activeTabs" role="tablist">
 
-                </ul>
-            </div>
-            <div style="float:left;width:5%;margin-right: 5%;margin-left: 2%;">
-                <button class="btn btn-primary" type="button"><a href="#" onclick="add_function()" style="color: white;"><i class="fa fa-plus"></i>增加</a></button>
-            </div>
+        </ul>
+    </div>
+    <div style="float:left;width:5%;margin-right: 5%;margin-left: 2%;">
+        <button class="btn btn-primary" type="button"><a href="#" onclick="add_function()" style="color: white;"><i
+                class="fa fa-plus"></i>增加</a></button>
+    </div>
 
-            <div id="content_id" class="tab-content activeTabs" style="min-height:500px;">
+    <div id="content_id" class="tab-content activeTabs" style="min-height:500px;">
 
-            </div>
-            <%--新增表数据--%>
-            <div id="staticAddData" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
-                <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 50%;">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                                    id="addTableData"></button>
-                            <h4 class="modal-title" id="adddata1">新增数据</h4>
+    </div>
+    <%--新增表数据--%>
+    <div id="staticAddData" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
+        <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 50%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                            id="addTableData"></button>
+                    <h4 class="modal-title" id="adddata1">新增数据</h4>
 
-                        </div>
+                </div>
 
-                        <div class="modal-body" style="overflow:scroll;">
-                            <div class="tab-content"
-                                 style="background-color: white;min-height:300px;max-height:60%;padding-top: 20px ;">
-                                <div class="tab-pane active" id="adddata" style=" ">
-                                    <table id="addTable" class="table table-bordered data-table" style="border: 0">
-                                        <thead class="table_tr">
-                                        <th style="width:20%;">字段名</th>
-                                        <th style="width:20%;">字段类型</th>
-                                        <th style="width:20%;">注释</th>
-                                        <th style="width:40%;">字段值</th>
-                                        </thead>
-                                        <tbody id="addtbody">
+                <div class="modal-body" style="overflow:scroll;">
+                    <div class="tab-content"
+                         style="background-color: white;min-height:300px;max-height:60%;padding-top: 20px ;">
+                        <div class="tab-pane active" id="adddata" style=" ">
+                            <table id="addTable" class="table table-bordered data-table" style="border: 0">
+                                <thead class="table_tr">
+                                <th style="width:20%;">字段名</th>
+                                <th style="width:20%;">字段类型</th>
+                                <th style="width:20%;">注释</th>
+                                <th style="width:40%;">字段值</th>
+                                </thead>
+                                <tbody id="addtbody">
 
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="add_div" class="modal-footer">
-
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div id="add_div" class="modal-footer">
 
-            <%--修改数据--%>
-            <div id="staticUpdateData" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
-                <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 50%;">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                                    id="editTableFieldComsCloseId11"></button>
-                            <h4 class="modal-title" id="title_id1">表数据编辑</h4>
-
-                        </div>
-
-                        <div class="modal-body" style="overflow:scroll;">
-
-                            <div class="tab-content"
-                                 style="background-color: white;min-height:300px;max-height:50%;padding-top: 20px ;">
-                                <div style="margin-left: 1%;margin-right: 1%;width:98%;">
-                                    <table class="table table-bordered data-table" border="0">
-                                        <thead>
-                                        <tr class='table_tr'>
-                                            <th>字段名</th>
-                                            <th>字段类型</th>
-                                            <th>注释</th>
-                                            <th>字段值</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="update_tbody"></tbody>
-                                    </table>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="update_div" class="modal-footer">
-                            <%--<button id="updatebtn"  style="width: 80px;height: 30px; border: 1px solid #cad9ea;">保存</button>--%>
-                        </div>
-                    </div>
                 </div>
             </div>
-
-            <%--表数据查看详情--%>
-            <div id="staticShowDataDetail" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
-                <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 50%;">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                                    id="editTableFieldComsCloseId1"></button>
-                            <h4 class="modal-title" id="checkDetial">查看详情</h4>
-
-                        </div>
-
-                        <div class="modal-body" style="overflow:scroll;max-height:600px;">
-                            <div class="tab-content"
-                                 style="background-color: white;padding-top: 20px ;">
-                                <div class="tab-pane active" id="checkData1"
-                                     style="width: 98%;margin-right: 1%;margin-left: 1%; ">
-                                    <table spellcheck="0" cellspacing="0" border="0" class="table table-bordered data-table" id="checkTable"style="text-align: center;">
-                                        <thead>
-                                        <tr class="table_tr" >
-                                        <th style="width:20%;text-align: center;">字段名</th>
-                                        <th style="width:20%;text-align: center;">字段类型</th>
-                                        <th style="width:20%;text-align: center;">注释</th>
-                                        <th style="width:40%;text-align: center;">字段值</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
+
+    <%--修改数据--%>
+    <div id="staticUpdateData" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
+        <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 50%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                            id="editTableFieldComsCloseId11"></button>
+                    <h4 class="modal-title" id="title_id1">表数据编辑</h4>
+
+                </div>
+
+                <div class="modal-body" style="overflow:scroll;">
+
+                    <div class="tab-content"
+                         style="background-color: white;min-height:300px;max-height:50%;padding-top: 20px ;">
+                        <div style="margin-left: 1%;margin-right: 1%;width:98%;">
+                            <table class="table table-bordered data-table" border="0">
+                                <thead>
+                                <tr class='table_tr'>
+                                    <th>字段名</th>
+                                    <th>字段类型</th>
+                                    <th>注释</th>
+                                    <th>字段值</th>
+                                </tr>
+                                </thead>
+                                <tbody id="update_tbody"></tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="update_div" class="modal-footer">
+                    <%--<button id="updatebtn"  style="width: 80px;height: 30px; border: 1px solid #cad9ea;">保存</button>--%>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%--表数据查看详情--%>
+    <div id="staticShowDataDetail" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
+        <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 50%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                            id="editTableFieldComsCloseId1"></button>
+                    <h4 class="modal-title" id="checkDetial">查看详情</h4>
+
+                </div>
+
+                <div class="modal-body" style="overflow:scroll;max-height:600px;">
+                    <div class="tab-content"
+                         style="background-color: white;padding-top: 20px ;">
+                        <div class="tab-pane active" id="checkData1"
+                             style="width: 98%;margin-right: 1%;margin-left: 1%; ">
+                            <table spellcheck="0" cellspacing="0" border="0" class="table table-bordered data-table"
+                                   id="checkTable" style="text-align: center;">
+                                <thead>
+                                <tr class="table_tr">
+                                    <th style="width:20%;text-align: center;">字段名</th>
+                                    <th style="width:20%;text-align: center;">字段类型</th>
+                                    <th style="width:20%;text-align: center;">注释</th>
+                                    <th style="width:40%;text-align: center;">字段值</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script type="text/html" id="showDataTmpl">

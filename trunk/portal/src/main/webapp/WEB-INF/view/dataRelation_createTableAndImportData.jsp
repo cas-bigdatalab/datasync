@@ -9,158 +9,34 @@
     <title>Title</title>
 </head>
 <body>
-<div class="page-content">
-    <%--弹窗页定义 开始--%>
-    <%--弹窗页定义 结束--%>
 
-    <%--模板定义 开始--%>
-    <script type="text/html" id="createTable">
-        <div tableName="{{tableName}}" class="tab-pane">
-            <table class="table table-hover table-bordered">
-                <thead>
-                <tr style="word-break: keep-all">
-                    <th>序号</th>
-                    <th>excel字段名称</th>
-                    <th>excel字段注释</th>
-                    <th>字段类型</th>
-                    <th>字段长度</th>
-                    <th>
-                        是否主键
-                        <button class="btn btn-default" id="clearPK" type="button">清除</button>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {{each data as v i}}
-                {{if i > 0}}
-                <tr>
-                    <td>{{i}}</td>
-
-                    {{each v as vv ii}}
-                    {{if ii > 2}}
-                    <td>
-                        <input name={{vv}} value={{vv}}>
-                    </td>
-                    {{/if}}
-                    {{/each}}
-
-                    <td>
-                        <select fieldType={{v[0]}}>
-                            <option selected value="0">请选择字段类型</option>
-                            <option value="varchar">varchar</option>
-                            <option value="int">int</option>
-                            <option value="text">text</option>
-                        </select>
-                    </td>
-
-                    <td>
-                        <input fieldLength={{v[0]}} placeholder="请输入字段长度"/>
-                    </td>
-                    <td><input fieldPk="{{v[0]}}" name="isPK" type="radio"/></td>
-                </tr>
-                {{/if}}
-                {{/each}}
-                </tbody>
-            </table>
-        </div>
-        <button type="button" onclick="createTableAndInsertValue(this)" data-dismiss="modal"
-                class="saveExcelSuccess btn bule" tablename="{{tableName}}">创建表并上传数据
-        </button>
-    </script>
-
-    <script type="text/html" id="insertData">
-        <div class="tab-pane" tableName="{{tableName}}">
-            <table class="table table-hover table-bordered">
-                <thead>
-                <tr style="word-break: keep-all">
-                    <th>表中字段名称</th>
-                    <th>表中字段注释</th>
-                    <th>excel字段名称</th>
-                    <th>excel字段注释</th>
-                    <th>是否主键</th>
-                </tr>
-                </thead>
-                <tbody>
-                {{each data as v i}}
-                {{if i > 0 && v[0] !="PORTALID"}}
-                <tr>
-                    {{each v as vv ii}}
-                    {{if ii == 0 || ii == 1}}
-                    <td>
-                        {{vv}}
-                    </td>
-                    {{/if}}
-                    {{/each}}
+<%--弹窗页定义 开始--%>
+<%--弹窗页定义 结束--%>
 
 
-                    <td>
-                        <select>
-                            <option value="-1">不匹配任何字段</option>
-                            {{each data as vd id}}
-                            {{if id > 0 && vd[3] != ""}}
-                            {{if id == i}}
-                            <option selected="selected" value={{vd[3]}}>{{vd[3]}}</option>
-                            {{else}}
-                            <option value={{vd[3]}}>{{vd[3]}}</option>
-                            {{/if}}
-                            {{/if}}
-                            {{/each}}
-                        </select>
-                    </td>
-
-
-                    {{each v as vv ii}}
-                    {{if ii == 4}}
-                    <td>{{vv}}</td>
-                    {{/if}}
-                    {{/each}}
-
-                    {{if v[2] == "PRI"}}
-                    <td><input type="radio" name="isPK" fieldPk="{{v[0]}}" checked disabled/></td>
-                    {{else }}
-                    <td><input type="radio" name="isPK" disabled/></td>
-                    {{/if}}
-                </tr>
-                {{/if}}
-                {{/each}}
-                </tbody>
-            </table>
-        </div>
-        <button type="button" onclick="createTableAndInsertValue(this)" data-dismiss="modal"
-                class="saveExcelSuccess btn bule" tablename="{{tableName}}">上传数据
-        </button>
-    </script>
-
-    <%--模板定义 结束--%>
-
-    <%--正文开始--%>
-    <div class="right_div">
-        <div class="time_div"><a><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 关系数据管理</a>--&gt;<a
-        >导入式建表</a></div>
-        <div class="fabu_div2">导入式建表</div>
-        <div id="excelTableList">
-            <div class="qiehuan_div">
-                <ul class="nav nav-tabs activeTabs" role="tablist">
-                </ul>
-            </div>
-            <div class="tap_div">
-                <div class="tab-content activeTabs" style="width:100%;">
-                    <table spellcheck="0" class="table table-hover biaoge" cellspacing="0" border="0">
-                    </table>
-                </div>
-
-            </div>
-        </div>
-        <div id="uploadExcel" style="height: 200px;background: #dddddd">
-            <form name="form" id="fileForm" method="post" style="text-align: center;">
-                <a href="${ctx}/fileImport/getExcelTemplate">点击下载Excel模板</a><br/>
-                <input id="excelFile" style="display: inline;margin-left: 7%;" type="file" name="file"/><br/>
-                <input id="excelFileUpload" type="button" class="btn btn-default" onclick="uploadExcel();"
-                       value="上传"/>
-            </form>
-        </div>
+<%--正文开始--%>
+<div id="excelTableList">
+    <div class="qiehuan_div">
+        <ul class="nav nav-tabs activeTabs" role="tablist">
+        </ul>
     </div>
-    <%--正文结束--%>
+    <div class="tap_div">
+        <div class="tab-content activeTabs" style="width:100%;">
+            <table spellcheck="0" class="table table-hover biaoge" cellspacing="0" border="0">
+            </table>
+        </div>
+
+    </div>
+</div>
+<div id="uploadExcel" style="height: 200px;background: #dddddd">
+    <form name="form" id="fileForm" method="post" style="text-align: center;">
+        <a href="${ctx}/fileImport/getExcelTemplate">点击下载Excel模板</a><br/>
+        <input id="excelFile" style="display: inline;margin-left: 7%;" type="file" name="file"/><br/>
+        <input id="excelFileUpload" type="button" class="btn btn-default" onclick="uploadExcel();"
+               value="上传"/>
+    </form>
+</div>
+<%--正文结束--%>
 </div>
 </body>
 
@@ -414,4 +290,125 @@
     </script>
 </div>
 <%--js 结束--%>
+
+<%--模板定义 开始--%>
+<div id="artTemplate">
+    <script type="text/html" id="createTable">
+        <div tableName="{{tableName}}" class="tab-pane">
+            <table class="table table-hover table-bordered">
+                <thead>
+                <tr style="word-break: keep-all">
+                    <th>序号</th>
+                    <th>excel字段名称</th>
+                    <th>excel字段注释</th>
+                    <th>字段类型</th>
+                    <th>字段长度</th>
+                    <th>
+                        是否主键
+                        <button class="btn btn-default" id="clearPK" type="button">清除</button>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {{each data as v i}}
+                {{if i > 0}}
+                <tr>
+                    <td>{{i}}</td>
+
+                    {{each v as vv ii}}
+                    {{if ii > 2}}
+                    <td>
+                        <input name={{vv}} value={{vv}}>
+                    </td>
+                    {{/if}}
+                    {{/each}}
+
+                    <td>
+                        <select fieldType={{v[0]}}>
+                            <option selected value="0">请选择字段类型</option>
+                            <option value="varchar">varchar</option>
+                            <option value="int">int</option>
+                            <option value="text">text</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <input fieldLength={{v[0]}} placeholder="请输入字段长度"/>
+                    </td>
+                    <td><input fieldPk="{{v[0]}}" name="isPK" type="radio"/></td>
+                </tr>
+                {{/if}}
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <button type="button" onclick="createTableAndInsertValue(this)" data-dismiss="modal"
+                class="saveExcelSuccess btn bule" tablename="{{tableName}}">创建表并上传数据
+        </button>
+    </script>
+
+    <script type="text/html" id="insertData">
+        <div class="tab-pane" tableName="{{tableName}}">
+            <table class="table table-hover table-bordered">
+                <thead>
+                <tr style="word-break: keep-all">
+                    <th>表中字段名称</th>
+                    <th>表中字段注释</th>
+                    <th>excel字段名称</th>
+                    <th>excel字段注释</th>
+                    <th>是否主键</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{each data as v i}}
+                {{if i > 0 && v[0] !="PORTALID"}}
+                <tr>
+                    {{each v as vv ii}}
+                    {{if ii == 0 || ii == 1}}
+                    <td>
+                        {{vv}}
+                    </td>
+                    {{/if}}
+                    {{/each}}
+
+
+                    <td>
+                        <select>
+                            <option value="-1">不匹配任何字段</option>
+                            {{each data as vd id}}
+                            {{if id > 0 && vd[3] != ""}}
+                            {{if id == i}}
+                            <option selected="selected" value={{vd[3]}}>{{vd[3]}}</option>
+                            {{else}}
+                            <option value={{vd[3]}}>{{vd[3]}}</option>
+                            {{/if}}
+                            {{/if}}
+                            {{/each}}
+                        </select>
+                    </td>
+
+
+                    {{each v as vv ii}}
+                    {{if ii == 4}}
+                    <td>{{vv}}</td>
+                    {{/if}}
+                    {{/each}}
+
+                    {{if v[2] == "PRI"}}
+                    <td><input type="radio" name="isPK" fieldPk="{{v[0]}}" checked disabled/></td>
+                    {{else }}
+                    <td><input type="radio" name="isPK" disabled/></td>
+                    {{/if}}
+                </tr>
+                {{/if}}
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <button type="button" onclick="createTableAndInsertValue(this)" data-dismiss="modal"
+                class="saveExcelSuccess btn bule" tablename="{{tableName}}">上传数据
+        </button>
+    </script>
+</div>
+<%--模板定义 结束--%>
 </html>

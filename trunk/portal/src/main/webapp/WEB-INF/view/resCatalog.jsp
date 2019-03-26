@@ -18,10 +18,6 @@
     <link href="${ctx}/resources/bundles/jstree/dist/themes/default/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<div class="page-content" style="min-height: 700px;">
-    <div class="right_div">
-        <div class="time_div"><a href=""><i class="fa fa-chevron-circle-right" aria-hidden="true"></i>数据分类管理</a></div>
-        <div class="fabu_div2">数据分类管理</div>
     <div class="col-md-4" >
             <button type="button" class="btn btn-success btn-sm" style="margin-bottom:5px" onclick="editTree();"><i
                     class="glyphicon glyphicon-pencil"></i> 修改
@@ -32,7 +28,6 @@
     <div class="col-md-4" id="editRegon">
     </div>
 
-</div>
 
 
 <div id="deleteNodeModal" class="modal fade" tabindex="-1" data-width="400">
@@ -53,7 +48,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->

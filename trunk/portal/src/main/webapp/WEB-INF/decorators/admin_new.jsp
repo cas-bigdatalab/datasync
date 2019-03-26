@@ -56,6 +56,19 @@
     <link rel="shortcut icon" href="${ctx}/resources/img/favicon.ico"/>
 
     <style>
+        .page-content-wrapper .page-content {
+            padding: unset !important;
+        }
+
+        .right_div {
+            /*padding-top:8px;*/
+            padding-bottom: unset;
+        }
+
+        #content {
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+        }
         .page-sidebar .page-sidebar-menu > li > a {
             padding: 8px 15px;
         }
@@ -78,13 +91,14 @@
             background: #dddddd;
         }
 
-        .user_div table{
+        .user_div table {
             margin-left: 26%;
         }
 
         .alert.alert-info {
             background-color: #cbe2fc !important;
         }
+
 
         #upload-list th, #dataList th, #table_List1 th, #table_List2 th {
             background-color: #cbe2fc;
@@ -154,12 +168,14 @@
                                 <li><a href="javaScript:void(0);"><i class="fa fa-file-text-o" aria-hidden="true"></i>
                                     关系数据管理</a>
                                     <ul>
-                                        <li class="l2-menu"><a href="${ctx}/dataConfiguration"><i class="fa fa-bars"></i>数据字段配置</a></li>
+                                        <li class="l2-menu"><a href="${ctx}/dataConfiguration"><i
+                                                class="fa fa-bars"></i>数据字段配置</a></li>
                                         <li class="l2-menu"><a href="${ctx}/createTableAndImportData"><i
                                                 class="fa fa-bars"></i>导入式建表</a></li>
                                         <li class="l2-menu"><a href="${ctx}/datatest"><i
                                                 class="fa fa-bars"></i>数据记录管理</a>
-                                            <div id="alltableName" style="height:400px;overflow-y: scroll;display:none;margin-top:1%;">
+                                            <div id="alltableName"
+                                                 style="height:400px;overflow-y: scroll;display:none;margin-top:1%;">
 
                                             </div>
                                         </li>
@@ -184,8 +200,21 @@
 
         <!-- BEGIN CONTENT -->
         <div class="page-content-wrapper">
-            <sitemesh:write property="body"/>
-
+            <div class="page-content" style="height:100%">
+                <div class="right_div">
+                    <div id="content-top">
+                        <div class="time_div">
+                            <a>
+                                <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                        <div class="fabu_div2"></div>
+                    </div>
+                    <div id="content">
+                        <sitemesh:write property="body"/>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- END CONTENT -->
     </div>
@@ -195,7 +224,7 @@
 <script type="text/html" id="tableNameTempl">
     {{each list as value i}}
     <li class="l3-menu" style=" border-bottom: 1px #cad9ea solid"><a href="javaScript:void(0)"
-                                                                        onclick="editTableData(this,1)" id="{{value}}">{{value}}</a>
+                                                                     onclick="editTableData(this,1)" id="{{value}}">{{value}}</a>
     </li>
     {{/each}}
 </script>
@@ -267,21 +296,6 @@
         var path = window.location.pathname;
         if (path.indexOf('?') > -1)
             path = path.substring(0, path.indexOf('?'));
-        $("ul.page-sidebar-menu a").each(function () {
-            var href = $(this).attr("href");
-            if (href.indexOf('?') > -1)
-                href = href.substring(0, href.indexOf('?'));
-            if (href === path) {
-                $(this).parent().addClass("active");
-                if ($(this).parent().parent().hasClass("sub-menu")) {
-                    $(this).parent().parent().parent().children("a").trigger("click");
-                    $(this).parent().parent().parent().children("a").append('<span class="selected"></span>');
-                    $(this).parent().parent().parent().addClass("active");
-                } else {
-                    $(this).parent().children("a").append('<span class="selected"></span>');
-                }
-            }
-        });
 
         $("div.left_div ul a").each(function () {
             var href = $(this).attr("href");
@@ -292,21 +306,44 @@
                 $(this).addClass("active");
                 var level2 = $(this).parent().is("[class='l2-menu']");
                 var level3 = $(this).parent().is("[class='l3-menu']");
+                var oneName, twoName, threeName;
                 if (level3) {
+                    threeName = $(this).text();
+
                     $(this).parent().parent().show();
+                    twoName = $(this).parent().parent().prev().text();
                     $(this).parent().parent().prev().addClass("active");
 
                     $(this).parent().parent().parent().show();
+                    oneName = $(this).parent().parent().parent().prev().text();
                     $(this).parent().parent().parent().prev().addClass("active");
                 } else if (level2) {
+                    twoName = $(this).text();
+
                     $(this).parent().parent().show();
+                    oneName = $(this).parent().parent().prev().text();
                     $(this).parent().parent().prev().addClass("active");
                 } else {
+                    oneName = $(this).text();
+                }
+                $("div.time_div a").append(oneName);
+                if (typeof threeName !== "undefined") {
+                    $("div.time_div").append("--&gt;" + "<a>" + twoName + "</a>");
+                    $("div.time_div").append("--&gt;" + "<a>" + threeName + "</a>");
+                    $(".fabu_div2").append(threeName);
+                } else if (typeof twoName !== "undefined") {
+                    $("div.time_div").append("--&gt;" + "<a>" + twoName + "</a>");
+                    $(".fabu_div2").append(twoName);
+                } else {
+                    $(".fabu_div2").append(oneName);
                 }
             }
         });
 
+        // 根据显示器重置 div.page-content 实际内容区域大小
         $(".page-content").css("margin-left", $(".page-sidebar").width());
+
+        $("#content").css("height", $(".page-content").height() - $("#content-top").height() - parseInt($(".fabu_div2").css("margin-bottom")) - parseInt($("div.right_div").css("padding-top")))
     });
 
     function editTableData(i) {
@@ -319,6 +356,7 @@
 
 </script>
 <sitemesh:write property="div.siteMeshJavaScript"/>
+<sitemesh:write property="div.artTemplate"/>
 
 
 </body>

@@ -17,135 +17,130 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/fileinput.min.css">
 </head>
 <body>
-<div class="page-content">
-    <%--弹窗页定义 开始--%>
-    <%--创建目录弹窗页--%>
-    <div id="addSonDirectory" class="modal fade" tabindex="-1" data-width="200">
-        <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">新增目录名称</h4>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="parentURI">
-                    <input id="directorName" placeholder="请输入目录名称"/>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" onclick="addDirectory(this)" class="btn green">创建目录
-                    </button>
-                </div>
+<%--弹窗页定义 开始--%>
+<%--创建目录弹窗页--%>
+<div id="addSonDirectory" class="modal fade" tabindex="-1" data-width="200">
+    <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">新增目录名称</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="parentURI">
+                <input id="directorName" placeholder="请输入目录名称"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="addDirectory(this)" class="btn green">创建目录
+                </button>
             </div>
         </div>
     </div>
-    <%--重命名文件弹窗页--%>
-    <div id="renameDialog" class="modal fade" tabindex="-1" data-width="200">
-        <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">重命名文件</h4>
-                </div>
-                <div class="modal-body">
-                    <input id="newName" placeholder="请输入新名称"/>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" onclick="reNameFile(this)" class="btn green">确定重命名
-                    </button>
-                </div>
+</div>
+<%--重命名文件弹窗页--%>
+<div id="renameDialog" class="modal fade" tabindex="-1" data-width="200">
+    <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">重命名文件</h4>
+            </div>
+            <div class="modal-body">
+                <input id="newName" placeholder="请输入新名称"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="reNameFile(this)" class="btn green">确定重命名
+                </button>
             </div>
         </div>
     </div>
-    <%--新增文件弹窗页--%>
-    <div id="uploadFile" class="modal fade" tabindex="-1" data-width="200">
-        <div class="modal-dialog" style="min-width:400px;width:auto;max-width: 35%">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">选择文件并上传</h4>
-                </div>
-                <div class="modal-body" style="height: 600px">
-                    <form enctype="multipart/form-data">
-                        <div style="height: 400px">
-                            <div class="file-loading">
-                                <input id="file-5" type="file" multiple>
-                            </div>
+</div>
+<%--新增文件弹窗页--%>
+<div id="uploadFile" class="modal fade" tabindex="-1" data-width="200">
+    <div class="modal-dialog" style="min-width:400px;width:auto;max-width: 35%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">选择文件并上传</h4>
+            </div>
+            <div class="modal-body" style="height: 600px">
+                <form enctype="multipart/form-data">
+                    <div style="height: 400px">
+                        <div class="file-loading">
+                            <input id="file-5" type="file" multiple>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    <%--弹窗页定义 结束--%>
+</div>
+<%--弹窗页定义 结束--%>
 
-    <%--模板 开始--%>
-    <script type="text/html" id="fileNetList">
-        {{if data != null}}
-        {{each data as v i}}
-        <tr>
-            <%--<td></td>--%>
-            <td class="{{v.fileType}} fileName {{if v.fileType == 'dir'}} file-name {{else}} file-file {{/if}}"
-                path="{{v.filePath}}">
-                <div class="text_name">{{v.fileName}}</div>
-            </td>
-            <td class="text-center">{{ if v.fileLength == null}} - {{else}} {{v.fileLength}} {{/if}}</td>
-            <td class="text-center">{{v.fileLastModified}}</td>
-        </tr>
-        {{/each}}
-        {{else}}
-        <tr>
-            <td class="text-center" colspan="3" style="height: 150px">当前目录下没有文件</td>
-        </tr>
-        {{/if}}
-    </script>
+<%--模板 开始--%>
+<script type="text/html" id="fileNetList">
+    {{if data != null}}
+    {{each data as v i}}
+    <tr>
+        <%--<td></td>--%>
+        <td class="{{v.fileType}} fileName {{if v.fileType == 'dir'}} file-name {{else}} file-file {{/if}}"
+            path="{{v.filePath}}">
+            <div class="text_name">{{v.fileName}}</div>
+        </td>
+        <td class="text-center">{{ if v.fileLength == null}} - {{else}} {{v.fileLength}} {{/if}}</td>
+        <td class="text-center">{{v.fileLastModified}}</td>
+    </tr>
+    {{/each}}
+    {{else}}
+    <tr>
+        <td class="text-center" colspan="3" style="height: 150px">当前目录下没有文件</td>
+    </tr>
+    {{/if}}
+</script>
 
-        <script type="text/html" id="fileModules">
-            ss
-        </script>
-    <%--模板结束--%>
+<script type="text/html" id="fileModules">
+    ss
+</script>
+<%--模板结束--%>
 
-    <div class="right_div">
-        <div class="time_div"><a><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> 文件数据管理</a></div>
-        <div class="fabu_div2">文件数据管理</div>
-        <div class="form" id="FileOnNet">
-            <div class="row">
-                <div class="col-xs-6">
-                    <button type="button" class="btn btn-primary"
-                            onclick='showUploadFileDialog($("#FileOnNet #fileBar span.modules").attr("path"))'><i
-                            class="fa fa-upload"></i> 上传
-                    </button>
-                    <button type="button" class="btn btn-default" onclick="showAddFileDialog()"><i
-                            class="fa fa-folder"></i> 新建文件夹
-                    </button>
-                    <%--<button type="button" class="btn btn-default"><i class="fa fa-download"></i> 下载</button>--%>
-                </div>
-                <div class="col-xs-6 text-right file-search">
-                    <input type="text" placeholder="搜索您的文件">
-                    <button type="button"><i class="fa fa-sort-alpha-asc"></i></button>
-                    <button type="button"><i class="fa fa-th-large"></i></button>
-                </div>
-            </div>
-            <div class="file-nav row">
-                <div class="col-xs-12"><%--原值为：9--%>
-                    <div id="fileBar">
-                    </div>
-                    <input type="hidden" id="currentPath">
-                    <input type="hidden" id="currentName">
-                    <input type="hidden" id="copyCache">
-                </div>
-            </div>
-            <div class="file-list" style="overflow-y: scroll;max-height: 600px;">
-                <table>
-                    <thead>
-                    <tr>
-                        <%--<td style="width:20px;"><input id="fileName" type="checkbox"/></td>--%>
-                        <td>文件名</td>
-                        <td class="text-center">大小</td>
-                        <td class="text-center">修改日期</td>
-                    </tr>
-                    </thead>
-                    <tbody id="bd-data">
-                    </tbody>
-                </table>
-            </div>
+
+<div class="form" id="FileOnNet">
+    <div class="row">
+        <div class="col-xs-6">
+            <button type="button" class="btn btn-primary"
+                    onclick='showUploadFileDialog($("#FileOnNet #fileBar span.modules").attr("path"))'><i
+                    class="fa fa-upload"></i> 上传
+            </button>
+            <button type="button" class="btn btn-default" onclick="showAddFileDialog()"><i
+                    class="fa fa-folder"></i> 新建文件夹
+            </button>
+            <%--<button type="button" class="btn btn-default"><i class="fa fa-download"></i> 下载</button>--%>
         </div>
+        <div class="col-xs-6 text-right file-search">
+            <input type="text" placeholder="搜索您的文件">
+            <button type="button"><i class="fa fa-sort-alpha-asc"></i></button>
+            <button type="button"><i class="fa fa-th-large"></i></button>
+        </div>
+    </div>
+    <div class="file-nav row">
+        <div class="col-xs-12"><%--原值为：9--%>
+            <div id="fileBar">
+            </div>
+            <input type="hidden" id="currentPath">
+            <input type="hidden" id="currentName">
+            <input type="hidden" id="copyCache">
+        </div>
+    </div>
+    <div class="file-list" style="overflow-y: scroll;max-height: 600px;">
+        <table>
+            <thead>
+            <tr>
+                <%--<td style="width:20px;"><input id="fileName" type="checkbox"/></td>--%>
+                <td>文件名</td>
+                <td class="text-center">大小</td>
+                <td class="text-center">修改日期</td>
+            </tr>
+            </thead>
+            <tbody id="bd-data">
+            </tbody>
+        </table>
     </div>
 </div>
 </body>

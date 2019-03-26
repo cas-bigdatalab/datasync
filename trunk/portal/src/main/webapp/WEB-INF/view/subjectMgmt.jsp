@@ -18,10 +18,6 @@
 </head>
 
 <body>
-    <div class="page-content">
-        <div class="right_div">
-            <div class="time_div"><a href=""><i class="fa fa-chevron-circle-right" aria-hidden="true"></i>主题库注册管理</a></div>
-            <div class="fabu_div2">主题库注册管理</div>
 
         <!--专业库筛选条件-->
         <div class="alert alert-info" role="alert">
@@ -69,8 +65,6 @@
                 <div id="pagination" style="float: right"></div>
             </div>
         </div>
-    </div>
-    </div>
     <script type="text/html" id="subjectListTable">
         {{each list}}
         <tr>
