@@ -144,16 +144,16 @@
                                                                                  aria-hidden="true"></i>
                                     主题库注册管理</a>
                                 </li>
-                                <li><a class="" href="${ctx}/resCatalog"><i class="fa fa-cog"
+                                <li><a class="" href="${ctx}/resCatalog"><i class="fa fa-book"
                                                                             aria-hidden="true"></i> 数据分类管理</a>
                                 </li>
-                                <li><a class="" href="${ctx}/group/list"><i class="fa fa-cog"
+                                <li><a class="" href="${ctx}/group/list"><i class="fa fa-users"
                                                                             aria-hidden="true"></i> 用户与组管理</a>
                                 </li>
-                                <li><a class="" href="${ctx}/dataRelease"><i class="fa fa-cog"
+                                <li><a class="" href="${ctx}/dataRelease"><i class="fa fa-upload"
                                                                              aria-hidden="true"></i> 发布审核管理</a>
                                 </li>
-                                <li><a class="" href="javaScript:void(0);"><i class="fa fa-cog"
+                                <li><a class="" href="javaScript:void(0);"><i class="fa  fa-bar-chart"
                                                                               aria-hidden="true"></i> 数据统计管理</a>
                                     <ul>
                                         <li class="l2-menu"><a href="${ctx}/statisticalDataDetail"><i
@@ -166,7 +166,7 @@
                         </shiro:hasRole>
                         <shiro:hasRole name="admin">
                             <ul>
-                                <li><a href="javaScript:void(0);"><i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                <li><a href="javaScript:void(0);"><i class="fa fa-database" aria-hidden="true"></i>
                                     关系数据管理</a>
                                     <ul>
                                         <li class="l2-menu"><a href="${ctx}/dataConfiguration"><i
@@ -182,9 +182,9 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li><a href="${ctx}/dataRelease"><i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                <li><a href="${ctx}/dataRelease"><i class="fa fa-upload" aria-hidden="true"></i>
                                     数据发布管理</a></li>
-                                <li><a href="${ctx}/fileMange"><i class="fa fa-file-text-o" aria-hidden="true"></i>
+                                <li><a href="${ctx}/fileMange"><i class="fa fa-file" aria-hidden="true"></i>
                                     文件数据管理</a></li>
 
                             </ul>
@@ -351,7 +351,7 @@
 
 </script>
 <sitemesh:write property="div.siteMeshJavaScript"/>
-
+<sitemesh:write property="div.artTemplate"/>
 
 </body>
 </html>

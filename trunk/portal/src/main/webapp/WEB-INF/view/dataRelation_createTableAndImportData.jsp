@@ -7,6 +7,59 @@
 <html>
 <head>
     <title>Title</title>
+
+    <style>
+        .file {
+            position: relative;
+            display: inline-block;
+            background: #D0EEFF;
+            border: 1px solid #99D3F5;
+            border-radius: 4px;
+            padding: 4px 12px;
+            overflow: hidden;
+            color: #1E88C7;
+            text-decoration: none;
+            text-indent: 0;
+            line-height: 20px;
+        }
+
+        .file input {
+            position: absolute;
+            font-size: 100px;
+            right: 0;
+            top: 0;
+            opacity: 0;
+        }
+
+        .file:hover {
+            background: #AADFFD;
+            border-color: #78C3F3;
+            color: #004974;
+            text-decoration: none;
+        }
+
+        .inputfile {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+
+        /*          .inputfile + label {
+                    font-size: 1.25em;
+                    font-weight: 700;
+                    color: #0d59b1;
+                    background-color: #FFFFff;
+                    display: inline-block;
+                    border-radius: 6px;
+                }
+                .inputfile:focus + label,
+                .inputfile + label:hover {
+                    background-color: #dddddd;
+                }*/
+    </style>
 </head>
 <body>
 
@@ -31,9 +84,11 @@
 <div id="uploadExcel" style="height: 200px;background: #dddddd">
     <form name="form" id="fileForm" method="post" style="text-align: center;">
         <a href="${ctx}/fileImport/getExcelTemplate">点击下载Excel模板</a><br/>
-        <input id="excelFile" style="display: inline;margin-left: 7%;" type="file" name="file"/><br/>
-        <input id="excelFileUpload" type="button" class="btn btn-default" onclick="uploadExcel();"
-               value="上传"/>
+        <%--<input id="" style="display: inline;margin-left: 7%;" type="file" name="file"/><br/>--%>
+        <input type="file" name="file" id="excelFile" class="inputfile"/>
+        <label id="fileLabel" for="excelFile" class="btn btn-default">请选择上传文件</label>
+        <input id="excelFileUpload" type="button" class="btn btn-default" onclick="uploadExcel();" value="上传"/>
+        <input id="resetFile" type="button" class="btn btn-default" onclick="initExcelUpload()" value="重置"/>
     </form>
 </div>
 <%--正文结束--%>
@@ -57,16 +112,41 @@
                 if (!$(".nav.nav-tabs.activeTabs li")[0]) {
                     initExcelUpload();
                 }
-            }
+            };
+
+            var $inputs = $("#excelFile");
+            [].forEach.call($inputs, function (e) {
+                var label = $inputs.next();
+                $inputs.on("change", function (e) {
+                    var fileName = e.target.value.split("\\").pop();
+                    label.text(fileName);
+                    resetButton(true);
+                })
+            })
         })();
 
 
         function initExcelUpload() {
+            resetFile();
             $("#uploadExcel").show();
-            $("#excelFile").val("");
             $("#excelTableList").hide();
         }
 
+        function resetFile() {
+            resetButton(false);
+            $("#excelFile").val("");
+            $("#fileLabel").text("请选择上传文件");
+        }
+
+        function resetButton(isSelectFile) {
+            if (isSelectFile) {
+                $("#excelFileUpload").show();
+                $("#resetFile").show();
+            } else {
+                $("#excelFileUpload").hide();
+                $("#resetFile").hide();
+            }
+        }
 
         function showExcelTables() {
             $("#uploadExcel").hide();
