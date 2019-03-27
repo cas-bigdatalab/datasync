@@ -79,9 +79,17 @@
             <td style="text-align: center">{{$value.contact}}</td>
             <td style="text-align: center">{{$value.phone}}</td>
             <td id="{{$value.id}}">
-                <button class="btn default btn-xs purple updateSubjectBtn"onclick="updateSubject(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>
-                &nbsp;
-                <button class="btn default btn-xs red deleteSubjectBtn" onclick="deleteSubject(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>
+                <%--<button class="btn default btn-xs purple updateSubjectBtn"onclick="updateSubject(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>--%>
+                <%--&nbsp;--%>
+                <%--<button class="btn default btn-xs red deleteSubjectBtn" onclick="deleteSubject(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>--%>
+
+                    <table class="0" cellspacing="0" border="0" align="center">
+                        <tr>
+                            <td class="bianji"><a href="#" onclick="updateSubject(this);"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>修改</a></td>
+                            <td width="1"></td>
+                            <td class="shanchu"><a href="#" onclick="deleteSubject(this);"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i>删除</a></td>
+                        </tr>
+                    </table>
             </td>
         </tr>
         {{/each}}
@@ -194,7 +202,7 @@
 
                 <!--buttons to submit or cancel-->
                 <div class="modal-footer">
-                    <button id="saveSubjectAddBtn" class="btn green" onclick="agreeAddSubject();">
+                    <button id="saveSubjectAddBtn" class="btn btn-success" onclick="agreeAddSubject();">
                         保存
                     </button>
                     <button id="cancelSubjectAddBtn" class="btn default"  data-dismiss="modal">
@@ -316,7 +324,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button id="agreeUpdateSubjectBtn" class="btn green" onclick="agreeUpdateSubject();">
+                    <button id="agreeUpdateSubjectBtn" class="btn btn-success" onclick="agreeUpdateSubject();">
                         保存
                     </button>
                     <button id="cancelUpdateSubjectBtn" class="btn default"  data-dismiss="modal">

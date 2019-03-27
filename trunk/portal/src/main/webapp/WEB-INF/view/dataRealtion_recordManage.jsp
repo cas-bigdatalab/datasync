@@ -307,7 +307,7 @@
                             }
                             ss += "<td align='center'><table class='0' cellspacing='0' border='0' align='center'><tr>" +
                                 "<td class='bianji'><a src='#' onclick=\" updateData('" + arr + "','" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
-                                "<i class='fa fa-pencil-square-o' aria-hidden='true'></i>编辑</a></td><td width='1'></td>" +
+                                "<i class='fa fa-pencil-square-o' aria-hidden='true'></i>修改</a></td><td width='1'></td>" +
                                 "<td class='chakan'><a href='#' onclick=\"checkDada('" + arr + "','" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
                                 "<i class='fa fa-eye' aria-hidden='true'></i>查看</a></td><td width='1'></td>" +
                                 "<td class='shanchu'><a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +

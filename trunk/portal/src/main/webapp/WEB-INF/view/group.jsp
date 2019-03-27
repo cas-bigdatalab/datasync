@@ -210,7 +210,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn green" onclick="submitAddData();" ><i
+                <button type="button" class="btn btn-success" onclick="submitAddData();" ><i
                         class="glyphicon glyphicon-ok"></i>保存
                 </button>
                 <button type="button" data-dismiss="modal" onclick="resetData();" class="btn  btn-danger">取消</button>
