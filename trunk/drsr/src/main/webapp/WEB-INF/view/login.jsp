@@ -10,7 +10,7 @@
 <c:set value="${pageContext.request.contextPath}" var="ctx"/>
 <html>
 <head>
-    <title>分布式多源异构数据资源汇聚传输系统</title>
+    <title>数据资源汇聚传输工具</title>
     <link href="${ctx}/resources/bundles/bootstrapv3.3/css/bootstrap.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
@@ -37,15 +37,15 @@
                 }
             }
         } else {
-            username = " ";
-            password = " ";
+            username = "";
+            password = "";
             remberPassword="";
         }
     %>
 
         <div class="loginbox">
             <%--<h3>数据资源汇聚传输工具</h3>--%>
-            <h3>分布式多源异构数据资源汇聚传输系统</h3>
+            <h3>数据资源汇聚传输工具</h3>
             <table>
                 <tr>
                     <td>用户名：</td>

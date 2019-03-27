@@ -12,7 +12,7 @@ public class portalPages {
     }
     @RequestMapping("/dataSourceDescribe")
     public ModelAndView index2() {
-        ModelAndView modelAndView = new ModelAndView("dataSourceDescribe");
+        ModelAndView modelAndView = new ModelAndView("dataAdd_Publication");
         return modelAndView;
     }
     @RequestMapping("/editResource")
