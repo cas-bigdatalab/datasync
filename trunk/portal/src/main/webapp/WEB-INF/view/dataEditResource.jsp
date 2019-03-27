@@ -22,7 +22,8 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.css">
     <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">
-
+    <link href="${ctx}/resources/bundles/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/zTree_v3/css/demo.css" rel="stylesheet" type="text/css"/>
     <style>
         .undeslist label{
             font-size: 18px;
@@ -30,16 +31,6 @@
         .custom-error{
             color:#a94442!important;
             border-color:#a94442!important;
-        }
-        .key-word ,.permissions-word{
-            padding:0 8px;
-            height: 28px;
-            background:#57add9;
-            color:#fff;
-            font-size: 14px;
-            margin-right:10px;
-            margin-bottom: 5px;
-            float:left;
         }
 
         .key-word p , .permissions-word p{
@@ -54,99 +45,101 @@
             font-size:16px;
             margin-top:2px;
         }
-        .control-label .norequired {
-            color: #e02222;
-            font-size: 12px;
-            padding-left: 2px;
-        }
-        #tab1 .form-group{
-            margin-bottom: 0px;
+        .step .item div{
+            border-radius: 50%!important;
         }
 
     </style>
 </head>
 
 <body>
+<div class="step">
+    <div class="bar">
+        <div class="rate" style="width:50%;"></div>
+    </div>
+    <table class="items">
+        <tr>
+            <td class="item finish"><div class="number">1</div><span>元数据</span></td>
+            <td></td>
+            <td class="item active"><div class="number">2</div><span>实体数据</span></td>
+            <td></td>
+            <td class="item"><div class="number">3</div><span>元数据</span></td>
+        </tr>
+    </table>
+</div>
 
     <div class="row">
         <div class="col-md-12">
             <div class="portlet box blue" id="form_wizard_1">
-                <div class="portlet-title" style="background-color:#3fd5c0">
-                    <div class="caption">
-                        <i class="fa fa-gift"></i> 数据发布 - <span class="step-title">
-                                第&nbsp;<span id="staNum">1</span>&nbsp;步,共&nbsp;3&nbsp;步</span>
-                    </div>
-                </div>
+                <%--<div class="portlet-title" style="background-color:#3fd5c0">--%>
+                    <%--&lt;%&ndash;<div class="caption">&ndash;%&gt;--%>
+                        <%--&lt;%&ndash;<i class="fa fa-gift"></i> 数据发布 - <span class="step-title">&ndash;%&gt;--%>
+								<%--&lt;%&ndash;第&nbsp;<span id="staNum">1</span>&nbsp;步,共&nbsp;3&nbsp;步</span>&ndash;%&gt;--%>
+                    <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
+                <%--</div>--%>
                 <div class="portlet-body form">
                     <div class="form-wizard">
                         <div class="form-body">
-                            <ul class="nav nav-pills nav-justified steps">
-                                <li class="active">
-                                    <a href="#tab1"  class="step">
-                                                <span class="number">
-                                                1 </span>
-                                        <span class="desc">
-                                                <i class="fa fa-check"></i> 元数据 </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#tab2"  class="step">
-                                                <span class="number">
-                                                2 </span>
-                                        <span class="desc">
-                                                <i class="fa fa-check"></i> 实体数据 </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#tab3"  class="step">
-                                                <span class="number">
-                                                3 </span>
-                                        <span class="desc">
-                                                <i class="fa fa-check"></i> 设置权限 </span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <div id="bar" class="progress progress-striped" role="progressbar">
-                                <div class="progress-bar progress-bar-success">
-                                </div>
-                            </div>
+                            <%--<ul class="nav nav-pills nav-justified steps">--%>
+                                <%--<li class="active">--%>
+                                    <%--<a href="#tab1"  class="step">--%>
+												<%--<span class="number">--%>
+												<%--1 </span>--%>
+                                        <%--<span class="desc">--%>
+												<%--<i class="fa fa-check"></i> 元数据 </span>--%>
+                                    <%--</a>--%>
+                                <%--</li>--%>
+                                <%--<li>--%>
+                                    <%--<a href="#tab2"  class="step">--%>
+												<%--<span class="number">--%>
+												<%--2 </span>--%>
+                                        <%--<span class="desc">--%>
+												<%--<i class="fa fa-check"></i> 实体数据 </span>--%>
+                                    <%--</a>--%>
+                                <%--</li>--%>
+                                <%--<li>--%>
+                                    <%--<a href="#tab3"  class="step">--%>
+												<%--<span class="number">--%>
+												<%--3 </span>--%>
+                                        <%--<span class="desc">--%>
+												<%--<i class="fa fa-check"></i> 设置权限 </span>--%>
+                                    <%--</a>--%>
+                                <%--</li>--%>
+                            <%--</ul>--%>
+                            <%--<div id="bar" class="progress progress-striped" role="progressbar">--%>
+                                <%--<div class="progress-bar progress-bar-success">--%>
+                                <%--</div>--%>
+                            <%--</div>--%>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab1">
-                                    <%--<form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"  onfocusout="true"
+                                    <form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"  onfocusout="true"
                                           method="POST">
                                         <div class="form-group">
                                             <label class="control-label col-md-3" for="Task_dataName" >数据集名称 <span class="required">
                                                     * </span>
                                             </label>
-                                            <div class="col-md-4" style="padding-top:14px">
+                                            <div class="col-md-5" style="padding-top:13px">
                                                 <input type="text" class="form-control" name="Task_dataName" required="required"
                                                        id="Task_dataName" placeholder="请输入名称">
                                             </div>
 
                                         </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3" for="Task_email">邮箱号<span class="required">
+                                        <div class="form-group ">
+                                            <label class="control-label col-md-3" for="dataDescribeID">简介 <span class="required">
                                                     * </span>
                                             </label>
-                                            <div class="col-md-4" style="padding-top:14px">
-                                                <input type="text" class="form-control"
-                                                       id="Task_email" name="Task_email" required="required" placeholder="请输入邮箱号">
+                                            <div class="col-md-5" style="padding-top:13px">
+
+
+                                                    <textarea type="text" class="form-control" cols="30" rows="4"
+                                                              placeholder="数据集简介信息"
+                                                              id="dataDescribeID" name="dataDescribeID"
+                                                              required="required"></textarea>
+
                                             </div>
-
                                         </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3" for="Task_phone">电话号码 <span class="norequired">
-                                                    * </span>
-                                            </label>
-                                            <div class="col-md-4" style="padding-top:14px">
-                                                <input type="text" class="form-control" name="Task_phone" required="required" placeholder="请输入电话号码"
-                                                       id="Task_phone" >
-                                            </div>
-
-                                        </div>
-
                                     </form>
-                                    <div style="overflow: hidden">
+                                    <div style="overflow: hidden;margin: 0 -15px">
                                         <div class="form-group">
                                             <label class="control-label col-md-3 timeVili3" style="text-align: right">图片<span  class="required">
                                                     * </span>
@@ -155,7 +148,7 @@
                                                 <div class=" margin-top-10">
                                                     <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
                                                         <div id="cutDiv" style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
-                                                            &lt;%&ndash;<img alt="" src="" id="cutimg" style="height: 150px; width: 200px;"/>&ndash;%&gt;
+                                                            <%--<img alt="" src="" id="cutimg" style="height: 150px; width: 200px;"/>--%>
                                                             <input type="hidden" id="x" name="x" />
                                                             <input type="hidden" id="y" name="y" />
                                                             <input type="hidden" id="w" name="w" />
@@ -174,23 +167,33 @@
                                                                 <input type="button" onclick="doUpload();"/>
                                                         </span>
                                                     </form>
-                                                    <div class="timeVili3" style="display: none">请上传选择图片</div>
+                                                    <div class="timeVili3" style="display: none">请上传选择图片,图片规格为800*600
+                                                    </div>
                                                     <div class="clearfix margin-top-10">
-                                                    <span class="label label-danger">
-                                                注意! </span>
-                                                        图片只能在 IE10+, FF3.6+, Safari6.0+, Chrome6.0+ 和
-                                                        Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。
+                                                        <%--   <span class="label label-danger">
+                                                       注意! </span>
+                                                                   图片只能在 IE10+, FF3.6+, Safari6.0+, Chrome6.0+ 和
+                                                                   Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。--%>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <form class="form-horizontal" id="submit_form2" method="POST" accept-charset="utf-8" role="form"  onfocusout="true">
+
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3" for="select2_tags">关键词<span class="required">
+                                                    * </span></label>
+                                            <div class="checkbox-list col-md-5" style="padding-top:13px">
+                                                <input type="text" class="form-control" id="select2_tags" value=""
+                                                       name="select2_tags" required="required" placeholder="至少三个关键词">
+                                            </div>
+                                        </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3 timeVili2" for="centerCatalogId">资源目录<span class="norequired" >
                                                     * </span>
                                             </label>
-                                            <div class="col-md-4" id="cemterCatalogDiv" style="padding-top:14px" >
+                                            <div class="col-md-5" id="cemterCatalogDiv" style="padding-top:13px" >
 
                                                 <div id="jstree-demo"></div>
                                                 <input type="text"  id="centerCatalogId" name="centerCatalogId"  style="display: none">
@@ -198,229 +201,99 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3 timeVili" >选择时间<span class="required">
-                                                    * </span></label>
-                                            <div class="col-md-6"  style="padding-top:14px">
+                                            <label class="control-label col-md-3 timeVili" >选择时间<span style="margin-left: 13px">
+                                                     </span></label>
+                                            <div class="col-md-5"  style="padding-top:13px">
                                                 <div class="input-group input-daterange">
                                                     <input type="text" class="form-control selectData"
-                                                           data-date-format="yyyy-mm-dd" placeholder="起始时间" readonly>
+                                                           data-date-format="yyyy-mm-dd" placeholder="起始时间">
                                                     <div class="input-group-addon">to</div>
                                                     <input type="text" class="form-control selectData"
-                                                           data-date-format="yyyy-mm-dd" placeholder="起始时间" readonly>
+                                                           data-date-format="yyyy-mm-dd" placeholder="结束时间">
                                                 </div>
                                                 <div class="timeVili" style="display: none">请正确选择时间</div>
                                             </div>
                                         </div>
-                                        <div class="form-group ">
-                                            <label class="control-label col-md-3" for="dataDescribeID">描述 <span class="required">
-                                                    * </span>
-                                            </label>
-                                            <div class="col-md-6" style="padding-top:14px">
-                                                &lt;%&ndash;<textarea type="text"  id="dataDescribeID" name="dataDescribeID" required="required"
-                                                          style=" height: 96px; width: 412px;resize: none;"></textarea>&ndash;%&gt;
-
-                                                <textarea  type="text" class="form-control" cols="30" rows="5"  placeholder="不少于50字"
-                                                           id="dataDescribeID" name="dataDescribeID"  required="required" ></textarea>
-
-                                            </div>
-                                        </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" for="select2_tags">关键词<span class="required">
-                                                    * </span></label>
-                                            <div class="checkbox-list col-md-5" style="padding-top:14px">
-                                                    <input type="text" class="form-control" id="select2_tags" value="" name="select2_tags" required="required"  placeholder="至少三个关键词">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3" for="dataSourceDesID">来源<span  class="required">
-                                                    * </span></label>
-                                            <div class="col-md-6" id="dataSourceDes" style="padding-top:14px">
-                                                <textarea  type="text" class="form-control" cols="30" rows="5" placeholder="请输入来源信息"
-                                                           id="dataSourceDesID" name="dataSourceDesID"  required="required"></textarea>
-
-                                            </div>
-
-                                        </div>
-                                    </form>
---%>
-                                        <form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"  onfocusout="true"
-                                              method="POST">
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3" for="Task_dataName" >数据集名称 <span class="required">
-                                                    * </span>
-                                                </label>
-                                                <div class="col-md-5" style="padding-top:13px">
-                                                    <input type="text" class="form-control" name="Task_dataName" required="required"
-                                                           id="Task_dataName" placeholder="请输入名称">
-                                                </div>
-
-                                            </div>
-                                            <div class="form-group ">
-                                                <label class="control-label col-md-3" for="dataDescribeID">简介 <span class="required">
-                                                    * </span>
-                                                </label>
-                                                <div class="col-md-5" style="padding-top:13px">
-
-
-                                                    <textarea type="text" class="form-control" cols="30" rows="4"
-                                                              placeholder="数据集简介信息"
-                                                              id="dataDescribeID" name="dataDescribeID"
-                                                              required="required"></textarea>
-
-                                                </div>
-                                            </div>
-                                        </form>
-                                        <div style="overflow: hidden;margin: 0 -15px">
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3 timeVili3" style="text-align: right">图片<span  class="required">
-                                                    * </span>
-                                                </label>
-                                                <div class="col-md-9">
-                                                    <div class=" margin-top-10">
-                                                        <form name="form" id="fileForm" action="" class="form-horizontal" method="post">
-                                                            <div id="cutDiv" style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
-                                                                <%--<img alt="" src="" id="cutimg" style="height: 150px; width: 200px;"/>--%>
-                                                                <input type="hidden" id="x" name="x" />
-                                                                <input type="hidden" id="y" name="y" />
-                                                                <input type="hidden" id="w" name="w" />
-                                                                <input type="hidden" id="h" name="h" />
-                                                                <input type="hidden" id="tag" name="tag" val=""/>
-                                                                <input type="hidden" id="imgFlagNum" val=""/>
-                                                            </div>
-                                                            <span class="btn default btn-file" id="checkPicture">
-                                                            <span class="fileinput-new">
-                                                            选择一个图片</span>
-                                                            <input class="photo-file" id="fcupload" type="file" name="imgFile" onchange="readURL(this);">
-                                                            </span>
-                                                            <span id="uploadSpan" class="btn default btn-file" style="display: none">
-                                                                <span class="fileinput-new">
-                                                            上传</span>
-                                                                <input type="button" onclick="doUpload();"/>
-                                                        </span>
-                                                        </form>
-                                                        <div class="timeVili3" style="display: none">
-                                                            请上传选择图片,图片规格为800*600
-                                                        </div>
-                                                        <div class="clearfix margin-top-10">
-                                                 <%--   <span class="label label-danger">
-                                                注意! </span>
-                                                            图片只能在 IE10+, FF3.6+, Safari6.0+, Chrome6.0+ 和
-                                                            Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。--%>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <form class="form-horizontal" id="submit_form2" method="POST" accept-charset="utf-8" role="form"  onfocusout="true">
-
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3" for="select2_tags">关键词<span class="required">
-                                                    * </span></label>
-                                                <div class="checkbox-list col-md-5" style="padding-top:13px">
-                                                    <input type="text" class="form-control" id="select2_tags" value=""
-                                                           name="select2_tags" required="required"
-                                                           placeholder="至少三个关键词">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3 timeVili2" for="centerCatalogId">资源目录<span class="norequired" >
-                                                    * </span>
-                                                </label>
-                                                <div class="col-md-5" id="cemterCatalogDiv" style="padding-top:13px" >
-
-                                                    <div id="jstree-demo"></div>
-                                                    <input type="text"  id="centerCatalogId" name="centerCatalogId"  style="display: none">
-                                                    <div class="timeVili2" style="display: none">请选择目录</div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3 timeVili" >选择时间<span style="margin-left: 13px">
-                                                    </span></label>
-                                                <div class="col-md-5"  style="padding-top:13px">
-                                                    <div class="input-group input-daterange">
-                                                        <input type="text" class="form-control selectData"
-                                                               data-date-format="yyyy-mm-dd" name="startTime"
-                                                               placeholder="起始时间">
-                                                        <div class="input-group-addon">to</div>
-                                                        <input type="text" class="form-control selectData"
-                                                               data-date-format="yyyy-mm-dd" name="endTime"
-                                                               placeholder="结束时间">
-                                                    </div>
-                                                    <div class="timeVili" style="display: none">请正确选择时间</div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3" for="dataSourceDesID">版权声明<span style="margin-left: 13px">
+                                            <label class="control-label col-md-3" for="dataSourceDesID">版权声明<span style="margin-left: 13px">
                                                      </span></label>
-                                                <div class="col-md-5" id="dataSourceDes" style="padding-top:13px">
+                                            <div class="col-md-5" id="dataSourceDes" style="padding-top:13px">
                                                 <textarea  type="text" class="form-control" cols="30" rows="4" placeholder="请输入来源信息"
                                                            id="dataSourceDesID" name="dataSourceDesID" ></textarea>
 
-                                                </div>
-
                                             </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3" for="create_Organization">创建者机构 <span class="required">
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3" for="create_Organization">创建者机构 <span class="required">
                                                     * </span>
-                                                </label>
-                                                <div class="col-md-5" style="padding-top:13px">
-                                                    <input type="text" class="form-control" name="create_Organization" required="required" placeholder="请输入机构名"
-                                                           id="create_Organization" >
-                                                </div>
-
+                                            </label>
+                                            <div class="col-md-5" style="padding-top:13px">
+                                                <input type="text" class="form-control" name="create_Organization" required="required" placeholder="请输入机构名"
+                                                       id="create_Organization" >
                                             </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3" for="create_person">创建人员<span style="margin-left: 13px">
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3" for="create_person">创建人员<span style="margin-left: 13px">
                                                      </span>
-                                                </label>
-                                                <div class="col-md-5" style="padding-top:13px">
-                                                    <input type="text" class="form-control"
-                                                           id="create_person" name="create_person" placeholder="请输入创建人员">
-                                                </div>
+                                            </label>
+                                            <div class="col-md-5" style="padding-top:13px">
+                                                <input type="text" class="form-control"
+                                                       id="create_person" name="create_person" placeholder="请输入创建人员">
+                                            </div>
 
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3" >创建日期<span style="margin-left: 13px">
-                                                     </span></label>
-                                                <div class="col-md-5"  style="padding-top:13px">
-                                                    <div class="input-group input-daterange">
-                                                        <input type="text" class="form-control selectData" id="createTime"
-                                                               data-date-format="yyyy-mm-dd" placeholder="创建日期">
-                                                    </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3" >创建日期<span style="margin-left: 13px">
+                                                    </span></label>
+                                            <div class="col-md-5"  style="padding-top:13px">
+                                                <div class="input-group input-daterange">
+                                                    <input type="text" class="form-control selectData" id="createTime"
+                                                           data-date-format="yyyy-mm-dd" placeholder="创建日期">
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3" for="publish_Organization">发布者机构 <span class="required">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3" for="publish_Organization">发布者机构 <span class="required">
                                                     * </span>
-                                                </label>
-                                                <div class="col-md-5" style="padding-top:13px">
-                                                    <input type="text" class="form-control"  required="required" placeholder="请输入发布者机构"
-                                                           id="publish_Organization" name="publish_Organization">
-                                                </div>
+                                            </label>
+                                            <div class="col-md-5" style="padding-top:13px">
+                                                <input type="text" class="form-control" name="publish_Organization" required="required" placeholder="请输入发布者机构"
+                                                       id="publish_Organization" >
+                                            </div>
 
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3" for="Task_email">发布者邮箱号<span class="required">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3" for="Task_email">发布者邮箱号<span class="required">
                                                     * </span>
-                                                </label>
-                                                <div class="col-md-5" style="padding-top:13px">
-                                                    <input type="text" class="form-control"
-                                                           id="Task_email" name="Task_email" required="required" placeholder="请输入邮箱号">
-                                                </div>
+                                            </label>
+                                            <div class="col-md-5" style="padding-top:13px">
+                                                <input type="text" class="form-control"
+                                                       id="Task_email" name="Task_email" required="required" placeholder="请输入邮箱号">
                                             </div>
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3" for="Task_phone">发布者电话号码 <span style="margin-left: 13px"></span>
-                                                </label>
-                                                <div class="col-md-5" style="padding-top:13px">
-                                                    <input type="text" class="form-control" name="Task_phone" placeholder="请输入电话号码"
-                                                           id="Task_phone" >
-                                                </div>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3" for="Task_phone">发布者电话号码 <span style="margin-left: 13px">
+                                                     </span>
+                                            </label>
+                                            <div class="col-md-5" style="padding-top:13px">
+                                                <input type="text" class="form-control" name="Task_phone" placeholder="请输入电话号码"
+                                                       id="Task_phone" >
                                             </div>
-                                        </form>
+
+                                        </div>
+
+
+
+
+
+
+                                    </form>
 
                                 </div>
                                 <div class="tab-pane" id="tab2">
-
                                     <div style="font-size: 18px">
                                         <span>数据源:</span>
                                         <input name="ways" type="radio" checked="checked" value="DB" id="aaa"/>
@@ -438,11 +311,11 @@
                                         </div>
                                     </div>
                                     <div style="overflow: hidden;display: none" class="select-local">
-                                        <div class="col-md-2" style="font-size: 18px;text-align:left;margin: 0 -15px ">
-                                            <span>选择文件资源</span>
+                                        <div class="col-md-4 col-md-offset-2" style="font-size: 18px;width: 68%;" id="fileContainerTree">
+                                            <ul id="treeDemo" class="ztree" style="width: 100%;"></ul>
                                         </div>
-                                        <div class="col-md-6 col-md-offset-1" style="font-size: 18px" id="fileContainerTree"></div>
-                                        <div id="fileDescribeDiv" style="display: none">
+                                        <div id="fileDescribeDiv" class="col-md-5 tagsinput" style="border: 1px solid grey;display: none" >
+
 
                                         </div>
                                     </div>
@@ -450,23 +323,30 @@
                                 <div class="tab-pane" id="tab3">
 
                                     <div style="overflow: hidden">
-                                        <div class="col-md-6 col-md-offset-3" style="font-size: 18px">
+                                        <div class="col-md-6 col-md-offset-1" style="font-size: 18px">
                                             <form class="form-horizontal">
                                                 <div class="form-group">
-                                                    <label  class="col-sm-4 control-label">选择公开范围</label>
+                                                    <label  class="col-sm-4 control-label">可公开范围</label>
                                                     <div class="col-sm-8">
-                                                        <select name="permissions" id="permissions" class="form-control" multiple>
-                                                            <%--<option value="外网公开用户">外网公开用户</option>
+                                                        <%--<select name="" id="permissions" class="form-control">
+                                                            <option value="" selected="selected">请选择公开范围</option>
+                                                            <option value="外网公开用户">外网公开用户</option>
                                                             <option value="内网用户">内网用户</option>
                                                             <option value="质量组用户">质量组用户</option>
-                                                            <option value="分析组用户">分析组用户</option>--%>
-                                                        </select>
+                                                            <option value="分析组用户">分析组用户</option>
+                                                        </select>--%>
+                                                            <select name="permissions" id="permissions" class="form-control" multiple>
+                                                                <%--<option value="外网公开用户">外网公开用户</option>
+                                                                <option value="内网用户">内网用户</option>
+                                                                <option value="质量组用户">质量组用户</option>
+                                                                <option value="分析组用户">分析组用户</option>--%>
+                                                            </select>
                                                     </div>
                                                 </div>
                                                 <%--<div class="form-group">
                                                     <label  class="col-sm-4 control-label">已选择</label>
                                                     <div class="col-sm-8">
-                                                        <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden" class="permissions-wrap"></div>
+                                                        <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden;padding-left: 5px" class="permissions-wrap"></div>
                                                     </div>
                                                 </div>--%>
                                             </form>
@@ -489,7 +369,7 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                          </div>
                     </div>
 
                 </div>
@@ -508,11 +388,6 @@
     </div>
     {{/each}}
 </script>
-<script type="text/html" id="dataUserList">
-    {{each groupList as value i}}
-        <option value="{{value.groupName}}">{{value.groupName}}</option>
-    {{/each}}
-</script>
 <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
     <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
         <div class="modal-content">
@@ -525,7 +400,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="portlet box green-haze" style="border:0;">
-                            <div class="portlet-title" style="display: none">
+                            <div class="portlet-title " style="display: none">
                                 <ul class="nav nav-tabs" style="float:left;">
                                     <li class="active" style="display: none">
                                         <a href="#editTableFieldComsId" data-toggle="tab"
@@ -558,42 +433,44 @@
         </div>
     </div>
 </div>
+<script type="text/html" id="dataUserList">
+    {{each groupList as value i}}
+    <option value="{{value.groupName}}">{{value.groupName}}</option>
+    {{/each}}
+</script>
 <%@ include file="./tableFieldComsTmpl.jsp" %>
 </body>
 
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
-    <%--<script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>--%>
     <script type="text/javascript" src="${ctx}/resources/js/jquery.Jcrop.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/jquery-form/jquery.form.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.js"></script>
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
-    <script src="${ctx}/resources/js/metaTemplate.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2_locale_zh-CN.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-    <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
-    <script src="${ctx}/resources/js/jquery.json.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
+    <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
+    <script src="${ctx}/resources/bundles/zTree_v3/js/jquery.ztree.all.js"></script>
+    <script src="${ctx}/resources/js/jquery.json.min.js"></script>
     <script type="text/javascript">
         var ctx = '${ctx}';
+        var sdoId = "${resourceId}";
         var sub = '${sessionScope.SubjectCode}'
         var initNum =1;
         var firstFlag=false;
         var secondFlag=false;
-        var resourceId="";
+        var resourceId=sdoId;
         var publicType="mysql";
-        var firstTime ;
-        var lastTime ;
-        var api = null;
-        //将图片截图并上传功能
+        var firstTime;
+        var lastTime;
+
+        /*var tagNames=new Array();*/
         $('.selectData').datepicker({
             language:'zh-CN'
         });
         $('.selectData').each(function() {
-            $(this).datepicker({
-                autoclose: true
-            });
+            $(this).datepicker('clearDates');
         });
         $('.selectData:eq(0)').datepicker().on("changeDate",function (ev) {
             firstTime = new Date(ev.date).getTime()
@@ -605,11 +482,7 @@
             $(".timeVili").removeClass("custom-error")
             $(".timeVili:eq(1)").hide()
         })
-        $("#select2_tags").select2({
-            tags: true,
-            multiple: true,
-            tags:[""],
-        });
+
         var validData = {
             errorElement: 'span', //default input error message container
             errorClass: 'help-block help-block-error', // default input error message class
@@ -696,9 +569,6 @@
                 endTime: {
                     required: "请输入结束时间"
                 },
-                create_Organization: {
-                    required: true,
-                },
                 create_Organization:{
                     required: "请输入机构名",
                 },
@@ -753,20 +623,19 @@
             $("#submit_form2").validate(validData2).element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
         })
 
-
         $("#submit_form1").validate(validData)
         $("#submit_form2").validate(validData2)
+
+
+
+
+        //将图片截图并上传功能
+        var api = null;
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.readAsDataURL(input.files[0]);
                 reader.onload = function(event) {
-                    var tag = $("#tag").val();
-                    if(tag=="") {
-                        $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
-                        $("#tag").val("1");
-                    }
-                    $("#imgFlagNum").val("1")
                     $('#cutimg').removeAttr('src');
                     $('#cutimg').attr('src', event.target.result);
                     $("#checkPicture").hide();
@@ -776,12 +645,8 @@
                         setSelect: [ 10, 10, 100, 100 ],
                         aspectRatio: 4/3,
                         allowSelect:true,
-/*
-                        allowSelect:false,
-*/
-/*
-                        allowResize:false,
-*/
+                       /* allowSelect:false,
+                        allowResize:false,*/
                         onSelect: updateCoords,
                         onChange:updateCoords
                     });
@@ -810,23 +675,17 @@
                 processData: false,
                 success: function (result) {
                     var resultJson = JSON.parse(result);
-                    var filePath = 'resources/img/images/'+resultJson.saveName;
+                    console.log(resultJson)
+                    var filePath = '${ctx}/resources/img/images/'+resultJson.saveName;
                     $("#imgPath").val('resources/img/images/'+resultJson.saveName);
                     $('.jcrop-tracker').hide();
                     $("#checkPicture").show();
                     $("#uploadSpan").hide();
                     $('#cutimg').attr('src',filePath+'_cut.jpg');
                     $('#cutimg').show();
-                    var tagNum = $("#imgFlagNum").val();
-                    if(tagNum=="1") {
-                        $("#imgFlagNum").val("2");
-                        $(".timeVili3").removeClass("custom-error")
-                        $(".timeVili3:eq(1)").hide()
-                    }
                 },
                 error: function (returndata) {
                     alert(returndata);
-                    alert("aaaaaaa")
                 }
             });
         }
@@ -846,6 +705,7 @@
             var $index = $("[name='need_checked']").index($(this))
             if($(this).val() != "" &&$(this).val().trim()!=""){
                 $("[name='need_checked']:eq("+$index +")").removeClass("custom-error")
+                $("[name='need_message']:eq("+$index +")").removeClass("custom-error")
                 $("[name='need_message']:eq("+$index +")").hide()
                 $(".required:eq("+$index +")").parent().removeClass("custom-error")
             }
@@ -860,12 +720,10 @@
             staticSourceTableChoice(1,this,sub,$(this).attr("keyval"),"dataResource")
             $("#previewTableDataAndComsButtonId").click()
         })
-
         $(".button-submit").click(function () {
             addResourceThirdStep()
         })
 
-        initCenterResourceCatalogTree($("#jstree-demo"));
         relationalDatabaseTableList();
         userGroupList()
         function fromAction(flag) {
@@ -923,7 +781,7 @@
                 }
             }
         }
-        function initCenterResourceCatalogTree(container) {
+        function initCenterResourceCatalogTree(container,index) {
             $.ajax({
                 url: ctx + "/getLocalResCatalog",
                 type: "get",
@@ -931,14 +789,25 @@
                 data: {editable: false},
                 success: function (data) {
                     console.log(data)
+                    console.log(index)
+                    var listPar = data.core.data
+                    if(data.id == index){
+                        data.state.selected =true
+                    }else {
+
+                    }
                     $(container).jstree(data).bind("select_node.jstree", function (event, selected) {
                         /*$(".button-save").removeAttr("disabled");*/
                         $("#centerCatalogId").val(selected.node.id);
-                        /*$("#submit_form2").validate(validData2).element($(this));*/
                         $(".timeVili2").removeClass("custom-error")
                         $(".timeVili2:eq(1)").hide()
-
-                    })
+                    }).on("loaded.jstree", function (event, data) {
+                        //这两句化是在loaded所有的树节点后，然后做的选中操作，这点是需要注意的，loaded.jstree 这个函数
+                        //取消选中，然后选中某一个节点
+                        $(container).jstree("deselect_all",true);
+                        //$("#keyKamokuCd").val()是选中的节点id，然后后面的一个参数 true表示的是不触发默认select_node.change的事件
+                        $(container).jstree('select_node',index,true);
+                    });
                 }
             })
         }
@@ -949,8 +818,10 @@
                 success:function (data) {
                     $(".undeslist").empty();
                     var List =JSON.parse(data)
+                    console.log(List)
                     var tabCon = template("dataRelationshipList", List);
                     $(".undeslist").append(tabCon);
+
                 },
                 error:function (data) {
                     console.log("请求失败")
@@ -975,69 +846,6 @@
                 }
             })
         }
-
-        function addResourceFirstStep() {
-            firstFlag=false
-            if((firstTime ==null && lastTime !=null)||(firstTime !=null && lastTime ==null)||(firstTime>lastTime)){
-                $(".timeVili").addClass("custom-error")
-                $(".timeVili:eq(1)").show()
-                firstFlag=true
-            }
-            /*if(firstTime ==null || lastTime==0|| firstTime>lastTime){
-
-            }*/
-            if($("#centerCatalogId").val()==""){
-                $(".timeVili2").addClass("custom-error")
-                $(".timeVili2:eq(1)").show()
-                firstFlag=true
-            }
-            if($("#imgFlagNum").val() !="2"){
-                $(".timeVili3").addClass("custom-error")
-                $(".timeVili3:eq(1)").show()
-                firstFlag=true
-            }
-            if(!$("#submit_form1").valid() ){
-                firstFlag=true
-            }
-
-            if(!$("#submit_form2").valid()){
-                firstFlag=true
-            }
-            if(firstFlag){
-                return
-            }
-
-            var keywordStr = $("#select2_tags").val()
-            $.ajax({
-                url:ctx+"/resource/addResourceFirstStep",
-                type:"POST",
-                data:{
-                    title:$("#Task_dataName").val(),
-                    imagePath:$("#imgPath").val(),
-                    introduction:$("#dataDescribeID").val(),
-                    keyword:keywordStr,
-                    catalogId:$("#centerCatalogId").val(),
-                    createdByOrganization:$("#dataSourceDesID").val(),
-                    startTime:$('.selectData:eq(0)').val(),
-                    endTime:$('.selectData:eq(1)').val(),
-                    email:$("#Task_email").val(),
-                    phoneNum:$("#Task_phone").val(),
-                    createTime:$("#createTime").val(),
-                    publishOrganization:$("#publish_Organization").val(),
-                    createOrganization:$("#create_Organization").val(),
-                    createPerson:$("#create_person").val()
-                },
-                success:function (data) {
-                    var data = JSON.parse(data)
-                    console.log(data)
-                    resourceId = data.resourceId
-                    console.log(resourceId)
-                },
-                error:function (data) {
-                    console.log("请求失败")
-                }
-            })
-        }
         function addResourceSecondStep() {
             secondFlag = false
             var dataList=""
@@ -1048,50 +856,24 @@
                     dataList+=$(this).attr("keyval")+";"
                 })
             }else {
-                var $ele = $("#fileDescribeDiv span")
-                $ele.each(function () {
-                    dataList+=$(this).text()+";"
-                })
-            }
-            if($ele.size() ==0 ){
-                secondFlag = true
-                return
-            }
-            dataList = dataList.substr(0, dataList.length - 1);
-
-
-            var ref = $('#fileContainerTree').jstree(true);//获得整个树
-            var sel = ref.get_selected(false);//获得所有选中节点，返回值为数组
-            var totalSel = sel.toString();
-            $(".jstree-undetermined").each(function(){
-                totalSel = totalSel + ',' + $(this).parent().parent().attr('id');
-            });
-            var reg = new RegExp( '%_%' , "g" );
-            var reg2 = new RegExp( ',' , "g" );
-            totalSel = totalSel.replace( reg , '/' );
-            totalSel = totalSel.replace( reg2 , ';' );
-            var arr1=dataList.split(";");
-            var arr2=totalSel.split(";");
-            var _arr = new Array();
-            for(var i=0;i<arr1.length;i++){//去重
-                _arr.push(arr1[i]);
-            }
-            for(var i=0;i<arr2.length;i++){
-                var flag = true;
-                for(var j=0;j<arr1.length;j++){
-                    if(arr2[i]==arr1[j]){
-                        flag=false;
-                        break;
-                    }
+                // var sss="";
+                // var $ele = $(".fileTag")
+                // $ele.each(function () {
+                //     sss+=$(this).attr("name")+";"
+                // })
+                var fileList=getChecedValueInLocalTree();
+                if(fileList.length==0 ){
+                    secondFlag = true
+                    return
                 }
-                if(flag){
-                    _arr.push(arr2[i]);
-                }
-            }
-            dataList=_arr.toString();
-            dataList = dataList.replace( reg2 , ';' );
+                dataList=fileList.toString();
 
-            console.log(dataList);
+                var reg2 = new RegExp( ',' , "g" );
+                dataList = dataList.replace( reg2 , ';' );
+            }
+
+            // dataList = dataList.substr(0, dataList.length - 1);
+            console.log(dataList)
             $.ajax({
                 url:ctx+"/resource/addResourceSecondStep",
                 type:"POST",
@@ -1109,6 +891,15 @@
             })
         }
         function addResourceThirdStep() {
+           /* var $preEle= $(".permissions-word .tagname")
+            if($preEle.size() ==0){
+                toastr["error"]("请选择用户组");
+                return
+            }
+            var userStr = ""
+            $preEle.each(function () {
+                userStr+=$(this).text()+";"
+            })*/
             var $preEle= $("#permissions").val();
             if($preEle == null){
                 toastr["error"]("请选择用户组");
@@ -1131,11 +922,6 @@
         }
         function editResourceFirstStep() {
             firstFlag=false
-            /*if(firstTime ==0 || lastTime==0|| firstTime>lastTime){
-                $(".timeVili").addClass("custom-error")
-                $(".timeVili:eq(1)").show()
-                firstFlag=true
-            }*/
             if((firstTime ==null && lastTime !=null)||(firstTime !=null && lastTime ==null)||(firstTime>lastTime)){
                 $(".timeVili").addClass("custom-error")
                 $(".timeVili:eq(1)").show()
@@ -1191,61 +977,100 @@
             })
         }
 
-        $('#fileContainerTree').jstree({
-            'core': {
-                'data': function (node, cb) {
-                    var children;
-                    if (node.id == '#') {
-                        children = initFileTree();
-                    } else {
-                        children = getFileList(node.id);
+        function getResourceById() {
+            $.ajax({
+                url:ctx+"/resource/getResourceById",
+                type:"POST",
+                data:{
+                    resourceId:resourceId,
+                },
+                success:function (data) {
+                    var totalList = JSON.parse(data).resource
+                    console.log(JSON.parse(data));
+                    initCenterResourceCatalogTree($("#jstree-demo"),totalList.catalogId);
+                    $("#Task_dataName").val(totalList.title)
+                    $("#Task_email").val(totalList.email)
+                    $("#Task_phone").val(totalList.phoneNum)
+                    firstTime = totalList.startTime
+                    lastTime =totalList.endTime
+                    if(firstTime !=null){
+                        $('.selectData:eq(0)').val(convertMilsToDateString(firstTime))
                     }
-                    generateChildJson(children);
-                    cb.call(this, children);
+                    if(lastTime !=null){
+                        $('.selectData:eq(1)').val(convertMilsToDateString(lastTime))
+                    }
+                    if(totalList.createTime !=null){
+                        $("#createTime").val(convertMilsToDateString(totalList.createTime))
+                    }
+                    $("#publish_Organization").val(totalList.publishOrgnization)
+                    $("#create_Organization").val(totalList.createOrgnization)
+                    $("#create_person").val(totalList.createPerson)
+                    $("#dataDescribeID").val(totalList.introduction)
+                    $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
+                    var path = "${ctx}/"+totalList.imagePath+"_cut.jpg";
+                    $('#cutimg').attr('src',path);
+                    $('#imgPath').val(totalList.imagePath);
+                    publicType =  totalList.publicType==""?"mysql":totalList.publicType=="mysql"?"mysql":"file"
+                    $("#select2_tags").val(totalList.keyword)
+                    $("#select2_tags").select2({
+                        tags: true,
+                        multiple: true,
+                        tags:[""],
+                    });
+                    $("#dataSourceDesID").val(totalList.createdByOrganization)
+                    var publicContentList = totalList.publicContent.split(";")
+                    var typeNum = (totalList.publicType=="mysql"||totalList.publicType=="")?0:1;
+                    $("[name='ways']:eq("+ typeNum+")").prop("checked",true)
+                    if(typeNum ==0){
+                        for(var i=0;i<publicContentList.length;i++){
+                            $("[keyval='"+publicContentList[i] +"']").prop("checked",true)
+                        }
+                    }else {
+                        var fileId=totalList.filePath
+                        fileId = fileId.substr(0, fileId.length - 1);
+                        var str = fileId.replace(/%_%/g, "/");
+                        console.log(str);
+                        var filePathList = str.split(";")
+                        console.log(filePathList)
+                        $(".select-database").hide();
+                        $(".select-local").show();
+
+                    }
+                    var userList = totalList.userGroupId.split(",")
+                    $('#permissions').select2().val(userList).trigger("change");
+                    $('#permissions').select2({
+                        placeholder: "请选择用户",
+                        allowClear: true,
+                    });
+                },
+                error:function (data) {
+                    console.log("请求失败")
                 }
-            },
-            "plugins": [
-                "checkbox", "wholerow"
-            ]
-        }).bind('select_node.jstree', function (e, data) {
-            data.instance.open_all(data.node.id);
-            /*var fileId = data.node.id;
-            var str = fileId.replace(/%_%/g, "/");*/
-            /*var isContain = false;*/
-           //$("#fileDescribeDiv").append("<div name="+ fileId+"><span>"+str +"</span></div>")
-            /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
-        }).bind("deselect_node.jstree", function (e, data) {
-            $("#fileDescribeDiv").html("");
-            var ref = $('#fileContainerTree').jstree(true);//获得整个树
-            var sel = ref.get_selected(false);
-            for(var i = 0; i <sel.length; i++){
-                var str = sel[i].replace(/%_%/g, "/");
-                $("#fileDescribeDiv").append("<div name="+ str+"><span>"+str +"</span></div>")
-            }
-            /*var fileId = data.node.id;
-            var fileName = data.node.text;
-            $("div[name='" + fileId + "']").remove();*/
-            /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
-        }).bind("after_open.jstree", function (e ,data) {
-            $("#fileDescribeDiv").html("");
-            var ref = $('#fileContainerTree').jstree(true);//获得整个树
-            var sel = ref.get_selected(false);
-            //var str = sel.replace(/%_%/g, "/");
-            //var str1 = sel.split("，");
-            for(var i = 0; i <sel.length; i++){
-                var str = sel[i].replace(/%_%/g, "/");
-                $("#fileDescribeDiv").append("<div name="+ str+"><span>"+str +"</span></div>")
-            }
-            /*var isContain = false;*/
-        });
+            })
+        }
+
+
+
+
+
         function initFileTree() {
             var root;
             $.ajax({
                 type: "GET",
-                url: '${ctx}/resource/fileSourceFileList',
+                url: '${ctx}/resource/fileSourceZtreeFileList',
+                data:{
+                    resourceId:resourceId
+                },
                 dataType: "json",
                 async: false,
                 success: function (data) {
+                    var zTreeObj = $.fn.zTree.getZTreeObj("treeDemo");
+                    if(zTreeObj!=null){
+                        zTreeObj.destroy();//用之前先销毁tree
+                    }
+                    var fileNodes=data.nodeList;
+                    var zTreeObj = $.fn.zTree.init($("#treeDemo"),setting,fileNodes);
+
                     root = data;
                 }
             });
@@ -1277,6 +1102,164 @@
                 }
             }
         }
+        function tagClick(obj){
+            $(obj).parent().remove();
+        }
+
+        jQuery(document).ready(function () {
+            getResourceById();
+            initFileTree();
+        })
+
+
+        var setting = {
+            async: {
+                enable: true,
+                url:"${ctx}/resource/ZTreeNode",
+                autoParam:["id", "pid", "name"],
+                dataFilter: filter
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey:'id',
+                    pIdKey:'pid',
+                    rootPId: 0
+                }
+            },
+            check: {
+                enable: true
+            },
+            callback : {
+                beforeAsync: beforeAsync,
+                onAsyncSuccess: onAsyncSuccess,
+                onAsyncError: onAsyncError,
+                onCheck : asyncAll
+            }
+        };
+
+        function filter(treeId, parentNode, childNodes) {
+            if(parentNode.checked==true){
+                for(var num=0;num<childNodes.length;num++){
+                    childNodes[num].open=true;
+                    childNodes[num].checked=true;
+                }
+            }
+            return childNodes;
+        }
+
+        // 递归，获取所有子节点
+        function getAllChildrenNodes(treeNode,result){
+            if (treeNode.isParent) {
+                var childrenNodes = treeNode.children;
+                if (childrenNodes) {
+                    for (var i = 0; i < childrenNodes.length; i++) {
+                        result += ',' + childrenNodes[i].id;
+                        result = getAllChildrenNodes(childrenNodes[i], result);
+                    }
+                }
+            }
+            return result;
+        }
+
+
+        //获取界面中所有被选中的radio
+        function getChecedValueInLocalTree() {
+            var pathsOfCheckedFiles = new Array();
+            var treeObj=$.fn.zTree.getZTreeObj("treeDemo"),
+                nodes=treeObj.getCheckedNodes(true),v="";
+            for(var i=0;i<nodes.length;i++){
+                if(nodes[i].pid!="0"){
+                  pathsOfCheckedFiles.push(nodes[i].id);
+                }
+            }
+            return pathsOfCheckedFiles;
+        }
+
+
+
+        function asyncAll(event, treeId, treeNode) {
+            if (!check()) {
+                return;
+            }
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            if (false) {
+            } else {
+                var nodes=new Array([treeNode]);
+                asyncNodes(nodes[0]);
+            }
+        };
+
+        function asyncNodes(nodes) {
+            if (!nodes) return;
+            curStatus = "async";
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            for (var i=0, l=nodes.length; i<l; i++) {
+                if (nodes[i].isParent && nodes[i].zAsync) {
+                    asyncNodes(nodes[i].children);
+                    // whetherChecked=false;
+                } else {
+                    goAsync = true;
+                    zTree.reAsyncChildNodes(nodes[i], "refresh", true);
+                }
+            }
+        };
+
+        function beforeAsync() {
+            curAsyncCount++;
+        }
+        function onAsyncSuccess(event, treeId, treeNode, msg) {
+            curAsyncCount--;
+            if (curStatus == "expand") {
+                expandNodes(treeNode.children);
+            } else if (curStatus == "async") {
+                asyncNodes(treeNode.children);
+            }
+
+            if (curAsyncCount <= 0) {
+                if (curStatus != "init" && curStatus != "") {
+                    asyncForAll = true;
+                }
+                curStatus = "";
+            }
+        }
+        function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
+            curAsyncCount--;
+
+            if (curAsyncCount <= 0) {
+                curStatus = "";
+                if (treeNode!=null) asyncForAll = true;
+            }
+        }
+        var curStatus = "init", curAsyncCount = 0, asyncForAll = false,
+            goAsync = false;
+
+        function expandNodes(nodes) {
+            if (!nodes) return;
+            curStatus = "expand";
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            for (var i=0, l=nodes.length; i<l; i++) {
+                zTree.expandNode(nodes[i], true, false, false);
+                if (nodes[i].isParent && nodes[i].zAsync) {
+                    expandNodes(nodes[i].children);
+                } else {
+                    goAsync = true;
+                }
+            }
+        }
+
+
+        function check() {
+            if (curAsyncCount > 0) {
+                return false;
+            }
+            return true;
+        }
+
+
+
+
+
 
     </script>
 </div>

@@ -144,7 +144,7 @@ public class ResourceController {
 
     @RequestMapping(value = "editResource")
     public ModelAndView resourceEdit(String resourceId) {
-        ModelAndView mv = new ModelAndView("editResource");
+        ModelAndView mv = new ModelAndView("dataEditResource");
         mv.addObject("resourceId", resourceId);
         return mv;
     }

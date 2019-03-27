@@ -46,25 +46,6 @@
 
 <body>
 <input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
-<div class="page-content">
-    <div>
-        <div class="time_div"><a><i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
-            <shiro:hasRole name="admin">
-                数据发布管理
-            </shiro:hasRole>
-            <shiro:hasRole name="root">
-                发布审核管理
-            </shiro:hasRole>
-        </a>
-        </div>
-        <div class="fabu_div2">
-            <shiro:hasRole name="admin">
-                数据发布管理
-            </shiro:hasRole>
-            <shiro:hasRole name="root">
-                发布审核管理
-            </shiro:hasRole>
-        </div>
         <div class="alert alert-info fabu_div" role="alert">
             <!--查询条件 -->
             <div class="row">
@@ -123,8 +104,6 @@
                 <div class="page-list" style="float: right; padding-right: 15px;"></div>
             </div>
         </div>
-    </div>
-</div>
 <div id="relModal" class="modal fade" tabindex="-1" data-width="400">
     <div class="modal-dialog">
         <div class="modal-content">

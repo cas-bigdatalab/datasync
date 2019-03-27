@@ -23,17 +23,17 @@
     <link href="${ctx}/resources/css/home.css" type="text/css"/>
     <style type="text/css">
         .css_chartsleft {
-            width: 35%;
+            width: 38%;
             height: 100%;
             float: left;
-            margin-left: 2%;
+            margin-left: 1%;
         }
 
         .css_charts {
-            width: 35%;
+            width: 38%;
             height: 100%;
             float: left;
-            margin-left: 18%;
+            margin-left: 13%;
             margin-right: 10%;
         }
 
@@ -50,18 +50,14 @@
             margin-left: 4%;
             /*margin-right: 10%;*/
         }
-        .report-title{border-bottom: #ccc 1px solid; height: 20px;}
-        .report-title h4{background-color: #fff; float:left; font-size: 18px; color:#296ebf; padding-right: 5px;}
-        .report-title div{float: left; width: 25px; height: 20px; border-bottom: #296ebf 1px solid;}
-        .report-title a.more{float: right; background: #fff; padding-left: 5px; padding-top:8px;}
+        /*.report-title{border-bottom: #ccc 1px solid; height: 20px;}*/
+        /*.report-title h4{background-color: #fff; float:left; font-size: 18px; color:#296ebf; padding-right: 5px;}*/
+        /*.report-title div{float: left; width: 25px; height: 20px; border-bottom: #296ebf 1px solid;}*/
+        /*.report-title a.more{float: right; background: #fff; padding-left: 5px; padding-top:8px;}*/
 
     </style>
 </head>
 <body>
-<div class="page-content">
-    <div class="right_div">
-        <div class="time_div"><a href=""><i class="fa fa-chevron-circle-right" aria-hidden="true"></i>数据统计管理</a>--><a href="">专题detail</a></div>
-        <div class="fabu_div2">专题detail</div>
         <div class="tap_div" style="margin-top:15px;">
         <div id="div1" style="width: 100%;height:400px;">
             <div class="report-title">
@@ -69,7 +65,7 @@
                 <div></div>
                 <a href="#" class="more" onclick="func_moreDetail()">查看更多</a>
             </div>
-            <div style="width: 100%;height:100%;margin-top: 2%" class="report-content row">
+            <div style="width: 100%;height:100%;margin-top: 1%" class="report-content row">
             <div id="datashowvisit" class="css_chartsleft"></div>
             <div id="datashowdown" class="css_charts"></div>
             </div>
@@ -83,11 +79,11 @@
                     <a href="#" class="more" onclick="func_toTopTen()">返回</a>
                 </div>
             <div id="datashowvisitTotal"></div>
-            <div id="datashowdownTotal" style="margin-top: 30px;"></div>
+            <div id="datashowdownTotal" style="margin-top: 30px;margin-bottom: 20px;"></div>
         </div>
 
         <%--数据集Top10--%>
-        <div style="width: 100%;height:400px;margin-top: 100px;">
+        <div style="width: 100%;height:400px;margin-top: 50px;">
             <div class="report-title">
                 <h4><i class="fa fa-caret-right"></i>数据集访问量下载量TOP10统计</h4>
                 <a href="#" class="more"></a>
@@ -100,7 +96,7 @@
 
 
         <%--显示所有专题库--%>
-        <div id="themeList" style="width: 100%;height:40%;margin-top: 100px;">
+        <div id="themeList" style="width: 100%;margin-top: 50px;">
             <%--<div style="background-color: #0d957a;color: #FFFFFF;height:3%;width: 200px;height: 30px;">按专题库查看访问量下载量--%>
             <%--</div>--%>
                 <div class="report-title">
@@ -109,7 +105,7 @@
                     <a href="#" class="more"></a>
                 </div>
                 <div class="clearfix"></div>
-            <div  class="report-content row"  style="height-min:300px;width:100%; ">
+            <div  class="report-content row"  style="height-min:300px;width:100%;">
                 <div id="showAllThemeSpan" class="pic-items">
 
                 </div>
@@ -133,19 +129,19 @@
             <div id="detialCharts" style="width: 100%; float: none">
                 <%--<div id="singlethemeChartsV"  style=" margin-left: 10%;width: 35%;float: left; height:60%;"></div>--%>
                 <%--<div id="singlethemeChartsD"   style="margin-left: 10%;margin-right: 10%;width: 35%;float: left;height:60%;"></div>--%>
-                <table id="singleThemeTable" class="table table-bordered data-table">
+                <table id="singleThemeTable" class="table table-hover biaoge" spellcheck="0" border="0">
                     <thead>
-                    <tr>
-                        <th width="60%">数据集名</th>
-                        <th width="20%">访问量<i id="vcount_desc" class="fa fa-sort-desc" aria-hidden="true"
+                    <tr class="table_tr">
+                        <td width="60%">数据集名</td>
+                        <td width="20%">访问量&nbsp;&nbsp;<i id="vcount_desc" class="fa fa-sort-desc" aria-hidden="true"
                                               onclick="func_asc()"></i>
                             <i id="vcount_asc" class="fa fa-sort-asc" aria-hidden="true" style="display: none;"
-                               onclick="func_desc()"></i></th>
-                        <th width="20%">下载量<i id="dcount_desc" class="fa fa-sort-desc" aria-hidden="true"
+                               onclick="func_desc()"></i></td>
+                        <td width="20%">下载量&nbsp;&nbsp;<i id="dcount_desc" class="fa fa-sort-desc" aria-hidden="true"
                                               onclick="func_ascDown()"></i>
                             <i id="dcount_asc" class="fa fa-sort-asc" aria-hidden="true" style="display: none;"
                                onclick="func_descDown()"></i>
-                        </th>
+                        </td>
                     </tr>
                     </thead>
                     <tbody id="single_tbody"></tbody>
@@ -167,20 +163,10 @@
             </div>
         </div>
         </div>
-    </div>
-</div>
 
 
 <script type="text/html" id="showAllTheme">
     {{each list as value i}}
-    <%--<span style="float: left;width:13%;margin-left: 3%;">--%>
-         <%--<a href="javaScript:void(0)" id="{{value.subjectCode}}" onclick="findBySubjectCode(this)">--%>
-             <%--<img src="${ctx}/{{value.imagePath}}"/>--%>
-         <%--</a>--%>
-        <%--<br/>--%>
-        <%--<p>{{value.subjectName}}</p>--%>
-    <%--</span>--%>
-
     <div class="pic-item" style=" width: 20%; float: left; padding: 5px;height: 250px;">
         <a href="javaScript:void(0)" id="{{value.subjectCode}}" onclick="findBySubjectCode(this)">
             <img src="${ctx}/IoReadImage?filePath={{value.imagePath}}" width="100%;"/>
