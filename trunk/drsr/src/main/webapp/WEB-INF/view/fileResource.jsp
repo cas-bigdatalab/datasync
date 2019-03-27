@@ -29,7 +29,7 @@
         .alert-info {
             background-color: #e0e0e0 !important;
             border: none !important;
-            /*border-left: #0e6445 8px solid !important;*/
+            border-left: #0e6445 8px solid !important;
         }
         .page-content-wrapper .page-content{
             padding: 0px 0px 0px 0px !important;
@@ -71,6 +71,30 @@
         .table-bordered > tbody > tr:hover {
             background-color: #f5f5f5;
         }
+        .purple.btn,.red.btn {
+            color: green !important;
+            background-color: #ffffff !important;
+            border: 2px solid green;
+        }
+        .purple.btn:hover,.red.btn:hover{
+            background-color: green !important;
+            color: white !important;
+        }
+        .row h4 {
+            font-size: 18px;
+            color: #1a8651;
+            margin: 0px auto ;
+        }
+        .row a.big-btn {
+            right: 0;
+            position: absolute;
+            top: 48;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background: #137450;
+        }
 
     </style>
 </head>
@@ -83,15 +107,17 @@
     <%--<div class="source-title">
         <span>文件数据源信息管理</span>
     </div>--%>
-    <div class="alert alert-info" role="alert" style="padding: 14px 20px !important;margin-left: 20px;">
+    <div class="alert alert-info" role="alert" style="padding: 12px 20px !important;margin-left: 20px;">
         <!--查询条件 -->
-        <div class="row">
+        <div class="row" style="margin: 5px auto;">
             <%--<div class="col-md-9">
                 <button type="button" class="btn  btn-sm green pull-right" id="addSqlSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;添加SQL数据源</button>
             </div>--%>
-            <div class="col-md-12">
-                <button type="button" class="btn  btn-sm green pull-right" id="addFileSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;新增文件型数据源</button>
-            </div>
+                <h4 style="font-weight: 500 !important;">文件数据信息管理</h4>
+                <a class="big-btn" id="addFileSource">新增文件型数据源</a>
+            <%--<div class="col-md-12">--%>
+                <%--<button type="button" class="btn  btn-sm green pull-right" id="addFileSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;新增文件型数据源</button>--%>
+            <%--</div>--%>
         </div>
     </div>
     <div class="source-table">

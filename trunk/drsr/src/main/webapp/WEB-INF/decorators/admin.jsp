@@ -12,7 +12,7 @@
 
 <html>
 <head>
-    <title>分布式多源异构数据资源汇聚传输系统</title>
+    <title>数据资源汇聚传输工具</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
@@ -203,11 +203,41 @@
         }
         .title{
             font-size: 18;
+            vertical-align: top;
             /*font-family: 宋体;*/
         }
         .page-sidebar .page-sidebar-menu > li.active > a > .selected{
             border-top: 25px double transparent !important;
         }
+
+        .page-sidebar .page-sidebar-menu > li:hover > a:hover{
+            background-color: #4ab380;
+            font-weight: bold;
+            color: #fff;
+            border: 1px solid white;
+        }
+        .page-sidebar .page-sidebar-menu > li.active > a > .selected {
+            border-top: 12px double transparent !important;
+        }
+        .page-sidebar .page-sidebar-menu > li.active > a > .selected {
+            top:10px !important;
+            border-bottom: 12px double transparent;
+        }
+        .page-sidebar .page-sidebar-menu > li.active.open > a > .selected, .page-sidebar .page-sidebar-menu > li.active > a > .selected {
+            border-bottom: 12px double transparent;
+        }
+        <%--.a1 img:hover{--%>
+            <%--src: url("${ctx}/resources/login/img/icon04.1.png");--%>
+        <%--}--%>
+        <%--.page-sidebar .page-sidebar-menu > li .img1{--%>
+            <%--&lt;%&ndash;src="${ctx}/resources/login/img/icon04.png"&ndash;%&gt;--%>
+           <%--background-image: url("${ctx}/resources/login/img/icon04.png");--%>
+        <%--}--%>
+        <%--.page-sidebar .page-sidebar-menu > li .img1:hover{--%>
+            <%--&lt;%&ndash;background: url("${ctx}/resources/login/img/icon04.1.png");&ndash;%&gt;--%>
+            <%--&lt;%&ndash;src:url("${ctx}/resources/login/img/icon04.1.png");&ndash;%&gt;--%>
+            <%--text:expression(src="${ctx}/resources/login/img/icon04.1.png");--%>
+        <%--}--%>
 
     </style>
 </head>
@@ -219,7 +249,7 @@
         <!-- BEGIN LOGO -->
         <div class="page-logo" style="width: auto;">
             <a href="#">
-                <h4 style="margin-top:14px;font-size: 21px;">分布式多源异构数据资源汇聚传输系统</h4>
+                <h4 style="margin-top:14px;font-size: 21px;">数据资源汇聚传输工具</h4>
             </a>
         </div>
 
@@ -254,16 +284,16 @@
                     <div style="height: 32px"></div>
                 </li>
                 <li>
-                    <a href="${ctx}/subjectInfo">
-                        <%--<i class="icon-wrench"></i>--%>
-                        <span class="title"><img style="width: 24px;display: inline;" src="${ctx}/resources/login/img/icon04.png">&nbsp;数据节点信息</span>
+                    <a href="${ctx}/subjectInfo" onmousemove="img1Over(this)" onmouseout="img1Out(this)">
+                        <%--<i class="icon-wren"></i>--%>
+                        <span class="title"><img class="img1" style="width: 24px;display: inline;"  src="${ctx}/resources/login/img/icon04.png">&nbsp;数据节点信息</span>
                         <span class="arrow "></span>
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:;">
+                    <a href="javascript:;"  onmousemove="img2Over(this)" onmouseout="img2Out(this)">
                         <%--<i class=" icon-drawer"></i>--%>
-                        <span class="title"><img style="width: 24px;display: inline;" src="${ctx}/resources/login/img/icon01.png">&nbsp;数据源管理&nbsp;&nbsp;&nbsp;</span>
+                        <span class="title"><img class="img2" style="width: 24px;display: inline;" src="${ctx}/resources/login/img/icon01.png">&nbsp;数据源管理&nbsp;&nbsp;&nbsp;</span>
                         <%--<span class="title">数据源管理</span>--%>
                         <span class="arrow "></span>
                     </a>
@@ -280,18 +310,18 @@
                 </li>
 
                 <li>
-                    <a href="${ctx}/dataUpload">
+                    <a href="${ctx}/dataUpload"  onmousemove="img3Over(this)" onmouseout="img3Out(this)">
                         <%--<i class="icon-wrench"></i>--%>
-                        <span class="title"><img style="width: 24px;display: inline;" src="${ctx}/resources/login/img/icon02.png">&nbsp;数据任务管理</span>
+                        <span class="title"><img class="img3" style="width: 24px;display: inline;" src="${ctx}/resources/login/img/icon02.png">&nbsp;数据任务管理</span>
 
                         <%--<span class="title">数据任务管理</span>--%>
                         <span class="arrow "></span>
                     </a>
                 </li>
                 <li>
-                    <a href="${ctx}/createTask">
+                    <a href="${ctx}/createTask"  onmousemove="img4Over(this)" onmouseout="img4Out(this)">
                         <%--<i class="icon-wrench"></i>--%>
-                        <span class="title"><img style="width: 24px;display: inline;" src="${ctx}/resources/login/img/icon03.png">&nbsp;设置数据任务</span>
+                        <span class="title"><img class="img4" style="width: 24px;display: inline;" src="${ctx}/resources/login/img/icon03.png">&nbsp;设置数据任务</span>
 
                         <%--<span class="title">设置数据任务</span>--%>
                         <span class="arrow "></span>
@@ -348,6 +378,7 @@
 <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
+    var menu="";
     jQuery(document).ready(function () {
         $.ajaxSetup({ cache: false });
         Metronic.init('${ctx}'); // init metronic core componets
@@ -367,8 +398,20 @@
                         $(this).parent().parent().parent().children("a").trigger("click");
                         $(this).parent().parent().parent().children("a").append('<span class="selected"></span>');
                         $(this).parent().parent().parent().addClass("active");
+                        $(".img2")[0].src="${ctx}/resources/login/img/icon01.1.png";
+                        menu="img2"
                     } else {
                         $(this).parent().children("a").append('<span class="selected"></span>');
+                        if("数据节点信息"==$(this).parent().children("a")[0].innerText.trim()){
+                            $(".img1")[0].src="${ctx}/resources/login/img/icon04.1.png";
+                            menu="img1"
+                        }else if("数据任务管理"==$(this).parent().children("a")[0].innerText.trim()){
+                            $(".img3")[0].src="${ctx}/resources/login/img/icon02.1.png";
+                            menu="img3"
+                        }else if("设置数据任务"==$(this).parent().children("a")[0].innerText.trim()){
+                            $(".img4")[0].src="${ctx}/resources/login/img/icon03.1.png";
+                            menu="img4"
+                        }
                     }
                 }
             });
@@ -410,6 +453,41 @@
         var date = new Date(mil);
         return date.Format("yyyy-MM-dd");
     }
+
+    function img1Over(e){
+        $(".img1")[0].src="${ctx}/resources/login/img/icon04.1.png";
+    }
+    function img1Out(e){
+        if(menu!="img1"){
+            $(".img1")[0].src="${ctx}/resources/login/img/icon04.png";
+        }
+
+    }
+    function img2Over(e){
+        $(".img2")[0].src="${ctx}/resources/login/img/icon01.1.png";
+    }
+    function img2Out(e){
+        if(menu!="img2"){
+            $(".img2")[0].src="${ctx}/resources/login/img/icon01.png";
+        }
+    }
+    function img3Over(e){
+        $(".img3")[0].src="${ctx}/resources/login/img/icon02.1.png";
+    }
+    function img3Out(e){
+        if(menu!="img3"){
+            $(".img3")[0].src="${ctx}/resources/login/img/icon02.png";
+        }
+    }
+    function img4Over(e){
+        $(".img4")[0].src="${ctx}/resources/login/img/icon03.1.png";
+    }
+    function img4Out(e){
+        if(menu!="img4"){
+            $(".img4")[0].src="${ctx}/resources/login/img/icon03.png";
+        }
+    }
+
 </script>
 <!-- END JAVASCRIPTS -->
 <sitemesh:write property="div.siteMeshJavaScript"/>
