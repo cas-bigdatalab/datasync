@@ -18,10 +18,10 @@
     <link href="${ctx}/resources/bundles/layerJs/theme/default/layer.css" rel="stylesheet" type="text/css"/>
     <style type="text/css">
         .col-md-5 {
-            width: 36.666667% !important;
+            width: 47.666667% !important;
         }
         .col-md-2 {
-            width: 12.666667% !important;
+            width: 10.666667% !important;
         }
         .ztree{
             width: 100% !important;
@@ -45,21 +45,40 @@
         }
         hr {
             margin: 10px 0 !important;
+            border: 1px solid #d8d5d5 !important;
+        }
+        ul.ztree{
+            margin-top: 0px !important;
+            background: #e8e3e3;
+            border: none;
+        }
+        ::-webkit-scrollbar-track{
+            background-color: #e8e3e3 !important;
+        }
+        .ztreeDiv{
+            background-color: #1e8753;
+            height: 38px;
+            color: white;
+            padding-left: 22px;
+            line-height: 38px;
+        }
+        .ztree li span {
+            font-size: 16px;
         }
 
     </style>
 </head>
 <body>
 <div class="page-content">
-    <div class="task-head">
-       <h3>设置任务</h3>
-        <hr>
-    </div>
+    <%--<div class="task-head">--%>
+       <%--<h3>设置任务</h3>--%>
+        <%--&lt;%&ndash;<hr>&ndash;%&gt;--%>
+    <%--</div>--%>
     <div class="task-title">
         <%--<span>确定数据对象范围，上传数据</span>--%>
         <form class="form-inline">
             <div class="form-group">
-                <label for="dataTaskName" style="font-size: 18px">创建任务名</label>
+                <label for="dataTaskName" style="font-size: 18px">任务名</label>
                 <input type="text" class="form-control" id="dataTaskName" style="width: 250px;font-size: 16px" disabled>
             </div>
         </form>
@@ -93,7 +112,7 @@
                     </div>
                     <div id="totalList">
                         <div class="col-md-12" style="margin-bottom: 10px;padding-top: 10px;" >
-                            <div class="col-md-2" style="text-align: right">sql查询</div>
+                            <div class="col-md-2" style="text-align: right">SQL查询</div>
                             <div class="col-md-4">
                                 <input type="text" class="form-control sqlStatements inputVili" >
                             </div>
@@ -102,7 +121,7 @@
                             </div>
                             <div class="col-md-4">
                                 <button type="button" class="btn blue preview">预览</button>
-                                <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>sql查询</button>
+                                <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>SQL查询</button>
                             </div>
                             <div class="col-md-2" style="text-align: left">
                             </div>
@@ -129,23 +148,28 @@
                         <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
                         <div class="col-md-9 dataHead2" id="fileTitle" style="display: none"></div>
                         <div class="col-md-12" style="margin: 0 -15px">
-                            <div class="col-md-2" style="margin: 0 -15px">选择文件</div>
+                            <%--<div class="col-md-2" style="margin-left: -15px">选择文件</div>--%>
                             <div class="col-md-5" style="margin-top: 6px">
+                                <div class="ztreeDiv">
+                                    <i class="fa fa-caret-right"></i>&nbsp;文件型数据源路径</div>
                                 <div id="jstree_show_edit">
-                                    <ul id="LocalTreeDemo" class="ztree" ></ul>
+                                    <ul id="LocalTreeDemo" class="ztree" style="padding-left: 22px;"></ul>
                                 </div>
                             <%--
                                 <div class="row" id="file-table"></div>
 --%>
                             </div>
-                            <div class="col-md-5" style="margin: 6px 0px 0px 100px">
+                            <div class="col-md-5" style="margin: 6px 0px 0px 6px">
+                                <div class="ztreeDiv">
+                                    <i class="fa fa-caret-right"></i>&nbsp;中心端上传路径</div>
                                 <div id="remoteTreeDiv">
-                                    <ul  class="ztree" id="remoteTree"></ul>
+                                    <ul  class="ztree" id="remoteTree" style="padding-left: 22px;"></ul>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-12 ">
-                            <button type="button" class="btn green pull-right" onclick="sendFileTask()">提交</button>
+                            <hr>
+                            <button type="button" class="btn green pull-right" onclick="sendFileTask()" style="margin: 1% 51%;">提交</button>
                         </div>
 
 
@@ -287,7 +311,7 @@
     {{each list as value i}}
     <div class="col-md-4">
         <label>
-            <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="relationBox" value="{{value}}" style="line-height: normal"></div>
+            <div style="float: left;width: 20px;height: 34px;padding-top: 7px;"><input type="checkbox" name="relationBox" value="{{value}}" style="line-height: normal"></div>
             <div style="padding-left: 20px;word-break: break-all ;"> {{value}}</div>
         </label>
     </div>
