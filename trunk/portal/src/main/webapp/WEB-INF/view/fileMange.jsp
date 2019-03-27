@@ -6,6 +6,8 @@
   用户管理文档
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set value="${pageContext.request.contextPath}" var="ctx"/>
 <html>
 <head>
     <title></title>
@@ -128,18 +130,29 @@
             <input type="hidden" id="copyCache">
         </div>
     </div>
+    <table>
+        <colgroup>
+            <col style="width: 60%"/>
+            <col style="width: 20%"/>
+            <col style="width: 20%"/>
+        </colgroup>
+        <thead>
+        <tr>
+            <%--<td style="width:20px;"><input id="fileName" type="checkbox"/></td>--%>
+            <td>文件名</td>
+            <td class="text-center">大小</td>
+            <td class="text-center">修改日期</td>
+        </tr>
+        </thead>
+    </table>
     <div class="file-list" style="overflow-y: scroll;max-height: 600px;">
         <table>
-            <thead>
-            <tr>
-                <%--<td style="width:20px;"><input id="fileName" type="checkbox"/></td>--%>
-                <td>文件名</td>
-                <td class="text-center">大小</td>
-                <td class="text-center">修改日期</td>
-            </tr>
-            </thead>
+            <colgroup>
+                <col style="width: 60%"/>
+                <col style="width: 20%"/>
+                <col style="width: 20%"/>
+            </colgroup>
             <tbody id="bd-data">
-            </tbody>
         </table>
     </div>
 </div>
@@ -155,7 +168,7 @@
         <%--页面初始化需要加载的方法开始--%>
         (function () {
             var $body = $("body");
-
+            var $ctx = "${ctx}";
             // 网盘功能模块  双击事件
             $body.on("dblclick", "#bd-data td.fileName", function (item) {
                 var $td = "";
@@ -232,13 +245,13 @@
                     }
                     menus = menus.concat([
                         {
-                            text: "复制到", action: function () {
+                            text: "复制", action: function () {
                                 copyPath("copy")
                             },
                             href: "javaScript:void(0);"
                         },
                         {
-                            text: "移动到", action: function () {
+                            text: "移动", action: function () {
                                 copyPath("move")
                             },
                             href: "javaScript:void(0);"
@@ -413,7 +426,7 @@
                     "parentURI": parentURI
                 },
                 success: function (data) {
-                    var jsonData = JSON.parse(data);
+                    var jsonData = data;
                     if (jsonData.code === "error") {
                         toastr["error"]("错误！", jsonData.message);
                     } else {

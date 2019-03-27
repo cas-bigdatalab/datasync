@@ -4,6 +4,8 @@
   通过excel创建表以及导入数据
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set value="${pageContext.request.contextPath}" var="ctx"/>
 <html>
 <head>
     <title>Title</title>
@@ -260,7 +262,7 @@
                         });
                     },
                     success: function (data) {
-                        var jsonData = JSON.parse(data);
+                        var jsonData = data;
                         if (jsonData.code === "error") {
                             toastr["error"]("错误！", jsonData.message);
                         } else {

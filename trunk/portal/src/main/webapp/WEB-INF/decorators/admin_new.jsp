@@ -13,7 +13,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set value="${pageContext.request.contextPath}" var="ctx"/>
-<c:set value="${sessionScope.SubjectCode}" var="sub2"/>
 <html>
 <head>
     <title>
@@ -333,9 +332,10 @@
             }
         });
 
-        if (path === "/dataSourceDescribe") {
+        var otherPath = path.split("/").pop();
+        if (otherPath === "dataSourceDescribe") {
             $(".time_div").append("<a>数据发布管理</a>--&gt;<a>新增数据发布</a>");
-        } else if (path === "/loginSuccess") {
+        } else if (otherPath === "loginSuccess") {
             $(".time_div").append("<a>节点信息</a>");
             $(".fabu_div2").append("<a>节点信息</a>");
         }
