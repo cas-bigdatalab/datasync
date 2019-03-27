@@ -23,14 +23,16 @@
         <div class="alert alert-info" role="alert">
             <div class="row">
                 <div class="col-md-12 form-inline">
-                    <label class="control-label">主题库名称:</label>
+                    <label class="control-label" style="color: black">主题库名称:</label>
                     <input type="text" id="subjectNameFilter" name="subjectNameFilter" placeholder="主题库名称" class="form-control search-text" style="width: 300px;" />
 
                     &nbsp;&nbsp;&nbsp;&nbsp;
 
-                    <button id="searchSubjectBtn" name="searchSubjectBtn" onclick="searchSubject();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
+                    <button id="searchSubjectBtn" name="searchSubjectBtn" onclick="searchSubject();" class="btn success blue btn-sm" >
+                        <i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <button id="addSubjectBtn" name="addSubjectBtn" style="float: right" class="btn info green btn-sm" onclick="addSubject()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增主题库</button>
+                    <button id="addSubjectBtn" name="addSubjectBtn" style="margin-left: -10px;" class="btn info green btn-sm" onclick="addSubject()">
+                        <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增主题库</button>
                 </div>
             </div>
         </div>

@@ -25,6 +25,9 @@
             height: 830px;
             min-height: 830px;
         }
+        .shenhe a{
+            border-radius: 6px!important;
+        }
     </style>
 </head>
 
@@ -58,17 +61,17 @@
                                 <div class="row">
                                     <div class="col-md-12 form-inline">
                                         <div style="float: left;width: 23%">
-                                            <label class="control-label">用户账号:</label>
+                                            <label class="control-label" style="color: black">用户账号:</label>
                                             <input type="text" id="loginIdFilter" style="width: 69%"
                                                    name="loginIdFilter" placeholder="用户账号" class="form-control search-text" />
                                         </div>
                                         <div style="float: left;width: 23%">
-                                            <label class="control-label">用户名:</label>
+                                            <label class="control-label" style="color: black">用户名:</label>
                                             <input type="text" id="userNameFilter" style="width: 69%"
                                                    name="userNameFilter" placeholder="用户名" class="form-control search-text" />
                                         </div>
                                         <div style="float: left;width: 23%">
-                                            <label class="control-label">用户组:</label>
+                                            <label class="control-label" style="color: black">用户组:</label>
                                             <select name='groupsFilter' id='groupsFilter' style="width: 69%"
                                                     multiple="multiple" class="form-control select2me" style="width: 200px;" >
                                                 <c:forEach  var="group"  items="${allGroupList}">
@@ -76,10 +79,10 @@
                                                 </c:forEach>
                                             </select>
                                         </div>
-                                        <div style="float: left;width: 10%;text-align: center">
+                                        <div style="float: left;width: 10%;text-align: center;margin-left:-65px;margin-top: 3px;">
                                             <button id="searchUserBtn" name="searchUserBtn" onclick="searchUser();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                                         </div>
-                                        <div style="float: left;width: 21%;">
+                                        <div style="float: left;width: 21%;margin-top: 3px;margin-left: -23px;">
                                             <button id="addUserBtn" name="addUserBtn"
                                                     class="btn info green btn-sm" onclick="addUser()" ><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增用户</button>
                                         </div>
@@ -134,7 +137,7 @@
                                 <div class="row">
                                     <div class="col-md-12 form-inline">
 
-                                        <label class="control-label">用户组名:</label>
+                                        <label class="control-label" style="color: black;">用户组名:</label>
                                         <input type="text" id="groupName" name="groupName" class="form-control search-text ">
                                         &nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -316,10 +319,19 @@
         <td style="display:table-cell; vertical-align:middle ;text-align: left;">{{$value.desc}}</td>
         <td style="display:table-cell; vertical-align:middle ;text-align: center;">{{dateFormat($value.createTime)}}</td>
         <td style="display:table-cell; vertical-align:middle;text-align: center;" id="a{{$value.id}}" >
-            <%--<button class="btn default btn-xs green-stripe" onclick="viewData()">查看</button>&nbsp;&nbsp;--%>
-                <button class="btn default btn-xs green" onclick="addUserData('{{$value.id}}')"><i class="fa fa-user"></i>添加用户</button>
-                <button class="btn default btn-xs purple updateButton" onclick="editData('{{$value.id}}')"><i class="fa fa-edit"></i>修改</button>&nbsp;
-            <button class="btn default btn-xs red" onclick="deleteData('{{$value.id}}')"><i class="fa fa-trash"></i>删除</button>&nbsp;
+                <%--<button class="btn default btn-xs green" onclick="addUserData('{{$value.id}}')"><i class="fa fa-user"></i>添加用户</button>--%>
+                <%--<button class="btn default btn-xs purple updateButton" onclick="editData('{{$value.id}}')"><i class="fa fa-edit"></i>修改</button>&nbsp;--%>
+            <%--<button class="btn default btn-xs red" onclick="deleteData('{{$value.id}}')"><i class="fa fa-trash"></i>删除</button>&nbsp;--%>
+                    <table class="0" cellspacing="0" border="0" align="center">
+                        <tr>
+                            <td class="shenhe"><a href="#" onclick="addUserData('{{$value.id}}')"><i class="fa fa-user" aria-hidden="true"></i>添加用户</a></td>
+                            <td width="1"></td>
+                            <td class="bianji"><a href="#" onclick="editData('{{$value.id}}')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>修改</a></td>
+                            <td width="1"></td>
+                            <td class="shanchu"><a href="#" onclick="deleteData('{{$value.id}}')"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i>删除</a></td>
+                        </tr>
+                    </table>
+
         </td>
     </tr>
     {{/each}}
@@ -336,9 +348,17 @@
         <%--<td style="text-align: center">{{$value.stat}}</td>--%>
         <td style="text-align: center">{{$value.groups}}</td>
         <td style="text-align: center" id = "{{$value.id}}">
-            <button class="btn default btn-xs purple updateUserButton" data-target="#updateUserDialog" data-toggle="modal" onclick="updateUser(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>
-            &nbsp;
-            <button class="btn default btn-xs red updateUserGroupButton" onclick="deleteUser(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>
+            <%--<button class="btn default btn-xs purple updateUserButton" data-target="#updateUserDialog" data-toggle="modal" onclick="updateUser(this);"><i class="fa fa-edit"></i>&nbsp;修改</button>--%>
+            <%--&nbsp;--%>
+            <%--<button class="btn default btn-xs red updateUserGroupButton" onclick="deleteUser(this);"><i class="fa fa-trash"></i>&nbsp;删除</button>--%>
+                <table class="0" cellspacing="0" border="0" align="center">
+                    <tr>
+                        <td class="bianji"><a href="#" data-target="#updateUserDialog"  data-toggle="modal" onclick="updateUser(this);" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i>修改</a></td>
+                        <td width="1"></td>
+                        <td class="shanchu"><a href="#" onclick="deleteUser(this);"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i>删除</a></td>
+                    </tr>
+                </table>
+
         </td>
     </tr>
     {{/each}}
@@ -489,7 +509,7 @@
             </div>
 
             <div class="modal-footer">
-                <button id="saveUserUpdateBtn" class="btn green" onclick="agreeUpdateUser();">
+                <button id="saveUserUpdateBtn" class='btn btn-success' onclick="agreeUpdateUser();">
                     保存
                 </button>
                 <button id="cancelUserUpdateBtn" class="btn default"  data-dismiss="modal">

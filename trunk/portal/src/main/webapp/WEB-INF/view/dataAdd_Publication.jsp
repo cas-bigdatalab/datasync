@@ -21,7 +21,7 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.css">
     <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">
-    <%--<link href="${ctx}/resources/css/home.css" type="text/css"/>--%>
+
     <style>
         .undeslist label{
             font-size: 18px;
@@ -62,20 +62,20 @@
 
 <div class="step">
     <div class="bar">
-        <div class="rate" style="width:50%;"></div>
+        <div class="rate" style="width:0"></div>
     </div>
     <table class="items">
         <tr>
-            <td class="item finish"><div class="number">1</div><span>元数据</span></td>
+            <td class="item active" id="firststep"><div class="number">1</div><span>元数据</span></td>
             <td></td>
-            <td class="item active"><div class="number">2</div><span>实体数据</span></td>
+            <td class="item" id="secondstep"><div class="number">2</div><span>实体数据</span></td>
             <td></td>
-            <td class="item"><div class="number">3</div><span>元数据</span></td>
+            <td class="item" id="thirdstep"><div class="number">3</div><span>元数据</span></td>
         </tr>
     </table>
 </div>
 
-<div class="form">
+<div class="form" >
     <div class="row">
         <div class="col-md-12" >
             <div class="portlet box blue" id="form_wizard_1">
@@ -283,8 +283,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane" id="tab3">
 
+                                <div class="tab-pane" id="tab3">
                                     <div style="overflow: hidden">
                                         <div class="col-md-6 col-md-offset-3" style="font-size: 18px">
                                             <form class="form-horizontal">
@@ -305,14 +305,22 @@
                         <div class="form-actions">
                             <div class="row">
                                 <div class="col-md-offset-3 col-md-9">
-                                    <a href="javascript:;" class="btn default button-previous" onclick="fromAction(false)" style="display: none">
-                                        <i class="m-icon-swapleft"></i> 上一步 </a>
-                                    <a href="javascript:;" class="btn blue button-next" onclick="fromAction(true)" >
-                                        下一步 <i class="m-icon-swapright m-icon-white"></i>
-                                    </a>
-                                    <a href="javascript:;" class="btn green button-submit" style="display: none">
-                                        提交 <i class="m-icon-swapup m-icon-white"></i>
-                                    </a>
+                                    <%--<a href="javascript:;" class="btn default button-previous" onclick="fromAction(false)" style="display: none">--%>
+                                        <%--<i class="m-icon-swapleft"></i> 上一步 </a>--%>
+                                    <%--<a href="javascript:;" class="btn blue button-next" onclick="fromAction(true)" >--%>
+                                        <%--下一步 <i class="m-icon-swapright m-icon-white"></i>--%>
+                                    <%--</a>--%>
+                                    <%--<a href="javascript:;" class="btn green button-submit" style="display: none">--%>
+                                        <%--提交 <i class="m-icon-swapup m-icon-white"></i>--%>
+                                    <%--</a>--%>
+                                        <a href="javascript:;" class="btn btn-default" onclick="fromAction(false)" style="display: none;">
+                                            上一步 </a>
+                                        <a href="javascript:;" class="btn btn-primary" onclick="fromAction(true)" >
+                                            下一步
+                                        </a>
+                                        <a href="javascript:;" class="btn green button-submit" style="display: none">
+                                            提交
+                                        </a>
                                 </div>
                             </div>
                         </div>
@@ -379,7 +387,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button"  data-dismiss="modal" class="btn red">关闭
+                <button type="button"  data-dismiss="modal" class="btn btn-success">关闭
                 </button>
             </div>
         </div>
@@ -413,6 +421,11 @@
         var firstTime ;
         var lastTime ;
         var api = null;
+        $(function(){
+            // $(".time_div").html("");
+            $(".fabu_div2").html("数据发布 - 第1步，共3步");
+        });
+
         //将图片截图并上传功能
         $('.selectData').datepicker({
             language:'zh-CN'
@@ -701,43 +714,72 @@
                         toastr["error"]("请填写必须项目");
                         return
                     }
+                    $("#firststep").removeClass("item active");
+                    $("#firststep").addClass("item finish");
+                    $(".fabu_div2").html("数据发布 - 第2步，共3步");
+                    $("#secondstep").removeClass("item");
+                    $("#secondstep").addClass("item active");
+                    $(".rate").css("width","50%");
+
                     $("#staNum").html(initNum)
                     $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab1").removeClass("active")
                     $("#tab2").addClass("active")
                     $(".steps li:eq(1)").addClass("active")
-                    $(".button-previous").show();
+                    $(".btn-default").show();
                 }else if(initNum ==3) {
+
                     addResourceSecondStep()
                     if(secondFlag){
                         initNum--
                         toastr["error"]("请选择至少一项");
                         return
                     }
+                    $("#secondstep").removeClass("item active");
+                    $("#secondstep").addClass("item finish");
+                    $(".fabu_div2").html("数据发布 - 第3步，共3步");
+                    $("#thirdstep").removeClass("item");
+                    $("#thirdstep").addClass("item active");
+                    $(".rate").css("width","100%");
+
                     $("#staNum").html(initNum)
                     $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab2").removeClass("active")
                     $("#tab3").addClass("active")
                     $(".steps li:eq(2)").addClass("active")
                     $(".button-submit").show()
-                    $(".button-next").hide()
+                    $(".btn-primary").hide()
                 }
             }else {
                 --initNum
                 if(initNum == 1){
+                    $("#secondstep").removeClass("item active");
+                    $("#secondstep").addClass("item");
+                    $(".fabu_div2").html("数据发布 - 第1步，共3步");
+                    $("#firststep").removeClass("item finish");
+                    $("#firststep").addClass("item active");
+                    $(".rate").css("width","0");
+
                     $("#staNum").html(initNum)
                     $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab2").removeClass("active")
                     $("#tab1").addClass("active")
                     $(".steps li:eq(1)").removeClass("active")
-                    $(".button-previous").hide();
+                    $(".btn-default").hide();
                 }else if(initNum == 2){
+                    $("#thirdstep").removeClass("item active");
+                    $("#thirdstep").addClass("item");
+                    $(".fabu_div2").html("数据发布 - 第2步，共3步");
+                    $("#secondstep").removeClass("item finish");
+                    $("#secondstep").addClass("item active");
+                    $(".rate").css("width","50%");
+
                     $("#staNum").html(initNum)
                     $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab3").removeClass("active")
                     $("#tab2").addClass("active")
                     $(".steps li:eq(2)").removeClass("active")
-                    $(".button-next").show()
+                    $(".btn-primary").show()
                     $(".button-submit").hide()
                 }
             }

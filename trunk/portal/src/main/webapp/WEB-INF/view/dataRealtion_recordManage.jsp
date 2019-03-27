@@ -14,26 +14,15 @@
 <html>
 <head>
     <title>数据记录管理</title>
-    <%--<link href="${ctx}/resources/css/dataUpload.css" rel="stylesheet" type="text/css"/>--%>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
     <link rel="Stylesheet" href="${ctx}/resources/css/common.css"/>
     <link rel="Stylesheet" href="${ctx}/resources/css/jquery.jerichotab.css"/>
-    <%--<link href="${ctx}/resources/bundles/bootstrap-fileinput/css/bootstrap.min.css"/>--%>
     <link rel="stylesheet" href="${ctx}/resources/bundles/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">
-    <%--<link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>--%>
     <link href="${ctx}/resources/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/css/home.css" type="text/css"/>
 
     <style type="text/css">
-        /*.datainp{border:1px #ccc solid;}*/
-        /*.datep{ margin-bottom:40px;}*/
-        /*.jedatebox{*/
-            /*z-index:10052 !important;*/
-        /*}*/
-        /*.user_div{*/
-
-        /*}*/
         /*超出隐藏*/
         #content_id table{
             table-layout: fixed;
@@ -173,7 +162,9 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-success">关闭</button>
+                </div>
             </div>
         </div>
     </div>
@@ -316,7 +307,7 @@
                             }
                             ss += "<td align='center'><table class='0' cellspacing='0' border='0' align='center'><tr>" +
                                 "<td class='bianji'><a src='#' onclick=\" updateData('" + arr + "','" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
-                                "<i class='fa fa-pencil-square-o' aria-hidden='true'></i>修改</a></td><td width='1'></td>" +
+                                "<i class='fa fa-pencil-square-o' aria-hidden='true'></i>编辑</a></td><td width='1'></td>" +
                                 "<td class='chakan'><a href='#' onclick=\"checkDada('" + arr + "','" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
                                 "<i class='fa fa-eye' aria-hidden='true'></i>查看</a></td><td width='1'></td>" +
                                 "<td class='shanchu'><a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
@@ -558,17 +549,17 @@
                     $("#addTable tbody").append(s);
                     $("#add_div").append(s_add);
                     $("#staticAddData").modal("show");
-                    $('.selectData').datepicker({
+                    $('.selectData').datetimepicker({
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
-                        // clearBtn: true,//清除按钮
+                        clearBtn: true,//清除按钮
                         todayBtn: false,//今日按钮
                         format: "yyyy-mm-dd"
                     });
                     $('.selectDataTime').datetimepicker({
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
-                        // clearBtn: true,//清除按钮
+                        clearBtn: true,//清除按钮
                         todayBtn: false,//今日按钮
                         minuteStep:1,
                         format: "yyyy-mm-dd hh:ii:ss"
@@ -577,7 +568,7 @@
                         //第一种
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
-                        // clearBtn: true,//清除按钮
+                        clearBtn: true,//清除按钮
                         todayBtn: false,//今日按钮
                         format: "hh:ii:ss",
                         minView: 0,
@@ -933,10 +924,10 @@
                     $("#update_div").append(s_save);
                     $("#staticUpdateData").modal("show");
 
-                    $('.selectData').datepicker({
+                    $('.selectData').datetimepicker({
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
-                        // clearBtn: true,//清除按钮
+                        clearBtn: true,//清除按钮
                         todayBtn: false,//今日按钮
                         format: "yyyy-mm-dd"
                     });
@@ -944,7 +935,7 @@
                         //第一种
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
-                        // clearBtn: true,//清除按钮
+                        clearBtn: true,//清除按钮
                         todayBtn: false,//今日按钮
                         format: "yyyy-mm-dd hh:ii:ss",
                         minView: 0,
@@ -967,7 +958,7 @@
                         //第一种
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
-                        // clearBtn: true,//清除按钮
+                        clearBtn: true,//清除按钮
                         todayBtn: false,//今日按钮
                         format: "hh:ii:ss",
                         minView: 0,

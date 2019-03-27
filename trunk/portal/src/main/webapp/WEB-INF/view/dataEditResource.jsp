@@ -55,61 +55,27 @@
 <body>
 <div class="step">
     <div class="bar">
-        <div class="rate" style="width:50%;"></div>
+        <div class="rate" style="width:0"></div>
     </div>
     <table class="items">
         <tr>
-            <td class="item finish"><div class="number">1</div><span>元数据</span></td>
+            <td class="item active" id="firststep"><div class="number">1</div><span>元数据</span></td>
             <td></td>
-            <td class="item active"><div class="number">2</div><span>实体数据</span></td>
+            <td class="item" id="secondstep"><div class="number">2</div><span>实体数据</span></td>
             <td></td>
-            <td class="item"><div class="number">3</div><span>元数据</span></td>
+            <td class="item" id="thirdstep"><div class="number">3</div><span>元数据</span></td>
         </tr>
     </table>
 </div>
 
+<div class="form" >
     <div class="row">
         <div class="col-md-12">
             <div class="portlet box blue" id="form_wizard_1">
-                <%--<div class="portlet-title" style="background-color:#3fd5c0">--%>
-                    <%--&lt;%&ndash;<div class="caption">&ndash;%&gt;--%>
-                        <%--&lt;%&ndash;<i class="fa fa-gift"></i> 数据发布 - <span class="step-title">&ndash;%&gt;--%>
-								<%--&lt;%&ndash;第&nbsp;<span id="staNum">1</span>&nbsp;步,共&nbsp;3&nbsp;步</span>&ndash;%&gt;--%>
-                    <%--&lt;%&ndash;</div>&ndash;%&gt;--%>
-                <%--</div>--%>
+
                 <div class="portlet-body form">
                     <div class="form-wizard">
                         <div class="form-body">
-                            <%--<ul class="nav nav-pills nav-justified steps">--%>
-                                <%--<li class="active">--%>
-                                    <%--<a href="#tab1"  class="step">--%>
-												<%--<span class="number">--%>
-												<%--1 </span>--%>
-                                        <%--<span class="desc">--%>
-												<%--<i class="fa fa-check"></i> 元数据 </span>--%>
-                                    <%--</a>--%>
-                                <%--</li>--%>
-                                <%--<li>--%>
-                                    <%--<a href="#tab2"  class="step">--%>
-												<%--<span class="number">--%>
-												<%--2 </span>--%>
-                                        <%--<span class="desc">--%>
-												<%--<i class="fa fa-check"></i> 实体数据 </span>--%>
-                                    <%--</a>--%>
-                                <%--</li>--%>
-                                <%--<li>--%>
-                                    <%--<a href="#tab3"  class="step">--%>
-												<%--<span class="number">--%>
-												<%--3 </span>--%>
-                                        <%--<span class="desc">--%>
-												<%--<i class="fa fa-check"></i> 设置权限 </span>--%>
-                                    <%--</a>--%>
-                                <%--</li>--%>
-                            <%--</ul>--%>
-                            <%--<div id="bar" class="progress progress-striped" role="progressbar">--%>
-                                <%--<div class="progress-bar progress-bar-success">--%>
-                                <%--</div>--%>
-                            <%--</div>--%>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab1">
                                     <form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"  onfocusout="true"
@@ -328,27 +294,10 @@
                                                 <div class="form-group">
                                                     <label  class="col-sm-4 control-label">可公开范围</label>
                                                     <div class="col-sm-8">
-                                                        <%--<select name="" id="permissions" class="form-control">
-                                                            <option value="" selected="selected">请选择公开范围</option>
-                                                            <option value="外网公开用户">外网公开用户</option>
-                                                            <option value="内网用户">内网用户</option>
-                                                            <option value="质量组用户">质量组用户</option>
-                                                            <option value="分析组用户">分析组用户</option>
-                                                        </select>--%>
                                                             <select name="permissions" id="permissions" class="form-control" multiple>
-                                                                <%--<option value="外网公开用户">外网公开用户</option>
-                                                                <option value="内网用户">内网用户</option>
-                                                                <option value="质量组用户">质量组用户</option>
-                                                                <option value="分析组用户">分析组用户</option>--%>
                                                             </select>
                                                     </div>
                                                 </div>
-                                                <%--<div class="form-group">
-                                                    <label  class="col-sm-4 control-label">已选择</label>
-                                                    <div class="col-sm-8">
-                                                        <div style=" width: 412px;border: 1px solid rgb(169, 169, 169);min-height: 40px;padding-top: 5px;overflow: hidden;padding-left: 5px" class="permissions-wrap"></div>
-                                                    </div>
-                                                </div>--%>
                                             </form>
                                         </div>
                                     </div>
@@ -359,13 +308,16 @@
                         <div class="form-actions">
                             <div class="row">
                                 <div class="col-md-offset-3 col-md-9">
-                                    <a href="javascript:;" class="btn default button-previous" onclick="fromAction(false)" style="display: none">
-                                        <i class="m-icon-swapleft"></i> 上一步 </a>
-                                    <a href="javascript:;" class="btn blue button-next" onclick="fromAction(true)" >
-                                        下一步 <i class="m-icon-swapright m-icon-white"></i>
+                                    <a href="javascript:;" class="btn btn-default" onclick="fromAction(false)" style="display: none;">
+                                        <%--<i class="m-icon-swapleft"></i> --%>
+                                        上一步 </a>
+                                    <a href="javascript:;" class="btn btn-primary" onclick="fromAction(true)" >
+                                        下一步
+                                        <%--<i class="m-icon-swapright m-icon-white"></i>--%>
                                     </a>
                                     <a href="javascript:;" class="btn green button-submit" style="display: none">
-                                        提交 <i class="m-icon-swapup m-icon-white"></i>
+                                        提交
+                                        <%--<i class="m-icon-swapup m-icon-white"></i>--%>
                                     </a>
                                 </div>
                             </div>
@@ -376,6 +328,7 @@
             </div>
         </div>
     </div>
+</div>
 <input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
 <input type="hidden" id="imgPath" val="">
 <script type="text/html" id="dataRelationshipList">
@@ -426,9 +379,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button"  data-dismiss="modal" class="btn red">关闭
+                <button type="button"  data-dismiss="modal" class="btn btn-success">关闭
                 </button>
-                <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
             </div>
         </div>
     </div>
@@ -464,6 +416,11 @@
         var publicType="mysql";
         var firstTime;
         var lastTime;
+
+        $(function(){
+            // $(".time_div").html("");
+            $(".fabu_div2").html("数据发布 - 第1步，共3步");
+        });
 
         /*var tagNames=new Array();*/
         $('.selectData').datepicker({
@@ -740,12 +697,19 @@
                         toastr["error"]("请填写必须项目");
                         return
                     }
+                    $("#firststep").removeClass("item active");
+                    $("#firststep").addClass("item finish");
+                    $(".fabu_div2").html("数据发布 - 第2步，共3步");
+                    $("#secondstep").removeClass("item");
+                    $("#secondstep").addClass("item active");
+                    $(".rate").css("width","50%");
+
                     $("#staNum").html(initNum)
                     $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab1").removeClass("active")
                     $("#tab2").addClass("active")
                     $(".steps li:eq(1)").addClass("active")
-                    $(".button-previous").show();
+                    $(".btn-default").show();
                 }else if(initNum ==3) {
                     addResourceSecondStep()
                     if(secondFlag){
@@ -753,30 +717,51 @@
                         toastr["error"]("请选择至少一项");
                         return
                     }
+                    $("#secondstep").removeClass("item active");
+                    $("#secondstep").addClass("item finish");
+                    $(".fabu_div2").html("数据发布 - 第3步，共3步");
+                    $("#thirdstep").removeClass("item");
+                    $("#thirdstep").addClass("item active");
+                    $(".rate").css("width","100%");
+
                     $("#staNum").html(initNum)
                     $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab2").removeClass("active")
                     $("#tab3").addClass("active")
                     $(".steps li:eq(2)").addClass("active")
                     $(".button-submit").show()
-                    $(".button-next").hide()
+                    $(".btn-primary").hide()
                 }
             }else {
                 --initNum
                 if(initNum == 1){
+                    $("#secondstep").removeClass("item active");
+                    $("#secondstep").addClass("item");
+                    $(".fabu_div2").html("数据发布 - 第1步，共3步");
+                    $("#firststep").removeClass("item finish");
+                    $("#firststep").addClass("item active");
+                    $(".rate").css("width","0");
+
                     $("#staNum").html(initNum)
                     $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab2").removeClass("active")
                     $("#tab1").addClass("active")
                     $(".steps li:eq(1)").removeClass("active")
-                    $(".button-previous").hide();
+                    $(".btn-default").hide();
                 }else if(initNum == 2){
+                    $("#thirdstep").removeClass("item active");
+                    $("#thirdstep").addClass("item");
+                    $(".fabu_div2").html("数据发布 - 第2步，共3步");
+                    $("#secondstep").removeClass("item finish");
+                    $("#secondstep").addClass("item active");
+                    $(".rate").css("width","50%");
+
                     $("#staNum").html(initNum)
                     $(".progress-bar-success").width(initNum*33+"%");
                     $("#tab3").removeClass("active")
                     $("#tab2").addClass("active")
                     $(".steps li:eq(2)").removeClass("active")
-                    $(".button-next").show()
+                    $(".btn-primary").show()
                     $(".button-submit").hide()
                 }
             }
