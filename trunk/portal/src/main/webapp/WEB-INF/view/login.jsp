@@ -59,10 +59,14 @@
 <script>
 
     $(function () {
-        $("#rememberPassword").click(function () {
+        var $loginId = $("#loginId");
+        var $password = $("#password");
+        var $rememberPassword = $("#rememberPassword");
+
+        $rememberPassword.click(function () {
             var isChecked = $(this).is(":checked");
-            var loginId = $("#loginId").val();
-            var password = $("#password").val();
+            var loginId = $loginId.val();
+            var password = $password.val();
             if (isChecked) {
                 if (loginId === "") {
                     toastr["warning"]("用户名不能为空", "警告！");
@@ -72,17 +76,18 @@
                     toastr["warning"]("密码不能为空", "警告！");
                     return false;
                 }
-                setCookie("loginId", loginId);
-                setCookie("password", password);
+                setCookie(loginId, password);
             } else {
-                delCookie("loginId");
-                delCookie("password");
+                delCookie(loginId);
             }
         });
 
-        $("#loginId").blur(function () {
-            var cookie = getCookie($(this).val());
-            $("#password").val(cookie);
+        $password.focus(function () {
+            var cookie = getCookie($loginId.val());
+            if (cookie) {
+                $password.val(cookie);
+                $rememberPassword.prop("checked", true);
+            }
         })
     });
 
