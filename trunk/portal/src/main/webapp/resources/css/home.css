@@ -293,7 +293,7 @@ li.l3-menu > a:hover i, li.l3-menu > a.active i {
     display: block;
     background: #4788cf;
     color: #FFF;
-    border-radius: 6px;
+    border-radius: 6px !important;
 }
 
 .bianji a:hover {
@@ -308,7 +308,7 @@ li.l3-menu > a:hover i, li.l3-menu > a.active i {
     display: block;
     background: #a96cc9;
     color: #FFF;
-    border-radius: 6px;
+    border-radius: 6px !important;
 }
 
 .chakan a:hover {
@@ -323,7 +323,7 @@ li.l3-menu > a:hover i, li.l3-menu > a.active i {
     display: block;
     background: #c75e5e;
     color: #FFF;
-    border-radius: 6px;
+    border-radius: 6px  !important;
 }
 
 .shanchu a:hover {
