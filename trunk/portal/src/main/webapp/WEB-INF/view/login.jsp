@@ -14,6 +14,13 @@
     <link href="${ctx}/resources/bundles/bootstrapv3.3/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/css/home.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css"/>
+    <style>
+        input[type='text'], input[type='password'] {
+            width: 80%;
+            height: 100%;
+            float: right;
+        }
+    </style>
     <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
     <script src="${ctx}/resources/bundles/bootstrap-toastr/toastr.min.js"></script>
 </head>
