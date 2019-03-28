@@ -142,6 +142,7 @@
         var sub = '${sessionScope.SubjectCode}';
         $(function () {
             chooseTable(sub, 0);
+            $(".qiehuan_div li:eq(0) a").addClass("active");
         });
 
         var sub1 = '${sessionScope.SubjectCode}';
