@@ -198,11 +198,11 @@
             <div class="page-content" style="height:100%">
                 <div class="right_div">
                     <div id="content-top">
-                        <div class="time_div">
+                        <%--<div class="time_div">
                             <a>
                                 <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
                             </a>
-                        </div>
+                        </div>--%>
                         <div class="fabu_div2"></div>
                     </div>
                     <div id="content">
@@ -272,6 +272,7 @@
             var sonUl = $(this).next();
             var sonUlIsHidden = sonUl.is(":hidden");
             if (sonUlIsHidden) {
+                window.location.href = sonUl.find("li:eq(0) a").attr("href");
                 sonUl.show();
             } else {
                 sonUl.hide();
