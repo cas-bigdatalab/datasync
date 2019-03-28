@@ -116,9 +116,10 @@
             <%--<button type="button" class="btn btn-default"><i class="fa fa-download"></i> 下载</button>--%>
         </div>
         <div class="col-xs-6 text-right file-search">
-            <input type="text" placeholder="搜索您的文件">
-            <button type="button"><i class="fa fa-sort-alpha-asc"></i></button>
-            <button type="button"><i class="fa fa-th-large"></i></button>
+            <input id="searchName" type="text" placeholder="搜索您的文件">
+            <button id="searchFile" type="button" class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+            <%-- <button type="button"><i class="fa fa-sort-alpha-asc"></i></button>
+             <button type="button"><i class="fa fa-th-large"></i></button>--%>
         </div>
     </div>
     <div class="file-nav row">
@@ -321,6 +322,15 @@
             }).on("filebatchselected", function (event, files) {
             }).on("fileuploaded", function (event, data) {
                 fileNet($("#parentURI").val());
+            });
+
+            // 初始化文件搜索框
+            $("#searchFile").on("click", function () {
+                var val = $("#searchName").val();
+                var $option = $("#bd-data tr td.fileName div.text_name");
+                resetSelectedFile($option);
+                searchFile($option, val);
+                window.location.hash = "#reg_0";
             })
         })();
 
@@ -620,6 +630,32 @@
                     })
                 }
             })
+        }
+
+        function resetSelectedFile(divs) {
+            divs.removeAttrs("id");
+            divs.each(function (index, value) {
+                var $span = $(value).find("span");
+                if ($span[0]) {
+                    $span.replaceWith($span.text());
+                    $(value).html($.trim($(value).html()));
+                }
+            })
+        }
+
+        function searchFile(divs, val) {
+            var regId = 0;
+            divs.each(function (index, value) {
+                var $_this = $(this);
+                var reg = new RegExp(val, "gi");
+                var regId = 0;
+                var text = value.innerText;
+                if (reg.test(text)) {
+                    $_this.attr("id", "reg_" + regId);
+                    regId++;
+                    $_this.html($_this.html().replace(reg, "<span style='color:red;font-weight: bold;'>" + val + "</span>"));
+                }
+            });
         }
     </script>
 </div>

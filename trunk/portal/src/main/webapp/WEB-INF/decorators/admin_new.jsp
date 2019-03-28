@@ -91,9 +91,6 @@
             background: #dddddd;
         }
 
-        .user_div table {
-            margin-left: 26%;
-        }
 
         .alert.alert-info {
             background-color: #cbe2fc !important;
@@ -181,11 +178,10 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li><a href="${ctx}/dataRelease"><i class="fa fa-upload" aria-hidden="true"></i>
-                                    数据发布管理</a></li>
                                 <li><a href="${ctx}/fileMange"><i class="fa fa-file" aria-hidden="true"></i>
                                     文件数据管理</a></li>
-
+                                <li><a href="${ctx}/dataRelease"><i class="fa fa-upload" aria-hidden="true"></i>
+                                    数据发布管理</a></li>
                             </ul>
                         </shiro:hasRole>
 
