@@ -334,6 +334,8 @@
         } else if (otherPath === "loginSuccess") {
             $(".time_div").append("<a>节点信息</a>");
             $(".fabu_div2").append("<a>节点信息</a>");
+        } else if (otherPath === "editResource") {
+            $(".time_div").append("<a>数据发布管理</a>--&gt;<a>数据集编辑</a>");
         }
 
         // 根据显示器重置 div.page-content 实际内容区域大小
