@@ -313,12 +313,12 @@
                                     <%--<a href="javascript:;" class="btn green button-submit" style="display: none">--%>
                                         <%--提交 <i class="m-icon-swapup m-icon-white"></i>--%>
                                     <%--</a>--%>
-                                        <a href="javascript:;" class="btn btn-default" onclick="fromAction(false)" style="display: none;">
+                                        <a href="javascript:;" class="btn btn-default" onclick="fromAction(false)" style="display: none;margin-left: 10%">
                                             上一步 </a>
-                                        <a href="javascript:;" class="btn btn-primary" onclick="fromAction(true)" >
+                                        <a href="javascript:;" class="btn btn-primary" onclick="fromAction(true)"style="margin-left: 30%;" >
                                             下一步
                                         </a>
-                                        <a href="javascript:;" class="btn green button-submit" style="display: none">
+                                        <a href="javascript:;" class="btn green button-submit" style="display: none;margin-left: 30%;">
                                             提交
                                         </a>
                                 </div>

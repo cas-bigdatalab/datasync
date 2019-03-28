@@ -56,7 +56,7 @@
     </div>
     <%--新增表数据--%>
     <div id="staticAddData" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
-        <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 50%;">
+        <div class="modal-dialog" style="width:600px;width:auto;max-width: 50%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -65,9 +65,9 @@
 
                 </div>
 
-                <div class="modal-body" style="overflow:scroll;">
+                <div class="modal-body" style="overflow-y:scroll;max-height: 500px;">
                     <div class="tab-content"
-                         style="background-color: white;min-height:300px;max-height:60%;padding-top: 20px ;">
+                         style="background-color: white;max-height:60%;padding-top: -10px ;">
                         <div class="tab-pane active" id="adddata" style=" ">
                             <table id="addTable" class="table table-bordered data-table" style="border: 0">
                                 <thead class="table_tr">
@@ -92,7 +92,7 @@
 
     <%--修改数据--%>
     <div id="staticUpdateData" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
-        <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 50%;">
+        <div class="modal-dialog" style="width:600px;width:auto;max-width: 50%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -101,10 +101,10 @@
 
                 </div>
 
-                <div class="modal-body" style="overflow:scroll;">
+                <div class="modal-body" style="overflow-y:scroll;max-height: 500px;">
 
                     <div class="tab-content"
-                         style="background-color: white;min-height:300px;max-height:50%;padding-top: 20px ;">
+                         style="background-color: white;max-height:50%;padding-top: -10px ;">
                         <div style="margin-left: 1%;margin-right: 1%;width:98%;">
                             <table class="table table-bordered data-table" border="0">
                                 <thead>
@@ -140,11 +140,11 @@
 
                 </div>
 
-                <div class="modal-body" style="overflow:scroll;max-height:600px;">
+                <div class="modal-body" style="overflow-y:scroll;max-height: 500px;">
                     <div class="tab-content"
-                         style="background-color: white;padding-top: 20px ;">
+                         style="background-color: white;padding-top: -10px ;">
                         <div class="tab-pane active" id="checkData1"
-                             style="width: 98%;margin-right: 1%;margin-left: 1%; ">
+                             style="width: 98%;margin-right: 1%;margin-left: 1%;">
                             <table spellcheck="0" cellspacing="0" border="0" class="table table-bordered data-table"
                                    id="checkTable" style="text-align: center;">
                                 <thead>
@@ -185,6 +185,35 @@
     </tr>
     {{/each}}
 </script>
+
+<script type="text/html" id="checkdataTmpl">
+    {{each data as value i}}
+    <tr>
+        {{if value.colName=="PORTALID"}}
+        {{else }}
+        <td>{{value.colName}}</td>
+        <td>{{value.dataType}}</td>
+        <td>{{value.columnComment}}</td>
+        <td>{{value.data}}</td>
+        {{/if}}
+    </tr>
+    {{/each}}
+</script>
+
+<script type="text/html" id="adddataTmpl">
+    {{each data as value i}}
+    <tr>
+        {{if value.colName=="PORTALID"}}
+        {{else if value.pkColumn==}}
+        <td>{{value.colName}}</td>
+        <td>{{value.dataType}}</td>
+        <td>{{value.columnComment}}</td>
+        <td><input type="text" /></td>
+        {{/if}}
+    </tr>
+    {{/each}}
+</script>
+
 </body>
 <div id="siteMeshJavaScript">
     <script src="${ctx}/resources/bundles/bootstrap-closable-tab/bootstrap-closable-tab.js"></script>
@@ -544,7 +573,7 @@
                             }
                         }
                     }
-
+                    // var html=template("adddataTmpl",data);
                     var s_add=" <button id='addbtn' class='btn btn-success' data-dismiss='modal' onclick=\"addTablefuntion('"+dataTypeArr+"','"+strs2+"','"+pkColumnArr+"','"+autoAddArr+"')\">保存</button>";
                     $("#addTable tbody").append(s);
                     $("#add_div").append(s_add);
@@ -1607,29 +1636,30 @@
 
             $.ajax({
                 type: "post",
-                url: "${ctx}/toupdateTableData",
+                url: "${ctx}/toupdateTableDatatest",
                 data: {"subjectCode": subjectCode, "tableName": tableName, "PORTALID": delPORTALID},
                 dataType: "json",
                 success: function (data) {
-                    var dataTypeArr = data.DATA_TYPE;
-                    var columnComments = data.COLUMN_COMMENT;
-                    var autoAddArr = data.autoAdd;
-                    var pkColumnArr = data.pkColumn;
-                    var COLUMN_TYPE=data.COLUMN_TYPE;
-                    var t_data=data.data;
-                    var s="";
-                    for (var i = 0; i < strs2.length; i++) {
-                        if (strs2[i] === "PORTALID") {
-                            s += "<tr style='display:none;'><td>" + strs2[i] + "</td><td>" + COLUMN_TYPE[i] + "</td><td>" + columnComments[i] + "</td><td>" + t_data[i] + "</td></tr>";
-                        } else {
-                            if(dataTypeArr[i]==="datetime" && t_data[i]!=="" && t_data[i]!==null) {
-                                var date =t_data[i].split(".");
-                                t_data[i] = date[0];
-                            }
-                            s += "<tr><td>" + strs2[i] + "</td><td>" + COLUMN_TYPE[i] + "</td><td>" + columnComments[i] + "</td><td title='" + t_data[i] + "'>" + t_data[i] + "</td></tr>";
-                        }
-                    }
-                    $("#checkTable tbody").append(s);
+                    // var dataTypeArr = data.DATA_TYPE;
+                    // var columnComments = data.COLUMN_COMMENT;
+                    // var autoAddArr = data.autoAdd;
+                    // var pkColumnArr = data.pkColumn;
+                    // var COLUMN_TYPE=data.COLUMN_TYPE;
+                    // var t_data=data.data;
+                    // var s="";
+                    // for (var i = 0; i < strs2.length; i++) {
+                    //     if (strs2[i] === "PORTALID") {
+                    //         s += "<tr style='display:none;'><td>" + strs2[i] + "</td><td>" + COLUMN_TYPE[i] + "</td><td>" + columnComments[i] + "</td><td>" + t_data[i] + "</td></tr>";
+                    //     } else {
+                    //         if(dataTypeArr[i]==="datetime" && t_data[i]!=="" && t_data[i]!==null) {
+                    //             var date =t_data[i].split(".");
+                    //             t_data[i] = date[0];
+                    //         }
+                    //         s += "<tr><td>" + strs2[i] + "</td><td>" + COLUMN_TYPE[i] + "</td><td>" + columnComments[i] + "</td><td title='" + t_data[i] + "'>" + t_data[i] + "</td></tr>";
+                    //     }
+                    // }
+                    var html=template("checkdataTmpl",data);
+                    $("#checkTable tbody").append(html);
                     $("#staticShowDataDetail").modal("show");
                 }
             });

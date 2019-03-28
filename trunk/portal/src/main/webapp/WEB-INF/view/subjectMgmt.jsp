@@ -85,9 +85,9 @@
 
                     <table class="0" cellspacing="0" border="0" align="center">
                         <tr>
-                            <td class="bianji"><a href="#" onclick="updateSubject(this);"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>修改</a></td>
+                            <td class="bianji" name="{{$value.id}}"><a href="javascript:;" onclick="updateSubject(this);"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>修改</a></td>
                             <td width="1"></td>
-                            <td class="shanchu"><a href="#" onclick="deleteSubject(this);"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i>删除</a></td>
+                            <td class="shanchu" name="{{$value.id}}"><a href="javascript:;" onclick="deleteSubject(this);"><i class="fa fa-trash-o fa-fw" aria-hidden="true"></i>删除</a></td>
                         </tr>
                     </table>
             </td>
@@ -678,7 +678,7 @@
                 type: "GET",
                 async: false,
                 url: '${ctx}/subjectMgmt/querySubjectById',
-                data: {id: $(updateBtn).parent().attr("id")},
+                data: {id: $(updateBtn).parent().attr("name")},
                 dataType: "json",
                 success: function (data){
                     $("#idM").val(data.id);
@@ -743,7 +743,7 @@
         //删除专业库
         function deleteSubject(deleteBtn)
         {
-            var id = $(deleteBtn).parent().attr("id");
+            var id = $(deleteBtn).parent().attr("name");
 
             console.log("idOfSubjectToBeDeleted = " + id);
 
