@@ -586,6 +586,7 @@
                     $("#add_div").append(s_add);
                     $("#staticAddData").modal("show");
                     $('.selectData').datetimepicker({
+                        minView: "month",//选择日期后，不会再跳转去选择时分秒
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
                         clearBtn: true,//清除按钮
@@ -961,6 +962,7 @@
                     $("#staticUpdateData").modal("show");
 
                     $('.selectData').datetimepicker({
+                        minView: "month",//选择日期后，不会再跳转去选择时分秒
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
                         clearBtn: true,//清除按钮
