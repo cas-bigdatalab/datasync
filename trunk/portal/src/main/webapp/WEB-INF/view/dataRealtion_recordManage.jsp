@@ -304,7 +304,7 @@
                                             delPORTALID = d[k];
                                             ss += "<td  style='display:none;' title='" + d[k] + "'>" + d[k] + "</td>";
                                         } else {
-                                            ss += "<td title='" + d[k] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp>" + d[k] + "</xmp></td>";
+                                            ss += "<td title='" + d[k] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'>" + d[k] + "</td>";
                                             j++;
                                         }
                                     } else {
@@ -316,7 +316,7 @@
                                             delPORTALID = d[arr[i]];
                                             ss += "<td style='display:none;' title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
                                         } else {
-                                            ss += "<td title='" + d[arr[i]] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp>" + d[arr[i]] + "</xmp></td>";
+                                            ss += "<td title='" + d[arr[i]] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'>" + d[arr[i]] + "</td>";
                                             j++;
                                         }
                                     }
@@ -470,7 +470,7 @@
                                             delPORTALID = d[k];
                                             ss += "<td  style='display:none;' title='" + d[k] + "'>" + d[k] + "</td>";
                                         } else {
-                                            ss += "<td title='" + d[k] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp>" + d[k] + "</xmp></td>";
+                                            ss += "<td title='" + d[k] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'>" + d[k] + "</td>";
                                             j++;
                                         }
                                     } else {
@@ -482,7 +482,7 @@
                                             delPORTALID = d[arr[i]];
                                             ss += "<td style='display:none;' title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
                                         } else {
-                                            ss += "<td title='" + d[arr[i]] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp>" + d[arr[i]] + "</xmp></td>";
+                                            ss += "<td title='" + d[arr[i]] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'>" + d[arr[i]] + "</td>";
                                             j++;
                                         }
                                     }
@@ -568,7 +568,7 @@
                                 } else if(dataTypeArr[i] === "time"){
                                     s += "<td><input class='DataTime' style='width: 100%;height:100%;' id='" + strs2[i] + "' type='text'  placeholder='请选择'  /></td></tr>";
                                 }else{
-                                    s += "<td><input  id='" + strs2[i] + "' class='form-control' style='width:100%;height=100%'  name=" + strs2[i] + "  dataType='" + dataTypeArr[i] + "' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 5px;'></p></td></tr>";
+                                    s += "<td><input  id='" + strs2[i] + "' class='form-control' style='width:100%;height=100%'  name=" + strs2[i] + "  dataType='" + dataTypeArr[i] + "' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 10px;'></p></td></tr>";
                                 }
                             }
                         }
