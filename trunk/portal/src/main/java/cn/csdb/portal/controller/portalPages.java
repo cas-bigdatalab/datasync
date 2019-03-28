@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class portalPages {
     @RequestMapping("/dataRelease")
     public ModelAndView index() {
-        ModelAndView modelAndView = new ModelAndView("dataRelease");
+        ModelAndView modelAndView = new ModelAndView("dataReleaseNew");
         return modelAndView;
     }
     @RequestMapping("/dataSourceDescribe")
