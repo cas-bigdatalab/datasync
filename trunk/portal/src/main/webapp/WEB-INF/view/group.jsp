@@ -79,10 +79,10 @@
                                                 </c:forEach>
                                             </select>
                                         </div>
-                                        <div style="float: left;width: 10%;text-align: center;margin-left:-65px;margin-top: 3px;">
+                                        <div style="float: left;width: 10%;text-align: center;margin-left:-25px;margin-top: 3px;">
                                             <button id="searchUserBtn" name="searchUserBtn" onclick="searchUser();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                                         </div>
-                                        <div style="float: left;width: 21%;margin-top: 3px;margin-left: -23px;">
+                                        <div style="float: left;width: 21%;margin-top: 3px;">
                                             <button id="addUserBtn" name="addUserBtn"
                                                     class="btn info green btn-sm" onclick="addUser()" ><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增用户</button>
                                         </div>
