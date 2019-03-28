@@ -1,5 +1,6 @@
 package cn.csdb.portal.controller;
 
+import cn.csdb.portal.model.DataComposeDemo;
 import cn.csdb.portal.model.DataSrc;
 import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.repository.CheckUserDao;
@@ -270,8 +271,22 @@ public class EditDataController {
         jsonObject.put("COLUMN_COMMENT",list3);
         jsonObject.put("autoAdd",list4);
         jsonObject.put("pkColumn",list5);
+//        List<DataComposeDemo> d=new ArrayList<>();
+//        for(int i=0;i<list1.size();i++){
+//            DataComposeDemo composeDemo=new DataComposeDemo();
+//            composeDemo.setColName(list1.get(i));
+//            composeDemo.setAutoAdd(list4.get(i));
+//            composeDemo.setPkColumn(list5.get(i));
+//            composeDemo.setColumnComment(list3.get(i));
+//            composeDemo.setDataType(list2.get(i));
+////            composeDemo.setColumnType(list6.get(i));
+////            composeDemo.setData(list.get(i));
+//            d.add(composeDemo);
+//        }
+//        jsonObject.put("data",d);
         return jsonObject;
     }
+
     @RequestMapping("toupdateTableData")
     @ResponseBody
     public JSONObject toupdateTableData(String subjectCode,String tableName,String PORTALID){
@@ -356,6 +371,42 @@ public class EditDataController {
         }else{
             jsonObject.put("data","0");
         }
+        return jsonObject;
+    }
+
+    @RequestMapping("toupdateTableDatatest")
+    @ResponseBody
+    public JSONObject toupdateTableDatatest(String subjectCode,String tableName,String PORTALID){
+        JSONObject jsonObject=new JSONObject();
+        DataSrc datasrc=getDataSrc(subjectCode);
+        Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);
+        List<String> list2=map.get("DATA_TYPE");//字段类型
+        List<String> list3=map.get("COLUMN_COMMENT"); //注释
+        List<String> list4=map.get("autoAdd");  //自增
+        List<String> list5=map.get("pkColumn");  //键
+        List<String> list6=map.get("COLUMN_TYPE"); //列类型
+        List<String> list7=map.get("COLUMN_NAME");
+
+        jsonObject.put("DATA_TYPE",list2);
+        jsonObject.put("COLUMN_COMMENT",list3);
+        jsonObject.put("autoAdd",list4);
+        jsonObject.put("pkColumn",list5);
+        jsonObject.put("COLUMN_TYPE",list6);
+        List<String> list=dataSrcService.getDataByPORTALID(datasrc,tableName,PORTALID);
+        List<DataComposeDemo> d=new ArrayList<>();
+        for(int i=0;i<list7.size();i++){
+            DataComposeDemo composeDemo=new DataComposeDemo();
+            composeDemo.setColName(list7.get(i));
+            composeDemo.setAutoAdd(list4.get(i));
+            composeDemo.setPkColumn(list5.get(i));
+            composeDemo.setColumnComment(list3.get(i));
+            composeDemo.setDataType(list2.get(i));
+            composeDemo.setColumnType(list6.get(i));
+            composeDemo.setData(list.get(i));
+            d.add(composeDemo);
+        }
+//        jsonObject.put("data",list);
+        jsonObject.put("data",d);
         return jsonObject;
     }
 }
