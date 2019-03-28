@@ -63,7 +63,7 @@
                                     <li class="active">
                                         <a href="#editTableFieldComsId" data-toggle="tab"
                                            id="editTableDataAndComsButtonId" aria-expanded="true">
-                                            <button type="button" class="btn btn-primary">
+                                            <button id="btn_eidt" type="button" class="btn btn-primary">
                                                 编辑
                                             </button>
                                         </a>
@@ -72,7 +72,7 @@
                                         <a href="#previewTableDataAndComsId"
                                            id="previewTableDataAndComsButtonId"
                                            data-toggle="tab" aria-expanded="false">
-                                            <button type="button" class="btn btn-default">
+                                            <button id="btn_check" type="button" class="btn btn-default">
                                                 预览
                                             </button>
                                         </a>
@@ -161,7 +161,6 @@
             $("#isdescribe").hide();
             $("#undescribe").show();
         });
-
         function chooseTable(subjectCode, flag) {
             $.ajax({
                 type: "GET",
@@ -187,6 +186,22 @@
             });
         }
 
+        $("#btn_eidt").click(function () {
+            $("#btn_check").removeClass("btn btn-primary");
+            $("#btn_eidt").removeClass("btn btn-default");
+
+            $("#btn_eidt").addClass("btn btn-primary");
+            $("#btn_check").addClass("btn btn-default");
+
+        });
+
+        $("#btn_check").click(function () {
+            $("#btn_check").removeClass("btn btn-default");
+            $("#btn_eidt").removeClass("btn btn-primary");
+
+            $("#btn_check").addClass("btn btn-primary");
+            $("#btn_eidt").addClass("btn btn-default");
+        });
 
     </script>
 </div>

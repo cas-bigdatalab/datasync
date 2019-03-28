@@ -52,7 +52,7 @@
 
         </ul>
     </div>
-    <div style="float:left;width:5%;margin-right: 5%;margin-left: 2%;">
+    <div id="btn_addTableData" style="float:left;width:5%;margin-right: 5%;margin-left: 2%;display: none;">
         <button class="btn btn-primary" type="button"><a href="#" onclick="add_function()" style="color: white;"><i
                 class="fa fa-plus"></i>增加</a></button>
     </div>
@@ -250,6 +250,7 @@
         });
 
         function editTableData(i) {
+            $("#btn_addTableData").show();
             var tableName = $(i).attr("id");
             var subjectCode = userName;
             var pageNo = 1;
