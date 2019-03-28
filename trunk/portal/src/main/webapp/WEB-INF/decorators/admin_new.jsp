@@ -128,7 +128,7 @@
                             </tr>
                             <tr>
                                 <td>欢迎您！${sessionScope.userName}</td>
-                                <td class="tuichu"><a style="border-radius: 6px" href="${ctx}/logout">退出</a></td>
+                                <td><a style="border-radius: 6px;margin-left:6px;color: #ef124d" href="${ctx}/logout"><span class="glyphicon glyphicon-off"></span></a></td>
                             </tr>
                             </tbody>
                         </table>
