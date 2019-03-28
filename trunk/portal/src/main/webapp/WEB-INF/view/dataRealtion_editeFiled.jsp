@@ -21,6 +21,11 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/fileinput.min.css">
     <link href="${ctx}/resources/bundles/layerJs/theme/default/layer.css" rel="stylesheet" type="text/css"/>
     <style type="text/css">
+        .qiehuan_div li a.active {
+            background: #2a6ebf !important;
+            margin-right: 1px !important;
+            color: #fff !important;
+        }
     </style>
 </head>
 
@@ -142,6 +147,10 @@
         var sub1 = '${sessionScope.SubjectCode}';
         $("#tabDescribe li").click(function () {
             var flag = $(this).val();
+            $(this).siblings().removeClass("active");
+            $(this).siblings().find("a").removeClass("active");
+            $(this).addClass("active");
+            $(this).find("a").addClass("active");
             chooseTable(sub1, flag);
         });
         $("#described").click(function () {

@@ -49,18 +49,11 @@
             z-index: -1;
         }
 
-        /*          .inputfile + label {
-                    font-size: 1.25em;
-                    font-weight: 700;
-                    color: #0d59b1;
-                    background-color: #FFFFff;
-                    display: inline-block;
-                    border-radius: 6px;
-                }
-                .inputfile:focus + label,
-                .inputfile + label:hover {
-                    background-color: #dddddd;
-                }*/
+        .qiehuan_div li.active a {
+            background: #2a6ebf !important;
+            margin-right: 1px !important;
+            color: #fff !important;
+        }
     </style>
 </head>
 <body>
