@@ -215,7 +215,7 @@
     </div>
 </div>
 
-<%--<div class="foot_div">2018-2020 &copy; 中国科学院计算机网络信息中心.版权所有.</div>--%>
+<div class="foot_div">2018-2020 &copy; 中国科学院计算机网络信息中心.版权所有.</div>
 
 
 <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>

@@ -825,12 +825,13 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping(value = "fileSourceZtreeFileList")
-    public JSONObject fileSourceZtreeFileList(String resourceId ) {
+    public JSONObject fileSourceZtreeFileList(String resourceId, HttpServletRequest request) {
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         String[] filePathArry = new String[0];
 
         List<FileTreeNode> nodeList=new ArrayList<FileTreeNode>();
-        String filePath="D:\\workspace";
+        String filePath = (String) request.getSession().getAttribute("FtpFilePath") + File.separator + "file";
+//        String filePath="D:\\workspace";
         File dirFile = new File(filePath);
         JSONObject jsonObject = new JSONObject();
         if(resource!=null){
