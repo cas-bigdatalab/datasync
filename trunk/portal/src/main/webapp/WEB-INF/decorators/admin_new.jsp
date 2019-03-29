@@ -111,6 +111,10 @@
            background-color: #e5e5e5;
             color: #333333
         }
+
+        .right_div table tbody tr {
+            background-color: #FFFFff !important;
+        }
     </style>
 
 </head>

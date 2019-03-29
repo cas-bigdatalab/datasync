@@ -252,7 +252,9 @@
 
         var subjectCode = '${sessionScope.SubjectCode}';
         closableTab.afterCloseTab = function (item){
-
+            if (!$(".nav.nav-tabs.activeTabs li")[0]) {
+                $("#btn_addTableData").hide();
+            }
         };
         $.ajax({
             url: "${ctx}/showTable",
