@@ -642,6 +642,7 @@
                     }
                     // var html=template("adddataTmpl",data);
                     var s_add=" <button id='addbtn' class='btn btn-success' data-dismiss='modal' onclick=\"addTablefuntion('"+dataTypeArr+"','"+strs2+"','"+pkColumnArr+"','"+autoAddArr+"')\">保存</button>";
+                        s_add+="<button type='button' data-dismiss='modal' class='btn default'>取消</button> ";
                     $("#addTable tbody").append(s);
                     $("#add_div").append(s_add);
                     $("#staticAddData").modal("show");
@@ -1018,6 +1019,7 @@
                         }
                     }
                     var s_save = "<button id='btn_save'  class='btn btn-success' data-dismiss='modal' onclick=\" saveDataTest('" + tableName + "','" + subjectCode + "','" + dataTypeArr + "','" + currentPage + "','" + strs2 + "','"+delPORTALID+"')\">保存</button> ";
+                    s_save+="<button type='button' data-dismiss='modal' class='btn default'>取消</button> ";
                     $("#update_tbody").append(s_tbody);
                     $("#update_div").append(s_save);
                     $("#staticUpdateData").modal("show");

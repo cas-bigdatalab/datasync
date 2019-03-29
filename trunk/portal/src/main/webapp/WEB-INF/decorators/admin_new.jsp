@@ -107,6 +107,10 @@
             font-weight: normal;
             color: #000;
         }
+        button.btn.btn-danger{
+           background-color: #e5e5e5;
+            color: #333333
+        }
     </style>
 
 </head>

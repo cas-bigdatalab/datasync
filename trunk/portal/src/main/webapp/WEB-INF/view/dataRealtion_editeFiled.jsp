@@ -108,6 +108,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" id="editTableFieldComsSaveId" data-dismiss="modal">保存
                 </button>
+                <button type="button" data-dismiss="modal" class="btn default">取消</button>
             </div>
         </div>
     </div>
