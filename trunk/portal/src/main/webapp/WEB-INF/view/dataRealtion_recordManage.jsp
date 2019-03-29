@@ -184,19 +184,17 @@
     {{/each}}
 </script>
 
-<script type="text/html" id="showDataTmpl">
-    {{each dataDatil as value i}}
-    <tr>
-        <td>{{value}}</td>
-    </tr>
-    {{/each}}
-</script>
-
+<%--查看数据--%>
 <script type="text/html" id="checkdataTmpl">
     {{each data as value i}}
     <tr>
         {{if value.colName=="PORTALID"}}
-        {{else }}
+        {{else if value.dataType=="datetime"}}
+        <td>{{value.colName}}</td>
+        <td>{{value.dataType}}</td>
+        <td>{{value.columnComment}}</td>
+        <td>{{dateFormat(value.data)}}</td>
+        {{else}}
         <td>{{value.colName}}</td>
         <td>{{value.dataType}}</td>
         <td>{{value.columnComment}}</td>
@@ -206,17 +204,38 @@
     {{/each}}
 </script>
 
+<%--新增数据--%>
 <script type="text/html" id="adddataTmpl">
     {{each data as value i}}
     <tr>
         {{if value.colName=="PORTALID"}}
-        {{else if value.pkColumn==}}
+        {{else if value.pkColumn=="PRI" && value.autoAdd=="auto_increment"}}
+        {{else}}
         <td>{{value.colName}}</td>
         <td>{{value.dataType}}</td>
         <td>{{value.columnComment}}</td>
         <td><input type="text" /></td>
         {{/if}}
     </tr>
+    {{/each}}
+</script>
+
+<%--显示表数据--%>
+<script type="text/html" id="showTableDataTestTheadTmpl">
+    {{each data as value i}}
+    <tr>
+        {{include 'scoreTemplate' $value}}   <!--引入子模板-->
+        <td>操作</td>
+    </tr>
+    {{/each}}
+</script>
+<script id="scoreTemplate" type="text/html">
+    {{each dataDatil}}
+    <td>{{$value.tabledata1}}</td>
+    <td>{{$value.tabledata2}}</td>
+    <td>{{$value.tabledata3}}</td>
+    <td>{{$value.tabledata4}}</td>
+    <td>{{$value.tabledata5}}</td>
     {{/each}}
 </script>
 
@@ -266,6 +285,7 @@
                 data: {"subjectCode": subjectCode, "tableName": tableName, "pageNo": pageNo},
                 dataType: "json",
                 success: function (data) {
+                    console.log(data);
                     var arr = data.columns;
                     var dataType = data.dataType;
                     var columnComment = data.columnComment;
@@ -311,7 +331,7 @@
                                             delPORTALID = d[k];
                                             ss += "<td  style='display:none;' title='" + d[k] + "'>" + d[k] + "</td>";
                                         } else {
-                                            ss += "<td title='" + d[k] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'>" + d[k] + "</td>";
+                                            ss += "<td title='" + d[k] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp style='font-family: Arial, 微软雅黑;'>" + d[k] + "</xmp></td>";
                                             j++;
                                         }
                                     } else {
@@ -323,7 +343,7 @@
                                             delPORTALID = d[arr[i]];
                                             ss += "<td style='display:none;' title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
                                         } else {
-                                            ss += "<td title='" + d[arr[i]] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'>" + d[arr[i]] + "</td>";
+                                            ss += "<td title='" + d[arr[i]] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp style='font-family: Arial, 微软雅黑;'>" + d[arr[i]] + "</xmp></td>";
                                             j++;
                                         }
                                     }
@@ -342,9 +362,9 @@
                                 }
                             }
                             ss += "<td align='center'><table class='0' cellspacing='0' border='0' align='center'><tr>" +
-                                "<td class='bianji'><a src='#' onclick=\" updateData('" + arr + "','" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
+                                "<td class='bianji'><a src='#' onclick=\" updateData('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
                                 "<i class='fa fa-pencil-square-o' aria-hidden='true'></i>修改</a></td><td width='1'></td>" +
-                                "<td class='chakan'><a href='#' onclick=\"checkDada('" + arr + "','" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
+                                "<td class='chakan'><a href='#' onclick=\"checkDada('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
                                 "<i class='fa fa-eye' aria-hidden='true'></i>查看</a></td><td width='1'></td>" +
                                 "<td class='shanchu'><a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
                                 "<i class='fa fa-trash-o fa-fw' aria-hidden='true'></i>删除</a></td></tr></table></td></tr>";
@@ -371,6 +391,46 @@
                     }
                 }
             });
+        }
+
+        
+        function showTableDataTestTmpl(subjectCode, tableName, pageNo) {
+            var ids = "#tab_container_" + tableName;
+            $.ajax({
+                type: "post",
+                url: "${ctx}/showTableDataTestTmpl",
+                data: {"subjectCode": subjectCode, "tableName": tableName, "pageNo": pageNo},
+                dataType: "json",
+                success: function (data) {
+                    data.push("subjectCode",subjectCode);
+                    data.push("tableName",tableName);
+                    data.push("pageNo",pageNo);
+                    var arr = data.columns;
+                    // var dataType = data.dataType;
+                    var columnComment = data.columnComment;
+                    var dataArry = data.dataDatil;
+
+                     var s = "<table id='" + tableName + "' class='table table-hover biaoge' spellcheck='0' border='0'>" +
+                        "<thead><tr class='table_tr'>";
+                    var il = 0;
+                    if (dataArry.length > 0) {
+                        for (var i = 0; i < arr.length; i++) {
+                            if (il < 5) {
+                                if (arr[i] === "PORTALID") {
+                                    s += "<td style='display:none;' title=" + arr[i] + ">" + arr[i] + "</td>";
+                                } else {
+                                    s += "<td style='width:15%;'>" + arr[i] + "<br/><p title=" + columnComment[i] + ">" + columnComment[i] + "</p></td>";
+                                    il++;
+                                }
+                            } else {
+                               break;
+                            }
+                        }
+                    }
+
+                     var html=template("showTableDataTestTheadTmpl",data);
+                }
+            })
         }
 
         /**
@@ -477,7 +537,7 @@
                                             delPORTALID = d[k];
                                             ss += "<td  style='display:none;' title='" + d[k] + "'>" + d[k] + "</td>";
                                         } else {
-                                            ss += "<td title='" + d[k] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'>" + d[k] + "</td>";
+                                            ss += "<td title='" + d[k] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp style='font-family: Arial, 微软雅黑;'>" + d[k] + "</xmp></td>";
                                             j++;
                                         }
                                     } else {
@@ -489,7 +549,7 @@
                                             delPORTALID = d[arr[i]];
                                             ss += "<td style='display:none;' title='" + d[arr[i]] + "'>" + d[arr[i]] + "</td>";
                                         } else {
-                                            ss += "<td title='" + d[arr[i]] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'>" + d[arr[i]] + "</td>";
+                                            ss += "<td title='" + d[arr[i]] + "' style='word-break:keep-all;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;'><xmp style='font-family: Arial, 微软雅黑;'>" + d[arr[i]] + "</xmp></td>";
                                             j++;
                                         }
                                     }
@@ -508,9 +568,9 @@
                                 }
                             }
                             ss += "<td align='center'><table class='0' cellspacing='0' border='0' align='center'><tr>" +
-                                "<td class='bianji'><a src='#' onclick=\" updateData('" + arr + "','" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
+                                "<td class='bianji'><a src='#' onclick=\" updateData('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
                                 "<i class='fa fa-pencil-square-o' aria-hidden='true'></i>修改</a></td><td width='1'></td>" +
-                                "<td class='chakan'><a href='#' onclick=\"checkDada('" + arr + "','" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
+                                "<td class='chakan'><a href='#' onclick=\"checkDada('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
                                 "<i class='fa fa-eye' aria-hidden='true'></i>查看</a></td><td width='1'></td>" +
                                 "<td class='shanchu'><a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
                                 "<i class='fa fa-trash-o fa-fw' aria-hidden='true'></i>删除</a></td></tr></table></td></tr>";
@@ -908,15 +968,15 @@
             })
         }
 
-        function updateData(columns, delPORTALID,tableName,subjectCode) {
+        function updateData(delPORTALID,tableName,subjectCode) {
             $("#form_id").html(" ");
             $("#update_tbody").html(" ");
             $("#update_div").html("");
             //获得当前页码
             var currentPage = $("#currentPageNo"+tableName +"").html();
 
-            var strs2 = new Array(); //定义一数组
-            strs2 = columns.split(",");
+            // var strs2 = new Array(); //定义一数组
+            // strs2 = columns.split(",");
             $.ajax({
                 type: "post",
                 url: "${ctx}/toupdateTableData",
@@ -928,6 +988,7 @@
                     var autoAddArr = data.autoAdd;
                     var pkColumnArr = data.pkColumn;
                     var COLUMN_TYPE = data.COLUMN_TYPE;
+                    var strs2=data.COLUMN_NAME;
                     var strs = data.data;
                     var delPORTALID="";
                     var s_tbody="";
@@ -951,7 +1012,7 @@
                                 s_tbody+="<td  style='width:40%;'><input class='selectData' id='"+ getinput_id +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "'  /></td></tr>";
                             }else if(dataTypeArr[i]==="time"){
                                 s_tbody += "<td  style='width:40%;'><input class='DataTime' id='" + getinput_id + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
-                            }else{
+                            }else {
                                 s_tbody+="<td  style='width:40%;'><input title='" + strs[i] + "' class='form-control'  type='text' id='"+ getinput_id +"' style='width:100%;height=100%'   name=" + strs2[i] + " value='" + strs[i] + "' dataType='" + dataTypeArr[i] +"' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 10px;'></p></td></tr>";
                             }
                         }
@@ -1001,6 +1062,7 @@
                         format: "hh:ii:ss",
                         minView: 0,
                         minuteStep:1,
+                        pickDate:false,
                         startView: 0
                     });
                 }
@@ -1638,10 +1700,10 @@
         }
 
         //查看详情
-        function checkDada(columns, delPORTALID,tableName,subjectCode) {
+        function checkDada(delPORTALID,tableName,subjectCode) {
             $("#checkTable tbody").html(" ");
-            var strs2 = new Array(); //定义一数组
-            strs2 = columns.split(",");
+            // var strs2 = new Array(); //定义一数组
+            // strs2 = columns.split(",");
 
             $.ajax({
                 type: "post",
@@ -1667,6 +1729,7 @@
                     //         s += "<tr><td>" + strs2[i] + "</td><td>" + COLUMN_TYPE[i] + "</td><td>" + columnComments[i] + "</td><td title='" + t_data[i] + "'>" + t_data[i] + "</td></tr>";
                     //     }
                     // }
+                    template.helper("dateFormat", formatDate);
                     var html=template("checkdataTmpl",data);
                     $("#checkTable tbody").append(html);
                     $("#staticShowDataDetail").modal("show");

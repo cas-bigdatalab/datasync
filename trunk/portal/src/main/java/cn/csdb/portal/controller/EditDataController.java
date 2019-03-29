@@ -69,14 +69,6 @@ public class EditDataController {
         List<String> list8=map.get("COLUMN_TYPE");
              list=dataSrcService.getTableData(datasrc,tableName,pageNo,pageSize);
         List<String> list1=new ArrayList<>();
-//         for(int i=0;i<=0;i++){
-//             Map<String,Object> map1=list.get(i);
-//             for(String key:map1.keySet()){
-//                 list1.add(key);
-//                 System.out.println("key:"+key+"...."+"value:"+map1.get(key));
-//             }
-//         }
-
         int countNum=dataSrcService.countData(datasrc,tableName);
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("totalCount", countNum);
@@ -93,6 +85,37 @@ public class EditDataController {
         jsonObject.put("columnType",list8);
        return jsonObject;
     }
+
+//    显示表数据，使用template，建立数据类，未完成
+    @ResponseBody
+    @RequestMapping("/showTableDataTestTmpl")
+    public JSONObject showTableDataTestTmpl(String subjectCode, String tableName,@RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
+                           @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
+        DataSrc datasrc=getDataSrc(subjectCode);
+        List<List<Object>> list=new ArrayList<>();
+
+        Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);
+        List<String> list3=map.get("COLUMN_NAME");
+        List<String> list4=map.get("DATA_TYPE");
+        List<String> list5=map.get("COLUMN_COMMENT");
+
+        list=dataSrcService.getTableDataTestTmpl(datasrc,tableName,pageNo,pageSize);
+        List<String> list1=new ArrayList<>();
+        int countNum=dataSrcService.countData(datasrc,tableName);
+        JSONObject jsonObject=new JSONObject();
+        jsonObject.put("totalCount", countNum);
+        jsonObject.put("currentPage", pageNo);
+        jsonObject.put("pageSize", pageSize);
+        jsonObject.put("totalPages", countNum % pageSize == 0 ? countNum / pageSize : countNum / pageSize + 1);
+
+        jsonObject.put("dataDatil",list);
+        jsonObject.put("columns",list3);
+        jsonObject.put("dataType",list4);
+        jsonObject.put("columnComment",list5);
+
+        return jsonObject;
+    }
+
 
     @RequestMapping("/saveTableData")
     @ResponseBody
@@ -293,12 +316,14 @@ public class EditDataController {
         JSONObject jsonObject=new JSONObject();
         DataSrc datasrc=getDataSrc(subjectCode);
         Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);
+        List<String> list1=map.get("COLUMN_NAME");
         List<String> list2=map.get("DATA_TYPE");//字段类型
         List<String> list3=map.get("COLUMN_COMMENT"); //注释
         List<String> list4=map.get("autoAdd");  //自增
         List<String> list5=map.get("pkColumn");  //键
         List<String> list6=map.get("COLUMN_TYPE"); //列类型
 
+        jsonObject.put("COLUMN_NAME",list1);
         jsonObject.put("DATA_TYPE",list2);
         jsonObject.put("COLUMN_COMMENT",list3);
         jsonObject.put("autoAdd",list4);
@@ -380,6 +405,7 @@ public class EditDataController {
         JSONObject jsonObject=new JSONObject();
         DataSrc datasrc=getDataSrc(subjectCode);
         Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);
+        List<String> list1=map.get("COLUMN_NAME");
         List<String> list2=map.get("DATA_TYPE");//字段类型
         List<String> list3=map.get("COLUMN_COMMENT"); //注释
         List<String> list4=map.get("autoAdd");  //自增
@@ -387,6 +413,7 @@ public class EditDataController {
         List<String> list6=map.get("COLUMN_TYPE"); //列类型
         List<String> list7=map.get("COLUMN_NAME");
 
+        jsonObject.put("COLUMN_NAME",list1);
         jsonObject.put("DATA_TYPE",list2);
         jsonObject.put("COLUMN_COMMENT",list3);
         jsonObject.put("autoAdd",list4);
@@ -409,4 +436,6 @@ public class EditDataController {
         jsonObject.put("data",d);
         return jsonObject;
     }
+
+
 }
