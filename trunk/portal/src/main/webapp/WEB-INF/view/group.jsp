@@ -433,7 +433,7 @@
             </div>
 
             <div class="modal-footer">
-                <button id="saveUserAddBtn" class="btn green" onclick="agreeAddUser();">
+                <button id="saveUserAddBtn" class="btn btn-success" onclick="agreeAddUser();">
                     保存
                 </button>
                 <button id="cancelUserAddBtn" class="btn default"  data-dismiss="modal">
