@@ -78,8 +78,9 @@
 </div>
 <div id="uploadExcel" style="height: 200px;background: #dddddd">
     <form name="form" id="fileForm" method="post" style="text-align: center;">
-        <a href="${ctx}/fileImport/getExcelTemplate">点击下载Excel模板</a><br/>
+        <a href="${ctx}/fileImport/getExcelTemplate" style="font-size: 19px;">点击下载Excel模板</a><br/>
         <%--<input id="" style="display: inline;margin-left: 7%;" type="file" name="file"/><br/>--%>
+        <div style="margin: 25px;"></div>
         <input type="file" name="file" id="excelFile" class="inputfile"/>
         <label id="fileLabel" for="excelFile" class="btn btn-default">请选择上传文件</label>
         <input id="excelFileUpload" type="button" class="btn btn-default" onclick="uploadExcel();" value="上传"/>
