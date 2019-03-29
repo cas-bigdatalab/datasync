@@ -113,7 +113,7 @@
 
 <div class="con_div">
 
-    <div class="page-container" style="min-height: 550px;width: 100%;margin: 0 auto;">
+    <div class="page-container" style="height: 95%;width: 100%;margin: 0 auto;">
         <!-- BEGIN SIDEBAR -->
         <div class="page-sidebar-wrapper">
             <%--NEW BAR ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！--%>
@@ -340,9 +340,12 @@
         }
 
         // 根据显示器重置 div.page-content 实际内容区域大小
-        $(".page-content").css("margin-left", $(".page-sidebar").width());
+        var $page_content = $(".page-content");
+        $page_content.css("margin-left", $(".page-sidebar").width());
+        $page_content.css("min-height", $page_content.height() - $(".foot_div").height());
 
-        $("#content").css("height", $(".page-content").height() - $("#content-top").height() - parseInt($(".fabu_div2").css("margin-bottom")) - parseInt($("div.right_div").css("padding-top")))
+
+        $("#content").css("height", $page_content.height() - $("#content-top").height() - parseInt($(".fabu_div2").css("margin-bottom")) * 2 - parseInt($("div.right_div").css("padding-top")))
     });
 
 </script>
