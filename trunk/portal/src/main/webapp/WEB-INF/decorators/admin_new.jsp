@@ -178,7 +178,8 @@
                                                 class="fa fa-bars"></i>导入式建表</a></li>
                                         <li class="l2-menu"><a href="${ctx}/datatest"><i
                                                 class="fa fa-bars"></i>数据记录管理</a>
-                                            <div  id="alltableName" style="height:280px;overflow-y: scroll;display:none;margin-top:1%;">
+                                            <div id="alltableName"
+                                                 style="max-height:230px;overflow-y: scroll;display:none;margin-top:1%;">
 
                                             </div>
                                         </li>
