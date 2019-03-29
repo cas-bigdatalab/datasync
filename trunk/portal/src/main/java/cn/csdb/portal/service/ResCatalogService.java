@@ -89,10 +89,19 @@ public class ResCatalogService {
         ResCatalog_Mongo resCatalog = resCatalogDao.getLocalResCatalogNodeById(objectId);
         jsonObject.put("id",resCatalog.getRid());
         jsonObject.put("text",resCatalog.getName());
-        if(resCatalog.getLevel() == 1){
+        /*if(resCatalog.getLevel() == 1){
             jsonObject.put("icon","glyphicon glyphicon-home");
         }else{
             jsonObject.put("icon","glyphicon glyphicon-th-list");
+        }*/
+        if (resCatalog.getLevel() == 1) {
+            jsonObject.put("icon", "/portal/resources/img/first.png");
+        } else if (resCatalog.getLevel() == 2) {
+            jsonObject.put("icon", "/portal/resources/img/second.png");
+        } else if (resCatalog.getLevel() == 3) {
+            jsonObject.put("icon", "/portal/resources/img/third.png");
+        } else {
+            jsonObject.put("icon", "glyphicon glyphicon-th-list");
         }
 
         if(resCatalog.getLevel()<depth){
