@@ -833,7 +833,7 @@ div.labels button {
 .loginbox {
     width: 420px;
     background: #fff;
-    padding: 60px 40px;
+    padding: 30px 40px;
     margin: auto;
     margin-top: -160px;
     box-shadow: 0px 2px 5px #ccc;
@@ -843,7 +843,6 @@ div.labels button {
     text-align: center;
     font-size: 24px;
     color: #1a5b9d;
-    padding-bottom: 38px;
 }
 
 .loginbox table {
