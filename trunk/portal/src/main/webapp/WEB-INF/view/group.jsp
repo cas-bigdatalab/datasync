@@ -213,7 +213,7 @@
                 <button type="button" class="btn btn-success" onclick="submitAddData();" ><i
                         class="glyphicon glyphicon-ok"></i>保存
                 </button>
-                <button type="button" data-dismiss="modal" onclick="resetData();" class="btn  btn-danger">取消</button>
+                <button type="button" data-dismiss="modal" onclick="resetData();" class="btn  default">取消</button>
             </div>
         </div>
     </div>
@@ -258,7 +258,7 @@
                 <button type="button" class="btn green" onclick="submitEditData();" ><i
                         class="glyphicon glyphicon-ok"></i>保存
                 </button>
-                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+                <button type="button" data-dismiss="modal" class="btn  default">取消</button>
             </div>
         </div>
     </div>
@@ -303,7 +303,7 @@
                 <button type="button" class="btn green" onclick="submitAddUser();" ><i
                         class="glyphicon glyphicon-ok"></i>保存
                 </button>
-                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+                <button type="button" data-dismiss="modal" class="btn  default">取消</button>
             </div>
         </div>
     </div>
@@ -1022,8 +1022,10 @@
             $.ajax({
                 type: "POST",
                 url: '${ctx}/group/updateUsers',
+                traditional: true,
                 data: {"id": $("#spanGroupId").val(),
-                    "users":JSON.stringify($("#users").val())
+                    // "users":JSON.stringify($("#users").val())
+                    "users": $("#users").val()
                 },
                 dataType: "json",
                 success: function (data) {
@@ -1201,7 +1203,8 @@
         //删除按钮
         function deleteUser(deleteBtn)
         {
-            var idOfUser = $(deleteBtn).parent().attr("id");
+            // var idOfUser = $(deleteBtn).parent().attr("id");
+            var idOfUser = $(deleteBtn).parent().parent().parent().parent().parent().attr("id");
 
             bootbox.confirm("<span style='font-size: 16px'>确认要删除此条记录吗?</span>",
                 function (result)
@@ -1259,7 +1262,7 @@
 
         function updateUser(updateBtn)
         {
-            var idOfUser = $(updateBtn).parent().attr("id");
+            var idOfUser = $(updateBtn).parent().parent().parent().parent().parent().attr("id");
 
             $.ajax(
                 {

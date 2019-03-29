@@ -296,7 +296,7 @@
                 <button type="button" class="btn green" data-dismiss="modal" ><i
                         class="glyphicon glyphicon-ok"></i>确认
                 </button>
-                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+                <button type="button" data-dismiss="modal" class="btn  default">取消</button>
             </div>
         </div>
     </div>
