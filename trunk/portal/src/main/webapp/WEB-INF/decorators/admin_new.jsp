@@ -88,9 +88,12 @@
         }
 
         .page-content table tbody tr:hover {
-            background: #dddddd;
+            background: #f5f5f5;
         }
 
+        table.items tr:hover {
+            background: none !important;
+        }
 
         .alert.alert-info {
             background-color: #cbe2fc !important;
