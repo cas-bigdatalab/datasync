@@ -169,7 +169,7 @@ li.l3-menu > a:hover i, li.l3-menu > a.active i {
     width: 100%;
     /*background: #f1f1f1;*/
     float: right;
-    padding: 20px;
+    padding: 10px;
     /*height: 60%;*/
     height: 100%;
     /*overflow-y: auto;*/
@@ -211,7 +211,6 @@ li.l3-menu > a:hover i, li.l3-menu > a.active i {
     color: #256bbc;
     background: #e1effe;
     border: #c3ddfb 1px solid;
-    margin-top: 15px;
     margin-bottom: 15px;
     padding-left: 15px;
 }
@@ -549,7 +548,7 @@ p.pic {
     padding: 4px 14px;
     width: 300px;
     border-radius: 20px !important;
-    background: url("../img/search.png") 270px center no-repeat;
+    /*background: url("../img/search.png") 270px center no-repeat;*/
 }
 
 .file-search button {

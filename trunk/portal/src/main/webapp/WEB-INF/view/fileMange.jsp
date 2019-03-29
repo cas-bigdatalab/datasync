@@ -81,7 +81,7 @@
     {{if data != null}}
     {{each data as v i}}
     <tr>
-        <%--<td></td>--%>
+        <td></td>
         <td class="{{v.fileType}} fileName {{if v.fileType == 'dir'}} file-name {{else}} file-file {{/if}}"
             path="{{v.filePath}}">
             <div class="text_name">{{v.fileName}}</div>
@@ -117,7 +117,9 @@
         </div>
         <div class="col-xs-6 text-right file-search">
             <input id="searchName" type="text" placeholder="搜索您的文件">
-            <button id="searchFile" type="button" class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+            <button id="searchFile" type="button" class="btn btn-default" style="line-height: 7px;"><i
+                    class="fa fa-search"></i> 搜索
+            </button>
             <%-- <button type="button"><i class="fa fa-sort-alpha-asc"></i></button>
              <button type="button"><i class="fa fa-th-large"></i></button>--%>
         </div>
@@ -133,6 +135,7 @@
     </div>
     <table>
         <colgroup>
+            <col style="width: 1%"/>
             <col style="width: 60%"/>
             <col style="width: 20%"/>
             <col style="width: 20%"/>
@@ -140,6 +143,7 @@
         <thead>
         <tr>
             <%--<td style="width:20px;"><input id="fileName" type="checkbox"/></td>--%>
+            <td></td>
             <td>文件名</td>
             <td class="text-center">大小</td>
             <td class="text-center">修改日期</td>
@@ -149,6 +153,7 @@
     <div class="file-list" style="overflow-y: scroll;max-height: 600px;">
         <table>
             <colgroup>
+                <col style="width: 2%"/>
                 <col style="width: 60%"/>
                 <col style="width: 20%"/>
                 <col style="width: 20%"/>
