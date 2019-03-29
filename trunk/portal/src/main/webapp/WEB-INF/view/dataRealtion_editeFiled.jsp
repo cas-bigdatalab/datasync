@@ -47,7 +47,7 @@
     </div>
 </div>
 <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
-    <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
+    <div class="modal-dialog" style="height:600px;width:auto;max-width: 55%">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -94,11 +94,11 @@
                             </div>
 
                             <div class="tab-content"
-                                 style="background-color: white;min-height:300px;max-height:70%; overflow: hidden">
-                                <div class="tab-pane active" id="editTableFieldComsId" style="overflow: scroll;">
+                                 style="background-color: white;max-height:70%;max-width:100%; ">
+                                <div class="tab-pane active" id="editTableFieldComsId" style="width:99%;max-height:70%;overflow: hidden;overflow: auto;" >
                                 </div>
 
-                                <div class="tab-pane" id="previewTableDataAndComsId" style="overflow: scroll;">
+                                <div class="tab-pane" id="previewTableDataAndComsId" style="width:99%;max-height:70%;overflow: hidden;overflow: auto;">
                                 </div>
                             </div>
                         </div>

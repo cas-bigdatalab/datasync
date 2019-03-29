@@ -71,7 +71,7 @@
 
                 </div>
 
-                <div class="modal-body" style="overflow-y:scroll;max-height: 500px;">
+                <div class="modal-body" style="overflow:auto;max-height: 500px;">
                     <div class="tab-content"
                          style="background-color: white;max-height:60%;padding-top: -10px ;">
                         <div class="tab-pane active" id="adddata" style=" ">
@@ -107,7 +107,7 @@
 
                 </div>
 
-                <div class="modal-body" style="overflow-y:scroll;max-height: 500px;">
+                <div class="modal-body" style="overflow:auto;max-height: 500px;">
 
                     <div class="tab-content"
                          style="background-color: white;max-height:50%;padding-top: -10px ;">
@@ -137,7 +137,7 @@
 
     <%--表数据查看详情--%>
     <div id="staticShowDataDetail" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
-        <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 50%;">
+        <div class="modal-dialog" style="max-width:600px;width:auto;max-width: 50%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -146,7 +146,7 @@
 
                 </div>
 
-                <div class="modal-body" style="overflow-y:scroll;max-height: 500px;">
+                <div class="modal-body" style="overflow:auto;max-height: 500px;width: 100%;">
                     <div class="tab-content"
                          style="background-color: white;padding-top: -10px ;">
                         <div class="tab-pane active" id="checkData1"
