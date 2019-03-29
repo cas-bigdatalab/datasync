@@ -71,7 +71,7 @@
 
                 </div>
 
-                <div class="modal-body" style="overflow-y:scroll;max-height: 500px;">
+                <div class="modal-body" style="overflow:auto;max-height: 500px;">
                     <div class="tab-content"
                          style="background-color: white;max-height:60%;padding-top: -10px ;">
                         <div class="tab-pane active" id="adddata" style=" ">
@@ -107,7 +107,7 @@
 
                 </div>
 
-                <div class="modal-body" style="overflow-y:scroll;max-height: 500px;">
+                <div class="modal-body" style="overflow:auto;max-height: 500px;">
 
                     <div class="tab-content"
                          style="background-color: white;max-height:50%;padding-top: -10px ;">
@@ -137,7 +137,7 @@
 
     <%--表数据查看详情--%>
     <div id="staticShowDataDetail" class="modal fade" tabindex="-1" data-width="200editTableFieldComsId">
-        <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 50%;">
+        <div class="modal-dialog" style="max-width:600px;width:auto;max-width: 50%;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -146,7 +146,7 @@
 
                 </div>
 
-                <div class="modal-body" style="overflow-y:scroll;max-height: 500px;">
+                <div class="modal-body" style="overflow:auto;max-height: 500px;width: 100%;">
                     <div class="tab-content"
                          style="background-color: white;padding-top: -10px ;">
                         <div class="tab-pane active" id="checkData1"
@@ -642,6 +642,7 @@
                     }
                     // var html=template("adddataTmpl",data);
                     var s_add=" <button id='addbtn' class='btn btn-success' data-dismiss='modal' onclick=\"addTablefuntion('"+dataTypeArr+"','"+strs2+"','"+pkColumnArr+"','"+autoAddArr+"')\">保存</button>";
+                        s_add+="<button type='button' data-dismiss='modal' class='btn default'>取消</button> ";
                     $("#addTable tbody").append(s);
                     $("#add_div").append(s_add);
                     $("#staticAddData").modal("show");
@@ -1018,6 +1019,7 @@
                         }
                     }
                     var s_save = "<button id='btn_save'  class='btn btn-success' data-dismiss='modal' onclick=\" saveDataTest('" + tableName + "','" + subjectCode + "','" + dataTypeArr + "','" + currentPage + "','" + strs2 + "','"+delPORTALID+"')\">保存</button> ";
+                    s_save+="<button type='button' data-dismiss='modal' class='btn default'>取消</button> ";
                     $("#update_tbody").append(s_tbody);
                     $("#update_div").append(s_save);
                     $("#staticUpdateData").modal("show");
