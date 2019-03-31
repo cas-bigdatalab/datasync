@@ -1,4 +1,5 @@
 <%--
+    ！！！废弃
   Created by IntelliJ IDEA.
   User: shibaoping
   Date: 2018/10/30
@@ -1916,6 +1917,7 @@
                         var tableName = template("tableNameLi", {"data": data});
                         $("#tableNameUl").html("");
                         $("#tableNameUl").html(tableName);
+
                         var tableNameDiv = template("tableNameDiv", {"data": data});
                         $("#tableNamePDiv").html("");
                         $("#tableNamePDiv").html(tableNameDiv);
@@ -1924,9 +1926,9 @@
                                 var tableField;
                                 var exist = v[0][0];
                                 if (exist === "isExist") {
-                                    tableField = template("tableFieldIsExist", {"data": v});
+                                    tableField = template("tableFieldIsExist", {"data": v, "tableName": k});
                                 } else {
-                                    tableField = template("tableFieldNotExist", {"data": v});
+                                    tableField = template("tableFieldNotExist", {"data": v, "tableName": k});
                                 }
                                 $("#" + k).html("");
                                 $("#" + k).append(tableField);
@@ -2265,7 +2267,7 @@
          */
         function fileNet(selectPath) {
             $.ajax({
-                url: "${ctx}/fileNet/getCurrentFile",
+                url: "${ctx}/fileNet/fileList",
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -2424,7 +2426,7 @@
             }
             $.ajax({
                 type: "POST",
-                url: "${ctx}/fileNet/copyPasteFile",
+                url: "${ctx}/fileNet/copyFile",
                 data: {
                     "oldFile": copyCache,
                     "newFile": currentPath

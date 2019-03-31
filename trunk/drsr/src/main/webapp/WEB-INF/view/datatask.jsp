@@ -35,28 +35,83 @@
         .progress > .progress-bar-success {
             background-color: #5cb85c !important;
         }
+        #upload-list th {
+            background-color: #f1f1f1;
+            color: black;
+            font-size: 14px;
+            border-left: none !important;
+            border-right: none !important;
+            font-weight: normal;
+        }
+        #upload-list td {
+            border-left: none !important;
+            border-right: none !important;
+        }
+        .form-control{
+            border-radius: 6px !important;
+        }
+        .alert-info {
+            background-color: #e0e0e0 !important;
+            border: none !important;
+            border-left: #0e6445 8px solid !important;
+        }
+        .alert {
+            padding: 11px;
+        }
+        .page-content-wrapper .page-content{
+            padding: 0px 0px 0px 0px !important;
+        }
+        .uplod-head,.alert alert-info,.upload-table{
+            padding:0px 20px !important;
+        }
+        #ser_div a {
+            font-size: 16px;
+            height: 40px;
+            padding-left: 10px;
+            padding-right: 10px;
+            display: block;
+            background: #70c24c;
+            line-height: 40px;
+            color: #FFF;
+            border-radius: 6px;
+        }
+        .btn-xs {
+            border-radius: 6px !important;
+        }
+        .bg-primary {
+            background-color: #1e8753 !important;
+        }
+        .col-sm-3 {
+            width: 25% !important;
+        }
+        .btn-xs {
+            padding: 3px 5px !important;
+        }
+        .table-bordered > tbody > tr:hover {
+            background-color: #f5f5f5;
+        }
     </style>
 </head>
 <body>
 <div class="page-content">
     <div>
         <div class="uplod-head">
-            <h3>
+            <h3 style="font-size: 17px !important;">
                 数据任务
             </h3>
-            <hr>
+            <%--<hr>--%>
         </div>
         <%--<div class="upload-title">
             <span>数据上传任务列表</span>
             &lt;%&ndash;<a href="${ctx}/createTask">新建任务</a>&ndash;%&gt;
         </div>--%>
-        <div class="alert alert-info" role="alert" style="margin:0  33px">
+        <div class="alert alert-info" role="alert" style="margin:0px 20px">
             <!--查询条件 -->
             <div class="row">
                 <div class="col-md-9">
                     <form class="form-inline" style="margin-bottom: 0px">
                         <div class="form-group" >
-                            <label >数据类型</label>
+                            <label style="color: black">数据类型</label>
                             <select  id="dataSourceList" class="form-control" style="width: 150px">
                                 <option value="">全部</option>
                                 <option value="mysql">mysql</option>
@@ -64,19 +119,19 @@
                                 <option value="file">file</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label  >状态</label>
+                        <div class="form-group" style="margin-left: 8px;">
+                            <label  style="color: black;">状态</label>
                             <select  id="dataStatusList" class="form-control" style="width: 150px">
                                 <option value="">全部</option>
                                 <option value="1">上传/导入完成</option>
                                 <option value="0">未上传</option>
                             </select>
                         </div>
-                        <button type="button" class="btn btn-sm blue" style="margin-left: 49px" id="seachTaskSource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
+                        <button type="button" class="btn btn-sm blue" style="margin-left: 49px;border-radius: 6px !important;background-color: #5cac39;" id="seachTaskSource"><i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                     </form>
                 </div>
-                <div class="col-md-3" style="text-align: right">
-                    <button type="button" class="btn btn-sm green" style="margin-left: 49px" onclick="relCreateTask()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据任务</button>
+                <div class="col-md-3" style="text-align: right;padding-top: 3px;">
+                    <button type="button" class="btn btn-sm green" style="margin-left: 49px;border-radius: 6px !important;background-color: #3774b6;padding: 5px 10px !important;" onclick="relCreateTask()"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增数据任务</button>
                 </div>
             </div>
         </div>
@@ -95,7 +150,7 @@
                     <th width="29%">操作</th>
                 </tr>
                 </thead>
-                <tbody id="bd-data"></tbody>
+                <tbody id="bd-data" style="background-color: #ffffff;"></tbody>
             </table>
 
            <%-- <div class="page-message" style="float: left;line-height: 56px" ></div>
@@ -164,7 +219,7 @@
             </div>
             <div class="modal-footer">
 
-                <button type="button" data-dismiss="modal" class="btn  default">关闭</button>
+                <button type="button" data-dismiss="modal" class="btn  default" style="color: #267d24 !important;background-color: #fff; border: 1.6px solid; border-radius: 6px !important; ">关闭</button>
             </div>
         </div>
     </div>
@@ -222,7 +277,7 @@
             </div>
             <div class="modal-footer">
 
-                <button type="button" data-dismiss="modal" class="btn default">关闭</button>
+                <button type="button" data-dismiss="modal" class="btn default" style="color: #267d24 !important;background-color: #fff; border: 1.6px solid; border-radius: 6px !important; ">关闭</button>
             </div>
        </div>
     </div>
@@ -241,7 +296,7 @@
                 <button type="button" class="btn green" data-dismiss="modal" ><i
                         class="glyphicon glyphicon-ok"></i>确认
                 </button>
-                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+                <button type="button" data-dismiss="modal" class="btn  default">取消</button>
             </div>
         </div>
     </div>

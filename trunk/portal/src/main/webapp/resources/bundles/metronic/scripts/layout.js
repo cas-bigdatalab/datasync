@@ -35,7 +35,7 @@ var Layout = function () {
                 if (Metronic.getViewPort().width < 992) {
                     height = Metronic.getViewPort().height - headerHeight - footerHeight;
                 } else {
-                    height = sidebar.height() + 20;
+                    height = sidebar.height();
                 }
 
                 if ((height + headerHeight + footerHeight) <= Metronic.getViewPort().height) {

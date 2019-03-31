@@ -102,11 +102,15 @@ var context = context || (function () {
             e.preventDefault();
             e.stopPropagation();
             // 获取触发事件元素的path
-            var findPath = $(e.currentTarget).attr("path");
+            var findPath = $(e.currentTarget).find("td").attr("path");
             $("#currentPath").data("currentPath", findPath);
             // 获取触发事件元素的name
-            var findName = $(e.currentTarget).find("a").text();
-            $("#currentName").data("currentName", findName);
+            var findName = $(e.currentTarget).find(".text_name").text();
+            if (typeof findName === "undefined") {
+                $("#currentName").data("currentName", undefined);
+            } else {
+                $("#currentName").data("currentName", findName);
+            }
             $('.dropdown-context:not(.dropdown-context-sub)').hide();
 
             $dd = $('#dropdown-' + id);

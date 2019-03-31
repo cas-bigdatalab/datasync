@@ -112,7 +112,7 @@ public class SubjectMgmtController {
         // check the input file's path to ensure user input a real image
         String imageFilePath = "";
         if (!(fileName == null || fileName.equals(""))) {
-            imageFilePath = imagesPath + fileName;
+            imageFilePath = imagesPath + File.separator + fileName;
         } else {
             return "";
         }

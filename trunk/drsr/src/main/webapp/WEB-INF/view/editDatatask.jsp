@@ -18,7 +18,7 @@
     <link href="${ctx}/resources/bundles/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css"/>
     <style>
         .col-md-5 {
-            width: 36.666667% !important;
+            width: 47.666667% !important;
         }
         .ztree{
             width: 100% !important;
@@ -29,24 +29,54 @@
         div#rMenu {position:absolute; visibility:hidden; top:0; background-color: #555;text-align: left;padding: 2px;}
         div#rMenu ul li{
             margin: 1px 0;
-            padding: 0 5px;
+            padding: 3px 5px;
             cursor: pointer;
             list-style: none outside none;
             background-color: #DFDFDF;
         }
+        .btn-primary,.red.btn,.blue.btn,.form-control,#DBchange,#DBFilechange,.green.btn{
+            border-radius: 6px !important;
+        }
+        .col-md-2 {
+            width: 16.66666667% !important;
+        }
+        .btn-primary {
+            background-color: #137450 !important;
+        }
+        hr {
+            margin: 10px 0 !important;
+            border: 1px solid #d8d5d5 !important;
+        }
+        ul.ztree{
+            margin-top: 0px !important;
+            background: #e8e3e3;
+            padding-left: 22px;
+            border:none;
+        }
+        ::-webkit-scrollbar-track{
+            background-color: #e8e3e3 !important;
+        }
+        .ztreeDiv{
+            background-color: #1e8753;
+            height: 38px;
+            color: white;
+            padding-left: 22px;
+            line-height: 38px;
+        }
+
     </style>
 </head>
 <body>
 <div class="page-content">
-    <div class="task-head">
-        <h3>设置任务</h3>
-        <hr>
-    </div>
+    <%--<div class="task-head">--%>
+        <%--<h3>设置任务</h3>--%>
+        <%--&lt;%&ndash;<hr>&ndash;%&gt;--%>
+    <%--</div>--%>
     <div class="task-title">
         <%--<span>确定数据对象范围，上传数据</span>--%>
         <form class="form-inline">
             <div class="form-group">
-                <label for="dataTaskName" style="font-size: 18px">创建任务名</label>
+                <label for="dataTaskName" style="font-size: 18px">任务名</label>
                 <input type="text" class="form-control" id="dataTaskName" style="width: 250px;font-size: 16px;" disabled>
             </div>
         </form>
@@ -71,15 +101,15 @@
                 <div class="row">
                     <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
                     <div class="col-md-9 dataHead2" id="resTitle" style="display: none"></div>
-                    <div class="col-md-12" style="margin: 0 -15px">
+                    <div class="col-md-12" style="margin: 0 -15px;height: 54%;overflow: auto;">
                         <div class="col-md-2" style="margin: 0 -15px">选择表资源</div>
                         <div class="col-md-10" >
                             <div class="row" id="db-table" style="margin-top: 6px"></div>
                         </div>
                     </div>
                     <div id="totalList">
-                        <div class="col-md-12" style="margin-bottom: 10px" >
-                            <div class="col-md-2" style="text-align: right">sql查询</div>
+                        <div class="col-md-12" style="margin-bottom: 10px;padding-top: 10px;" >
+                            <div class="col-md-2" style="text-align: right">SQL查询</div>
                             <div class="col-md-4">
                                 <input type="text" class="form-control sqlStatements inputVili" >
                             </div>
@@ -88,7 +118,7 @@
                             </div>
                             <div class="col-md-4">
                                 <button type="button" class="btn blue preview">预览</button>
-                                <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>sql查询</button>
+                                <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>SQL查询</button>
                             </div>
                             <div class="col-md-2" style="text-align: left">
                             </div>
@@ -115,8 +145,10 @@
                     <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
                     <div class="col-md-9 dataHead2" id="fileTitle" style="display: none"></div>
                     <div class="col-md-12" style="margin: 0 -15px">
-                        <div class="col-md-2" style="margin: 0 -15px">选择文件</div>
+                        <%--<div class="col-md-2" style="margin: 0 -15px">选择文件</div>--%>
                         <div class="col-md-5" style="margin-top: 6px">
+                            <div class="ztreeDiv">
+                                <i class="fa fa-caret-right"></i>&nbsp;文件型数据源路径</div>
                             <div id="jstree_show_edit">
                                 <ul id="treeDemo" class="ztree"></ul>
                             </div>
@@ -124,18 +156,21 @@
                                 <div class="row" id="file-table"></div>
 --%>
                         </div>
-                        <div class="col-md-5" style="margin-top: 6px">
-                            <div id="tags_tagsinput" class="tagsinput" style="border: 1px solid black;
-                            display: none;width: 100%;overflow-y: auto;overflow-x:hidden;max-height: 500px"></div>
-                        </div>
-                        <div class="col-md-5" style="margin: 6px 0px 0px 100px">
+                        <%--<div class="col-md-5" style="margin-top: 6px">--%>
+                            <%--<div id="tags_tagsinput" class="tagsinput" style="border: 1px solid black;--%>
+                            <%--display: none;width: 100%;overflow-y: auto;overflow-x:hidden;max-height: 500px"></div>--%>
+                        <%--</div>--%>
+                        <div class="col-md-5" style="margin: 6px 0px 0px 6px">
+                            <div class="ztreeDiv">
+                                <i class="fa fa-caret-right"></i>&nbsp;中心端上传路径</div>
                             <div id="remoteTreeDiv">
                                 <ul  class="ztree" id="remoteTree"></ul>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-12 ">
-                        <button type="button" class="btn green pull-right" onclick="sendFileTask()">提交</button>
+                        <hr>
+                        <button type="button" class="btn green pull-right" onclick="sendFileTask()" style="margin: 1% 51%;">提交</button>
                     </div>
 
 
@@ -156,31 +191,16 @@
     <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
         <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
             <div class="modal-content">
-                <div class="modal-header bg-primary">
+                <div class="modal-header bg-primary" style="background-color: #1e8753 !important;">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                             id="editTableFieldComsCloseId"></button>
-                    <h4 class="modal-title" id="relationalDatabaseModalTitle">预览数据</h4>
+                    <h4 class="modal-title" id="relationalDatabaseModalTitle" style="color: white;font-size: 18px;font-weight: 500;">预览数据</h4>
                 </div>
-                <%--<div class="form">--%>
-                <%--<form class="form-horizontal" role="form" action="addRelationalDatabase" method="post"--%>
-                <%--accept-charset="utf-8" id="relationalDatabaseForm">--%>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="portlet box green-haze" style="border:0;">
                                 <div class="portlet-title" style="display: none">
-                                    <%-- <ul class="nav nav-tabs" style="float:left;">
-                                        &lt;%&ndash; <li class="active">
-                                             <a href="#editTableFieldComsId" data-toggle="tab"
-                                                id="editTableDataAndComsButtonId" aria-expanded="true">
-                                                 编辑 </a>
-                                         </li>&ndash;%&gt;
-                                         <li class="active">
-                                             <a href="#previewTableDataAndComsId" id="previewTableDataAndComsButtonId"
-                                                data-toggle="tab" aria-expanded="true">
-                                                 预览 </a>
-                                         </li>
-                                     </ul>--%>
                                 </div>
                                 <div class="tab-content"
                                      style="background-color: white;min-height:300px;max-height:70%;padding-top: 20px ; overflow: scroll;">
@@ -206,7 +226,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="editTableFieldComsSaveId" data-dismiss="modal" class="btn green">确认
+                    <button type="button" id="editTableFieldComsSaveId" data-dismiss="modal" class="btn red">关闭
                     </button>
                     <%--<button type="button" data-dismiss="modal" id="editTableFieldComsCancelId" class="btn default">取消</button>--%>
                 </div>
@@ -219,11 +239,11 @@
 
 <div id="rMenu">
     <ul>
-        <li id="m_add" onclick="addTreeNode(this);">增加节点</li>
-        <li id="m_del" onclick="removeTreeNode();">删除节点</li>
+        <li id="m_add" onclick="addTreeNode(this);"><span class="glyphicon glyphicon-plus"></span>&nbsp;增加节点</li>
+        <li id="m_del" onclick="removeTreeNode();"><span class="glyphicon glyphicon-trash"></span>&nbsp;删除节点</li>
         <%--<li id="m_check" onclick="checkTreeNode(true);">Check节点</li>--%>
         <%--<li id="m_unCheck" onclick="checkTreeNode(false);">unCheck节点</li>--%>
-        <li id="m_reset" onclick="resetTree();">恢复初始目录</li>
+        <li id="m_reset" onclick="resetTree();"><span class="glyphicon glyphicon-refresh"></span>&nbsp;恢复初始目录</li>
     </ul>
 </div>
 
@@ -279,7 +299,7 @@
     {{each list as value i}}
     <div class="col-md-4">
         <label>
-            <div style="float: left;width: 20px;height: 34px">
+            <div style="float: left;width: 20px;height: 34px;padding-top: 7px;">
                 <input type="checkbox" name="relationBox" relname="{{value}}" value="{{value}}" style="line-height: normal">
             </div>
             <div style="padding-left: 20px;word-break: break-all ;"> {{value}}</div>
@@ -289,7 +309,7 @@
 </script>
 <script type="text/html" id="addSql">
     <div class="col-md-12" style="margin-bottom: 10px" name="aaaa">
-        <div class="col-md-2" style="text-align: right">sql查询</div>
+        <div class="col-md-2" style="text-align: right">SQL查询</div>
         <div class="col-md-4">
             <input type="text" class="form-control sqlStatements inputVili" >
         </div>
@@ -437,7 +457,14 @@
                     $("#bdTableLabel").css("display", "block");//显示“选择资源”标签
                     $("#bdDirDiv").css("display", "block");//显示“选择资源”标签
                     $("#bdSubmitButton").css("display", "block"); //显示“提交”按钮
-                    var zTreeObj = $.fn.zTree.init($("#treeDemo"),changeSetting, data);
+
+                    jsonObjectStr=eval(data.jsonObjectStr);
+
+                    var fileNodes=data.nodeList;
+                    var ztreeObjRemote=$.fn.zTree.init($("#remoteTree"),remoteSetting,jsonObjectStr);
+                    var zTreeObj = $.fn.zTree.init($("#treeDemo"),changeSetting, fileNodes);
+                    remoteZTree = $.fn.zTree.getZTreeObj("remoteTree");
+                    rMenu = $("#rMenu");
                     //让第一个父节点展开
                     var rootNode_0 = zTreeObj.getNodeByParam('pid',0,null);
                     zTreeObj.expandNode(rootNode_0, true, false, false, false);
@@ -1023,9 +1050,10 @@
                 enable: true
             },
             callback : {
-                onAsyncSuccess: zTreeOnAsyncSuccess,//异步加载完成调用
-                aOnAsyncError : zTreeOnAsyncError,//加载错误的fun
-                onCheck : onCheck
+                beforeAsync: beforeAsync,
+                onAsyncSuccess: onAsyncSuccess,
+                onAsyncError: onAsyncError,
+                onCheck : asyncAll
             }
         };
 
@@ -1048,13 +1076,20 @@
                 enable: true
             },
             callback : {
-                onAsyncSuccess: zTreeOnAsyncSuccess,//异步加载完成调用
-                aOnAsyncError : zTreeOnAsyncError,//加载错误的fun
-                onCheck : onCheck
+                beforeAsync: beforeAsync,
+                onAsyncSuccess: onAsyncSuccess,
+                onAsyncError: onAsyncError,
+                onCheck : asyncAll
             }
         };
 
         function filter(treeId, parentNode, childNodes) {
+            if(parentNode.checked==true){
+                for(var num=0;num<childNodes.length;num++){
+                    childNodes[num].open=true;
+                    childNodes[num].checked=true;
+                }
+            }
             return childNodes;
         }
 
@@ -1067,86 +1102,6 @@
                 pathsOfCheckedFiles.push(nodes[i].id);
             }
             return pathsOfCheckedFiles;
-        }
-
-        //选中checkbox后执行的事件
-        function zTreeOnCheck(event, treeId, treeNode, clickFlag){
-
-        }
-
-        function onCheck(event, treeId, treeNode){
-            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-            if(treeNode.isParent){
-                if (!treeNode.open){
-                    zTree.expandNode(treeNode, true, true, false);
-                    onExpand(event, treeId, treeNode);
-                    setTimeout(function(){
-                        var children=treeNode.children;
-                        for(var i=0;i<children.length;i++){
-                            if(children[i].isParent ){
-                                zTree.expandNode(children[i], false, false, false);
-                            }
-                        }
-                        //zTree.expandNode(treeNode, false, false, false);
-                    },1000);//延时1秒
-                }else{
-                    var children=treeNode.children;
-                    for(var i=0;i<children.length;i++){
-                        if(children[i].isParent ){
-                            if (!children[i].open){
-                                zTree.expandNode(children[i], true, true, false);
-                                onExpand(event, treeId, children[i]);
-                            }
-                        }
-                    }
-                    setTimeout(function(){
-                        var children=treeNode.children;
-                        for(var i=0;i<children.length;i++){
-                            if(children[i].isParent ){
-                                zTree.expandNode(children[i], false, false, false);
-                            }
-                        }
-                    },1000);//延时1.5秒
-                }
-            }
-        };
-
-        function onExpand(event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-            var checked=treeNode.checked;
-            setTimeout(function(){
-                var children=treeNode.children;
-                for(var i=0;i<children.length;i++){
-                    zTree.checkNode(children[i],checked,checked);
-                    if(children[i].isParent){
-                        if (!children[i].open){
-                            zTree.expandNode(children[i], true, true, false);
-                            onExpand(event, treeId, children[i]);
-                            console.log(children[i]);
-                            zTree.expandNode(children[i], false, false, false);
-                        }
-                    }
-                }
-            },1200);//延时1.2秒
-        };
-
-        /* 获取返回的数据，进行预操作，treeId是treeDemo,异步加载完之后走这个方法，responseData为后台返回数据  */
-        function filter2(treeId, parentNode, responseData) {
-//        responseData = responseData.jsonArray;
-            if (!responseData){
-                return null;
-            }
-            return responseData;
-        }
-
-        //异步加载完成时运行
-        function zTreeOnAsyncSuccess(event, treeId, treeNode, msg)  {
-
-        }
-
-        //异步加载失败
-        function zTreeOnAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown)  {
-            alertMsg.error("异步加载节点失败!");
         }
 
         //获取界面中所有被选中的radio
@@ -1201,6 +1156,92 @@
         function hidenFileNameModal() {
             $("#createFileMModal").modal("hide");
         }
+
+        var curStatus = "init", curAsyncCount = 0, asyncForAll = false,
+            goAsync = false;
+
+        function asyncAll(event, treeId, treeNode) {
+            if (!check()) {
+                return;
+            }
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            if (false) {
+            } else {
+                var nodes=new Array([treeNode]);
+                asyncNodes(nodes[0]);
+            }
+        };
+
+        function asyncNodes(nodes) {
+            if (!nodes) return;
+            curStatus = "async";
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            for (var i=0, l=nodes.length; i<l; i++) {
+                if (nodes[i].isParent && nodes[i].zAsync) {
+                    asyncNodes(nodes[i].children);
+                    // whetherChecked=false;
+                } else {
+                    goAsync = true;
+                    zTree.reAsyncChildNodes(nodes[i], "refresh", true);
+                }
+            }
+        };
+
+        function beforeAsync() {
+            curAsyncCount++;
+        }
+        function onAsyncSuccess(event, treeId, treeNode, msg) {
+            curAsyncCount--;
+            if (curStatus == "expand") {
+                expandNodes(treeNode.children);
+            } else if (curStatus == "async") {
+                asyncNodes(treeNode.children);
+            }
+
+            if (curAsyncCount <= 0) {
+                if (curStatus != "init" && curStatus != "") {
+                    asyncForAll = true;
+                }
+                curStatus = "";
+            }
+        }
+        function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
+            curAsyncCount--;
+
+            if (curAsyncCount <= 0) {
+                curStatus = "";
+                if (treeNode!=null) asyncForAll = true;
+            }
+        }
+        var curStatus = "init", curAsyncCount = 0, asyncForAll = false,
+            goAsync = false;
+
+        function expandNodes(nodes) {
+            if (!nodes) return;
+            curStatus = "expand";
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            for (var i=0, l=nodes.length; i<l; i++) {
+                zTree.expandNode(nodes[i], true, false, false);
+                if (nodes[i].isParent && nodes[i].zAsync) {
+                    expandNodes(nodes[i].children);
+                } else {
+                    goAsync = true;
+                }
+            }
+        }
+
+        function check() {
+            if (curAsyncCount > 0) {
+                return false;
+            }
+            return true;
+        }
+
+        function resetTree() {
+            hideRMenu();
+            $.fn.zTree.init($("#remoteTree"), remoteSetting, jsonObjectStr);
+        }
+
 
 
 

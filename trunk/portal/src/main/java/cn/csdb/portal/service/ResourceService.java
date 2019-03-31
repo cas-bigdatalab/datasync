@@ -2,6 +2,7 @@ package cn.csdb.portal.service;
 
 import cn.csdb.portal.repository.DataSrcDao;
 import cn.csdb.portal.repository.ResourceDao;
+import cn.csdb.portal.utils.FileTreeNode;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +45,12 @@ public class ResourceService {
     @Transactional
     public void saveFileInfo(cn.csdb.portal.model.FileInfo fileInfo) {
         resourceDao.saveFileInfo(fileInfo);
+    }
+
+    //在表中将删除的已审核数据集id记录下来
+    @Transactional
+    public void saveDeleteId(String id){
+        resourceDao.saveDeleteId(id);
     }
 
     @Transactional
@@ -234,4 +241,69 @@ public class ResourceService {
     public int getRecordCount(String host, String port, String userName, String password, String databaseName, List<String> tableName) {
         return dataSrcDao.getRecordCount( host,  port,  userName,  password,  databaseName,  tableName);
     }
+
+
+    public  List<FileTreeNode> loadingFileTree(String path,List<FileTreeNode> nodeList){
+        String systemName=System.getProperties().getProperty("os.name");
+        File dirFile = new File(path);//获取文件第一层
+        File[] fs = dirFile.listFiles();
+        int isWindows=systemName.indexOf("Windows");
+        for (int i = 0; i < fs.length; i++) {
+            if(fs[i].isFile()){//当对象为文件时
+                String pidStr="";
+                if("-1".equals(isWindows+"")){//linux
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("/"));
+                }else {
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("\\"));
+                }
+                nodeList.add(new FileTreeNode(fs[i].toString(),pidStr,fs[i].getName(),"false","false","false"));
+            }else if(fs[i].isDirectory()){//当对象为路径时
+                String pidStr="";
+                if("-1".equals(isWindows+"")){//linux
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("/"));
+                }else {
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("\\"));
+                }
+                nodeList.add(new FileTreeNode(fs[i].toString(),pidStr,fs[i].getName(),"false","true","false"));
+                // nodeList=loadingTree(fs[i].toString(),nodeList);
+            }
+        }
+
+        return nodeList;
+    }
+
+    public List<FileTreeNode> asynLoadingTree(String data,String path,String result){
+        System.out.println("服务器系统:"+System.getProperties().getProperty("os.name"));
+        String systemName=System.getProperties().getProperty("os.name");
+        int isWindows=systemName.indexOf("Windows");
+        List<FileTreeNode> nodeList=new ArrayList<FileTreeNode>();
+        File dirFile = new File(path);//获取文件第一层
+        File[] fs = dirFile.listFiles();
+        if("init".equals(result)){
+            nodeList.add(new FileTreeNode(path,"0",path,"true","true","false"));
+        }
+        for (int i = 0; i < fs.length; i++) {
+            if(fs[i].isFile()){//当对象为文件时
+                String pidStr="";
+                if("-1".equals(isWindows+"")){//linux
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("/"));
+                }else {
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("\\"));
+                }
+                nodeList.add(new FileTreeNode(fs[i].toString(),pidStr,fs[i].getName(),"false","false","false"));
+            }else if(fs[i].isDirectory()){//当对象为路径时
+                String pidStr="";
+                if("-1".equals(isWindows+"")){//linux
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("/"));
+                }else {
+                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("\\"));
+                }
+                nodeList.add(new FileTreeNode(fs[i].toString(),pidStr,fs[i].getName(),"false","true","false"));
+                //  nodeList=loadingTree(fs[i].toString(),nodeList);
+            }
+        }
+        return nodeList;
+    }
+
+
 }

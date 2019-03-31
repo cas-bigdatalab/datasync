@@ -10,9 +10,9 @@ body {
     padding: 0;
     margin: 0;
     min-width: 1100px;
-    color: #535353;
+    /*color: #535353;*/
     line-height: 24px;
-    background: #FFF url(../img/bg.jpg) repeat-x;
+    /*background: #FFF url(../img/bg.jpg) repeat-x;*/
 }
 
 /*.container {*/
@@ -307,8 +307,7 @@ ul {
 .foot_div {
     background: #454241;
     color: #d7d7d7;
-    padding-top: 20px;
-    height: 55px;
+    height: 5%;
     text-align: center;
 }
 

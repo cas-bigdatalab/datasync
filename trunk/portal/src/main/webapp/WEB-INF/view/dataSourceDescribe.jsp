@@ -68,7 +68,6 @@
 
 <body>
 
-<div class="page-content">
     <div class="row">
         <div class="col-md-12">
             <div class="portlet box blue" id="form_wizard_1">
@@ -497,7 +496,6 @@
             </div>
         </div>
     </div>
-</div>
 <input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
 <input type="hidden" id="imgPath" val="">
 <script type="text/html" id="dataRelationshipList">
@@ -1060,6 +1058,39 @@
                 return
             }
             dataList = dataList.substr(0, dataList.length - 1);
+
+
+            var ref = $('#fileContainerTree').jstree(true);//获得整个树
+            var sel = ref.get_selected(false);//获得所有选中节点，返回值为数组
+            var totalSel = sel.toString();
+            $(".jstree-undetermined").each(function(){
+                totalSel = totalSel + ',' + $(this).parent().parent().attr('id');
+            });
+            var reg = new RegExp( '%_%' , "g" );
+            var reg2 = new RegExp( ',' , "g" );
+            totalSel = totalSel.replace( reg , '/' );
+            totalSel = totalSel.replace( reg2 , ';' );
+            var arr1=dataList.split(";");
+            var arr2=totalSel.split(";");
+            var _arr = new Array();
+            for(var i=0;i<arr1.length;i++){//去重
+                _arr.push(arr1[i]);
+            }
+            for(var i=0;i<arr2.length;i++){
+                var flag = true;
+                for(var j=0;j<arr1.length;j++){
+                    if(arr2[i]==arr1[j]){
+                        flag=false;
+                        break;
+                    }
+                }
+                if(flag){
+                    _arr.push(arr2[i]);
+                }
+            }
+            dataList=_arr.toString();
+            dataList = dataList.replace( reg2 , ';' );
+
             console.log(dataList);
             $.ajax({
                 url:ctx+"/resource/addResourceSecondStep",
@@ -1177,16 +1208,35 @@
                 "checkbox", "wholerow"
             ]
         }).bind('select_node.jstree', function (e, data) {
-            var fileId = data.node.id;
-            var str = fileId.replace(/%_%/g, "/");
+            data.instance.open_all(data.node.id);
+            /*var fileId = data.node.id;
+            var str = fileId.replace(/%_%/g, "/");*/
             /*var isContain = false;*/
-            $("#fileDescribeDiv").append("<div name="+ fileId+"><span>"+str +"</span></div>")
+           //$("#fileDescribeDiv").append("<div name="+ fileId+"><span>"+str +"</span></div>")
             /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
         }).bind("deselect_node.jstree", function (e, data) {
-            var fileId = data.node.id;
+            $("#fileDescribeDiv").html("");
+            var ref = $('#fileContainerTree').jstree(true);//获得整个树
+            var sel = ref.get_selected(false);
+            for(var i = 0; i <sel.length; i++){
+                var str = sel[i].replace(/%_%/g, "/");
+                $("#fileDescribeDiv").append("<div name="+ str+"><span>"+str +"</span></div>")
+            }
+            /*var fileId = data.node.id;
             var fileName = data.node.text;
-            $("div[name='" + fileId + "']").remove();
+            $("div[name='" + fileId + "']").remove();*/
             /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
+        }).bind("after_open.jstree", function (e ,data) {
+            $("#fileDescribeDiv").html("");
+            var ref = $('#fileContainerTree').jstree(true);//获得整个树
+            var sel = ref.get_selected(false);
+            //var str = sel.replace(/%_%/g, "/");
+            //var str1 = sel.split("，");
+            for(var i = 0; i <sel.length; i++){
+                var str = sel[i].replace(/%_%/g, "/");
+                $("#fileDescribeDiv").append("<div name="+ str+"><span>"+str +"</span></div>")
+            }
+            /*var isContain = false;*/
         });
         function initFileTree() {
             var root;

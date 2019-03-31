@@ -18,10 +18,10 @@
     <link href="${ctx}/resources/bundles/layerJs/theme/default/layer.css" rel="stylesheet" type="text/css"/>
     <style type="text/css">
         .col-md-5 {
-            width: 36.666667% !important;
+            width: 47.666667% !important;
         }
         .col-md-2 {
-            width: 8.666667% !important;
+            width: 10.666667% !important;
         }
         .ztree{
             width: 100% !important;
@@ -29,25 +29,56 @@
         div#rMenu {position:absolute; visibility:hidden; top:0; background-color: #555;text-align: left;padding: 2px;}
         div#rMenu ul li{
             margin: 1px 0;
-            padding: 0 5px;
+            padding: 3px 5px;
             cursor: pointer;
             list-style: none outside none;
             background-color: #DFDFDF;
+        }
+        /*.form-control {*/
+          /*border-radius: 6px !important;*/
+        /*}*/
+        .red.btn,.form-control,.btn-primary ,.blue.btn ,.green.btn{
+            border-radius: 6px !important;
+        }
+        .btn-primary {
+            background-color: #137450 !important;
+        }
+        hr {
+            margin: 10px 0 !important;
+            border: 1px solid #d8d5d5 !important;
+        }
+        ul.ztree{
+            margin-top: 0px !important;
+            background: #e8e3e3;
+            border: none;
+        }
+        ::-webkit-scrollbar-track{
+            background-color: #e8e3e3 !important;
+        }
+        .ztreeDiv{
+            background-color: #1e8753;
+            height: 38px;
+            color: white;
+            padding-left: 22px;
+            line-height: 38px;
+        }
+        .ztree li span {
+            font-size: 16px;
         }
 
     </style>
 </head>
 <body>
 <div class="page-content">
-    <div class="task-head">
-       <h3>设置任务</h3>
-        <hr>
-    </div>
+    <%--<div class="task-head">--%>
+       <%--<h3>设置任务</h3>--%>
+        <%--&lt;%&ndash;<hr>&ndash;%&gt;--%>
+    <%--</div>--%>
     <div class="task-title">
         <%--<span>确定数据对象范围，上传数据</span>--%>
         <form class="form-inline">
             <div class="form-group">
-                <label for="dataTaskName" style="font-size: 18px">创建任务名</label>
+                <label for="dataTaskName" style="font-size: 18px">任务名</label>
                 <input type="text" class="form-control" id="dataTaskName" style="width: 250px;font-size: 16px" disabled>
             </div>
         </form>
@@ -72,7 +103,7 @@
                 <div class="row">
                     <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
                     <div class="col-md-9 dataHead2" id="resTitle" style="display: none"></div>
-                    <div class="col-md-12" style="margin: 0 -15px">
+                    <div class="col-md-12" style="margin: 0 -15px;height: 54%;overflow: auto;">
                         <div class="col-md-2" style="margin: 0 -15px">选择表资源</div>
                         <div class="col-md-10" >
                             <div style="text-align: center" id="dataUp">数据加载中......</div>
@@ -80,8 +111,8 @@
                         </div>
                     </div>
                     <div id="totalList">
-                        <div class="col-md-12" style="margin-bottom: 10px" >
-                            <div class="col-md-2" style="text-align: right">sql查询</div>
+                        <div class="col-md-12" style="margin-bottom: 10px;padding-top: 10px;" >
+                            <div class="col-md-2" style="text-align: right">SQL查询</div>
                             <div class="col-md-4">
                                 <input type="text" class="form-control sqlStatements inputVili" >
                             </div>
@@ -90,7 +121,7 @@
                             </div>
                             <div class="col-md-4">
                                 <button type="button" class="btn blue preview">预览</button>
-                                <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>sql查询</button>
+                                <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>SQL查询</button>
                             </div>
                             <div class="col-md-2" style="text-align: left">
                             </div>
@@ -117,23 +148,28 @@
                         <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
                         <div class="col-md-9 dataHead2" id="fileTitle" style="display: none"></div>
                         <div class="col-md-12" style="margin: 0 -15px">
-                            <div class="col-md-2" style="margin: 0 -15px">选择文件</div>
+                            <%--<div class="col-md-2" style="margin-left: -15px">选择文件</div>--%>
                             <div class="col-md-5" style="margin-top: 6px">
+                                <div class="ztreeDiv">
+                                    <i class="fa fa-caret-right"></i>&nbsp;文件型数据源路径</div>
                                 <div id="jstree_show_edit">
-                                    <ul id="LocalTreeDemo" class="ztree" ></ul>
+                                    <ul id="LocalTreeDemo" class="ztree" style="padding-left: 22px;"></ul>
                                 </div>
                             <%--
                                 <div class="row" id="file-table"></div>
 --%>
                             </div>
-                            <div class="col-md-5" style="margin: 6px 0px 0px 100px">
+                            <div class="col-md-5" style="margin: 6px 0px 0px 6px">
+                                <div class="ztreeDiv">
+                                    <i class="fa fa-caret-right"></i>&nbsp;中心端上传路径</div>
                                 <div id="remoteTreeDiv">
-                                    <ul  class="ztree" id="remoteTree"></ul>
+                                    <ul  class="ztree" id="remoteTree" style="padding-left: 22px;"></ul>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-12 ">
-                            <button type="button" class="btn green pull-right" onclick="sendFileTask()">提交</button>
+                            <hr>
+                            <button type="button" class="btn green pull-right" onclick="sendFileTask()" style="margin: 1% 51%;">提交</button>
                         </div>
 
 
@@ -154,10 +190,10 @@
     <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
         <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
             <div class="modal-content">
-                <div class="modal-header bg-primary">
+                <div class="modal-header bg-primary" style="background-color: #1e8753 !important;">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                             id="editTableFieldComsCloseId"></button>
-                    <h4 class="modal-title" id="relationalDatabaseModalTitle">预览数据</h4>
+                    <h4 class="modal-title" id="relationalDatabaseModalTitle" style="color: white;font-size: 18px;font-weight: 500;">预览数据</h4>
                 </div>
                 <%--<div class="form">--%>
                 <%--<form class="form-horizontal" role="form" action="addRelationalDatabase" method="post"--%>
@@ -217,11 +253,11 @@
 
 <div id="rMenu">
     <ul>
-        <li id="m_add" onclick="addTreeNode(this);">增加节点</li>
-        <li id="m_del" onclick="removeTreeNode();">删除节点</li>
+        <li id="m_add" onclick="addTreeNode(this);"><span class="glyphicon glyphicon-plus"></span>&nbsp;增加节点</li>
+        <li id="m_del" onclick="removeTreeNode();"><span class="glyphicon glyphicon-trash"></span>&nbsp;删除节点</li>
         <%--<li id="m_check" onclick="checkTreeNode(true);">Check节点</li>--%>
         <%--<li id="m_unCheck" onclick="checkTreeNode(false);">unCheck节点</li>--%>
-        <li id="m_reset" onclick="resetTree();">恢复初始目录</li>
+        <li id="m_reset" onclick="resetTree();"><span class="glyphicon glyphicon-refresh"></span>&nbsp;恢复初始目录</li>
     </ul>
 </div>
 <div class="modal fade" id="createFileMModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -275,7 +311,7 @@
     {{each list as value i}}
     <div class="col-md-4">
         <label>
-            <div style="float: left;width: 20px;height: 34px"><input type="checkbox" name="relationBox" value="{{value}}" style="line-height: normal"></div>
+            <div style="float: left;width: 20px;height: 34px;padding-top: 7px;"><input type="checkbox" name="relationBox" value="{{value}}" style="line-height: normal"></div>
             <div style="padding-left: 20px;word-break: break-all ;"> {{value}}</div>
         </label>
     </div>
@@ -826,13 +862,20 @@
                 enable: true
             },
             callback : {
-                onAsyncSuccess: zTreeOnAsyncSuccess,//异步加载完成调用
-                aOnAsyncError : zTreeOnAsyncError,//加载错误的fun
-                onCheck : onCheck
+                beforeAsync: beforeAsync,
+                onAsyncSuccess: onAsyncSuccess,
+                onAsyncError: onAsyncError,
+                onCheck : asyncAll
             }
         };
 
         function filter(treeId, parentNode, childNodes) {
+            if(parentNode.checked==true){
+                for(var num=0;num<childNodes.length;num++){
+                    childNodes[num].open=true;
+                    childNodes[num].checked=true;
+                }
+            }
             return childNodes;
         }
 
@@ -859,87 +902,6 @@
             return pathsOfCheckedFiles;
         }
 
-        function onCheck(event, treeId, treeNode){
-            index = layer.load(1, {
-                shade: [0.5,'#fff'] //0.1透明度的白色背景
-            });
-            var zTree = $.fn.zTree.getZTreeObj("LocalTreeDemo");
-            if(treeNode.isParent){
-                if (!treeNode.open){
-                    zTree.expandNode(treeNode, true, true, false);
-                    onExpand(event, treeId, treeNode);
-                    setTimeout(function(){
-                        var children=treeNode.children;
-                        for(var i=0;i<children.length;i++){
-                            if(children[i].isParent ){
-                                zTree.expandNode(children[i], false, false, false);
-                            }
-                        }
-                        //zTree.expandNode(treeNode, false, false, false);
-                    },1000);//延时1秒
-                }else{
-                    var children=treeNode.children;
-                    for(var i=0;i<children.length;i++){
-                        if(children[i].isParent ){
-                            if (!children[i].open){
-                                zTree.expandNode(children[i], true, true, false);
-                                onExpand(event, treeId, children[i]);
-                            }
-                        }
-                    }
-                    setTimeout(function(){
-                        var children=treeNode.children;
-                        for(var i=0;i<children.length;i++){
-                            if(children[i].isParent ){
-                                zTree.expandNode(children[i], false, false, false);
-                            }
-                        }
-                    },1000);//延时1.5秒
-                }
-            }
-            $("#layui-layer-shade"+index+"").remove();
-            $("#layui-layer"+index+"").remove();
-        };
-
-        function onExpand(event, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj("LocalTreeDemo");
-            var checked=treeNode.checked;
-            setTimeout(function(){
-                var children=treeNode.children;
-                if(children!=null){
-                    for(var i=0;i<children.length;i++){
-                        zTree.checkNode(children[i],checked,checked);
-                        if(children[i].isParent){
-                            if (!children[i].open){
-                                zTree.expandNode(children[i], true, true, false);
-                                onExpand(event, treeId, children[i]);
-                                console.log(children[i]);
-                                zTree.expandNode(children[i], false, false, false);
-                            }
-                        }
-                    }
-                }
-            },900);//延时1.2秒
-        };
-
-        /* 获取返回的数据，进行预操作，treeId是treeDemo,异步加载完之后走这个方法，responseData为后台返回数据  */
-        function filter2(treeId, parentNode, responseData) {
-//        responseData = responseData.jsonArray;
-            if (!responseData){
-                return null;
-            }
-            return responseData;
-        }
-
-        //异步加载完成时运行
-        function zTreeOnAsyncSuccess(event, treeId, treeNode, msg)  {
-
-        }
-
-        //异步加载失败
-        function zTreeOnAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown)  {
-            alertMsg.error("异步加载节点失败!");
-        }
 
         function addFilePath(){
             var inputFileName = $("#fileName").val().trim();
@@ -980,6 +942,86 @@
 
         function hidenFileNameModal() {
             $("#createFileMModal").modal("hide");
+        }
+
+        var curStatus = "init", curAsyncCount = 0, asyncForAll = false,
+            goAsync = false;
+
+        function asyncAll(event, treeId, treeNode) {
+            if (!check()) {
+                return;
+            }
+            var zTree = $.fn.zTree.getZTreeObj("LocalTreeDemo");
+            if (false) {
+            } else {
+                var nodes=new Array([treeNode]);
+                asyncNodes(nodes[0]);
+            }
+        };
+
+        function asyncNodes(nodes) {
+            if (!nodes) return;
+            curStatus = "async";
+            var zTree = $.fn.zTree.getZTreeObj("LocalTreeDemo");
+            for (var i=0, l=nodes.length; i<l; i++) {
+                if (nodes[i].isParent && nodes[i].zAsync) {
+                    asyncNodes(nodes[i].children);
+                    // whetherChecked=false;
+                } else {
+                    goAsync = true;
+                    zTree.reAsyncChildNodes(nodes[i], "refresh", true);
+                }
+            }
+        };
+
+        function beforeAsync() {
+            curAsyncCount++;
+        }
+        function onAsyncSuccess(event, treeId, treeNode, msg) {
+            curAsyncCount--;
+            if (curStatus == "expand") {
+                expandNodes(treeNode.children);
+            } else if (curStatus == "async") {
+                asyncNodes(treeNode.children);
+            }
+
+            if (curAsyncCount <= 0) {
+                if (curStatus != "init" && curStatus != "") {
+                    asyncForAll = true;
+                }
+                curStatus = "";
+            }
+        }
+        function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
+            curAsyncCount--;
+
+            if (curAsyncCount <= 0) {
+                curStatus = "";
+                if (treeNode!=null) asyncForAll = true;
+            }
+        }
+        var curStatus = "init", curAsyncCount = 0, asyncForAll = false,
+            goAsync = false;
+
+        function expandNodes(nodes) {
+            if (!nodes) return;
+            curStatus = "expand";
+            var zTree = $.fn.zTree.getZTreeObj("LocalTreeDemo");
+            for (var i=0, l=nodes.length; i<l; i++) {
+                zTree.expandNode(nodes[i], true, false, false);
+                if (nodes[i].isParent && nodes[i].zAsync) {
+                    expandNodes(nodes[i].children);
+                } else {
+                    goAsync = true;
+                }
+            }
+        }
+
+        function check() {
+            if (curAsyncCount > 0) {
+                return false;
+            }
+            return true;
         }
 
     </script>

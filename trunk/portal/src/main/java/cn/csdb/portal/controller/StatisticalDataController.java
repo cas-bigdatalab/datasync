@@ -8,9 +8,16 @@ import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -174,35 +181,125 @@ public class StatisticalDataController {
      * @auther:zcy
      * @date:   2019/3/13 9:36
      */
-     @RequestMapping("/singlethemeChartsVisit")
-     @ResponseBody
-    public JSONObject singlethemeChartsVisit(String subjectCode ){
-        JSONObject jsonObjec=new JSONObject();
-        List<Resource> list=statisticalDataService.getResouceVisitBySCode(subjectCode);
-        List<Integer> vcount=new ArrayList<>();
-        List<String> title=new ArrayList<>();
-        for(Resource r:list){
-           vcount.add(r.getvCount());
-           title.add(r.getTitle());
-        }
-        jsonObjec.put("vcount",vcount);
-        jsonObjec.put("title",title);
-        return jsonObjec;
-     }
+//     @RequestMapping("/singlethemeChartsVisit")
+//     @ResponseBody
+//    public JSONObject singlethemeChartsVisit(String subjectCode ){
+//        JSONObject jsonObjec=new JSONObject();
+//        List<Resource> list=statisticalDataService.getResouceVisitBySCode(subjectCode);
+//        List<Integer> vcount=new ArrayList<>();
+//        List<String> title=new ArrayList<>();
+//        for(Resource r:list){
+//           vcount.add(r.getvCount());
+//           title.add(r.getTitle());
+//        }
+//        jsonObjec.put("vcount",vcount);
+//        jsonObjec.put("title",title);
+//        return jsonObjec;
+//     }
 
-    @RequestMapping("/singlethemeChartsDown")
+//    @RequestMapping("/singlethemeChartsDown")
+//    @ResponseBody
+//    public JSONObject singlethemeChartsDown(String subjectCode ){
+//        JSONObject jsonObjec=new JSONObject();
+//        List<Resource> list=statisticalDataService.getResouceDownBySCode(subjectCode);
+//        List<Integer> dcount=new ArrayList<>();
+//        List<String> title=new ArrayList<>();
+//        for(Resource r:list){
+//            dcount.add(r.getdCount());
+//            title.add(r.getTitle());
+//        }
+//        jsonObjec.put("dcount",dcount);
+//        jsonObjec.put("title",title);
+//        return jsonObjec;
+//    }
+
+    @RequestMapping("/SingleSortTable")
     @ResponseBody
-    public JSONObject singlethemeChartsDown(String subjectCode ){
-        JSONObject jsonObjec=new JSONObject();
-        List<Resource> list=statisticalDataService.getResouceDownBySCode(subjectCode);
-        List<Integer> dcount=new ArrayList<>();
-        List<String> title=new ArrayList<>();
-        for(Resource r:list){
-            dcount.add(r.getdCount());
-            title.add(r.getTitle());
+    public JSONObject SingleSortTable(String subjectCode,@RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
+                                      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
+         JSONObject jsonObject=new JSONObject();
+        List<Resource> list=statisticalDataService.getResouceVisitBySCode(subjectCode,pageNo,pageSize);
+        List<Resource> list2=statisticalDataService.getResouceDownBySCode(subjectCode,pageNo,pageSize);
+        for(int i=0;i<list2.size();i++){
+            list.get(i).setdCount(list2.get(i).getdCount());
         }
-        jsonObjec.put("dcount",dcount);
-        jsonObjec.put("title",title);
-        return jsonObjec;
+
+        jsonObject.put("vCount",list);
+        int totalCount=statisticalDataService.countBySubjectCode(subjectCode);
+        jsonObject.put("totalCount", totalCount);
+        jsonObject.put("currentPage", pageNo);
+        jsonObject.put("pageSize", pageSize);
+        jsonObject.put("totalPages", totalCount % pageSize == 0 ? totalCount  / pageSize : totalCount / pageSize + 1);
+
+//        jsonObject.put("dCount",list2);
+        return jsonObject;
     }
+
+    @RequestMapping("/SortByVcount")
+    @ResponseBody
+    public JSONObject SortByVcount(String subjectCode,String sortMethod,@RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
+                                      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
+        JSONObject jsonObject=new JSONObject();
+        List<Resource> list=new ArrayList<>();
+        if("asc".equals(sortMethod)){
+        list=statisticalDataService.getResouceVisitBySCodeASC(subjectCode,pageNo,pageSize);
+        }else{
+            list=statisticalDataService.getResouceVisitBySCode(subjectCode,pageNo,pageSize);
+        }
+        jsonObject.put("vCount",list);
+        int totalCount=statisticalDataService.countBySubjectCode(subjectCode);
+        jsonObject.put("totalCount", totalCount);
+        jsonObject.put("currentPage", pageNo);
+        jsonObject.put("pageSize", pageSize);
+        jsonObject.put("totalPages", totalCount % pageSize == 0 ? totalCount  / pageSize : totalCount / pageSize + 1);
+        return jsonObject;
+    }
+
+    @RequestMapping("/SortByDcount")
+    @ResponseBody
+    public JSONObject SortByDcountSortByVcount(String subjectCode,String sortMethod,@RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
+                                   @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
+        JSONObject jsonObject=new JSONObject();
+        List<Resource> list=new ArrayList<>();
+        if("asc".equals(sortMethod)){
+            list=statisticalDataService.getResouceDownBySCodeASC(subjectCode,pageNo,pageSize);
+        }else{
+            list=statisticalDataService.getResouceDownBySCode(subjectCode,pageNo,pageSize);
+        }
+        jsonObject.put("vCount",list);
+        int totalCount=statisticalDataService.countBySubjectCode(subjectCode);
+        jsonObject.put("totalCount", totalCount);
+        jsonObject.put("currentPage", pageNo);
+        jsonObject.put("pageSize", pageSize);
+        jsonObject.put("totalPages", totalCount % pageSize == 0 ? totalCount  / pageSize : totalCount / pageSize + 1);
+        return jsonObject;
+    }
+
+    @RequestMapping(value = "/IoReadImage")
+    public String IoReadImage(@RequestParam("filePath")String filePath, HttpServletRequest request,
+                              HttpServletResponse response) throws IOException {
+        ServletOutputStream out = null;
+        FileInputStream ips = null;
+        try {
+            //获取图片存放路径
+            String imgPath ="G:\\Users\\5793914_122325176000_2.jpg";    // "G:\\Users\\5793914_122325176000_2.jpg"/*filePath*/;
+            ips = new FileInputStream(new File(imgPath));
+            response.setContentType("multipart/form-data");
+            out = response.getOutputStream();
+            //读取文件流
+            int len = 0;
+            byte[] buffer = new byte[1024 * 10];
+            while ((len = ips.read(buffer)) != -1){
+                out.write(buffer,0,len);
+            }
+            out.flush();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            out.close();
+            ips.close();
+        }
+        return null;
+    }
+
 }

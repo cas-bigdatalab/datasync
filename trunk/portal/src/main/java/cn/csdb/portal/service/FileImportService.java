@@ -32,26 +32,24 @@ public class FileImportService {
 
     @Transactional
     public JSONObject processExcel(String tempFilePath, String subjectCode) {
-        // 接收excel 判断excel类型
         JSONObject jsonObject = new JSONObject();
 
-        // 解析excel 隐藏的sheet，row跳过
-        //        parseExcel(workbook, mapSheet);
+        // 解析excel
         Map<String, List<List<String>>> mapSheet = parseExcel2(tempFilePath);
         int sheetSize = mapSheet.keySet().size();
         if (sheetSize == 0) {
             jsonObject.put("code", "error");
             jsonObject.put("message", "excel数据为空");
             return jsonObject;
-        } else if (sheetSize > 1) {
+        } /*else if (sheetSize > 1) {
             jsonObject.put("code", "error");
             jsonObject.put("message", "excel中仅能有一个数据源");
             return jsonObject;
-        }
+        }*/
 
+        // 获取当前用户的MySQL连接
         Connection connection = null;
         try {
-            // 获取当前用户的MySQL连接
             DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
             connection = getConnection(dataSrc);
             if (connection == null) {
@@ -136,6 +134,11 @@ public class FileImportService {
             while (iterator.hasNext()) {
                 Map.Entry<String, List<List<String>>> next = iterator.next();
                 List<List<String>> value = next.getValue();
+                String key = next.getKey();
+                // sheet页名称需要与表名称匹配才能继续执行添加
+                if (!key.equals(tableName)) {
+                    continue;
+                }
                 jsonObject = insertValue2(connection, tableName, value);
                 if ("error".equals(jsonObject.get("code"))) {
                     return jsonObject;
@@ -173,6 +176,11 @@ public class FileImportService {
             Iterator<Map.Entry<String, List<List<String>>>> iterator = mapSheet.entrySet().iterator();
             while (iterator.hasNext()) {
                 Map.Entry<String, List<List<String>>> next = iterator.next();
+                String key = next.getKey();
+                // sheet页名称需要与表名称匹配才能继续执行添加
+                if (!key.equals(tableName)) {
+                    continue;
+                }
                 List<List<String>> value = next.getValue();
                 jsonObject = onlyInsertSql(tableName, tableFields, value, connection);
                 if ("error".equals(jsonObject.get("code"))) {
@@ -230,7 +238,7 @@ public class FileImportService {
         Excel2ListIncludeNull excel2ListIncludeNull = new Excel2ListIncludeNull();
         Map<String, List<List<String>>> map = null;
         try {
-            map = excel2ListIncludeNull.processOneSheet(fileName);
+            map = excel2ListIncludeNull.processSheet(fileName);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -348,8 +356,13 @@ public class FileImportService {
                     l.add(list2.get(i));
                     l.add(list3.get(i));
                 }
+                // l【0】：当前表是否存在标志位
+                // l【1~length-2】：字段信息
+                // l【length】：当前表的主键
                 resultList.add(l);
             }
+
+            // 根据表字段集合长度判断 当前表是否存在
             List<String> status = new LinkedList<>();
             if (list == null) {
                 status.add("notExist");

@@ -22,6 +22,8 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.css">
     <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">
+    <link href="${ctx}/resources/bundles/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/zTree_v3/css/demo.css" rel="stylesheet" type="text/css"/>
     <style>
         .undeslist label{
             font-size: 18px;
@@ -59,7 +61,6 @@
 
 <body>
 
-<div class="page-content">
     <div class="row">
         <div class="col-md-12">
             <div class="portlet box blue" id="form_wizard_1">
@@ -303,7 +304,9 @@
                                         </div>
                                     </div>
                                     <div style="overflow: hidden;display: none" class="select-local">
-                                        <div class="col-md-4 col-md-offset-2" style="font-size: 18px" id="fileContainerTree"></div>
+                                        <div class="col-md-4 col-md-offset-2" style="font-size: 18px;width: 68%;" id="fileContainerTree">
+                                            <ul id="treeDemo" class="ztree" style="width: 100%;"></ul>
+                                        </div>
                                         <div id="fileDescribeDiv" class="col-md-5 tagsinput" style="border: 1px solid grey;display: none" >
 
 
@@ -366,7 +369,6 @@
             </div>
         </div>
     </div>
-</div>
 <input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
 <input type="hidden" id="imgPath" val="">
 <script type="text/html" id="dataRelationshipList">
@@ -442,6 +444,7 @@
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
     <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
+    <script src="${ctx}/resources/bundles/zTree_v3/js/jquery.ztree.all.js"></script>
     <script src="${ctx}/resources/js/jquery.json.min.js"></script>
     <script type="text/javascript">
         var ctx = '${ctx}';
@@ -846,16 +849,23 @@
                     dataList+=$(this).attr("keyval")+";"
                 })
             }else {
-                var $ele = $(".fileTag")
-                $ele.each(function () {
-                    dataList+=$(this).attr("name")+";"
-                })
+                // var sss="";
+                // var $ele = $(".fileTag")
+                // $ele.each(function () {
+                //     sss+=$(this).attr("name")+";"
+                // })
+                var fileList=getChecedValueInLocalTree();
+                if(fileList.length==0 ){
+                    secondFlag = true
+                    return
+                }
+                dataList=fileList.toString();
+
+                var reg2 = new RegExp( ',' , "g" );
+                dataList = dataList.replace( reg2 , ';' );
             }
-            if($ele.size() ==0 ){
-                secondFlag = true
-                return
-            }
-            dataList = dataList.substr(0, dataList.length - 1);
+
+            // dataList = dataList.substr(0, dataList.length - 1);
             console.log(dataList)
             $.ajax({
                 url:ctx+"/resource/addResourceSecondStep",
@@ -1015,10 +1025,10 @@
                         console.log(str);
                         var filePathList = str.split(";")
                         console.log(filePathList)
-                        for (var i=0;i<filePathList.length;i++){
-                            $("#fileDescribeDiv").append("<span class='tag fileTag' style='display: inline-block;margin-right: 5px' name="+ filePathList[i]+"><span class='filePathClass'>"+filePathList[i] +"</span> &nbsp;&nbsp; <a href='javascript:void(0)' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
-                        }
-                        $("#fileDescribeDiv").show();
+                        // for (var i=0;i<filePathList.length;i++){
+                        //     $("#fileDescribeDiv").append("<span class='tag fileTag' style='display: inline-block;margin-right: 5px' name="+ filePathList[i]+"><span class='filePathClass'>"+filePathList[i] +"</span> &nbsp;&nbsp; <a href='javascript:void(0)' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
+                        // }
+                        // $("#fileDescribeDiv").show();
                         $(".select-database").hide();
                         $(".select-local").show();
 
@@ -1036,42 +1046,28 @@
             })
         }
 
-        $('#fileContainerTree').jstree({
-            'core': {
-                'data': function (node, cb) {
-                    var children;
-                    if (node.id == '#') {
-                        children = initFileTree();
-                    } else {
-                        children = getFileList(node.id);
-                    }
-                    generateChildJson(children);
-                    cb.call(this, children);
-                }
-            },
-            "plugins": [
-                "checkbox", "wholerow"
-            ]
-        }).bind('select_node.jstree', function (e, data) {
-            var fileId = data.node.id;
-            var str = fileId.replace(/%_%/g, "/");
-            /*var isContain = false;*/
-            $("#fileDescribeDiv").append("<span class='tag fileTag' style='display: inline-block;margin-right: 5px;display: none' nameid="+ fileId+" name="+fileId +"><span class='filePathClass'>"+str +"</span> &nbsp;&nbsp; <a href='javascript:void(0)' title='Removing tag' onclick='tagClick(this)'>x</a> </span>")
-        }).bind("deselect_node.jstree", function (e, data) {
-            var fileId = data.node.id;
-            var fileName = data.node.text;
-            $("span[nameid='" + fileId + "']").remove();
-            /*$("#form_wizard_1").find(".button-save").removeAttr("disabled");*/
-        });
+
+
+
 
         function initFileTree() {
             var root;
             $.ajax({
                 type: "GET",
-                url: '${ctx}/resource/fileSourceFileList',
+                url: '${ctx}/resource/fileSourceZtreeFileList',
+                data:{
+                    resourceId:resourceId
+                },
                 dataType: "json",
                 async: false,
                 success: function (data) {
+                    var zTreeObj = $.fn.zTree.getZTreeObj("treeDemo");
+                    if(zTreeObj!=null){
+                        zTreeObj.destroy();//用之前先销毁tree
+                    }
+                    var fileNodes=data.nodeList;
+                    var zTreeObj = $.fn.zTree.init($("#treeDemo"),setting,fileNodes);
+
                     root = data;
                 }
             });
@@ -1109,7 +1105,162 @@
 
         jQuery(document).ready(function () {
             getResourceById();
+            initFileTree();
         })
+
+
+        var setting = {
+            async: {
+                enable: true,
+                url:"${ctx}/resource/ZTreeNode",
+                autoParam:["id", "pid", "name"],
+                // otherParam:{
+                //     "whetherChecked":function(){return whetherChecked;}
+                // },
+                dataFilter: filter
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey:'id',
+                    pIdKey:'pid',
+                    rootPId: 0
+                }
+            },
+            check: {
+                enable: true
+            },
+            callback : {
+                beforeAsync: beforeAsync,
+                onAsyncSuccess: onAsyncSuccess,
+                onAsyncError: onAsyncError,
+                onCheck : asyncAll
+            }
+        };
+
+        function filter(treeId, parentNode, childNodes) {
+            if(parentNode.checked==true){
+                for(var num=0;num<childNodes.length;num++){
+                    childNodes[num].open=true;
+                    childNodes[num].checked=true;
+                }
+            }
+            // whetherChecked=false;
+            return childNodes;
+        }
+
+        // 递归，获取所有子节点
+        function getAllChildrenNodes(treeNode,result){
+            if (treeNode.isParent) {
+                var childrenNodes = treeNode.children;
+                if (childrenNodes) {
+                    for (var i = 0; i < childrenNodes.length; i++) {
+                        result += ',' + childrenNodes[i].id;
+                        result = getAllChildrenNodes(childrenNodes[i], result);
+                    }
+                }
+            }
+            return result;
+        }
+
+
+        //获取界面中所有被选中的radio
+        function getChecedValueInLocalTree() {
+            var pathsOfCheckedFiles = new Array();
+            var treeObj=$.fn.zTree.getZTreeObj("treeDemo"),
+                nodes=treeObj.getCheckedNodes(true),v="";
+            for(var i=0;i<nodes.length;i++){
+                if(nodes[i].pid!="0"){
+                  pathsOfCheckedFiles.push(nodes[i].id);
+                }
+            }
+            return pathsOfCheckedFiles;
+        }
+
+
+
+        function asyncAll(event, treeId, treeNode) {
+            if (!check()) {
+                return;
+            }
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            if (false) {
+            } else {
+                var nodes=new Array([treeNode]);
+                asyncNodes(nodes[0]);
+            }
+        };
+
+        function asyncNodes(nodes) {
+            if (!nodes) return;
+            curStatus = "async";
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            for (var i=0, l=nodes.length; i<l; i++) {
+                if (nodes[i].isParent && nodes[i].zAsync) {
+                    asyncNodes(nodes[i].children);
+                    // whetherChecked=false;
+                } else {
+                    goAsync = true;
+                    zTree.reAsyncChildNodes(nodes[i], "refresh", true);
+                }
+            }
+        };
+
+        function beforeAsync() {
+            curAsyncCount++;
+        }
+        function onAsyncSuccess(event, treeId, treeNode, msg) {
+            curAsyncCount--;
+            if (curStatus == "expand") {
+                expandNodes(treeNode.children);
+            } else if (curStatus == "async") {
+                asyncNodes(treeNode.children);
+            }
+
+            if (curAsyncCount <= 0) {
+                if (curStatus != "init" && curStatus != "") {
+                    asyncForAll = true;
+                }
+                curStatus = "";
+            }
+        }
+        function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
+            curAsyncCount--;
+
+            if (curAsyncCount <= 0) {
+                curStatus = "";
+                if (treeNode!=null) asyncForAll = true;
+            }
+        }
+        var curStatus = "init", curAsyncCount = 0, asyncForAll = false,
+            goAsync = false;
+
+        function expandNodes(nodes) {
+            if (!nodes) return;
+            curStatus = "expand";
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            for (var i=0, l=nodes.length; i<l; i++) {
+                zTree.expandNode(nodes[i], true, false, false);
+                if (nodes[i].isParent && nodes[i].zAsync) {
+                    expandNodes(nodes[i].children);
+                } else {
+                    goAsync = true;
+                }
+            }
+        }
+
+
+        function check() {
+            if (curAsyncCount > 0) {
+                return false;
+            }
+            return true;
+        }
+
+
+
+
+
 
     </script>
 </div>

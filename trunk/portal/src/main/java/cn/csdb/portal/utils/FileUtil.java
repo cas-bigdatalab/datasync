@@ -70,6 +70,17 @@ public class FileUtil {
         JSONObject jsonObject = new JSONObject();
         File oldFile = new File(oldPath);
         File newFile = new File(newPath);
+        CopyCheck copyCheck = copyeCheck(oldFile, newFile);
+        if (copyCheck != CopyCheck.ALLOW) {
+            jsonObject.put("code", "error");
+            if (copyCheck.equals(CopyCheck.MYSELF)) {
+                jsonObject.put("message", "目标文件是源文件的子文件");
+            } else if (copyCheck.equals(CopyCheck.REPETITION)) {
+                jsonObject.put("message", "文件名称重复");
+            }
+            return jsonObject;
+        }
+        ;
         try {
             if (oldFile.exists() && oldFile.isFile()) {
                 jsonObject = copyFile(oldFile, newFile);
@@ -81,14 +92,14 @@ public class FileUtil {
                 newPath = tempNewFile.getAbsolutePath();
                 // System.out.println("新的文件位置：" + newPath);
                 String[] list = oldFile.list();
-                for (String s : list) {
-                    // 同一个作用域变量名称不要使用自拼接 !!!
-                    // oldPath = oldPath + File.separator +s;
-                    String tempPath = oldPath + File.separator + s;
-                    copyFolder(tempPath, newPath);
+                if (list.length != 0) {
+                    for (String s : list) {
+                        // 同一个作用域变量名称不要使用自拼接 !!!
+                        // oldPath = oldPath + File.separator +s;
+                        String tempPath = oldPath + File.separator + s;
+                        copyFolder(tempPath, newPath);
+                    }
                 }
-            } else {
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,6 +110,32 @@ public class FileUtil {
         jsonObject.put("code", "success");
         jsonObject.put("message", "文件复制成功！");
         return jsonObject;
+    }
+
+    /**
+     * 检查被复制文件在新位置是否有同名文件
+     *
+     * @param oldFile
+     * @param newFile
+     * @return
+     */
+    private static CopyCheck copyeCheck(File oldFile, File newFile) {
+        String oldFileName = oldFile.getName();
+        String newFileName = newFile.getName();
+
+        if (newFileName.equals(oldFileName)) {
+            return CopyCheck.MYSELF;
+        }
+
+        String[] newFileNames = newFile.list();
+        if (newFileNames != null && newFileNames.length != 0) {
+            for (String name : newFileNames) {
+                if (name.equals(oldFileName)) {
+                    return CopyCheck.REPETITION;
+                }
+            }
+        }
+        return CopyCheck.ALLOW;
     }
 
     /**
@@ -196,4 +233,9 @@ public class FileUtil {
         return jsonObject;
     }
 
+    private enum CopyCheck {
+        ALLOW,
+        MYSELF,
+        REPETITION
+    }
 }

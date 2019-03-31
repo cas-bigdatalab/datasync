@@ -2,18 +2,17 @@ package cn.csdb.portal.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class portalPages {
     @RequestMapping("/dataRelease")
     public ModelAndView index() {
-        ModelAndView modelAndView = new ModelAndView("dataRelease");
+        ModelAndView modelAndView = new ModelAndView("dataReleaseNew");
         return modelAndView;
     }
     @RequestMapping("/dataSourceDescribe")
     public ModelAndView index2() {
-        ModelAndView modelAndView = new ModelAndView("dataSourceDescribe");
+        ModelAndView modelAndView = new ModelAndView("dataAdd_Publication");
         return modelAndView;
     }
     @RequestMapping("/editResource")
@@ -28,7 +27,7 @@ public class portalPages {
     }
     @RequestMapping("/dataConfiguration")
     public ModelAndView index5() {
-        ModelAndView modelAndView = new ModelAndView("dataConfiguration");
+        ModelAndView modelAndView = new ModelAndView("dataRealtion_editeFiled");
         return modelAndView;
     }
 
@@ -39,12 +38,25 @@ public class portalPages {
     }
     @RequestMapping("/datatest")
     public ModelAndView  testData(){
-        ModelAndView modelAndView=new ModelAndView("editDataTest");
+        ModelAndView modelAndView=new ModelAndView("dataRealtion_recordManage");
         return modelAndView;
     }
     @RequestMapping("/statisticalDataTotal")
     public ModelAndView  statisticalDataTotal(){
         ModelAndView modelAndView=new ModelAndView("statisticalDataTotal");
+        return modelAndView;
+    }
+
+    @RequestMapping("/fileMange")
+    public ModelAndView fileMange() {
+        ModelAndView modelAndView = new ModelAndView("fileMange");
+        return modelAndView;
+    }
+
+    @RequestMapping("/createTableAndImportData")
+    public ModelAndView createTableAndImportData() {
+        ModelAndView modelAndView = new ModelAndView("dataRelation_createTableAndImportData");
+//        ModelAndView modelAndView = new ModelAndView("dataConfiguration");
         return modelAndView;
     }
 }
