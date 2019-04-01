@@ -70,6 +70,11 @@
         .row {
             margin-right: 0 !important;
         }
+        .alert-info {
+            background-color: #e0e0e0 !important;
+            border: none !important;
+            border-left: #0e6445 8px solid !important;
+        }
 
     </style>
 </head>
@@ -79,16 +84,29 @@
        <%--<h3>设置任务</h3>--%>
         <%--&lt;%&ndash;<hr>&ndash;%&gt;--%>
     <%--</div>--%>
-    <div class="task-title">
-        <%--<span>确定数据对象范围，上传数据</span>--%>
-        <form class="form-inline">
-            <div class="form-group">
-                <label for="dataTaskName" style="font-size: 18px">任务名</label>
-                <input type="text" class="form-control" id="dataTaskName" style="width: 250px;font-size: 16px" disabled>
-            </div>
-        </form>
-    </div>
 
+        <div class="alert alert-info" role="alert" style="margin:1% 20px 1% 20px">
+            <!--查询条件 -->
+            <div class="row">
+                <div class="col-md-9">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label for="dataTaskName" style="font-size: 18px">任务名</label>
+                            <input type="text" class="form-control" id="dataTaskName" style="width: 250px;font-size: 16px" disabled>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <%--<div class="task-title">--%>
+        <%--&lt;%&ndash;<span>确定数据对象范围，上传数据</span>&ndash;%&gt;--%>
+        <%--<form class="form-inline">--%>
+            <%--<div class="form-group">--%>
+                <%--<label for="dataTaskName" style="font-size: 18px">任务名</label>--%>
+                <%--<input type="text" class="form-control" id="dataTaskName" style="width: 250px;font-size: 16px" disabled>--%>
+            <%--</div>--%>
+        <%--</form>--%>
+    <%--</div>--%>
     <div class="select-way">
         <span>数据源</span>
         <input name="ways" type="radio" checked="checked" value="DB" id="aaa"/>

@@ -67,10 +67,10 @@
 
 <div class="page-content">
 
-    <div class="source-head">
-        <h3 style="font-size: 17px !important;">数据节点信息</h3>
-        <%--<hr>--%>
-    </div>
+    <%--<div class="source-head">--%>
+        <%--<h3 style="font-size: 17px !important;">数据节点信息</h3>--%>
+        <%--&lt;%&ndash;<hr>&ndash;%&gt;--%>
+    <%--</div>--%>
     <div class="alert alert-info" role="alert" style="padding: 12px 20px !important;margin-top: 12px;">
         <!--查询条件 -->
         <div class="row" style="margin: 5px auto;">

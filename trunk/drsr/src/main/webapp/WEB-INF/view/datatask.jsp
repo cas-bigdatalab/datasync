@@ -95,17 +95,17 @@
 <body>
 <div class="page-content">
     <div>
-        <div class="uplod-head">
-            <h3 style="font-size: 17px !important;">
-                数据任务
-            </h3>
-            <%--<hr>--%>
-        </div>
+        <%--<div class="uplod-head">--%>
+            <%--<h3 style="font-size: 17px !important;">--%>
+                <%--数据任务--%>
+            <%--</h3>--%>
+            <%--&lt;%&ndash;<hr>&ndash;%&gt;--%>
+        <%--</div>--%>
         <%--<div class="upload-title">
             <span>数据上传任务列表</span>
             &lt;%&ndash;<a href="${ctx}/createTask">新建任务</a>&ndash;%&gt;
         </div>--%>
-        <div class="alert alert-info" role="alert" style="margin:0px 20px">
+        <div class="alert alert-info" role="alert" style="margin:1% 20px 0px 20px">
             <!--查询条件 -->
             <div class="row">
                 <div class="col-md-9">
