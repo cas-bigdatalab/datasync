@@ -189,7 +189,7 @@
        <h5 style="text-align: center;">{{value.subjectName}}</h5>
    </div>
    <div class="pic-item" style=" width: 40%; float: left; padding: 5px;height:150px;">
-       简介：{{value.contact}}
+       简介：{{value.brief}}
    </div>
 
    {{/each}}
@@ -198,7 +198,9 @@
 <script type="text/html" id="single_tbodyTemplent">
    {{each vCount as value i}}
    <tr>
-       <td><a href="http://10.0.86.85/DataExplore/sdo/detail&id={{value.id}}">{{value.title}}</a></td>
+       <%--<a href="${applicationScope.systemPro['cas.url.prefix']}/login?service=${applicationScope.systemPro['dataexplore.url']}/shiro-cas">登录</a>--%>
+       <%--<td><a href="http://10.0.86.85/DataExplore/sdo/detail&id={{value.id}}">{{value.title}}</a></td>--%>
+       <td><a href="${applicationScope.systemPro['dataexplore.url']}&id={{value.id}}?service=${applicationScope.systemPro['portal.url']}/shiro-cas">{{value.title}}</a></td>
        <td>{{value.vCount}}</td>
        <td>{{value.dCount}}</td>
    </tr>
