@@ -95,13 +95,13 @@ public class ResCatalogService {
             jsonObject.put("icon","glyphicon glyphicon-th-list");
         }*/
         if (resCatalog.getLevel() == 1) {
-            jsonObject.put("icon", "/portal/resources/img/first.png");
+            jsonObject.put("icon", "glyphicon glyphicon-home");
         } else if (resCatalog.getLevel() == 2) {
-            jsonObject.put("icon", "/portal/resources/img/second.png");
+            jsonObject.put("icon", "/resources/img/first.png");
         } else if (resCatalog.getLevel() == 3) {
-            jsonObject.put("icon", "/portal/resources/img/third.png");
+            jsonObject.put("icon", "/resources/img/second.png");
         } else {
-            jsonObject.put("icon", "glyphicon glyphicon-th-list");
+            jsonObject.put("icon", "/resources/img/third.png");
         }
 
         if(resCatalog.getLevel()<depth){

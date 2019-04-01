@@ -13,7 +13,7 @@
     <title></title>
     <style>
         .form #bd-data tr.checked {
-            background: #dddddd;
+            background: #dddddd !important;
         }
     </style>
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/fileinput.min.css">
