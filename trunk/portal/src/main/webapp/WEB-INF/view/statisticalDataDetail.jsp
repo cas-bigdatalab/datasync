@@ -200,7 +200,7 @@
    <tr>
        <%--<a href="${applicationScope.systemPro['cas.url.prefix']}/login?service=${applicationScope.systemPro['dataexplore.url']}/shiro-cas">登录</a>--%>
        <%--<td><a href="http://10.0.86.85/DataExplore/sdo/detail&id={{value.id}}">{{value.title}}</a></td>--%>
-       <td><a href="${applicationScope.systemPro['dataexplore.url']}&id={{value.id}}?service=${applicationScope.systemPro['portal.url']}/shiro-cas">{{value.title}}</a></td>
+       <td><a href="${applicationScope.systemPro['dataexplore.url']}/{{value.id}}">{{value.title}}</a></td>
        <td>{{value.vCount}}</td>
        <td>{{value.dCount}}</td>
    </tr>
