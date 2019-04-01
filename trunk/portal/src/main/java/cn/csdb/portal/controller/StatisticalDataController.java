@@ -282,7 +282,7 @@ public class StatisticalDataController {
         FileInputStream ips = null;
         try {
             //获取图片存放路径
-            String imgPath ="G:\\Users\\5793914_122325176000_2.jpg";    // "G:\\Users\\5793914_122325176000_2.jpg"/*filePath*/;
+            String imgPath =filePath;    // "G:\\Users\\5793914_122325176000_2.jpg"/*filePath*/;
             ips = new FileInputStream(new File(imgPath));
             response.setContentType("multipart/form-data");
             out = response.getOutputStream();
