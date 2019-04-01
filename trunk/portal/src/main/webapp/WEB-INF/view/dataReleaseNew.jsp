@@ -90,7 +90,7 @@
         </form>
     </div>
 </div>
-<div class="upload-table">
+<div class="upload-table" style="background: #fff;">
     <div class="table-message">列表加载中......</div>
     <table class="table table-bordered data-table" id="upload-list">
         <thead>

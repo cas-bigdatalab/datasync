@@ -30,25 +30,25 @@ var closableTab = {
 
     //关闭tab
     closeTab: function (item) {
-        bootbox.confirm("<span style='font-size: 16px'>确认要关闭此条记录吗?</span>", function (r) {
-            if (r) {
-                var val = $(item).attr('tabclose');
-                var containerId = "tab_container_" + val.substring(9);
+        var val = $(item).attr('tabclose');
+        var containerId = "tab_container_" + val.substring(9);
 
-                if ($('#' + containerId).hasClass('active')) {
-                    if ($('#' + val).prev()[0]) {
-                        $('#' + val).prev().addClass('active');
-                        $('#' + containerId).prev().addClass('active');
-                    } else {
-                        $('#' + val).next().addClass('active');
-                        $('#' + containerId).next().addClass('active');
-                    }
-                }
-                $("#" + val).remove();
-                $("#" + containerId).remove();
-                closableTab.afterCloseTab(item);
+        if ($('#' + containerId).hasClass('active')) {
+            if ($('#' + val).prev()[0]) {
+                $('#' + val).prev().addClass('active');
+                $('#' + containerId).prev().addClass('active');
+            } else {
+                $('#' + val).next().addClass('active');
+                $('#' + containerId).next().addClass('active');
             }
-        })
+        }
+        $("#" + val).remove();
+        $("#" + containerId).remove();
+        closableTab.afterCloseTab(item);
+        /*bootbox.confirm("<span style='font-size: 16px'>确认要关闭此条记录吗?</span>", function (r) {
+            if (r) {
+            }
+        })*/
     },
 
     // 关闭之后的操作

@@ -88,9 +88,12 @@
         }
 
         .page-content table tbody tr:hover {
-            background: #dddddd;
+            background: #f5f5f5;
         }
 
+        table.items tr:hover {
+            background: none !important;
+        }
 
         .alert.alert-info {
             background-color: #cbe2fc !important;
@@ -104,6 +107,14 @@
             font-weight: normal;
             color: #000;
         }
+        button.btn.btn-danger{
+           background-color: #e5e5e5;
+            color: #333333
+        }
+
+        .right_div table tbody tr {
+            background-color: #FFFFff !important;
+        }
     </style>
 
 </head>
@@ -113,7 +124,7 @@
 
 <div class="con_div">
 
-    <div class="page-container" style="min-height: 550px;width: 100%;margin: 0 auto;">
+    <div class="page-container" style="height: 95%;width: 100%;margin: 0 auto;">
         <!-- BEGIN SIDEBAR -->
         <div class="page-sidebar-wrapper">
             <%--NEW BAR ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！--%>
@@ -171,7 +182,8 @@
                                                 class="fa fa-bars"></i>导入式建表</a></li>
                                         <li class="l2-menu"><a href="${ctx}/datatest"><i
                                                 class="fa fa-bars"></i>数据记录管理</a>
-                                            <div  id="alltableName" style="height:280px;overflow-y: scroll;display:none;margin-top:1%;">
+                                            <div id="alltableName"
+                                                 style="max-height:230px;overflow-y: scroll;display:none;margin-top:1%;">
 
                                             </div>
                                         </li>
@@ -340,9 +352,12 @@
         }
 
         // 根据显示器重置 div.page-content 实际内容区域大小
-        $(".page-content").css("margin-left", $(".page-sidebar").width());
+        var $page_content = $(".page-content");
+        $page_content.css("margin-left", $(".page-sidebar").width());
+        $page_content.css("min-height", $page_content.height() - $(".foot_div").height());
 
-        $("#content").css("height", $(".page-content").height() - $("#content-top").height() - parseInt($(".fabu_div2").css("margin-bottom")) - parseInt($("div.right_div").css("padding-top")))
+
+        $("#content").css("height", $page_content.height() - $("#content-top").height() - parseInt($(".fabu_div2").css("margin-bottom")) * 2 - parseInt($("div.right_div").css("padding-top")))
     });
 
 </script>

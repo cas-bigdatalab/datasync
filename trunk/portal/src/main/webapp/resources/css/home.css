@@ -169,7 +169,7 @@ li.l3-menu > a:hover i, li.l3-menu > a.active i {
     width: 100%;
     /*background: #f1f1f1;*/
     float: right;
-    padding: 20px;
+    padding: 10px;
     /*height: 60%;*/
     height: 100%;
     /*overflow-y: auto;*/
@@ -211,7 +211,6 @@ li.l3-menu > a:hover i, li.l3-menu > a.active i {
     color: #256bbc;
     background: #e1effe;
     border: #c3ddfb 1px solid;
-    margin-top: 15px;
     margin-bottom: 15px;
     padding-left: 15px;
 }
@@ -549,7 +548,7 @@ p.pic {
     padding: 4px 14px;
     width: 300px;
     border-radius: 20px !important;
-    background: url("../img/search.png") 270px center no-repeat;
+    /*background: url("../img/search.png") 270px center no-repeat;*/
 }
 
 .file-search button {
@@ -834,7 +833,7 @@ div.labels button {
 .loginbox {
     width: 420px;
     background: #fff;
-    padding: 60px 40px;
+    padding: 30px 40px;
     margin: auto;
     margin-top: -160px;
     box-shadow: 0px 2px 5px #ccc;
@@ -844,7 +843,6 @@ div.labels button {
     text-align: center;
     font-size: 24px;
     color: #1a5b9d;
-    padding-bottom: 38px;
 }
 
 .loginbox table {
