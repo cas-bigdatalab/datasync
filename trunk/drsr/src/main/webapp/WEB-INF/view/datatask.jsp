@@ -18,7 +18,7 @@
         .arrListSty{
             display: inline-block;
             margin-right: 5px;
-            background-color: #aaaaaa;
+            /*background-color: #aaaaaa;*/
             padding: 3px 6px;
             margin-bottom: 5px;
         }
@@ -95,17 +95,17 @@
 <body>
 <div class="page-content">
     <div>
-        <div class="uplod-head">
-            <h3 style="font-size: 17px !important;">
-                数据任务
-            </h3>
-            <%--<hr>--%>
-        </div>
+        <%--<div class="uplod-head">--%>
+            <%--<h3 style="font-size: 17px !important;">--%>
+                <%--数据任务--%>
+            <%--</h3>--%>
+            <%--&lt;%&ndash;<hr>&ndash;%&gt;--%>
+        <%--</div>--%>
         <%--<div class="upload-title">
             <span>数据上传任务列表</span>
             &lt;%&ndash;<a href="${ctx}/createTask">新建任务</a>&ndash;%&gt;
         </div>--%>
-        <div class="alert alert-info" role="alert" style="margin:0px 20px">
+        <div class="alert alert-info" role="alert" style="margin:1% 20px 0px 20px">
             <!--查询条件 -->
             <div class="row">
                 <div class="col-md-9">
@@ -255,7 +255,7 @@
                     </div>--%>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">文件路径:</label>
-                        <div class="col-sm-8 modediv" id="file-filePath" style="max-height: 300px;overflow-x: hidden"></div>
+                        <div class="col-sm-8 modediv" id="file-filePath" style="max-height: 300px;overflow-x: hidden;border: 1px solid #e5e5e5;margin-top: 18px;"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">创建时间:</label>
