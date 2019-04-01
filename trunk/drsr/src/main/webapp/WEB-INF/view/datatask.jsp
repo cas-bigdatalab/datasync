@@ -18,7 +18,7 @@
         .arrListSty{
             display: inline-block;
             margin-right: 5px;
-            background-color: #aaaaaa;
+            /*background-color: #aaaaaa;*/
             padding: 3px 6px;
             margin-bottom: 5px;
         }
@@ -255,7 +255,7 @@
                     </div>--%>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">文件路径:</label>
-                        <div class="col-sm-8 modediv" id="file-filePath" style="max-height: 300px;overflow-x: hidden"></div>
+                        <div class="col-sm-8 modediv" id="file-filePath" style="max-height: 300px;overflow-x: hidden;border: 1px solid #e5e5e5;margin-top: 18px;"></div>
                     </div>
                     <div class="form-group">
                         <label  class="col-sm-3 control-label">创建时间:</label>

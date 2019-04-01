@@ -82,7 +82,7 @@
             padding: 0 0 0 0;
             font-size: 16px;
             border: none;
-            cursor: pointer;
+            cursor: default;
         }
 
         /* 容器 <div> - 需要定位下拉内容 */
@@ -93,7 +93,7 @@
             background-color: #339e69;
             height: 100%;
             /*padding: 0 25px 0 40px;*/
-            width: 170px;
+            width: 169px;
         }
 
         /* 下拉内容 (默认隐藏) */
@@ -238,27 +238,46 @@
             <%--&lt;%&ndash;src:url("${ctx}/resources/login/img/icon04.1.png");&ndash;%&gt;--%>
             <%--text:expression(src="${ctx}/resources/login/img/icon04.1.png");--%>
         <%--}--%>
+        /*<!--[if !IE]><!-->*/
+                         /*<h1>您使用不是 Internet Explorer</h1>*/
+        /*<!--<![endif]-->*/
+        .img1,.img2,.img3,.img4{
+
+            vertical-align: middle !important;
+        }
+        @media screen and(-ms-high-contrast:active),(-ms-high-contrast:none){
+            .img1,.img2,.img3,.img4{
+                margin-top: -5px;
+            }
+
+        }
+
+        .logoutClass:hover{
+            background-color: #339e69;
+        }
 
     </style>
+
 </head>
-<body class="page-quick-sidebar-over-content page-style-square" style="font-family: 微软 !important;">
+<%--style="font-family: 微软 !important;--%>
+<body class="page-quick-sidebar-over-content page-style-square" >
 <!-- BEGIN HEADER -->
-<div class="page-header navbar navbar-static-top" style="background-color: #1e8753">
+<div class="page-header navbar navbar-static-top" style="background-color: #1e8753;position:relative;">
     <!-- BEGIN HEADER INNER -->
     <div class="page-header-inner">
         <!-- BEGIN LOGO -->
-        <div class="page-logo" style="width: auto;">
+        <div class="page-logo" style="width: auto;margin: auto;position: absolute;top: 0;left: 0;bottom: 0;right: 0;">
             <a href="#">
-                <h4 style="margin-top:14px;font-size: 21px;">数据资源汇聚传输工具</h4>
+                <h4 style="font-size: 21px;margin-top: 10px;margin-bottom: 10px;">数据资源汇聚传输工具</h4>
             </a>
         </div>
 
         <div class="dropdown">
-            <div style="position: absolute;margin-top: 6%;">
+            <div style="position: absolute;height: 33px;margin: auto;top: 0;left: 0;bottom: 0;right: 0;">
                 <div style="float: left;"><img src="${ctx}/resources/login/img/user.png" height="34" width="34" style="margin-left: 26px" /></div>
-                <div style="float: left;padding-top: 3px;" class="dropbtn">
-                    <button class="dropbtn" style="margin-top:2px;margin-left: 15px;">${sessionScope.userName}</button>
-                    <td ><a href="/drsr/logout" style="color: #ef124d;margin-left: 6px"><span class="glyphicon glyphicon-off" ></span></a></td>
+                <div style="float: left;padding-top: 4px;" class="dropbtn">
+                    <span class="dropbtn" style="margin-top:2px;margin-left: 15px;"><a class="logoutClass" style="color: white;cursor: default;">${sessionScope.userName}</a></span>
+                    <td ><a href="/drsr/logout"  style="color: white;margin-left: 6px;"><span class="glyphicon glyphicon-log-out" style="font-size: 16px;"></span></a></td>
                 </div>
                 <%--<div class="dropdown-content">--%>
                     <%--<a href="/drsr/logout"> <i class="glyphicon glyphicon-off"></i> &nbsp;安全退出</a>--%>
@@ -299,12 +318,20 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <a href="${ctx}/relationship/index">
-                                关系数据源</a>
+                            <a href="${ctx}/relationship/index" >
+                                <img style="width: 18px;display: inline;height: 16px"  src="${ctx}/resources/login/img/relationImg.jpg">
+                                &nbsp;关系数据源</a>
+
+                            <%--<a href="">--%>
+                                <%--<img style="width: 10px;height: 20px;" src="${ctx}/resources/login/img/relationImg.jpg">--%>
+                                <%--关系数据源</a>--%>
                         </li>
                         <li>
-                            <a href="${ctx}/fileResource/index">
-                                文件数据源</a>
+                            <%--<a href="${ctx}/fileResource/index">--%>
+                                <%--文件数据源</a>--%>
+                            <a href="${ctx}/fileResource/index" >
+                                <img style="width: 18px;display: inline;height: 16px"  src="${ctx}/resources/login/img/fileImg.jpg">
+                                &nbsp;文件数据源</a>
                         </li>
                     </ul>
                 </li>
@@ -400,8 +427,11 @@
                         $(this).parent().parent().parent().addClass("active");
                         $(".img2")[0].src="${ctx}/resources/login/img/icon01.1.png";
                         menu="img2"
+                        $(this).parent().parent().parent().children("a")[0].style.fontWeight="bold";
+                        $(this).parent().children("a")[0].style.fontWeight="bold";
                     } else {
                         $(this).parent().children("a").append('<span class="selected"></span>');
+                        $(this).parent().children("a")[0].style.fontWeight="bold"
                         if("数据节点信息"==$(this).parent().children("a")[0].innerText.trim()){
                             $(".img1")[0].src="${ctx}/resources/login/img/icon04.1.png";
                             menu="img1"
