@@ -35,8 +35,19 @@
 
         #ul_div111 li.active a {
             background: #2a6ebf !important;
-            margin-right: 1px !important;
             color: #fff !important;
+        }
+
+        #ul_div111 li a {
+            padding-left: 40px;
+            padding-right: 40px;
+            color: #406ec5;
+            border: blue solid 1px;
+            margin-right: 1px;
+        }
+
+        #ul_div111 li {
+            background-color: #FFFFff;
         }
 
     </style>

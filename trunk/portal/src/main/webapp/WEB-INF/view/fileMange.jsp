@@ -150,7 +150,7 @@
         </tr>
         </thead>
     </table>
-    <div class="file-list" style="overflow-y: scroll;max-height: 600px;">
+    <div class="file-list" style="overflow-y: scroll;height: 65%;">
         <table>
             <colgroup>
                 <col style="width: 2%"/>
