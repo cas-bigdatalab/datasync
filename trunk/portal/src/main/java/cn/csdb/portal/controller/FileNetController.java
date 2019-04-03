@@ -55,15 +55,16 @@ public class FileNetController {
     private String removeFtpRootLastSeparator(HttpServletRequest request) {
         String ftpRootPath = (String) request.getSession().getAttribute("FtpFilePath");
         // TODO 部署时候请注释下一行
-        ftpRootPath = "H:\\Cache\\";
+//        ftpRootPath = "H:\\Cache\\";
 
         boolean linux = ftpRootPath.endsWith("/");
         boolean win = ftpRootPath.endsWith("\\");
         if (linux || win) {
             ftpRootPath = ftpRootPath.substring(0, ftpRootPath.length() - 1);
+            ftpRootPath += File.separator + "file";
             return ftpRootPath;
         }
-        return ftpRootPath + File.separator + "file";
+        return ftpRootPath;
     }
 
 

@@ -13,7 +13,7 @@
     <title></title>
     <style>
         .form #bd-data tr.checked {
-            background: #dddddd;
+            background: #dddddd !important;
         }
     </style>
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/fileinput.min.css">
@@ -150,7 +150,7 @@
         </tr>
         </thead>
     </table>
-    <div class="file-list" style="overflow-y: scroll;max-height: 600px;">
+    <div class="file-list" style="overflow-y: scroll;height: 65%;">
         <table>
             <colgroup>
                 <col style="width: 2%"/>

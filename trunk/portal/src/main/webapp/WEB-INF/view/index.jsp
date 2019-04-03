@@ -40,6 +40,11 @@
             background: linear-gradient(whitesmoke, lightgrey); /* 标准的语法（必须放在最后） */
         }
 
+        table.list td, table.list th {
+            padding: 14px !important;
+            border-bottom: #edefee 1px solid;
+            border-top: none !important;
+        }
     </style>
     <link type="text/css" rel="stylesheet" href="${ctx}/resources/css/home.css">
 </head>

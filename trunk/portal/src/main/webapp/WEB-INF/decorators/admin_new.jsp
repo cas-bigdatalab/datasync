@@ -139,7 +139,8 @@
                             </tr>
                             <tr>
                                 <td>欢迎您！${sessionScope.userName}</td>
-                                <td><a style="border-radius: 6px;margin-left:6px;color: #ef124d" href="${ctx}/logout"><span class="glyphicon glyphicon-off"></span></a></td>
+                                <td><a style="border-radius: 6px;margin-left:6px;color: #FFFFff"
+                                       href="${ctx}/logout"><span class="glyphicon glyphicon-log-out"></span></a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -354,10 +355,13 @@
         // 根据显示器重置 div.page-content 实际内容区域大小
         var $page_content = $(".page-content");
         $page_content.css("margin-left", $(".page-sidebar").width());
-        $page_content.css("min-height", $page_content.height() - $(".foot_div").height());
+        // $page_content.css("min-height", $page_content.height() - $(".foot_div").height());
+        $page_content.css("min-height", "");
+        $page_content.css("height", "95%");
 
 
-        $("#content").css("height", $page_content.height() - $("#content-top").height() - parseInt($(".fabu_div2").css("margin-bottom")) * 2 - parseInt($("div.right_div").css("padding-top")))
+        /* $("#content").css("height", $page_content.height() - $("#content-top").height() - parseInt($(".fabu_div2").css("margin-bottom")) * 2 - parseInt($("div.right_div").css("padding-top")))*/
+        $("#content").height("90%");
     });
 
 </script>

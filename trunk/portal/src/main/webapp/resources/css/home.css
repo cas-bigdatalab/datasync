@@ -603,7 +603,7 @@ p.pic {
     cursor: pointer;
 }
 
-.file-list td.file-name:hover div {
+.file-list td.fileName:hover div {
     color: #296ebf;
     font-weight: bold;
 }
