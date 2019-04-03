@@ -2,6 +2,7 @@ package cn.csdb.portal.service;
 
 import cn.csdb.portal.model.Person;
 import cn.csdb.portal.repository.PersonDao;
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -12,6 +13,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @program: DataSync
@@ -49,6 +52,18 @@ public class PersonServiceTest {
         for (Person person : lists){
             logger.info( person.getId() + ":" + person.getName() + ":" + person.getAge() + ": " +person.getAddress());
             System.out.println( person.getId() + ":" + person.getName() + ":" + person.getAge() + ": " +person.getAddress());
+        }
+    }
+
+    @Test
+    public void testAA(){
+        String extMetadata="{\"ext_projection\":\"11\",\"ext_productCode\":\"22\",\"ext_dataProcessor\":\"33\",\"ext_hareMethod\":\"44\"}\n" +
+                " ";
+        System.out.println(extMetadata);
+        JSONObject json = JSONObject.parseObject(extMetadata);
+        for (Map.Entry<String, Object> map :  json.entrySet()){
+            System.out.println(map.getKey());
+            System.out.println(map.getValue());
         }
     }
 }

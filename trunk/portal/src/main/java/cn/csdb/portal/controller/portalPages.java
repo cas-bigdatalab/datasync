@@ -1,17 +1,30 @@
 package cn.csdb.portal.controller;
 
+import cn.csdb.portal.model.MetadataTemplate;
+import cn.csdb.portal.service.MetadataTemplateService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import java.util.List;
+
 @Controller
 public class portalPages {
+    @Resource
+    private MetadataTemplateService metadataTemplateService;
+
     @RequestMapping("/dataRelease")
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("dataReleaseNew");
         return modelAndView;
     }
     @RequestMapping("/dataSourceDescribe")
-    public ModelAndView index2() {
+    public ModelAndView index2(Model model) {
+        //ModelAndView modelAndView = new ModelAndView("dataSourceDescribe");
+        List<MetadataTemplate> list = metadataTemplateService.getAll();
+        model.addAttribute("list",list);
         ModelAndView modelAndView = new ModelAndView("dataAdd_Publication");
         return modelAndView;
     }
