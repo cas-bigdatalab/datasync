@@ -307,6 +307,9 @@ public class DataSyncController {
                 return 0;
             }
         }finally {
+            if( ftpUtil.numberOfRequest.get(dataTaskId+"Block")!=null){
+                ftpUtil.numberOfRequest.remove(dataTaskId+"Block");
+            }
             ftpUtil.disconnect();
             now = new Date();
             dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
