@@ -17,10 +17,10 @@
 <head>
     <title>
         <shiro:hasRole name="root">
-            主题库后台管理系统
+            数据管理与发布工具
         </shiro:hasRole>
         <shiro:hasRole name="admin">
-            集中式数据管理与定制化融合发布工具
+            数据管理与发布工具
         </shiro:hasRole>
     </title>
 
