@@ -71,35 +71,36 @@
 </script>
 
 
+
 <script type="text/html" id="tableNameLi">
-    {{each data as value i}}
-    {{each value as v key}}
-    {{if i == 0}}
-    <li class="active">
-        <a href={{"#"+key}} data-toggle="tab" aria-expanded="true"> {{key}} </a>
-    </li>
-    {{else}}
-    <li>
-        <a href={{"#"+key}} data-toggle="tab"> {{key}} </a>
-    </li>
-    {{/if}}
-    {{/each}}
+        {{each data as value i}}
+        {{each value as v key}}
+            {{if i == 0}}
+            <li class="active">
+                <a href={{"#"+key}} data-toggle="tab" aria-expanded="true"> {{key}} </a>
+            </li>
+            {{else}}
+            <li>
+                <a href={{"#"+key}} data-toggle="tab"> {{key}} </a>
+            </li>
+            {{/if}}
+        {{/each}}
     {{/each}}
 </script>
 
 <script type="text/html" id="tableNameDiv">
     {{each data as value i}}
-    {{each value as v key}}
-    {{if i== 0}}
-    <div class="tab-pane active">
-        <form id={{key}}></form>
-    </div>
-    {{else}}
-    <div class="tab-pane">
-        <form id={{key}}></form>
-    </div>
-    {{/if}}
-    {{/each}}
+        {{each value as v key}}
+            {{if i== 0}}
+            <div class="tab-pane active" >
+                <form id={{key}}></form>
+            </div>
+            {{else}}
+            <div class="tab-pane">
+                <form id={{key}}></form>
+            </div>
+            {{/if}}
+        {{/each}}
     {{/each}}
 </script>
 
@@ -130,15 +131,15 @@
 
                 <td>
                     <select>
-                        <option value="-1">不匹配任何字段</option>
+                        <option  value="-1">不匹配任何字段</option>
                         {{each data as vd id}}
                         {{if id > 0 && vd[3] != ""}}
-                        {{if id == i}}
-                        <option selected="selected" value={{vd[3]}}>{{vd[3]}}</option>
-                        {{else}}
-                        <option value={{vd[3]}}>{{vd[3]}}</option>
-                        {{/if}}
-                        {{/if}}
+                                {{if id == i}}
+                                <option selected="selected" value={{vd[3]}}>{{vd[3]}}</option>
+                                {{else}}
+                                <option value={{vd[3]}}>{{vd[3]}}</option>
+                                {{/if}}
+                            {{/if}}
                         {{/each}}
                     </select>
                 </td>
@@ -153,7 +154,7 @@
                 {{if v[2] == "PRI"}}
                 <td><input type="radio" name="isPK" fieldPk={{v[0]}} checked disabled/></td>
                 {{else }}
-                <td><input type="radio" name="isPK" disabled/></td>
+                <td><input type="radio" name="isPK"  disabled/></td>
                 {{/if}}
             </tr>
             {{/if}}
@@ -163,7 +164,61 @@
     </div>
 </script>
 
+<script type="text/html" id="demoIs">
+
+</script>
+
 <script type="text/html" id="tableFieldNotExist">
+    <div class="tab-pane">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr style="word-break: keep-all">
+                <th>序号</th>
+                <th>excel字段名称</th>
+                <th>excel字段注释</th>
+                <th>字段类型</th>
+                <th>字段长度</th>
+                <th>
+                    是否主键
+                    <button id="clearPK" class="btn btn-default" type="button">清除</button>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {{each data as v i}}
+            {{if i > 0}}
+            <tr>
+                <td>{{i}}</td>
+
+                {{each v as vv ii}}
+                {{if ii > 2}}
+                <td>
+                    <input name={{vv}} value={{vv}} />
+                </td>
+                {{/if}}
+                {{/each}}
+
+                <td>
+                    <select fieldType={{v[0]}}>
+                        <option value="0" selected>请选择字段类型</option>
+                        <option value="varchar">varchar</option>
+                        <option value="int">int</option>
+                        <option value="text">text</option>
+                    </select>
+                </td>
+
+                <td>
+                    <input placeholder="请输入字段长度" fieldLength={{v[0]}} />
+                </td>
+                <td><input type="radio" name="isPK" fieldPk={{v[0]}} /></td>
+            </tr>
+            {{/if}}
+            {{/each}}
+            </tbody>
+        </table>
+    </div>
+</script>
+<script type="text/html" id="demoNot">
     <div class="tab-pane">
         <table class="table table-hover table-bordered">
             <thead>
@@ -212,6 +267,10 @@
             </tbody>
         </table>
     </div>
+    <button type="button" onclick="createTableAndInsertValue(this)" data-dismiss="modal" class="btn green"
+            id="saveExcelSuccess" tablename="{{tableName}}">保存
+    </button>
+
 </script>
 
 

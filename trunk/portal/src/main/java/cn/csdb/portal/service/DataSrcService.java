@@ -109,12 +109,12 @@ public class DataSrcService {
             ResultSetMetaData rsm = set.getMetaData();
             while (set.next()) {
                 for (int i = 1; i <= rsm.getColumnCount(); i++) {
-                    if (set.getString(rsm.getColumnName(i)) == null){
-                        list.add(set.getString(" "));
+                    if (set.getString(rsm.getColumnName(i)) == null||set.getString(rsm.getColumnName(i)).equals("")){
+                        list.add("");
                     }else {
-//                    System.out.println("aaaaaaaallll"+set.getString(rsm.getColumnName(i)));
                         list.add(set.getString(rsm.getColumnName(i)));
                     }
+                    System.out.println("aaaaaaaallll"+set.getString(rsm.getColumnName(i)));
                 }
             }
 
@@ -311,6 +311,33 @@ public class DataSrcService {
         return count;
     }
 
+//    根据主键查询数据条数
+    public int countByPrimaryKey(DataSrc dataSrc, String tableName,String columnName,Object pkus){
+        int n=0;
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        try {
+         String sql="select count(*) as num from  "+ tableName + " where  "+columnName +"= ?";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            pst.setObject(1,pkus);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                n = rs.getInt("num");
+            }
+            pst.close();
+            rs.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return n;
+    }
+
     //    连接mysql数据库，根据表明查出所有数据，供编辑
     public List<Map<String, Object>> getTableData(DataSrc dataSrc, String tableName, int pageNo, int pageSize) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
@@ -352,6 +379,49 @@ public class DataSrcService {
         return listMap;
     }
 
+//    显示表数据测试
+public List<List<Object>> getTableDataTestTmpl(DataSrc dataSrc, String tableName, int pageNo, int pageSize) {
+    IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+    Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+    List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+    List<List<Object>> lists=new ArrayList<>();
+
+    int start = pageSize * (pageNo - 1);
+    try {
+//           select COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT from information_schema.COLUMNS where table_name = '表名' and table_schema = '数据库名称';
+        String sql = "select * from " + tableName + " limit " + start + " ," + pageSize + "";
+
+        //         时间格式的数据怎么获得
+        PreparedStatement pst = connection.prepareStatement(sql);
+        ResultSet set = pst.executeQuery();
+        ResultSetMetaData rsm = set.getMetaData();
+        while (set.next()) {
+          List<Object> list=new ArrayList<>();
+            for (int i = 1; i <= rsm.getColumnCount(); i++) {
+                if (set.getString(rsm.getColumnName(i)) == null) {
+//                    map.put(rsm.getColumnName(i), "");
+                    list.add("");
+                } else {
+//                    map.put(rsm.getColumnName(i), set.getString(rsm.getColumnName(i)));
+                    list.add(set.getString(rsm.getColumnName(i)));
+                }
+//                       System.out.println("第"+i+"列的值"+"列名："+rsm.getColumnName(i)+",,,"+set.getString(rsm.getColumnName(i)));
+            }
+            lists.add(list);
+        }
+        pst.close();
+        set.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    return lists;
+}
 
     //    连接mysql数据库，根据表明查出所有数据，供编辑
     public List<List<Object>> getTableData1(DataSrc dataSrc, String tableName, int pageNo, int pageSize) {

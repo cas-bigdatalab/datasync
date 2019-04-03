@@ -18,9 +18,6 @@
     <link href="${ctx}/resources/bundles/jstree/dist/themes/default/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<div class="page-content" style="min-height: 700px;">
-    <h3>数据分类管理</h3>
-    <hr>
     <div class="col-md-4" >
             <button type="button" class="btn btn-success btn-sm" style="margin-bottom:5px" onclick="editTree();"><i
                     class="glyphicon glyphicon-pencil"></i> 修改
@@ -28,10 +25,9 @@
         <div id="jstree_show" style="height:300px"></div>
     </div>
     <div class="col-md-1"></div>
-    <div class="col-md-4" id="editRegon">
+    <div class="col-md-4" id="editRegon" style="height:600px;width:500px;">
     </div>
 
-</div>
 
 
 <div id="deleteNodeModal" class="modal fade" tabindex="-1" data-width="400">
@@ -85,7 +81,7 @@
                 '<button type="button" class="btn btn-default btn-sm" onclick="jstree_rename();"><i class="glyphicon glyphicon-pencil"></i> 重命名</button> ' +
                 '<button type="button" class="btn btn-default btn-sm" onclick="jstree_delete();"><i class="glyphicon glyphicon-remove"></i> 删除</button> ' +
                 '</div> ' +
-                '<div id="jstree_edit" style="height:300px"></div> ' +
+                '<div id="jstree_edit" style="max-height:350px;overflow: auto;margin-bottom: 25px;"></div> ' +
                 '<button type="button" class="btn btn-default btn-sm" onclick="jstree_cancel();" style="margin-left:5px"><i class="glyphicon glyphicon-remove"></i> 取消</button>' +
                 '<button type="button" class="btn btn-primary btn-sm" onclick="jstree_submit();" style="margin-left:5px"><i class="glyphicon glyphicon-ok"></i> 提交</button>'
             $("#editRegon").append(html);
@@ -212,6 +208,7 @@
 
 
     </script>
+
 </div>
 
 </html>

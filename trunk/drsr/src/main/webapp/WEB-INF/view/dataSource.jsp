@@ -118,7 +118,7 @@
                 <button type="button" class="btn green" data-dismiss="modal" onclick="confirmAddNode();" ><i
                         class="glyphicon glyphicon-ok"></i>添加
                 </button>
-                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+                <button type="button" data-dismiss="modal" class="btn  default">取消</button>
             </div>
         </div>
     </div>
@@ -155,7 +155,7 @@
                         <button type="button" class="btn green" data-dismiss="modal" onclick="confirmAddNode();" ><i
                                 class="glyphicon glyphicon-ok"></i>添加
                         </button>
-                        <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+                        <button type="button" data-dismiss="modal" class="btn  default">取消</button>
                     </div>
                 </form>
             </div>
@@ -201,7 +201,7 @@
                 <button type="button" class="btn green" data-dismiss="modal" onclick="confirmEditNode();" ><i
                         class="glyphicon glyphicon-ok"></i>完成
                 </button>
-                <button type="button" data-dismiss="modal" class="btn  btn-danger">取消</button>
+                <button type="button" data-dismiss="modal" class="btn  default">取消</button>
             </div>
         </div>
     </div>

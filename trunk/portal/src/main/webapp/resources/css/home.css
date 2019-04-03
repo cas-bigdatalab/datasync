@@ -51,7 +51,7 @@ a:focus, a:active {
 
 .bg_div {
     height: 100%;
-    background: #f1f1f1;
+    /*background: #f1f1f1;*/
 }
 
 .left_top {
@@ -167,11 +167,12 @@ li.l3-menu > a:hover i, li.l3-menu > a.active i {
 /*.right_div{ width:82%; background:#f1f1f1; float:right; padding:20px; height: 100%; overflow-y: auto;}*/
 .right_div {
     width: 100%;
-    background: #f1f1f1;
+    /*background: #f1f1f1;*/
     float: right;
-    padding: 20px;
-    height: 60%;
-    overflow-y: auto;
+    padding: 10px;
+    /*height: 60%;*/
+    height: 100%;
+    /*overflow-y: auto;*/
 }
 
 
@@ -210,7 +211,6 @@ li.l3-menu > a:hover i, li.l3-menu > a.active i {
     color: #256bbc;
     background: #e1effe;
     border: #c3ddfb 1px solid;
-    margin-top: 15px;
     margin-bottom: 15px;
     padding-left: 15px;
 }
@@ -292,7 +292,7 @@ li.l3-menu > a:hover i, li.l3-menu > a.active i {
     display: block;
     background: #4788cf;
     color: #FFF;
-    border-radius: 6px;
+    border-radius: 6px !important;
 }
 
 .bianji a:hover {
@@ -307,7 +307,7 @@ li.l3-menu > a:hover i, li.l3-menu > a.active i {
     display: block;
     background: #a96cc9;
     color: #FFF;
-    border-radius: 6px;
+    border-radius: 6px !important;
 }
 
 .chakan a:hover {
@@ -322,7 +322,7 @@ li.l3-menu > a:hover i, li.l3-menu > a.active i {
     display: block;
     background: #c75e5e;
     color: #FFF;
-    border-radius: 6px;
+    border-radius: 6px  !important;
 }
 
 .shanchu a:hover {
@@ -547,8 +547,8 @@ p.pic {
     border: #296ebf 1px solid;
     padding: 4px 14px;
     width: 300px;
-    border-radius: 20px;
-    background: url("../img/search.png") 270px center no-repeat;
+    border-radius: 20px !important;
+    /*background: url("../img/search.png") 270px center no-repeat;*/
 }
 
 .file-search button {
@@ -599,11 +599,11 @@ p.pic {
 
 .file-list td.file-file div {
     padding-left: 25px;
-    background: url("../img/folder.png") 0 center no-repeat;
+    background: url("../img/file.png") 0 center no-repeat;
     cursor: pointer;
 }
 
-.file-list td.file-name:hover div {
+.file-list td.fileName:hover div {
     color: #296ebf;
     font-weight: bold;
 }
@@ -833,7 +833,7 @@ div.labels button {
 .loginbox {
     width: 420px;
     background: #fff;
-    padding: 60px 40px;
+    padding: 30px 40px;
     margin: auto;
     margin-top: -160px;
     box-shadow: 0px 2px 5px #ccc;
@@ -843,7 +843,6 @@ div.labels button {
     text-align: center;
     font-size: 24px;
     color: #1a5b9d;
-    padding-bottom: 38px;
 }
 
 .loginbox table {

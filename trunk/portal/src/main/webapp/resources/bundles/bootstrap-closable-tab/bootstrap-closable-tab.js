@@ -10,14 +10,15 @@ var closableTab = {
         $("div[id^=tab_container_]").removeClass("active");
 
         if (!$('#' + id)[0]) {
-            var li_tab = '<li role="presentation" class="" id="' + id + '"><a href="#' + container + '"  role="tab" data-toggle="tab" style="position: relative;padding:2px 20px 2px 15px">' + tabItem.name;
+            /*a:style="position: relative;padding:2px 20px 2px 15px"*/
+            var li_tab = '<li role="presentation" class="" id="' + id + '"><a href="#' + container + '"  role="tab" data-toggle="tab" >' + tabItem.name;
             if (tabItem.closable) {
-                li_tab = li_tab + '<i class="glyphicon glyphicon-remove small" tabclose="' + id + '" style="position: absolute;right:4px;top: 4px;"  onclick="remove(this)"></i></a></li> ';
+                li_tab = li_tab + '<i class="glyphicon glyphicon-remove small" tabclose="' + id + '" style="position: absolute;right:4px;top: 4px;"  onclick="closableTab.closeTab(this)"></i></a></li> ';
             } else {
                 li_tab = li_tab + '</a></li>';
             }
 
-            var tabpanel = '<div role="tabpanel" class="tab-pane" id="' + container + '" style="width: 100%;">' +
+            var tabpanel = '<div role="tabpanel" class="tab-pane" id="' + container + '">' +
                 tabItem.template +
                 '</div>';
             $('.nav-tabs.activeTabs').append(li_tab);
@@ -33,10 +34,30 @@ var closableTab = {
         var containerId = "tab_container_" + val.substring(9);
 
         if ($('#' + containerId).hasClass('active')) {
-            $('#' + val).prev().addClass('active');
-            $('#' + containerId).prev().addClass('active');
+            if ($('#' + val).prev()[0]) {
+                $('#' + val).prev().addClass('active');
+                $('#' + containerId).prev().addClass('active');
+            } else {
+                $('#' + val).next().addClass('active');
+                $('#' + containerId).next().addClass('active');
+            }
         }
         $("#" + val).remove();
         $("#" + containerId).remove();
+        closableTab.afterCloseTab(item);
+        /*bootbox.confirm("<span style='font-size: 16px'>确认要关闭此条记录吗?</span>", function (r) {
+            if (r) {
+            }
+        })*/
+    },
+
+    // 关闭之后的操作
+    afterCloseTab: function (item) {
+
+    },
+
+    // 初始化动态标签失败操作
+    error: function (item) {
+
     }
-}
+};

@@ -12,7 +12,7 @@
 
 <html>
 <head>
-    <title>分布式数据汇交管理系统</title>
+    <title>数据资源汇聚传输工具</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
@@ -37,7 +37,7 @@
           id="style_color"/>
     <link href="${ctx}/resources/bundles/metronic/css/custom.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/css/globle.css" rel="stylesheet" type="text/css"/>
-  <%--  <link href="${ctx}/resources/css/reset.css" rel="stylesheet" type="text/css"/>--%>
+    <%--  <link href="${ctx}/resources/css/reset.css" rel="stylesheet" type="text/css"/>--%>
     <link href="${ctx}/resources/css/main.css" rel="stylesheet" type="text/css"/>
 
     <!-- END THEME STYLES -->
@@ -70,19 +70,19 @@
             z-index: 99999;
             display: none;
         }
-       /* .tabWrap img{
-            width: 200px;
-            height: 200px;
-        }*/
+        /* .tabWrap img{
+             width: 200px;
+             height: 200px;
+         }*/
 
         /* 下拉按钮样式 */
         .dropbtn {
-            background-color: #438eb9;
+            background-color: #339e69;
             color: white;
-            padding: 11px;
+            padding: 0 0 0 0;
             font-size: 16px;
             border: none;
-            cursor: pointer;
+            cursor: default;
         }
 
         /* 容器 <div> - 需要定位下拉内容 */
@@ -90,6 +90,10 @@
             position: relative;
             display: inline-block;
             float: right;
+            background-color: #339e69;
+            height: 100%;
+            /*padding: 0 25px 0 40px;*/
+            width: 176px
         }
 
         /* 下拉内容 (默认隐藏) */
@@ -98,17 +102,16 @@
             filter:alpha(opacity=40);
             display: none;
             position: absolute;
-            background-color: #438eb9;
+            background-color: #1e8753;
             width: 100%;
-            /*color: white;*/
-            /*min-width: 100%;*/
+            margin-top: 50px;
             box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
         }
 
         /* 下拉菜单的链接 */
         .dropdown-content a {
             color: white;
-           /*// padding: 6px 10px;*/
+            /*// padding: 6px 10px;*/
             font-size: 16px;
             width: 100%;
             text-decoration: none;
@@ -126,49 +129,171 @@
 
         /* 当下拉内容显示后修改下拉按钮的背景颜色 */
         .dropdown:hover .dropbtn {
-            background-color: #438eb9;
+            background-color: #339e69;
         }
+        .page-header.navbar {
+            height: 7.373% !important;
+        }
+        .page-sidebar-wrapper{
+            width: 18%;
+            height: 87.545%;
+            float: left;
+            background: #e1e5e3 url(${ctx}/resources/login/img/left_bg.png) bottom no-repeat;
+            background-size: 100%;
+        }
+        .page-content-wrapper {
+            float: left;
+            width: 82%;
+            height: 87%;
+            overflow-y: auto;
+            background-color: #f1f1f1;
+        }
+        .page-content-wrapper .page-content {
+            margin-left: 0px !important;
+            padding: 0px 20px 0px 20px;
+            min-height: 0px !important;
+            height: 92%;
+            background-color: #f1f1f1;
+        }
+        .page-sidebar-menu{
+            background-color: none;
+            text-align: center;
+        }
+        .page-sidebar-menu >a{
+            background: red;
+        }
+        .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a, .page-sidebar .page-sidebar-menu > li.active > a, .page-sidebar .page-sidebar-menu > li.active.open > a {
+           background-color:  #4ab380;
+        }
+        .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a > .selected, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a > .selected, .page-sidebar .page-sidebar-menu > li.active.open > a > .selected, .page-sidebar .page-sidebar-menu > li.active > a > .selected {
+            background-color:  #e1e5e3;
+        }
+        .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a > .selected, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a > .selected, .page-sidebar .page-sidebar-menu > li.active.open > a > .selected, .page-sidebar .page-sidebar-menu > li.active > a > .selected {
+            border-left: 8px solid #4ab380;
+        }
+        .page-sidebar {
+            width: 96%;
+        }
+        .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover, .page-sidebar {
+            background-color: none;
+        }
+        .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a:hover, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a:hover, .page-sidebar .page-sidebar-menu > li.active > a:hover, .page-sidebar .page-sidebar-menu > li.active.open > a:hover {
+            background: #4ab380;
+        }
+        .col-sm-3 {
+            width: 32%;
+        }
+        .form-group {
+            margin-bottom: 0.6%;
+        }
+        .messageCon {
+            padding: 6px 0;
+            top: 10%;
+            position: absolute;
+            margin-left: 16%;
+        }
+        .task-title{
+            margin-top: 1%;
+        }
+        .task-head{
+            padding-top: 2%;
+        }
+        .page-sidebar {
+            background-color: rgba(0, 0, 0, 0);
+        }
+        .title{
+            font-size: 18;
+            vertical-align: top;
+            /*font-family: 宋体;*/
+        }
+        .page-sidebar .page-sidebar-menu > li.active > a > .selected{
+            border-top: 25px double transparent !important;
+        }
+
+        .page-sidebar .page-sidebar-menu > li:hover > a:hover{
+            background-color: #4ab380;
+            font-weight: bold;
+            color: #fff;
+            border: 1px solid white;
+        }
+        .page-sidebar .page-sidebar-menu > li.active > a > .selected {
+            border-top: 12px double transparent !important;
+        }
+        .page-sidebar .page-sidebar-menu > li.active > a > .selected {
+            top:10px !important;
+            border-bottom: 12px double transparent;
+        }
+        .page-sidebar .page-sidebar-menu > li.active.open > a > .selected, .page-sidebar .page-sidebar-menu > li.active > a > .selected {
+            border-bottom: 12px double transparent;
+        }
+        <%--.a1 img:hover{--%>
+            <%--src: url("${ctx}/resources/login/img/icon04.1.png");--%>
+        <%--}--%>
+        <%--.page-sidebar .page-sidebar-menu > li .img1{--%>
+            <%--&lt;%&ndash;src="${ctx}/resources/login/img/icon04.png"&ndash;%&gt;--%>
+           <%--background-image: url("${ctx}/resources/login/img/icon04.png");--%>
+        <%--}--%>
+        <%--.page-sidebar .page-sidebar-menu > li .img1:hover{--%>
+            <%--&lt;%&ndash;background: url("${ctx}/resources/login/img/icon04.1.png");&ndash;%&gt;--%>
+            <%--&lt;%&ndash;src:url("${ctx}/resources/login/img/icon04.1.png");&ndash;%&gt;--%>
+            <%--text:expression(src="${ctx}/resources/login/img/icon04.1.png");--%>
+        <%--}--%>
+        /*<!--[if !IE]><!-->*/
+                         /*<h1>您使用不是 Internet Explorer</h1>*/
+        /*<!--<![endif]-->*/
+        .img1,.img2,.img3,.img4{
+
+            vertical-align: middle !important;
+        }
+        @media screen and(-ms-high-contrast:active),(-ms-high-contrast:none){
+            .img1,.img2,.img3,.img4{
+                margin-top: -5px;
+            }
+
+        }
+
+        .logoutClass:hover{
+            background-color: #339e69;
+        }
+
     </style>
+
 </head>
-<body class="page-quick-sidebar-over-content page-style-square">
+<%--style="font-family: 微软 !important;--%>
+<body class="page-quick-sidebar-over-content page-style-square" >
+<%
+String userName=request.getSession().getAttribute("userName")+"";
+String titleName=request.getSession().getAttribute("userName")+"";
+if(userName != null && userName.length()>6){
+    userName=userName.substring(0,6)+"...";
+    System.out.println(userName);
+}
+
+
+%>
 <!-- BEGIN HEADER -->
-<div class="page-header navbar navbar-static-top" style="background-color: #438eb9">
+<div class="page-header navbar navbar-static-top" style="background-color: #1e8753;position:relative;">
     <!-- BEGIN HEADER INNER -->
     <div class="page-header-inner">
         <!-- BEGIN LOGO -->
-        <div class="page-logo" style="width: auto;">
+        <div class="page-logo" style="width: auto;margin: auto;position: absolute;top: 0;left: 0;bottom: 0;right: 0;">
             <a href="#">
-                <h4 style="margin-top:14px ">分布式数据汇交管理系统</h4>
+                <h4 style="font-size: 21px;margin-top: 10px;margin-bottom: 10px;">数据资源汇聚传输工具</h4>
             </a>
         </div>
 
-        <%--<div class="top-menu">--%>
-            <%--<ul class="cus_ul">--%>
-                <%--<li>--%>
-                    <%--<a href="#" id="cus_User_id">--%>
-                        <%--<i class="glyphicon glyphicon-user"></i>--%>
-                        <%--&nbsp;&nbsp;--%>
-                        <%--<span>欢迎您！${sessionScope.userName}</span>--%>
-                        <%--&nbsp;--%>
-                        <%--<i class="fa fa-angle-down"></i>--%>
-                    <%--</a>--%>
-                    <%--<ul class="cus_drop">--%>
-                        <%--<li>--%>
-                            <%--<a href="logout"><i class="icon-key"></i>&nbsp;安全退出</a>--%>
-                        <%--</li>--%>
-                    <%--</ul>--%>
-                <%--</li>--%>
-                <%--<!-- END USER LOGIN DROPDOWN -->--%>
-            <%--</ul>--%>
-        <%--</div>--%>
-
-
         <div class="dropdown">
-            <i class="glyphicon glyphicon-user"></i>
-            <button class="dropbtn">欢迎您！${sessionScope.userName} &nbsp; &nbsp;</button>
-            <div class="dropdown-content">
-               <a href="/drsr/logout"> <i class="glyphicon glyphicon-off"></i> &nbsp;安全退出</a>
+            <div style="position: absolute;height: 33px;margin: auto;top: 0;left: 0;bottom: 0;right: 0;">
+                <div style="float: left;"><img src="${ctx}/resources/login/img/user.png" height="34" width="34" style="margin-left: 20px" /></div>
+                <div style="float: left;padding-top: 4px;" class="dropbtn" title="<%=titleName%>">
+                    <span class="dropbtn" style="margin-top:2px;margin-left: 15px;"><a class="logoutClass" style="color: white;cursor: default;"><%=userName%></a></span>
+                    <td ><a href="/drsr/logout"  style="color: white;margin-left: 6px;"><span class="glyphicon glyphicon-log-out" style="font-size: 16px;"></span></a></td>
+                </div>
+                <%--<div class="dropdown-content">--%>
+                    <%--<a href="/drsr/logout"> <i class="glyphicon glyphicon-off"></i> &nbsp;安全退出</a>--%>
+                <%--</div>--%>
             </div>
+
         </div>
 
         <!-- END TOP NAVIGATION MENU -->
@@ -179,50 +304,63 @@
 
 <!-- END HEADER -->
 <div class="clearfix"></div>
-<div class="page-container" style="min-height: 750px">
+<div class="page-container">
     <!-- BEGIN SIDEBAR -->
     <div class="page-sidebar-wrapper">
         <div class="page-sidebar navbar-collapse collapse">
             <ul class="page-sidebar-menu" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
                 <li>
-                    <div style="height: 70px"></div>
+                    <div style="height: 32px"></div>
                 </li>
                 <li>
-                    <a href="${ctx}/subjectInfo">
-                        <i class="icon-wrench"></i>
-                        <span class="title">数据节点信息</span>
+                    <a href="${ctx}/subjectInfo" onmousemove="img1Over(this)" onmouseout="img1Out(this)">
+                        <%--<i class="icon-wren"></i>--%>
+                        <span class="title"><img class="img1" style="width: 24px;display: inline;"  src="${ctx}/resources/login/img/icon04.png">&nbsp;数据节点信息</span>
                         <span class="arrow "></span>
                     </a>
                 </li>
                 <li>
-                    <a href="javascript:;">
-                        <i class=" icon-drawer"></i>
-                        <span class="title">数据源管理</span>
+                    <a href="javascript:;"  onmousemove="img2Over(this)" onmouseout="img2Out(this)">
+                        <%--<i class=" icon-drawer"></i>--%>
+                        <span class="title"><img class="img2" style="width: 24px;display: inline;" src="${ctx}/resources/login/img/icon01.png">&nbsp;数据源管理&nbsp;&nbsp;&nbsp;</span>
+                        <%--<span class="title">数据源管理</span>--%>
                         <span class="arrow "></span>
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <a href="${ctx}/relationship/index">
-                                关系数据源</a>
+                            <a href="${ctx}/relationship/index" >
+                                <img style="width: 18px;display: inline;height: 16px"  src="${ctx}/resources/login/img/relationImg.jpg">
+                                &nbsp;关系数据源</a>
+
+                            <%--<a href="">--%>
+                                <%--<img style="width: 10px;height: 20px;" src="${ctx}/resources/login/img/relationImg.jpg">--%>
+                                <%--关系数据源</a>--%>
                         </li>
                         <li>
-                            <a href="${ctx}/fileResource/index">
-                                文件数据源</a>
+                            <%--<a href="${ctx}/fileResource/index">--%>
+                                <%--文件数据源</a>--%>
+                            <a href="${ctx}/fileResource/index" >
+                                <img style="width: 18px;display: inline;height: 16px"  src="${ctx}/resources/login/img/fileImg.jpg">
+                                &nbsp;文件数据源</a>
                         </li>
                     </ul>
                 </li>
 
                 <li>
-                    <a href="${ctx}/dataUpload">
-                        <i class="icon-wrench"></i>
-                        <span class="title">数据任务管理</span>
+                    <a href="${ctx}/dataUpload"  onmousemove="img3Over(this)" onmouseout="img3Out(this)">
+                        <%--<i class="icon-wrench"></i>--%>
+                        <span class="title"><img class="img3" style="width: 24px;display: inline;" src="${ctx}/resources/login/img/icon02.png">&nbsp;数据任务管理</span>
+
+                        <%--<span class="title">数据任务管理</span>--%>
                         <span class="arrow "></span>
                     </a>
                 </li>
                 <li>
-                    <a href="${ctx}/createTask">
-                        <i class="icon-wrench"></i>
-                        <span class="title">设置数据任务</span>
+                    <a href="${ctx}/createTask"  onmousemove="img4Over(this)" onmouseout="img4Out(this)">
+                        <%--<i class="icon-wrench"></i>--%>
+                        <span class="title"><img class="img4" style="width: 24px;display: inline;" src="${ctx}/resources/login/img/icon03.png">&nbsp;设置数据任务</span>
+
+                        <%--<span class="title">设置数据任务</span>--%>
                         <span class="arrow "></span>
                     </a>
                 </li>
@@ -236,7 +374,7 @@
     <!-- END CONTENT -->
 </div>
 <!-- BEGIN FOOTER -->
-<div class="page-footer" style="text-align: center;background-color: #454241;margin-top: 50px">
+<div class="page-footer" style="text-align: center;background-color: #454241;height: 4.92% !important;">
     <div class="page-footer-inner" style="color: #FFF;float: none">
         2018-2020 &copy; 中国科学院计算机网络信息中心大数据部.版权所有.
     </div>
@@ -277,6 +415,7 @@
 <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
+    var menu="";
     jQuery(document).ready(function () {
         $.ajaxSetup({ cache: false });
         Metronic.init('${ctx}'); // init metronic core componets
@@ -296,8 +435,23 @@
                         $(this).parent().parent().parent().children("a").trigger("click");
                         $(this).parent().parent().parent().children("a").append('<span class="selected"></span>');
                         $(this).parent().parent().parent().addClass("active");
+                        $(".img2")[0].src="${ctx}/resources/login/img/icon01.1.png";
+                        menu="img2"
+                        $(this).parent().parent().parent().children("a")[0].style.fontWeight="bold";
+                        $(this).parent().children("a")[0].style.fontWeight="bold";
                     } else {
                         $(this).parent().children("a").append('<span class="selected"></span>');
+                        $(this).parent().children("a")[0].style.fontWeight="bold"
+                        if("数据节点信息"==$(this).parent().children("a")[0].innerText.trim()){
+                            $(".img1")[0].src="${ctx}/resources/login/img/icon04.1.png";
+                            menu="img1"
+                        }else if("数据任务管理"==$(this).parent().children("a")[0].innerText.trim()){
+                            $(".img3")[0].src="${ctx}/resources/login/img/icon02.1.png";
+                            menu="img3"
+                        }else if("设置数据任务"==$(this).parent().children("a")[0].innerText.trim()){
+                            $(".img4")[0].src="${ctx}/resources/login/img/icon03.1.png";
+                            menu="img4"
+                        }
                     }
                 }
             });
@@ -339,6 +493,41 @@
         var date = new Date(mil);
         return date.Format("yyyy-MM-dd");
     }
+
+    function img1Over(e){
+        $(".img1")[0].src="${ctx}/resources/login/img/icon04.1.png";
+    }
+    function img1Out(e){
+        if(menu!="img1"){
+            $(".img1")[0].src="${ctx}/resources/login/img/icon04.png";
+        }
+
+    }
+    function img2Over(e){
+        $(".img2")[0].src="${ctx}/resources/login/img/icon01.1.png";
+    }
+    function img2Out(e){
+        if(menu!="img2"){
+            $(".img2")[0].src="${ctx}/resources/login/img/icon01.png";
+        }
+    }
+    function img3Over(e){
+        $(".img3")[0].src="${ctx}/resources/login/img/icon02.1.png";
+    }
+    function img3Out(e){
+        if(menu!="img3"){
+            $(".img3")[0].src="${ctx}/resources/login/img/icon02.png";
+        }
+    }
+    function img4Over(e){
+        $(".img4")[0].src="${ctx}/resources/login/img/icon03.1.png";
+    }
+    function img4Out(e){
+        if(menu!="img4"){
+            $(".img4")[0].src="${ctx}/resources/login/img/icon03.png";
+        }
+    }
+
 </script>
 <!-- END JAVASCRIPTS -->
 <sitemesh:write property="div.siteMeshJavaScript"/>

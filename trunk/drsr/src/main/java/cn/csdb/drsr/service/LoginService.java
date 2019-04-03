@@ -59,9 +59,10 @@ public class LoginService
 
     private boolean getSubjectConfig(String userName)
     {
+        String configFilePathDrsr = LoginService.class.getClassLoader().getResource("drsr.properties").getFile();
         String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
 
-        String portalUrl = ConfigUtil.getConfigItem(configFilePath, "PortalUrl");
+        String portalUrl = ConfigUtil.getConfigItem(configFilePathDrsr, "PortalUrl");
         String getSubjectApiPath = "/api/getSubjectByUser/" + userName;
 
         String url = "http://" + portalUrl + getSubjectApiPath;

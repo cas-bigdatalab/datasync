@@ -17,7 +17,7 @@ public class portalPages {
 
     @RequestMapping("/dataRelease")
     public ModelAndView index() {
-        ModelAndView modelAndView = new ModelAndView("dataRelease");
+        ModelAndView modelAndView = new ModelAndView("dataReleaseNew");
         return modelAndView;
     }
     @RequestMapping("/dataSourceDescribe")
@@ -25,6 +25,8 @@ public class portalPages {
         ModelAndView modelAndView = new ModelAndView("dataSourceDescribe");
         List<MetadataTemplate> list = metadataTemplateService.getAll();
         model.addAttribute("list",list);
+    public ModelAndView index2() {
+        ModelAndView modelAndView = new ModelAndView("dataAdd_Publication");
         return modelAndView;
     }
     @RequestMapping("/editResource")
@@ -39,7 +41,7 @@ public class portalPages {
     }
     @RequestMapping("/dataConfiguration")
     public ModelAndView index5() {
-        ModelAndView modelAndView = new ModelAndView("dataConfiguration");
+        ModelAndView modelAndView = new ModelAndView("dataRealtion_editeFiled");
         return modelAndView;
     }
 
@@ -50,7 +52,7 @@ public class portalPages {
     }
     @RequestMapping("/datatest")
     public ModelAndView  testData(){
-        ModelAndView modelAndView=new ModelAndView("editDataTest");
+        ModelAndView modelAndView=new ModelAndView("dataRealtion_recordManage");
         return modelAndView;
     }
     @RequestMapping("/statisticalDataTotal")
@@ -62,6 +64,13 @@ public class portalPages {
     @RequestMapping("/fileMange")
     public ModelAndView fileMange() {
         ModelAndView modelAndView = new ModelAndView("fileMange");
+        return modelAndView;
+    }
+
+    @RequestMapping("/createTableAndImportData")
+    public ModelAndView createTableAndImportData() {
+        ModelAndView modelAndView = new ModelAndView("dataRelation_createTableAndImportData");
+//        ModelAndView modelAndView = new ModelAndView("dataConfiguration");
         return modelAndView;
     }
 }

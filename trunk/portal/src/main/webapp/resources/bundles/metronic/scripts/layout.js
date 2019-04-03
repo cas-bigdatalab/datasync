@@ -20,7 +20,7 @@ var Layout = function () {
         if (body.hasClass("page-footer-fixed") === true && body.hasClass("page-sidebar-fixed") === false) {
             var available_height = Metronic.getViewPort().height - $('.page-footer').outerHeight() - $('.page-header').outerHeight();
             if (content.height() < available_height) {
-                content.attr('style', 'min-height:' + available_height + 'px');
+                // content.attr('style', 'min-height:' + available_height + 'px');
             }
         } else {
             if (body.hasClass('page-sidebar-fixed')) {
@@ -35,14 +35,14 @@ var Layout = function () {
                 if (Metronic.getViewPort().width < 992) {
                     height = Metronic.getViewPort().height - headerHeight - footerHeight;
                 } else {
-                    height = sidebar.height() + 20;
+                    height = sidebar.height();
                 }
 
                 if ((height + headerHeight + footerHeight) <= Metronic.getViewPort().height) {
                     height = Metronic.getViewPort().height - headerHeight - footerHeight;
                 }
             }
-            content.attr('style', 'min-height:' + height + 'px');
+            // content.attr('style', 'min-height:' + height + 'px');
         }
     };
 

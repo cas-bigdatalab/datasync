@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -47,7 +48,9 @@ public class LoginController {
     }
 
     @RequestMapping(value = "/login")
-    public String login(HttpServletRequest request, @RequestParam(required = true) String userName, @RequestParam(required = true) String password, RedirectAttributes attributes) {
+    public
+    @ResponseBody
+    String login(HttpServletRequest request,HttpServletResponse response, @RequestParam(required = true) String userName, @RequestParam(required = true) String password,@RequestParam String remberPassword,RedirectAttributes attributes) throws IOException {
         logger.info("enterring validateLogin");
         logger.info("userName = " + userName + ", password = " + password);
 
@@ -59,21 +62,50 @@ public class LoginController {
             loginStatus = loginService.validateLogin(userName, password);
         }
 
-        String retView = "";
-        if (loginStatus == 1)
-        {
+        //记住密码
+        request.setCharacterEncoding("utf-8");
+        String remember = "passcookies";//request.getParameter("passcookies");
+        if ("true".equals(remberPassword)) {
+            Cookie c1 = new Cookie("username", userName);
+            Cookie c2 = new Cookie("password", password);
+            Cookie c3 = new Cookie("remberPassword", "checked");
+            c1.setMaxAge(3 * 24 * 60 * 60);
+            c2.setMaxAge(3 * 24 * 60 * 60);//这里设置保存这条Cookie的时间
+            c3.setMaxAge(3 * 24 * 60 * 60);//这里设置保存这条Cookie的时间
+            response.addCookie(c1);//添加Cookie
+            response.addCookie(c2);
+            response.addCookie(c3);
+           } else {
+            Cookie[] c = request.getCookies();
+            for(Cookie cookie:c){
+                if(!"JSESSIONID".equals(cookie.getName())){//避免删除登录状态信息
+                    cookie.setMaxAge(0);
+                    cookie.setValue("");
+                    response.addCookie(cookie);
+                }
+            }
+            System.out.println();
+        }
+        String retView = loginStatus+"";
+        if(loginStatus==1){
             request.getSession().setAttribute("userName", userName);
-            retView = "redirect:/subjectInfo";
         }
-        else if(loginStatus == 2){
-            retView = "redirect:/";
-            attributes.addFlashAttribute("loginNotice", "账号或者密码不能为空！");
-        }
-        else
-        {
-            retView = "redirect:/";
-            attributes.addFlashAttribute("loginNotice", "用户名或密码错误！");
-        }
+
+
+//        if (loginStatus == 1)
+//        {
+//            request.getSession().setAttribute("userName", userName);
+//            retView = "redirect:/subjectInfo";
+//        }
+//        else if(loginStatus == 2){
+//            retView = "redirect:/";
+//            attributes.addFlashAttribute("loginNotice", "账号或者密码不能为空！");
+//        }
+//        else
+//        {
+//            retView = "redirect:/";
+//            attributes.addFlashAttribute("loginNotice", "用户名或密码错误！");
+//        }
 
         return retView;
     }
