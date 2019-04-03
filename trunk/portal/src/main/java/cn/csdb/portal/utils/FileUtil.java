@@ -233,6 +233,19 @@ public class FileUtil {
         return jsonObject;
     }
 
+    public static void createFileByPathAndType(String filepath, String fileType) throws IOException {
+        File f = new File(filepath);
+        if (!f.exists() && "file".equals(fileType)) {
+            File parentFile = f.getParentFile();
+            if (!parentFile.exists()) {
+                parentFile.mkdirs();
+            }
+            f.createNewFile();
+        } else if (!f.exists() && "dir".equals(fileType)) {
+            f.mkdirs();
+        }
+    }
+
     private enum CopyCheck {
         ALLOW,
         MYSELF,
