@@ -93,7 +93,7 @@
             background-color: #339e69;
             height: 100%;
             /*padding: 0 25px 0 40px;*/
-            width: 169px;
+            width: 176px
         }
 
         /* 下拉内容 (默认隐藏) */
@@ -261,6 +261,16 @@
 </head>
 <%--style="font-family: 微软 !important;--%>
 <body class="page-quick-sidebar-over-content page-style-square" >
+<%
+String userName=request.getSession().getAttribute("userName")+"";
+String titleName=request.getSession().getAttribute("userName")+"";
+if(userName != null && userName.length()>6){
+    userName=userName.substring(0,6)+"...";
+    System.out.println(userName);
+}
+
+
+%>
 <!-- BEGIN HEADER -->
 <div class="page-header navbar navbar-static-top" style="background-color: #1e8753;position:relative;">
     <!-- BEGIN HEADER INNER -->
@@ -274,9 +284,9 @@
 
         <div class="dropdown">
             <div style="position: absolute;height: 33px;margin: auto;top: 0;left: 0;bottom: 0;right: 0;">
-                <div style="float: left;"><img src="${ctx}/resources/login/img/user.png" height="34" width="34" style="margin-left: 26px" /></div>
-                <div style="float: left;padding-top: 4px;" class="dropbtn">
-                    <span class="dropbtn" style="margin-top:2px;margin-left: 15px;"><a class="logoutClass" style="color: white;cursor: default;">${sessionScope.userName}</a></span>
+                <div style="float: left;"><img src="${ctx}/resources/login/img/user.png" height="34" width="34" style="margin-left: 20px" /></div>
+                <div style="float: left;padding-top: 4px;" class="dropbtn" title="<%=titleName%>">
+                    <span class="dropbtn" style="margin-top:2px;margin-left: 15px;"><a class="logoutClass" style="color: white;cursor: default;"><%=userName%></a></span>
                     <td ><a href="/drsr/logout"  style="color: white;margin-left: 6px;"><span class="glyphicon glyphicon-log-out" style="font-size: 16px;"></span></a></td>
                 </div>
                 <%--<div class="dropdown-content">--%>
