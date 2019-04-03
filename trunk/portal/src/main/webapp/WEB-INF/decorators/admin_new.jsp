@@ -130,7 +130,8 @@
             <%--NEW BAR ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！--%>
             <div class="page-sidebar" style="width: 18%">
                 <div class="left_bottom">
-                    <div class="left_top"><img src="${ctx}/resources/img/logo.png"></div>
+                    <div class="left_top"><img src="${ctx}/resources/img/logo.png"><span
+                            style="font-weight: bold;color: white;font-size: 20px;">数据管理与发布工具</span></div>
                     <div class="user_div">
                         <table cellspacing="0" cellpadding="0" border="0" align="center">
                             <tbody>
@@ -160,6 +161,10 @@
                                 </li>
                                 <li><a class="" href="${ctx}/dataRelease"><i class="fa fa-upload"
                                                                              aria-hidden="true"></i> 发布审核管理</a>
+                                </li>
+                                <li><a href="${ctx}/admin/metadata"><i class="fa fa-cog"
+                                                                       aria-hidden="true"></i>
+                                    元数据管理</a>
                                 </li>
                                 <li><a class="" href="javaScript:void(0);"><i class="fa  fa-bar-chart"
                                                                               aria-hidden="true"></i> 数据统计管理</a>

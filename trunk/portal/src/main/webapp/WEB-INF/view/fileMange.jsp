@@ -92,7 +92,7 @@
     {{/each}}
     {{else}}
     <tr>
-        <td class="text-center" colspan="3" style="height: 150px">当前目录下没有文件</td>
+        <td class="text-center" colspan="4" style="height: 150px">当前目录下没有文件</td>
     </tr>
     {{/if}}
 </script>

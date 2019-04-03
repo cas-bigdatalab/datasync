@@ -193,7 +193,7 @@
             });
             $.ajax({
                 url: ctx + "/resCatalogSubmit",
-                type: "get",
+                type: "post",
                 dataType: "json",
                 data: {
                     packageTreeData: JSON.stringify(packageTreeData),

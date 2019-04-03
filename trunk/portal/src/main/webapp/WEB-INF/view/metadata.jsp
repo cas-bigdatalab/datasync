@@ -39,9 +39,6 @@
 
 <body>
 
-<div style="height: 850px;min-height: 850px;" class="page-content" >
-    <h3>&nbsp;&nbsp;元数据管理</h3>
-    <hr />
 
     <div class="alert alert-info" role="alert" >
         <!--查询条件 -->
@@ -92,7 +89,6 @@
 
     </div>
 
-</div>
 
 <!--增加元数据-->
 <div class="modal fade" tabindex="-1" role="dialog" id="addModal">
