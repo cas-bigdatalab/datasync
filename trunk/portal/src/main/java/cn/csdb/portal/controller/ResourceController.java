@@ -147,14 +147,13 @@ public class ResourceController {
     @RequestMapping(value = "editResource")
     public ModelAndView resourceEdit(String resourceId,Model model) {
         //ModelAndView mv = new ModelAndView("editResource");
-    public ModelAndView resourceEdit(String resourceId) {
         ModelAndView mv = new ModelAndView("dataEditResource");
         mv.addObject("resourceId", resourceId);
         List<MetadataTemplate> list = metadataTemplateService.getAll();
         model.addAttribute("list",list);
-        /*cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         List<Map<String,Object>> metadataList = resource.getExtMetadata();
-        model.addAttribute("metadataList",metadataList);*/
+        model.addAttribute("metadataList",metadataList);
         return mv;
     }
 

@@ -22,10 +22,9 @@ public class portalPages {
     }
     @RequestMapping("/dataSourceDescribe")
     public ModelAndView index2(Model model) {
-        ModelAndView modelAndView = new ModelAndView("dataSourceDescribe");
+        //ModelAndView modelAndView = new ModelAndView("dataSourceDescribe");
         List<MetadataTemplate> list = metadataTemplateService.getAll();
         model.addAttribute("list",list);
-    public ModelAndView index2() {
         ModelAndView modelAndView = new ModelAndView("dataAdd_Publication");
         return modelAndView;
     }
