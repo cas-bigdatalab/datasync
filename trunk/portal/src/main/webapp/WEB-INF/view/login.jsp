@@ -55,7 +55,7 @@
                     for="rememberPassword">记住密码</label>
             </div>
             <div class="col-xs-6 text-right">
-                <a href="#">注册</a>
+                <%--<a href="#">注册</a>--%>
                 <input type="submit" id="loginButton" value="登录" class="submit_btn"
                        style="width:40%;font-size:16px;background:#296ebf;color:#f8f8f8;height: 30px;border: none;border-radius: 6px;"/>
             </div>

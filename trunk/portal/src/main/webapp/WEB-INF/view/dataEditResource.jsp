@@ -250,7 +250,66 @@
                                             </div>
 
                                         </div>
+                                        <%--xiajl20190310增加 动态扩展元数据信自展示--%>
+                                        <div id="divExtMetadata">
+                                            <div><br/>自定义扩展的元数据信息：</div>
+                                            <c:forEach items="${list}" var="item">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">${item.extFieldName}
+                                                        <c:if test="${item.isMust eq 1}">
+                                                            <span class="required"> * </span>
+                                                        </c:if>
+                                                        <c:if test="${item.isMust != 1}">
+                                                            <span style="margin-left:13px"></span>
+                                                        </c:if>
+                                                    </label>
+                                                    <div class="col-md-5" style="padding-top:13px">
+                                                        <c:choose>
+                                                            <c:when test="${item.type eq 'List'}">
+                                                                <select class="form-control enumdataclass"
+                                                                        data="${item.enumdata}"
+                                                                        name=${item.extField} placeholder="请输入${item.extFieldName}"
+                                                                        id=${item.extField}>
+                                                                    <c:forEach items="${item.enumdataList}" var="data">
+                                                                        <option value="${data}">${data}</option>
+                                                                    </c:forEach>
 
+                                                                </select>
+                                                            </c:when>
+                                                            <c:when test="${item.type eq 'DateTime'}">
+                                                                <input type="text" class="form-control selectData"
+                                                                       name=${item.extField}  "
+                                                                       id=${item.extField}  data-date-format="
+                                                                       yyyy-mm-dd" placeholder=${item.extFieldName} >
+                                                            </c:when>
+                                                            <c:when test="${item.type eq 'Integer'}">
+                                                                <input type="text" class="form-control"
+                                                                       name=${item.extField} placeholder="请输入${item.extFieldName}"
+                                                                       id=${item.extField}  digits="true"
+                                                                <c:if test="${item.isMust eq 1}">
+                                                                       required='required'</c:if> >
+                                                            </c:when>
+
+                                                            <c:when test="${item.type eq 'Double'}">
+                                                                <input type="text" class="form-control"
+                                                                       name=${item.extField} placeholder="请输入${item.extFieldName}"
+                                                                       id=${item.extField}  number="true"
+                                                                <c:if test="${item.isMust eq 1}">
+                                                                       required='required'</c:if> >
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <input type="text" class="form-control"
+                                                                       name=${item.extField} placeholder="请输入${item.extFieldName}"
+                                                                       id=${item.extField}
+                                                                       <c:if test="${item.isMust eq 1}"> required='required'</c:if>  >
+                                                            </c:otherwise>
+                                                        </c:choose>
+
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+
+                                        </div>
 
 
 
@@ -934,6 +993,16 @@
             } else {
                 createTime = $.trim($("#createTime").val());
             }
+            //xiajl20190310增加 扩展元数据
+            var d = {};
+            var t = $("#submit_form2").serializeArray();
+            $.each(t, function () {
+                console.log(this.name);
+                if (this.name.indexOf("ext_") >= 0) {
+                    d[this.name] = this.value;
+                }
+            });
+            var extData = JSON.stringify(d);
             $.ajax({
                 url:ctx+"/resource/editResourceFirstStep",
                 type:"POST",
@@ -952,7 +1021,8 @@
                     createTime: createTime,
                     publishOrganization:$("#publish_Organization").val(),
                     createOrganization:$("#create_Organization").val(),
-                    createPerson:$("#create_person").val()
+                    createPerson: $("#create_person").val(),
+                    extMetadata: extData
                 },
                 success:function (data) {
                 },
@@ -1026,6 +1096,23 @@
                     $('#permissions').select2({
                         placeholder: "请选择用户",
                         allowClear: true,
+                    });
+
+                    //xiajl20190310增加，显示扩展元数据信息
+                    console.log('begin20190310');
+
+                    $("#divExtMetadata input,select").each(function () {
+                        var str = this.name;
+                        var valueStr = "";
+                        for (var i = 0; i < totalList.extMetadata.length; i++) {
+                            $.each(totalList.extMetadata[i], function (key, value) {
+                                if (key == str) {
+                                    valueStr = value;
+                                }
+                            })
+                        }
+                        console.log("xiajl=====:" + valueStr);
+                        $(this).val(valueStr);
                     });
                 },
                 error:function (data) {
