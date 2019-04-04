@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -59,12 +58,12 @@ public class HttpServiceController {
 //        String realPath = dataTask.getRealPath();
         Subject subject = subjectMgmtService.findByCode(subjectCode);
         String siteFtpPath = subject.getFtpFilePath();
-        siteFtpPath += "temp/";
+/*        siteFtpPath += "temp/";
         try {
             FileUtil.createFileByPathAndType(siteFtpPath, "dir");
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
         dataTask.setSubjectCode(subject.getSubjectCode());
         String sqlFilePath = dataTask.getSqlFilePath();
         sqlFilePath = sqlFilePath.replaceAll("%_%", File.separator);
