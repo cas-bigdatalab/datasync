@@ -1117,7 +1117,11 @@
             var treeObj=$.fn.zTree.getZTreeObj("remoteTree"),
                 nodes=treeObj.getCheckedNodes(true),v="";
             for(var i=0;i<nodes.length;i++){
-                pathsOfCheckedFiles.push(nodes[i].pid+"/"+nodes[i].name);
+                if(nodes[i].pid==0){
+                    pathsOfCheckedFiles.push(nodes[i].id);
+                }else {
+                    pathsOfCheckedFiles.push(nodes[i].pid+"/"+nodes[i].name);
+                }
             }
             return pathsOfCheckedFiles;
         }
