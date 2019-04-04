@@ -71,6 +71,9 @@
                     </div>
                 </form>
             </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn default">退出</button>
+            </div>
         </div>
     </div>
 </div>
@@ -168,6 +171,7 @@
 <div id="siteMeshJavaScript">
     <script type="text/javascript" src="${ctx}/resources/bundles/context/context.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-fileinput/js/locals/zh.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/layerJs/layer.js"></script>
 
     <script>

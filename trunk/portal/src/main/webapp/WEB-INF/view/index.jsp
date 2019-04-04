@@ -13,7 +13,14 @@
 <html>
 
 <head>
-    <title>数据管理与发布工具</title>
+    <title>
+        <shiro:hasRole name="admin">
+            数据管理与发布工具
+        </shiro:hasRole>
+        <shiro:hasRole name="root">
+            学科数据后台管理系统
+        </shiro:hasRole>
+    </title>
     <style type="text/css">
         .task-title {
             line-height: 50px;
@@ -51,14 +58,19 @@
 
 <body>
 
-<shiro:hasRole name="root">
+<shiro:hasRole name="admin">
     <h3><b>欢迎使用数据管理与发布工具</b></h3>
+</shiro:hasRole>
+
+<shiro:hasRole name="root">
+    <%--<h3><b>欢迎使用学科数据节点后台管理系统</b></h3>--%>
+    <h1 style="margin-top: 20%;margin-left: 35%;"><b>欢迎使用学科数据后台管理系统</b></h1>
 </shiro:hasRole>
 <%--<shiro:hasRole name="admin">
     <h3><b>欢迎使用数据管理与发布工具</b></h3>
     <hr>
     <div class="task-title" style="font-size: 16px; font-weight: bold; padding-right:250px;text-align: center;">
-        <span>主题库信息</span>
+        <span>学科节点信息</span>
     </div>
 
     <div class="messageCon"  style="font-size: 18px;padding: 25px 50px">
@@ -66,12 +78,12 @@
 
 
             <div class="form-group">
-                <div  class="col-sm-4" style="text-align: right;font-weight: bold;color: #000000">主题库名称:</div>
+                <div  class="col-sm-4" style="text-align: right;font-weight: bold;color: #000000">学科节点名称:</div>
                 <div class="col-sm-6" style="padding-left: 50px;">${subject.subjectName}</div>
             </div>
 
             <div class="form-group">
-                <div  class="col-sm-4 " style="text-align: right;font-weight: bold;color: #000000">主题库代码:</div>
+                <div  class="col-sm-4 " style="text-align: right;font-weight: bold;color: #000000">学科节点代码:</div>
                 <div class="col-sm-6" style="padding-left: 50px;">${subject.subjectCode}</div>
             </div>
 
@@ -113,11 +125,11 @@
         <table class="table list">
             <tbody>
             <tr>
-                <th>主题库名称:</th>
+                <th>学科节点名称:</th>
                 <td>${subject.subjectName}</td>
             </tr>
             <tr>
-                <th>主题库代码:</th>
+                <th>学科节点代码:</th>
                 <td>${subject.subjectCode}</td>
             </tr>
             <tr>

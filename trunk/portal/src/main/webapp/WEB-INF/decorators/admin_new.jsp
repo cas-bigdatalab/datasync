@@ -16,11 +16,11 @@
 <html>
 <head>
     <title>
-        <shiro:hasRole name="root">
-            数据管理与发布工具
-        </shiro:hasRole>
         <shiro:hasRole name="admin">
             数据管理与发布工具
+        </shiro:hasRole>
+        <shiro:hasRole name="root">
+            学科数据后台管理系统
         </shiro:hasRole>
     </title>
 
@@ -130,8 +130,14 @@
             <%--NEW BAR ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！--%>
             <div class="page-sidebar" style="width: 18%">
                 <div class="left_bottom">
-                    <div class="left_top"><img src="${ctx}/resources/img/logo.png"><span
-                            style="font-weight: bold;color: white;font-size: 20px;">数据管理与发布工具</span></div>
+                    <div class="left_top"><img src="${ctx}/resources/img/logo.png">
+                        <shiro:hasRole name="admin">
+                            <span style="font-weight: bold;color: white;font-size: 20px;">数据管理与发布工具</span>
+                        </shiro:hasRole>
+                        <shiro:hasRole name="root">
+                            <span style="font-weight: bold;color: white;font-size: 20px;">学科数据后台管理系统</span>
+                        </shiro:hasRole>
+                    </div>
                     <div class="user_div">
                         <table cellspacing="0" cellpadding="0" border="0" align="center">
                             <tbody>
@@ -151,7 +157,7 @@
                             <ul>
                                 <li><a href="${ctx}/subjectMgmt/subjectIndex"><i class="fa fa-cog"
                                                                                  aria-hidden="true"></i>
-                                    主题库注册管理</a>
+                                    学科节点注册管理</a>
                                 </li>
                                 <li><a class="" href="${ctx}/resCatalog"><i class="fa fa-book"
                                                                             aria-hidden="true"></i> 数据分类管理</a>
@@ -166,13 +172,8 @@
                                                                        aria-hidden="true"></i>
                                     元数据管理</a>
                                 </li>
-                                <li><a class="" href="javaScript:void(0);"><i class="fa  fa-bar-chart"
-                                                                              aria-hidden="true"></i> 数据统计管理</a>
-                                    <ul>
-                                        <li class="l2-menu"><a href="${ctx}/statisticalDataDetail"><i
-                                                class="fa fa-bars"></i> 专题detail</a></li>
-                                        </li>
-                                    </ul>
+                                <li><a class="" href="${ctx}/statisticalDataDetail"><i class="fa  fa-bar-chart"
+                                                                                       aria-hidden="true"></i> 数据统计管理</a>
                                 </li>
                             </ul>
 

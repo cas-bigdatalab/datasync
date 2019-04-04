@@ -1,5 +1,5 @@
 <%--
-    ！！！废弃
+    ！！！废弃 被admin_new.jsp 替换
   Created by IntelliJ IDEA.
   User: xiajl
   Date: 2018/9/21
@@ -123,7 +123,7 @@
                     <li class="start">
                         <a href="${ctx}/subjectMgmt/subjectIndex">
                             <i class="icon-user"></i>
-                            <span class="title">主题库注册管理</span>
+                            <span class="title">学科节点注册管理</span>
                             <span class="arrow"></span>
                         </a>
                     </li>

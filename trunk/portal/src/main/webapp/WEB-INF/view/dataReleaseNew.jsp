@@ -498,22 +498,13 @@
                         </td>
                         <td width="1"></td>
                     </shiro:hasRole>
+                    {{/if}}
 
                     <shiro:hasRole name="admin">
-                        <%--<button type="button" class="btn  edit-data btn-xs blue"--%>
-                        <%--onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')"><i--%>
-                        <%--class="fa fa-eye"></i>&nbsp;查看--%>
-                        <%--</button>--%>
-                        <td class="chakan"><a href="javascript:;" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')">
+                        <td class="chakan"><a href="javascript:;"
+                                              onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')">
                             <i class="fa fa-eye" aria-hidden="true"></i> 查看</a></td>
                         <td width="1"></td>
-                    </shiro:hasRole>
-
-                    {{/if}}
-                    <shiro:hasRole name="admin">
-                        <%--<button type="button" class="btn  btn-xs red remove-data" onclick="removeData('{{value.id}}');"><i--%>
-                        <%--class="glyphicon glyphicon-trash"></i>&nbsp;删除--%>
-                        <%--</button>--%>
                         <td class="shanchu"><a href="javascript:;"  onclick="removeData('{{value.id}}');"><i class="fa fa-window-close-o" aria-hidden="true"></i> 删除</a>
                         </td>
                     </shiro:hasRole>

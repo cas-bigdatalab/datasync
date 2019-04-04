@@ -61,7 +61,7 @@
         <div class="tap_div" style="margin-top:15px;">
         <div id="div1" style="width: 100%;height:400px;">
             <div class="report-title">
-                <h4><i class="fa fa-caret-right"></i>专题库访问量下载TOP10统计</h4>
+                <h4><i class="fa fa-caret-right"></i>学科节点访问量下载TOP10统计</h4>
                 <div></div>
                 <a href="#" class="more" onclick="func_moreDetail()">查看更多</a>
             </div>
@@ -74,7 +74,7 @@
         <%-- 专题详情--%>
         <div id="div2" style="width: 100%;height:700px; display: none;">
                 <div class="report-title">
-                    <h4><i class="fa fa-caret-right"></i>专题库访问量下载量统计</h4>
+                    <h4><i class="fa fa-caret-right"></i>学科节点访问量下载量统计</h4>
                     <div></div>
                     <a href="#" class="more" onclick="func_toTopTen()">返回</a>
                 </div>
@@ -95,12 +95,12 @@
         </div>
 
 
-        <%--显示所有专题库--%>
+            <%--显示所有学科节点--%>
         <div id="themeList" style="width: 100%;margin-top: 50px;">
-            <%--<div style="background-color: #0d957a;color: #FFFFFF;height:3%;width: 200px;height: 30px;">按专题库查看访问量下载量--%>
+            <%--<div style="background-color: #0d957a;color: #FFFFFF;height:3%;width: 200px;height: 30px;">按学科节点查看访问量下载量--%>
             <%--</div>--%>
                 <div class="report-title">
-                    <h4><i class="fa fa-caret-right"></i>按专题库查看访问量下载量</h4>
+                    <h4><i class="fa fa-caret-right"></i>按学科节点查看访问量下载量</h4>
                     <div></div>
                     <a href="#" class="more"></a>
                 </div>
@@ -111,15 +111,15 @@
                 </div>
             </div>
         </div>
-        <%--根据专题库查看该专题库内的访问量下载量--%>
+            <%--根据学科节点查看该学科节点内的访问量下载量--%>
         <div id="themeDetail" style="width: 100%;height:70%;margin-top: 100px;display: none;margin-bottom: 3%;">
             <%--<div style="width: 100%;height: 10%;">--%>
-                <%--<span style="float: left;background-color: #0d957a;color: #FFFFFF;height:3%;width: 200px;height: 30px;">按专题库查看访问量下载量</span>--%>
+            <%--<span style="float: left;background-color: #0d957a;color: #FFFFFF;height:3%;width: 200px;height: 30px;">按学科节点查看访问量下载量</span>--%>
                 <%--<span style="float: left;margin-left: 30%;"><a>
                 <button id="reback_id"  style="background-color: #0d957a;color: #FFFFFF;height:3%;width: 100px;height: 30px;"><<<</button></a></span>--%>
             <%--</div>--%>
                 <div class="report-title">
-                    <h4><i class="fa fa-caret-right"></i>按专题库查看访问量下载量</h4>
+                    <h4><i class="fa fa-caret-right"></i>按学科节点查看访问量下载量</h4>
                     <div></div>
                     <a id="reback_id" href="#" class="more">返回</a>
                 </div>
@@ -231,7 +231,7 @@
                 var chart = echarts.init(document.getElementById('datashowvisit'));
                 var option = {
                     title: {
-                        text: '专题库TOP10访问量',
+                        text: '学科节点TOP10访问量',
                         left: 'center'
                     },
                     tooltip: {
@@ -302,7 +302,7 @@
                 var option = {
                     // color: ['#5182bb', '#be4f4f', '#9bbb5e', '#8064a1', '#4facc5', '#2d4d74'],
                     title: {
-                        text: '专题库TOP10下载量',
+                        text: '学科节点TOP10下载量',
                         left: 'center'
                     },
                     tooltip: {
@@ -731,7 +731,7 @@
                     var chart = echarts.init(document.getElementById('datashowvisitTotal'));
                     var option = {
                         title: {
-                            text: '专题库访问量统计',
+                            text: '学科节点访问量统计',
                             left: 'center'
                         },
                         tooltip: {
@@ -801,7 +801,7 @@
                     var chart = echarts.init(document.getElementById('datashowdownTotal'));
                     var option = {
                         title: {
-                            text: '专题库下载量统计',
+                            text: '学科节点下载量统计',
                             left: 'center'
                         },
                         tooltip: {
