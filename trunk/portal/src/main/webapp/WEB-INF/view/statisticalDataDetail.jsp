@@ -123,7 +123,7 @@
                     <div></div>
                     <a id="reback_id" href="#" class="more">返回</a>
                 </div>
-            <div id="themeDetail111" style="width: 80%;margin-top:1%;margin-left: 10%;height: 25%;">
+                <div id="themeDetail111" style="width: 80%;margin-top:1%;margin-left: 10%;height: 60%;">
 
             </div>
             <div id="detialCharts" style="width: 100%; float: none">
@@ -167,7 +167,7 @@
 
 <script type="text/html" id="showAllTheme">
     {{each list as value i}}
-    <div class="pic-item" style=" width: 20%; float: left; padding: 5px;height: 250px;">
+    <div class="pic-item" style=" width: 20%; float: left; padding: 5px;">
         <a href="javaScript:void(0)" id="{{value.subjectCode}}" onclick="findBySubjectCode(this)">
             <img src="${ctx}/IoReadImage?filePath={{value.imagePath}}" width="100%;"/>
             <h5 style="text-align: center;" >{{value.subjectName}}</h5>

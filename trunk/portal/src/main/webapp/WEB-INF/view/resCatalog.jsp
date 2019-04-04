@@ -81,7 +81,7 @@
                 '<button type="button" class="btn btn-default btn-sm" onclick="jstree_rename();"><i class="glyphicon glyphicon-pencil"></i> 重命名</button> ' +
                 '<button type="button" class="btn btn-default btn-sm" onclick="jstree_delete();"><i class="glyphicon glyphicon-remove"></i> 删除</button> ' +
                 '</div> ' +
-                '<div id="jstree_edit" style="max-height:350px;overflow: auto;margin-bottom: 25px;"></div> ' +
+                '<div id="jstree_edit" style="overflow: auto;margin-bottom: 25px;"></div> ' +
                 '<button type="button" class="btn btn-default btn-sm" onclick="jstree_cancel();" style="margin-left:5px"><i class="glyphicon glyphicon-remove"></i> 取消</button>' +
                 '<button type="button" class="btn btn-primary btn-sm" onclick="jstree_submit();" style="margin-left:5px"><i class="glyphicon glyphicon-ok"></i> 提交</button>'
             $("#editRegon").append(html);
@@ -125,7 +125,16 @@
             sel = sel[0];
 
             sel = ref.create_node(sel);
-            ref.set_icon(sel, "glyphicon glyphicon-th-list");
+            var selLevel = ref.get_selected("true")[0].parents.length;
+            if (selLevel === 1) {
+                ref.set_icon(sel, "${ctx}/resources/img/first.png");
+            } else if (selLevel === 2) {
+                ref.set_icon(sel, "${ctx}/resources/img/second.png");
+            } else if (selLevel === 3) {
+                ref.set_icon(sel, "${ctx}/resources/img/third.png");
+            } else {
+                ref.set_icon(sel, "glyphicon glyphicon-th-list");
+            }
 
             if (sel) {
                 ref.edit(sel);

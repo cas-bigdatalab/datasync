@@ -129,8 +129,10 @@ var context = context || (function () {
                     }).fadeIn(options.fadeSpeed);
                 } else {
                     $dd.css({
-                        top: e.pageY + 10,
-                        left: e.pageX - 13
+                        /*top: e.pageY + 10,
+                        left: e.pageX - 13*/
+                        top: e.pageY,
+                        left: e.pageX
                     }).fadeIn(options.fadeSpeed);
                 }
             }
