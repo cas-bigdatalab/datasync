@@ -21,6 +21,7 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.css">
     <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/fileinput.min.css">
 
     <style>
         .undeslist label{
@@ -330,6 +331,7 @@
                                         <input name="ways" type="radio" value="LH" id="bbb"/>
                                         <label for="bbb" style="font-size: 18px;color: #1CA04C">文件型数据</label>
                                     </div>
+                                    <div style="height: 15px"></div>
                                     <div style="overflow: hidden" class="select-database" >
                                         <div class="col-md-2" style="font-size: 18px;text-align:left;margin: 0 -15px ">
                                             <span>选择表资源</span>
@@ -344,6 +346,13 @@
                                             <span>选择文件资源</span>
                                         </div>
                                         <div class="col-md-6 col-md-offset-1" style="font-size: 18px" id="fileContainerTree"></div>
+                                        <div style="height: 15px"></div>
+                                        <div class="col-md-4 col-md-offset-2" style="font-size: 18px;width: 68%;">
+                                            <span style="margin-left: -26%;">在线上传：</span>
+                                            <div>
+                                                <input id="file-1" type="file" multiple>
+                                            </div>
+                                        </div>
                                         <div id="fileDescribeDiv" style="display: none">
 
                                         </div>
@@ -476,6 +485,8 @@
     <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
     <script src="${ctx}/resources/js/jquery.json.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
+        <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-fileinput/js/fileinput.min.js"></script>
+        <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-fileinput/js/locals/zh.js"></script>
     <script type="text/javascript">
         var ctx = '${ctx}';
         var sub = '${sessionScope.SubjectCode}'
@@ -501,6 +512,21 @@
             $(".fabu_div2").html("数据发布 - 第1步，共3步");
         });
 
+        $("#file-1").fileinput({
+            theme: 'fas',
+            language: 'zh',
+            uploadUrl: '#', // you must set a valid URL here else you will get an error
+            allowedFileExtensions: ['jpg', 'png', 'gif'],
+            overwriteInitial: false,
+            maxFileSize: 1000,
+            maxFilesNum: 10,
+            dropZoneEnabled: false,
+            showPreview: false,
+            //allowedFileTypes: ['image', 'video', 'flash'],
+            slugCallback: function (filename) {
+                return filename.replace('(', '_').replace(']', '_');
+            }
+        });
         //将图片截图并上传功能
         $('.selectData').datepicker({
             language:'zh-CN'

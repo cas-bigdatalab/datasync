@@ -24,6 +24,7 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">
     <link href="${ctx}/resources/bundles/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/zTree_v3/css/demo.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/fileinput.min.css">
     <style>
         .undeslist label{
             font-size: 18px;
@@ -326,6 +327,7 @@
                                         <input name="ways" type="radio" value="LH" id="bbb"/>
                                         <label for="bbb" style="font-size: 18px;color: #1CA04C">文件型数据</label>
                                     </div>
+                                    <div style="height: 15px"></div>
                                     <div style="overflow: hidden" class="select-database" >
                                         <div class="col-md-2" style="font-size: 18px;text-align:left;margin: 0 -15px ">
                                             <span>选择表资源</span>
@@ -338,6 +340,13 @@
                                     <div style="overflow: hidden;display: none" class="select-local">
                                         <div class="col-md-4 col-md-offset-2" style="font-size: 18px;width: 68%;" id="fileContainerTree">
                                             <ul id="treeDemo" class="ztree" style="width: 100%;"></ul>
+                                        </div>
+                                        <div style="height: 15px"></div>
+                                        <div class="col-md-4 col-md-offset-2" style="font-size: 18px;width: 68%;">
+                                            <span style="margin-left: -26%;">在线上传：</span>
+                                            <div>
+                                                <input id="file-1" type="file" multiple>
+                                            </div>
                                         </div>
                                         <div id="fileDescribeDiv" class="col-md-5 tagsinput" style="border: 1px solid grey;display: none" >
 
@@ -464,6 +473,8 @@
     <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
     <script src="${ctx}/resources/bundles/zTree_v3/js/jquery.ztree.all.js"></script>
     <script src="${ctx}/resources/js/jquery.json.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-fileinput/js/locals/zh.js"></script>
     <script type="text/javascript">
         var ctx = '${ctx}';
         var sdoId = "${resourceId}";
@@ -479,6 +490,21 @@
         $(function(){
             // $(".time_div").html("");
             $(".fabu_div2").html("数据发布 - 第1步，共3步");
+            $("#file-1").fileinput({
+                theme: 'fas',
+                language: 'zh',
+                uploadUrl: '#', // you must set a valid URL here else you will get an error
+                allowedFileExtensions: ['jpg', 'png', 'gif'],
+                overwriteInitial: false,
+                maxFileSize: 1000,
+                maxFilesNum: 10,
+                dropZoneEnabled: false,
+                showPreview: false,
+                //allowedFileTypes: ['image', 'video', 'flash'],
+                slugCallback: function (filename) {
+                    return filename.replace('(', '_').replace(']', '_');
+                }
+            });
         });
 
         /*var tagNames=new Array();*/
