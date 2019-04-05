@@ -102,7 +102,7 @@ var context = context || (function () {
             e.preventDefault();
             e.stopPropagation();
             // 获取触发事件元素的path
-            var findPath = $(e.currentTarget).find("td").attr("path");
+            var findPath = $(e.currentTarget).find("td:eq(1)").attr("path");
             $("#currentPath").data("currentPath", findPath);
             // 获取触发事件元素的name
             var findName = $(e.currentTarget).find(".text_name").text();
@@ -129,8 +129,10 @@ var context = context || (function () {
                     }).fadeIn(options.fadeSpeed);
                 } else {
                     $dd.css({
-                        top: e.pageY + 10,
-                        left: e.pageX - 13
+                        /*top: e.pageY + 10,
+                        left: e.pageX - 13*/
+                        top: e.pageY,
+                        left: e.pageX
                     }).fadeIn(options.fadeSpeed);
                 }
             }

@@ -16,11 +16,11 @@
 <html>
 <head>
     <title>
-        <shiro:hasRole name="root">
-            主题库后台管理系统
-        </shiro:hasRole>
         <shiro:hasRole name="admin">
-            集中式数据管理与定制化融合发布工具
+            数据管理与发布工具
+        </shiro:hasRole>
+        <shiro:hasRole name="root">
+            学科数据后台管理系统
         </shiro:hasRole>
     </title>
 
@@ -130,7 +130,14 @@
             <%--NEW BAR ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！--%>
             <div class="page-sidebar" style="width: 18%">
                 <div class="left_bottom">
-                    <div class="left_top"><img src="${ctx}/resources/img/logo.png"></div>
+                    <div class="left_top"><img src="${ctx}/resources/img/logo.png">
+                        <shiro:hasRole name="admin">
+                            <span style="font-weight: bold;color: white;font-size: 20px;">数据管理与发布工具</span>
+                        </shiro:hasRole>
+                        <shiro:hasRole name="root">
+                            <span style="font-weight: bold;color: white;font-size: 20px;">学科数据后台管理系统</span>
+                        </shiro:hasRole>
+                    </div>
                     <div class="user_div">
                         <table cellspacing="0" cellpadding="0" border="0" align="center">
                             <tbody>
@@ -139,7 +146,8 @@
                             </tr>
                             <tr>
                                 <td>欢迎您！${sessionScope.userName}</td>
-                                <td><a style="border-radius: 6px;margin-left:6px;color: #ef124d" href="${ctx}/logout"><span class="glyphicon glyphicon-off"></span></a></td>
+                                <td><a style="border-radius: 6px;margin-left:6px;color: #FFFFff"
+                                       href="${ctx}/logout"><span class="glyphicon glyphicon-log-out"></span></a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -149,7 +157,7 @@
                             <ul>
                                 <li><a href="${ctx}/subjectMgmt/subjectIndex"><i class="fa fa-cog"
                                                                                  aria-hidden="true"></i>
-                                    主题库注册管理</a>
+                                    学科节点注册管理</a>
                                 </li>
                                 <li><a class="" href="${ctx}/resCatalog"><i class="fa fa-book"
                                                                             aria-hidden="true"></i> 数据分类管理</a>
@@ -160,13 +168,12 @@
                                 <li><a class="" href="${ctx}/dataRelease"><i class="fa fa-upload"
                                                                              aria-hidden="true"></i> 发布审核管理</a>
                                 </li>
-                                <li><a class="" href="javaScript:void(0);"><i class="fa  fa-bar-chart"
-                                                                              aria-hidden="true"></i> 数据统计管理</a>
-                                    <ul>
-                                        <li class="l2-menu"><a href="${ctx}/statisticalDataDetail"><i
-                                                class="fa fa-bars"></i> 专题detail</a></li>
-                                        </li>
-                                    </ul>
+                                <li><a href="${ctx}/admin/metadata"><i class="fa fa-cog"
+                                                                       aria-hidden="true"></i>
+                                    元数据管理</a>
+                                </li>
+                                <li><a class="" href="${ctx}/statisticalDataDetail"><i class="fa  fa-bar-chart"
+                                                                                       aria-hidden="true"></i> 数据统计管理</a>
                                 </li>
                             </ul>
 
@@ -354,10 +361,13 @@
         // 根据显示器重置 div.page-content 实际内容区域大小
         var $page_content = $(".page-content");
         $page_content.css("margin-left", $(".page-sidebar").width());
-        $page_content.css("min-height", $page_content.height() - $(".foot_div").height());
+        // $page_content.css("min-height", $page_content.height() - $(".foot_div").height());
+        $page_content.css("min-height", "");
+        $page_content.css("height", "95%");
 
 
-        $("#content").css("height", $page_content.height() - $("#content-top").height() - parseInt($(".fabu_div2").css("margin-bottom")) * 2 - parseInt($("div.right_div").css("padding-top")))
+        /* $("#content").css("height", $page_content.height() - $("#content-top").height() - parseInt($(".fabu_div2").css("margin-bottom")) * 2 - parseInt($("div.right_div").css("padding-top")))*/
+        $("#content").height("90%");
     });
 
 </script>

@@ -24,7 +24,7 @@
             width: 100% !important;
         }
         .col-md-2 {
-            width: 8.66666667%;
+            width: 12.66666667%;
         }
         div#rMenu {position:absolute; visibility:hidden; top:0; background-color: #555;text-align: left;padding: 2px;}
         div#rMenu ul li{
@@ -37,9 +37,9 @@
         .btn-primary,.red.btn,.blue.btn,.form-control,#DBchange,#DBFilechange,.green.btn{
             border-radius: 6px !important;
         }
-        .col-md-2 {
-            width: 16.66666667% !important;
-        }
+        /*.col-md-2 {*/
+            /*width: 16.66666667% !important;*/
+        /*}*/
         .btn-primary {
             background-color: #137450 !important;
         }
@@ -52,6 +52,7 @@
             background: #e8e3e3;
             padding-left: 22px;
             border:none;
+            height: 60%;
         }
         ::-webkit-scrollbar-track{
             background-color: #e8e3e3 !important;
@@ -62,6 +63,12 @@
             color: white;
             padding-left: 22px;
             line-height: 38px;
+        }
+        .ztree li span {
+            font-size: 16px;
+        }
+        .row {
+            margin-right: 0 !important;
         }
 
     </style>
@@ -101,15 +108,15 @@
                 <div class="row">
                     <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
                     <div class="col-md-9 dataHead2" id="resTitle" style="display: none"></div>
-                    <div class="col-md-12" style="margin: 0 -15px;height: 54%;overflow: auto;">
+                    <div class="col-md-12" style="margin: 0 -15px;height: 60%;width: 98% !important;">
                         <div class="col-md-2" style="margin: 0 -15px">选择表资源</div>
-                        <div class="col-md-10" >
+                        <div class="col-md-10" style="width: 89.333333%;margin-top: 28px;padding-right: 0px !important;background-color: white;height: 100%;overflow: auto;">
                             <div class="row" id="db-table" style="margin-top: 6px"></div>
                         </div>
                     </div>
                     <div id="totalList">
-                        <div class="col-md-12" style="margin-bottom: 10px;padding-top: 10px;" >
-                            <div class="col-md-2" style="text-align: right">SQL查询</div>
+                        <div class="col-md-12" style="margin-bottom: 10px;padding-top: 50px;" >
+                            <div class="col-md-2" style="text-align: right;margin-left: 35px;">SQL查询</div>
                             <div class="col-md-4">
                                 <input type="text" class="form-control sqlStatements inputVili" >
                             </div>
@@ -170,7 +177,7 @@
                     </div>
                     <div class="col-md-12 ">
                         <hr>
-                        <button type="button" class="btn green pull-right" onclick="sendFileTask()" style="margin: 1% 51%;">提交</button>
+                        <button type="button" class="btn green pull-right" onclick="sendFileTask()" >提交</button>
                     </div>
 
 
@@ -308,7 +315,7 @@
     {{/each}}
 </script>
 <script type="text/html" id="addSql">
-    <div class="col-md-12" style="margin-bottom: 10px" name="aaaa">
+    <div class="col-md-12" style="margin-bottom: 10px;margin-left: 35px;" name="aaaa">
         <div class="col-md-2" style="text-align: right">SQL查询</div>
         <div class="col-md-4">
             <input type="text" class="form-control sqlStatements inputVili" >
@@ -1110,8 +1117,11 @@
             var treeObj=$.fn.zTree.getZTreeObj("remoteTree"),
                 nodes=treeObj.getCheckedNodes(true),v="";
             for(var i=0;i<nodes.length;i++){
-                debugger
-                pathsOfCheckedFiles.push(nodes[i].pid+"/"+nodes[i].name);
+                if(nodes[i].pid==0){
+                    pathsOfCheckedFiles.push(nodes[i].id);
+                }else {
+                    pathsOfCheckedFiles.push(nodes[i].pid+"/"+nodes[i].name);
+                }
             }
             return pathsOfCheckedFiles;
         }

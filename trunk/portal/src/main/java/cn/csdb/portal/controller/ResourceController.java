@@ -8,6 +8,7 @@ import cn.csdb.portal.utils.FileUploadUtil;
 import cn.csdb.portal.utils.ImgCut;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -55,7 +56,8 @@ public class ResourceController {
     @Resource
     private TableFieldComsDao tableFieldComsDao;
 
-
+    @Resource
+    private MetadataTemplateService metadataTemplateService;
 
     private Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
@@ -143,9 +145,15 @@ public class ResourceController {
     }
 
     @RequestMapping(value = "editResource")
-    public ModelAndView resourceEdit(String resourceId) {
+    public ModelAndView resourceEdit(String resourceId,Model model) {
+        //ModelAndView mv = new ModelAndView("editResource");
         ModelAndView mv = new ModelAndView("dataEditResource");
         mv.addObject("resourceId", resourceId);
+        List<MetadataTemplate> list = metadataTemplateService.getAll();
+        model.addAttribute("list",list);
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        List<Map<String,Object>> metadataList = resource.getExtMetadata();
+        model.addAttribute("metadataList",metadataList);
         return mv;
     }
 
@@ -308,7 +316,8 @@ public class ResourceController {
                                             @RequestParam(name = "createTime") String createTime,
                                             @RequestParam(name = "publishOrganization") String publishOrganization,
                                             @RequestParam(name = "createOrganization") String createOrganization,
-                                            @RequestParam(name = "createPerson") String createPerson
+                                            @RequestParam(name = "createPerson") String createPerson,
+                                            @RequestParam(name = "extMetadata") String extMetadata
     ) {
         String subjectCode = session.getAttribute("SubjectCode").toString();
         Subject subject = subjectService.findBySubjectCode(subjectCode);
@@ -343,6 +352,19 @@ public class ResourceController {
         resource.setStatus("-1");
         resource.setdCount(0);
         resource.setvCount(0);
+        System.out.println(extMetadata);
+
+        if (StringUtils.isNotEmpty(extMetadata)){
+            List<Map<String,Object>> list = new ArrayList<>();
+            JSONObject json = JSONObject.parseObject(extMetadata);
+            for (Map.Entry<String, Object> map :  json.entrySet()){
+                Map<String,Object> item = new HashMap<>();
+                item.put(map.getKey(),map.getValue());
+                list.add(item);
+            }
+            resource.setExtMetadata(list);
+        }
+
         String resourceId = resourceService.save(resource);
         jsonObject.put("resourceId", resourceId);
         return jsonObject;
@@ -482,6 +504,7 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         jsonObject.put("resource", resource);
+        jsonObject.put("metadataList",resource.getExtMetadata());
         return jsonObject;
     }
 
@@ -510,7 +533,8 @@ public class ResourceController {
                                             @RequestParam(name = "createTime") String createTime,
                                             @RequestParam(name = "publishOrganization") String publishOrganization,
                                             @RequestParam(name = "createOrganization") String createOrganization,
-                                            @RequestParam(name = "createPerson") String createPerson) {
+                                            @RequestParam(name = "createPerson") String createPerson,
+                                            @RequestParam(name = "extMetadata") String extMetadata ) {
         String subjectCode = session.getAttribute("SubjectCode").toString();
         Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
@@ -544,6 +568,20 @@ public class ResourceController {
             resource.setStatus("1");
         } else {
             resource.setStatus("-1");
+        }
+
+        //xiajl20190310 增加
+        System.out.println(extMetadata);
+
+        if (StringUtils.isNotEmpty(extMetadata)){
+            List<Map<String,Object>> list = new ArrayList<>();
+            JSONObject json = JSONObject.parseObject(extMetadata);
+            for (Map.Entry<String, Object> map :  json.entrySet()){
+                Map<String,Object> item = new HashMap<>();
+                item.put(map.getKey(),map.getValue());
+                list.add(item);
+            }
+            resource.setExtMetadata(list);
         }
 
         String resId = resourceService.save(resource);

@@ -24,6 +24,7 @@
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">
     <link href="${ctx}/resources/bundles/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/zTree_v3/css/demo.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/fileinput.min.css">
     <style>
         .undeslist label{
             font-size: 18px;
@@ -250,7 +251,66 @@
                                             </div>
 
                                         </div>
+                                        <%--xiajl20190310增加 动态扩展元数据信自展示--%>
+                                        <div id="divExtMetadata">
+                                            <div><br/>自定义扩展的元数据信息：</div>
+                                            <c:forEach items="${list}" var="item">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">${item.extFieldName}
+                                                        <c:if test="${item.isMust eq 1}">
+                                                            <span class="required"> * </span>
+                                                        </c:if>
+                                                        <c:if test="${item.isMust != 1}">
+                                                            <span style="margin-left:13px"></span>
+                                                        </c:if>
+                                                    </label>
+                                                    <div class="col-md-5" style="padding-top:13px">
+                                                        <c:choose>
+                                                            <c:when test="${item.type eq 'List'}">
+                                                                <select class="form-control enumdataclass"
+                                                                        data="${item.enumdata}"
+                                                                        name=${item.extField} placeholder="请输入${item.extFieldName}"
+                                                                        id=${item.extField}>
+                                                                    <c:forEach items="${item.enumdataList}" var="data">
+                                                                        <option value="${data}">${data}</option>
+                                                                    </c:forEach>
 
+                                                                </select>
+                                                            </c:when>
+                                                            <c:when test="${item.type eq 'DateTime'}">
+                                                                <input type="text" class="form-control selectData"
+                                                                       name=${item.extField}  "
+                                                                       id=${item.extField}  data-date-format="
+                                                                       yyyy-mm-dd" placeholder=${item.extFieldName} >
+                                                            </c:when>
+                                                            <c:when test="${item.type eq 'Integer'}">
+                                                                <input type="text" class="form-control"
+                                                                       name=${item.extField} placeholder="请输入${item.extFieldName}"
+                                                                       id=${item.extField}  digits="true"
+                                                                <c:if test="${item.isMust eq 1}">
+                                                                       required='required'</c:if> >
+                                                            </c:when>
+
+                                                            <c:when test="${item.type eq 'Double'}">
+                                                                <input type="text" class="form-control"
+                                                                       name=${item.extField} placeholder="请输入${item.extFieldName}"
+                                                                       id=${item.extField}  number="true"
+                                                                <c:if test="${item.isMust eq 1}">
+                                                                       required='required'</c:if> >
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <input type="text" class="form-control"
+                                                                       name=${item.extField} placeholder="请输入${item.extFieldName}"
+                                                                       id=${item.extField}
+                                                                       <c:if test="${item.isMust eq 1}"> required='required'</c:if>  >
+                                                            </c:otherwise>
+                                                        </c:choose>
+
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+
+                                        </div>
 
 
 
@@ -267,6 +327,7 @@
                                         <input name="ways" type="radio" value="LH" id="bbb"/>
                                         <label for="bbb" style="font-size: 18px;color: #1CA04C">文件型数据</label>
                                     </div>
+                                    <div style="height: 15px"></div>
                                     <div style="overflow: hidden" class="select-database" >
                                         <div class="col-md-2" style="font-size: 18px;text-align:left;margin: 0 -15px ">
                                             <span>选择表资源</span>
@@ -279,6 +340,13 @@
                                     <div style="overflow: hidden;display: none" class="select-local">
                                         <div class="col-md-4 col-md-offset-2" style="font-size: 18px;width: 68%;" id="fileContainerTree">
                                             <ul id="treeDemo" class="ztree" style="width: 100%;"></ul>
+                                        </div>
+                                        <div style="height: 15px"></div>
+                                        <div class="col-md-4 col-md-offset-2" style="font-size: 18px;width: 68%;">
+                                            <span style="margin-left: -26%;">在线上传：</span>
+                                            <div>
+                                                <input id="file-1" type="file" multiple>
+                                            </div>
                                         </div>
                                         <div id="fileDescribeDiv" class="col-md-5 tagsinput" style="border: 1px solid grey;display: none" >
 
@@ -405,6 +473,8 @@
     <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
     <script src="${ctx}/resources/bundles/zTree_v3/js/jquery.ztree.all.js"></script>
     <script src="${ctx}/resources/js/jquery.json.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-fileinput/js/locals/zh.js"></script>
     <script type="text/javascript">
         var ctx = '${ctx}';
         var sdoId = "${resourceId}";
@@ -420,6 +490,21 @@
         $(function(){
             // $(".time_div").html("");
             $(".fabu_div2").html("数据发布 - 第1步，共3步");
+            $("#file-1").fileinput({
+                theme: 'fas',
+                language: 'zh',
+                uploadUrl: '#', // you must set a valid URL here else you will get an error
+                allowedFileExtensions: ['jpg', 'png', 'gif'],
+                overwriteInitial: false,
+                maxFileSize: 1000,
+                maxFilesNum: 10,
+                dropZoneEnabled: false,
+                showPreview: false,
+                //allowedFileTypes: ['image', 'video', 'flash'],
+                slugCallback: function (filename) {
+                    return filename.replace('(', '_').replace(']', '_');
+                }
+            });
         });
 
         /*var tagNames=new Array();*/
@@ -934,6 +1019,16 @@
             } else {
                 createTime = $.trim($("#createTime").val());
             }
+            //xiajl20190310增加 扩展元数据
+            var d = {};
+            var t = $("#submit_form2").serializeArray();
+            $.each(t, function () {
+                console.log(this.name);
+                if (this.name.indexOf("ext_") >= 0) {
+                    d[this.name] = this.value;
+                }
+            });
+            var extData = JSON.stringify(d);
             $.ajax({
                 url:ctx+"/resource/editResourceFirstStep",
                 type:"POST",
@@ -952,7 +1047,8 @@
                     createTime: createTime,
                     publishOrganization:$("#publish_Organization").val(),
                     createOrganization:$("#create_Organization").val(),
-                    createPerson:$("#create_person").val()
+                    createPerson: $("#create_person").val(),
+                    extMetadata: extData
                 },
                 success:function (data) {
                 },
@@ -1026,6 +1122,23 @@
                     $('#permissions').select2({
                         placeholder: "请选择用户",
                         allowClear: true,
+                    });
+
+                    //xiajl20190310增加，显示扩展元数据信息
+                    console.log('begin20190310');
+
+                    $("#divExtMetadata input,select").each(function () {
+                        var str = this.name;
+                        var valueStr = "";
+                        for (var i = 0; i < totalList.extMetadata.length; i++) {
+                            $.each(totalList.extMetadata[i], function (key, value) {
+                                if (key == str) {
+                                    valueStr = value;
+                                }
+                            })
+                        }
+                        console.log("xiajl=====:" + valueStr);
+                        $(this).val(valueStr);
                     });
                 },
                 error:function (data) {

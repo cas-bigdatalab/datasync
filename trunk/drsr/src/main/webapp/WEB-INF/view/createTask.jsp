@@ -21,7 +21,7 @@
             width: 47.666667% !important;
         }
         .col-md-2 {
-            width: 10.666667% !important;
+            width: 12.666667% !important;
         }
         .ztree{
             width: 100% !important;
@@ -46,11 +46,13 @@
         hr {
             margin: 10px 0 !important;
             border: 1px solid #d8d5d5 !important;
+            width: 94%;
         }
         ul.ztree{
             margin-top: 0px !important;
             background: #e8e3e3;
             border: none;
+            height: 60%;
         }
         ::-webkit-scrollbar-track{
             background-color: #e8e3e3 !important;
@@ -65,6 +67,14 @@
         .ztree li span {
             font-size: 16px;
         }
+        .row {
+            margin-right: 0 !important;
+        }
+        .alert-info {
+            background-color: #e0e0e0 !important;
+            border: none !important;
+            border-left: #0e6445 8px solid !important;
+        }
 
     </style>
 </head>
@@ -74,16 +84,29 @@
        <%--<h3>设置任务</h3>--%>
         <%--&lt;%&ndash;<hr>&ndash;%&gt;--%>
     <%--</div>--%>
-    <div class="task-title">
-        <%--<span>确定数据对象范围，上传数据</span>--%>
-        <form class="form-inline">
-            <div class="form-group">
-                <label for="dataTaskName" style="font-size: 18px">任务名</label>
-                <input type="text" class="form-control" id="dataTaskName" style="width: 250px;font-size: 16px" disabled>
-            </div>
-        </form>
-    </div>
 
+        <div class="alert alert-info" role="alert" style="margin:1% 20px 1% 20px">
+            <!--查询条件 -->
+            <div class="row">
+                <div class="col-md-9">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label for="dataTaskName" style="font-size: 18px">任务名</label>
+                            <input type="text" class="form-control" id="dataTaskName" style="width: 250px;font-size: 16px" disabled>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <%--<div class="task-title">--%>
+        <%--&lt;%&ndash;<span>确定数据对象范围，上传数据</span>&ndash;%&gt;--%>
+        <%--<form class="form-inline">--%>
+            <%--<div class="form-group">--%>
+                <%--<label for="dataTaskName" style="font-size: 18px">任务名</label>--%>
+                <%--<input type="text" class="form-control" id="dataTaskName" style="width: 250px;font-size: 16px" disabled>--%>
+            <%--</div>--%>
+        <%--</form>--%>
+    <%--</div>--%>
     <div class="select-way">
         <span>数据源</span>
         <input name="ways" type="radio" checked="checked" value="DB" id="aaa"/>
@@ -103,16 +126,16 @@
                 <div class="row">
                     <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
                     <div class="col-md-9 dataHead2" id="resTitle" style="display: none"></div>
-                    <div class="col-md-12" style="margin: 0 -15px;height: 54%;overflow: auto;">
+                    <div class="col-md-12" style="margin: 0 -15px;height: 60%;width: 98% !important;">
                         <div class="col-md-2" style="margin: 0 -15px">选择表资源</div>
-                        <div class="col-md-10" >
+                        <div class="col-md-10" style="width: 89.333333%;margin-top: 28px;padding-right: 0px !important;background-color: white;height: 100%;overflow: auto;">
                             <div style="text-align: center" id="dataUp">数据加载中......</div>
                             <div class="row" id="db-table" style="margin-top: 6px"></div>
                         </div>
                     </div>
                     <div id="totalList">
-                        <div class="col-md-12" style="margin-bottom: 10px;padding-top: 10px;" >
-                            <div class="col-md-2" style="text-align: right">SQL查询</div>
+                        <div class="col-md-12" style="margin-bottom: 10px;padding-top: 50px;" >
+                            <div class="col-md-2" style="text-align: right;margin-left: 35px;">SQL查询</div>
                             <div class="col-md-4">
                                 <input type="text" class="form-control sqlStatements inputVili" >
                             </div>
@@ -143,7 +166,7 @@
                     </div>
                 </form>
 
-                <div class="database-con-file container-fluid" style="display: none;">
+                <div class="database-con-file container-fluid" style="display: none;margin-left: 6%">
                     <div class="row">
                         <div class="col-md-3 dataHead1" style="display: none">数据源名称：</div>
                         <div class="col-md-9 dataHead2" id="fileTitle" style="display: none"></div>
@@ -169,7 +192,7 @@
                         </div>
                         <div class="col-md-12 ">
                             <hr>
-                            <button type="button" class="btn green pull-right" onclick="sendFileTask()" style="margin: 1% 51%;">提交</button>
+                            <button type="button" class="btn green pull-right" style="margin-right: 6%;" onclick="sendFileTask()">提交</button>
                         </div>
 
 
@@ -318,8 +341,8 @@
     {{/each}}
 </script>
 <script type="text/html" id="addSql">
-    <div class="col-md-12" style="margin-bottom: 10px" name="aaaa">
-        <div class="col-md-2" style="text-align: right">sql查询</div>
+    <div class="col-md-12" style="margin-bottom: 10px;margin-left: 35px;" name="aaaa">
+        <div class="col-md-2" style="text-align: right">SQL查询</div>
         <div class="col-md-4">
             <input type="text" class="form-control sqlStatements inputVili" >
         </div>
@@ -896,8 +919,11 @@
             var treeObj=$.fn.zTree.getZTreeObj("remoteTree"),
                 nodes=treeObj.getCheckedNodes(true),v="";
             for(var i=0;i<nodes.length;i++){
-                debugger
-                pathsOfCheckedFiles.push(nodes[i].pid+"/"+nodes[i].name);
+                if(nodes[i].pid==0){
+                    pathsOfCheckedFiles.push(nodes[i].id);
+                }else {
+                    pathsOfCheckedFiles.push(nodes[i].pid+"/"+nodes[i].name);
+                }
             }
             return pathsOfCheckedFiles;
         }

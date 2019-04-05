@@ -1,5 +1,7 @@
 <%--
-    ！！！废弃
+    ！！！废弃 被
+    dataRealtion_editeFiled.jsp & dataRealtion_recordManage.jsp & dataRelation_createTableAndImportData.jsp
+    分割替换
   Created by IntelliJ IDEA.
   User: shibaoping
   Date: 2018/10/30

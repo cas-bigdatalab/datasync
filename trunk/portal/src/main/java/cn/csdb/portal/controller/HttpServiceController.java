@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * @program: DataSync
@@ -57,6 +58,12 @@ public class HttpServiceController {
 //        String realPath = dataTask.getRealPath();
         Subject subject = subjectMgmtService.findByCode(subjectCode);
         String siteFtpPath = subject.getFtpFilePath();
+/*        siteFtpPath += "temp/";
+        try {
+            FileUtil.createFileByPathAndType(siteFtpPath, "dir");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
         dataTask.setSubjectCode(subject.getSubjectCode());
         String sqlFilePath = dataTask.getSqlFilePath();
         sqlFilePath = sqlFilePath.replaceAll("%_%", File.separator);
@@ -101,6 +108,7 @@ public class HttpServiceController {
 //                System.out.println("=========="+fileName);
 //                unZipPath = siteFtpPath + File.separator + "file" + File.separator + subjectCode + "_" + dataTask.getDataTaskId();
                 unZipPath = dataTask.getRemoteuploadpath();
+                System.out.println("dataTask.getRemoteuploadpath()" + dataTask.getRemoteuploadpath());
                 File tempFile = new File(unZipPath);
                 if (!tempFile.exists()) {
                     tempFile.mkdirs();
@@ -147,7 +155,10 @@ public class HttpServiceController {
             File file = new File(zipFile);
             ZipUtil zipUtil = new ZipUtil();
             try {
-                zipUtil.unZip(file, unZipPath);
+                List<String> listName = zipUtil.unZip(file, unZipPath);
+                System.out.println("解压的文件名称集合" + listName.toString());
+                System.out.println("源路径：" + zipFile);
+                System.out.println("目标路径：" + unZipPath);
             } catch (Exception e) {
                 e.printStackTrace();
             }

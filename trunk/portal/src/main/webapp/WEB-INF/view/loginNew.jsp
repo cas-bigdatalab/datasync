@@ -1,5 +1,5 @@
 <%--
-    ！！！废弃
+    ！！！废弃 被 login.jsp 替换
   Created by IntelliJ IDEA.
   User: shiba
   Date: 2018/11/7
@@ -39,7 +39,7 @@
 <body>
 <dl class="admin_login">
     <dt>
-        <strong style="color: #f9fafa">科研主题库统一登录认证</strong>
+        <strong style="color: #f9fafa">科研学科节点统一登录认证</strong>
         <em style="color: #f9fafa">Data Assembler</em>
     </dt>
     <form action="${pageContext.request.contextPath}/login" method="post">

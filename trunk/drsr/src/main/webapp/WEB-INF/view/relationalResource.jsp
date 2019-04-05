@@ -89,8 +89,8 @@
         }
         .row a.big-btn {
             right: 0;
-            position: absolute;
-            top: 48;
+            /*position: absolute;*/
+            /*top: 48;*/
             padding: 15px;
             font-size: 16px;
             font-weight: bold;
@@ -102,19 +102,21 @@
 </head>
 <body>
 <div class="page-content">
-    <div class="source-head">
-        <h3 style="font-size: 17px !important;">关系数据源</h3>
-        <%--<hr>--%>
-    </div>
+    <%--<div class="source-head">--%>
+        <%--<h3 style="font-size: 17px !important;">关系数据源</h3>--%>
+        <%--&lt;%&ndash;<hr>&ndash;%&gt;--%>
+    <%--</div>--%>
     <%--<div class="source-title">
         <span>关系数据源信息管理</span>
     </div>--%>
-    <div class="alert alert-info" role="alert" style="padding: 12px 20px !important;margin-left: 20px;">
+    <div class="alert alert-info" role="alert" style="padding: 10px 20px !important;margin-left: 20px;margin-right: 20px;margin-top:1%;">
         <!--查询条件 -->
         <div class="row" style="margin: 5px auto;">
-            <h4 style="font-weight: 500 !important;">关系数据信息管理</h4>
-            <a class="big-btn" id="addSqlSource">添加SQL数据源</a>
-            <%--<div class="col-md-12">--%>
+            <h4 style="font-weight: 500 !important;float: left;">关系数据信息管理</h4>
+            <div style="float: right;margin-right: -19px;">
+                <a class="big-btn" id="addSqlSource">添加SQL数据源</a>
+            </div>
+                <%--<div class="col-md-12">--%>
                 <%--<button type="button" class="btn  btn-sm green pull-right" id="addSqlSource"><i class="glyphicon glyphicon-plus"></i>&nbsp;新增关系型数据源</button>--%>
             <%--</div>--%>
             <%--<div class="col-md-2">
