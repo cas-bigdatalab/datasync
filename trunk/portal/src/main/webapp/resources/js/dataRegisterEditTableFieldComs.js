@@ -73,7 +73,21 @@ function getTableFieldComs(subjectCode, tableName) {
             dataResult = data.tableInfos;
         }
     });
-    return dataResult;
+    return deletePORTALID(dataResult);
+}
+
+function deletePORTALID(data) {
+    var list = [];
+    $.each(data, function (index, json) {
+        var isPORTALID = false;
+        $.each(json, function (key, value) {
+            if (value === "PORTALID") {
+                isPORTALID = true;
+            }
+        });
+        isPORTALID ? 0 : list.push(json);
+    });
+    return list;
 }
 
 /**

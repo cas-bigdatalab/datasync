@@ -246,6 +246,7 @@
                 $.ajax({
                     type: "POST",
                     url: requestUrl,
+                    dataType: "JSON",
                     data: data,
                     async: false,
                     cache: false,
@@ -363,6 +364,32 @@
             trl.push(tdl);
         }
 
+        function saveValueAfterDeleteTable() {
+            var tableName = $.trim($("#excelTableList .qiehuan_div li.active a").text());
+            bootbox.confirm("<span style='font-size: 16px'>确认要删除 “" + tableName + "” 数据表么</span>",
+                function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "${ctx}/fileImport/deleteTable",
+                            dataType: "JSON",
+                            type: "POST",
+                            data: {
+                                "tableName": tableName,
+                                "subjectCode": sub
+
+                            },
+                            success: function (data) {
+                                var parse = data;
+                                if (parse.code === "success") {
+                                    initExcelUpload();
+                                    toastr["info"]("提示！", parse.message);
+                                }
+                            }
+                        })
+                    }
+                }
+            );
+        }
 
     </script>
 </div>
@@ -483,7 +510,10 @@
             </table>
         </div>
         <button type="button" onclick="createTableAndInsertValue(this)" data-dismiss="modal"
-                class="saveExcelSuccess btn bule" tablename="{{tableName}}">上传数据
+                class="saveExcelSuccess btn bule" tablename="{{tableName}}">增量保存
+        </button>
+        <button type="button" onclick="saveValueAfterDeleteTable()" data-dismiss="modal"
+                class="saveExcelSuccess btn bule" tablename="{{tableName}}">重新上传
         </button>
     </script>
 </div>
