@@ -40,10 +40,12 @@ public class FileNetService {
         // 当前目录以及每一个上层目录
         List<Map<String, String>> parentModules = getParentModule(parentPath, ftpRootPath);
         jsonObject.put("parentModules", parentModules);
+        // 对文件排序
+        List<File> fileList = FileUtil.orderByNameAndSize(files);
         // 查询当前目录
         List<Map<String, String>> fList = new ArrayList<>(20);
-        if (files != null && files.length != 0) {
-            for (File file : files) {
+        if (fileList != null && fileList.size() != 0) {
+            for (File file : fileList) {
                 Map<String, String> map = new HashMap<>(16);
                 String fileName = file.getName();
                 map.put("fileName", fileName);

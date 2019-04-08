@@ -143,7 +143,7 @@
             <col style="width: 20%"/>
         </colgroup>
         <thead>
-        <tr>
+        <tr style="background-color: #5091dc">
             <td></td>
             <td>文件名</td>
             <td class="text-center">大小</td>
@@ -303,15 +303,16 @@
             });
 
             $body.on("mousedown", "#FileOnNet table thead tr:eq(0)", function (e) {
+                context.destroy("#FileOnNet table thead tr:eq(0)");
                 var which = e.which;
                 var copyCache = $("#copyCache").data("copyCache");
-                if (which === 3 && copyCache) {
+                if (which === 3 && (copyCache && copyCache !== "")) {
                     var menus = [{
                         text: "粘贴", action: function () {
+                            $("#currentPath").data("currentPath", $.trim($("#fileBar span").attr("path")));
                             pasteFile()
                         }
                     }];
-                    context.destroy("#FileOnNet table thead tr:eq(0)");
                     context.attach("#FileOnNet table thead tr:eq(0)", menus);
                 }
             });

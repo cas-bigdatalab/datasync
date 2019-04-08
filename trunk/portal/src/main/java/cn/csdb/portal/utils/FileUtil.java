@@ -5,6 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @Author jinbao
@@ -244,6 +248,36 @@ public class FileUtil {
         } else if (!f.exists() && "dir".equals(fileType)) {
             f.mkdirs();
         }
+    }
+
+    public static List<File> orderByNameAndSize(File[] files) {
+        List fileList = Arrays.asList(files);
+        Collections.sort(fileList, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                if (o1.isDirectory() && o2.isFile()) {
+                    return -1;
+                }
+                if (o1.isFile() && o2.isDirectory()) {
+                    return 1;
+                }
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        Collections.sort(fileList, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                boolean file = o1.isFile() && o2.isFile();
+                if (file && (o1.length() > o2.length())) {
+                    return -1;
+                } else if (file && (o1.length() < o2.length())) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+        return fileList;
     }
 
     private enum CopyCheck {
