@@ -119,6 +119,11 @@
         function jstree_create() {
             var ref = $('#jstree_edit').jstree(true),
                 sel = ref.get_selected();
+            var selected = jstree_selectOne(sel);
+            if (selected) {
+                toastr["warning"](selected);
+                return;
+            }
             if (!sel.length) {
                 return false;
             }
@@ -144,6 +149,11 @@
         function jstree_rename() {
             var ref = $('#jstree_edit').jstree(true),
                 sel = ref.get_selected();
+            var selected = jstree_selectOne(sel);
+            if (selected) {
+                toastr["warning"](selected);
+                return;
+            }
             if (!sel.length) {
                 return false;
             }
@@ -155,6 +165,11 @@
 
             var ref = $('#jstree_edit').jstree(true);
             sel = ref.get_selected();
+            var selected = jstree_selectOne(sel);
+            if (selected) {
+                toastr["warning"](selected);
+                return;
+            }
             if (!sel.length) {
                 return false;
             }
@@ -174,7 +189,10 @@
                 }
             })
         }
-        ;
+
+        function jstree_selectOne(ref) {
+            return ref.length <= 1 ? ref.length === 1 ? false : "至少选中一个" : "至多选中一个";
+        }
 
         function confirmDeleteNode() {
             var ref = $('#jstree_edit').jstree(true);
