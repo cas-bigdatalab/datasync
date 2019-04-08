@@ -8,7 +8,6 @@ import cn.csdb.portal.utils.FileUploadUtil;
 import cn.csdb.portal.utils.ImgCut;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -868,7 +867,7 @@ public class ResourceController {
         String[] filePathArry = new String[0];
 
         List<FileTreeNode> nodeList=new ArrayList<FileTreeNode>();
-        String filePath = (String) request.getSession().getAttribute("FtpFilePath") + File.separator + "file";
+        String filePath = (String) request.getSession().getAttribute("FtpFilePath") + "file";
 //        String filePath="D:\\workspace";
         File dirFile = new File(filePath);
         JSONObject jsonObject = new JSONObject();

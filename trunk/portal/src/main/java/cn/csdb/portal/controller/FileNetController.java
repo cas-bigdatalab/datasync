@@ -84,7 +84,7 @@ public class FileNetController {
         response.setCharacterEncoding("UTF-8");
         response.setHeader("Content-Type", "multipart/form-data");
         fileName = new String(fileName.getBytes("gb2312"), "ISO8859-1");
-        response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
+        response.setHeader("Content-Disposition", "attachment;fileName=\"" + fileName + "\"");
         InputStream input = new FileInputStream(file);
         OutputStream out = response.getOutputStream();
         byte[] buff = new byte[1024];

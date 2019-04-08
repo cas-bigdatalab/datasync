@@ -341,9 +341,9 @@
                                         <div class="col-md-4 col-md-offset-2" style="font-size: 18px;width: 68%;" id="fileContainerTree">
                                             <ul id="treeDemo" class="ztree" style="width: 100%;"></ul>
                                         </div>
-                                        <div style="height: 15px"></div>
+                                        <div style="height: 15px;clear: both"></div>
                                         <div class="col-md-4 col-md-offset-2" style="font-size: 18px;width: 68%;">
-                                            <span style="margin-left: -26%;">在线上传：</span>
+                                            <span style="margin-left: -26%;position: absolute">在线上传：</span>
                                             <div>
                                                 <input id="file-1" type="file" multiple>
                                             </div>
