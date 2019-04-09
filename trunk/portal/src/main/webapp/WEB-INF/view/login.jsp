@@ -39,8 +39,8 @@
             </tr>
             <tr>
                 <td>
-                    <span>密码：</span>
-                    <input type="password" id="password" name="password" class="login_txtbx"/>
+                    <span>密&nbsp;&nbsp;&nbsp;&nbsp;码：</span>
+                    <input type="password" id="passwdaord" name="password" class="login_txtbx"/>
                 </td>
             </tr>
             <dd>
