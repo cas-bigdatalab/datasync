@@ -171,7 +171,7 @@
         <a href="javaScript:void(0)" id="{{value.subjectCode}}" onclick="findBySubjectCode(this)">
             <%--<img src="${ctx}/IoReadImage?filePath={{value.imagePath}}" width="100%;"/>--%>
             <img src="{{value.imagePath}}" width="100%;"/>
-            <h5 style="text-align: center;" >{{value.subjectName}}</h5>
+            <span style="text-align: center;font-weight: bolder;font-size: smaller;display: block;">{{value.subjectName}}</span>
         </a>
    </div>
    {{/each}}
