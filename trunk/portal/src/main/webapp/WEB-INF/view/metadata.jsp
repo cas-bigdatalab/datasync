@@ -53,7 +53,9 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <button id="btnSearch" name="btnSearch" onclick="search();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查询</button>
                 &nbsp;&nbsp;
-                <button id="btnAdd" name="btnAdd" style="float: right" onclick="" class="btn info green btn-sm"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增</button>
+                <button id="btnAdd" name="btnAdd" onclick="" class="btn info green btn-sm"><i
+                        class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增
+                </button>
             </div>
         </div>
 
