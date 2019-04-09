@@ -95,13 +95,13 @@
     <table class="table table-bordered data-table" id="upload-list">
         <thead>
         <tr>
-            <th width="7%">编号</th>
-            <th width="22%">数据集名称</th>
-            <th width="13%">类型</th>
+            <th width="4%">编号</th>
+            <th width="30%">数据集名称</th>
+            <th width="5%">类型</th>
             <%-- <th width="10%">来源位置</th>--%>
-            <th width="20%">发布时间</th>
-            <th width="16%">状态</th>
-            <th width="22%">操作</th>
+            <th width="10%">发布时间</th>
+            <th width="10%">状态</th>
+            <th width="10%">操作</th>
         </tr>
         </thead>
         <tbody id="bd-data">
@@ -465,7 +465,8 @@
     {{each resourceList as value i}}
     <tr keyIdTr="{{value.id}}">
         <td>{{i + 1}}</td>
-        <td><a href="javascript:void(0)">{{value.title}}</a></td>
+        <td><a href="javascript:void(0)" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')">{{value.title}}</a>
+        </td>
         {{if value.publicType == 'mysql' ||value.publicType == '' }}
         <td>mysql</td>
         {{else if value.publicType == 'file'}}
@@ -486,25 +487,22 @@
         {{/if}}
 
         <td>
-            <table class="0" cellspacing="0" border="0" align="center">
+            <table class="0" cellspacing="0" border="0">
                 <tr>
-                    {{if value.status != '2'}}
-                    <shiro:hasRole name="admin">
-                        <%--<button type="button" class="btn purple upload-data btn-xs" keyIdTd="{{value.id}}"><i--%>
-                        <%--class="fa fa-edit"></i>&nbsp;编辑--%>
-                        <%--</button>--%>
-                        <td class="bianji"><a href="javascript:;" onclick="editdatarelease(this)" keyIdTd="{{value.id}}">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>编辑</a>
-                        </td>
-                        <td width="1"></td>
-                    </shiro:hasRole>
-                    {{/if}}
+
 
                     <shiro:hasRole name="admin">
                         <td class="chakan"><a href="javascript:;"
                                               onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')">
                             <i class="fa fa-eye" aria-hidden="true"></i> 查看</a></td>
-                        <td width="1"></td>
+                        <td width="5"></td>
+                        {{if value.status != '2'}}
+                        <td class="bianji"><a href="javascript:;" onclick="editdatarelease(this)"
+                                              keyIdTd="{{value.id}}">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>编辑</a>
+                        </td>
+                        <td width="5"></td>
+                        {{/if}}
                         <td class="shanchu"><a href="javascript:;"  onclick="removeData('{{value.id}}');"><i class="fa fa-window-close-o" aria-hidden="true"></i> 删除</a>
                         </td>
                     </shiro:hasRole>
@@ -512,46 +510,29 @@
                     <shiro:hasRole name="root">
 
                         {{if value.status == '1'}}
-                        <%--<button type="button" class="btn green btn-xs exportSql"--%>
-                                <%--onclick="auditRelease('{{value.id}}')"><i class="fa fa-edit"></i>&nbsp;审核--%>
-                        <%--</button>--%>
                         <td class="shenhe"><a href="javascript:;" onclick="auditRelease('{{value.id}}')">
                             <i class="fa fa-user-circle-o" aria-hidden="true"></i> 审核</a></td>
-                        <td width="1"></td>
+                        <td width="5"></td>
                         {{/if}}
                         {{if value.status == '0'}}
-                        <%--<button type="button" class="btn green btn-xs exportSql"--%>
-                                <%--onclick="auditRelease('{{value.id}}')"><i class="fa fa-edit"></i>&nbsp;审核--%>
-                        <%--</button>--%>
                         <td class="shenhe"><a href="javascript:;" onclick="auditRelease('{{value.id}}')">
                             <i class="fa fa-user-circle-o" aria-hidden="true"></i> 审核</a></td>
-                        <td width="1"></td>
+                        <td width="5"></td>
                         {{/if}}
 
                         {{if value.status == '-1'}}
-                        <%--<button type="button" class="btn  edit-data btn-xs blue" style="margin-right: 66px"--%>
-                        <%--onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')"><i--%>
-                        <%--class="fa fa-eye"></i>&nbsp;查看--%>
-                        <%--</button>--%>
                         <td class="chakan"><a href="javascript:;" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')">
                             <i class="fa fa-eye" aria-hidden="true"></i> 查看</a></td>
-                        <td width="1"></td>
+                        <td width="5"></td>
 
                         {{else if value.status != '-1'}}
-                        <%--<button type="button" class="btn  edit-data btn-xs blue"--%>
-                        <%--onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')"><i--%>
-                        <%--class="fa fa-eye" aria-hidden="true"></i>&nbsp;查看--%>
-                        <%--</button>--%>
                         <td class="chakan"><a href="javascript:;" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')">
                             <i class="fa fa-eye" aria-hidden="true"></i> 查看</a></td>
-                        <td width="1"></td>
+                        <td width="5"></td>
 
                         {{/if}}
 
                         {{if value.status == '2'}}
-                        <%--<button type="button" class="btn red btn-xs exportSql"--%>
-                                <%--onclick="disableRelease('{{value.id}}')"><i class="fa fa-edit"></i>&nbsp;停用--%>
-                        <%--</button>--%>
                         <td class="shanchu"><a href="javascript:;" onclick="disableRelease('{{value.id}}')">
                             <i class="fa fa-window-close-o" aria-hidden="true"></i>停用</a></td>
                         {{/if}}

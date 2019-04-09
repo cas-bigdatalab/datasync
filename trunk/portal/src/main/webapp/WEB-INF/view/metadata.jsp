@@ -53,7 +53,9 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <button id="btnSearch" name="btnSearch" onclick="search();" class="btn success blue btn-sm"><i class="fa fa-search"></i>&nbsp;&nbsp;查询</button>
                 &nbsp;&nbsp;
-                <button id="btnAdd" name="btnAdd" style="float: right" onclick="" class="btn info green btn-sm"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增</button>
+                <button id="btnAdd" name="btnAdd" onclick="" class="btn info green btn-sm"><i
+                        class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增
+                </button>
             </div>
         </div>
 
@@ -66,17 +68,17 @@
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
                 <tr id="table_List2">
-                    <th style="width: 5%;">编号</th>
-                    <th style="width: 10%;">
+                    <th style="width: 8%;">编号</th>
+                    <th style="width: 20%;">
                         元数据英文名
                     </th>
-                    <th style="width: 5%;">
+                    <th style="width: 8%;">
                         字段类型
                     </th>
-                    <th style="width: 10%;">元数据中文名</th>
-                    <th style="width: 5%;">排序</th>
+                    <th style="width: 15%;">元数据中文名</th>
+                    <th style="width: 8%;">排序</th>
                     <th style="width: 8%;">是否必填</th>
-                    <th style="width: 25%;">枚举值</th>
+                    <th style="width: 15%;">枚举值</th>
                     <%--<th style="width: 20%;">备注</th>--%>
                     <th style="width: 18%;">操作</th>
                 </tr>
@@ -100,13 +102,24 @@
             </div>
             <div class="modal-body" style="min-height: 150px">
                 <form class="form-horizontal" id="addMetadataForm" method="post" accept-charset="utf-8" role="form"  onfocusout="true">
+                    <%--中文名称--%>
                     <div class="form-group">
-                        <label for="extFieldAdd" class="col-sm-3 control-label">元数据英文名<span class="required">
+                        <label for="extFieldNameAdd" class="col-sm-3 control-label">元数据中文名称<span class="required">
+													*</span></label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="extFieldNameAdd" name="extFieldName"
+                                   placeholder="请输入元数据中文名称" required="required">
+                        </div>
+                    </div>
+                    <%--英文名称--%>
+                    <div class="form-group">
+                        <label for="extFieldAdd" class="col-sm-3 control-label">元数据英文名称<span class="required">
 													*</span></label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="extFieldAdd" name="extField" placeholder="请输入元数据英文名(首字母小字)"  required="required" >
                         </div>
                     </div>
+                    <%--数据类型--%>
                     <div class="form-group">
                         <label for="typeAdd" class="col-sm-3 control-label">字段类型<span class="required">*
 													</span></label>
@@ -120,22 +133,26 @@
                             </select>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="extFieldNameAdd" class="col-sm-3 control-label">元数据中文名称<span class="required">
-													*</span></label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="extFieldNameAdd" name="extFieldName" placeholder="请输入元数据中文名称"  required="required" >
-                        </div>
-                    </div>
-
+                    <%--数据类型为枚举值显示--%>
                     <div id="divEnumdata" class="form-group" style="display:none;">
                         <label for="enumdataAdd" class="col-sm-3 control-label">枚举项值</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="enumdataAdd" name="enumdata" placeholder="请输入枚举值,各枚举项值以英文逗号(,)隔开">
                         </div>
                     </div>
-
+                    <%--是否必填--%>
+                    <div class="form-group">
+                        <label for="isMustAdd" class="col-sm-3 control-label">是否必填项<span class="required">
+													</span></label>
+                        <div class="col-sm-8">
+                            <select class="form-control" style="width: 368px;height: 34px;" id="isMustAdd" name="isMust"
+                                    placeholder="请选择元数据字段值是否必填项">
+                                <option value="0">否</option>
+                                <option value="1">是</option>
+                            </select>
+                        </div>
+                    </div>
+                    <%--排序--%>
                     <div class="form-group">
                         <label for="sortOrderAdd" class="col-sm-3 control-label">排序<span class="required">
 													</span></label>
@@ -143,17 +160,7 @@
                             <input  type="text" class="form-control"  id="sortOrderAdd" name="sortOrder" placeholder="请输入元数据排列顺序" />
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="isMustAdd" class="col-sm-3 control-label">是否必填项<span class="required">
-													</span></label>
-                        <div class="col-sm-8">
-                            <select class="form-control" style="width: 368px;height: 34px;" id="isMustAdd" name="isMust" placeholder="请选择元数据字段值是否必填项">
-                                <option  value="0">否</option>
-                                <option  value="1">是</option>
-                            </select>
-                        </div>
-                    </div>
-
+                    <%--备注--%>
                     <div class="form-group">
                         <label for="remarkAdd" class="col-sm-3 control-label">备注<span class="required">
 													</span></label>
@@ -265,11 +272,11 @@
     {{each list}}
     <tr>
         <td style="display:table-cell; vertical-align:middle ; text-align: center;" >{{$index+1}}</td>
-        <td style="display:table-cell; vertical-align:middle;text-align: left;" > {{$value.extField}}
+        <td style="display:table-cell; vertical-align:middle;text-align: center;"> {{$value.extField}}
         </td>
-        <td style="display:table-cell; vertical-align:middle ;text-align: left;">{{$value.type}}</td>
+        <td style="display:table-cell; vertical-align:middle ;text-align: center;">{{$value.type}}</td>
 
-        <td style="display:table-cell; vertical-align:middle ;text-align: left;">{{$value.extFieldName}}</td>
+        <td style="display:table-cell; vertical-align:middle ;text-align: center;">{{$value.extFieldName}}</td>
         <td style="display:table-cell; vertical-align:middle ;text-align: center;">{{$value.sortOrder}}</td>
         <td style="display:table-cell; vertical-align:middle ;text-align: center;">
             {{if $value.isMust == 1}}是

@@ -62,7 +62,7 @@
             <div class="modal-header">
                 <h4 class="modal-title">选择文件并上传</h4>
             </div>
-            <div class="modal-body" style="height: 600px">
+            <div class="modal-body" style="height: 510px">
                 <form enctype="multipart/form-data">
                     <div style="height: 400px">
                         <div class="file-loading">
@@ -116,7 +116,6 @@
             <button type="button" class="btn btn-default" onclick="showAddFileDialog()"><i
                     class="fa fa-folder"></i> 新建文件夹
             </button>
-            <%--<button type="button" class="btn btn-default"><i class="fa fa-download"></i> 下载</button>--%>
         </div>
         <div class="col-xs-6 text-right file-search">
             <input id="searchName" type="text" placeholder="搜索您的文件">
@@ -144,8 +143,7 @@
             <col style="width: 20%"/>
         </colgroup>
         <thead>
-        <tr>
-            <%--<td style="width:20px;"><input id="fileName" type="checkbox"/></td>--%>
+        <tr style="background-color: #5091dc">
             <td></td>
             <td>文件名</td>
             <td class="text-center">大小</td>
@@ -223,7 +221,7 @@
             // 鼠标点击事件
             $body.on("mousedown", "#FileOnNet table tr", function (e) {
                 var which = e.which;
-                console.log(which); // 1 = 鼠标左键 left; 2 = 鼠标中键; 3 = 鼠标右键
+                // console.log(which); // 1 = 鼠标左键 left; 2 = 鼠标中键; 3 = 鼠标右键
                 changeSelect(e);
 
                 function getMenus() {
@@ -243,7 +241,6 @@
                             },
                             {divider: true}
                         ])
-                    } else if (isFile) {
                     } else if (isFile) {
                         menus = menus.concat([
                             {
@@ -267,7 +264,7 @@
                             href: "javaScript:void(0);"
                         }
                     ]);
-                    if (copyCache !== undefined && copyCache !== "") {
+                    if (copyCache !== undefined && copyCache !== "" && isDir) {
                         menus = menus.concat([{
                             text: "粘贴", action: function () {
                                 pasteFile()
@@ -296,13 +293,28 @@
                     context.init({preventDoubleContext: false});
                     var menus = [];
                     var copyCache = $("#copyCache").data("copyCache");
-                    var isDir = $(e.currentTarget).find("td:eq(0).dir")[0];
-                    var isFile = $(e.currentTarget).find("td:eq(0).file")[0];
+                    var isDir = $(e.currentTarget).find("td:eq(1).dir")[0];
+                    var isFile = $(e.currentTarget).find("td:eq(1).file")[0];
                     getMenus();
                     context.destroy("#FileOnNet tbody tr");
                     context.attach("#FileOnNet tbody tr", menus);
                 }
                 return false;// 阻止链接跳转
+            });
+
+            $body.on("mousedown", "#FileOnNet table thead tr:eq(0)", function (e) {
+                context.destroy("#FileOnNet table thead tr:eq(0)");
+                var which = e.which;
+                var copyCache = $("#copyCache").data("copyCache");
+                if (which === 3 && (copyCache && copyCache !== "")) {
+                    var menus = [{
+                        text: "粘贴", action: function () {
+                            $("#currentPath").data("currentPath", $.trim($("#fileBar span").attr("path")));
+                            pasteFile()
+                        }
+                    }];
+                    context.attach("#FileOnNet table thead tr:eq(0)", menus);
+                }
             });
 
 
@@ -464,7 +476,6 @@
          * 将当前父路径赋值到指定位置
          */
         function showUploadFileDialog(parentPath) {
-            // var parentPath = $("#FileOnNet #fileBar span.modules").attr("path");
             $("#parentURI").val(parentPath);
             console.log(parentPath);
             $("#uploadFile").modal("show");
@@ -543,7 +554,7 @@
          *将复制的文件粘贴到当前目录下
          */
         function pasteFile() {
-            var currentPath = $("#fileBar span").attr("path");
+            var currentPath = $("#currentPath").data("currentPath");
             var copyCache = $("#copyCache").data("copyCache");
             var operationType = $("#copyCache").data("operationType");
             var url = "";
