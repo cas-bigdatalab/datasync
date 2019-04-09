@@ -12,9 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.*;
+import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
@@ -368,7 +372,7 @@ public class SubjectMgmtDao {
             update.set("phone", subject.getPhone());
             update.set("email", subject.getEmail());
             update.set("serialNo", subject.getSerialNo());
-
+            update.set("imagePath", subject.getImagePath());
             mongoTemplate.upsert(query, update, "t_subject");
 
         } catch (Exception e) {

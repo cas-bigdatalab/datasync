@@ -131,6 +131,9 @@
                         </div>
 
                         <div class="form-group">
+                            <div class="showImgIfExist" hidden>
+                                <img style="width: 20%;margin-left: 27%;margin-bottom: 2%;"/>
+                            </div>
                             <label class="col-md-3 control-label">
                                 图片<span style="color: red;">*</span>
                             </label>
@@ -257,6 +260,9 @@
                         </div>
 
                         <div class="form-group">
+                            <div class="showImgIfExist" hidden>
+                                <img style="width: 20%;margin-left: 27%;margin-bottom: 2%;"/>
+                            </div>
                             <label class="col-md-3 control-label">
                                 图片
                             </label>
@@ -485,7 +491,6 @@
             };
 
             jQuery.validator.addMethod("isphoneNum", function(value, element) {
-                debugger
                 var length = value.length;
                 var mobile = /^1[0-9]{1}[0-9]{9}$/;
                 return this.optional(element) || (length == 11 && mobile.test(value));
@@ -538,6 +543,10 @@
             };
             $("#addSubjectForm").validate(addSubjectValid);
             $("#updateSubjectForm").validate(updateSubjectValid);
+
+            $("#imageM,#image").on("change", function (item) {
+                showUploadFileAsDataURL(item);
+            })
         });
 
         //专业库名称的模糊搜索
@@ -623,6 +632,7 @@
 
         function addSubject()
         {
+            clearAllInput();
             $.ajax({
                 url: "${ctx}/subjectMgmt/getNextSerialNo",
                 type: "get",
@@ -682,6 +692,7 @@
 
         //更新专业库
         function updateSubject(updateBtn) {
+            clearAllInput();
             $.ajax({
                 type: "GET",
                 async: false,
@@ -692,7 +703,11 @@
                     $("#idM").val(data.id);
                     $("#subjectNameM").val(data.subjectName);
                     $("#subjectCodeM").val(data.subjectCode);
-                    $("#imageM").attr("src", data.imagePath)
+                    if (data.imagePath !== "") {
+                        $(".showImgIfExist img").attr("src", "${ctx}/IoReadImage?filePath=" + data.imagePath);
+                        $(".showImgIfExist").show();
+                    }
+                    $("#imageM").attr("src", data.imagePath);
                     $("#briefM").val(data.brief);
                     $("#adminM").val(data.admin);
                     $("#adminPasswdM").val(data.adminPasswd);
@@ -794,6 +809,22 @@
             );
         }
 
+        // 选中图片回显图片
+        function showUploadFileAsDataURL(input) {
+            var reader = new FileReader();
+            reader.readAsDataURL(input.currentTarget.files[0]);
+            reader.onload = function (event) {
+                $(input.currentTarget).parent().parent().find("div:eq(0)").show();
+                $(input.currentTarget).parent().parent().find("img").attr("src", event.target.result);
+            }
+        }
+
+        // 清理弹窗中所有的输入框
+        function clearAllInput() {
+            $("input").val("");
+            $(".showImgIfExist").hide();
+            $("textarea").val("");
+        }
     </script>
 </div>
 </html>

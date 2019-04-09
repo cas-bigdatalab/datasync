@@ -487,7 +487,7 @@
         {{/if}}
 
         <td>
-            <table style="margin-left:18%;">
+            <table style="margin-left:10%;">
                 <tr>
 
 

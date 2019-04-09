@@ -2,6 +2,7 @@ package cn.csdb.portal.controller;
 
 import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.service.SubjectMgmtService;
+import cn.csdb.portal.utils.PropertiesUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.logging.log4j.LogManager;
@@ -97,11 +98,15 @@ public class SubjectMgmtController {
      * Function Description: save image binary data to local filesystem and return the path
      *
      * @param image， the image to be stored
-     * @return imageFilePath, the absolute local filesystem path of the image, may be a path like {portalRoot}/SubjectImages/img1.jpg, here {portalRoot} represent the root of the web app
+     * @return imageFilePath, the absolute local filesystem path of the image, may be a path like {imagesPath}/{SubjectCode}/img1.jpg, here {imagesPath} represent the save images`s system path ,images{SubjectCode} represent the current user.
      */
     private String saveImage(HttpServletRequest request, MultipartFile image) {
         logger.info("save image file, image = " + image);
-        String imagesPath = request.getSession().getServletContext().getRealPath("/SubjectImage/");
+//        String imagesPath = request.getSession().getServletContext().getRealPath("/resources/img/images");
+        String configFilePath = SubjectMgmtController.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = request.getParameter("subjectCode");
+        String imagesPath = PropertiesUtil.GetValueByKey(configFilePath, "imagesPath");
+        imagesPath += File.separator + subjectCode;
         if (!(new File(imagesPath).exists()))
         {
             new File(imagesPath).mkdir();

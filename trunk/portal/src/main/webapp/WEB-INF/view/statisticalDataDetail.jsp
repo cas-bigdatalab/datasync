@@ -167,10 +167,10 @@
 
 <script type="text/html" id="showAllTheme">
     {{each list as value i}}
-    <div class="pic-item" style=" width: 20%; float: left; padding: 5px;">
+    <div class="pic-item" style=" width: 20%; float: left; padding: 5px;height:55%;">
         <a href="javaScript:void(0)" id="{{value.subjectCode}}" onclick="findBySubjectCode(this)">
-            <%--<img src="${ctx}/IoReadImage?filePath={{value.imagePath}}" width="100%;"/>--%>
-            <img src="{{value.imagePath}}" width="100%;"/>
+            <img src="${ctx}/IoReadImage?filePath={{value.imagePath}}" width="100%;height:100%"/>
+            <%--<img src="{{value.imagePath}}" width="100%;"/>--%>
             <span style="text-align: center;font-weight: bolder;font-size: smaller;display: block;">{{value.subjectName}}</span>
         </a>
    </div>
@@ -186,7 +186,7 @@
    <%--</span>--%>
    <%--<span style="float: left;">简介：{{value.contact}}</span>--%>
    <div class="pic-item" style=" width: 16%; float: left; padding: 5px;height: 150px;margin-bottom: 50px;">
-       <img src="/{{value.imagePath}}" width="100%;height:80%;"/>
+       <img src="${ctx}/IoReadImage?filePath={{value.imagePath}}" width="100%;height:80%;"/>
        <h5 style="text-align: center;">{{value.subjectName}}</h5>
    </div>
    <div class="pic-item" style=" width: 40%; float: left; padding: 5px;height:150px;">
