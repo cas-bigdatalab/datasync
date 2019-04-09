@@ -25,6 +25,15 @@ public class DataTask {
     private String LogPath;
     private DataSrc dataSrc;
     private String remoteuploadpath;
+    private String fileSize;
+
+    public String getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(String fileSize) {
+        this.fileSize = fileSize;
+    }
 
     public String getRemoteuploadpath() {
         return remoteuploadpath;
