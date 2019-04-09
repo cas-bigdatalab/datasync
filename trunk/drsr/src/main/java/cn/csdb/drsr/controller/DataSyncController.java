@@ -9,6 +9,7 @@ import cn.csdb.drsr.service.DataSrcService;
 import cn.csdb.drsr.service.DataTaskService;
 import cn.csdb.drsr.service.LoginService;
 import cn.csdb.drsr.utils.ConfigUtil;
+import cn.csdb.drsr.utils.FileUtil;
 import cn.csdb.drsr.utils.FtpUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.io.IOUtils;
@@ -104,6 +105,15 @@ public class DataSyncController {
             dataTask.setStatus("0");
             dataTaskService.update(dataTask);
             pw.println("###########上传的文件为###########" + "\n");
+            File f=new File(dataTask.getSqlFilePath().replace("%_%",File.separator));
+            if(f.exists()){
+                FileUtil fileUtil=new FileUtil();
+
+                pw.println("文件大小：" +  fileUtil.getPrintSize(f.length())+"\n");
+                pw.println("文件上传路径：" +  dataTask.getRemoteuploadpath()+"\n");
+//              System.out.println("文件大小为"+ fileUtil.getPrintSize(file.length()));
+            }
+
             String[] fileAttr = dataTask.getFilePath().split(";");
             for(String fileAttrName : fileAttr){
                 pw.println(fileAttrName+ "\n");

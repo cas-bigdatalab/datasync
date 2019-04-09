@@ -73,7 +73,7 @@ public class LoginFilter  implements Filter {
 //                out.println("window.open ('"+request.getContextPath()+"/','_top')");
 //                out.println("</script>");
 //                out.println("</html>");
-                ((HttpServletResponse) res).sendRedirect("/drsr");
+                ((HttpServletResponse) res).sendRedirect("/");
                 return;
 
             }else {

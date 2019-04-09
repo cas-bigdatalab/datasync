@@ -5,6 +5,7 @@ import cn.csdb.drsr.model.DataTask;
 import cn.csdb.drsr.model.FileTreeNode;
 import cn.csdb.drsr.service.*;
 import cn.csdb.drsr.utils.ConfigUtil;
+import cn.csdb.drsr.utils.FileUtil;
 import cn.csdb.drsr.utils.FtpUtil;
 import cn.csdb.drsr.utils.PropertiesUtil;
 import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -218,9 +220,15 @@ public class DataTaskController {
                    Path=Path+file+";";
                }
            }
-
+          File file=new File(datatask.getSqlFilePath().replace("%_%",File.separator));
+          if(file.exists()){
+              FileUtil fileUtil=new FileUtil();
+              datatask.setFileSize(fileUtil.getPrintSize(file.length()));
+//              System.out.println("文件大小为"+ fileUtil.getPrintSize(file.length()));
+          }
       }
         datatask.setFilePath(Path);
+
         jsonObject.put("datatask",datatask);
         jsonObject.put("dataSrc",dataSrc);
         return jsonObject;

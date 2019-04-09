@@ -258,8 +258,16 @@
                         <div class="col-sm-8 modediv" id="file-filePath" style="max-height: 300px;overflow-x: hidden;border: 1px solid #e5e5e5;margin-top: 18px;"></div>
                     </div>
                     <div class="form-group">
+                        <label  class="col-sm-3 control-label">文件大小:</label>
+                        <div class="col-sm-8 modediv" id="file-size"></div>
+                    </div>
+                    <div class="form-group">
                         <label  class="col-sm-3 control-label">创建时间:</label>
                         <div class="col-sm-8 modediv" id="file-createTime"></div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-3 control-label">上传路径:</label>
+                        <div class="col-sm-8 modediv" id="file-uploadpath"></div>
                     </div>
                     <%--<div class="form-group">
                         <label  class="col-sm-3 control-label">创建者:</label>
@@ -689,6 +697,8 @@
                         /*$("#file-filePath").html(datatask.filePath)*/
                         $("#file-createTime").html(convertMilsToDateTimeString(datatask.createTime))
                         $("#file-creator").html(datatask.creator)
+                        $("#file-size").html(datatask.fileSize)
+                        $("#file-uploadpath").html(datatask.remoteuploadpath)
                         if(datatask.status == 1){
                             $("#file-status").html("导入完成")
                         }else {

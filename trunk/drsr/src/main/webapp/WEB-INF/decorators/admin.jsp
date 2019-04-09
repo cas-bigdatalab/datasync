@@ -287,7 +287,7 @@ if(userName != null && userName.length()>6){
                 <div style="float: left;"><img src="${ctx}/resources/login/img/user.png" height="34" width="34" style="margin-left: 20px" /></div>
                 <div style="float: left;padding-top: 4px;" class="dropbtn" title="<%=titleName%>">
                     <span class="dropbtn" style="margin-top:2px;margin-left: 15px;"><a class="logoutClass" style="color: white;cursor: default;"><%=userName%></a></span>
-                    <td ><a href="/drsr/logout"  style="color: white;margin-left: 6px;"><span class="glyphicon glyphicon-log-out" style="font-size: 16px;"></span></a></td>
+                    <td ><a href="/logout"  style="color: white;margin-left: 6px;"><span class="glyphicon glyphicon-log-out" style="font-size: 16px;"></span></a></td>
                 </div>
                 <%--<div class="dropdown-content">--%>
                     <%--<a href="/drsr/logout"> <i class="glyphicon glyphicon-off"></i> &nbsp;安全退出</a>--%>

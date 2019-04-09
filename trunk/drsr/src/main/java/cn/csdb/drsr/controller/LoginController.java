@@ -117,7 +117,7 @@ public class LoginController {
         if(session !=null){
           session.invalidate();
         }
-        response.sendRedirect("/drsr/");
+        response.sendRedirect("/");
     }
 
 
