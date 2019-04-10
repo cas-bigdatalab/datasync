@@ -418,7 +418,7 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="groupsForAddUserDialog">
-                                用户组<span style="color: red;">*</span>
+                                用户组
                             </label>
                             <div class="col-md-9">
                                 <select class='form-control select2me' name='groupsForAddUserDialog' id='groupsForAddUserDialog' multiple="multiple" placeholder="请选择用户组">
@@ -751,7 +751,6 @@
                         required: true,
                         minlength: 6
                     },
-                    groupsForAddUserDialog: "required",
                 },
                 messages: {
                     userName: "请输入用户名",
@@ -763,7 +762,6 @@
                         required: "请输入密码",
                         minlength: "密码至少为6位"
                     },
-                    groupsForAddUserDialog: "请输入用户组",
                 }
             };
             var updateUserValid = {
@@ -988,8 +986,7 @@
                     //编辑显示己增加的用户
                     console.log(data.group.users);
                     console.log(JSON.stringify(data.group.users));
-
-                    $("#users").select2().val(JSON.parse(data.group.users)).trigger("change");
+                    $("#users").select2().val(data.group.users).trigger("change");
 
                 }
             });
@@ -1088,8 +1085,8 @@
                     "userName": $("#userName").val(),
                     "loginId": $("#loginId").val(),
                     "password": $("#password").val(),
-                    "subjectCode": $("#subjectCodeForAddUserDialog").val().toString(),
-                    "groups": $("#groupsForAddUserDialog").val().toString(),
+                    "subjectCode": $("#subjectCodeForAddUserDialog").val(),
+                    "groups": ($("#groupsForUpdateUserDialog").val() == null) ? "" : ($("#groupsForUpdateUserDialog").val().toString())
                 },
                 dataType: "text",
                 success: function (data) {
@@ -1317,7 +1314,7 @@
                         "userName": $("#userNameForUpdate").val(),
                         "loginId": $("#loginIdForUpdate").val(),
                         "password": $("#passwordForUpdate").val(),
-                        "subjectCode": $("#subjectCodeForUpdateUserDialog").val().toString(),
+                        "subjectCode": $("#subjectCodeForUpdateUserDialog").val(),
                         "groups": ($("#groupsForUpdateUserDialog").val()==null) ? "" : ($("#groupsForUpdateUserDialog").val().toString())
                     },
                     dataType: "text",
