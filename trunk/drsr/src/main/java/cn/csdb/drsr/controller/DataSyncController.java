@@ -107,9 +107,7 @@ public class DataSyncController {
             pw.println("###########上传的文件为###########" + "\n");
             File f=new File(dataTask.getSqlFilePath().replace("%_%",File.separator));
             if(f.exists()){
-                FileUtil fileUtil=new FileUtil();
-
-                pw.println("文件大小：" +  fileUtil.getPrintSize(f.length())+"\n");
+                pw.println("文件大小：" +  FileUtil.getPrintSize(f.length())+"\n");
                 pw.println("文件上传路径：" +  dataTask.getRemoteuploadpath()+"\n");
 //              System.out.println("文件大小为"+ fileUtil.getPrintSize(file.length()));
             }
