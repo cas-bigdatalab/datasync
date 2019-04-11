@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import sun.util.resources.cldr.ga.LocaleNames_ga;
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -222,8 +223,10 @@ public class DataTaskController {
            }
           File file=new File(datatask.getSqlFilePath().replace("%_%",File.separator));
           if(file.exists()){
-              FileUtil fileUtil=new FileUtil();
-              datatask.setFileSize(fileUtil.getPrintSize(file.length()));
+              Long l=Long.valueOf(file.length());
+//              FileUtil fileUtil=new FileUtil();
+              String fileSize=FileUtil.getPrintSize(l);
+              datatask.setFileSize(fileSize);
 //              System.out.println("文件大小为"+ fileUtil.getPrintSize(file.length()));
           }
       }
