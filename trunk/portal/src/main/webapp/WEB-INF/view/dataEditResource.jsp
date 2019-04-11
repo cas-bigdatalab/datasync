@@ -491,19 +491,25 @@
             // $(".time_div").html("");
             $(".fabu_div2").html("数据发布 - 第1步，共3步");
             $("#file-1").fileinput({
+                uploadAsync: false,
                 theme: 'fas',
                 language: 'zh',
-                uploadUrl: '#', // you must set a valid URL here else you will get an error
-                allowedFileExtensions: ['jpg', 'png', 'gif'],
+                uploadUrl: '${ctx}/fileNet/uploadResourceExtraFile', // you must set a valid URL here else you will get an error
                 overwriteInitial: false,
-                maxFileSize: 1000,
-                maxFilesNum: 10,
+                maxFileSize: 500000,
+                maxFileCount: 10,
                 dropZoneEnabled: false,
-                showPreview: false,
+                showPreview: true,
                 //allowedFileTypes: ['image', 'video', 'flash'],
+                // 文件缓存过程将源文件名称中的敏感字符替换
                 slugCallback: function (filename) {
                     return filename.replace('(', '_').replace(']', '_');
                 }
+            }).on("filebatchuploadsuccess", function (event, data) {
+                console.log("全部上传成功回调函数");
+                console.log("#############filebatchuploadsuccess###############");
+                console.log(data);
+                console.log("#############filebatchuploadsuccess###############")
             });
         });
 
@@ -682,7 +688,7 @@
                     $('#cutimg').attr('src', event.target.result);
                     $("#checkPicture").hide();
                     $("#uploadSpan").show();
-                    console.log(event.target.result)
+                    // console.log(event.target.result)
                     api = $.Jcrop('#cutimg', {
                         setSelect: [ 10, 10, 100, 100 ],
                         aspectRatio: 4/3,
@@ -717,7 +723,7 @@
                 processData: false,
                 success: function (result) {
                     var resultJson = JSON.parse(result);
-                    console.log(resultJson)
+                    // console.log(resultJson)
                     var filePath = '${ctx}/resources/img/images/'+resultJson.saveName;
                     $("#imgPath").val('resources/img/images/'+resultJson.saveName);
                     $('.jcrop-tracker').hide();
@@ -858,8 +864,8 @@
                 dataType: "json",
                 data: {editable: false},
                 success: function (data) {
-                    console.log(data)
-                    console.log(index)
+                    // console.log(data)
+                    // console.log(index)
                     var listPar = data.core.data
                     if(data.id == index){
                         data.state.selected =true
@@ -888,7 +894,7 @@
                 success:function (data) {
                     $(".undeslist").empty();
                     var List =JSON.parse(data)
-                    console.log(List)
+                    // console.log(List)
                     var tabCon = template("dataRelationshipList", List);
                     $(".undeslist").append(tabCon);
 
@@ -943,7 +949,7 @@
             }
 
             // dataList = dataList.substr(0, dataList.length - 1);
-            console.log(dataList)
+            // console.log(dataList)
             $.ajax({
                 url:ctx+"/resource/addResourceSecondStep",
                 type:"POST",
@@ -953,7 +959,7 @@
                     dataList:dataList
                 },
                 success:function (data) {
-                    console.log(data)
+                    // console.log(data)
                 },
                 error:function (data) {
                     console.log("请求失败")
@@ -1023,7 +1029,7 @@
             var d = {};
             var t = $("#submit_form2").serializeArray();
             $.each(t, function () {
-                console.log(this.name);
+                // console.log(this.name);
                 if (this.name.indexOf("ext_") >= 0) {
                     d[this.name] = this.value;
                 }
@@ -1067,7 +1073,7 @@
                 },
                 success:function (data) {
                     var totalList = JSON.parse(data).resource
-                    console.log(JSON.parse(data));
+                    // console.log(JSON.parse(data));
                     initCenterResourceCatalogTree($("#jstree-demo"),totalList.catalogId);
                     $("#Task_dataName").val(totalList.title)
                     $("#Task_email").val(totalList.email)
@@ -1110,9 +1116,9 @@
                         var fileId=totalList.filePath
                         fileId = fileId.substr(0, fileId.length - 1);
                         var str = fileId.replace(/%_%/g, "/");
-                        console.log(str);
+                        // console.log(str);
                         var filePathList = str.split(";")
-                        console.log(filePathList)
+                        // console.log(filePathList)
                         $(".select-database").hide();
                         $(".select-local").show();
 
@@ -1125,7 +1131,7 @@
                     });
 
                     //xiajl20190310增加，显示扩展元数据信息
-                    console.log('begin20190310');
+                    // console.log('begin20190310');
 
                     $("#divExtMetadata input,select").each(function () {
                         var str = this.name;
@@ -1137,7 +1143,7 @@
                                 }
                             })
                         }
-                        console.log("xiajl=====:" + valueStr);
+                        // console.log("xiajl=====:" + valueStr);
                         $(this).val(valueStr);
                     });
                 },
@@ -1189,7 +1195,7 @@
             return children;
         }
         function generateChildJson(childArray) {
-            console.log(childArray)
+            // console.log(childArray)
             for (var i = 0; i < childArray.length; i++) {
                 var child = childArray[i];
                 if (child.type == 'directory') {

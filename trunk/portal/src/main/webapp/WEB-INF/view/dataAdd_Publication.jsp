@@ -171,8 +171,9 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-md-3 timeVili" >选择时间<span style="margin-left: 13px">
-                                                    </span></label>
+                                                <label class="control-label col-md-3 timeVili">选择时间<span
+                                                        class="required">
+                                                    * </span></label>
                                                 <div class="col-md-5"  style="padding-top:13px">
                                                     <div class="input-group input-daterange">
                                                         <input type="text" class="form-control selectData"
@@ -513,20 +514,26 @@
         });
 
         $("#file-1").fileinput({
+            uploadAsync: false,
             theme: 'fas',
             language: 'zh',
-            uploadUrl: '#', // you must set a valid URL here else you will get an error
-            allowedFileExtensions: ['jpg', 'png', 'gif'],
+            uploadUrl: '${ctx}/fileNet/uploadResourceExtraFile', // you must set a valid URL here else you will get an error
             overwriteInitial: false,
-            maxFileSize: 1000,
-            maxFilesNum: 10,
+            maxFileSize: 500000,
+            maxFileCount: 10,
             dropZoneEnabled: false,
-            showPreview: false,
+            showPreview: true,
             //allowedFileTypes: ['image', 'video', 'flash'],
+            // 文件缓存过程将源文件名称中的敏感字符替换
             slugCallback: function (filename) {
                 return filename.replace('(', '_').replace(']', '_');
             }
-        });
+        }).on("filebatchuploadsuccess", function (event, data) {
+            console.log("全部上传成功回调函数");
+            console.log("#############filebatchuploadsuccess###############");
+            console.log(data);
+            console.log("#############filebatchuploadsuccess###############")
+        }
         //将图片截图并上传功能
         $('.selectData').datepicker({
             language:'zh-CN'

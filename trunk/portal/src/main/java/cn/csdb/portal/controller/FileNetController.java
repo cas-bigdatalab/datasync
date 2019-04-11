@@ -1,6 +1,7 @@
 package cn.csdb.portal.controller;
 
 import cn.csdb.portal.service.FileNetService;
+import cn.csdb.portal.utils.ConfigUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartRequest;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Author jinbao
@@ -202,4 +203,23 @@ public class FileNetController {
         return jsonObject;
     }
 
+    @RequestMapping(value = "/uploadResourceExtraFile")
+    @ResponseBody
+    public List<String> unloadFileOnLocal(HttpServletRequest request) {
+        MultipartRequest multipartRequest = (MultipartRequest) request;
+        String ftpRootPath = removeFtpRootLastSeparator(request);
+        String configFilePath = FileNetController.class.getClassLoader().getResource("config.properties").getFile();
+        String ResourceExtraFile = ConfigUtil.getConfigItem(configFilePath, "ResourceExtraFile");
+        String parentURI = ftpRootPath + ResourceExtraFile;
+        List<MultipartFile> files = multipartRequest.getMultiFileMap().get("file_data");
+        List<String> filePath = new ArrayList<>(10);
+        for (MultipartFile file : files) {
+            Map<String, MultipartFile> m = new HashMap<>();
+            m.put("file", file);
+            Map.Entry<String, MultipartFile> next = m.entrySet().iterator().next();
+            fileNetService.addFile(parentURI, next);
+            filePath.add(parentURI + "/" + file.getOriginalFilename());
+        }
+        return filePath;
+    }
 }
