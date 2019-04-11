@@ -22,6 +22,8 @@
     <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/fileinput.min.css">
+    <link href="${ctx}/resources/bundles/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/zTree_v3/css/demo.css" rel="stylesheet" type="text/css"/>
 
     <style>
         .undeslist label{
@@ -346,7 +348,9 @@
                                         <div class="col-md-2" style="font-size: 18px;text-align:left;margin: 0 -15px ">
                                             <span>选择文件资源</span>
                                         </div>
-                                        <div class="col-md-6 col-md-offset-1" style="font-size: 18px" id="fileContainerTree"></div>
+                                        <div class="col-md-6 col-md-offset-1" style="font-size: 18px" >
+                                            <ul id="fileContainerTree" class="ztree" style="width: 100%;"></ul>
+                                        </div>
                                         <div style="height: 15px;clear: both"></div>
                                         <div class="col-md-4 col-md-offset-2" style="font-size: 18px;width: 68%;">
                                             <span style="margin-left: -26%;position: absolute">在线上传：</span>
@@ -488,6 +492,7 @@
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
         <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-fileinput/js/fileinput.min.js"></script>
         <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-fileinput/js/locals/zh.js"></script>
+        <script src="${ctx}/resources/bundles/zTree_v3/js/jquery.ztree.all.js"></script>
     <script type="text/javascript">
         var ctx = '${ctx}';
         var sub = '${sessionScope.SubjectCode}'
@@ -511,6 +516,7 @@
         $(function(){
             // $(".time_div").html("");
             $(".fabu_div2").html("数据发布 - 第1步，共3步");
+            initFileTree();
         });
 
         $("#file-1").fileinput({
@@ -533,7 +539,7 @@
             console.log("#############filebatchuploadsuccess###############");
             console.log(data);
             console.log("#############filebatchuploadsuccess###############")
-        }
+        })
         //将图片截图并上传功能
         $('.selectData').datepicker({
             language:'zh-CN'
@@ -1024,47 +1030,16 @@
                     dataList+=$(this).attr("keyval")+";"
                 })
             }else {
-                var $ele = $("#fileDescribeDiv span")
-                $ele.each(function () {
-                    dataList+=$(this).text()+";"
-                })
+
             }
-            if($ele.size() ==0 ){
+            var fileList=getChecedValueInLocalTree();
+            if(fileList.length==0 ){
                 secondFlag = true
                 return
             }
-            dataList = dataList.substr(0, dataList.length - 1);
+            dataList=fileList.toString();
 
-
-            var ref = $('#fileContainerTree').jstree(true);//获得整个树
-            var sel = ref.get_selected(false);//获得所有选中节点，返回值为数组
-            var totalSel = sel.toString();
-            $(".jstree-undetermined").each(function(){
-                totalSel = totalSel + ',' + $(this).parent().parent().attr('id');
-            });
-            var reg = new RegExp( '%_%' , "g" );
             var reg2 = new RegExp( ',' , "g" );
-            totalSel = totalSel.replace( reg , '/' );
-            totalSel = totalSel.replace( reg2 , ';' );
-            var arr1=dataList.split(";");
-            var arr2=totalSel.split(";");
-            var _arr = new Array();
-            for(var i=0;i<arr1.length;i++){//去重
-                _arr.push(arr1[i]);
-            }
-            for(var i=0;i<arr2.length;i++){
-                var flag = true;
-                for(var j=0;j<arr1.length;j++){
-                    if(arr2[i]==arr1[j]){
-                        flag=false;
-                        break;
-                    }
-                }
-                if(flag){
-                    _arr.push(arr2[i]);
-                }
-            }
-            dataList=_arr.toString();
             dataList = dataList.replace( reg2 , ';' );
 
             console.log(dataList);
@@ -1162,53 +1137,59 @@
             })
         }
 
-        $('#fileContainerTree').jstree({
-            'core': {
-                'data': function (node, cb) {
-                    var children;
-                    if (node.id == '#') {
-                        children = initFileTree();
-                    } else {
-                        children = getFileList(node.id);
-                    }
-                    generateChildJson(children);
-                    cb.call(this, children);
-                }
-            },
-            "plugins": [
-                "checkbox", "wholerow"
-            ]
-        }).bind('select_node.jstree', function (e, data) {
-            data.instance.open_all(data.node.id);
-        }).bind("deselect_node.jstree", function (e, data) {
-            $("#fileDescribeDiv").html("");
-            var ref = $('#fileContainerTree').jstree(true);//获得整个树
-            var sel = ref.get_selected(false);
-            for(var i = 0; i <sel.length; i++){
-                var str = sel[i].replace(/%_%/g, "/");
-                $("#fileDescribeDiv").append("<div name="+ str+"><span>"+str +"</span></div>")
-            }
-        }).bind("after_open.jstree", function (e ,data) {
-            $("#fileDescribeDiv").html("");
-            var ref = $('#fileContainerTree').jstree(true);//获得整个树
-            var sel = ref.get_selected(false);
-            for(var i = 0; i <sel.length; i++){
-                var str = sel[i].replace(/%_%/g, "/");
-                $("#fileDescribeDiv").append("<div name="+ str+"><span>"+str +"</span></div>")
-            }
-        });
+        // $('#fileContainerTree').jstree({
+        //     'core': {
+        //         'data': function (node, cb) {
+        //             var children;
+        //             if (node.id == '#') {
+        //                 children = initFileTree();
+        //             } else {
+        //                 children = getFileList(node.id);
+        //             }
+        //             generateChildJson(children);
+        //             cb.call(this, children);
+        //         }
+        //     },
+        //     "plugins": [
+        //         "checkbox", "wholerow"
+        //     ]
+        // }).bind('select_node.jstree', function (e, data) {
+        //     data.instance.open_all(data.node.id);
+        // }).bind("deselect_node.jstree", function (e, data) {
+        //     $("#fileDescribeDiv").html("");
+        //     var ref = $('#fileContainerTree').jstree(true);//获得整个树
+        //     var sel = ref.get_selected(false);
+        //     for(var i = 0; i <sel.length; i++){
+        //         var str = sel[i].replace(/%_%/g, "/");
+        //         $("#fileDescribeDiv").append("<div name="+ str+"><span>"+str +"</span></div>")
+        //     }
+        // }).bind("after_open.jstree", function (e ,data) {
+        //     $("#fileDescribeDiv").html("");
+        //     var ref = $('#fileContainerTree').jstree(true);//获得整个树
+        //     var sel = ref.get_selected(false);
+        //     for(var i = 0; i <sel.length; i++){
+        //         var str = sel[i].replace(/%_%/g, "/");
+        //         $("#fileDescribeDiv").append("<div name="+ str+"><span>"+str +"</span></div>")
+        //     }
+        // });
         function initFileTree() {
             var root;
             $.ajax({
                 type: "GET",
-                url: '${ctx}/resource/fileSourceFileList',
+                url: '${ctx}/resource/addFileSourceFileList',
                 dataType: "json",
                 async: false,
                 success: function (data) {
+                    var zTreeObj = $.fn.zTree.getZTreeObj("fileContainerTree");
+                    if(zTreeObj!=null){
+                        zTreeObj.destroy();//用之前先销毁tree
+                    }
+                    var fileNodes=data.nodeList;
+                    var zTreeObj = $.fn.zTree.init($("#fileContainerTree"),setting,fileNodes);
                     root = data;
                 }
             });
-            return root;
+            // return root;
         }
         function getFileList(folderPath) {
             var children;
@@ -1236,6 +1217,126 @@
                 }
             }
         }
+
+        var setting = {
+            async: {
+                enable: true,
+                url:"${ctx}/resource/asyncGetNodes",
+                autoParam:["id", "pid", "name"],
+                dataFilter: filter
+            },
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey:'id',
+                    pIdKey:'pid',
+                    rootPId: 0
+                }
+            },
+            check: {
+                enable: true
+            },
+            callback : {
+                beforeAsync: beforeAsync,
+                onAsyncSuccess: onAsyncSuccess,
+                onAsyncError: onAsyncError,
+                onCheck : asyncAll
+            }
+        };
+
+        function filter(treeId, parentNode, childNodes) {
+            return childNodes;
+        }
+        function beforeAsync() {
+            curAsyncCount++;
+        }
+        function onAsyncSuccess(event, treeId, treeNode, msg) {
+            curAsyncCount--;
+            if (curStatus == "expand") {
+                expandNodes(treeNode.children);
+            } else if (curStatus == "async") {
+                asyncNodes(treeNode.children);
+            }
+
+            if (curAsyncCount <= 0) {
+                if (curStatus != "init" && curStatus != "") {
+                    asyncForAll = true;
+                }
+                curStatus = "";
+            }
+        }
+        function onAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown) {
+            curAsyncCount--;
+
+            if (curAsyncCount <= 0) {
+                curStatus = "";
+                if (treeNode!=null) asyncForAll = true;
+            }
+        }
+        var curStatus = "init", curAsyncCount = 0, asyncForAll = false,
+            goAsync = false;
+
+        function expandNodes(nodes) {
+            if (!nodes) return;
+            curStatus = "expand";
+            var zTree = $.fn.zTree.getZTreeObj("fileContainerTree");
+            for (var i=0, l=nodes.length; i<l; i++) {
+                zTree.expandNode(nodes[i], true, false, false);
+                if (nodes[i].isParent && nodes[i].zAsync) {
+                    expandNodes(nodes[i].children);
+                } else {
+                    goAsync = true;
+                }
+            }
+        }
+
+        function check() {
+            if (curAsyncCount > 0) {
+                return false;
+            }
+            return true;
+        }
+
+        function asyncAll(event, treeId, treeNode) {
+            if (!check()) {
+                return;
+            }
+            var zTree = $.fn.zTree.getZTreeObj("fileContainerTree");
+            if (false) {
+            } else {
+                var nodes=new Array([treeNode]);
+                asyncNodes(nodes[0]);
+            }
+        };
+
+        //获取界面中所有被选中的radio
+        function getChecedValueInLocalTree() {
+            var pathsOfCheckedFiles = new Array();
+            var treeObj=$.fn.zTree.getZTreeObj("fileContainerTree"),
+                nodes=treeObj.getCheckedNodes(true),v="";
+            for(var i=0;i<nodes.length;i++){
+                if(nodes[i].pid!="0"){
+                    pathsOfCheckedFiles.push(nodes[i].id);
+                }
+            }
+            return pathsOfCheckedFiles;
+        };
+
+        function asyncNodes(nodes) {
+            if (!nodes) return;
+            curStatus = "async";
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            for (var i=0, l=nodes.length; i<l; i++) {
+                if (nodes[i].isParent && nodes[i].zAsync) {
+                    asyncNodes(nodes[i].children);
+                    // whetherChecked=false;
+                } else {
+                    goAsync = true;
+                    zTree.reAsyncChildNodes(nodes[i], "refresh", true);
+                }
+            }
+        };
+
 
     </script>
 </div>

@@ -906,4 +906,46 @@ public class ResourceController {
         nodeList=resourceService.asynLoadingTree("",id,"false");//此处id为文件节点（文件路径）
         return nodeList;
     }
+
+
+    /**
+     *
+     * @param: []
+     * @return: java.util.List<com.alibaba.fastjson.JSONObject>
+     * @auther: caohq
+     * @date: 2019/04/11 15:43
+     */
+    @ResponseBody
+    @RequestMapping(value = "addFileSourceFileList")
+    public JSONObject addFileSourceFileList(HttpSession session) {
+        String subjectCode = session.getAttribute("SubjectCode").toString();
+
+        Subject subject = subjectService.findBySubjectCode(subjectCode);
+
+
+        String filePath=subject.getFtpFilePath();
+
+        List<FileTreeNode> nodeList=new ArrayList<FileTreeNode>();
+        filePath= filePath.replace("/",File.separator);
+        if("/".equals(filePath.charAt(filePath.length()-1)+"") || "\\".equals(filePath.charAt(filePath.length()-1)+"")){
+            filePath=filePath.substring(0,filePath.length()-1);
+        }
+        nodeList=subjectService.asynLoadingTree("",filePath,"init");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("nodeList",nodeList);
+        return jsonObject;
+    }
+
+    @RequestMapping(value="asyncGetNodes")
+    @ResponseBody
+    public List<FileTreeNode> asyncGetNodes(String id, String pid, String name, String taskId, HttpServletRequest req){
+        List<FileTreeNode> nodeList = new ArrayList<FileTreeNode>();
+        nodeList=subjectService.asynLoadingTree("",id,"false");
+        return nodeList;
+    }
+
+
+
+
+
 }
