@@ -162,7 +162,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">发布图片:</label>
                         <div class="col-sm-8 modediv" id="rel-imagePath">
-                            <img src="" alt="">
+                            <img src="" style="max-width:160px; " alt="">
                         </div>
                     </div>
                     <div class="form-group">
@@ -326,7 +326,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">发布图片:</label>
                         <div class="col-sm-8 modediv" id="file-imagePath">
-                            <img src="" alt="">
+                            <img src="" style="max-width:160px;" alt="">
                         </div>
                     </div>
                     <div class="form-group">
