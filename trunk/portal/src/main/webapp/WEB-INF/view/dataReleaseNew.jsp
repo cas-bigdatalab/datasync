@@ -325,7 +325,9 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">发布图片:</label>
-                        <div class="col-sm-8 modediv" id="file-imagePath"></div>
+                        <div class="col-sm-8 modediv" id="file-imagePath">
+                            <img src="" alt="">
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">资源关键词:</label>
@@ -864,7 +866,8 @@
                         $("#file-dataSourceId").html(id)
                         $("#file-email").html(dataList.email)
                         $("#file-catalogId").html(dataList.catalogId)
-                        $("#file-imagePath").html(dataList.imagePath)
+                        // $("#file-imagePath").html(dataList.imagePath)
+                        $("#file-imagePath img").attr("src", "${ctx}/" + dataList.imagePath + "_cut.jpg")
                         $("#file-status").html(tabStatus)
                         $("#file-resState").html(dataList.resState)
                         $("#file-publishOrgnization").html(dataList.publishOrgnization)

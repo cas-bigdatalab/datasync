@@ -376,7 +376,7 @@ if(userName != null && userName.length()>6){
 <!-- BEGIN FOOTER -->
 <div class="page-footer" style="text-align: center;background-color: #454241;height: 4.92% !important;">
     <div class="page-footer-inner" style="color: #FFF;float: none">
-        2018-2020 &copy; 中国科学院计算机网络信息中心大数据部.版权所有.
+        2019-2025 &copy; 中国科学院计算机网络信息中心大数据部 版权所有
     </div>
     <div class="scroll-to-top">
         <i class="icon-arrow-up"></i>

@@ -1245,6 +1245,12 @@
         };
 
         function filter(treeId, parentNode, childNodes) {
+            if(parentNode.checked==true){
+                for(var num=0;num<childNodes.length;num++){
+                    childNodes[num].open=true;
+                    childNodes[num].checked=true;
+                }
+            }
             return childNodes;
         }
         function beforeAsync() {
@@ -1325,7 +1331,7 @@
         function asyncNodes(nodes) {
             if (!nodes) return;
             curStatus = "async";
-            var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+            var zTree = $.fn.zTree.getZTreeObj("fileContainerTree");
             for (var i=0, l=nodes.length; i<l; i++) {
                 if (nodes[i].isParent && nodes[i].zAsync) {
                     asyncNodes(nodes[i].children);
