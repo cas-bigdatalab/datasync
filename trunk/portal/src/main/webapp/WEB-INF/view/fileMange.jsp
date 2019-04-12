@@ -145,9 +145,9 @@
         <thead>
         <tr style="background-color: #5091dc">
             <td></td>
-            <td>文件名</td>
-            <td class="text-center">大小</td>
-            <td class="text-center">修改日期</td>
+            <td style="color: white;">文件名</td>
+            <td class="text-center" style="color: white;">大小</td>
+            <td class="text-center" style="color: white;">修改日期</td>
         </tr>
         </thead>
     </table>
