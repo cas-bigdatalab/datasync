@@ -929,7 +929,7 @@ public class ResourceController {
         Subject subject = subjectService.findBySubjectCode(subjectCode);
 
 
-        String filePath=subject.getFtpFilePath();
+        String filePath=subject.getFtpFilePath()+ "file";
 
         List<FileTreeNode> nodeList=new ArrayList<FileTreeNode>();
         filePath= filePath.replace("/",File.separator);
