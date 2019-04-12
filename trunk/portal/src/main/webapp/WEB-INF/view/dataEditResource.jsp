@@ -1094,7 +1094,7 @@
                     $("#create_person").val(totalList.createPerson)
                     $("#dataDescribeID").val(totalList.introduction)
                     $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
-                    var path = "${ctx}/"+totalList.imagePath+"_cut.jpg";
+                    var path = "${ctx}/"+totalList.imagePath.replace(".jpg","_cut.jpg");
                     $('#cutimg').attr('src',path);
                     $('#imgPath').val(totalList.imagePath);
                     publicType =  totalList.publicType==""?"mysql":totalList.publicType=="mysql"?"mysql":"file"

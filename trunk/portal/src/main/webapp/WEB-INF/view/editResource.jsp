@@ -729,7 +729,7 @@
                     $('.jcrop-tracker').hide();
                     $("#checkPicture").show();
                     $("#uploadSpan").hide();
-                    $('#cutimg').attr('src',filePath+'_cut.jpg');
+                    $('#cutimg').attr('src',filePath.replace(".jpg","_cut.jpg"));
                     $('#cutimg').show();
                 },
                 error: function (returndata) {
@@ -1067,9 +1067,9 @@
                     $("#create_person").val(totalList.createPerson)
                     $("#dataDescribeID").val(totalList.introduction)
                     $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
-                    var path = "${ctx}/"+totalList.imagePath+"_cut.jpg";
+                    var path = "${ctx}/"+totalList.imagePath.replace(".jpg","_cut.jpg");
                     $('#cutimg').attr('src',path);
-                    $('#imgPath').val(totalList.imagePath);
+                    $('#imgPath').val(totalList.imagePath.replace(".jpg","_cut.jpg"));
                     publicType =  totalList.publicType==""?"mysql":totalList.publicType=="mysql"?"mysql":"file"
                     $("#select2_tags").val(totalList.keyword)
                     $("#select2_tags").select2({

@@ -323,7 +323,7 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = new cn.csdb.portal.model.Resource();
         resource.setTitle(title);
-        resource.setImagePath(imagePath);
+        resource.setImagePath(imagePath+".jpg");
         resource.setIntroduction(introduction);
         resource.setKeyword(keyword);
         resource.setCatalogId(catalogId);
@@ -539,7 +539,13 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setTitle(title);
-        resource.setImagePath(imagePath);
+        //判断图片是否发生改变
+        if(imagePath.indexOf(".jpg")!=-1){
+            resource.setImagePath(imagePath);
+        }else{
+            resource.setImagePath(imagePath+".jpg");
+        }
+
         resource.setIntroduction(introduction);
         resource.setKeyword(keyword);
         resource.setCatalogId(catalogId);
