@@ -101,7 +101,7 @@
             <%-- <th width="10%">来源位置</th>--%>
             <th width="10%">发布时间</th>
             <th width="10%">状态</th>
-            <th width="10%">操作</th>
+            <th width="16%">操作</th>
         </tr>
         </thead>
         <tbody id="bd-data">
