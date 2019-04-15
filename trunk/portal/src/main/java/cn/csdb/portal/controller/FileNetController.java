@@ -62,7 +62,7 @@ public class FileNetController {
         boolean win = ftpRootPath.endsWith("\\");
         if (linux || win) {
             ftpRootPath = ftpRootPath.substring(0, ftpRootPath.length() - 1);
-            ftpRootPath += File.separator + "file";
+            ftpRootPath += "/file";
             return ftpRootPath;
         }
         return ftpRootPath;

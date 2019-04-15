@@ -218,9 +218,8 @@ public class FileNetService {
         JSONObject jsonObject = new JSONObject();
         File file = new File(parentURI);
         if (!file.exists()) {
-            jsonObject.put("code", "error");
-            jsonObject.put("message", "请检查目录");
-        } else {
+            file.mkdirs();
+        }
             String s = multipartFile.getKey();
             MultipartFile value = multipartFile.getValue();
             FileItem fileItem = ((CommonsMultipartFile) value).getFileItem();
@@ -241,7 +240,6 @@ public class FileNetService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
         return jsonObject;
     }
 
