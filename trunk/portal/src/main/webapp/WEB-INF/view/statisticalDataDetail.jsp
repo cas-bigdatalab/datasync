@@ -50,6 +50,7 @@
             margin-left: 4%;
             /*margin-right: 10%;*/
         }
+
         /*.report-title{border-bottom: #ccc 1px solid; height: 20px;}*/
         /*.report-title h4{background-color: #fff; float:left; font-size: 18px; color:#296ebf; padding-right: 5px;}*/
         /*.report-title div{float: left; width: 25px; height: 20px; border-bottom: #296ebf 1px solid;}*/
@@ -58,111 +59,111 @@
     </style>
 </head>
 <body>
-        <div class="tap_div" style="margin-top:15px;">
-        <div id="div1" style="width: 100%;height:400px;">
-            <div class="report-title">
-                <h4><i class="fa fa-caret-right"></i>学科节点访问量下载TOP10统计</h4>
-                <div></div>
-                <a href="#" class="more" onclick="func_moreDetail()">查看更多</a>
-            </div>
-            <div style="width: 100%;height:100%;margin-top: 1%" class="report-content row">
+<div class="tap_div" style="margin-top:15px;">
+    <div id="div1" style="width: 100%;height:400px;">
+        <div class="report-title">
+            <h4><i class="fa fa-caret-right"></i>学科节点访问量下载TOP10统计</h4>
+            <div></div>
+            <a href="#" class="more" onclick="func_moreDetail()">查看更多</a>
+        </div>
+        <div style="width: 100%;height:100%;margin-top: 1%" class="report-content row">
             <div id="datashowvisit" class="css_chartsleft"></div>
             <div id="datashowdown" class="css_charts"></div>
+        </div>
+    </div>
+
+    <%-- 专题详情--%>
+    <div id="div2" style="width: 100%;height:700px; display: none;">
+        <div class="report-title">
+            <h4><i class="fa fa-caret-right"></i>学科节点访问量下载量统计</h4>
+            <div></div>
+            <a href="#" class="more" onclick="func_toTopTen()">返回</a>
+        </div>
+        <div id="datashowvisitTotal"></div>
+        <div id="datashowdownTotal" style="margin-top: 30px;margin-bottom: 20px;"></div>
+    </div>
+
+    <%--数据集Top10--%>
+    <div style="width: 100%;height:400px;margin-top: 50px;">
+        <div class="report-title">
+            <h4><i class="fa fa-caret-right"></i>数据集访问量下载量TOP10统计</h4>
+            <a href="#" class="more"></a>
+        </div>
+        <div style="width: 100%;height:100%;margin-top: 2%;" class="report-content row">
+            <div id="datacollectionvisit" class="css_chartsleft"></div>
+            <div id="datacollectiondown" class="css_charts"></div>
+        </div>
+    </div>
+
+
+    <%--显示所有学科节点--%>
+    <div id="themeList" style="width: 100%;margin-top: 50px;">
+        <%--<div style="background-color: #0d957a;color: #FFFFFF;height:3%;width: 200px;height: 30px;">按学科节点查看访问量下载量--%>
+        <%--</div>--%>
+        <div class="report-title">
+            <h4><i class="fa fa-caret-right"></i>按学科节点查看访问量下载量</h4>
+            <div></div>
+            <a href="#" class="more"></a>
+        </div>
+        <div class="clearfix"></div>
+        <div class="report-content row" style="height-min:300px;width:100%;">
+            <div id="showAllThemeSpan" class="pic-items">
+
             </div>
         </div>
+    </div>
+    <%--根据学科节点查看该学科节点内的访问量下载量--%>
+    <div id="themeDetail" style="width: 100%;min-height: 400px;margin-top: 100px;display: none;margin-bottom: 3%;">
+        <%--<div style="width: 100%;height: 10%;">--%>
+        <%--<span style="float: left;background-color: #0d957a;color: #FFFFFF;height:3%;width: 200px;height: 30px;">按学科节点查看访问量下载量</span>--%>
+        <%--<span style="float: left;margin-left: 30%;"><a>
+        <button id="reback_id"  style="background-color: #0d957a;color: #FFFFFF;height:3%;width: 100px;height: 30px;"><<<</button></a></span>--%>
+        <%--</div>--%>
+        <div class="report-title">
+            <h4><i class="fa fa-caret-right"></i>按学科节点查看访问量下载量</h4>
+            <div></div>
+            <a id="reback_id" href="#" class="more">返回</a>
+        </div>
+        <div id="themeDetail111"
+             style="width: 80%;margin-top:20px;margin-left: 10%;min-height:200px;">
 
-        <%-- 专题详情--%>
-        <div id="div2" style="width: 100%;height:700px; display: none;">
-                <div class="report-title">
-                    <h4><i class="fa fa-caret-right"></i>学科节点访问量下载量统计</h4>
-                    <div></div>
-                    <a href="#" class="more" onclick="func_toTopTen()">返回</a>
+        </div>
+        <div id="detialCharts" style="width: 100%; float: none;margin-top:20px;">
+            <table id="singleThemeTable" class="table table-hover biaoge" spellcheck="0" border="0">
+                <thead>
+                <tr class="table_tr">
+                    <td width="60%">数据集名</td>
+                    <td width="20%">访问量&nbsp;&nbsp;<i id="vcount_desc" class="fa fa-sort-desc" aria-hidden="true"
+                                                      onclick="func_asc()"></i>
+                        <i id="vcount_asc" class="fa fa-sort-asc" aria-hidden="true" style="display: none;"
+                           onclick="func_desc()"></i></td>
+                    <td width="20%">下载量&nbsp;&nbsp;<i id="dcount_desc" class="fa fa-sort-desc" aria-hidden="true"
+                                                      onclick="func_ascDown()"></i>
+                        <i id="dcount_asc" class="fa fa-sort-asc" aria-hidden="true" style="display: none;"
+                           onclick="func_descDown()"></i>
+                    </td>
+                </tr>
+                </thead>
+                <tbody id="single_tbody"></tbody>
+            </table>
+
+            <div class="review-item clearfix">
+
+                <div id="page_div" style="padding-top: 25px; float: left; display: none;">
+                    当前第<span style="color:blue;" id="currentPageNo"></span>页，共<span
+                        style="color:blue;"
+                        id="totalPages"></span>页，<span
+                        style="color:blue;" id="totalCount"></span>条数据
                 </div>
-            <div id="datashowvisitTotal"></div>
-            <div id="datashowdownTotal" style="margin-top: 30px;margin-bottom: 20px;"></div>
-        </div>
-
-        <%--数据集Top10--%>
-        <div style="width: 100%;height:400px;margin-top: 50px;">
-            <div class="report-title">
-                <h4><i class="fa fa-caret-right"></i>数据集访问量下载量TOP10统计</h4>
-                <a href="#" class="more"></a>
-            </div>
-            <div style="width: 100%;height:100%;margin-top: 2%;" class="report-content row">
-                <div id="datacollectionvisit" class="css_chartsleft"></div>
-                <div id="datacollectiondown" class="css_charts"></div>
-            </div>
-        </div>
-
-
-            <%--显示所有学科节点--%>
-        <div id="themeList" style="width: 100%;margin-top: 50px;">
-            <%--<div style="background-color: #0d957a;color: #FFFFFF;height:3%;width: 200px;height: 30px;">按学科节点查看访问量下载量--%>
-            <%--</div>--%>
-                <div class="report-title">
-                    <h4><i class="fa fa-caret-right"></i>按学科节点查看访问量下载量</h4>
-                    <div></div>
-                    <a href="#" class="more"></a>
+                <div style="float: right;">
+                    <div id="pagination"></div>
                 </div>
-                <div class="clearfix"></div>
-            <div  class="report-content row"  style="height-min:300px;width:100%;">
-                <div id="showAllThemeSpan" class="pic-items">
-
-                </div>
-            </div>
-        </div>
-            <%--根据学科节点查看该学科节点内的访问量下载量--%>
-        <div id="themeDetail" style="width: 100%;height:70%;margin-top: 100px;display: none;margin-bottom: 3%;">
-            <%--<div style="width: 100%;height: 10%;">--%>
-            <%--<span style="float: left;background-color: #0d957a;color: #FFFFFF;height:3%;width: 200px;height: 30px;">按学科节点查看访问量下载量</span>--%>
-                <%--<span style="float: left;margin-left: 30%;"><a>
-                <button id="reback_id"  style="background-color: #0d957a;color: #FFFFFF;height:3%;width: 100px;height: 30px;"><<<</button></a></span>--%>
-            <%--</div>--%>
-                <div class="report-title">
-                    <h4><i class="fa fa-caret-right"></i>按学科节点查看访问量下载量</h4>
-                    <div></div>
-                    <a id="reback_id" href="#" class="more">返回</a>
-                </div>
-                <div id="themeDetail111" style="width: 80%;margin-top:1%;margin-left: 10%;height: 60%;">
 
             </div>
-            <div id="detialCharts" style="width: 100%; float: none">
-                <%--<div id="singlethemeChartsV"  style=" margin-left: 10%;width: 35%;float: left; height:60%;"></div>--%>
-                <%--<div id="singlethemeChartsD"   style="margin-left: 10%;margin-right: 10%;width: 35%;float: left;height:60%;"></div>--%>
-                <table id="singleThemeTable" class="table table-hover biaoge" spellcheck="0" border="0">
-                    <thead>
-                    <tr class="table_tr">
-                        <td width="60%">数据集名</td>
-                        <td width="20%">访问量&nbsp;&nbsp;<i id="vcount_desc" class="fa fa-sort-desc" aria-hidden="true"
-                                              onclick="func_asc()"></i>
-                            <i id="vcount_asc" class="fa fa-sort-asc" aria-hidden="true" style="display: none;"
-                               onclick="func_desc()"></i></td>
-                        <td width="20%">下载量&nbsp;&nbsp;<i id="dcount_desc" class="fa fa-sort-desc" aria-hidden="true"
-                                              onclick="func_ascDown()"></i>
-                            <i id="dcount_asc" class="fa fa-sort-asc" aria-hidden="true" style="display: none;"
-                               onclick="func_descDown()"></i>
-                        </td>
-                    </tr>
-                    </thead>
-                    <tbody id="single_tbody"></tbody>
-                </table>
-
-                <div class="review-item clearfix">
-
-                    <div id="page_div" style="padding-top: 25px; float: left; display: none;">
-                        当前第<span style="color:blue;" id="currentPageNo"></span>页,共<span
-                            style="color:blue;"
-                            id="totalPages"></span>页,<span
-                            style="color:blue;" id="totalCount"></span>条数据
-                    </div>
-                    <div style="float: right;">
-                        <div id="pagination"></div>
-                    </div>
-
-                </div>
-            </div>
         </div>
-        </div>
+            <div style="display: none;margin-top:30px;" id="pointOut_div" align="center"><h2>暂时没有数据集</h2></div>
+    </div>
+</div>
 
 
 <script type="text/html" id="showAllTheme">
@@ -173,51 +174,51 @@
             <%--<img src="{{value.imagePath}}" width="100%;"/>--%>
             <span style="text-align: center;font-weight: bolder;font-size: smaller;display: block;">{{value.subjectName}}</span>
         </a>
-   </div>
-   {{/each}}
+    </div>
+    {{/each}}
 </script>
 
 <script type="text/html" id="showThemeDetial11">
-   {{each subject as value i}}
-   <%--<span style="width:13%;margin-left: 3%;float: left">--%>
-            <%--<img src="${ctx}/{{value.imagePath}}"/>--%>
-       <%--<br/>--%>
-       <%--<p>{{value.subjectName}}</p>--%>
-   <%--</span>--%>
-   <%--<span style="float: left;">简介：{{value.contact}}</span>--%>
-   <div class="pic-item" style=" width: 16%; float: left; padding: 5px;height: 150px;margin-bottom: 50px;">
-       <img src="${ctx}/IoReadImage?filePath={{value.imagePath}}" width="200px" height="150px"/>
-       <h5 style="text-align: center;">{{value.subjectName}}</h5>
-   </div>
-   <div class="pic-item" style=" width: 60%; float: left; padding: 20px;height:150px;margin-left: 20px;">
-       <label>简介：</label>{{value.brief}}
-   </div>
+    {{each subject as value i}}
+    <%--<span style="width:13%;margin-left: 3%;float: left">--%>
+    <%--<img src="${ctx}/{{value.imagePath}}"/>--%>
+    <%--<br/>--%>
+    <%--<p>{{value.subjectName}}</p>--%>
+    <%--</span>--%>
+    <%--<span style="float: left;">简介：{{value.contact}}</span>--%>
+    <div class="pic-item" style=" width: 16%; float: left; padding: 5px;height: 150px;margin-bottom: 50px;">
+        <img src="${ctx}/IoReadImage?filePath={{value.imagePath}}" width="200px" height="150px"/>
+        <h5 style="text-align: center;">{{value.subjectName}}</h5>
+    </div>
+    <div class="pic-item" style=" width: 60%; float: left; padding: 20px;height:150px;margin-left: 20px;">
+        <label>简介：</label>{{value.brief}}
+    </div>
 
-   {{/each}}
+    {{/each}}
 </script>
 
 <script type="text/html" id="single_tbodyTemplent">
-   {{each vCount as value i}}
-   <tr>
-       <%--<a href="${applicationScope.systemPro['cas.url.prefix']}/login?service=${applicationScope.systemPro['dataexplore.url']}/shiro-cas">登录</a>--%>
-       <%--<td><a href="http://10.0.86.85/DataExplore/sdo/detail&id={{value.id}}">{{value.title}}</a></td>--%>
-       <td><a href="${applicationScope.systemPro['dataexplore.url']}/{{value.id}}">{{value.title}}</a></td>
-       <td>{{value.vCount}}</td>
-       <td>{{value.dCount}}</td>
-   </tr>
-   {{/each}}
+    {{each vCount as value i}}
+    <tr>
+        <%--<a href="${applicationScope.systemPro['cas.url.prefix']}/login?service=${applicationScope.systemPro['dataexplore.url']}/shiro-cas">登录</a>--%>
+        <%--<td><a href="http://10.0.86.85/DataExplore/sdo/detail&id={{value.id}}">{{value.title}}</a></td>--%>
+        <td><a href="${applicationScope.systemPro['dataexplore.url']}/{{value.id}}">{{value.title}}</a></td>
+        <td>{{value.vCount}}</td>
+        <td>{{value.dCount}}</td>
+    </tr>
+    {{/each}}
 </script>
 
 </body>
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
-   <script src="${ctx}/resources/js/jquery.json.min.js"></script>
-   <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
-   <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
-   <script src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-   <script src="${ctx}/resources/bundles/layerJs/layer.js"></script>
-   <script src="${ctx}/resources/bundles/echarts/echarts.min.js"></script>
-   <%--<script src="${ctx}/resources/bundles/jquery.svg3dtagcloud/jquery.svg3dtagcloud.min.js"></script>--%>
+    <script src="${ctx}/resources/js/jquery.json.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
+    <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
+    <script src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script src="${ctx}/resources/bundles/layerJs/layer.js"></script>
+    <script src="${ctx}/resources/bundles/echarts/echarts.min.js"></script>
+    <%--<script src="${ctx}/resources/bundles/jquery.svg3dtagcloud/jquery.svg3dtagcloud.min.js"></script>--%>
 
     <script type="text/javascript">
         var s_subjectCode = "";
@@ -226,7 +227,7 @@
             // rotate: 45,//倾斜度 -90 至 90 默认为0
             // margin: 2,
             formatter: function (value, index) {
-                var s=value.substring(0,10);
+                var s = value.substring(0, 10);
                 var ret = "";//拼接加\n返回的类目项
                 var maxLength = 2;//每项显示文字个数
                 var valLength = s.length;//X轴类目项的文字个数
@@ -248,7 +249,7 @@
             }
         };
         var grid = {bottom: "30%"};
-        var colors=['#4a8cd6','#da6663', '#7e64a1', '#a987d6',
+        var colors = ['#4a8cd6', '#da6663', '#7e64a1', '#a987d6',
             '#58bae5', '#54d7b3', '#51c061', '#89c154', '#e2e061',
             '#e2b65f'];
         $.ajax({
@@ -277,9 +278,9 @@
                         top: 'bottom'
                     },
                     toolbox: {
-                        show : true,
-                        feature : {
-                            dataView : {show: true, readOnly: false},
+                        show: true,
+                        feature: {
+                            dataView: {show: true, readOnly: false},
                             magicType: {show: true, type: ['line', 'bar']},
                         }
                     },
@@ -350,9 +351,9 @@
                         top: 'bottom'
                     },
                     toolbox: {
-                        show : true,
-                        feature : {
-                            dataView : {show: true, readOnly: false},
+                        show: true,
+                        feature: {
+                            dataView: {show: true, readOnly: false},
                             magicType: {show: true, type: ['line', 'bar']},
                         }
                     },
@@ -424,9 +425,9 @@
                         top: 'bottom'
                     },
                     toolbox: {
-                        show : true,
-                        feature : {
-                            dataView : {show: true, readOnly: false},
+                        show: true,
+                        feature: {
+                            dataView: {show: true, readOnly: false},
                             magicType: {show: true, type: ['line', 'bar']},
                         }
                     },
@@ -501,9 +502,9 @@
                         top: 'bottom'
                     },
                     toolbox: {
-                        show : true,
-                        feature : {
-                            dataView : {show: true, readOnly: false},
+                        show: true,
+                        feature: {
+                            dataView: {show: true, readOnly: false},
                             magicType: {show: true, type: ['line', 'bar']},
                         }
                     },
@@ -621,9 +622,17 @@
                 dataType: "json",
                 data: {"subjectCode": subjectCode, "pageNo": page},
                 success: function (data) {
-                    var html = template("single_tbodyTemplent", data);
-                    $("#single_tbody").append(html);
-                    fun_limit(subjectCode, data);
+                    if(data.vCount.length===0){
+                        $("#detialCharts").hide();
+                        $("#pointOut_div").show();
+                    }else{
+                        $("#pointOut_div").hide();
+                        $("#detialCharts").show();
+                        var html = template("single_tbodyTemplent", data);
+                        $("#single_tbody").append(html);
+                        fun_limit(subjectCode, data);
+                    }
+
                 }
             });
         }
@@ -780,9 +789,9 @@
                             top: 'bottom'
                         },
                         toolbox: {
-                            show : true,
-                            feature : {
-                                dataView : {show: true, readOnly: false},
+                            show: true,
+                            feature: {
+                                dataView: {show: true, readOnly: false},
                                 magicType: {show: true, type: ['line', 'bar']},
                             }
                         },
@@ -852,9 +861,9 @@
                             top: 'bottom'
                         },
                         toolbox: {
-                            show : true,
-                            feature : {
-                                dataView : {show: true, readOnly: false},
+                            show: true,
+                            feature: {
+                                dataView: {show: true, readOnly: false},
                                 magicType: {show: true, type: ['line', 'bar']},
                             }
                         },
