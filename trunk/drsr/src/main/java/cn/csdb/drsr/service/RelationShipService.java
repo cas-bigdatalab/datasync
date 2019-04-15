@@ -184,7 +184,8 @@ public class RelationShipService {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(),
                 dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
-        PreparedStatement paginationSql = dataSource.getPaginationSql(connection, sql, null, start, limit);
+        List<Object> params=new ArrayList<>();
+        PreparedStatement paginationSql = dataSource.getBySql(connection, sql, params);
         List<List<Object>> datas = Lists.newArrayList();
         try {
             ResultSet resultSet = paginationSql.executeQuery();

@@ -243,7 +243,7 @@
                                      style="background-color: white;min-height:300px;max-height:70%;padding-top: 20px ; overflow: scroll;">
                                    <%-- <div class="tab-pane active" id="editTableFieldComsId">
                                     </div>--%>
-                                    <div id="previewTableDataAndComsId">
+                                    <div id="previewTableDataAndComsId" style="max-height: 400px;">
                                         <div class="skin skin-minimal">
                                             <table class="table table-hover table-bordered">
                                                 <thead>
@@ -810,6 +810,11 @@
                             },
                             dataType: "json",
                             success: function (data) {
+
+                                if(data.dataSize>10){
+                                    toastr["warning"]("预览仅展示前十条数据！");
+                                }
+
                                 for(var key in data.maps){
                                     var sqlName = key
                                 }

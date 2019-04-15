@@ -93,10 +93,10 @@
                 <th>管理员账号：</th>
                 <td>${subject.admin}</td>
             </tr>
-            <tr>
-                <th>密码：</th>
-                <td>${subject.adminPasswd}</td>
-            </tr>
+            <%--<tr>--%>
+                <%--<th>密码：</th>--%>
+                <%--<td>${subject.adminPasswd}</td>--%>
+            <%--</tr>--%>
             <tr>
                 <th>联系人：</th>
                 <td>${subject.contact}</td>
@@ -113,10 +113,10 @@
                 <th>FTP用户名：</th>
                 <td>${subject.ftpUser}</td>
             </tr>
-            <tr>
-                <th>FTP密码：</th>
-                <td>${subject.ftpPassword}</td>
-            </tr>
+            <%--<tr>--%>
+                <%--<th>FTP密码：</th>--%>
+                <%--<td>${subject.ftpPassword}</td>--%>
+            <%--</tr>--%>
             <tr>
                 <th>描述：</th>
                 <td>${subject.brief}</td></tr>

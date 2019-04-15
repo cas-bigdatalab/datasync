@@ -243,8 +243,22 @@ public class RelationSourceController {
         JSONObject jsonObject = new JSONObject();
         Map<String, List<TableInfo>> maps = relationShipService.getTableComsBySql(Integer.parseInt(dataSourceId), sqlStr);
         List<List<Object>> datas = relationShipService.getDataBySql(sqlStr, maps, Integer.valueOf(dataSourceId), 0, pageSize);
-        jsonObject.put("datas", datas);
+        List<List<Object>> datasLimit=new ArrayList<>();
+
+        if(datas.size()>10){//查询结果大于10条时
+           for(int n=0;n<=9;n++){
+               datasLimit.add(datas.get(n));
+           }
+        }else if(datas.size()<=10 && datas.size()>0){//查询结果大于零小于等于10条时
+           for(int n=0;n<datas.size();n++){
+               datasLimit.add(datas.get(n));
+           }
+        }else {
+            datasLimit=datas;
+        }
+        jsonObject.put("datas", datasLimit);
         jsonObject.put("maps", maps);
+        jsonObject.put("dataSize", datas.size());
         return jsonObject;
     }
 
