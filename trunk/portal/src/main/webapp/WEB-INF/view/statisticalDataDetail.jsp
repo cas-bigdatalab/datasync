@@ -167,9 +167,9 @@
 
 <script type="text/html" id="showAllTheme">
     {{each list as value i}}
-    <div class="pic-item" style=" width: 20%; float: left; padding: 5px;height:55%;">
+    <div class="pic-item" style="width:210px;float: left; height: 200px;margin: 15px;">
         <a href="javaScript:void(0)" id="{{value.subjectCode}}" onclick="findBySubjectCode(this)">
-            <img src="${ctx}/IoReadImage?filePath={{value.imagePath}}" width="100%;height:100%"/>
+            <img src="${ctx}/IoReadImage?filePath={{value.imagePath}}" width="200px" height="150px"/>
             <%--<img src="{{value.imagePath}}" width="100%;"/>--%>
             <span style="text-align: center;font-weight: bolder;font-size: smaller;display: block;">{{value.subjectName}}</span>
         </a>
@@ -186,11 +186,11 @@
    <%--</span>--%>
    <%--<span style="float: left;">简介：{{value.contact}}</span>--%>
    <div class="pic-item" style=" width: 16%; float: left; padding: 5px;height: 150px;margin-bottom: 50px;">
-       <img src="${ctx}/IoReadImage?filePath={{value.imagePath}}" width="100%;height:80%;"/>
+       <img src="${ctx}/IoReadImage?filePath={{value.imagePath}}" width="200px" height="150px"/>
        <h5 style="text-align: center;">{{value.subjectName}}</h5>
    </div>
-   <div class="pic-item" style=" width: 40%; float: left; padding: 5px;height:150px;">
-       简介：{{value.brief}}
+   <div class="pic-item" style=" width: 60%; float: left; padding: 20px;height:150px;margin-left: 20px;">
+       <label>简介：</label>{{value.brief}}
    </div>
 
    {{/each}}
@@ -226,9 +226,10 @@
             // rotate: 45,//倾斜度 -90 至 90 默认为0
             // margin: 2,
             formatter: function (value, index) {
+                var s=value.substring(0,10);
                 var ret = "";//拼接加\n返回的类目项
-                var maxLength = 3;//每项显示文字个数
-                var valLength = value.length;//X轴类目项的文字个数
+                var maxLength = 2;//每项显示文字个数
+                var valLength = s.length;//X轴类目项的文字个数
                 var rowN = Math.ceil(valLength / maxLength); //类目项需要换行的行数
                 if (rowN > 1)//如果类目项的文字大于3,
                 {
@@ -237,12 +238,12 @@
                         var start = i * maxLength;//开始截取的位置
                         var end = start + maxLength;//结束截取的位置
                         //这里也可以加一个是否是最后一行的判断，但是不加也没有影响，那就不加吧
-                        temp = value.substring(start, end) + "\n";
+                        temp = s.substring(start, end) + "\n";
                         ret += temp; //凭借最终的字符串
                     }
                     return ret;
                 } else {
-                    return value;
+                    return s;
                 }
             }
         };
