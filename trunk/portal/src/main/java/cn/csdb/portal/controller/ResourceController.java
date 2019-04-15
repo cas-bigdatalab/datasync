@@ -6,9 +6,11 @@ import cn.csdb.portal.service.*;
 import cn.csdb.portal.utils.FileTreeNode;
 import cn.csdb.portal.utils.FileUploadUtil;
 import cn.csdb.portal.utils.ImgCut;
+import cn.csdb.portal.utils.PropertiesUtil;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Strings;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -323,7 +325,7 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = new cn.csdb.portal.model.Resource();
         resource.setTitle(title);
-        resource.setImagePath(imagePath+".jpg");
+        resource.setImagePath(imagePath);
         resource.setIntroduction(introduction);
         resource.setKeyword(keyword);
         resource.setCatalogId(catalogId);
@@ -539,11 +541,15 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setTitle(title);
-        //判断图片是否发生改变
-        if(imagePath.indexOf(".jpg")!=-1){
-            resource.setImagePath(imagePath);
-        }else{
-            resource.setImagePath(imagePath+".jpg");
+        String oldImagePath = resource.getImagePath();
+        if (!Strings.isNullOrEmpty(imagePath) && !Strings.isNullOrEmpty(oldImagePath)) {
+            if (oldImagePath.equals(imagePath)) {
+                resource.setImagePath(oldImagePath);
+            } else {
+                File f = new File(oldImagePath);
+                f.delete();
+                resource.setImagePath(imagePath);
+            }
         }
 
         resource.setIntroduction(introduction);
@@ -717,21 +723,24 @@ public class ResourceController {
             @RequestParam(value = "imgFile") MultipartFile imageFile
     ) throws Exception {
         System.out.println("==========Start=============");
+        JSONObject jsonObject = new JSONObject();
         String saveName = "";
-        String realPath = request.getSession().getServletContext().getRealPath("/");
-        String resourcePath = "resources" + File.separator + "img" + File.separator + "images" + File.separator;
+        String configFilePath = SubjectMgmtController.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = (String) request.getSession().getAttribute("SubjectCode");
+        String resourcePath = PropertiesUtil.GetValueByKey(configFilePath, "imagesPath");
+        resourcePath += "/" + subjectCode + "/resources";
         if (imageFile != null) {
             if (FileUploadUtil.allowUpload(imageFile.getContentType())) {
                 String fileName = FileUploadUtil.rename(imageFile.getOriginalFilename());
                 int end = fileName.lastIndexOf(".");
                 saveName = fileName.substring(0, end);
-                File dir = new File(realPath + resourcePath);
+                File dir = new File(resourcePath);
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }
                 File file = new File(dir, saveName + "_src.jpg");
                 imageFile.transferTo(file);
-                String srcImagePath = realPath + resourcePath + saveName;
+                String srcImagePath = resourcePath + "/" + saveName;
                 int imageX = Double.valueOf(x).intValue();
                 int imageY = Double.valueOf(y).intValue();
                 int imageH = Double.valueOf(h).intValue();
@@ -740,12 +749,10 @@ public class ResourceController {
                 System.out.println("==========imageCutStart=============");
                 ImgCut.imgCut(srcImagePath, imageX, imageY, imageW, imageH);
                 System.out.println("==========imageCutEnd=============");
-                request.getSession().setAttribute("imgSrc", resourcePath + saveName + "_src.jpg");//成功之后显示用
-                request.getSession().setAttribute("imgCut", resourcePath + saveName + "_cut.jpg");//成功之后显示用
+                file.delete();
+                jsonObject.put("saveName", "/imagesPath/" + subjectCode + "/resources/" + saveName + "_cut.jpg");
             }
         }
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("saveName", saveName);
         return jsonObject;
     }
 

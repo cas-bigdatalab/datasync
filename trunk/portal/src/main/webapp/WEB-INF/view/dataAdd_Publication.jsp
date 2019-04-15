@@ -756,12 +756,12 @@
                 processData: false,
                 success: function (result) {
                     var resultJson = JSON.parse(result);
-                    var filePath = 'resources/img/images/'+resultJson.saveName;
-                    $("#imgPath").val('resources/img/images/'+resultJson.saveName);
+                    var filePath = resultJson.saveName;
+                    $("#imgPath").val(resultJson.saveName);
                     $('.jcrop-tracker').hide();
                     $("#checkPicture").show();
                     $("#uploadSpan").hide();
-                    $('#cutimg').attr('src',filePath+'_cut.jpg');
+                    $('#cutimg').attr('src', filePath);
                     $('#cutimg').show();
                     var tagNum = $("#imgFlagNum").val();
                     if(tagNum=="1") {

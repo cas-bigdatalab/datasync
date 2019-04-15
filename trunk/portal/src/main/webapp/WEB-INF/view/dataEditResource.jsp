@@ -714,7 +714,7 @@
             $(".jcrop-holder").hide();
             var formData = new FormData($( "#fileForm" )[0]);
             $.ajax({
-                url: '${ctx}/resource/uploadHeadImage' ,
+                url: '${ctx}/resource/uploadHeadImage',
                 type: 'post',
                 data: formData,
                 async: false,
@@ -724,12 +724,12 @@
                 success: function (result) {
                     var resultJson = JSON.parse(result);
                     // console.log(resultJson)
-                    var filePath = '${ctx}/resources/img/images/'+resultJson.saveName;
-                    $("#imgPath").val('resources/img/images/'+resultJson.saveName);
+                    var filePath = resultJson.saveName;
+                    $("#imgPath").val(resultJson.saveName);
                     $('.jcrop-tracker').hide();
                     $("#checkPicture").show();
                     $("#uploadSpan").hide();
-                    $('#cutimg').attr('src',filePath+'_cut.jpg');
+                    $('#cutimg').attr('src', filePath);
                     $('#cutimg').show();
                 },
                 error: function (returndata) {
@@ -1094,7 +1094,7 @@
                     $("#create_person").val(totalList.createPerson)
                     $("#dataDescribeID").val(totalList.introduction)
                     $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
-                    var path = "${ctx}/"+totalList.imagePath.replace(".jpg","_cut.jpg");
+                    var path = totalList.imagePath;
                     $('#cutimg').attr('src',path);
                     $('#imgPath').val(totalList.imagePath);
                     publicType =  totalList.publicType==""?"mysql":totalList.publicType=="mysql"?"mysql":"file"
