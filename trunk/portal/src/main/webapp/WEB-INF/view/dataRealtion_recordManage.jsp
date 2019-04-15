@@ -633,7 +633,7 @@
                             if (strs2[i] === "PORTALID") {
                                 s += "<input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='0'/>";
                             } else {
-                                s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td><input class='form-control' style='width: 100%;height:100%;' value='' name='" + strs2[i] + "'/></td></tr>";
+                                s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td><input class='form-control' style='width: 100%;height:100%;'  name='" + strs2[i] + "' dataType='" + dataTypeArr[i] + "' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 10px;'></p></td></tr>";
                             }
                         } else {
                             if(strs2[i] === "PORTALID"){
