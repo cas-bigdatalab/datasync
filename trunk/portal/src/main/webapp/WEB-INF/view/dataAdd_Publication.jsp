@@ -504,6 +504,7 @@
         var firstTime ;
         var lastTime ;
         var api = null;
+        var uploadFilePath = [];
 
 
         $.extend($.validator.messages, {
@@ -529,17 +530,49 @@
             maxFileCount: 10,
             dropZoneEnabled: false,
             showPreview: true,
-            //allowedFileTypes: ['image', 'video', 'flash'],
+            layoutTemplates: { // 设置预览框中的按钮
+                actionUpload: ''    //设置为空可去掉上传按钮
+                // actionDelete:''  //设置为空可去掉删除按钮
+            },
+            showUploadedThumbs: true,
             // 文件缓存过程将源文件名称中的敏感字符替换
             slugCallback: function (filename) {
                 return filename.replace('(', '_').replace(']', '_');
             }
-        }).on("filebatchuploadsuccess", function (event, data) {
-            console.log("全部上传成功回调函数");
-            console.log("#############filebatchuploadsuccess###############");
-            console.log(data);
-            console.log("#############filebatchuploadsuccess###############")
-        })
+        }).on("filebatchuploadsuccess", function (event, data) { // 选中文件全部上传成功后调用
+            uploadFilePath = data.response;
+        }).on("filesuccessremove", function (event, id, index) {// 预览且已上传情况下 删除之前
+            var deleteFileName = $("#" + id).find(".file-thumbnail-footer").find(".file-footer-caption").attr("title");
+            removeFileFromFtpAndUploadFilePath(deleteFileName);
+        });
+
+        function removeFileFromFtpAndUploadFilePath(deleteFileName) {
+
+            var ftpFilePath = findFtpPathAndRemove(deleteFileName);
+            $.ajax({
+                url: "${ctx}/fileNet/deleteFile",
+                type: "POST",
+                dataType: "JSON",
+                data: {
+                    deletePath: ftpFilePath
+                },
+                success: function (data) {
+
+                }
+            })
+        }
+
+        function findFtpPathAndRemove(deleteFileName) {
+            var ftpFilePath, pathIndex;
+            $.each(uploadFilePath, function (index, value) {
+                if (value.endsWith(deleteFileName)) {
+                    ftpFilePath = value;
+                    pathIndex = index;
+                }
+            });
+            uploadFilePath.splice(pathIndex, 1);
+            return ftpFilePath;
+        }
         //将图片截图并上传功能
         $('.selectData').datepicker({
             language:'zh-CN'
@@ -1325,7 +1358,7 @@
                     pathsOfCheckedFiles.push(nodes[i].id);
                 }
             }
-            return pathsOfCheckedFiles;
+            return pathsOfCheckedFiles.concat(uploadFilePath);
         };
 
         function asyncNodes(nodes) {
