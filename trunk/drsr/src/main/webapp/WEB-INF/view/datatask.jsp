@@ -860,7 +860,7 @@
                         $('#pagination').empty();
                     }
                     var totalpage = Math.ceil(DataList.totalCount/DataList.pageSize)
-                    $(".page-message").html("当前第<span style='color:blue'>"+DataList.pageNum +"</span>页,共<span style='color:blue'>"+totalpage +"</span>页,共<span style='color:blue'>"+DataList.totalCount+"</span>条数据");
+                    $(".page-message").html("当前第<span style='color:blue'>"+pageNum +"</span>页，共<span style='color:blue'>"+totalpage +"</span>页，共<span style='color:blue'>"+DataList.totalCount+"</span>条数据");
                     $('#pagination').bootpag({
                         total: totalpage,
                         page:DataList.pageNo,
