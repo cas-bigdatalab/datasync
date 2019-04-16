@@ -217,12 +217,11 @@ public class FtpUtil {
             if (remoteFilepath.contains("/")) {
 //                remoteFileName = remoteFilepath.substring(remoteFilepath.lastIndexOf("/") + 1);
                 //创建服务器远程目录结构，创建失败直接返回
-                ftpClient.changeWorkingDirectory(remoteFilepath);
                 if (CreateDirecroty(remoteFilepath, ftpClient) == UploadStatus.Create_Directory_Fail) {
                     return UploadStatus.Create_Directory_Fail;
                 }
             }
-
+            ftpClient.changeWorkingDirectory("/temp/");
             //检查远程是否存在文件
             FTPFile[] files = ftpClient.listFiles(new String(remoteFileName.getBytes("GBK"), "iso-8859-1"));
             if (files.length == 1) {
