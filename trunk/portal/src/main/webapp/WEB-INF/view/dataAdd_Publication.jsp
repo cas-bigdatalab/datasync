@@ -1358,6 +1358,15 @@
                     pathsOfCheckedFiles.push(nodes[i].id);
                 }
             }
+            if (uploadFilePath.length != 0) {
+                var path = uploadFilePath[0];
+                if (!path.endsWith("userUpload")) {
+                    var lastIndex = path.lastIndexOf("/");
+                    var parentPath = path.slice(0, lastIndex);
+                    uploadFilePath.splice(0, 0, parentPath);
+                }
+
+            }
             return pathsOfCheckedFiles.concat(uploadFilePath);
         };
 
