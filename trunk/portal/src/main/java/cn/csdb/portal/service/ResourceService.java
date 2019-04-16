@@ -9,10 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @program: DataSync
@@ -242,6 +239,9 @@ public class ResourceService {
         return dataSrcDao.getRecordCount( host,  port,  userName,  password,  databaseName,  tableName);
     }
 
+    public Map<String, Map<String, String>> getTableColumns(String host, String port, String userName, String password, String databaseName, String tableName){
+        return dataSrcDao.getTableColumns( host,  port,  userName,  password,  databaseName,  tableName);
+    }
 
     public  List<FileTreeNode> loadingFileTree(String path,List<FileTreeNode> nodeList){
         String systemName=System.getProperties().getProperty("os.name");

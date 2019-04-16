@@ -27,6 +27,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -395,6 +396,19 @@ public class ResourceController {
             resource.setToFilesNumber(0);
             resource.setPublicType("mysql");
             List<String> tableList = Arrays.asList(dataList.split(";"));
+            //计算存储量
+            int allCount = 0;
+            for(String tableName:tableList){
+                Map<String, Map<String, String>> tableColumns = resourceService.getTableColumns(subject.getDbHost(), subject.getDbPort(), subject.getDbUserName(), subject.getDbPassword(), subject.getDbName(), tableName);
+                int column = tableColumns.size()-1;
+                List<String>list = new ArrayList<>();
+                list.add(tableName);
+                int row = resourceService.getRecordCount(subject.getDbHost(), subject.getDbPort(), subject.getDbUserName(), subject.getDbPassword(), subject.getDbName(), list);
+                allCount += row*column;
+            }
+            Double allCountDouble = 225.0/(75000/allCount)/1024;
+            String str = String.format("%.2f", allCountDouble);
+            resource.setToMemorySize(str);
             int rowCount = resourceService.getRecordCount(subject.getDbHost(), subject.getDbPort(), subject.getDbUserName(), subject.getDbPassword(), subject.getDbName(), tableList);
             resource.setToRecordNumber(rowCount);
         } else if (publicType.equals("file")) {
