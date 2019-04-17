@@ -704,7 +704,7 @@
                     $("#subjectNameM").val(data.subjectName);
                     $("#subjectCodeM").val(data.subjectCode);
                     if (data.imagePath !== "") {
-                        $(".showImgIfExist img").attr("src", "${ctx}/IoReadImage?filePath=" + data.imagePath);
+                        $(".showImgIfExist img").attr("src", data.imagePath);
                         $(".showImgIfExist").show();
                     }
                     $("#imageM").attr("src", data.imagePath);

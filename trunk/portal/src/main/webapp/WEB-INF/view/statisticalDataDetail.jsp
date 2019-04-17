@@ -170,7 +170,7 @@
     {{each list as value i}}
     <div class="pic-item" style="width:210px;float: left; height: 200px;margin: 15px;">
         <a href="javaScript:void(0)" id="{{value.subjectCode}}" onclick="findBySubjectCode(this)">
-            <img src="${ctx}/IoReadImage?filePath={{value.imagePath}}" width="200px" height="150px"/>
+            <img src="{{value.imagePath}}" width="200px" height="150px"/>
             <%--<img src="{{value.imagePath}}" width="100%;"/>--%>
             <span style="text-align: center;font-weight: bolder;font-size: smaller;display: block;">{{value.subjectName}}</span>
         </a>
@@ -187,7 +187,7 @@
     <%--</span>--%>
     <%--<span style="float: left;">简介：{{value.contact}}</span>--%>
     <div class="pic-item" style=" width: 16%; float: left; padding: 5px;height: 150px;margin-bottom: 50px;">
-        <img src="${ctx}/IoReadImage?filePath={{value.imagePath}}" width="200px" height="150px"/>
+        <img src="{{value.imagePath}}" width="200px" height="150px"/>
         <h5 style="text-align: center;">{{value.subjectName}}</h5>
     </div>
     <div class="pic-item" style=" width: 60%; float: left; padding: 20px;height:150px;margin-left: 20px;">

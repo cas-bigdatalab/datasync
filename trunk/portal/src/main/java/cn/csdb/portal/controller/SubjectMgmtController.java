@@ -106,7 +106,7 @@ public class SubjectMgmtController {
         String configFilePath = SubjectMgmtController.class.getClassLoader().getResource("config.properties").getFile();
         String subjectCode = request.getParameter("subjectCode");
         String imagesPath = PropertiesUtil.GetValueByKey(configFilePath, "imagesPath");
-        imagesPath += File.separator + subjectCode;
+        imagesPath += "/" + subjectCode;
         if (!(new File(imagesPath).exists()))
         {
             new File(imagesPath).mkdir();
@@ -117,7 +117,7 @@ public class SubjectMgmtController {
         // check the input file's path to ensure user input a real image
         String imageFilePath = "";
         if (!(fileName == null || fileName.equals(""))) {
-            imageFilePath = imagesPath + File.separator + fileName;
+            imageFilePath = imagesPath + "/" + fileName;
         } else {
             return "";
         }
@@ -137,8 +137,9 @@ public class SubjectMgmtController {
 
         logger.info("image saved path : " + imageFilePath);
         logger.info("save image file completed!");
-
-        return imageFilePathObj.getAbsolutePath();
+        String replace = imageFilePathObj.getPath().replace("\\", "/");
+        replace = replace.replace("/home/userimg", "/imagesPath");
+        return replace;
     }
 
     /**
