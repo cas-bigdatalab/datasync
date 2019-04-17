@@ -964,28 +964,23 @@
                     dataList+=$(this).attr("keyval")+";"
                 })
             }else {
-                // var sss="";
-                // var $ele = $(".fileTag")
-                // $ele.each(function () {
-                //     sss+=$(this).attr("name")+";"
-                // })
-                var fileList=getChecedValueInLocalTree();
-                if(fileList.length==0 ){
-                    secondFlag = true
-                    return
+                var fileList = getChecedValueInLocalTree();
+                if (fileList.length !== 0) {
+                    var userUploadPath = $.fn.zTree.getZTreeObj("fileContainerTree").getNodesByFilter(function (node) {
+                        return node.level === 0;
+                    }, true).id + "/userUpload";
+                    if (fileList.indexOf(userUploadPath) === -1) {
+                        fileList.splice(0, 0, userUploadPath);
+                    }
+                    dataList = fileList.toString();
                 }
-                var userUploadPath = $("#treeDemo_1_span").text() + "/userUpload";
-                if (fileList.indexOf(userUploadPath) === -1) {
-                    fileList.splice(0, 0, userUploadPath);
-                }
-                dataList=fileList.toString();
-
-                var reg2 = new RegExp( ',' , "g" );
-                dataList = dataList.replace( reg2 , ';' );
             }
-
-            // dataList = dataList.substr(0, dataList.length - 1);
-            // console.log(dataList)
+            if (dataList.length === 0) {
+                secondFlag = true;
+                return
+            }
+            var reg2 = new RegExp(',', "g");
+            dataList = dataList.replace(reg2, ';');
             $.ajax({
                 url:ctx+"/resource/addResourceSecondStep",
                 type:"POST",
