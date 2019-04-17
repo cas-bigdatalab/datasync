@@ -387,7 +387,7 @@
                         tabs = s + ss + "</table>";
 
                         tabs += "<div class='review-item clearfix'><div id='page_div" + tableName + "' style='padding-top: 25px; float: left;'>" +
-                            "当前第<span style='color:blue;' id='currentPageNo" + tableName + "'></span>页,共<span style='color:blue;' id='totalPages" + tableName + "'></span>页,<span style='color:blue;' id='totalCount" + tableName + "'></span>" +
+                            "当前第<span style='color:blue;' id='currentPageNo" + tableName + "'></span>页，共<span style='color:blue;' id='totalPages" + tableName + "'></span>页，<span style='color:blue;' id='totalCount" + tableName + "'></span>" +
                             "条数据</div><div style='float: right;' ><div id='pagination" + tableName + "'></div></div></div>";
 
                         var item = {'id': tableName, 'name': tableName, 'closable': true, 'template': tabs};
@@ -593,7 +593,7 @@
                         tabs = s + ss + "</table>";
 
                         tabs += "<div class='review-item clearfix'><div id='page_div" + tableName + "' style='padding-top: 25px; float: left;'>" +
-                            "当前第<span style='color:blue;' id='currentPageNo" + tableName + "'></span>页,共<span style='color:blue;' id='totalPages" + tableName + "'></span>页,<span style='color:blue;' id='totalCount" + tableName + "'></span>" +
+                            "当前第<span style='color:blue;' id='currentPageNo" + tableName + "'></span>页，共<span style='color:blue;' id='totalPages" + tableName + "'></span>页，<span style='color:blue;' id='totalCount" + tableName + "'></span>" +
                             "条数据</div><div style='float: right;' ><div id='pagination" + tableName + "'></div></div></div>";
                         $(ids).append(tabs);
                         fun_limit(subjectCode, tableName, data);

@@ -1010,7 +1010,7 @@
                         $(".page-list").off();
                         $('.page-list').empty();
                     }
-                    $(".page-message").html("当前第<span style='color:blue'>" + DataList.currentPage + "</span>页,共<span style='color:blue'>" + DataList.totalPages + "</span>页,共<span style='color:blue'>" + DataList.totalCount + "</span>条数据");
+                    $(".page-message").html("当前第<span style='color:blue'>" + DataList.currentPage + "</span>页，共<span style='color:blue'>" + DataList.totalPages + "</span>页，共<span style='color:blue'>" + DataList.totalCount + "</span>条数据");
                     $('.page-list').bootpag({
                         total: DataList.totalPages,
                         page: DataList.currentPage,

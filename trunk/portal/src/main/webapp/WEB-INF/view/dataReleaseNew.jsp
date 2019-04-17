@@ -711,7 +711,7 @@
                     auditContent: auditContent
                 },
                 success: function (data) {
-                    $('#auditModal').modal('hide')
+                    $('#auditModal').modal('hide');
                     tableConfiguration2(1, "", "", "")
                 },
                 error: function () {
@@ -719,22 +719,28 @@
                 }
             })
 
-        })
+        });
 
         function disableRelease(id) {
-            $.ajax({
-                url: "${ctx}/resource/stopResource",
-                type: "POST",
-                data: {
-                    resourceId: id,
-                },
-                success: function (data) {
-                    tableConfiguration2(1, "", "", "")
-                },
-                error: function () {
-                    console.log("请求失败")
+            var currentTargetName = $.trim($(event.currentTarget).parent().parent().parent().parent().parent().parent().find("td:eq(1)").text());
+            bootbox.confirm("<span style='font-size: 16px'>确认停用<span style='font-size: 16px;color: #5b9bd1'>" + currentTargetName + "</span>么？</span>", function (r) {
+                if (r) {
+                    $.ajax({
+                        url: "${ctx}/resource/stopResource",
+                        type: "POST",
+                        data: {
+                            resourceId: id,
+                        },
+                        success: function (data) {
+                            tableConfiguration2(1, "", "", "")
+                        },
+                        error: function () {
+                            console.log("请求失败")
+                        }
+                    })
                 }
             })
+
         }
 
         function resSend() {
@@ -984,7 +990,7 @@
                         $(".page-list").off();
                         $('.page-list').empty();
                     }
-                    $(".page-message").html("当前第<span style='color:blue'>" + DataList.currentPage + "</span>页,共<span style='color:blue'>" + DataList.totalPages + "</span>页,共<span style='color:blue'>" + DataList.totalCount + "</span>条数据");
+                    $(".page-message").html("当前第<span style='color:blue'>" + DataList.currentPage + "</span>页，共<span style='color:blue'>" + DataList.totalPages + "</span>页，共<span style='color:blue'>" + DataList.totalCount + "</span>条数据");
                     $('.page-list').bootpag({
                         total: DataList.totalPages,
                         page: DataList.currentPage,

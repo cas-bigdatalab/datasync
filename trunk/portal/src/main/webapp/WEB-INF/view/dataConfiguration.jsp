@@ -345,9 +345,9 @@
                                 <div class="review-item clearfix">
 
                                     <div id="page_div" style="padding-top: 25px; float: left; display: none;">
-                                        当前第<span style="color:blue;" id="currentPageNo"></span>页,共<span
+                                        当前第<span style="color:blue;" id="currentPageNo"></span>页，共<span
                                             style="color:blue;"
-                                            id="totalPages"></span>页,<span
+                                            id="totalPages"></span>页，<span
                                             style="color:blue;" id="totalCount"></span>条数据
                                     </div>
                                     <div style="float: right;">
