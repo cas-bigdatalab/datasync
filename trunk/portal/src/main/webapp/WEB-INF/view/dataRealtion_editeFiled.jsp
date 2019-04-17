@@ -176,7 +176,7 @@
                     var list = data.list;
                     for (var i = 0; i < list.length; i++) {
                         html += "<span style='width:33%;height:40px;padding-left: 0px;font-size: 15px' class='col-md-6'>" +
-                            "<input type='radio' name='mapTable' onclick=\"staticSourceTableChoice(1,this" + ",'" + sub1 + "','" + list[i] + "','dataResource','" + flag + "')\" value='" + list[i] + "'>&nbsp;" + list[i] + "</span>"
+                            "<input type='radio' id='" + list[i] + "' name='mapTable' onclick=\"staticSourceTableChoice(1,this" + ",'" + sub1 + "','" + list[i] + "','dataResource','" + flag + "')\" value='" + list[i] + "'>&nbsp;<label for='" + list[i] + "'> " + list[i] + "</label></span>"
                     }
                     html += "</div><input type='text' class='form-control' name='maptableinput' id='maptableinput' style='display:none;'/></div></div>";
                     if (flag == '0') {

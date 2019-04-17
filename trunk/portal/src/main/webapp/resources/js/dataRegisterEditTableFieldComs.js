@@ -61,9 +61,9 @@ function staticSourceTableChoice(editIsChoiceTableOrSql, obj, subjectCode, table
 function getTableFieldComs(subjectCode, tableName) {
     var dataResult = null;
     $.ajax({
-        type: "GET",
+        type: "post",
         url: ctx + '/getTableFieldComs',
-        data: {"subjectCode": subjectCode, "tableName": tableName, "timestamp": Date.parse(new Date())},
+        data: {"subjectCode": subjectCode, "tableName": $.trim(tableName), "timestamp": Date.parse(new Date())},
         dataType: "json",
         async: false,
         success: function (data) {
