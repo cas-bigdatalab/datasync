@@ -64,7 +64,7 @@
         </ul>
     </div>
     <div id="btn_addTableData" style="float:left;width:5%;margin-right: 5%;margin-left: 2%;display: none;">
-        <button class="btn btn-primary" type="button"><a href="#" onclick="add_function()" style="color: white;"><i
+        <button class="btn btn-primary" type="button"  onclick="add_function()"><a href="#" style="color: white;"><i
                 class="fa fa-plus"></i>增加</a></button>
     </div>
 
@@ -610,7 +610,6 @@
          * 新增加函数
          * **/
         function add_function() {
-
             var tableName = $("#ul_div111 li.active a").text();
             $.ajax({
                 url: "${ctx}/toaddTableData",

@@ -115,6 +115,7 @@
         .right_div table tbody tr {
             background-color: #FFFFff !important;
         }
+
     </style>
 
 </head>
@@ -190,7 +191,7 @@
                                         <li class="l2-menu"><a href="${ctx}/datatest"><i
                                                 class="fa fa-bars"></i>数据记录管理</a>
                                             <div id="alltableName"
-                                                 style="max-height:230px;overflow-y: scroll;display:none;margin-top:1%;">
+                                                 style="max-height:230px;overflow: auto;display:none;margin-top:1%;">
 
                                             </div>
                                         </li>
@@ -253,6 +254,7 @@
 <script src="${ctx}/resources/bundles/jquery-bootpag/jquery.bootpag.min.js"></script>
 <script src="${ctx}/resources/js/dataRegisterEditTableFieldComs.js"></script>
 <script src="${ctx}/resources/bundles/bootstrap-closable-tab/bootstrap-closable-tab.js"></script>
+<script src="${ctx}/resources/bundles/nicescroll/jquery.nicescroll.min.js"></script>
 
 
 <script type="text/javascript">
@@ -368,6 +370,8 @@
 
         /* $("#content").css("height", $page_content.height() - $("#content-top").height() - parseInt($(".fabu_div2").css("margin-bottom")) * 2 - parseInt($("div.right_div").css("padding-top")))*/
         $("#content").height("90%");
+
+        $("#alltableName").niceScroll({cursorborder:"",cursorcolor:"#155aab",boxzoom:true}); // First scrollable DIV
     });
 
 </script>
