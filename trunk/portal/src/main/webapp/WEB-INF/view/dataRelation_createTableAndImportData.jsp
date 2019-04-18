@@ -100,7 +100,7 @@
     <script>
 
         var sub = '${sessionScope.SubjectCode}';
-
+        var excelFileName;
 
         (function () {
             initExcelUpload();
@@ -115,8 +115,8 @@
             [].forEach.call($inputs, function (e) {
                 var label = $inputs.next();
                 $inputs.on("change", function (e) {
-                    var fileName = e.target.value.split("\\").pop();
-                    label.text(fileName);
+                    excelFileName = e.target.value.split("\\").pop();
+                    label.text(excelFileName);
                     resetButton(true);
                 })
             })
@@ -153,7 +153,7 @@
 
         function uploadExcel() {
             var formData = new FormData($("#fileForm")[0]);
-            var fileName = formData.get("file").name;
+            var fileName = excelFileName;
 
             if (fileName === undefined) {
                 toastr["warning"]("提示！", "请选择文件");
