@@ -366,10 +366,10 @@
                                                     </div>
                                                     <div class="row margin-top-20">
                                                         <div class="col-md-6 margin-top-20">
-                                                            当前第<span style="color:blue;"
-                                                                     id="currentPageNo">1</span>页，共<span
+                                                            当前第&nbsp;<span style="color:blue;"
+                                                                           id="currentPageNo">1</span>&nbsp;页,&nbsp;共&nbsp;<span
                                                                 style="color:blue;" id="totalPages">3</span>页，<span
-                                                                style="color:blue;" id="totalCount">25</span>条数据
+                                                                style="color:blue;" id="totalCount">25</span>&nbsp;条数据
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div id="pagination" style="float: right"><ul class="pagination bootpag"><li data-lp="1" class="prev disabled"><a href="javascript:void(0);">«</a></li><li data-lp="1" class="disabled"><a href="javascript:void(0);">1</a></li><li data-lp="2"><a href="javascript:void(0);">2</a></li><li data-lp="3"><a href="javascript:void(0);">3</a></li><li data-lp="2" class="next"><a href="javascript:void(0);">»</a></li></ul></div>

@@ -356,7 +356,7 @@
                         $(".page-list").off();
                         $('.page-list').empty();
                     }
-                    $(".page-message").html("当前第"+dataFile.pageNum +"页,共"+dataFile.totalPage +"页,共"+dataFile.totalNum+"条数据");
+                    $(".page-message").html("当前第&nbsp;" + dataFile.pageNum + "页,&nbsp;共" + dataFile.totalPage + "页,&nbsp;共" + dataFile.totalNum + "条数据");
                     $('#page-list').bootpag({
                         total: DataList.totalPage,
                         page: DataList.pageNum,

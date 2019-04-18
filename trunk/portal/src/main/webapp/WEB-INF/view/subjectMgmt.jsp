@@ -63,8 +63,9 @@
         <!--专业库分页插件-->
         <div class="row margin-top-20">
             <div class="page-message col-md-6 margin-top-10">
-                当前第<span style="color:blue;" id="pageNum"></span>页，共<span style="color:blue;" id="totalPages"></span>页，
-                共<span style="color:blue;" id="total"></span>条数据
+                当前第&nbsp;<span style="color:blue;" id="pageNum"></span>&nbsp;页,&nbsp;共&nbsp;<span style="color:blue;"
+                                                                                                  id="totalPages"></span>页，
+                共<span style="color:blue;" id="total"></span>&nbsp;条数据
             </div>
             <div class="page-list col-md-6">
                 <div id="pagination" style="float: right"></div>

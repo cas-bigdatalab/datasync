@@ -118,9 +118,11 @@
                             <!--用户管理标签页: 分页-->
                             <div class="row margin-top-20">
                                 <div class="page-message col-md-6 margin-top-10">
-                                    当前第<span style="color:blue;" id="curUserPageNum"></span>页，共<span style="color:blue;"
-                                                                                                     id="totalUserPages"></span>页，
-                                    共<span style="color:blue;" id="totalUsers"></span>条数据
+                                    当前第&nbsp;<span style="color:blue;"
+                                                   id="curUserPageNum"></span>&nbsp;页,&nbsp;共&nbsp;<span
+                                        style="color:blue;"
+                                        id="totalUserPages"></span>页，
+                                    共<span style="color:blue;" id="totalUsers"></span>&nbsp;条数据
                                 </div>
                                 <div class="page-list col-md-6">
                                     <div id="paginationForUser" style="float: right"></div>
@@ -172,9 +174,11 @@
                             </div>
                             <div class="row margin-top-20">
                                 <div class="col-md-6 margin-top-10" id="message-group1">
-                                    当前第<span style="color:blue;" id="currentPageNo"></span>页，共<span style="color:blue;"
-                                                                                                    id="totalPages"></span>页，<span
-                                        style="color:blue;" id="totalCount"></span>条数据
+                                    当前第&nbsp;<span style="color:blue;"
+                                                   id="currentPageNo"></span>&nbsp;页,&nbsp;共&nbsp;<span
+                                        style="color:blue;"
+                                        id="totalPages"></span>页，<span
+                                        style="color:blue;" id="totalCount"></span>&nbsp;条数据
                                 </div>
                                 <div class="col-md-6" id="message-group2">
                                     <div id="pagination" style="float: right" ></div>
