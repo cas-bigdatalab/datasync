@@ -269,7 +269,8 @@
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" for="Task_phone">发布者电话号码 <span style="margin-left: 13px">
+                                            <label class="control-label col-md-3" for="Task_phone">发布者电话 <span
+                                                    style="margin-left: 13px">
                                                      </span>
                                             </label>
                                             <div class="col-md-5" style="padding-top:13px">

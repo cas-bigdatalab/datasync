@@ -23,8 +23,8 @@
         <div class="alert alert-info" role="alert">
             <div class="row">
                 <div class="col-md-12 form-inline">
-                    <label class="control-label" style="color: black">学科节点名称:</label>
-                    <input type="text" id="subjectNameFilter" name="subjectNameFilter" placeholder="学科节点名称"
+                    <label class="control-label" style="color: black">主题库名称:</label>
+                    <input type="text" id="subjectNameFilter" name="subjectNameFilter" placeholder="主题库名称"
                            class="form-control search-text" style="width: 300px;"/>
 
                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -47,8 +47,8 @@
                     <tr id="dataList">
                         <th style="display:none;">学科节点ID</th>
                         <th style="width: 3%;">编号</th>
-                        <th style="width: 5%;">学科节点名称</th>
-                        <th style="width: 5%;">学科节点代码</th>
+                        <th style="width: 5%;">主题库名称</th>
+                        <th style="width: 5%;">主题库代码</th>
                         <th style="width: 5%;">管理员账号</th>
                         <th style="width: 5%;">负责人</th>
                         <th style="width: 5%;">电话</th>
@@ -113,10 +113,10 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectName">
-                                学科节点名称<span style="color: red;">*</span>
+                                主题库名称<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入学科节点名称" id="subjectName"
+                                <input type="text" class="form-control" placeholder="请输入主题库名称" id="subjectName"
                                        name="subjectName" required="required"/>
                             </div>
                         </div>
@@ -124,10 +124,10 @@
                         <!--SubjectCode需要保证唯一性，为了保证唯一，需要通过后端数据库交互验证是否已经存在-->
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                学科节点代码<span style="color: red;">*</span>
+                                主题库代码<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入学科节点代码" id="subjectCode"
+                                <input type="text" class="form-control" placeholder="请输入主题库代码" id="subjectCode"
                                        name="subjectCode" required="required"/>
                             </div>
                         </div>
@@ -243,20 +243,20 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label" for="subjectName">
-                                学科节点名称<span style="color: red;">*</span>
+                                主题库名称<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入学科节点名称" id="subjectNameM"
+                                <input type="text" class="form-control" placeholder="请输入主题库名称" id="subjectNameM"
                                        name="subjectName" required="required"/>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                学科节点代码<span style="color: red;">*</span>
+                                主题库代码<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入学科节点代码" id="subjectCodeM"
+                                <input type="text" class="form-control" placeholder="请输入主题库代码" id="subjectCodeM"
                                        name="subjectCode" required="required" readonly="readonly"/>
                             </div>
                         </div>
@@ -466,10 +466,10 @@
                     serialNo: "required"
                 },
                 messages: {
-                    subjectName: "请输入学科节点名称",
+                    subjectName: "请输入主题库名称",
                     subjectCode: {
-                        required: "请输入学科节点代码",
-                        remote: "此学科节点代码已经存在！"
+                        required: "请输入主题库代码",
+                        remote: "此主题库代码已经存在！"
                     },
                     image: "请选择一个图片",
                     admin: {
@@ -525,8 +525,8 @@
                     serialNo: "required"
                 },
                 messages: {
-                    subjectName: "请输入学科节点名称",
-                    subjectCode: "请输入学科节点代码",
+                    subjectName: "请输入主题库名称",
+                    subjectCode: "请输入主题库代码",
                     admin: "请输入学科节点管理员账号",
                     adminPasswd: {
                         required: "请输入学科节点管理密码",

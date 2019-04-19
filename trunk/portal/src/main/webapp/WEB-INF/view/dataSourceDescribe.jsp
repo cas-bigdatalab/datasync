@@ -410,7 +410,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label col-md-3" for="Task_phone">发布者电话号码 <span style="margin-left: 13px"></span>
+                                                <label class="control-label col-md-3" for="Task_phone">发布者电话 <span
+                                                        style="margin-left: 13px"></span>
                                                 </label>
                                                 <div class="col-md-5" style="padding-top:13px">
                                                     <input type="text" class="form-control" name="Task_phone" placeholder="请输入电话号码"

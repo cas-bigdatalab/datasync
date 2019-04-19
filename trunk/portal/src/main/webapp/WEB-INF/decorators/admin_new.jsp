@@ -17,7 +17,7 @@
 <head>
     <title>
         <shiro:hasRole name="admin">
-            数据管理与发布工具
+            主题库构建与发布工具
         </shiro:hasRole>
         <shiro:hasRole name="root">
             学科数据后台管理系统
@@ -133,7 +133,7 @@
                 <div class="left_bottom">
                     <div class="left_top"><img src="${ctx}/resources/img/logo.png">
                         <shiro:hasRole name="admin">
-                            <span style="font-weight: bold;color: white;font-size: 20px;">数据管理与发布工具</span>
+                            <span style="font-weight: bold;color: white;font-size: 20px;">主题库构建与发布工具</span>
                         </shiro:hasRole>
                         <shiro:hasRole name="root">
                             <span style="font-weight: bold;color: white;font-size: 20px;">学科数据后台管理系统</span>
@@ -156,9 +156,12 @@
                     <div class="left_div">
                         <shiro:hasRole name="root">
                             <ul>
+                                    <%--<li><a href="${ctx}/subjectMgmt/subjectIndex"><i class="fa fa-cog"--%>
+                                    <%--aria-hidden="true"></i>--%>
+                                    <%--学科节点注册管理</a>--%>
                                 <li><a href="${ctx}/subjectMgmt/subjectIndex"><i class="fa fa-cog"
                                                                                  aria-hidden="true"></i>
-                                    学科节点注册管理</a>
+                                    主题库注册管理</a>
                                 </li>
                                 <li><a class="" href="${ctx}/resCatalog"><i class="fa fa-book"
                                                                             aria-hidden="true"></i> 数据分类管理</a>
