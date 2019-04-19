@@ -303,6 +303,7 @@
                     var dataType = data.dataType;
                     var columnComment = data.columnComment;
                     var dataArry = data.dataDatil;
+                    var count=dataArry.length;
                     console.log(dataArry);
                     var delPORTALID;
                     var tabs = "";
@@ -379,7 +380,7 @@
                                 "<i class='fa fa-pencil-square-o' aria-hidden='true'></i>修改</a></td><td width='1'></td>" +
                                 "<td class='chakan'><a href='#' onclick=\"checkDada('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
                                 "<i class='fa fa-eye' aria-hidden='true'></i>查看</a></td><td width='1'></td>" +
-                                "<td class='shanchu'><a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
+                                "<td class='shanchu'><a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "','"+ count +"')\">" +
                                 "<i class='fa fa-trash-o fa-fw' aria-hidden='true'></i>删除</a></td></tr></table></td></tr>";
                         }
                         ss += "</tbody>";
@@ -511,6 +512,7 @@
                     var columnComment = data.columnComment;
                     var dataArry = data.dataDatil;
                     console.log(dataArry);
+                    var count=dataArry.length;
                     var delPORTALID;
                     var tabs = "";
                     var s = " ";
@@ -585,7 +587,7 @@
                                 "<i class='fa fa-pencil-square-o' aria-hidden='true'></i>修改</a></td><td width='1'></td>" +
                                 "<td class='chakan'><a href='#' onclick=\"checkDada('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
                                 "<i class='fa fa-eye' aria-hidden='true'></i>查看</a></td><td width='1'></td>" +
-                                "<td class='shanchu'><a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
+                                "<td class='shanchu'><a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "','"+ count +"')\">" +
                                 "<i class='fa fa-trash-o fa-fw' aria-hidden='true'></i>删除</a></td></tr></table></td></tr>";
                         }
                         ss += "</tbody>";
@@ -1682,13 +1684,16 @@
         }
 
         //删除数据
-        function deleteDate(delPORTALID, tableName, subjectCode) {
-
+        function deleteDate(delPORTALID, tableName, subjectCode,j) {
             bootbox.confirm("<span style='font-size: 16px'>确认要删除此条记录吗?</span>", function (r) {
                 if (r) {
-                    //获得当前页码
-                    //获得当前页码
                     var currentPage = $("#currentPageNo"+tableName +"").html();
+                    if(j==="1" && currentPage!=="1"){
+                        currentPage=currentPage-1;
+                    }
+                    //获得当前页码
+                    //获得当前页码
+
                     $.ajax({
                         url: "${ctx}/deleteData",
                         type: "POST",
