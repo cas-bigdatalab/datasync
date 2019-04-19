@@ -113,7 +113,7 @@
         </div>
     </div>
     <%--根据学科节点查看该学科节点内的访问量下载量--%>
-    <div id="themeDetail" style="width: 100%;min-height: 400px;margin-top: 100px;display: none;margin-bottom: 3%;">
+    <div id="themeDetail" style="width: 100%;min-height: 400px;margin-top: 50px;display: none;margin-bottom: 3%;">
         <%--<div style="width: 100%;height: 10%;">--%>
         <%--<span style="float: left;background-color: #0d957a;color: #FFFFFF;height:3%;width: 200px;height: 30px;">按学科节点查看访问量下载量</span>--%>
         <%--<span style="float: left;margin-left: 30%;"><a>
@@ -190,7 +190,7 @@
         <img src="{{value.imagePath}}" width="200px" height="150px"/>
         <h5 style="text-align: center;">{{value.subjectName}}</h5>
     </div>
-    <div class="pic-item" style=" width: 60%; float: left; padding: 20px;height:150px;margin-left: 20px;">
+    <div class="pic-item" style=" width: 60%; float: left; padding: 20px;height:150px;margin-left: 20px;margin-top: 10px;">
         <label>简介：</label>{{value.brief}}
     </div>
 
