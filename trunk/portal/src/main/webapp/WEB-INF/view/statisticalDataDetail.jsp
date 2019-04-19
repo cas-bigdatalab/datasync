@@ -186,11 +186,11 @@
     <%--<p>{{value.subjectName}}</p>--%>
     <%--</span>--%>
     <%--<span style="float: left;">简介：{{value.contact}}</span>--%>
-    <div class="pic-item" style=" width: 16%; float: left; padding: 5px;height: 150px;margin-bottom: 50px;">
+    <div class="pic-item" style=" width: 17%; float: left;height: 150px;margin-bottom: 50px;">
         <img src="{{value.imagePath}}" width="200px" height="150px"/>
         <h5 style="text-align: center;">{{value.subjectName}}</h5>
     </div>
-    <div class="pic-item" style=" width: 60%; float: left; padding: 20px;height:150px;margin-left: 20px;margin-top: 10px;">
+    <div class="pic-item" style=" width: 60%; float: left; padding: 20px;height:150px;margin-left: 30px;margin-top: 10px;">
         <label>简介：</label>{{value.brief}}
     </div>
 
