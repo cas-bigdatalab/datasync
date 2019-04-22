@@ -70,7 +70,7 @@
     <h3><b>欢迎使用主题库构建与发布工具</b></h3>
     <hr>
     <div class="task-title" style="font-size: 16px; font-weight: bold; padding-right:250px;text-align: center;">
-        <span>学科节点信息</span>
+        <span>主题库节点信息</span>
     </div>
 
     <div class="messageCon"  style="font-size: 18px;padding: 25px 50px">

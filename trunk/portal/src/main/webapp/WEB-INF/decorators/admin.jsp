@@ -123,7 +123,7 @@
                     <li class="start">
                         <a href="${ctx}/subjectMgmt/subjectIndex">
                             <i class="icon-user"></i>
-                            <span class="title">学科节点注册管理</span>
+                            <span class="title">主题库节点注册管理</span>
                             <span class="arrow"></span>
                         </a>
                     </li>

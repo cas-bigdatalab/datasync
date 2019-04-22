@@ -763,7 +763,7 @@
                     {
                         if (result)
                         {
-                            bootbox.confirm("<span style='font-size: 16px'>学科节点相关信息很重要，请再次确认要删除吗?</span>", function (result)
+                            bootbox.confirm("<span style='font-size: 16px'>主题库节点相关信息很重要，请再次确认要删除吗?</span>", function (result)
                                 {
                                     if (result)
                                     {

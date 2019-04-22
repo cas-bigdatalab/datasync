@@ -39,7 +39,7 @@
 <body>
 <dl class="admin_login">
     <dt>
-        <strong style="color: #f9fafa">科研学科节点统一登录认证</strong>
+        <strong style="color: #f9fafa">科研主题库节点统一登录认证</strong>
         <em style="color: #f9fafa">Data Assembler</em>
     </dt>
     <form action="${pageContext.request.contextPath}/login" method="post">

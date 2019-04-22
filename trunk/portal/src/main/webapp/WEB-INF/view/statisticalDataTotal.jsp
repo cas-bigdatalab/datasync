@@ -35,7 +35,7 @@
 <body>
 <div class="page-content">
     <div style="width: 100%;height:40%;" >
-        <div><span style="background-color: #0d957a;color: #FFFFFF;height:2%;">学科节点访问量下载量统计</span>
+        <div><span style="background-color: #0d957a;color: #FFFFFF;height:2%;">主题库节点访问量下载量统计</span>
             <span style="background-color: #0d957a;height:2%;margin-left: 30%;"><a href="#" style="color: #FFFFFF;"><<<<</a></span>
         </div>
         <div id="datashowvisitTotal"></div>
@@ -69,7 +69,7 @@
                 var chart = echarts.init(document.getElementById('datashowvisitTotal'));
                 var option = {
                     title: {
-                        text: '学科节点访问量统计',
+                        text: '主题库节点访问量统计',
                         left: 'center'
                     },
                     tooltip: {
@@ -135,7 +135,7 @@
                 var chart = echarts.init(document.getElementById('datashowdownTotal'));
                 var option = {
                     title: {
-                        text: '学科节点下载量统计',
+                        text: '主题库节点下载量统计',
                         left: 'center'
                     },
                     tooltip: {

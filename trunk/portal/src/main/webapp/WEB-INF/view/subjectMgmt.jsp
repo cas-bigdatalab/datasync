@@ -33,7 +33,7 @@
                         <i class="fa fa-search"></i>&nbsp;&nbsp;查&nbsp;&nbsp;询</button>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <button id="addSubjectBtn" name="addSubjectBtn" style="margin-left: -10px;" class="btn info green btn-sm" onclick="addSubject()">
-                        <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增学科节点
+                        <i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;新增主题库节点
                     </button>
                 </div>
             </div>
@@ -45,7 +45,7 @@
             <table class="table table-striped table-bordered table-advance table-hover">
                 <thead>
                     <tr id="dataList">
-                        <th style="display:none;">学科节点ID</th>
+                        <th style="display:none;">主题库节点ID</th>
                         <th style="width: 3%;">编号</th>
                         <th style="width: 5%;">主题库名称</th>
                         <th style="width: 5%;">主题库代码</th>
@@ -104,7 +104,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-primary">
                     <button class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button>
-                    <h4 id="titleForAddSubjectDialog" class="modal-title">新增学科节点</h4>
+                    <h4 id="titleForAddSubjectDialog" class="modal-title">新增主题库节点</h4>
                 </div>
 
                 <!--subject info input form-->
@@ -146,10 +146,10 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                学科节点简介
+                                主题库节点简介
                             </label>
                             <div class="col-md-9">
-                                <textarea class="form-control" placeholder="请输入学科节点简介" id="brief"
+                                <textarea class="form-control" placeholder="请输入主题库节点简介" id="brief"
                                           name="brief"></textarea>
                             </div>
                         </div>
@@ -228,13 +228,13 @@
             <div class="modal-content">
                 <div class="modal-header bg-primary">
                     <button class="close" data-dismiss="modal"> <span aria-hidden="true">×</span> </button>
-                    <h4 id="titleForUpdateSubjectDialog" class="modal-title">修改学科节点</h4>
+                    <h4 id="titleForUpdateSubjectDialog" class="modal-title">修改主题库节点</h4>
                 </div>
                 <div class="modal-body">
                     <form id="updateSubjectForm" class="form-horizontal" role="form" method="post">
                         <div class="form-group">
                                 <label class="col-md-3 control-label" for="subjectName" style="display:none;">
-                                    学科节点id（不显示）
+                                    主题库节点id（不显示）
                                 </label>
                                 <div style="display:none;">
                                     <input type="text" class="form-control" id="idM" name="id" />
@@ -275,10 +275,10 @@
 
                         <div class="form-group">
                             <label class="col-md-3 control-label">
-                                学科节点简介
+                                主题库节点简介
                             </label>
                             <div class="col-md-9">
-                                <textarea class="form-control" placeholder="请输入学科节点简介" id="briefM"
+                                <textarea class="form-control" placeholder="请输入主题库节点简介" id="briefM"
                                           name="brief"></textarea>
                             </div>
                         </div>
@@ -389,7 +389,7 @@
 
         //初始化
         $(function () {
-            console.log("学科节点页面初始化");
+            console.log("主题库节点页面初始化");
             getSubject(1);
 
             toastr.options = {
@@ -473,14 +473,14 @@
                     },
                     image: "请选择一个图片",
                     admin: {
-                        required: "请输入学科节点管理员账号",
-                        remote: "此学科节点管理员账号已经存在！"
+                        required: "请输入主题库节点管理员账号",
+                        remote: "此主题库节点管理员账号已经存在！"
                     },
                     adminPasswd: {
-                        required: "请输入学科节点管理密码",
+                        required: "请输入主题库节点管理密码",
                         minlength: "密码至少为6位"
                     },
-                    contact: "请输入学科节点联系人",
+                    contact: "请输入主题库节点联系人",
                     phone: {
                         required:"请输入手机号",
                         maxlength:"请填写11位的手机号",
@@ -488,7 +488,7 @@
                         isphoneNum:"请填写正确的手机号码"
                     },
                     email: "请输入一个正确的email",
-                    serialNo: "请输入学科节点的序号"
+                    serialNo: "请输入主题库节点的序号"
                 }
             };
 
@@ -527,12 +527,12 @@
                 messages: {
                     subjectName: "请输入主题库名称",
                     subjectCode: "请输入主题库代码",
-                    admin: "请输入学科节点管理员账号",
+                    admin: "请输入主题库节点管理员账号",
                     adminPasswd: {
-                        required: "请输入学科节点管理密码",
+                        required: "请输入主题库节点管理密码",
                         minlength: "密码至少为6位"
                     },
-                    contact: "请输入学科节点联系人",
+                    contact: "请输入主题库节点联系人",
                     phone: {
                         required:"请输入手机号",
                         maxlength:"请填写11位的手机号",
@@ -540,7 +540,7 @@
                         isphoneNum:"请填写正确的手机号码"
                     },
                     email: "请输入一个正确的email",
-                    serialNo: "请输入学科节点的序号"
+                    serialNo: "请输入主题库节点的序号"
                 }
             };
             $("#addSubjectForm").validate(addSubjectValid);
@@ -777,7 +777,7 @@
                 {
                     if (result)
                     {
-                        bootbox.confirm("<span style='font-size: 16px'>学科节点相关信息很重要，请再次确认要删除吗?</span>", function (result)
+                        bootbox.confirm("<span style='font-size: 16px'>主题库节点相关信息很重要，请再次确认要删除吗?</span>", function (result)
                             {
                                 if (result)
                                 {

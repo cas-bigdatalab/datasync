@@ -159,7 +159,7 @@
                             <ul>
                                     <%--<li><a href="${ctx}/subjectMgmt/subjectIndex"><i class="fa fa-cog"--%>
                                     <%--aria-hidden="true"></i>--%>
-                                    <%--学科节点注册管理</a>--%>
+                                    <%--主题库节点注册管理</a>--%>
                                 <li><a href="${ctx}/subjectMgmt/subjectIndex"><i class="fa fa-cog"
                                                                                  aria-hidden="true"></i>
                                     主题库注册管理</a>
