@@ -74,7 +74,7 @@
     <div class="alert alert-info" role="alert" style="padding: 12px 20px !important;margin-top: 12px;">
         <!--查询条件 -->
         <div class="row" style="margin: 5px auto;">
-            <h4 style="font-weight: 500 !important;">数据节点信息认证管理</h4>
+            <h4 style="font-weight: 500 !important;">主题库节点信息认证管理</h4>
         </div>
     </div>
 
@@ -84,10 +84,10 @@
     <div class="form">
         <table class="table list">
             <tbody><tr>
-                <th>数据节点名称：</th>
+                <th>主题库节点名称：</th>
                 <td>${subject.subjectName}</td>
             </tr><tr>
-                <th>数据节点代码：</th>
+                <th>主题库节点代码：</th>
                 <td>${subject.subjectCode}</td></tr>
             <tr>
                 <th>管理员账号：</th>
