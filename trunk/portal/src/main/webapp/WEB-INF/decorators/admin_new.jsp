@@ -20,7 +20,7 @@
             主题库构建与发布工具
         </shiro:hasRole>
         <shiro:hasRole name="root">
-            学科数据后台管理系统
+            <%--学科数据后台管理系统--%>
         </shiro:hasRole>
     </title>
 
@@ -136,7 +136,8 @@
                             <span style="font-weight: bold;color: white;font-size: 20px;">主题库构建与发布工具</span>
                         </shiro:hasRole>
                         <shiro:hasRole name="root">
-                            <span style="font-weight: bold;color: white;font-size: 20px;">学科数据后台管理系统</span>
+                            <%--<span style="font-weight: bold;color: white;font-size: 20px;">学科数据后台管理系统</span>--%>
+                            <span style="font-weight: bold;color: white;font-size: 20px;">主题库后台管理系统</span>
                         </shiro:hasRole>
                     </div>
                     <div class="user_div">
