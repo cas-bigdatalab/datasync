@@ -3,6 +3,7 @@ package cn.csdb.portal.repository;
 import cn.csdb.portal.model.FileInfo;
 import cn.csdb.portal.model.ResourceDelete;
 import cn.csdb.portal.model.SdoComment;
+import cn.csdb.portal.model.SdoRelationDisable;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
 import org.apache.commons.lang.StringUtils;
@@ -48,6 +49,13 @@ public class ResourceDao {
         String resourceId = resource.getId();
         Query query = Query.query(Criteria.where("sdo_id").is(resourceId));
         mongoTemplate.remove(query, SdoComment.class);
+        List<SdoRelationDisable> sdoRelationDisables = mongoTemplate.find(query, SdoRelationDisable.class);
+        if (sdoRelationDisables.size() == 0) {
+            SdoRelationDisable sdoRelationDisable = new SdoRelationDisable();
+            sdoRelationDisable.setSdoId(resourceId);
+            sdoRelationDisable.setSdoName(resource.getTitle());
+            mongoTemplate.save(sdoRelationDisable);
+        }
     }
     public void saveFileInfo(cn.csdb.portal.model.FileInfo fileInfo){
         mongoTemplate.save(fileInfo);
