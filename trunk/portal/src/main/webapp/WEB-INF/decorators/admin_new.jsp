@@ -191,7 +191,7 @@
                                         <li class="l2-menu"><a href="${ctx}/dataConfiguration"><i
                                                 class="fa fa-bars"></i>数据字段配置</a></li>
                                         <li class="l2-menu"><a href="${ctx}/createTableAndImportData"><i
-                                                class="fa fa-bars"></i>导入式建表</a></li>
+                                                class="fa fa-bars"></i>创建新表</a></li>
                                         <li class="l2-menu"><a href="${ctx}/datatest"><i
                                                 class="fa fa-bars"></i>数据记录管理</a>
                                             <div id="alltableName"

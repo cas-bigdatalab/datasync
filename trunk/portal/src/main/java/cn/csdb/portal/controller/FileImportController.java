@@ -182,4 +182,24 @@ public class FileImportController {
         JSONObject jsonObject = fileImportService.deleteTableName(tableName, subjectCode);
         return jsonObject;
     }
+
+    @PostMapping("/validateSqlString")
+    @ResponseBody
+    public String validateSqlString(String newSql, HttpServletRequest request) {
+        String subjectCode = request.getSession().getAttribute("SubjectCode").toString();
+        return fileImportService.validateSqlString(newSql, subjectCode);
+    }
+
+    @PostMapping("/validateTableName")
+    @ResponseBody
+    public String validateTableName(String newName, HttpServletRequest request) {
+        String subjectCode = request.getSession().getAttribute("SubjectCode").toString();
+        return fileImportService.validateTableName(newName, subjectCode);
+    }
+
+    public JSONObject previewSqlData(String sqlString, HttpServletRequest request) {
+        String subjectCode = request.getSession().getAttribute("SubjectCode").toString();
+        return fileImportService.previewSqlData(sqlString, subjectCode);
+
+    }
 }

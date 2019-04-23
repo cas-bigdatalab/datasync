@@ -695,4 +695,39 @@ public class FileImportService {
         }
         return jsonObject;
     }
+
+    public String validateSqlString(String sqlString, String subjectCode) {
+        DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
+        Connection connection = getConnection(dataSrc);
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return "true";
+    }
+
+    public String validateTableName(String tableName, String subjectCode) {
+        DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
+        Connection connection = getConnection(dataSrc);
+        boolean tableIsExist = tableIsExist(connection, null, dataSrc.getDatabaseName(), tableName);
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tableIsExist ? tableName + ":已经存在" : "true";
+    }
+
+    public JSONObject previewSqlData(String salString, String subjectCode) {
+        return null;
+    }
 }

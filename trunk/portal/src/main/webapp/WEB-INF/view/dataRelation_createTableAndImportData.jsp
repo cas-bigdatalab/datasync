@@ -54,20 +54,117 @@
             margin-right: 1px !important;
             color: #fff !important;
         }
+
+        .preview {
+            height: auto;
+            width: auto;
+            border: none;
+            margin-bottom: 0px;
+        }
     </style>
 </head>
 <body>
 
 <%--弹窗页定义 开始--%>
+<div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
+    <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
+        <div class="modal-content">
+            <div class="modal-header bg-primary" style="background-color: #1e8753 !important;">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                        id="editTableFieldComsCloseId"></button>
+                <h4 class="modal-title" id="relationalDatabaseModalTitle"
+                    style="color: white;font-size: 18px;font-weight: 500;">预览数据</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="portlet box green-haze" style="border:0;">
+                            <div class="portlet-title" style="display: none">
+                            </div>
+                            <div class="tab-content"
+                                 style="background-color: white;min-height:300px;max-height:70%;padding-top: 20px ; overflow: scroll;">
+                                <div id="previewTableDataAndComsId" style="max-height: 400px;">
+                                    <div class="skin skin-minimal">
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr style="word-break: keep-all" id="pre-head">
+                                                <th>#</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="pre-body">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="editTableFieldComsSaveId" data-dismiss="modal" class="btn red">关闭
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <%--弹窗页定义 结束--%>
 
 
 <%--正文开始--%>
-<div id="excelTableList">
-    <div class="qiehuan_div">
-        <ul class="nav nav-tabs activeTabs" role="tablist">
-        </ul>
+<div class="qiehuan_div">
+    <ul class="nav nav-tabs activeTabs" role="tablist">
+    </ul>
+</div>
+
+
+<div class="tab-content" style="background-color: white;">
+    <%--导入式建表--%>
+    <div class="tab-pane active" id="uploadExcel" style="height: 200px;background: #dddddd">
+        <form name="form" id="fileForm" method="post" style="text-align: center;">
+            <div style="padding-top: 5%;"></div>
+            <a href="${ctx}/fileImport/getExcelTemplate" style="font-size: 19px;">点击下载Excel模板</a><br/>
+            <div style="margin: 25px;"></div>
+            <input type="file" name="file" id="excelFile" class="inputfile"/>
+            <label id="fileLabel" for="excelFile" class="btn btn-default">请选择上传文件</label>
+            <input id="excelFileUpload" type="button" class="btn btn-default" onclick="uploadExcel();" value="上传"/>
+            <input id="resetFile" type="button" class="btn btn-default" onclick="initCreateTable()" value="重置"/>
+        </form>
+
     </div>
+
+    <%--关联创建表--%>
+    <div class="tab-pane" id="sql">
+        <div style="width: 100%;height: 80%;background: #dddddd">
+            <form id="selectSQL">
+                <div id="totalList">
+                    <div class="col-md-12" style="margin-bottom: 10px;padding-top: 50px;">
+                        <div class="col-md-2" style="text-align: right;margin-left: 35px;">SQL查询</div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control sqlStatements inputVili" name="newSql">
+                        </div>
+                        <div class="col-md-2" style="margin: 0 -15px">
+                            <input type="text" class="form-control inputVili" placeholder="新表名" name="newName">
+                        </div>
+                        <div class="col-md-4" style="display: contents">
+                            <button type="button" class="btn blue preview">预览</button>
+                            <button type="button" class="btn green" onclick="addSql()"><span
+                                    class="glyphicon glyphicon-plus"></span>SQL查询
+                            </button>
+                        </div>
+                        <div class="col-md-2" style="text-align: left;width: 20px;">
+                        </div>
+                    </div>
+                    <div id="sqlList"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%--解析excel根据sheet页生成表格--%>
+<div id="excelTableList">
     <div class="tap_div">
         <div class="tab-content activeTabs" style="width:100%;">
             <table spellcheck="0" class="table table-hover biaoge" cellspacing="0" border="0">
@@ -75,18 +172,6 @@
         </div>
 
     </div>
-</div>
-<div id="uploadExcel" style="height: 200px;background: #dddddd">
-    <form name="form" id="fileForm" method="post" style="text-align: center;">
-        <div style="padding-top: 5%;"></div>
-        <a href="${ctx}/fileImport/getExcelTemplate" style="font-size: 19px;">点击下载Excel模板</a><br/>
-        <%--<input id="" style="display: inline;margin-left: 7%;" type="file" name="file"/><br/>--%>
-        <div style="margin: 25px;"></div>
-        <input type="file" name="file" id="excelFile" class="inputfile"/>
-        <label id="fileLabel" for="excelFile" class="btn btn-default">请选择上传文件</label>
-        <input id="excelFileUpload" type="button" class="btn btn-default" onclick="uploadExcel();" value="上传"/>
-        <input id="resetFile" type="button" class="btn btn-default" onclick="initExcelUpload()" value="重置"/>
-    </form>
 </div>
 <%--正文结束--%>
 </div>
@@ -101,13 +186,16 @@
 
         var sub = '${sessionScope.SubjectCode}';
         var excelFileName;
-
+        var tagParent = $("div.qiehuan_div ul");
+        var li_excel = '<li class="active" value="0"><a id="createTableByExcel" href="#uploadExcel" data-toggle="tab">导入式建表</a></li>';
+        var li_sql = '<li class="" value="1"><a id="createTableBySQL" href="#sql" data-toggle="tab">关联创建新表</a></li>';
         (function () {
-            initExcelUpload();
+            initCreateTable();
 
             closableTab.afterCloseTab = function (item) {
                 if (!$(".nav.nav-tabs.activeTabs li")[0]) {
-                    initExcelUpload();
+                    $("#uploadExcel").addClass("active");
+                    initCreateTable();
                 }
             };
 
@@ -119,13 +207,16 @@
                     label.text(excelFileName);
                     resetButton(true);
                 })
-            })
+            });
+
+            initSelectSql();
         })();
 
-
-        function initExcelUpload() {
+        function initCreateTable() {
             resetFile();
-            $("#uploadExcel").show();
+            tagParent.html("");
+            tagParent.append(li_excel);
+            tagParent.append(li_sql);
             $("#excelTableList").hide();
         }
 
@@ -146,10 +237,9 @@
         }
 
         function showExcelTables() {
-            $("#uploadExcel").hide();
+            $("#uploadExcel").removeClass("active");
             $("#excelTableList").show();
         }
-
 
         function uploadExcel() {
             var formData = new FormData($("#fileForm")[0]);
@@ -187,6 +277,7 @@
                         toastr["error"]("错误！", resultJson["message"]);
                     } else {
                         var data = resultJson.data;
+                        tagParent.html("");
                         $.each(data, function (index, value) {
 
                             $.each(value, function (sheetName, sheetData) {
@@ -220,7 +311,6 @@
                 }
             });
         }
-
 
         /**
          * 创建表并保存数据 || 仅保存数据
@@ -277,7 +367,6 @@
             }
         }
 
-
         function parseTableData2Json(table) {
             var result = {};
             var rows = table.rows;
@@ -306,7 +395,6 @@
             result["data"] = trl;
             return result;
         }
-
 
         function serializeTableForCreate(cellLength, cells, trl, i) {
             var tdl = {};
@@ -348,7 +436,6 @@
             trl.push(tdl);
         }
 
-
         function serializeTableForInsert(cellLength, cells, trl, i) {
             var tdl = {};
             for (var j = 0; j < cellLength; j++) {
@@ -365,7 +452,7 @@
         }
 
         function saveValueAfterDeleteTable() {
-            var tableName = $.trim($("#excelTableList .qiehuan_div li.active a").text());
+            var tableName = $.trim($("div.qiehuan_div ul li.active a").text());
             bootbox.confirm("<span style='font-size: 16px'>确认要删除 “" + tableName + "” 数据表么</span>",
                 function (result) {
                     if (result) {
@@ -381,7 +468,7 @@
                             success: function (data) {
                                 var parse = data;
                                 if (parse.code === "success") {
-                                    initExcelUpload();
+                                    initCreateTable();
                                     toastr["info"]("提示！", parse.message);
                                 }
                             }
@@ -391,6 +478,119 @@
             );
         }
 
+        function initSelectSql() {
+            $("#sqlList").on("click", ".removeSql", function () {
+                $(this).parent().parent().remove();
+            });
+            $("#totalList").on("click", ".preview", function () {
+                var $Str = $(this).parent().parent().find(".sqlStatements").val();
+                previewSqlDataAndComs(this);
+            });
+            $("#totalList").on("change", ".sqlStatements", function () {
+                $(this).css("border-color", "")
+            })
+        }
+
+        function addSql() {
+            var result = true;
+            $(".sqlStatements").each(function () {
+                if (!$(this).val() || !$(this).val().trim()) {
+                    toastr["error"]("错误！", "请先完成当前编辑");
+                    result = false;
+                    return;
+                }
+            });
+            if (!result) {
+                return;
+            }
+            <!-- 第一个校验完成才能添加-->
+            var tabCon = template("addSql");
+            $("#sqlList").append(tabCon);
+        }
+
+
+        function previewSqlDataAndComs(_this, dataSourceId, str) {
+            validateSql(_this);
+            return;
+            $.ajax({
+                url: "${ctx}/datatask/sqlValidation",
+                type: "GET",
+                data: {
+                    sqlStr: str,
+                    dataSourceId: dataSourceId
+                },
+                success: function (data) {
+                    var sqlFlag = JSON.parse(data).result
+                    if (sqlFlag) {
+                        $("#staticSourceTableChoiceModal").modal("show");
+                        var sqlName = splistLastStr(str);
+                        $.ajax({
+                            type: "GET",
+                            url: '${ctx}/relationship/previewRelationalDatabaseBySQL',
+                            data: {
+                                "dataSourceId": dataSourceId,
+                                "sqlStr": str
+                            },
+                            dataType: "json",
+                            success: function (data) {
+
+                                if (data.dataSize > 10) {
+                                    toastr["warning"]("预览仅展示前十条数据！");
+                                }
+
+                                for (var key in data.maps) {
+                                    var sqlName = key
+                                }
+                                var tabHead = data.maps[sqlName];
+                                var tabBody = data.datas;
+                                $("#pre-head").empty();
+                                $("#pre-body").empty();
+                                var preHeadStr = "<th>#</th>";
+                                var preBodyStr = "";
+                                if (!data || !data.datas) {
+                                    return;
+                                }
+                                for (var i = 0; i < tabHead.length; i++) {
+                                    preHeadStr += "<th>" + tabHead[i].columnName + "</th>"
+                                }
+                                $("#pre-head").append(preHeadStr);
+                                var columnTitleList = [];
+                                data.datas.unshift(columnTitleList);
+
+                                var html = template("previewTableDataAndComsTmpl", {"datas": data.datas});
+                                $('#pre-body').html(html);
+                            }
+                        });
+                    } else {
+                        toastr["error"]("提示！", "请正确输入sql语句");
+                    }
+                }
+            })
+
+
+        }
+
+        function validateSql(_this) {
+            var selectSql = $.trim($(_this).parent().parent().find('[name="newSql"]').val());
+            var flg;
+            $.ajax({
+                url: "${ctx}/fileImport/validateSqlString",
+                type: "POST",
+                data: {
+                    newSql: encodeURIComponent(selectSql)
+                },
+                success: function (data) {
+
+                }
+            })
+        }
+
+        function splistLastStr(str) {
+
+            var arr = str.split(" ");
+            var lastStr = arr[arr.length - 1];
+            return lastStr;
+        }
     </script>
 </div>
 <%--js 结束--%>
@@ -515,6 +715,25 @@
         <button type="button" onclick="saveValueAfterDeleteTable()" data-dismiss="modal"
                 class="saveExcelSuccess btn bule" tablename="{{tableName}}">重新上传
         </button>
+    </script>
+
+    <%--sql建表新增--%>
+    <script type="text/html" id="addSql">
+        <div class="col-md-12" style="margin-bottom: 10px;margin-left: 35px;" name="aaaa">
+            <div class="col-md-2" style="text-align: right">SQL查询</div>
+            <div class="col-md-4">
+                <input type="text" class="form-control sqlStatements inputVili">
+            </div>
+            <div class="col-md-2" style="margin: 0 -15px">
+                <input type="text" class="form-control inputVili" placeholder="新表名 " name="sqlTableName">
+            </div>
+            <div class="col-md-4">
+                <button type="button" class="btn blue preview">预览</button>
+                <button type="button" class="btn red removeSql"><span class="glyphicon glyphicon-trash"></span>删除
+                </button>
+            </div>
+
+        </div>
     </script>
 </div>
 <%--模板定义 结束--%>
