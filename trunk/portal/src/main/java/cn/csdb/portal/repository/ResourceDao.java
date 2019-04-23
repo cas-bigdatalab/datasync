@@ -2,24 +2,22 @@ package cn.csdb.portal.repository;
 
 import cn.csdb.portal.model.FileInfo;
 import cn.csdb.portal.model.ResourceDelete;
-import cn.csdb.portal.model.Subject;
-import com.mongodb.BasicDBObject;
+import cn.csdb.portal.model.SdoComment;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
-import javax.annotation.Resource;
-//import cn.csdb.portal.model.Resource;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+//import cn.csdb.portal.model.Resource;
 
 
 /**
@@ -46,6 +44,11 @@ public class ResourceDao {
         return resource.getId();
     }
 
+    public void deleteComment(cn.csdb.portal.model.Resource resource) {
+        String resourceId = resource.getId();
+        Query query = Query.query(Criteria.where("sdo_id").is(resourceId));
+        mongoTemplate.remove(query, SdoComment.class);
+    }
     public void saveFileInfo(cn.csdb.portal.model.FileInfo fileInfo){
         mongoTemplate.save(fileInfo);
     }
