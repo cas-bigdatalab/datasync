@@ -12,7 +12,7 @@
 
 <html>
 <head>
-    <title>数据资源汇聚传输工具</title>
+    <title>专业库管理与汇交工具</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
@@ -138,7 +138,7 @@
             width: 18%;
             height: 87.545%;
             float: left;
-            background: #e1e5e3 url(${ctx}/resources/login/img/left_bg.png) bottom no-repeat;
+            background: #e1e5e3 url(${ctx}/resources/login/img/green-bg.png) bottom no-repeat;
             background-size: 100%;
         }
         .page-content-wrapper {
@@ -278,7 +278,7 @@ if(userName != null && userName.length()>6){
         <!-- BEGIN LOGO -->
         <div class="page-logo" style="width: auto;margin: auto;position: absolute;top: 0;left: 0;bottom: 0;right: 0;">
             <a href="#">
-                <h4 style="font-size: 21px;margin-top: 10px;margin-bottom: 10px;">数据资源汇聚传输工具</h4>
+                <h4 style="font-size: 21px;margin-top: 10px;margin-bottom: 10px;">专业库管理与汇交工具</h4>
             </a>
         </div>
 
@@ -315,7 +315,7 @@ if(userName != null && userName.length()>6){
                 <li>
                     <a href="${ctx}/subjectInfo" onmousemove="img1Over(this)" onmouseout="img1Out(this)">
                         <%--<i class="icon-wren"></i>--%>
-                        <span class="title"><img class="img1" style="width: 24px;display: inline;"  src="${ctx}/resources/login/img/icon04.png">&nbsp;数据节点信息</span>
+                        <span class="title"><img class="img1" style="width: 24px;display: inline;"  src="${ctx}/resources/login/img/icon04.png">&nbsp;主题库节点信息</span>
                         <span class="arrow "></span>
                     </a>
                 </li>
