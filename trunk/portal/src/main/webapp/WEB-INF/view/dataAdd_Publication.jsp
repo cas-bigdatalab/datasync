@@ -272,7 +272,7 @@
 
                                         </div>
                                         <div class="form-group">
-                                            <label class="control-label col-md-3" for="Task_email">发布者邮箱号<span
+                                            <label class="control-label col-md-3" for="Task_email">发布者邮箱<span
                                                     class="required">
                                                     * </span>
                                             </label>

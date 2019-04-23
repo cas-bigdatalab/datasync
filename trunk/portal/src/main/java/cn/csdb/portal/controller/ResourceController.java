@@ -27,7 +27,6 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -545,7 +544,7 @@ public class ResourceController {
                                             @RequestParam(name = "endTime") String endTime,
                                             @RequestParam(name = "email") String email,
                                             @RequestParam(name = "phoneNum") String phoneNum,
-                                            @RequestParam(name = "createTime") String createTime,
+                                            @RequestParam(name = "creatorCreateTimeString") String creatorCreateTimeString,
                                             @RequestParam(name = "publishOrganization") String publishOrganization,
                                             @RequestParam(name = "createOrganization") String createOrganization,
                                             @RequestParam(name = "createPerson") String createPerson,
@@ -576,10 +575,10 @@ public class ResourceController {
         ParsePosition pos3 = new ParsePosition(0);
         Date startDate = formatter.parse(startTime, pos1);
         Date endDate = formatter.parse(endTime, pos2);
-        Date createDate = formatter.parse(endTime, pos3);
+        Date creatorCreateTime = formatter.parse(creatorCreateTimeString, pos3);
         resource.setStartTime(startDate);
         resource.setEndTime(endDate);
-        resource.setCreatorCreateTime(createDate);
+        resource.setCreatorCreateTime(creatorCreateTime);
         resource.setCreateTime(new Date());
         resource.setEmail(email);
         resource.setPhoneNum(phoneNum);
