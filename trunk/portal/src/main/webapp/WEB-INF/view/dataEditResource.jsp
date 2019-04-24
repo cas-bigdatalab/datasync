@@ -74,7 +74,7 @@
             <td></td>
             <td class="item" id="thirdstep">
                 <div class="number">3</div>
-                <span>元数据</span></td>
+                <span>权限设置</span></td>
         </tr>
     </table>
 </div>
@@ -231,8 +231,8 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3" for="create_person">创建人员<span
-                                                    class="required">
-                                                    * </span>
+                                                    style="margin-left: 13px">
+                                                     </span>
                                             </label>
                                             <div class="col-md-5" style="padding-top:13px">
                                                 <input type="text" class="form-control"
@@ -666,9 +666,6 @@
                 endTime: {
                     required: true
                 },
-                create_person: {
-                    required: true
-                },
                 create_Organization: {
                     required: true,
                 },
@@ -695,9 +692,6 @@
                 },
                 endTime: {
                     required: "请输入结束时间"
-                },
-                create_person: {
-                    required: "请输入创建人员"
                 },
                 create_Organization: {
                     required: "请输入机构名",
@@ -1059,15 +1053,6 @@
         }
 
         function addResourceThirdStep() {
-            /* var $preEle= $(".permissions-word .tagname")
-             if($preEle.size() ==0){
-                 toastr["error"]("请选择用户组");
-                 return
-             }
-             var userStr = ""
-             $preEle.each(function () {
-                 userStr+=$(this).text()+";"
-             })*/
             var $preEle = $("#permissions").val();
             if ($preEle == null) {
                 toastr["error"]("请选择用户组");
@@ -1432,7 +1417,7 @@
             if (!nodes) return;
             curStatus = "expand";
             var zTree = $.fn.zTree.getZTreeObj("treeDemo");
-            for (var i = 0, l = nodes.length; i < l; i++) {
+            for (var i=0, l=nodes.length; i<l; i++) {
                 zTree.expandNode(nodes[i], true, false, false);
                 if (nodes[i].isParent && nodes[i].zAsync) {
                     expandNodes(nodes[i].children);
@@ -1449,6 +1434,10 @@
             }
             return true;
         }
+
+
+
+
 
 
     </script>

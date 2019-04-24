@@ -239,7 +239,9 @@
     </div>
 </div>
 
-<div class="foot_div">2019-2025 &copy; 中国科学院计算机网络信息中心 版权所有</div>
+<%--<div class="foot_div">2019-2025 &copy; 中国科学院计算机网络信息中心 版权所有</div>--%>
+<div class="foot_div"> @中国烟草总公司郑州烟草研究院 本网站由国家烟草专卖局科技司主管、中国烟草科技信息中心承办
+</div>
 
 
 <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
