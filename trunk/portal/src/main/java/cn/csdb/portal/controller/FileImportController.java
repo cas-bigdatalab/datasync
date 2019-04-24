@@ -197,6 +197,16 @@ public class FileImportController {
         return fileImportService.validateTableName(newName, subjectCode);
     }
 
+    @PostMapping("/createTableBySql")
+    @ResponseBody
+    public JSONObject createTableBySql(String newSql, String newName, HttpServletRequest request) {
+        JSONObject jsonObject = new JSONObject();
+        String subjectCode = request.getSession().getAttribute("SubjectCode").toString();
+        String tableBySql = fileImportService.createTableBySql(newSql, newName, subjectCode);
+        jsonObject.put("message", tableBySql);
+        return jsonObject;
+    }
+
     public JSONObject previewSqlData(String sqlString, HttpServletRequest request) {
         String subjectCode = request.getSession().getAttribute("SubjectCode").toString();
         return fileImportService.previewSqlData(sqlString, subjectCode);

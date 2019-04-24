@@ -5,15 +5,20 @@ import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.model.TableField;
 import cn.csdb.portal.repository.CheckUserDao;
 import cn.csdb.portal.utils.Excel2ListIncludeNull;
+import cn.csdb.portal.utils.SqlUtil;
+import cn.csdb.portal.utils.dataSrc.DDL2SQLUtils;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.ibatis.jdbc.ScriptRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.*;
 
@@ -697,22 +702,29 @@ public class FileImportService {
     }
 
     public String validateSqlString(String sqlString, String subjectCode) {
+        String message = "true";
         DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
+        boolean b = false;
+        try {
+            b = SqlUtil.validateSelectSql(sqlString);
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+            return "请输入查询语句";
+        }
+        if (!b) {
+            return "查询语句错误";
+        }
         Connection connection = getConnection(dataSrc);
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
             preparedStatement.execute();
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            return e.getMessage();
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            message = e.getMessage();
         }
-        return "true";
+
+        return message;
     }
 
     public String validateTableName(String tableName, String subjectCode) {
@@ -729,5 +741,24 @@ public class FileImportService {
 
     public JSONObject previewSqlData(String salString, String subjectCode) {
         return null;
+    }
+
+    public String createTableBySql(String newSql, String newName, String subjectCode) {
+        DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
+        Connection connection = getConnection(dataSrc);
+        String ddl = DDL2SQLUtils.generateDDLFromSql(connection, newSql, newName);
+        String insert = DDL2SQLUtils.generateInsertSqlFromSQL(connection, newSql, newName);
+        ScriptRunner runner = new ScriptRunner(connection);
+        // 下面配置不要随意更改，否则会出现各种问题
+        // 自动提交
+        runner.setAutoCommit(true);
+        runner.setFullLineDelimiter(false);
+        // 每条命令间的分隔符
+        runner.setDelimiter(";");
+        runner.setSendFullScript(false);
+        runner.setStopOnError(false);
+        runner.runScript(new InputStreamReader(new ByteArrayInputStream(ddl.getBytes())));
+        runner.runScript(new InputStreamReader(new ByteArrayInputStream(insert.getBytes())));
+        return newName + "：创建成功";
     }
 }
