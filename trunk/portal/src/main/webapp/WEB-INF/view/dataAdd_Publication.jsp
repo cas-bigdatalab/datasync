@@ -240,8 +240,8 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="control-label col-md-3" for="create_person">创建人员<span
-                                                    style="margin-left: 13px">
-                                                     </span>
+                                                    class="required">
+                                                    * </span>
                                             </label>
                                             <div class="col-md-5" style="padding-top:13px">
                                                 <input type="text" class="form-control"
@@ -701,6 +701,9 @@
                 endTime: {
                     required: true
                 },
+                create_person: {
+                    required: true
+                },
                 create_Organization: {
                     required: true,
                 },
@@ -728,8 +731,8 @@
                 endTime: {
                     required: "请输入结束时间"
                 },
-                create_Organization: {
-                    required: true,
+                create_person: {
+                    required: "请输入创建人员"
                 },
                 create_Organization: {
                     required: "请输入机构名",
