@@ -85,7 +85,7 @@
             <td></td>
             <td class="item" id="thirdstep">
                 <div class="number">3</div>
-                <span>元数据</span></td>
+                <span>权限设置</span></td>
         </tr>
     </table>
 </div>
