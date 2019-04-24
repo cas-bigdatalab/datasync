@@ -358,6 +358,10 @@
                                             </c:forEach>
 
                                         </div>
+
+                                        <!-- xiajl20190424增加:创建元数据模板 -->
+                                        <%@ include file="./metaTemplateCreate.jsp" %>
+
                                     </form>
                                 </div>
 
@@ -914,6 +918,16 @@
                         toastr["error"]("请填写必须项目");
                         return
                     }
+                    //xiajl20190424 判断模板名称是否填写
+                    if ($("#isTemplate").prop("checked")){
+                        if ($.trim($("#metaTemplateName").val()) == ""){
+                            toastr["error"]("请填写模板名称");
+                            firstFlag = true;
+                            initNum--;
+                            return;
+                        }
+                    }
+
                     $("#firststep").removeClass("item active");
                     $("#firststep").addClass("item finish");
                     $(".fabu_div2").html("数据发布 - 第2步，共3步");
@@ -1066,6 +1080,7 @@
                 return
             }
 
+
             //xiajl20190310
             var d = {};
             var t = $("#submit_form2").serializeArray();
@@ -1096,7 +1111,11 @@
                     publishOrganization: $("#publish_Organization").val(),
                     createOrganization: $("#create_Organization").val(),
                     createPerson: $("#create_person").val(),
-                    extMetadata: extData
+                    extMetadata: extData,
+                    //xiajl20190424增加
+                    isTemplate:$("#isTemplate").val(),
+                    metaTemplateName:$.trim($("#metaTemplateName").val()),
+                    memo:$("#memo").val()
                 },
                 success: function (data) {
                     var data = JSON.parse(data)

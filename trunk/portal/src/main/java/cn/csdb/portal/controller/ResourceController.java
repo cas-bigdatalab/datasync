@@ -56,9 +56,10 @@ public class ResourceController {
     private DataSrcService dataSrcService;
     @Resource
     private TableFieldComsDao tableFieldComsDao;
-
     @Resource
     private MetadataTemplateService metadataTemplateService;
+    @Resource
+    private MetaTemplateService metaTemplateService;
 
     private Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
@@ -314,8 +315,11 @@ public class ResourceController {
                                             @RequestParam(name = "publishOrganization") String publishOrganization,
                                             @RequestParam(name = "createOrganization") String createOrganization,
                                             @RequestParam(name = "createPerson") String createPerson,
-                                            @RequestParam(name = "extMetadata") String extMetadata
-    ) {
+                                            @RequestParam(name = "extMetadata") String extMetadata,
+                                            @RequestParam(name = "metaTemplateName",required = false) String metaTemplateName,
+                                            @RequestParam(name = "memo",required = false) String memo,
+                                            @RequestParam(name = "isTemplate",required = false) String isTemplate
+                                            ) {
         String subjectCode = session.getAttribute("SubjectCode").toString();
         Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
@@ -360,6 +364,33 @@ public class ResourceController {
                 list.add(item);
             }
             resource.setExtMetadata(list);
+        }
+
+        //xiajl20190424增加创建元数据模板信息
+        System.out.println(isTemplate);
+        if ("true".equals(isTemplate)){
+            MetaTemplate metaTemplate = new MetaTemplate();
+            metaTemplate.setMetaTemplateName(metaTemplateName);
+            metaTemplate.setMemo(memo);
+            metaTemplate.setMetaTemplateCreator(session.getAttribute("userName").toString());
+            metaTemplate.setMetaTemplateCreateDate(new Date());
+            metaTemplate.setSubjectCode(subjectCode);
+
+            metaTemplate.setTitle(title);
+            metaTemplate.setIntroduction(introduction);
+            metaTemplate.setImagePath(imagePath);
+            metaTemplate.setKeyword(keyword);
+            metaTemplate.setCatalogId(catalogId);
+            metaTemplate.setStartTime(startDate);
+            metaTemplate.setEndTime(endDate);
+            metaTemplate.setCreatedByOrganization(createdByOrganization);
+            metaTemplate.setCreateOrgnization(createOrganization);
+            metaTemplate.setCreatePerson(createPerson);
+            metaTemplate.setCreatorCreateTime(createDate);
+            metaTemplate.setPublishOrgnization(publishOrganization);
+            metaTemplate.setEmail(email);
+            metaTemplate.setPhoneNum(phoneNum);
+            metaTemplateService.add(metaTemplate);
         }
 
         String resourceId = resourceService.save(resource);
