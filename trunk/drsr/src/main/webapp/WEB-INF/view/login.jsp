@@ -10,7 +10,7 @@
 <c:set value="${pageContext.request.contextPath}" var="ctx"/>
 <html>
 <head>
-    <title>专业库管理与汇交工具</title>
+    <title>烟草科研专业库管理与汇交工具</title>
     <link href="${ctx}/resources/bundles/bootstrapv3.3/css/bootstrap.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
@@ -45,7 +45,7 @@
 
         <div class="loginbox">
             <%--<h3>数据资源汇聚传输工具</h3>--%>
-            <h3>专业库管理与汇交工具</h3>
+            <h3>烟草科研专业库管理与汇交工具</h3>
             <table>
                 <tr>
                     <td>用户名：</td>
