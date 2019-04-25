@@ -61,6 +61,10 @@
             border: none;
             margin-bottom: 0px;
         }
+
+        #selectTable select {
+            width: 60%;
+        }
     </style>
 </head>
 <body>
@@ -138,34 +142,48 @@
     <div class="tab-pane" id="sql">
         <div style="width: 100%;height: 80%;background: #dddddd">
             <p></p>
-            <p>通过联合表A和表B，形成新表</p>
-            <div style="border: red solid 2px">
+            <h4>通过联合表A和表B，形成新表</h4>
+            <div style="margin-left: 3%;">
                 <form id="selectTable">
-                    <div class="row">
+                    <div class="row" id="tableA">
                         <div class="col-md-1"> 关联表A</div>
-                        <div class="col-md-5">
-                            <select id="tableA">
-
+                        <div class="col-md-4">
+                            <select id="selectTableA" class="selectTable">
                             </select>
                         </div>
-                        <div class="col-md-5">
-                            <select id="tableFeild">
+                        <div class="col-md-4">
+                            <select id="selectTableFieldA" class="">
 
                             </select>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-1">
-                            <input type="checkbox"/>
+                    <div id="checkBoxTableFieldA"></div>
+
+                    <div class="row" style="height: 20px"></div>
+
+                    <div class="row" id="tableB">
+                        <div class="col-md-1"> 关联表B</div>
+                        <div class="col-md-4">
+                            <select id="selectTableB" class="selectTable">
+
+                            </select>
                         </div>
+                        <div class="col-md-4">
+                            <select id="selectTableFieldB" class="">
+
+                            </select>
+                        </div>
+                    </div>
+                    <div id="checkBoxTableFieldB">
                     </div>
                 </form>
             </div>
-            <p>通过SQL语句，形成新表</p>
-            <div class="col-md-12" style="border: red solid 2px">
+
+            <h4>通过SQL语句，形成新表</h4>
+            <div class="col-md-12">
                 <form id="selectSQL">
                     <div id="totalList">
-                        <div class="col-md-12" style="margin-bottom: 10px;padding-top: 50px;">
+                        <div class="col-md-12">
                             <div class="col-md-1">SQL查询</div>
                             <%--style="text-align: right;margin-left: 35px;"--%>
                             <div class="col-md-7">
@@ -518,6 +536,17 @@
             });
             $("#totalList").on("change", ".sqlStatements", function () {
                 $(this).css("border-color", "")
+            });
+
+            $("#selectTable select.selectTable").on("change", function (event) {
+                var _this = $(event.currentTarget);
+                var tableName = _this.val();
+                getTableField(_this, tableName);
+            });
+
+            $("#createTableBySQL").on("click", function () {
+                resetSelectAndCheckBox();
+                getTableName();
             })
         }
 
@@ -547,7 +576,7 @@
                 },
                 success: function (data) {
                     console.log(data);
-                    debugger
+                    toastr["info"](data.message, "成功！");
                 }
             })
         }
@@ -594,8 +623,81 @@
                 success: function (data) {
                     result["flg"] = data;
                 }
-            })
+            });
             return result;
+        }
+
+        function resetSelectAndCheckBox() {
+            $("select").html("");
+            $("#checkBoxTableFieldA").html("");
+            $("#checkBoxTableFieldB").html("");
+        }
+
+        function getTableName() {
+            var tableNameList = [];
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "${ctx}/relationalDatabaseTableList",
+                dataType: "JSON",
+                data: {
+                    subjectCode: sub
+                },
+                success: function (data) {
+                    tableNameList = tableNameList.concat(data.list)
+                }
+            });
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "${ctx}/relationalDatabaseTableList",
+                dataType: "JSON",
+                data: {
+                    subjectCode: sub,
+                    flag: "0"
+                },
+                success: function (data) {
+                    tableNameList = tableNameList.concat(data.list)
+                }
+            });
+            var sort = tableNameList.sort();
+            sort.splice(0, 0, "选择表");
+            var html = template("tableNameOption", {"data": sort});
+            $(".selectTable").html("");
+            $(".selectTable").html(html);
+        }
+
+        function getTableField(_this, tableName) {
+            $.ajax({
+                type: "POST",
+                url: "${ctx}/getTableFieldComs",
+                dataType: "JSON",
+                data: {
+                    subjectCode: sub,
+                    tableName: tableName
+                },
+                success: function (data) {
+                    var field = [];
+                    $.each(data.tableInfos, function (k, v) {
+                        if (v["columnName"] !== "PORTALID") {
+                            field.push(v["columnName"]);
+                        }
+                    });
+                    var fieldOption = template("tableFieldOption", {"data": field});
+                    _this.parent().parent().find("select:eq(1)").html("");
+                    _this.parent().parent().find("select:eq(1)").html(fieldOption);
+
+                    var result = [];
+                    for (var i = 0; i < field.length; i += 4) {
+                        result.push(field.slice(i, i + 4))
+                    }
+                    var _thisID = _this.attr("id");
+                    var owner = _thisID.slice(_thisID.length - 1, _thisID.length);
+                    var fieldCheckBox = template("tableFieldCheckBox", {"data": result, "owner": owner});
+                    _this.parent().parent().next().html("");
+                    _this.parent().parent().next().html(fieldCheckBox);
+                }
+            })
         }
 
     </script>
@@ -741,6 +843,36 @@
             </div>
 
         </div>
+    </script>
+
+    <script type="text/html" id="tableNameOption">
+        {{each data as v i}}
+        <option value="{{v}}">{{v}}</option>
+        {{/each}}
+    </script>
+
+    <script type="text/html" id="tableFieldOption">
+        {{each data as v i}}
+        <option value="{{v}}">{{v}}</option>
+        {{/each}}
+    </script>
+
+    <%--
+    [[第一行],[第二行],[第三行], ... ,[最后一行]]
+    --%>
+    <script type="text/html" id="tableFieldCheckBox">
+        {{each data as v i}}
+        <div class="row">
+            <div class="col-md-1">
+            </div>
+            {{each v as rowv rowi}}
+            <div class="col-md-2">
+                <input type="checkbox" id="{{owner}}{{rowv}}"/>
+                <label for="{{owner}}{{rowv}}">{{rowv}}</label>
+            </div>
+            {{/each}}
+        </div>
+        {{/each}}
     </script>
 </div>
 <%--模板定义 结束--%>
