@@ -1,19 +1,27 @@
 package cn.csdb.portal.controller;
 
 import cn.csdb.portal.model.MetadataTemplate;
+import cn.csdb.portal.model.User;
+import cn.csdb.portal.service.CheckUserService;
 import cn.csdb.portal.service.MetadataTemplateService;
+import cn.csdb.portal.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
 public class portalPages {
     @Resource
     private MetadataTemplateService metadataTemplateService;
+    @Resource
+    private CheckUserService checkUserService;
+    @Resource
+    private UserService userService;
 
     @RequestMapping("/dataRelease")
     public ModelAndView index() {
@@ -71,5 +79,25 @@ public class portalPages {
         ModelAndView modelAndView = new ModelAndView("dataRelation_createTableAndImportData");
 //        ModelAndView modelAndView = new ModelAndView("dataConfiguration");
         return modelAndView;
+    }
+
+    @RequestMapping("/authorization")//用戶授權
+    public String authorization(HttpServletRequest request, Model model) {
+//         modelAndView = new ModelAndView("authorizationPage");
+
+        String loginid = "";
+        if (request.getSession().getAttribute("LoginId") != null) {
+            loginid = request.getSession().getAttribute("LoginId").toString();
+        }
+        List<User> list = userService.getAllByRole("普通用户");
+        model.addAttribute("list",list);
+        User u = checkUserService.getByUserName(loginid);
+        cn.csdb.portal.model.Subject subject = null;
+        if (u.getSubjectCode() != null) {
+            subject = checkUserService.getSubjectByCode(u.getSubjectCode());
+            model.addAttribute("subject", subject);
+        }
+
+        return "authorizationPage";
     }
 }
