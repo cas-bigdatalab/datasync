@@ -855,7 +855,7 @@
                         $("#rel-endTime").html(convertMilsToDateString(dataList.endTime))
                         $("#rel-createdByOrganization").html(dataList.createdByOrganization)
                         $("#rel-createdBy").html(dataList.createPerson)
-                        $("#rel-creationDate").html(convertMilsToDateString(dataList.creationDate))
+                        $("#rel-creationDate").html(convertMilsToDateString(dataList.creatorCreateTime))
                         $("#rel-organizationName").html(dataList.organizationName)
                         $("#rel-mail").html(dataList.mail)
                         $("#rel-phoneNum").html(dataList.phoneNum)

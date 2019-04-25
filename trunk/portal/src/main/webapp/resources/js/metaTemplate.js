@@ -28,8 +28,8 @@ $("#isTemplate").change(function(){
     if ($(this).prop("checked") ){
         $("#divTemplate").css("display","");
         //xiajl20171101增加
-        $("#templateName").val($("#resTitle").val() +"元数据模板");
-
+        $("#metaTemplateName").val($("#Task_dataName").val() +"元数据模板");
+        $(this).val("true");
         //选择模板失效
         $("#isSelectTemplate").prop("checked",false);
         $("#isSelectTemplate").attr("checked",false);
@@ -38,6 +38,7 @@ $("#isTemplate").change(function(){
     else{
         $("#divTemplate").css("display","none");
         $("#isSelectTemplate").removeAttr("disabled");
+        $(this).val("false");
     }
 });
 
