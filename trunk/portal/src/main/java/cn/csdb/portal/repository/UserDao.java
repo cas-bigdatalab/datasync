@@ -7,7 +7,6 @@ import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteResult;
 import org.apache.commons.lang.StringUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -15,6 +14,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
+
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -339,6 +339,10 @@ public class UserDao {
 
         updateUserGroup(user);
 
+        DBObject dBObject = QueryBuilder.start().and("loginId").is(user.getLoginId()).get();
+        Query query = new BasicQuery(dBObject);
+        User one = mongoTemplate.findOne(query, user.getClass());
+        user.setId(one.getId());
         mongoTemplate.save(user);
 
         return updatedUserCnt;
