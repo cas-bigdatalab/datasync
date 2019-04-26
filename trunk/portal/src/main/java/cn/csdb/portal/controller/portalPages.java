@@ -30,15 +30,9 @@ public class portalPages {
     }
     @RequestMapping("/dataSourceDescribe")
     public ModelAndView index2(Model model) {
-        //ModelAndView modelAndView = new ModelAndView("dataSourceDescribe");
         List<MetadataTemplate> list = metadataTemplateService.getAll();
         model.addAttribute("list",list);
         ModelAndView modelAndView = new ModelAndView("dataAdd_Publication");
-        return modelAndView;
-    }
-    @RequestMapping("/editResource")
-    public ModelAndView index3() {
-        ModelAndView modelAndView = new ModelAndView("editResource");
         return modelAndView;
     }
     @RequestMapping("/dataDataDescribe")
@@ -57,7 +51,9 @@ public class portalPages {
         ModelAndView modelAndView=new ModelAndView("statisticalDataDetail");
         return modelAndView;
     }
-    @RequestMapping("/datatest")
+
+    @RequestMapping("/recordManage")
+//    @RequestMapping("/datatest")
     public ModelAndView  testData(){
         ModelAndView modelAndView=new ModelAndView("dataRealtion_recordManage");
         return modelAndView;
@@ -77,13 +73,11 @@ public class portalPages {
     @RequestMapping("/createTableAndImportData")
     public ModelAndView createTableAndImportData() {
         ModelAndView modelAndView = new ModelAndView("dataRelation_createTableAndImportData");
-//        ModelAndView modelAndView = new ModelAndView("dataConfiguration");
         return modelAndView;
     }
 
     @RequestMapping("/authorization")//用戶授權
     public String authorization(HttpServletRequest request, Model model) {
-//         modelAndView = new ModelAndView("authorizationPage");
 
         String loginid = "";
         if (request.getSession().getAttribute("LoginId") != null) {

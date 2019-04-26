@@ -194,7 +194,7 @@
                                                 class="fa fa-bars"></i>数据字段配置</a></li>
                                         <li class="l2-menu"><a href="${ctx}/createTableAndImportData"><i
                                                 class="fa fa-bars"></i>创建新表</a></li>
-                                        <li class="l2-menu"><a href="${ctx}/datatest"><i
+                                        <li class="l2-menu"><a href="${ctx}/recordManage"><i
                                                 class="fa fa-bars"></i>数据记录管理</a>
                                             <div id="alltableName"
                                                  style="max-height:230px;overflow: auto;display:none;margin-top:1%;">
