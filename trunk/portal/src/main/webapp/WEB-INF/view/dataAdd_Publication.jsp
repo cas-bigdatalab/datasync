@@ -102,6 +102,9 @@
                                     <form class="form-horizontal" id="submit_form1" accept-charset="utf-8" role="form"
                                           onfocusout="true"
                                           method="POST">
+
+                                        <jsp:include page="metaTemplateSelect.jsp" ></jsp:include>
+
                                         <div class="form-group">
                                             <label class="control-label col-md-3" for="Task_dataName">数据集名称 <span
                                                     class="required">
@@ -204,11 +207,11 @@
                                             <div class="col-md-5" style="padding-top:13px">
                                                 <div class="input-group input-daterange">
                                                     <input type="text" class="form-control selectData"
-                                                           data-date-format="yyyy-mm-dd" name="startTime"
+                                                           data-date-format="yyyy-mm-dd" name="startTime"  id="startTime"
                                                            placeholder="起始时间">
                                                     <div class="input-group-addon">to</div>
                                                     <input type="text" class="form-control selectData"
-                                                           data-date-format="yyyy-mm-dd" name="endTime"
+                                                           data-date-format="yyyy-mm-dd" name="endTime"   id="endTime"
                                                            placeholder="结束时间">
                                                 </div>
                                                 <div class="timeVili" style="display: none">请正确选择时间</div>
@@ -528,7 +531,9 @@
     <script type="text/javascript" src="${ctx}/resources/bundles/jquery-form/jquery.form.js"></script>
     <script type="text/javascript"
             src="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.js"></script>
-    <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
+     <script src="${ctx}/resources/js/metaTemplate.js"></script>
+
+        <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
     <script src="${ctx}/resources/js/metaTemplate.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2_locale_zh-CN.js"></script>
@@ -541,6 +546,7 @@
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-fileinput/js/fileinput.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-fileinput/js/locals/zh.js"></script>
     <script src="${ctx}/resources/bundles/zTree_v3/js/jquery.ztree.all.js"></script>
+    <script src="${ctx}/resources/js/jquery.json.min.js"></script>
     <script type="text/javascript">
         var ctx = '${ctx}';
         var sub = '${sessionScope.SubjectCode}'
@@ -1014,6 +1020,8 @@
             })
         }
 
+
+
         function relationalDatabaseTableList() {
             $.ajax({
                 url: ctx + "/resource/relationalDatabaseTableList",
@@ -1464,6 +1472,39 @@
             }
         };
 
+
+        function initCenterResourceCatalog(container, index) {
+            alert('begin------' + index );
+            $.ajax({
+                url: ctx + "/getLocalResCatalog",
+                type: "get",
+                dataType: "json",
+                data: {editable: false},
+                success: function (data) {
+                    console.log(data)
+                    //console.log(index)
+                    //console.log(data.id);
+                    var listPar = data.core.data
+                    if (data.id == index) {
+                        data.state.selected = true
+                    } else {
+
+                    }
+                    $(container).jstree("destroy");
+                    $(container).jstree(data).bind("select_node.jstree", function (event, selected) {
+                        $("#centerCatalogId").val(selected.node.id);
+                        $(".timeVili2").removeClass("custom-error")
+                        $(".timeVili2:eq(1)").hide()
+                    }).on("loaded.jstree", function (event, data) {
+                        //这两句化是在loaded所有的树节点后，然后做的选中操作，这点是需要注意的，loaded.jstree 这个函数
+                        //取消选中，然后选中某一个节点
+                        $(container).jstree("deselect_all", true);
+                        //$("#keyKamokuCd").val()是选中的节点id，然后后面的一个参数 true表示的是不触发默认select_node.change的事件
+                        $(container).jstree('select_node', index, true);
+                    });
+                }
+            })
+        }
 
     </script>
 </div>

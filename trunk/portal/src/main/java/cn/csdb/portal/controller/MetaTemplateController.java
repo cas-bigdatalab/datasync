@@ -4,6 +4,7 @@ import cn.csdb.portal.model.MetaTemplate;
 import cn.csdb.portal.service.MetaTemplateService;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
@@ -21,12 +24,13 @@ import java.util.*;
  * @create: 2019-04-24 10:31
  **/
 @Controller
+@RequestMapping("/metaTemplate")
 public class MetaTemplateController {
     @Resource
     private MetaTemplateService metaTemplateService;
 
     @ResponseBody
-    @RequestMapping(value = "/metaTemplate/add")
+    @RequestMapping(value = "/add")
     public JSONObject add(@ModelAttribute MetaTemplate metaTemplate, @RequestParam(name = "subjectCode") String subjectCode) {
         JSONObject jsonObject = new JSONObject();
         metaTemplate.setSubjectCode(subjectCode);
@@ -37,7 +41,7 @@ public class MetaTemplateController {
 
 
     @ResponseBody
-    @RequestMapping(value = "/metaTemplate/getList")
+    @RequestMapping(value = "/getList")
     public JSONObject getList(@RequestParam(name = "subjectCode") String subjectCode) {
         JSONObject jsonObject = new JSONObject();
         List<MetaTemplate> list = metaTemplateService.getList(subjectCode);
@@ -45,14 +49,44 @@ public class MetaTemplateController {
         return jsonObject;
     }
 
-    @RequestMapping("/metaTemplate/toMateTemMsgList")
+
+    @ResponseBody
+    @RequestMapping(value = "/list")
+    public JSONObject list(@RequestParam(name = "subjectCode") String subjectCode,
+                           @RequestParam(name="pageNo",defaultValue = "1") int pageNo,
+                           @RequestParam(name="pageSize",defaultValue = "10") int pageSize){
+
+        List<MetaTemplate> list = metaTemplateService.getListByPage(subjectCode,pageNo,pageSize);
+        long count = metaTemplateService.countByPage(subjectCode);
+        JSONObject json = new JSONObject();
+        json.put("list",list);
+        json.put("totalCount",count);
+        json.put("currentPage",pageNo);
+        json.put("pageSize",pageSize);
+        json.put("totalPages",count % pageSize == 0 ? count / pageSize : count / pageSize + 1);
+        return json;
+    }
+
+
+    @RequestMapping(value = "/templateDetail/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public JSONObject viewData(@PathVariable("id") String id) {
+        JSONObject result = new JSONObject();
+        MetaTemplate  metaTemplate = metaTemplateService.get(id);
+        result.put("metaTemplate",metaTemplate);
+        return result;
+    }
+
+
+
+    @RequestMapping("/toMateTemMsgList")
     public String getDataMsgList() {
 //        String subjectCode = session.getAttribute("SubjectCode").toString();
 //        model.addAttribute("subjectCode",subjectCode);
         return "MateTemMsgList";
     }
     @ResponseBody
-    @RequestMapping(value = "/metaTemplate/getAllList")
+    @RequestMapping(value = "/getAllList")
     public JSONObject getAllist() {
         JSONObject jsonObject = new JSONObject();
         List<MetaTemplate> list = metaTemplateService.getAllList();
@@ -60,7 +94,7 @@ public class MetaTemplateController {
         return jsonObject;
     }
 
-    @RequestMapping("/metaTemplate/getDetail")
+    @RequestMapping("/getDetail")
     @ResponseBody
     public JSONObject getDetail(String id) {
         JSONObject jsonObject = new JSONObject();
@@ -82,7 +116,7 @@ public class MetaTemplateController {
         return jsonObject;
     }
 
-    @RequestMapping("/metaTemplate/deleteMetaTem")
+    @RequestMapping("/deleteMetaTem")
     @ResponseBody
     public JSONObject deleteMetaTem(String id){
         JSONObject jsonObject=new JSONObject();

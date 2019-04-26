@@ -354,9 +354,8 @@ public class ResourceController {
         resource.setdCount(0);
         resource.setvCount(0);
         System.out.println(extMetadata);
-
+        List<Map<String,Object>> list = new ArrayList<>();
         if (StringUtils.isNotEmpty(extMetadata)){
-            List<Map<String,Object>> list = new ArrayList<>();
             JSONObject json = JSONObject.parseObject(extMetadata);
             for (Map.Entry<String, Object> map :  json.entrySet()){
                 Map<String,Object> item = new HashMap<>();
@@ -390,7 +389,11 @@ public class ResourceController {
             metaTemplate.setPublishOrgnization(publishOrganization);
             metaTemplate.setEmail(email);
             metaTemplate.setPhoneNum(phoneNum);
+            if (list.size() > 0){
+                metaTemplate.setExtMetadata(list);
+            }
             metaTemplateService.add(metaTemplate);
+
         }
 
         String resourceId = resourceService.save(resource);

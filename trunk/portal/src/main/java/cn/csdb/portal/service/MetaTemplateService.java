@@ -52,6 +52,16 @@ public class MetaTemplateService {
     public List<MetaTemplate> getList(String subjectCode){
         return metaTemplateDao.getList(subjectCode);
     }
+
+
+    public List<MetaTemplate> getListByPage(String subjectCode, int pageNo, int pageSize){
+        List<MetaTemplate> list = metaTemplateDao.getListByPage(subjectCode,(pageNo-1)*pageSize,pageSize);
+        return list;
+    }
+
+    public long countByPage(String subjectCode){
+        return metaTemplateDao.countByPage(subjectCode);
+    }
     public List<MetaTemplate> getAllList(){
         return metaTemplateDao.getAllList();
     }
