@@ -41,7 +41,13 @@ function staticSourceTableChoice(editIsChoiceTableOrSql, obj, subjectCode, table
             tableInfosList = [];
             tableInfosList[0] = {tableName: tableNameOrSql, tableInfos: tableInfos};
         }
-        $("#staticSourceTableChoiceModal").modal("show");
+        $("#undescribe").hide();
+        $("#isdescribe").hide();
+        // $("#staticSourceTableChoiceModal").modal("show");
+        $("#staticSourceTableChoiceModal").show();
+        $("#span_tableName").html(tableNameOrSql);
+
+        getshowTypeData(tableNameOrSql);
         var html = template("editTableFieldComsTmpl", {"tableInfosList": tableInfosList});
         $('#editTableFieldComsId').html(html);
         curSourceTableChoice = obj;
@@ -156,9 +162,12 @@ $(function () {
     //     curTableName = null;
     //     curRefer = null;
     // });
+
+    //点击保存按钮
     $("#editTableFieldComsSaveId").bind("click", saveEditTableFieldComs);
     $("#editTableFieldComsCloseId").bind("click", function () {
-            $("#staticSourceTableChoiceModal").modal("hide");
+            // $("#staticSourceTableChoiceModal").modal("hide");
+            $("#staticSourceTableChoiceModal").hide();
         }
         // function () {
         // if (curEditIsChoiceTableOrSql == 1) {
@@ -222,6 +231,7 @@ function saveTableFieldComs(curDataSubjectCode, tableInfos) {
             }
     }
     if (tableInfos && tableInfos.length == 1) {
+        var tableComment=$("#tableComment").val();
         $.ajax({
             type: "POST",
             url: ctx + '/saveTableFieldComs',
@@ -229,7 +239,8 @@ function saveTableFieldComs(curDataSubjectCode, tableInfos) {
                 "state": state,
                 "curDataSubjectCode": curDataSubjectCode,
                 "tableName": tableInfos[0].tableName,
-                "tableInfos": $.toJSON(tableInfos[0].tableInfos)
+                "tableInfos": $.toJSON(tableInfos[0].tableInfos),
+                "tableComment":tableComment
             },
             dataType: "json",
             success: function () {
@@ -334,4 +345,20 @@ function editSqlFieldComs(sqlNum) {
     curSQLStrIndex = sqlNum;
     var sqlStr = $("#" + sqlStrId).val();
     staticSourceTableChoice(2, null, sub, sqlStr, "dataResource",S_flag);
+}
+
+function getshowTypeData(tableName){
+
+    $.ajax({
+        type: "post",
+        url: ctx +"/getShowTypeInfMsg",
+        data:{"tableName":tableName},
+        dataType: "json",
+        success: function (data) {
+            if(data.showTypeInfmsg!==null){
+                var showTypeInfmsg=data.showTypeInfmsg;
+                $("#tableComment").val(showTypeInfmsg.tableComment);
+            }
+        }
+    });
 }

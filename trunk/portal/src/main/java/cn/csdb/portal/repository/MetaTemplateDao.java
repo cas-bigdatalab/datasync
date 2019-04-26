@@ -7,6 +7,8 @@ import com.mongodb.QueryBuilder;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -34,6 +36,10 @@ public class MetaTemplateDao {
 
     public MetaTemplate get(String id){
         return mongoTemplate.findById(id,MetaTemplate.class);
+    }
+
+    public void deleteById(String id){
+        mongoTemplate.remove(new Query(Criteria.where("id").is(id)),MetaTemplate.class);
     }
 
     /**
@@ -66,4 +72,15 @@ public class MetaTemplateDao {
         List<MetaTemplate> list = mongoTemplate.find(basicQuery,MetaTemplate.class);
         return list;
     }
+
+    /**
+     * 获取所有的元数据模板信息内容
+     * ：节点代码
+     * @return
+     */
+    public List<MetaTemplate> getAllList(){
+        List<MetaTemplate> list=mongoTemplate.findAll(MetaTemplate.class);
+        return list;
+    }
+
 }
