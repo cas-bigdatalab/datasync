@@ -52,4 +52,12 @@ public class MetaTemplateService {
     public List<MetaTemplate> getList(String subjectCode){
         return metaTemplateDao.getList(subjectCode);
     }
+    public List<MetaTemplate> getAllList(){
+        return metaTemplateDao.getAllList();
+    }
+
+    public void deleteById(String id){
+        metaTemplateDao.deleteById(id);
+    }
+
 }

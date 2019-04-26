@@ -181,6 +181,7 @@
                                                 <option value="SqlServer">SqlServer</option>--%>
                                                 <option value="mysql">MySql</option>
                                                 <option value="oracle">Oracle</option>
+                                                <option value="sqlserver">SqlServer</option>
                                             </select>
                                         </div>
                                     </div>
@@ -679,8 +680,13 @@
                 $("#saveButton")[0].style.display="inline";//显示保存按钮
                 $("#checkButton")[0].style.display="none";//隐藏检查按钮
                 $("#dataBaseName")[0].innerHTML="服务名<span style='color: red;'>\t\t\t\t\t\t\t\t\t\t\t\t\t* </span>";
-            }else if(db=='SqlServer'){
+            }else if(db=='sqlserver'){
+                $("#databaseName").empty();//初始化select
                 $("#port").val("1433");
+                $("#dataBaseNameDiv")[0].style.display="none";//隐藏数据库输入框
+                $("#saveButton")[0].style.display="none";//隐藏保存按钮
+                $("#checkButton")[0].style.display="inline";//显示检查按钮
+                $("#dataBaseName")[0].innerHTML="数据库名称<span style='color: red;'>\t\t\t\t\t\t\t\t\t\t\t\t\t* </span>";
             }else if(db=='mysql'){
                 $("#databaseName").empty();//初始化select
                 $("#port").val("3306");
@@ -740,7 +746,7 @@
 
             $.ajax({
                 type: 'post',
-                url: "${ctx}/relationship/loadMysqlDatabaseList",
+                url: "${ctx}/relationship/loadDatabaseList",
                 async: false,
                 data: {
                     "dataBaseType": dataBaseType,

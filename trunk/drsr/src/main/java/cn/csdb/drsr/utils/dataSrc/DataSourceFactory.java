@@ -12,6 +12,8 @@ public class DataSourceFactory {
             return new MySqlDataSource();
         } else if (databaseType.equals("oracle")) {
             return new OracleDataSource();
+        }else if(databaseType.equals("sqlserver")){
+            return new SqlServerDataSource();
         }
         return null;
     }

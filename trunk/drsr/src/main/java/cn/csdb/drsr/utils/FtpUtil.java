@@ -205,10 +205,10 @@ public class FtpUtil {
                 fileName = localFilepath.substring(localFilepath.lastIndexOf("%_%")+3);
                 System.out.println("-------fileName"+fileName);
             }*/
-            if("mysql".equals(dataTask.getDataTaskType()) || "oracle".equals(dataTask.getDataTaskType())){
-                fileName = dataTask.getDataTaskId()+".zip";
-            }else{
+            if("file".equals(dataTask.getDataTaskType())){
                 fileName = subjectCode + "_" +dataTask.getDataTaskId()+".zip";
+            }else{
+                fileName = dataTask.getDataTaskId()+".zip";
             }
 
             //对远程目录的处理

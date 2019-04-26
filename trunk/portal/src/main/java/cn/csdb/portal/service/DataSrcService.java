@@ -158,22 +158,18 @@ public class DataSrcService {
         return i;
     }
 
-    //获得列名和字段类型
-    public Map<String, List<String>> getColumnName(DataSrc dataSrc, String tableName) {
+    //获得表列名
+    public List<String> getColumnName(DataSrc dataSrc, String tableName) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
         List<String> list1 = new ArrayList<>();
-        List<String> list2 = new ArrayList<>();
-        List<String> list3 = new ArrayList<>();
-        List<String> list4 = new ArrayList<>();
-        List<String> list5 = new ArrayList<>();
-        Map<String, List<String>> map = new HashMap<>();
         try {
 
-            String sql = " SELECT a.column_Name AS columnName,CASE WHEN p.column_Name IS NULL THEN 'false' ELSE 'true'END AS pkColumn,CASE WHEN a.extra = 'auto_increment' " +
-                    "THEN  'true'  ELSE 'false' END AS autoAdd,a.data_type jdbcType, column_COMMENT descr FROM information_schema. COLUMNS a  " +
-                    "LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS p ON a.table_schema = p.table_schema AND a.table_name = p.TABLE_NAME AND a.COLUMN_NAME = p.COLUMN_NAME AND p.constraint_name = 'PRIMARY' " +
-                    "WHERE a.table_schema = ? AND a.table_name = ? ORDER BY  a.ordinal_position";
+//            String sql = " SELECT a.column_Name AS columnName,CASE WHEN p.column_Name IS NULL THEN 'false' ELSE 'true'END AS pkColumn,CASE WHEN a.extra = 'auto_increment' " +
+//                    "THEN  'true'  ELSE 'false' END AS autoAdd,a.data_type jdbcType, column_COMMENT descr FROM information_schema. COLUMNS a  " +
+//                    "LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS p ON a.table_schema = p.table_schema AND a.table_name = p.TABLE_NAME AND a.COLUMN_NAME = p.COLUMN_NAME AND p.constraint_name = 'PRIMARY' " +
+//                    "WHERE a.table_schema = ? AND a.table_name = ? ORDER BY  a.ordinal_position";
+            String sql="SELECT COLUMN_NAME FROM information_schema. COLUMNS WHERE table_schema = ? AND table_name = ? ";
 
 //            String sql="select  COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT from information_schema.COLUMNS where TABLE_SCHEMA= ? and table_name =?";
             PreparedStatement pst = connection.prepareStatement(sql);
@@ -181,19 +177,9 @@ public class DataSrcService {
             pst.setString(2, tableName);
             ResultSet set = pst.executeQuery();
             while (set.next()) {
-                list1.add(set.getString("columnName"));
-                list2.add(set.getString("jdbcType"));
-                list3.add(set.getString("descr"));
-                list4.add(set.getString("pkColumn"));
-                list5.add(set.getString("autoAdd"));
-
-                System.out.println(set.getString("pkColumn") + "..." + set.getString("autoAdd"));
+                list1.add(set.getString("COLUMN_NAME"));
             }
-            map.put("COLUMN_NAME", list1);
-            map.put("DATA_TYPE", list2);
-            map.put("COLUMN_COMMENT", list3);
-            map.put("pkColumn", list4);
-            map.put("autoAdd", list5);
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -203,7 +189,7 @@ public class DataSrcService {
                 e.printStackTrace();
             }
         }
-        return map;
+        return list1;
     }
 
     //    更新数据
@@ -479,4 +465,5 @@ public List<List<Object>> getTableDataTestTmpl(DataSrc dataSrc, String tableName
             return false;
         return dataSource.validateSql(connection, sql);
     }
+
 }

@@ -158,7 +158,7 @@ public class DataSyncController {
                     ftpUtil.numberOfRequest.remove(dataTaskId+"Block");
                     return 0;
                 }
-            }else if(dataTask.getDataTaskType().equals("mysql") || dataTask.getDataTaskType().equals("oracle")){
+            }else {//if(dataTask.getDataTaskType().equals("mysql") || dataTask.getDataTaskType().equals("oracle")){
                 String remoteFilepath = ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+"_sql/";
                 String[] localFileList = {dataTask.getFilePath()};
                 result = ftpUtil.upload(localFileList, processId,remoteFilepath,dataTask,subjectCode+"_sql").toString();

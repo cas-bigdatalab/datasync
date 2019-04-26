@@ -8,12 +8,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <script type="text/html" id="editTableFieldComsTmpl">
+
     <div class="skin skin-minimal">
         <table class="table table-hover table-bordered">
             <thead>
             <tr>
                 <th>字段名称</th>
                 <th>注释</th>
+                <th>显示类型</th>
             </tr>
             </thead>
             <tbody>
@@ -27,7 +29,30 @@
                 </td>
                 <td>
                     <input type="text" class="form-control  input-sm fieldComsValue" style="width: 60%"
-                           name="order_customer_name" value="{{tableInfo.columnComment}}">
+                           name="order_customer_name" value="{{tableInfo.columnComment}}" clumnCommet="{{tableInfo.columnComment}}">
+                </td>
+                <td>
+                    {{if tableInfo.dataType=='int'||tableInfo.dataType=='integer'||tableInfo.dataType=='float'||tableInfo.dataType=='double'}}
+                    <select id="sel_type1" class="sel">
+                        <option class="sel_type" value="文本型" on="1">文本型</option>
+                        <option class="sel_type" value="字典枚举型" on="3" >字典枚举型</option>
+                        <option class="sel_type" value="关联数据表" on="4" >关联数据表</option>
+                    </select>
+                    {{else if tableInfo.dataType=='date'||tableInfo.dataType=='time'||tableInfo.dataType=='datetime'}}
+                    <select id="sel_type2" class="sel">
+                        <option class="sel_type" value="文本型" on="1">文本型</option>
+                        <option class="sel_type" value="字典枚举型" on="3" >字典枚举型</option>
+                        <option class="sel_type" value="关联数据表" on="4" >关联数据表</option>
+                    </select>
+                    {{else}}
+                    <select id="sel_type3" class="sel">
+                    <option class="sel_type" value="文本型" on="1" >文本型</option>
+                    <option class="sel_type" value="URL" on="2" >URL</option>
+                    <option class="sel_type" value="字典枚举型" on="3" >字典枚举型</option>
+                    <option class="sel_type" value="关联数据表" on="4" >关联数据表</option>
+                    <option class="sel_type" value="文件型" on="5" >文件型</option>
+                    </select>
+                    {{/if}}
                 </td>
             </tr>
             {{/each}}
@@ -71,36 +96,35 @@
 </script>
 
 
-
 <script type="text/html" id="tableNameLi">
-        {{each data as value i}}
-        {{each value as v key}}
-            {{if i == 0}}
-            <li class="active">
-                <a href={{"#"+key}} data-toggle="tab" aria-expanded="true"> {{key}} </a>
-            </li>
-            {{else}}
-            <li>
-                <a href={{"#"+key}} data-toggle="tab"> {{key}} </a>
-            </li>
-            {{/if}}
-        {{/each}}
+    {{each data as value i}}
+    {{each value as v key}}
+    {{if i == 0}}
+    <li class="active">
+        <a href={{"#"+key}} data-toggle="tab" aria-expanded="true"> {{key}} </a>
+    </li>
+    {{else}}
+    <li>
+        <a href={{"#"+key}} data-toggle="tab"> {{key}} </a>
+    </li>
+    {{/if}}
+    {{/each}}
     {{/each}}
 </script>
 
 <script type="text/html" id="tableNameDiv">
     {{each data as value i}}
-        {{each value as v key}}
-            {{if i== 0}}
-            <div class="tab-pane active" >
-                <form id={{key}}></form>
-            </div>
-            {{else}}
-            <div class="tab-pane">
-                <form id={{key}}></form>
-            </div>
-            {{/if}}
-        {{/each}}
+    {{each value as v key}}
+    {{if i== 0}}
+    <div class="tab-pane active">
+        <form id={{key}}></form>
+    </div>
+    {{else}}
+    <div class="tab-pane">
+        <form id={{key}}></form>
+    </div>
+    {{/if}}
+    {{/each}}
     {{/each}}
 </script>
 
@@ -131,15 +155,15 @@
 
                 <td>
                     <select>
-                        <option  value="-1">不匹配任何字段</option>
+                        <option value="-1">不匹配任何字段</option>
                         {{each data as vd id}}
                         {{if id > 0 && vd[3] != ""}}
-                                {{if id == i}}
-                                <option selected="selected" value={{vd[3]}}>{{vd[3]}}</option>
-                                {{else}}
-                                <option value={{vd[3]}}>{{vd[3]}}</option>
-                                {{/if}}
-                            {{/if}}
+                        {{if id == i}}
+                        <option selected="selected" value={{vd[3]}}>{{vd[3]}}</option>
+                        {{else}}
+                        <option value={{vd[3]}}>{{vd[3]}}</option>
+                        {{/if}}
+                        {{/if}}
                         {{/each}}
                     </select>
                 </td>
@@ -154,7 +178,7 @@
                 {{if v[2] == "PRI"}}
                 <td><input type="radio" name="isPK" fieldPk={{v[0]}} checked disabled/></td>
                 {{else }}
-                <td><input type="radio" name="isPK"  disabled/></td>
+                <td><input type="radio" name="isPK" disabled/></td>
                 {{/if}}
             </tr>
             {{/if}}
@@ -193,7 +217,7 @@
                 {{each v as vv ii}}
                 {{if ii > 2}}
                 <td>
-                    <input name={{vv}} value={{vv}} />
+                    <input name={{vv}} value={{vv}}/>
                 </td>
                 {{/if}}
                 {{/each}}
@@ -208,9 +232,9 @@
                 </td>
 
                 <td>
-                    <input placeholder="请输入字段长度" fieldLength={{v[0]}} />
+                    <input placeholder="请输入字段长度" fieldLength={{v[0]}}/>
                 </td>
-                <td><input type="radio" name="isPK" fieldPk={{v[0]}} /></td>
+                <td><input type="radio" name="isPK" fieldPk={{v[0]}}/></td>
             </tr>
             {{/if}}
             {{/each}}

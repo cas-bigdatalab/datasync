@@ -26,12 +26,15 @@
             margin-right: 1px !important;
             color: #fff !important;
         }
+        .beijing{
+            background-color: #dddddd !important;
+        }
     </style>
 </head>
 
 <body>
 
-<div class="qiehuan_div" >
+<div class="qiehuan_div">
     <ul id="tabDescribe">
         <li class="active" value="0"><a id="nodescribe" href="#undescribe" data-toggle="tab">待描述数据表</a></li>
         <li class="active" value="1"><a id="described" href="#isdescribe" data-toggle="tab">已描述数据表</a></li>
@@ -95,10 +98,12 @@
 
                             <div class="tab-content"
                                  style="background-color: white;max-height:70%;max-width:100%; ">
-                                <div class="tab-pane active" id="editTableFieldComsId" style="width:99%;max-height:70%;overflow: hidden;overflow: auto;" >
+                                <div class="tab-pane active" id="editTableFieldComsId"
+                                     style="width:99%;max-height:70%;overflow: hidden;overflow: auto;">
                                 </div>
 
-                                <div class="tab-pane" id="previewTableDataAndComsId" style="width:99%;max-height:70%;overflow: hidden;overflow: auto;">
+                                <div class="tab-pane" id="previewTableDataAndComsId"
+                                     style="width:99%;max-height:70%;overflow: hidden;overflow: auto;">
                                 </div>
                             </div>
                         </div>
@@ -113,10 +118,117 @@
         </div>
     </div>
 </div>
-    </div>
+</div>
 </div>
 <input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
 <input type="hidden" id="FtpFilePath" value="${sessionScope.FtpFilePath}"/>
+<script type="text/html" id="templTypeURL">
+    <tr id="id_2" style="">
+        <td colspan="3" style="text-align: left;background-color:#dddddd">
+            <div id="model_URL"  style="width:60%;margin-left:20%;">
+                <div><span>字段标题</span><span>URL(地址)</span></div>
+                <div><span>选项模式</span>
+                    <span>
+                <input type="radio" value="网页链接"/><label>网页链接</label>
+                <input type="radio" value="邮箱链接"/><label>邮箱链接</label>
+                <input type="radio" value="FTP链接"/><label>FTP链接</label>
+                <input type="radio" value="图片类型"/><label>图片类型</label>
+            </span></div>
+                <div><span>缺省值</span><span><input type="text"></span></div>
+                <div>
+                    <button onclick=""><a>确定</a></button>
+                    <button onclick=""><a>取消</a></button>
+                </div>
+            </div>
+        </td>
+    </tr>
+</script>
+
+<script type="text/html" id="templTypeEnum">
+    <tr id="id_3">
+        <td colspan="3" style="text-align: center;">
+            <div id="model_enum" style="">
+                <div><span>字段标题</span><span>enum(枚举)</span></div>
+                <div><span>选项模式</span>
+                    <span>
+                <input type="radio" value="来自文本串"/>来自文本串
+                <input type="radio" value="来自sql表字段"/>来自sql表字段
+                </span></div>
+                <div><span>选项</span><span><input type="text"></span></div>
+                <div><span>编辑风格</span><span> <input type="radio" value="单选按钮"/>单选按钮 <input type="radio"
+                                                                                           value="普通下拉框"/>普通下拉框</span>
+                </div>
+                <div><span>显示风格</span><span> <input type="radio" value="枚举输出"/></span></div>
+                <div>
+                    <button><a>确定</a></button>
+                    <button><a>取消</a></button>
+                </div>
+            </div>
+        </td>
+    </tr>
+</script>
+
+<script type="text/html" id="templTypeDatasheet">
+    <tr id="id_4">
+        <td colspan="3" style="text-align: center;">
+            <div id="model_Datasheet" style="">
+                <%--<div><span>字段标题</span><span>enum(枚举)</span></div>--%>
+                <div>
+                    <form>
+                        <label>关联字段 </label>
+                        <select>
+                            <option value="表一">表一</option>
+                            <option value="表二">表二</option>
+                            <option value="表三">表三</option>
+                            <option value="表四">表四</option>
+                            <option value="表五">表五</option>
+                        </select>
+                        <select>
+                            <option value="字段一">字段一</option>
+                            <option value="字段二">字段二</option>
+                            <option value="字段三">字段三</option>
+                            <option value="字段四">字段四</option>
+                            <option value="字段五">字段五</option>
+                        </select>
+                        <br/>
+                        <label>显示风格</label> <input type="checkbox" value=""/>字段一<input type="checkbox" value=""/>字段二<input type="checkbox" value=""/>字段三
+                        <br/>
+                        <button><a>确定</a></button>
+                        <button><a>取消</a></button>
+                    </form>
+
+                </div>
+            </div>
+        </td>
+    </tr>
+</script>
+
+<script type="text/html" id="templTypeFile">
+    <tr id="id_5">
+        <td colspan="3" style="text-align: center;">
+            <div id="model_file" style="">
+                <%--<div><span>字段标题</span><span>enum(枚举)</span></div>--%>
+                <div>
+                    <form>
+                        <label>显示类型 </label>
+                        <input type="radio" value="附件列表"/>附件列表
+                        <input type="radio" value="附件列表"/>图片列表
+                        <input type="radio" value="附件列表"/>视频列表
+                        <br/>
+                        <label>主路径</label> <input type="text" value=""/>
+                        <br/>
+                        <label>视图大小</label> <input type="text" value=""/>    <label>分隔符</label> <input type="text" value=""/>
+                        <br/>
+                        <button><a>确定</a></button>
+                        <button><a>取消</a></button>
+                    </form>
+
+                </div>
+            </div>
+        </td>
+    </tr>
+</script>
+
 <%@ include file="./tableFieldComsTmpl.jsp" %>
 </body>
 <%--为了加快页面加载速度，请把js文件放到这个div里--%>
@@ -146,6 +258,77 @@
             $(".qiehuan_div li:eq(0) a").addClass("active");
         });
 
+        $("body").delegate("select", "change", function () {
+            debugger
+            var _this = this;
+            // $(_this).removeClass('sel');
+
+             $(_this).parent().parent().siblings().find('.sel').find('option').eq(0).attr("selected",true);
+
+            // var myItem = document.getElementById("sel_type");
+            /*
+            var myOption = myItem.options[myItem.selectedIndex].getAttribute('on');
+            */
+
+            var siblingss = []; //用来存放其他的兄弟节点
+            // var parent=$(_this).parent().parent().siblings().attr("style","cursor:not-allowed");
+            // $(_this).parent().parent().siblings().find('select').attr("disabled","disabled");
+            // $(_this).parent().parent().siblings().find('option').attr("style","disabled");
+
+            // var elseLi = parent.parent().siblings();
+            // for (var i = 0, elseLil = elseLi.length; i < elseLil; i++) {
+            //     if (elseLi[i] !== parent) {//判断是否是ele节点，是否与触发事件的节点相同
+            //         siblingss.push(elseLi[i]);
+            //     }
+            // }
+
+            var myOption = $(_this).find('option:selected').attr('on');
+            // var myOption = $(_this).attr('on');
+            if (myOption === '1') {
+                $("#id_2").remove();
+                $("#id_3").remove();
+                $("#id_4").remove();
+                $("#id_5").remove();
+            }
+            if (myOption === '2') {
+                $("#id_2").remove();
+                $("#id_3").remove();
+                $("#id_4").remove();
+                $("#id_5").remove();
+                $(this).parent().parent().addClass("beijing");
+                $(this).parent().parent().next().remove()
+                var html = template("templTypeURL", {});
+                $(this).parent().parent().after(html);
+
+            }
+            if (myOption === '3') {
+                $("#id_2").remove();
+                $("#id_3").remove();
+                $("#id_4").remove();
+                $("#id_5").remove();
+                var html = template("templTypeEnum", {});
+                $(this).parent().parent().css("background-color","#dddddd");
+                $(this).parent().parent().after(html);
+            }
+            if (myOption === '4') {
+                $("#id_2").remove();
+                $("#id_3").remove();
+                $("#id_4").remove();
+                $("#id_5").remove();
+                var html = template("templTypeDatasheet", {});
+                $(this).parent().parent().after(html);
+            }
+            if (myOption === '5') {
+                $("#id_2").remove();
+                $("#id_3").remove();
+                $("#id_4").remove();
+                $("#id_5").remove();
+                var html = template("templTypeFile", {});
+                $(this).parent().parent().after(html);
+            }
+            $(_this).addClass('sel');
+        });
+
         var sub1 = '${sessionScope.SubjectCode}';
         $("#tabDescribe li").click(function () {
             var flag = $(this).val();
@@ -163,6 +346,19 @@
             $("#isdescribe").hide();
             $("#undescribe").show();
         });
+
+        /*function func_siblings(currentNode) {
+            var siblingss = []; //用来存放其他的兄弟节点
+            var parent=currentNode.parentNode.parentNode.parentNode;
+            var elseLi = parent.parentNode.children;
+            for (var i = 0, elseLil = elseLi.length; i < elseLil; i++) {
+                if (elseLi[i] !== parent) {//判断是否是ele节点，是否与触发事件的节点相同
+                    siblingss.push(elseLi[i]);
+                }
+            }
+            console.log(siblingss)
+        }
+        */
         function chooseTable(subjectCode, flag) {
             $.ajax({
                 type: "GET",

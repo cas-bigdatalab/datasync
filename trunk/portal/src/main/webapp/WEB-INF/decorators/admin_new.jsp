@@ -69,6 +69,7 @@
             overflow-y: auto !important;
             overflow-x: hidden !important;
         }
+
         .page-sidebar .page-sidebar-menu > li > a {
             padding: 8px 15px;
         }
@@ -107,8 +108,9 @@
             font-weight: normal;
             color: #000;
         }
-        button.btn.btn-danger{
-           background-color: #e5e5e5;
+
+        button.btn.btn-danger {
+            background-color: #e5e5e5;
             color: #333333
         }
 
@@ -173,12 +175,18 @@
                                 <li><a class="" href="${ctx}/dataRelease"><i class="fa fa-upload"
                                                                              aria-hidden="true"></i> 发布审核管理</a>
                                 </li>
-                                <li><a href="${ctx}/admin/metadata"><i class="fa fa-cog"
-                                                                       aria-hidden="true"></i>
+                                <li><a href="${ctx}/admin/metadata"><i class="fa fa-cog" aria-hidden="true"></i>
                                     元数据管理</a>
+                                        <%--<ul>--%>
+                                        <%--<li class="l2-menu"><a href="${ctx}/metaTemplateManage"><i--%>
+                                        <%--class="fa fa-bars"></i>元数据模板管理</a></li>--%>
+                                        <%--</ul>--%>
+                                </li>
+                                <li class=""><a href="${ctx}/metaTemplate/toMateTemMsgList"><i class="fa fa-bars"></i>元数据模板管理</a>
                                 </li>
                                 <li><a class="" href="${ctx}/statisticalDataDetail"><i class="fa  fa-bar-chart"
-                                                                                       aria-hidden="true"></i> 数据统计管理</a>
+                                                                                       aria-hidden="true"></i>
+                                    数据统计管理</a>
                                 </li>
                             </ul>
 
@@ -379,7 +387,7 @@
         /* $("#content").css("height", $page_content.height() - $("#content-top").height() - parseInt($(".fabu_div2").css("margin-bottom")) * 2 - parseInt($("div.right_div").css("padding-top")))*/
         $("#content").height("90%");
 
-        $("#alltableName").niceScroll({cursorborder:"",cursorcolor:"#155aab",boxzoom:true}); // First scrollable DIV
+        $("#alltableName").niceScroll({cursorborder: "", cursorcolor: "#155aab", boxzoom: true}); // First scrollable DIV
     });
 
 </script>

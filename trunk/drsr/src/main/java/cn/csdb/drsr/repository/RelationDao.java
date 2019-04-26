@@ -3,6 +3,8 @@ package cn.csdb.drsr.repository;
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.repository.mapper.DataSrcMapper;
 import cn.csdb.drsr.service.RelationShipService;
+import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
+import cn.csdb.drsr.utils.dataSrc.IDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
@@ -164,13 +166,24 @@ public class RelationDao{
         return dataSrc;
     }
 
-    public  List<Object> loadMysqlDatabaseList(String dataBaseType,String host,String port,String userName,String password ) throws SQLException {
+    public  List<Object> loadDatabaseList(String dataBaseType,String host,String port,String userName,String password ) throws SQLException {
         List<Object> list=new ArrayList<>();
-        Connection connection=null;
+       if("mysql".equals(dataBaseType)){
+           list=loadMysqlDatabaseList(dataBaseType,host,port,userName,password);
+       }else if("sqlserver".equals(dataBaseType)){
+           list=loadSqlServerDatabaseList(dataBaseType,host,port,userName,password);
+       }
+
+        return list;
+    }
+
+    public   List<Object> loadMysqlDatabaseList (String dataBaseType,String host,String port,String userName,String password) throws SQLException {
+        List<Object> list = new ArrayList<>();
+        Connection connection = null;
+
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://" + host + ":" + port + "" ;
-            connection = DriverManager.getConnection(url, userName, password);
+            IDataSource dataSource = DataSourceFactory.getDataSource(dataBaseType);
+            connection = dataSource.getConnection(host, port, userName, password, "");
             DatabaseMetaData dm = connection.getMetaData();
             ResultSet rs = dm.getCatalogs();
             while (rs.next()) {
@@ -178,15 +191,48 @@ public class RelationDao{
                 list.add(name);
             }
             System.out.println();
-        } catch (ClassNotFoundException e) {
-            System.out.println("数据库连接异常");
         } catch (SQLException e) {
             System.out.println("数据库连接异常");
-        }finally {
+        } finally {
             connection.close();
         }
-        return list;
+
+          return  list;
     }
+
+    public   List<Object> loadSqlServerDatabaseList (String dataBaseType,String host,String port,String userName,String password) throws SQLException {
+        List<Object> list = new ArrayList<>();
+        Connection connection = null;
+
+        try {
+            IDataSource dataSource = DataSourceFactory.getDataSource(dataBaseType);
+            connection = dataSource.getConnection(host, port, userName, password, "Tfs_Configuration");
+
+            // 获取Statement
+            Statement stmt=connection.createStatement();
+
+            //查询语句  获取当前账号下所有数据库
+            String query="select NAME from master..sysdatabases D where sid not in(select sid from master..syslogins where name='"+userName+"')";
+
+            //执行查询
+            ResultSet rs=stmt.executeQuery(query);
+            String name="";
+            while(rs.next()){
+                System.out.println(rs.getString(1));
+                name=rs.getString(1);
+                list.add(name);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("数据库连接异常");
+        } finally {
+            connection.close();
+        }
+
+        return  list;
+    }
+
+
 
 }
 

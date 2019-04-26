@@ -119,8 +119,8 @@ public class RelationShipService {
         return relationDao.queryPage(requestedPage,SubjectCode);
     }
 
-    public String testCon(String host, String port, String userName, String password, String databaseName) {
-        if("3306".equals(port)){
+    public String testCon(String dataSourceType,String host, String port, String userName, String password, String databaseName) {
+        if("mysql".equals(dataSourceType)){
             String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName;
             try {
                 Class.forName("com.mysql.jdbc.Driver");
@@ -137,7 +137,7 @@ public class RelationShipService {
                 e.printStackTrace();
                 return "false";
             }
-        }else if("1521".equals(port)){
+        }else if("oracle".equals(dataSourceType)){
             String url="jdbc:oracle:thin:@"+host+":1521:"+databaseName+"";
             try {
                 Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -154,6 +154,21 @@ public class RelationShipService {
                 e.printStackTrace();
                 return "false";
             }
+        }else if("sqlserver".equals(dataSourceType)){
+            String  url = "jdbc:sqlserver://"+host+":1433;DatabaseName="+databaseName+";";
+            try {
+                String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+                Class.forName(driver);
+                Connection conn = DriverManager.getConnection(url, userName, password);
+                conn.close();
+                return "success";
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+
         }
         return "false";
     }
@@ -379,8 +394,8 @@ public class RelationShipService {
 
     }
 
-    public  List<Object> loadMysqlDatabaseList(String dataBaseType,String host,String port,String userName,String password ) throws SQLException {
-        return relationDao.loadMysqlDatabaseList(dataBaseType,host,port,userName,password);
+    public  List<Object> loadDatabaseList(String dataBaseType,String host,String port,String userName,String password ) throws SQLException {
+        return relationDao.loadDatabaseList(dataBaseType,host,port,userName,password);
     }
 
 

@@ -450,43 +450,7 @@
                         $("[kkid="+souceID+"]")[0].style.width="0%";
                         $("[kkid="+souceID+"Text]")[0].textContent="0%";
                         uploadListFlag.append("<span name="+keyID+" valFlag='false'></span>")
-                        if(keyType =="mysql"){
-                            console.log("mysql数据源")
-                            $.ajax({
-                                url:"${ctx}/ftpUpload",
-                                type:"POST",
-                                data:{dataTaskId:souceID,processId:keyID},
-                                success:function (data) {
-                                    var data =JSON.parse(data)
-                                    $("[name="+keyID+"]").attr("valFlag","true")
-                                    if(keyType == "mysql"){
-                                        if(data =="1"){
-                                            toastr["success"]("导入成功！");
-                                            $("."+souceID).text("已导入")
-                                            tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
-                                            return
-                                        }else {
-                                            $("."+souceID).text("导入失败")
-                                            return
-                                        }
-                                    }else {
-                                        if(data =="1"){
-                                            toastr["success"]("上传成功！");
-                                            $("."+souceID).text("已上传")
-                                            tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
-                                            return
-                                        }else {
-                                            $("."+souceID).text("上传失败")
-                                            return
-                                        }
-                                    }
-                                },
-                                error:function () {
-                                    console.log("请求失败")
-                                }
-                            })
-
-                        }else{
+                        if(keyType =="file" ){
                             console.log("文件数据源")
                             $.ajax({
                                 url:"${ctx}/ftpUpload",
@@ -512,7 +476,7 @@
                                             $("."+souceID).text("已上传")
                                             tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
                                         }else if(data =="3"){
-                                           // toastr["error"]("暂停成功！");
+                                            // toastr["error"]("暂停成功！");
                                         }else if(data=="0"){
                                             stopSetOuts();
                                             toastr["error"]("连接FTP出错：请检查网络连接！");
@@ -534,6 +498,44 @@
                             })
                             //$("."+souceID).text("正在上传");
                             getProcess(keyID,souceID);
+
+
+
+                        }else{
+                            console.log("关系数据源")
+                            $.ajax({
+                                url:"${ctx}/ftpUpload",
+                                type:"POST",
+                                data:{dataTaskId:souceID,processId:keyID},
+                                success:function (data) {
+                                    var data =JSON.parse(data)
+                                    $("[name="+keyID+"]").attr("valFlag","true")
+                                    if(keyType != "file"){
+                                        if(data =="1"){
+                                            toastr["success"]("导入成功！");
+                                            $("."+souceID).text("已导入")
+                                            tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
+                                            return
+                                        }else {
+                                            $("."+souceID).text("导入失败")
+                                            return
+                                        }
+                                    }else {
+                                        if(data =="1"){
+                                            toastr["success"]("上传成功！");
+                                            $("."+souceID).text("已上传")
+                                            tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
+                                            return
+                                        }else {
+                                            $("."+souceID).text("上传失败")
+                                            return
+                                        }
+                                    }
+                                },
+                                error:function () {
+                                    console.log("请求失败")
+                                }
+                            })
                         }
                     }else {
                         console.log("bbbbbbbbbbbbbbbbbbbb")
@@ -542,7 +544,7 @@
                 })
             }else{
                 uploadListFlag.append("<span name="+keyID+" valFlag='false'></span>")
-                if(keyType =="mysql" || keyType=="oracle"){
+                if(keyType =="file" ){
                     $.ajax({
                         url:"${ctx}/ftpUpload",
                         type:"POST",
@@ -552,6 +554,55 @@
                             var data =JSON.parse(data)
                             $("[name="+keyID+"]").attr("valFlag","true")
                             if(keyType == "mysql"){
+                                if(data =="1"){
+                                    toastr["success"]("导入成功！");
+                                    $("."+souceID).text("已导入")
+                                    tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
+                                }else {
+                                    $("."+souceID).text("导入失败")
+                                    // return
+                                }
+                            }else {
+                                if(data =="1"){
+                                    toastr["success"]("上传成功！");
+                                    $("."+souceID).text("已上传")
+                                    // window.location.reload();
+                                    tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
+                                }else if(data=="0"){
+                                    stopSetOuts();
+                                    toastr["error"]("连接FTP出错：请检查网络连接！");
+                                    tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
+                                    $("[kkid="+souceID+"Loading]")[0].style.display="none";
+                                    $("[kkid="+souceID+"LoadingFail]")[0].style.display="block";
+                                    $("."+souceID).text("ftp断开")
+                                }else if(data=="4"){
+                                    toastr["error"]("文件不存在！");
+                                    $("."+souceID).text("上传失败")
+                                }else {
+                                    $("."+souceID).text("上传失败")
+                                    //   return
+                                }
+                            }
+
+
+                        },
+                        error:function () {
+                            console.log("请求失败")
+                        }
+                    })
+                    // $("."+souceID).text("正在上传");
+                    getProcess(keyID,souceID);
+
+                }else{
+                    $.ajax({
+                        url:"${ctx}/ftpUpload",
+                        type:"POST",
+                        timeout:600000,
+                        data:{dataTaskId:souceID,processId:keyID},
+                        success:function (data) {
+                            var data =JSON.parse(data)
+                            $("[name="+keyID+"]").attr("valFlag","true")
+                            if(keyType != "file"){
                                 if(data =="1"){
                                     toastr["success"]("导入成功！");
                                     $("."+souceID).text("已导入")
@@ -577,54 +628,6 @@
                             console.log("请求失败")
                         }
                     })
-                }else{
-                    $.ajax({
-                        url:"${ctx}/ftpUpload",
-                        type:"POST",
-                        timeout:600000,
-                        data:{dataTaskId:souceID,processId:keyID},
-                        success:function (data) {
-                            var data =JSON.parse(data)
-                            $("[name="+keyID+"]").attr("valFlag","true")
-                            if(keyType == "mysql"){
-                                if(data =="1"){
-                                    toastr["success"]("导入成功！");
-                                    $("."+souceID).text("已导入")
-                                    tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
-                                }else {
-                                    $("."+souceID).text("导入失败")
-                                   // return
-                                }
-                            }else {
-                                if(data =="1"){
-                                    toastr["success"]("上传成功！");
-                                    $("."+souceID).text("已上传")
-                                    // window.location.reload();
-                                    tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
-                                }else if(data=="0"){
-                                    stopSetOuts();
-                                    toastr["error"]("连接FTP出错：请检查网络连接！");
-                                    tableConfiguration2(pageNum,dataSourceName,dataSourceStatus)
-                                    $("[kkid="+souceID+"Loading]")[0].style.display="none";
-                                    $("[kkid="+souceID+"LoadingFail]")[0].style.display="block";
-                                    $("."+souceID).text("ftp断开")
-                                }else if(data=="4"){
-                                    toastr["error"]("文件不存在！");
-                                    $("."+souceID).text("上传失败")
-                                }else {
-                                    $("."+souceID).text("上传失败")
-                                 //   return
-                                }
-                            }
-
-
-                        },
-                        error:function () {
-                            console.log("请求失败")
-                        }
-                    })
-                   // $("."+souceID).text("正在上传");
-                    getProcess(keyID,souceID);
                 }
             }
 
@@ -664,28 +667,7 @@
                 success:function (data) {
                     var datatask = JSON.parse(data).datatask
                     console.log(datatask)
-                    if(type=="mysql" || type=="oracle"){
-                        $("#pre-dataTaskName").html(datatask.dataTaskName)
-                        $("#pre-dataSourceId").html(name)
-                        var $tableName=$("#pre-tableName")
-                        listSpan(datatask.tableName,";",$tableName)
-                        /*$("#pre-tableName").html(datatask.tableName)*/
-                        var $sqlString=$("#pre-sqlString")
-                        listSpan(datatask.sqlString,";",$sqlString)
-                        /*$("#pre-sqlString").html(datatask.sqlString)*/
-                        var $sqlTableNameEn=$("#pre-sqlTableNameEn")
-                        listSpan(datatask.sqlTableNameEn,";",$sqlTableNameEn)
-                        /*$("#pre-sqlTableNameEn").html(datatask.sqlTableNameEn)*/
-                       /* $("#pre-filePath").html(datatask.filePath)*/
-                        $("#pre-createTime").html(convertMilsToDateTimeString(datatask.createTime))
-                        $("#pre-creator").html(datatask.creator)
-                        if(datatask.status == 1){
-                            $("#pre-status").html("导入完成")
-                        }else {
-                            $("#pre-status").html("未导入完成")
-                        }
-                        $("#relModal").modal('show');
-                    }else {
+                    if(type=="file"){
                         $("#file-dataTaskName").html(datatask.dataTaskName)
                         $("#file-dataSourceId").html(name)
                         /*$("#file-tableName").html(datatask.tableName)
@@ -705,6 +687,27 @@
                             $("#file-status").html("未导入完成")
                         }
                         $("#fileModal").modal('show');
+                    }else {
+                        $("#pre-dataTaskName").html(datatask.dataTaskName)
+                        $("#pre-dataSourceId").html(name)
+                        var $tableName=$("#pre-tableName")
+                        listSpan(datatask.tableName,";",$tableName)
+                        /*$("#pre-tableName").html(datatask.tableName)*/
+                        var $sqlString=$("#pre-sqlString")
+                        listSpan(datatask.sqlString,";",$sqlString)
+                        /*$("#pre-sqlString").html(datatask.sqlString)*/
+                        var $sqlTableNameEn=$("#pre-sqlTableNameEn")
+                        listSpan(datatask.sqlTableNameEn,";",$sqlTableNameEn)
+                        /*$("#pre-sqlTableNameEn").html(datatask.sqlTableNameEn)*/
+                        /* $("#pre-filePath").html(datatask.filePath)*/
+                        $("#pre-createTime").html(convertMilsToDateTimeString(datatask.createTime))
+                        $("#pre-creator").html(datatask.creator)
+                        if(datatask.status == 1){
+                            $("#pre-status").html("导入完成")
+                        }else {
+                            $("#pre-status").html("未导入完成")
+                        }
+                        $("#relModal").modal('show');
                     }
                 },
                 error:function () {
