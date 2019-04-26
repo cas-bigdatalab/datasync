@@ -5,6 +5,8 @@ import cn.csdb.drsr.model.TableInfoR;
 import cn.csdb.drsr.service.LoginService;
 import cn.csdb.drsr.service.RelationShipService;
 import cn.csdb.drsr.utils.ConfigUtil;
+import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
+import cn.csdb.drsr.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
@@ -79,7 +81,7 @@ public class RelationSourceController {
             }
         }
         logger.info("测试新增或编辑的数据能否连通数据库");
-        String flag = relationShipService.testCon(host, port, userName, password, dataBaseName);
+        String flag = relationShipService.testCon(dataBaseType,host, port, userName, password, dataBaseName);
         if (flag == "success") {
             return relationShipService.addData(datasrc);
         } else {
@@ -112,7 +114,7 @@ public class RelationSourceController {
         datasrc.setDataSourceId(dataSourceId1);
         logger.info("测试新增或编辑的数据能否连通数据库");
 
-        String flag = relationShipService.testCon(host, port, userName, password, dataBaseName);
+        String flag = relationShipService.testCon(dataBaseType,host, port, userName, password, dataBaseName);
 
         if (flag == "success") {
             return relationShipService.editData(datasrc);
@@ -272,29 +274,25 @@ public class RelationSourceController {
      * @date: 2018/10/23 10:29
      */
     @ResponseBody
-    @RequestMapping(value = "/loadMysqlDatabaseList")
+    @RequestMapping(value = "/loadDatabaseList")
     public JSONObject loadMysqlDatabaseList(String dataBaseType,String host,String port,String userName,String password ) throws ClassNotFoundException, SQLException {
         JSONObject jsonObject=new JSONObject();
         List<Object> databaseList;
         Connection connection = null;
         String result="1";
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://" + host + ":" + port + "" ;
-            connection = DriverManager.getConnection(url, userName, password);
-        } catch (ClassNotFoundException e) {
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataBaseType);
+
+        connection=dataSource.getConnection(host,port,userName,password,"");
+        if(connection==null){
             result="0";
-            System.out.println("数据库连接异常");
-        } catch (SQLException e) {
-            result="0";
-            System.out.println("数据库连接异常");
-        }finally {
-            if(connection!=null){
-                connection.close();
-            }
+            System.out.println("数据库连接创建失败！");
+            return  null;
         }
+
+        connection.close();
+
         if("1".equals(result)){//数据库参数连接正常后加载数据库列表
-            databaseList= relationShipService.loadMysqlDatabaseList(dataBaseType,host,port,userName,password);
+            databaseList= relationShipService.loadDatabaseList(dataBaseType,host,port,userName,password );
             jsonObject.put("databaseList",databaseList);
         }
         jsonObject.put("result",result);

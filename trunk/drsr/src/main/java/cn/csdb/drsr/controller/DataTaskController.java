@@ -269,6 +269,8 @@ public class DataTaskController {
                 datatask.setDataTaskType("mysql");
             }else if("oracle".equals(dataSrc.getDatabaseType())){
                 datatask.setDataTaskType("oracle");
+            }else if("sqlserver".equals(dataSrc.getDatabaseType())){
+                datatask.setDataTaskType("sqlserver");
             }
         }
         datatask.setStatus("0");
@@ -481,6 +483,8 @@ public class DataTaskController {
                 datatask.setDataTaskType("mysql");
             }else if("oracle".equals(dataSrc.getDatabaseType())){
                 datatask.setDataTaskType("oracle");
+            }else if("sqlserver".equals(dataSrc.getDatabaseType())){
+                datatask.setDataTaskType("sqlserver");
             }
         }
         datatask.setStatus("0");

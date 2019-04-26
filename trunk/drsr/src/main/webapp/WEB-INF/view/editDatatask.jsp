@@ -797,7 +797,7 @@
                     if(typeNum ==0){
                         $("#aaa").click()
                     }
-                    if(dataTaskCon.dataTaskType == "mysql"){
+                    if(dataTaskCon.dataTaskType == "mysql" || dataTaskCon.dataTaskType=="sqlserver"){
                         dataRelSrcId=dataTaskCon.dataSourceId
                         $("#"+dataRelSrcId).prop("selected",true)
                         $.ajax({
