@@ -348,10 +348,17 @@
             // 初始化文件搜索框
             $("#searchFile").on("click", function () {
                 var val = $("#searchName").val();
+                if ($.trim(val).length < 1) {
+                    toastr["warning"]("请输入要检索的名称", "警告！");
+                    return;
+                }
+                fileNetByName(val);
+                /*
+                本地页面搜索
                 var $option = $("#bd-data tr td.fileName div.text_name");
                 resetSelectedFile($option);
                 searchFile($option, val);
-                window.location.hash = "#reg_0";
+                window.location.hash = "#reg_0";*/
             })
         })();
 
@@ -383,17 +390,40 @@
                     "rootPath": selectPath
                 },
                 success: function (data) {
-                    var fileListHTML = template("fileNetList", {"data": data.data});
-                    var $bd = $("#bd-data");
-                    $bd.html("");
-                    $bd.append(fileListHTML);
-                    fileAddressBar(data);
-                    $("#FileOnNet table #all").attr("checked", false);
+                    createFileListHtml(data);
                 }
             })
         }
 
         fileNet("");
+
+        function createFileListHtml(data) {
+            if (data.code === "error") {
+                toastr["error"](data.message, "错误！");
+                return;
+            }
+            var fileListHTML = template("fileNetList", {"data": data.data});
+            var $bd = $("#bd-data");
+            $bd.html("");
+            $bd.append(fileListHTML);
+            fileAddressBar(data);
+            $("#FileOnNet table #all").attr("checked", false);
+        }
+
+        function fileNetByName(name) {
+            $.ajax({
+                type: "POST",
+                url: "${ctx}/fileNet/fileNetByName",
+                dataType: "JSON",
+                data: {
+                    rootPath: $("#fileBar span").attr("path"),
+                    searchName: name
+                },
+                success: function (data) {
+                    createFileListHtml(data);
+                }
+            })
+        }
 
         // file address bar
         function fileAddressBar(data) {
