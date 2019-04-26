@@ -185,6 +185,8 @@
                         </shiro:hasRole>
                         <shiro:hasRole name="admin">
                             <ul>
+                                <li><a href="${ctx}/authorization"><i class="fa fa-cog" aria-hidden="true"></i>
+                                    专业库用户授权</a></li>
                                 <li><a href="javaScript:void(0);"><i class="fa fa-database" aria-hidden="true"></i>
                                     关系数据管理</a>
                                     <ul>
@@ -202,8 +204,6 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li><a href="${ctx}/authorization"><i class="fa fa-file" aria-hidden="true"></i>
-                                    专业库用户授权</a></li>
                                 <li><a href="${ctx}/fileMange"><i class="fa fa-file" aria-hidden="true"></i>
                                     文件数据管理</a></li>
                                 <li><a href="${ctx}/dataRelease"><i class="fa fa-upload" aria-hidden="true"></i>

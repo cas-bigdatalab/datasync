@@ -12,7 +12,7 @@
 
 <html>
 <head>
-    <title>专业库管理与汇交工具</title>
+    <title>烟草科研专业库管理与汇交工具</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
@@ -278,7 +278,7 @@ if(userName != null && userName.length()>6){
         <!-- BEGIN LOGO -->
         <div class="page-logo" style="width: auto;margin: auto;position: absolute;top: 0;left: 0;bottom: 0;right: 0;">
             <a href="#">
-                <h4 style="font-size: 21px;margin-top: 10px;margin-bottom: 10px;">专业库管理与汇交工具</h4>
+                <h4 style="font-size: 21px;margin-top: 10px;margin-bottom: 10px;">烟草科研专业库管理与汇交工具</h4>
             </a>
         </div>
 
@@ -376,7 +376,7 @@ if(userName != null && userName.length()>6){
 <!-- BEGIN FOOTER -->
 <div class="page-footer" style="text-align: center;background-color: #454241;height: 4.92% !important;">
     <div class="page-footer-inner" style="color: #FFF;float: none">
-        2019-2025 &copy; 中国科学院计算机网络信息中心 版权所有
+        <%--2019-2025 &copy; 中国科学院计算机网络信息中心 版权所有--%>
     </div>
     <div class="scroll-to-top">
         <i class="icon-arrow-up"></i>
