@@ -143,15 +143,15 @@ public class ResourceController {
     }
 
     @RequestMapping(value = "editResource")
-    public ModelAndView resourceEdit(String resourceId,Model model) {
+    public ModelAndView resourceEdit(String resourceId, Model model) {
         //ModelAndView mv = new ModelAndView("editResource");
         ModelAndView mv = new ModelAndView("dataEditResource");
         mv.addObject("resourceId", resourceId);
         List<MetadataTemplate> list = metadataTemplateService.getAll();
-        model.addAttribute("list",list);
+        model.addAttribute("list", list);
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
-        List<Map<String,Object>> metadataList = resource.getExtMetadata();
-        model.addAttribute("metadataList",metadataList);
+        List<Map<String, Object>> metadataList = resource.getExtMetadata();
+        model.addAttribute("metadataList", metadataList);
         return mv;
     }
 
@@ -316,10 +316,10 @@ public class ResourceController {
                                             @RequestParam(name = "createOrganization") String createOrganization,
                                             @RequestParam(name = "createPerson") String createPerson,
                                             @RequestParam(name = "extMetadata") String extMetadata,
-                                            @RequestParam(name = "metaTemplateName",required = false) String metaTemplateName,
-                                            @RequestParam(name = "memo",required = false) String memo,
-                                            @RequestParam(name = "isTemplate",required = false) String isTemplate
-                                            ) {
+                                            @RequestParam(name = "metaTemplateName", required = false) String metaTemplateName,
+                                            @RequestParam(name = "memo", required = false) String memo,
+                                            @RequestParam(name = "isTemplate", required = false) String isTemplate
+    ) {
         String subjectCode = session.getAttribute("SubjectCode").toString();
         Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
@@ -355,12 +355,12 @@ public class ResourceController {
         resource.setvCount(0);
         System.out.println(extMetadata);
 
-        if (StringUtils.isNotEmpty(extMetadata)){
-            List<Map<String,Object>> list = new ArrayList<>();
+        if (StringUtils.isNotEmpty(extMetadata)) {
+            List<Map<String, Object>> list = new ArrayList<>();
             JSONObject json = JSONObject.parseObject(extMetadata);
-            for (Map.Entry<String, Object> map :  json.entrySet()){
-                Map<String,Object> item = new HashMap<>();
-                item.put(map.getKey(),map.getValue());
+            for (Map.Entry<String, Object> map : json.entrySet()) {
+                Map<String, Object> item = new HashMap<>();
+                item.put(map.getKey(), map.getValue());
                 list.add(item);
             }
             resource.setExtMetadata(list);
@@ -368,7 +368,7 @@ public class ResourceController {
 
         //xiajl20190424增加创建元数据模板信息
         System.out.println(isTemplate);
-        if ("true".equals(isTemplate)){
+        if ("true".equals(isTemplate)) {
             MetaTemplate metaTemplate = new MetaTemplate();
             metaTemplate.setMetaTemplateName(metaTemplateName);
             metaTemplate.setMemo(memo);
@@ -424,15 +424,15 @@ public class ResourceController {
             List<String> tableList = Arrays.asList(dataList.split(";"));
             //计算存储量
             int allCount = 0;
-            for(String tableName:tableList){
+            for (String tableName : tableList) {
                 Map<String, Map<String, String>> tableColumns = resourceService.getTableColumns(subject.getDbHost(), subject.getDbPort(), subject.getDbUserName(), subject.getDbPassword(), subject.getDbName(), tableName);
-                int column = tableColumns.size()-1;
-                List<String>list = new ArrayList<>();
+                int column = tableColumns.size() - 1;
+                List<String> list = new ArrayList<>();
                 list.add(tableName);
                 int row = resourceService.getRecordCount(subject.getDbHost(), subject.getDbPort(), subject.getDbUserName(), subject.getDbPassword(), subject.getDbName(), list);
-                allCount += row*column;
+                allCount += row * column;
             }
-            Double allCountDouble = 225.0/(75000/allCount)/1024;
+            Double allCountDouble = 225.0 / (75000 / allCount) / 1024;
             String str = String.format("%.2f", allCountDouble);
             resource.setToMemorySize(str);
             int rowCount = resourceService.getRecordCount(subject.getDbHost(), subject.getDbPort(), subject.getDbUserName(), subject.getDbPassword(), subject.getDbName(), tableList);
@@ -507,6 +507,21 @@ public class ResourceController {
     }
 
 
+    @RequestMapping("/addResourceSecondStepCopy")
+    @ResponseBody
+    public JSONObject addResourceSecondStepCopy(HttpSession session,
+                                                @RequestParam(name = "resourceId") String resourceId,
+                                                @RequestParam(name = "publicType") String publicType,
+                                                resourceDataList resourceDataList) {
+        JSONObject jsonObject = new JSONObject();
+        String subjectCode = session.getAttribute("SubjectCode").toString();
+        Subject subject = subjectService.findBySubjectCode(subjectCode);
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        String sqlDataList = resourceDataList.getSqlDataList();
+        String fileDataList = resourceDataList.getFileDataList();
+        return jsonObject;
+    }
+
     /**
      * Function Description: 添加资源第三步保存
      *
@@ -545,7 +560,7 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         jsonObject.put("resource", resource);
-        jsonObject.put("metadataList",resource.getExtMetadata());
+        jsonObject.put("metadataList", resource.getExtMetadata());
         return jsonObject;
     }
 
@@ -575,7 +590,7 @@ public class ResourceController {
                                             @RequestParam(name = "publishOrganization") String publishOrganization,
                                             @RequestParam(name = "createOrganization") String createOrganization,
                                             @RequestParam(name = "createPerson") String createPerson,
-                                            @RequestParam(name = "extMetadata") String extMetadata ) {
+                                            @RequestParam(name = "extMetadata") String extMetadata) {
         String subjectCode = session.getAttribute("SubjectCode").toString();
         Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
@@ -624,12 +639,12 @@ public class ResourceController {
         //xiajl20190310 增加
         System.out.println(extMetadata);
 
-        if (StringUtils.isNotEmpty(extMetadata)){
-            List<Map<String,Object>> list = new ArrayList<>();
+        if (StringUtils.isNotEmpty(extMetadata)) {
+            List<Map<String, Object>> list = new ArrayList<>();
             JSONObject json = JSONObject.parseObject(extMetadata);
-            for (Map.Entry<String, Object> map :  json.entrySet()){
-                Map<String,Object> item = new HashMap<>();
-                item.put(map.getKey(),map.getValue());
+            for (Map.Entry<String, Object> map : json.entrySet()) {
+                Map<String, Object> item = new HashMap<>();
+                item.put(map.getKey(), map.getValue());
                 list.add(item);
             }
             resource.setExtMetadata(list);
@@ -920,50 +935,49 @@ public class ResourceController {
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         String[] filePathArry = new String[0];
 
-        List<FileTreeNode> nodeList=new ArrayList<FileTreeNode>();
+        List<FileTreeNode> nodeList = new ArrayList<FileTreeNode>();
         String filePath = (String) request.getSession().getAttribute("FtpFilePath") + "file";
 //        String filePath="D:\\workspace";
         File dirFile = new File(filePath);
         JSONObject jsonObject = new JSONObject();
-        if(resource!=null){
-            if(resource.getFilePath()!=null){//库内被选中字段
-                filePathArry=resource.getFilePath().replace("%_%",File.separator).split(";");
-                for(String fileStr:filePathArry){
-                    File file= new File(fileStr);
-                    if(file.isDirectory()){
-                        nodeList=resourceService.loadingFileTree(file.getPath(),nodeList);
+        if (resource != null) {
+            if (resource.getFilePath() != null) {//库内被选中字段
+                filePathArry = resource.getFilePath().replace("%_%", File.separator).split(";");
+                for (String fileStr : filePathArry) {
+                    File file = new File(fileStr);
+                    if (file.isDirectory()) {
+                        nodeList = resourceService.loadingFileTree(file.getPath(), nodeList);
                     }
                 }
             }
 
-            if(dirFile.isDirectory()){
-                nodeList.add(new FileTreeNode(filePath,"0",filePath,"true","true","init"));
-                nodeList=resourceService.loadingFileTree(filePath,nodeList);
+            if (dirFile.isDirectory()) {
+                nodeList.add(new FileTreeNode(filePath, "0", filePath, "true", "true", "init"));
+                nodeList = resourceService.loadingFileTree(filePath, nodeList);
             }
-            for(String filestr:filePathArry){
-                for(FileTreeNode ftn:nodeList){
-                    if(filestr.equals(ftn.getId())){
+            for (String filestr : filePathArry) {
+                for (FileTreeNode ftn : nodeList) {
+                    if (filestr.equals(ftn.getId())) {
                         ftn.setChecked("true");
                     }
                 }
             }
 
-            jsonObject.put("nodeList",nodeList);
+            jsonObject.put("nodeList", nodeList);
         }
         return jsonObject;
     }
 
-    @RequestMapping(value="ZTreeNode")
+    @RequestMapping(value = "ZTreeNode")
     @ResponseBody
-    public List<FileTreeNode> ZTreeNode(String id, String path, String name, String taskId, HttpServletRequest req){
+    public List<FileTreeNode> ZTreeNode(String id, String path, String name, String taskId, HttpServletRequest req) {
         List<FileTreeNode> nodeList = new ArrayList<FileTreeNode>();
-        nodeList=resourceService.asynLoadingTree("",id,"false");//此处id为文件节点（文件路径）
+        nodeList = resourceService.asynLoadingTree("", id, "false");//此处id为文件节点（文件路径）
         return nodeList;
     }
 
 
     /**
-     *
      * @param: []
      * @return: java.util.List<com.alibaba.fastjson.JSONObject>
      * @auther: caohq
@@ -977,29 +991,26 @@ public class ResourceController {
         Subject subject = subjectService.findBySubjectCode(subjectCode);
 
 
-        String filePath=subject.getFtpFilePath()+ "file";
+        String filePath = subject.getFtpFilePath() + "file";
 
-        List<FileTreeNode> nodeList=new ArrayList<FileTreeNode>();
-        filePath= filePath.replace("/",File.separator);
-        if("/".equals(filePath.charAt(filePath.length()-1)+"") || "\\".equals(filePath.charAt(filePath.length()-1)+"")){
-            filePath=filePath.substring(0,filePath.length()-1);
+        List<FileTreeNode> nodeList = new ArrayList<FileTreeNode>();
+        filePath = filePath.replace("/", File.separator);
+        if ("/".equals(filePath.charAt(filePath.length() - 1) + "") || "\\".equals(filePath.charAt(filePath.length() - 1) + "")) {
+            filePath = filePath.substring(0, filePath.length() - 1);
         }
-        nodeList=subjectService.asynLoadingTree("",filePath,"init");
+        nodeList = subjectService.asynLoadingTree("", filePath, "init");
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("nodeList",nodeList);
+        jsonObject.put("nodeList", nodeList);
         return jsonObject;
     }
 
-    @RequestMapping(value="asyncGetNodes")
+    @RequestMapping(value = "asyncGetNodes")
     @ResponseBody
-    public List<FileTreeNode> asyncGetNodes(String id, String pid, String name, String taskId, HttpServletRequest req){
+    public List<FileTreeNode> asyncGetNodes(String id, String pid, String name, String taskId, HttpServletRequest req) {
         List<FileTreeNode> nodeList = new ArrayList<FileTreeNode>();
-        nodeList=subjectService.asynLoadingTree("",id,"false");
+        nodeList = subjectService.asynLoadingTree("", id, "false");
         return nodeList;
     }
-
-
-
 
 
 }

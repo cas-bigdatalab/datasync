@@ -132,6 +132,7 @@
                                                           method="post">
                                                         <div id="cutDiv"
                                                              style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
+                                                            <%--<img alt="" src="" id="cutimg" style="height: 150px; width: 200px;"/>--%>
                                                             <input type="hidden" id="x" name="x"/>
                                                             <input type="hidden" id="y" name="y"/>
                                                             <input type="hidden" id="w" name="w"/>
@@ -351,6 +352,13 @@
 
                                 </div>
                                 <div class="tab-pane" id="tab2">
+                                    <div style="font-size: 18px">
+                                        <span>数据源:</span>
+                                        <input name="ways" type="radio" checked="checked" value="DB" id="aaa"/>
+                                        <label for="aaa" style="font-size: 18px;color: #1CA04C">数据库表</label>
+                                        <input name="ways" type="radio" value="LH" id="bbb"/>
+                                        <label for="bbb" style="font-size: 18px;color: #1CA04C">文件型数据</label>
+                                    </div>
                                     <div style="height: 15px"></div>
                                     <div style="overflow: hidden" class="select-database">
                                         <div class="col-md-2" style="font-size: 18px;text-align:left;margin: 0 -15px ">
@@ -361,11 +369,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div style="overflow: hidden" class="select-local">
-                                        <div class="col-md-2" style="font-size: 18px;text-align:left;margin: 0 -15px ">
-                                            <span>选择文件资源</span>
-                                        </div>
-                                        <div class="col-md-4" style="font-size: 18px;width: 68%;"
+                                    <div style="overflow: hidden;display: none" class="select-local">
+                                        <div class="col-md-4 col-md-offset-2" style="font-size: 18px;width: 68%;"
                                              id="fileContainerTree">
                                             <ul id="treeDemo" class="ztree" style="width: 100%;"></ul>
                                         </div>
@@ -408,14 +413,17 @@
                                 <div class="col-md-offset-3 col-md-9">
                                     <a href="javascript:;" class="btn btn-default" onclick="fromAction(false)"
                                        style="display: none;margin-left: 10%">
+                                        <%--<i class="m-icon-swapleft"></i> --%>
                                         上一步 </a>
                                     <a href="javascript:;" class="btn btn-primary" onclick="fromAction(true)"
                                        style="margin-left: 30%;">
                                         下一步
+                                        <%--<i class="m-icon-swapright m-icon-white"></i> --%>
                                     </a>
                                     <a href="javascript:;" class="btn green button-submit"
                                        style="display: none;margin-left: 30%;">
                                         提交
+                                        <%--<i class="m-icon-swapup m-icon-white"></i>--%>
                                     </a>
                                 </div>
                             </div>
@@ -512,7 +520,7 @@
     <script type="text/javascript">
         var ctx = '${ctx}';
         var sdoId = "${resourceId}";
-        var sub = '${sessionScope.SubjectCode}';
+        var sub = '${sessionScope.SubjectCode}'
         var initNum = 1;
         var firstFlag = false;
         var secondFlag = false;
@@ -524,6 +532,7 @@
         var userList;
 
         $(function () {
+            // $(".time_div").html("");
             $(".fabu_div2").html("数据发布 - 第1步，共3步");
             $("#file-1").fileinput({
                 uploadAsync: false,
@@ -550,9 +559,6 @@
                 var deleteFileName = $("#" + id).find(".file-thumbnail-footer").find(".file-footer-caption").attr("title");
                 removeFileFromFtpAndUploadFilePath(deleteFileName);
             });
-
-            getResourceById();
-            initFileTree();
         });
 
         function removeFileFromFtpAndUploadFilePath(deleteFileName) {
@@ -583,6 +589,7 @@
             return ftpFilePath;
         }
 
+        /*var tagNames=new Array();*/
         $('.selectData').datepicker({
             language: 'zh-CN'
         });
@@ -590,15 +597,15 @@
             $(this).datepicker('clearDates');
         });
         $('.selectData:eq(0)').datepicker().on("changeDate", function (ev) {
-            firstTime = new Date(ev.date).getTime();
-            $(".timeVili").removeClass("custom-error");
+            firstTime = new Date(ev.date).getTime()
+            $(".timeVili").removeClass("custom-error")
             $(".timeVili:eq(1)").hide()
-        });
+        })
         $('.selectData:eq(1)').datepicker().on("changeDate", function (ev) {
-            lastTime = new Date(ev.date).getTime();
-            $(".timeVili").removeClass("custom-error");
+            lastTime = new Date(ev.date).getTime()
+            $(".timeVili").removeClass("custom-error")
             $(".timeVili:eq(1)").hide()
-        });
+        })
 
         var validData = {
             errorElement: 'span', //default input error message container
@@ -738,10 +745,10 @@
 
         $("#select2_tags").change(function () {
             $("#submit_form2").validate(validData2).element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
-        });
+        })
 
-        $("#submit_form1").validate(validData);
-        $("#submit_form2").validate(validData2);
+        $("#submit_form1").validate(validData)
+        $("#submit_form2").validate(validData2)
 
 
         //将图片截图并上传功能
@@ -809,6 +816,17 @@
         }
 
         $(".progress-bar-success").width(initNum * 33 + "%");
+        $("[name='ways']").on("change", function () {
+            if (this.value == "DB") {
+                $(".select-database").show();
+                $(".select-local").hide();
+                publicType = "mysql"
+            } else {
+                $(".select-database").hide();
+                $(".select-local").show();
+                publicType = "file"
+            }
+        })
         $("[name='need_checked']").on("change", function () {
             var $index = $("[name='need_checked']").index($(this))
             if ($(this).val() != "" && $(this).val().trim() != "") {
@@ -817,20 +835,20 @@
                 $("[name='need_message']:eq(" + $index + ")").hide()
                 $(".required:eq(" + $index + ")").parent().removeClass("custom-error")
             }
-        });
+        })
         $("#task_email").on("change", function () {
             $("[name='data_email']").hide()
-        });
+        })
         $("#task_phone").on("change", function () {
             $("[name='data_phone']").hide()
-        });
+        })
         $(".undeslist").delegate("input", "click", function () {
             staticSourceTableChoice(1, this, sub, $(this).attr("keyval"), "dataResource")
             $("#previewTableDataAndComsButtonId").click()
-        });
+        })
         $(".button-submit").click(function () {
             addResourceThirdStep()
-        });
+        })
 
         relationalDatabaseTableList();
 
@@ -990,10 +1008,10 @@
         }
 
         function addResourceSecondStep() {
-            secondFlag = false;
-            var dataList = "";
-            if (publicType === "mysql") {
-                var $ele = $("[name='resTable']:checked");
+            secondFlag = false
+            var dataList = ""
+            if (publicType == "mysql") {
+                var $ele = $("[name='resTable']:checked")
 
                 $ele.each(function () {
                     dataList += $(this).attr("keyval") + ";"
@@ -1128,18 +1146,18 @@
             $.ajax({
                 url: ctx + "/resource/getResourceById",
                 type: "POST",
-                dataType: "JSON",
                 data: {
-                    resourceId: resourceId
+                    resourceId: resourceId,
                 },
                 success: function (data) {
-                    var totalList = data.resource;
+                    var totalList = JSON.parse(data).resource
+                    // console.log(JSON.parse(data));
                     initCenterResourceCatalogTree($("#jstree-demo"), totalList.catalogId);
-                    $("#Task_dataName").val(totalList.title);
-                    $("#Task_email").val(totalList.email);
-                    $("#Task_phone").val(totalList.phoneNum);
-                    firstTime = totalList.startTime;
-                    lastTime = totalList.endTime;
+                    $("#Task_dataName").val(totalList.title)
+                    $("#Task_email").val(totalList.email)
+                    $("#Task_phone").val(totalList.phoneNum)
+                    firstTime = totalList.startTime
+                    lastTime = totalList.endTime
                     if (firstTime != null) {
                         $('.selectData:eq(0)').val(convertMilsToDateString(firstTime))
                     }
@@ -1149,38 +1167,41 @@
                     if (totalList.creatorCreateTime != null) {
                         $("#createTime").val(convertMilsToDateString(totalList.creatorCreateTime))
                     }
-                    $("#publish_Organization").val(totalList.publishOrgnization);
-                    $("#create_Organization").val(totalList.createOrgnization);
-                    $("#create_person").val(totalList.createPerson);
-                    $("#dataDescribeID").val(totalList.introduction);
+                    $("#publish_Organization").val(totalList.publishOrgnization)
+                    $("#create_Organization").val(totalList.createOrgnization)
+                    $("#create_person").val(totalList.createPerson)
+                    $("#dataDescribeID").val(totalList.introduction)
                     $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
                     var path = totalList.imagePath;
                     $('#cutimg').attr('src', path);
                     $('#imgPath').val(totalList.imagePath);
-                    publicType = totalList.publicType == "" ? "mysql" : totalList.publicType == "mysql" ? "mysql" : "file";
-                    $("#select2_tags").val(totalList.keyword);
+                    publicType = totalList.publicType == "" ? "mysql" : totalList.publicType == "mysql" ? "mysql" : "file"
+                    $("#select2_tags").val(totalList.keyword)
                     $("#select2_tags").select2({
                         tags: true,
                         multiple: true,
                         tags: [""],
                     });
-                    $("#dataSourceDesID").val(totalList.createdByOrganization);
-                    var publicContentList = totalList.publicContent.split(";");
-                    var typeNum = (totalList.publicType === "mysql" || totalList.publicType === "") ? 0 : 1;
-                    $("[name='ways']:eq(" + typeNum + ")").prop("checked", true);
-                    if (typeNum === 0) {
+                    $("#dataSourceDesID").val(totalList.createdByOrganization)
+                    var publicContentList = totalList.publicContent.split(";")
+                    var typeNum = (totalList.publicType == "mysql" || totalList.publicType == "") ? 0 : 1;
+                    $("[name='ways']:eq(" + typeNum + ")").prop("checked", true)
+                    if (typeNum == 0) {
                         for (var i = 0; i < publicContentList.length; i++) {
                             $("[keyval='" + publicContentList[i] + "']").prop("checked", true)
                         }
                     } else {
-                        var fileId = totalList.filePath;
+                        var fileId = totalList.filePath
                         fileId = fileId.substr(0, fileId.length - 1);
                         var str = fileId.replace(/%_%/g, "/");
+                        // console.log(str);
+                        var filePathList = str.split(";")
+                        // console.log(filePathList)
                         $(".select-database").hide();
                         $(".select-local").show();
 
                     }
-                    userList = totalList.userGroupId.split(",");
+                    userList = totalList.userGroupId.split(",")
 
                     //xiajl20190310增加，显示扩展元数据信息
                     // console.log('begin20190310');
@@ -1190,7 +1211,7 @@
                         var valueStr = "";
                         for (var i = 0; i < totalList.extMetadata.length; i++) {
                             $.each(totalList.extMetadata[i], function (key, value) {
-                                if (key === str) {
+                                if (key == str) {
                                     valueStr = value;
                                 }
                             })
@@ -1204,6 +1225,7 @@
                 }
             })
         }
+
 
         function initFileTree() {
             var root;
@@ -1220,8 +1242,6 @@
                     if (zTreeObj != null) {
                         zTreeObj.destroy();//用之前先销毁tree
                     }
-                    // TODO 不提交且部署时请注释
-                    data.nodeList[0].id = data.nodeList[0].id.replace(/\//g, "\\");
                     var fileNodes = data.nodeList;
                     var zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, fileNodes);
 
@@ -1230,6 +1250,44 @@
             });
             return root;
         }
+
+        function getFileList(folderPath) {
+            var children;
+            $.ajax({
+                url: "${ctx}/resource/treeNode",
+                type: "get",
+                data: {'filePath': folderPath},
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    children = data;
+                }
+            });
+            return children;
+        }
+
+        function generateChildJson(childArray) {
+            // console.log(childArray)
+            for (var i = 0; i < childArray.length; i++) {
+                var child = childArray[i];
+                if (child.type == 'directory') {
+                    child.children = true;
+                    child.icon = "jstree-folder";
+                } else {
+                    child.icon = "jstree-file";
+                }
+            }
+        }
+
+        function tagClick(obj) {
+            $(obj).parent().remove();
+        }
+
+        jQuery(document).ready(function () {
+            getResourceById();
+            initFileTree();
+        })
+
 
         var setting = {
             async: {
@@ -1267,6 +1325,21 @@
             return childNodes;
         }
 
+        // 递归，获取所有子节点
+        function getAllChildrenNodes(treeNode, result) {
+            if (treeNode.isParent) {
+                var childrenNodes = treeNode.children;
+                if (childrenNodes) {
+                    for (var i = 0; i < childrenNodes.length; i++) {
+                        result += ',' + childrenNodes[i].id;
+                        result = getAllChildrenNodes(childrenNodes[i], result);
+                    }
+                }
+            }
+            return result;
+        }
+
+
         //获取界面中所有被选中的radio
         function getChecedValueInLocalTree() {
             var pathsOfCheckedFiles = new Array();
@@ -1280,6 +1353,7 @@
             return pathsOfCheckedFiles.concat(uploadFilePath);
         }
 
+
         function asyncAll(event, treeId, treeNode) {
             if (!check()) {
                 return;
@@ -1290,7 +1364,7 @@
                 var nodes = new Array([treeNode]);
                 asyncNodes(nodes[0]);
             }
-        }
+        };
 
         function asyncNodes(nodes) {
             if (!nodes) return;
@@ -1305,7 +1379,7 @@
                     zTree.reAsyncChildNodes(nodes[i], "refresh", true);
                 }
             }
-        }
+        };
 
         function beforeAsync() {
             curAsyncCount++;
@@ -1352,6 +1426,7 @@
                 }
             }
         }
+
 
         function check() {
             if (curAsyncCount > 0) {
