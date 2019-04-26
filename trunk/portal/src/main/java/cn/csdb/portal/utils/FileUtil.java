@@ -5,10 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @Author jinbao
@@ -278,6 +279,42 @@ public class FileUtil {
             }
         });
         return fileList;
+    }
+
+    public static List<File> searchFileByName(File file, String name) {
+        ArrayList<File> files = new ArrayList<>();
+        String regString = ".*" + name + ".*";
+        Pattern pattern = Pattern.compile(regString);
+        Path path = Paths.get(file.getAbsolutePath());
+        try {
+            Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+                // 访问文件时触发
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    getSelectedFile(file, pattern, files);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                // 访问目录时触发
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    getSelectedFile(dir, pattern, files);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                private void getSelectedFile(Path dir, Pattern pattern, ArrayList<File> files) {
+                    String fileName = dir.getFileName().toString();
+                    Matcher matcher = pattern.matcher(fileName);
+                    boolean matches = matcher.matches();
+                    if (matches) {
+                        files.add(new File(dir.toString()));
+                    }
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return files;
     }
 
     private enum CopyCheck {

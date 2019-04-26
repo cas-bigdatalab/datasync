@@ -53,6 +53,23 @@ public class FileNetController {
         return jsonObject;
     }
 
+
+    @PostMapping("/fileNetByName")
+    @ResponseBody
+    public JSONObject fileNetByName(HttpServletRequest request, String rootPath, String searchName) {
+        JSONObject jsonObject = new JSONObject();
+        String parentPath = "";
+        String ftpRootPath = removeFtpRootLastSeparator(request);
+        if ("".equals(rootPath)) {
+            parentPath = ftpRootPath;
+        } else {
+            parentPath = rootPath;
+        }
+        parentPath = fileNetService.decodePath(parentPath, ftpRootPath);
+        jsonObject = fileNetService.getDirByName(parentPath, ftpRootPath, searchName);
+        return jsonObject;
+    }
+
     private String removeFtpRootLastSeparator(HttpServletRequest request) {
         String ftpRootPath = (String) request.getSession().getAttribute("FtpFilePath");
         // TODO 部署时候请注释下一行
@@ -62,7 +79,7 @@ public class FileNetController {
         boolean win = ftpRootPath.endsWith("\\");
         if (linux || win) {
             ftpRootPath = ftpRootPath.substring(0, ftpRootPath.length() - 1);
-            ftpRootPath += "/file";
+            ftpRootPath += File.separator + "file";
             return ftpRootPath;
         }
         return ftpRootPath;
