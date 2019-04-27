@@ -1,14 +1,22 @@
 package cn.csdb.portal.service;
 
+import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.repository.DataSrcDao;
 import cn.csdb.portal.repository.ResourceDao;
 import cn.csdb.portal.utils.FileTreeNode;
+import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
+import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -47,7 +55,7 @@ public class ResourceService {
 
     //在表中将删除的已审核数据集id记录下来
     @Transactional
-    public void saveDeleteId(String id){
+    public void saveDeleteId(String id) {
         resourceDao.saveDeleteId(id);
     }
 
@@ -77,10 +85,10 @@ public class ResourceService {
     /**
      * Function Description: 分页查询获取资源List
      *
-     * @param:  subjectCode:专题库代码, title:资源名称, status:状态, pageNo:页数, pageSize:第页记录条数
+     * @param: subjectCode:专题库代码, title:资源名称, status:状态, pageNo:页数, pageSize:第页记录条数
      * @return: 资源List列表
      * @auther: Administrator
-     * @date:   2018/10/23 16:28
+     * @date: 2018/10/23 16:28
      */
     @Transactional(readOnly = true)
     public List<cn.csdb.portal.model.Resource> getListByPage(String subjectCode, String title, String publicType, String status, int pageNo, int pageSize) {
@@ -89,13 +97,13 @@ public class ResourceService {
 
 
     @Transactional(readOnly = true)
-    public long countByPage(String subjectCode, String title,String publicType, String resState){
-        return resourceDao.countByPage(subjectCode,title,publicType, resState);
+    public long countByPage(String subjectCode, String title, String publicType, String resState) {
+        return resourceDao.countByPage(subjectCode, title, publicType, resState);
     }
-/*----------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------------------*/
 
     public List<JSONObject> fileSourceFileList(String filePath) {
-        System.out.println("filePath为"+filePath);
+        System.out.println("filePath为" + filePath);
         List<JSONObject> jsonObjects = new ArrayList<JSONObject>();
         File file = new File(filePath);
         if (!file.exists() || !file.isDirectory()) {
@@ -124,7 +132,7 @@ public class ResourceService {
                 jsonObject.put("type", "file");
             }
             jsonObjects.add(jsonObject);
-    }
+        }
         System.out.println("2");
         Collections.sort(jsonObjects, new FileComparator());
         System.out.println("3");
@@ -155,9 +163,9 @@ public class ResourceService {
 //                continue;
 //            }
             JSONObject jsonObject = new JSONObject();
-            if(fp[i].getPath().indexOf("_sql")==-1){
+            if (fp[i].getPath().indexOf("_sql") == -1) {
                 if (fp[i].isDirectory()) {
-                    if(fp[i].getPath().indexOf("_sql")==-1) {
+                    if (fp[i].getPath().indexOf("_sql") == -1) {
                         jsonObject.put("id", fp[i].getPath().replaceAll(reg, "%_%"));
                         jsonObject.put("text", fp[i].getName().replaceAll(reg, "%_%"));
                         jsonObject.put("type", "directory");
@@ -230,42 +238,42 @@ public class ResourceService {
         }
     }
 
-    public cn.csdb.portal.model.Resource getById(String resourceId){
+    public cn.csdb.portal.model.Resource getById(String resourceId) {
 
 
         return resourceDao.getById(resourceId);
     }
 
     public int getRecordCount(String host, String port, String userName, String password, String databaseName, List<String> tableName) {
-        return dataSrcDao.getRecordCount( host,  port,  userName,  password,  databaseName,  tableName);
+        return dataSrcDao.getRecordCount(host, port, userName, password, databaseName, tableName);
     }
 
-    public Map<String, Map<String, String>> getTableColumns(String host, String port, String userName, String password, String databaseName, String tableName){
-        return dataSrcDao.getTableColumns( host,  port,  userName,  password,  databaseName,  tableName);
+    public Map<String, Map<String, String>> getTableColumns(String host, String port, String userName, String password, String databaseName, String tableName) {
+        return dataSrcDao.getTableColumns(host, port, userName, password, databaseName, tableName);
     }
 
-    public  List<FileTreeNode> loadingFileTree(String path,List<FileTreeNode> nodeList){
-        String systemName=System.getProperties().getProperty("os.name");
+    public List<FileTreeNode> loadingFileTree(String path, List<FileTreeNode> nodeList) {
+        String systemName = System.getProperties().getProperty("os.name");
         File dirFile = new File(path);//获取文件第一层
         File[] fs = dirFile.listFiles();
-        int isWindows=systemName.indexOf("Windows");
+        int isWindows = systemName.indexOf("Windows");
         for (int i = 0; i < fs.length; i++) {
-            if(fs[i].isFile()){//当对象为文件时
-                String pidStr="";
-                if("-1".equals(isWindows+"")){//linux
-                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("/"));
-                }else {
-                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("\\"));
+            if (fs[i].isFile()) {//当对象为文件时
+                String pidStr = "";
+                if ("-1".equals(isWindows + "")) {//linux
+                    pidStr = fs[i].toString().substring(0, fs[i].toString().lastIndexOf("/"));
+                } else {
+                    pidStr = fs[i].toString().substring(0, fs[i].toString().lastIndexOf("\\"));
                 }
-                nodeList.add(new FileTreeNode(fs[i].toString(),pidStr,fs[i].getName(),"false","false","false"));
-            }else if(fs[i].isDirectory()){//当对象为路径时
-                String pidStr="";
-                if("-1".equals(isWindows+"")){//linux
-                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("/"));
-                }else {
-                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("\\"));
+                nodeList.add(new FileTreeNode(fs[i].toString(), pidStr, fs[i].getName(), "false", "false", "false"));
+            } else if (fs[i].isDirectory()) {//当对象为路径时
+                String pidStr = "";
+                if ("-1".equals(isWindows + "")) {//linux
+                    pidStr = fs[i].toString().substring(0, fs[i].toString().lastIndexOf("/"));
+                } else {
+                    pidStr = fs[i].toString().substring(0, fs[i].toString().lastIndexOf("\\"));
                 }
-                nodeList.add(new FileTreeNode(fs[i].toString(),pidStr,fs[i].getName(),"false","true","false"));
+                nodeList.add(new FileTreeNode(fs[i].toString(), pidStr, fs[i].getName(), "false", "true", "false"));
                 // nodeList=loadingTree(fs[i].toString(),nodeList);
             }
         }
@@ -273,38 +281,118 @@ public class ResourceService {
         return nodeList;
     }
 
-    public List<FileTreeNode> asynLoadingTree(String data,String path,String result){
-        System.out.println("服务器系统:"+System.getProperties().getProperty("os.name"));
-        String systemName=System.getProperties().getProperty("os.name");
-        int isWindows=systemName.indexOf("Windows");
-        List<FileTreeNode> nodeList=new ArrayList<FileTreeNode>();
+    public List<FileTreeNode> asynLoadingTree(String data, String path, String result) {
+        System.out.println("服务器系统:" + System.getProperties().getProperty("os.name"));
+        String systemName = System.getProperties().getProperty("os.name");
+        int isWindows = systemName.indexOf("Windows");
+        List<FileTreeNode> nodeList = new ArrayList<FileTreeNode>();
         File dirFile = new File(path);//获取文件第一层
         File[] fs = dirFile.listFiles();
-        if("init".equals(result)){
-            nodeList.add(new FileTreeNode(path,"0",path,"true","true","false"));
+        if ("init".equals(result)) {
+            nodeList.add(new FileTreeNode(path, "0", path, "true", "true", "false"));
         }
         for (int i = 0; i < fs.length; i++) {
-            if(fs[i].isFile()){//当对象为文件时
-                String pidStr="";
-                if("-1".equals(isWindows+"")){//linux
-                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("/"));
-                }else {
-                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("\\"));
+            if (fs[i].isFile()) {//当对象为文件时
+                String pidStr = "";
+                if ("-1".equals(isWindows + "")) {//linux
+                    pidStr = fs[i].toString().substring(0, fs[i].toString().lastIndexOf("/"));
+                } else {
+                    pidStr = fs[i].toString().substring(0, fs[i].toString().lastIndexOf("\\"));
                 }
-                nodeList.add(new FileTreeNode(fs[i].toString(),pidStr,fs[i].getName(),"false","false","false"));
-            }else if(fs[i].isDirectory()){//当对象为路径时
-                String pidStr="";
-                if("-1".equals(isWindows+"")){//linux
-                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("/"));
-                }else {
-                    pidStr=fs[i].toString().substring(0,fs[i].toString().lastIndexOf("\\"));
+                nodeList.add(new FileTreeNode(fs[i].toString(), pidStr, fs[i].getName(), "false", "false", "false"));
+            } else if (fs[i].isDirectory()) {//当对象为路径时
+                String pidStr = "";
+                if ("-1".equals(isWindows + "")) {//linux
+                    pidStr = fs[i].toString().substring(0, fs[i].toString().lastIndexOf("/"));
+                } else {
+                    pidStr = fs[i].toString().substring(0, fs[i].toString().lastIndexOf("\\"));
                 }
-                nodeList.add(new FileTreeNode(fs[i].toString(),pidStr,fs[i].getName(),"false","true","false"));
+                nodeList.add(new FileTreeNode(fs[i].toString(), pidStr, fs[i].getName(), "false", "true", "false"));
                 //  nodeList=loadingTree(fs[i].toString(),nodeList);
             }
         }
         return nodeList;
     }
 
+    public BigDecimal getTableLength(Subject subject, String tableName) {
+        BigDecimal bigDecimal = new BigDecimal(0);
+        String sql = "SELECT\n" +
+                "\tDATA_LENGTH + INDEX_LENGTH as LENGTH\n" +
+                "FROM\n" +
+                "\tinformation_schema.`TABLES`\n" +
+                "WHERE\n" +
+                "\tTABLE_SCHEMA = ? \n" +
+                "AND TABLE_NAME = ? \n ";
 
+        IDataSource dataSource = DataSourceFactory.getDataSource("mysql");
+        Connection connection = dataSource.getConnection(subject.getDbHost(), subject.getDbPort(),
+                subject.getDbUserName(), subject.getDbPassword(), subject.getSubjectCode());
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, subject.getSubjectCode());
+            preparedStatement.setString(2, tableName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                long aLong = resultSet.getLong(1);
+                bigDecimal.add(new BigDecimal(aLong));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return bigDecimal;
+    }
+
+    public BigDecimal getTableRow(Subject subject, String tableName) {
+        BigDecimal bigDecimal = new BigDecimal(0);
+        String sql = "SELECT\n" +
+                "\tTABLE_ROWS AS ROW\n" +
+                "FROM\n" +
+                "\tINFORMATION_SCHEMA.`TABLES`\n" +
+                "WHERE\n" +
+                "\tTABLE_SCHEMA = ? \n" +
+                "AND TABLE_NAME = ? \n";
+
+        IDataSource dataSource = DataSourceFactory.getDataSource("mysql");
+        Connection connection = dataSource.getConnection(subject.getDbHost(), subject.getDbPort(),
+                subject.getDbUserName(), subject.getDbPassword(), subject.getSubjectCode());
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, subject.getSubjectCode());
+            preparedStatement.setString(2, tableName);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                long aLong = resultSet.getLong(1);
+                bigDecimal.add(new BigDecimal(aLong));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return bigDecimal;
+    }
+
+    public BigDecimal getFileLength(Subject subject, String filePath) {
+        BigDecimal bigDecimal = new BigDecimal(0);
+        File file = new File(filePath);
+        if (file.exists() && file.isFile()) {
+            BigDecimal fileLength = new BigDecimal(file.length());
+            bigDecimal = bigDecimal.add(fileLength);
+        }
+        return bigDecimal;
+    }
 }

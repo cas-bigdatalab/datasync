@@ -1017,12 +1017,18 @@
             var reg2 = new RegExp(',', "g");
             dataList = dataList.replace(reg2, ';');
             $.ajax({
-                url: ctx + "/resource/addResourceSecondStep",
+                // url: ctx + "/resource/addResourceSecondStep",
+                url: ctx + "/resource/addResourceSecondStepCopy",
                 type: "POST",
-                data: {
+                /*data: {
                     resourceId: resourceId,
                     publicType: publicType,
                     dataList: dataList
+                },*/
+                data: {
+                    resourceId: resourceId,
+                    sqlDataList: " engler_system;hutchinson_system",
+                    fileDataList: "E:\\\\logs;E:\\\\logs\\\\2019-04;E:\\\\logs\\\\2019-04\\\\portal-04-07-2019-1.log.gz;E:\\\\logs\\\\2019-04\\\\portal-04-15-2019-1.log.gz"
                 },
                 success: function (data) {
                     // console.log(data)
@@ -1221,7 +1227,8 @@
                         zTreeObj.destroy();//用之前先销毁tree
                     }
                     // TODO 不提交且部署时请注释
-                    data.nodeList[0].id = data.nodeList[0].id.replace(/\//g, "\\");
+                    // debugger
+                    // data.nodeList[0].id = data.nodeList[0].id.replace(/\//g, "\\");
                     var fileNodes = data.nodeList;
                     var zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, fileNodes);
 

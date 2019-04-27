@@ -7,8 +7,17 @@ package cn.csdb.portal.model;
  **/
 public class resourceDataList {
 
+    private String resourceId; // 数据集Id
     private String sqlDataList; // sql表名
     private String fileDataList;// 文件路径
+
+    public String getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
+    }
 
     public String getSqlDataList() {
         return sqlDataList;

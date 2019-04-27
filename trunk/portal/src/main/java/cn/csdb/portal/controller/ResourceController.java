@@ -25,6 +25,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.NumberFormat;
@@ -509,16 +510,70 @@ public class ResourceController {
 
     @RequestMapping("/addResourceSecondStepCopy")
     @ResponseBody
-    public JSONObject addResourceSecondStepCopy(HttpSession session,
-                                                @RequestParam(name = "resourceId") String resourceId,
-                                                @RequestParam(name = "publicType") String publicType,
-                                                resourceDataList resourceDataList) {
+    public JSONObject addResourceSecondStepCopy(HttpSession session, resourceDataList resourceDataList) {
         JSONObject jsonObject = new JSONObject();
         String subjectCode = session.getAttribute("SubjectCode").toString();
         Subject subject = subjectService.findBySubjectCode(subjectCode);
-        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
-        String sqlDataList = resourceDataList.getSqlDataList();
-        String fileDataList = resourceDataList.getFileDataList();
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceDataList.getResourceId());
+
+        String sqlDataListString = resourceDataList.getSqlDataList();
+        boolean sqlDataListIsNullOrEmpty = Strings.isNullOrEmpty(sqlDataListString);
+        String fileDataListString = resourceDataList.getFileDataList();
+        boolean fileDataListIsNullOrEmpty = Strings.isNullOrEmpty(fileDataListString);
+
+        if (!sqlDataListIsNullOrEmpty) {
+            resource.setPublicContent(sqlDataListString);
+            List<String> sqlDataList = Arrays.asList(sqlDataListString.split(";"));
+
+            BigDecimal allTableLength = new BigDecimal(0);
+            for (String tableName : sqlDataList) {
+                BigDecimal tableLength = resourceService.getTableLength(subject, tableName);
+                allTableLength = allTableLength.add(tableLength);
+            }
+            resource.setToMemorySize(allTableLength.toString());
+
+            BigDecimal allTableRow = new BigDecimal(0);
+            for (String tableName : sqlDataList) {
+                BigDecimal tableRow = resourceService.getTableRow(subject, tableName);
+                allTableRow = allTableRow.add(tableRow);
+            }
+            resource.setToRecordNumber(allTableRow.longValue());
+        }
+
+        if (!fileDataListIsNullOrEmpty) {
+            resource.setFilePath(fileDataListString);
+            List<String> filePathList = Arrays.asList(fileDataListString.split(";"));
+            BigDecimal allFileLength = new BigDecimal(0);
+            int fileNumber = 0;
+            for (String filepath : filePathList) {
+                BigDecimal fileLength = resourceService.getFileLength(subject, filepath);
+                allFileLength = allFileLength.add(fileLength);
+                if (!Objects.equals(fileLength.intValue(), 0)) {
+                    fileNumber++;
+                }
+            }
+            resource.setToMemorySize(allFileLength.toString());
+            resource.setToFilesNumber(fileNumber);
+        }
+
+        if (!sqlDataListIsNullOrEmpty && !fileDataListIsNullOrEmpty) {
+            resource.setPublicType("mix");
+        } else if (!sqlDataListIsNullOrEmpty && fileDataListIsNullOrEmpty) {
+            resource.setPublicType("mysql");
+            resource.setToFilesNumber(0);
+        } else if (sqlDataListIsNullOrEmpty && !fileDataListIsNullOrEmpty) {
+            resource.setPublicType("file");
+            resource.setToRecordNumber(0);
+        }
+
+/*        if (StringUtils.isNotBlank(resource.getUserGroupId())) {
+            resource.setStatus("1");
+        } else {
+            resource.setStatus("-1");
+        }
+        String resId = resourceService.save(resource);
+        jsonObject.put("resourceId", resId);*/
+
         return jsonObject;
     }
 
