@@ -30,6 +30,44 @@ function staticSourceTableChoice(editIsChoiceTableOrSql, obj, subjectCode, table
         $('#editTableDataAndComsButtonId').parent().removeClass("active");
         $('#previewTableDataAndComsButtonId').parent().removeClass("active");
 
+
+        $('#editTableFieldComsId').removeClass("active");
+        $('#previewTableDataAndComsId').removeClass("active");
+
+        $('#editTableDataAndComsButtonId').parent().addClass("active");
+        $('#editTableFieldComsId').addClass("active");
+        var tableInfosList = null;
+        if (editIsChoiceTableOrSql == 1) {
+            var tableInfos = getTableFieldComs(subjectCode, tableNameOrSql);
+            tableInfosList = [];
+            tableInfosList[0] = {tableName: tableNameOrSql, tableInfos: tableInfos};
+        }
+        $("#staticSourceTableChoiceModal").modal("show");
+        var html = template("editTableFieldComsTmpl", {"tableInfosList": tableInfosList});
+        $('#editTableFieldComsId').html(html);
+        curSourceTableChoice = obj;
+        curEditIsChoiceTableOrSql = editIsChoiceTableOrSql;
+        curRefer = refer;
+        if (editIsChoiceTableOrSql == 1) {
+            curTableName = tableNameOrSql;
+        }
+        preSaveEditTableFieldComs();// 页面与保存coms信息
+    } else {
+        $(obj).removeAttr("coms");
+    }
+    $("#form_wizard_1").find(".button-save").removeAttr("disabled");
+
+}
+
+function staticSourceTableChoice_edit(editIsChoiceTableOrSql, obj, subjectCode, tableNameOrSql, refer,flag) {
+    S_flag=flag;
+    if (refer == "dataService" || !obj || obj.checked) {
+        $('#editTableFieldComsId').html("");
+        $('#previewTableDataAndComsId').html("");
+
+        $('#editTableDataAndComsButtonId').parent().removeClass("active");
+        $('#previewTableDataAndComsButtonId').parent().removeClass("active");
+
         $('#editTableFieldComsId').removeClass("active");
         $('#previewTableDataAndComsId').removeClass("active");
 
@@ -43,8 +81,7 @@ function staticSourceTableChoice(editIsChoiceTableOrSql, obj, subjectCode, table
         }
         $("#undescribe").hide();
         $("#isdescribe").hide();
-        // $("#staticSourceTableChoiceModal").modal("show");
-        $("#staticSourceTableChoiceModal").show();
+        $("#staticSourceTableChoiceModalNew").show();
         $("#span_tableName").html(tableNameOrSql);
 
         getshowTypeData(tableNameOrSql);
@@ -166,8 +203,8 @@ $(function () {
     //点击保存按钮
     $("#editTableFieldComsSaveId").bind("click", saveEditTableFieldComs);
     $("#editTableFieldComsCloseId").bind("click", function () {
-            // $("#staticSourceTableChoiceModal").modal("hide");
             $("#staticSourceTableChoiceModal").hide();
+            $("#staticSourceTableChoiceModalNew").hide();
         }
         // function () {
         // if (curEditIsChoiceTableOrSql == 1) {
@@ -344,7 +381,7 @@ function editSqlFieldComs(sqlNum) {
     }
     curSQLStrIndex = sqlNum;
     var sqlStr = $("#" + sqlStrId).val();
-    staticSourceTableChoice(2, null, sub, sqlStr, "dataResource",S_flag);
+    staticSourceTableChoice_edit(2, null, sub, sqlStr, "dataResource",S_flag);
 }
 
 function getshowTypeData(tableName){

@@ -20,6 +20,8 @@
     <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/bootstrap.min.css">--%>
     <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-fileinput/css/fileinput.min.css">
     <link href="${ctx}/resources/bundles/layerJs/theme/default/layer.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="${ctx}/resources/bundles/font-awesome-4.7.0/css/font-awesome.min.css">
+
     <style type="text/css">
         .qiehuan_div li a.active {
             background: #2a6ebf !important;
@@ -49,8 +51,8 @@
     <div class="tab-pane" id="isdescribe" style="min-height: 400px;overflow: hidden">
 
     </div>
-<%--数据配置页面--%>
-    <div class="tab-pane" id="staticSourceTableChoiceModal" style="min-height: 400px;overflow: hidden;display: none;">
+    <%--数据配置页面--%>
+    <div class="tab-pane" id="staticSourceTableChoiceModalNew" style="min-height: 400px;overflow: hidden;display: none;">
         <div style="height:600px;width:auto;max-width: 100%">
             <div>
                 <div>
@@ -84,7 +86,9 @@
                                 <div class="tab-content"
                                      style="background-color: white;max-height:70%;max-width:100%; ">
                                     <div>
-                                        <label>表名：</label><span id="span_tableName" ></span>    <label style="margin-left: 30px;">备注：</label><input type="text" value="" name="tableComment" id="tableComment">
+                                        <label>表名：</label><span id="span_tableName"></span> <label
+                                            style="margin-left: 30px;"> <label style="color:red;">*</label>
+                                        备注：</label><input type="text" value="" name="tableComment" id="tableComment">
                                     </div>
                                     <div class="tab-pane active" id="editTableFieldComsId"
                                          style="width:99%;max-height:70%;overflow: hidden;overflow: auto;">
@@ -101,7 +105,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-success" id="editTableFieldComsSaveId" data-dismiss="modal">保存
                     </button>
-                    <button type="button" data-dismiss="modal" class="btn default" onclick="func_cancelBtn()">取消</button>
+                    <button type="button" data-dismiss="modal" class="btn default" id="editTableFieldComsCloseId" onclick="func_cancelBtn()">取消
+                    </button>
                 </div>
             </div>
         </div>
@@ -130,9 +135,9 @@
                 </div>
             </div>
             <%--<div class="modal-footer">--%>
-                <%--<button type="button" class="btn btn-success" id="showTypeDataSaveId" data-dismiss="modal">保存--%>
-                <%--</button>--%>
-                <%--<button type="button" data-dismiss="modal" class="btn default">取消</button>--%>
+            <%--<button type="button" class="btn btn-success" id="showTypeDataSaveId" data-dismiss="modal">保存--%>
+            <%--</button>--%>
+            <%--<button type="button" data-dismiss="modal" class="btn default">取消</button>--%>
             <%--</div>--%>
         </div>
     </div>
@@ -142,14 +147,29 @@
 <input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
 <input type="hidden" id="FtpFilePath" value="${sessionScope.FtpFilePath}"/>
 
+<script type="text/html" id="addSheetTable">
+    <div>
+    <select id="checkedDataSheetTable2" name="relationTable" class="relationTable">
+        <option value="null" name="">--请选择表名--</option>
+        {{each list as value i}}
+        <option value="{{value}}">{{value}}</option>
+        {{/each}}
+    </select>
+    <select id="tableColunm_id2" name="relationColumn">
+        <option value="null" name="">--请选择列名--</option>
+    </select>
+    <span id="remove_id" onclick="func_removeSheetDate()"><i class="fa fa-trash"></i></span>
+    </div>
+</script>
+
 <script type="text/html" id="templTypeURL">
     <div id="model_URL" style="">
         <form id="form_URL">
             <input type="text" name="DisplayType" value="1" style="display: none">
             {{each listData as value}}
             <input type="text" name="tableName" value="{{value.tableName}}" style="display: none">
-            <input type="text"  name="columnName" value="{{value.columnName}}" style="display: none">
-            <input type="text"  name="tableComment" value="{{value.clumnCommet}}" style="display: none">
+            <input type="text" name="columnName" value="{{value.columnName}}" style="display: none">
+            <input type="text" name="tableComment" value="{{value.clumnCommet}}" style="display: none">
             <label>字段标题</label> {{value.columnName}}({{value.clumnCommet}})<br/>
             {{/each}}
             <label>选项模式</label>
@@ -161,7 +181,7 @@
             <label>缺省值 </label><input type="text" name="address">
             <br/>
             <input type="button" onclick="func_saveTypeURL()" value="确定" class="btn btn-success" data-dismiss="modal">
-            <input type="button"  value="取消" class="btn btn-success" data-dismiss="modal" onclick="cancel_btn();">
+            <input type="button" value="取消" class="btn btn-success" data-dismiss="modal" onclick="cancel_btn();">
         </form>
 
     </div>
@@ -173,19 +193,20 @@
             <input type="text" name="DisplayType" value="2" style="display: none">
             {{each listData as value}}
             <input type="text" name="tableName" value="{{value.tableName}}" style="display: none">
-            <input type="text"  name="columnName" value="{{value.columnName}}" style="display: none">
-            <input type="text"  name="tableComment" value="{{value.clumnCommet}}" style="display: none">
+            <input type="text" name="columnName" value="{{value.columnName}}" style="display: none">
+            <input type="text" name="tableComment" value="{{value.clumnCommet}}" style="display: none">
             <label>字段标题</label> {{value.columnName}}({{value.clumnCommet}})<br/>
             {{/each}}
             <%--<div><span>字段标题</span><span>enum()</span></div>--%>
             <label>选项模式 </label>
             <input type="radio" value="1" name="optionMode" checked="checked" onclick="selectTypeEnum(this.value)"/>来自文本串
-            <input type="radio" value="2" name="optionMode" onclick="selectTypeEnum(this.value)" />来自sql表字段
+            <input type="radio" value="2" name="optionMode" onclick="selectTypeEnum(this.value)"/>来自sql表字段
             <br/>
             <label>选项 </label><input id="enum_text" name="enumData" type="text" placeholder="各选项采用“值=标题”的格式，选项之间采用逗号分隔，例如：male=男,female=女
-"> <input id="enum_sql" type="text" name="address" style="display: none" placeholder="输入一个sql语句，查询出两个字段分别为值和标题，如：select value,title from yourTable"> <br/>
-            <label>编辑风格</label> 普通下拉框<br/>
-            <label>显示风格</label> 枚举输出
+"> <input id="enum_sql" type="text" name="address" style="display: none"
+          placeholder="输入一个sql语句，查询出两个字段分别为值和标题，如：select value,title from yourTable"> <br/>
+            <%--<label>编辑风格</label> 普通下拉框<br/>--%>
+            <%--<label>显示风格</label> 枚举输出--%>
             <br/>
             <input type="button" onclick="func_saveTypeEnum()" value="确定" class="btn btn-success" data-dismiss="modal">
             <input type="button" value="取消" class="btn btn-success" data-dismiss="modal" onclick="cancel_btn();">
@@ -195,30 +216,37 @@
 
 <script type="text/html" id="templTypeDatasheet">
     <div id="model_Datasheet" style="">
-
         <div>
             <form id="form_DataSheet">
                 <input type="text" name="DisplayType" value="3" style="display: none">
                 {{each listData as value}}
-                <input type="text" name="tableName" value="{{value.tableName}}" style="display: none">
-                <input type="text"  name="columnName" value="{{value.columnName}}" style="display: none">
-                <input type="text"  name="tableComment" value="{{value.clumnCommet}}" style="display: none">
+                <input type="text" id="sheetDataTable1" name="tableName" value="{{value.tableName}}"
+                       style="display: none">
+                <input type="text" id="sheetDatacolumn1" name="columnName" value="{{value.columnName}}"
+                       style="display: none">
+                <input type="text" name="tableComment" value="{{value.clumnCommet}}" style="display: none">
                 <label>字段标题</label> {{value.columnName}}({{value.clumnCommet}})<br/>
                 {{/each}}
                 <label>关联字段 </label>
-                <select id="checkedDataSheetTable" name="relationTable">
+                <select id="checkedDataSheetTable" name="relationTable" class="relationTable">
                     <option value="null" name="">--请选择表名--</option>
                     {{each list as value i}}
-                    <option value="{{value}}" >{{value}}</option>
+                    <option value="{{value}}">{{value}}</option>
                     {{/each}}
                 </select>
                 <select id="tableColunm_id" name="relationColumn">
                     <option value="null" name="">--请选择列名--</option>
                 </select>
+                <span id="addTable_id" onclick="func_addSheetTable()"><i class="fa fa-plus"></i>增加</span>
+
                 <br/>
                 <%--<label>显示风格</label> <input type="checkbox" value=""/>字段一<input type="checkbox" value=""/>字段二<input type="checkbox" value=""/>字段三--%>
                 <br/>
-                <input type="button" onclick="func_saveTypeDatasheet()" value="确定" class="btn btn-success" data-dismiss="modal">
+                <div id="addTableList">
+
+                </div>
+                <input type="button" onclick="func_saveTypeDatasheet()" value="确定" class="btn btn-success"
+                       data-dismiss="modal">
                 <input type="button" value="取消" class="btn btn-success" data-dismiss="modal" onclick="cancel_btn();">
             </form>
 
@@ -233,8 +261,8 @@
                 <input type="text" name="DisplayType" value="4" style="display: none">
                 {{each listData as value}}
                 <input type="text" name="tableName" value="{{value.tableName}}" style="display: none">
-                <input type="text"  name="columnName" value="{{value.columnName}}" style="display: none">
-                <input type="text"  name="tableComment" value="{{value.clumnCommet}}" style="display: none">
+                <input type="text" name="columnName" value="{{value.columnName}}" style="display: none">
+                <input type="text" name="tableComment" value="{{value.clumnCommet}}" style="display: none">
                 <label>字段标题</label> {{value.columnName}}({{value.clumnCommet}})<br/>
                 {{/each}}
                 <label>显示类型 </label>
@@ -244,9 +272,10 @@
                 <br/>
                 <label>主路径</label> <input type="text" name="address"/>
                 <br/>
-                <label>视图大小</label> <input type="text" name=""/> <label>分隔符</label> <input type="text" name="Separator"/>
+                <label>分隔符</label> <input type="text" name="Separator"/>
                 <br/>
-                <input type="button" onclick="func_saveTypeFile()" value="确定" class="btn btn-success" data-dismiss="modal">
+                <input type="button" onclick="func_saveTypeFile()" value="确定" class="btn btn-success"
+                       data-dismiss="modal">
                 <input type="button" value="取消" class="btn btn-success" data-dismiss="modal" onclick="cancel_btn();">
             </form>
 
@@ -281,7 +310,6 @@
         $(function () {
             chooseTable(sub, 0);
             $(".qiehuan_div li:eq(0) a").addClass("active");
-
         });
 
         var sub1 = '${sessionScope.SubjectCode}';
@@ -317,7 +345,7 @@
                     var list = data.list;
                     for (var i = 0; i < list.length; i++) {
                         html += "<span style='width:33%;height:40px;padding-left: 0px;font-size: 15px' class='col-md-6'>" +
-                            "<input hidden type='radio' id='" + list[i] + "' name='mapTable' onclick=\"staticSourceTableChoice(1,this" + ",'" + sub1 + "','" + list[i] + "','dataResource','" + flag + "')\" value='" + list[i] + "'>&nbsp;<label for='" + list[i] + "'> <a >" + list[i] + "</a></label></span>"
+                            "<input hidden type='radio' id='" + list[i] + "' name='mapTable' onclick=\"staticSourceTableChoice_edit(1,this" + ",'" + sub1 + "','" + list[i] + "','dataResource','" + flag + "')\" value='" + list[i] + "'>&nbsp;<label for='" + list[i] + "'> <a >" + list[i] + "</a></label></span>"
                     }
                     html += "</div><input type='text' class='form-control' name='maptableinput' id='maptableinput' style='display:none;'/></div></div>";
                     if (flag == '0') {
@@ -347,41 +375,40 @@
         });
 
 
-
         //    显示类型
         $("body").delegate("select", "change", function () {
             var _this = this;
             $(_this).addClass('selShow');
             var myOption = $(_this).find('option:selected').attr('on');
-            var tableName=$(_this).parent().siblings().attr("tableName");
-            var columnName=$(_this).parent().siblings().attr("fieldName");
-            var clumnCommet=$(_this).parent().siblings().eq(1).find("input").val();
-            var data={};
+            var tableName = $(_this).parent().siblings().attr("tableName");
+            var columnName = $(_this).parent().siblings().attr("fieldName");
+            var clumnCommet = $(_this).parent().siblings().eq(1).find("input").val();
+            var data = {};
             data["columnName"] = columnName;
             data["tableName"] = tableName;
-            data["clumnCommet"]=clumnCommet;
-             var listData=[];
-             listData.push(data);
+            data["clumnCommet"] = clumnCommet;
+            var listData = [];
+            listData.push(data);
             if (myOption === '1') {
 
             }
             if (myOption === '2') {
                 $("#showTypeDataDetail").empty();
-                $('#showTypeDataModal').modal({backdrop:"static"});
-                var html = template("templTypeURL", {"listData":listData});
+                $('#showTypeDataModal').modal({backdrop: "static"});
+                var html = template("templTypeURL", {"listData": listData});
                 $("#showTypeDataDetail").append(html);
 
             }
             if (myOption === '3') {
                 $("#showTypeDataDetail").empty();
                 // $("#showTypeDataModal").modal("show");
-                $('#showTypeDataModal').modal({backdrop:"static"});
-                var html = template("templTypeEnum", {"listData":listData});
+                $('#showTypeDataModal').modal({backdrop: "static"});
+                var html = template("templTypeEnum", {"listData": listData});
                 $("#showTypeDataDetail").append(html);
 
             }
             if (myOption === '4') {
-                var tableName="";
+                var tableName = "";
                 if ($(".fieldComsKey")) {
                     $(".fieldComsKey").each(function (index, value, array) {
                         tableName = $(value).attr("tablename");
@@ -390,37 +417,37 @@
                 $.ajax({
                     type: "post",
                     url: "${ctx}/getDatasheetTable",
-                    data:{"tableName":tableName,"subjectCode":sub},
+                    data: {"tableName": tableName, "subjectCode": sub, "columnName": columnName},
                     dataType: "json",
                     success: function (data) {
                         debugger;
-                        data["listData"]=listData;
+                        data["listData"] = listData;
 
                         $("#showTypeDataDetail").empty();
-                        $('#showTypeDataModal').modal({backdrop:"static"});
+                        $('#showTypeDataModal').modal({backdrop: "static"});
                         var html = template("templTypeDatasheet", data);
                         $("#showTypeDataDetail").append(html);
-                        $("#checkedDataSheetTable").on("change",function () {
-                            var tName=$("#checkedDataSheetTable option:selected").val();//选中的值
+                        $("#checkedDataSheetTable").on("change", function () {
+                            var tName = $("#checkedDataSheetTable option:selected").val();//选中的值
 
                             //级联查询表字段
                             $.ajax({
                                 type: "post",
                                 url: "${ctx}/getDatasheetTableColumn",
-                                data:{"tableName":tName,"subjectCode":sub},
+                                data: {"tableName": tName, "subjectCode": sub},
                                 dataType: "json",
                                 success: function (data) {
                                     $("#tableColunm_id").html("");
-                                     var column=data.list;
-                                     var s="<option value='null' name=''>--请选择列名--</option>";
-                                     for(var i=0;i<column.length;i++){
-                                         if(column[i]==="PORTALID"){
+                                    var column = data.list;
+                                    var s = "<option value='null' name=''>--请选择列名--</option>";
+                                    for (var i = 0; i < column.length; i++) {
+                                        if (column[i] === "PORTALID") {
 
-                                         }else {
-                                             s += "<option value='" + column[i] + "'>" + column[i] + "</option>"
-                                         }
-                                     }
-                                     $("#tableColunm_id").append(s);
+                                        } else {
+                                            s += "<option value='" + column[i] + "'>" + column[i] + "</option>"
+                                        }
+                                    }
+                                    $("#tableColunm_id").append(s);
                                 }
                             })
 
@@ -432,65 +459,68 @@
             if (myOption === '5') {
                 $("#showTypeDataDetail").empty();
                 // $("#showTypeDataModal").modal("show");
-                $('#showTypeDataModal').modal({backdrop:"static"});
-                var html = template("templTypeFile", {"listData":listData});
+                $('#showTypeDataModal').modal({backdrop: "static"});
+                var html = template("templTypeFile", {"listData": listData});
                 $("#showTypeDataDetail").append(html);
             }
         });
 
         function cancel_btn() {
-            $('.selShow').find('option').eq(0).attr("selected",true);
+            $('.selShow').find('option').eq(0).attr("selected", true);
             $('.selShow').removeClass("selShow");
         }
-    //    保存URL显示类型
+
+        //    保存URL显示类型
         function func_saveTypeURL() {
             $('.selShow').removeClass("selShow");
-            var data=$("#form_URL").serialize();
+            var data = $("#form_URL").serialize();
             $.ajax({
                 type: "post",
                 url: "${ctx}/saveTypeURL",
-                data:data,
+                data: data,
                 dataType: "json",
                 success: function (data) {
                 }
             });
         }
+
         //字典枚举类型保存
         function func_saveTypeEnum() {
-            var data=$("#form_Enum").serialize();
+            var data = $("#form_Enum").serialize();
             $.ajax({
                 type: "post",
                 url: "${ctx}/saveTypeEnum",
-                data:data,
+                data: data,
                 dataType: "json",
                 success: function (data) {
                 }
             });
         }
+
         //枚举字典
         function selectTypeEnum(value) {
-            if(value==="1"){
+            if (value === "1") {
                 $("#enum_sql").hide();
                 $("#enum_text").show();
             }
-            if (value==="2") {
+            if (value === "2") {
                 $("#enum_sql").show();
                 $("#enum_text").hide();
             }
         }
-        
-    //    点击最外层取消按钮
+
+        //    点击最外层取消按钮
         function func_cancelBtn() {
-            var tableName="";
+            var tableName = "";
             if ($(".fieldComsKey")) {
                 $(".fieldComsKey").each(function (index, value, array) {
-                     tableName = $(value).attr("tablename");
+                    tableName = $(value).attr("tablename");
                 })
             }
             $.ajax({
                 type: "post",
                 url: "${ctx}/deleteStatusTwo",
-                data:{"tableName":tableName},
+                data: {"tableName": tableName},
                 dataType: "json",
                 success: function (data) {
                 }
@@ -500,24 +530,39 @@
             $("#staticSourceTableChoiceModal").hide();
         }
 
-    //    关联数据表
+        //    关联数据表
         function func_saveTypeDatasheet() {
-            var tName=$("#checkedDataSheetTable option:selected").val();
-            var tColumn=$("#tableColunm_id option:selected").val();
-            if(tName==="null"){
+            var tName = $("#checkedDataSheetTable option:selected").val();
+            var tColumn = $("#tableColunm_id option:selected").val();
+            if (tName === "null") {
                 toastr.warning("请选择表名！");
                 return;
             }
-            if(tColumn==="null"){
+            if (tColumn === "null") {
                 toastr.warning("请选择列名！");
                 return;
             }
-            if(tName!=="null" && tColumn!=="null"){
-                var data=$("#form_DataSheet").serialize();
+            if (tName !== "null" && tColumn !== "null") {
+                var data = $("#form_DataSheet").serialize();
+                var datas=[];
+                var tables=[];
+                var columns=[];
+                $("#form_DataSheet select").each(function () {
+                    datas.push($(this).val());
+                });
+                for(var i=0;i<datas.length;i++){
+                    if(i%2===0){
+                       tables.push(datas[i]);
+                    }else{
+                        columns.push(datas[i]);
+                    }
+                }
+
+
                 $.ajax({
                     type: "post",
                     url: "${ctx}/saveTypeDatasheet",
-                    data:data,
+                    data: data,
                     dataType: "json",
                     success: function (data) {
 
@@ -525,13 +570,14 @@
                 });
             }
         }
+
         //    文件类型
         function func_saveTypeFile() {
-            var data=$("#form_File").serialize();
+            var data = $("#form_File").serialize();
             $.ajax({
                 type: "post",
                 url: "${ctx}/saveTypeFile",
-                data:data,
+                data: data,
                 dataType: "json",
                 success: function (data) {
 
@@ -539,9 +585,9 @@
             });
         }
 
-    //    查询出该表关联的数据表
+        //    查询出该表关联的数据表
         function getDatasheetTable() {
-            var tableName="";
+            var tableName = "";
             if ($(".fieldComsKey")) {
                 $(".fieldComsKey").each(function (index, value, array) {
                     tableName = $(value).attr("tablename");
@@ -550,7 +596,7 @@
             $.ajax({
                 type: "post",
                 url: "${ctx}/getDatasheetTable",
-                data:{"tableName":tableName,"subjectCode":sub},
+                data: {"tableName": tableName, "subjectCode": sub},
                 dataType: "json",
                 success: function (data) {
                     return data.list;
@@ -558,6 +604,58 @@
             });
         }
 
+        //增加多个关联表字段
+        function func_addSheetTable(i) {
+            if($("#checkedDataSheetTable").val()!=="null" && $("#tableColunm_id").val()!=="null"){
+
+                var tables=[];
+                $("select.relationTable").each(function () {
+                    tables.push($(this).val());
+                });
+
+                var tableName = $("#sheetDataTable1").val();
+                var columnName = $("#sheetDatacolumn1").val();
+                var select_id=
+                $.ajax({
+                    type: "post",
+                    url: "${ctx}/getDatasheetTable",
+                    data: {"tableName": tableName, "subjectCode": sub, "columnName": columnName},
+                    dataType: "json",
+                    success: function (data) {
+                        data
+                        var html = template("addSheetTable", data);
+                        $("#addTableList").append(html);
+                        $("#checkedDataSheetTable2").on("change", function () {
+                            var tName = $("#checkedDataSheetTable2 option:selected").val();//选中的值
+                            //级联查询表字段
+                            $.ajax({
+                                type: "post",
+                                url: "${ctx}/getDatasheetTableColumn",
+                                data: {"tableName": tName, "subjectCode": sub},
+                                dataType: "json",
+                                success: function (data) {
+                                    $("#tableColunm_id2").html("");
+                                    var column = data.list;
+                                    var s = "<option value='null' name=''>--请选择列名--</option>";
+                                    for (var i = 0; i < column.length; i++) {
+                                        if (column[i] === "PORTALID") {
+
+                                        } else {
+                                            s += "<option value='" + column[i] + "'>" + column[i] + "</option>"
+                                        }
+                                    }
+                                    $("#tableColunm_id2").append(s);
+                                }
+                            })
+
+                        })
+                    }
+                });
+            }else{
+                toastr.warning("请填写完整再增加关联表！");
+            }
+
+        }
 
     </script>
 </div>
