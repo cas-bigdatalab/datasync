@@ -14,7 +14,7 @@
             <thead>
             <tr>
                 <th>字段名称</th>
-                <th>注释</th>
+                <th><label style="color:red;">*</label>注释</th>
                 <th>显示类型</th>
             </tr>
             </thead>
