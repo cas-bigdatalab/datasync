@@ -354,7 +354,7 @@
                                     <div style="height: 15px"></div>
                                     <div style="overflow: hidden" class="select-database">
                                         <div class="col-md-2" style="font-size: 18px;text-align:left;margin: 0 -15px ">
-                                            <span>选择表资源</span>
+                                            <span>选择表资源：</span>
                                         </div>
                                         <div class="col-md-9">
                                             <div class="row undeslist">
@@ -363,15 +363,15 @@
                                     </div>
                                     <div style="overflow: hidden" class="select-local">
                                         <div class="col-md-2" style="font-size: 18px;text-align:left;margin: 0 -15px ">
-                                            <span>选择文件资源</span>
+                                            <span>选择文件资源：</span>
                                         </div>
                                         <div class="col-md-4" style="font-size: 18px;width: 68%;"
                                              id="fileContainerTree">
                                             <ul id="treeDemo" class="ztree" style="width: 100%;"></ul>
                                         </div>
                                         <div style="height: 15px;clear: both"></div>
-                                        <div class="col-md-4 col-md-offset-2" style="font-size: 18px;width: 68%;">
-                                            <span style="margin-left: -26%;position: absolute">在线上传：</span>
+                                        <span class="col-md-2" style="font-size: 18px;text-align:left;margin: 0 -15px ">在线上传：</span>
+                                        <div class="col-md-4" style="font-size: 18px;width: 68%;">
                                             <div>
                                                 <input id="file-1" type="file" multiple>
                                             </div>
@@ -525,6 +525,7 @@
 
         $(function () {
             $(".fabu_div2").html("数据发布 - 第1步，共3步");
+
             $("#file-1").fileinput({
                 uploadAsync: false,
                 theme: 'fas',
@@ -535,6 +536,7 @@
                 maxFileCount: 10,
                 dropZoneEnabled: false,
                 showPreview: true,
+                showRemove: false,
                 layoutTemplates: { // 设置预览框中的按钮
                     actionUpload: ''    //设置为空可去掉上传按钮
                     // actionDelete:''  //设置为空可去掉删除按钮
@@ -551,7 +553,35 @@
                 removeFileFromFtpAndUploadFilePath(deleteFileName);
             });
 
+            $("[name='need_checked']").on("change", function () {
+                var $index = $("[name='need_checked']").index($(this));
+                if ($(this).val() !== "" && $(this).val().trim() !== "") {
+                    $("[name='need_checked']:eq(" + $index + ")").removeClass("custom-error");
+                    $("[name='need_message']:eq(" + $index + ")").removeClass("custom-error");
+                    $("[name='need_message']:eq(" + $index + ")").hide();
+                    $(".required:eq(" + $index + ")").parent().removeClass("custom-error");
+                }
+            });
+
+            $("#task_email").on("change", function () {
+                $("[name='data_email']").hide()
+            });
+
+            $("#task_phone").on("change", function () {
+                $("[name='data_phone']").hide()
+            });
+
+            $(".undeslist").delegate("input", "click", function () {
+                staticSourceTableChoice(1, this, sub, $(this).attr("keyval"), "dataResource");
+                $("#previewTableDataAndComsButtonId").click()
+            });
+
+            $(".button-submit").click(function () {
+                addResourceThirdStep()
+            });
+
             getResourceById();
+
             initFileTree();
         });
 
@@ -809,35 +839,14 @@
         }
 
         $(".progress-bar-success").width(initNum * 33 + "%");
-        $("[name='need_checked']").on("change", function () {
-            var $index = $("[name='need_checked']").index($(this))
-            if ($(this).val() != "" && $(this).val().trim() != "") {
-                $("[name='need_checked']:eq(" + $index + ")").removeClass("custom-error")
-                $("[name='need_message']:eq(" + $index + ")").removeClass("custom-error")
-                $("[name='need_message']:eq(" + $index + ")").hide()
-                $(".required:eq(" + $index + ")").parent().removeClass("custom-error")
-            }
-        });
-        $("#task_email").on("change", function () {
-            $("[name='data_email']").hide()
-        });
-        $("#task_phone").on("change", function () {
-            $("[name='data_phone']").hide()
-        });
-        $(".undeslist").delegate("input", "click", function () {
-            staticSourceTableChoice(1, this, sub, $(this).attr("keyval"), "dataResource")
-            $("#previewTableDataAndComsButtonId").click()
-        });
-        $(".button-submit").click(function () {
-            addResourceThirdStep()
-        });
+
 
         relationalDatabaseTableList();
 
         function fromAction(flag) {
             if (flag) {
                 ++initNum;
-                if (initNum == 2) {
+                if (initNum === 2) {
                     if (resourceId == "") {
                         addResourceFirstStep()
                     } else {
@@ -861,8 +870,8 @@
                     $("#tab2").addClass("active")
                     $(".steps li:eq(1)").addClass("active")
                     $(".btn-default").show();
-                } else if (initNum == 3) {
-                    addResourceSecondStep()
+                } else if (initNum === 3) {
+                    addResourceSecondStep();
                     if (secondFlag) {
                         initNum--
                         toastr["error"]("请选择至少一项");
@@ -973,7 +982,7 @@
                 type: "GET",
                 async: false,
                 success: function (data) {
-                    var list = JSON.parse(data)
+                    var list = JSON.parse(data);
                     var tabCon = template("dataUserList", list);
                     $("#permissions").append(tabCon);
                     $('#permissions').select2().val(userList).trigger("change");
@@ -981,7 +990,6 @@
                         placeholder: "请选择用户",
                         allowClear: true,
                     });
-                    debugger
                 },
                 error: function () {
                     console.log("请求失败")
@@ -990,53 +998,44 @@
         }
 
         function addResourceSecondStep() {
-            secondFlag = false;
-            var dataList = "";
-            if (publicType === "mysql") {
-                var $ele = $("[name='resTable']:checked");
+            var resourceData = {}, sqlDataList = [], fileDataList;
 
-                $ele.each(function () {
-                    dataList += $(this).attr("keyval") + ";"
-                })
-            } else {
-                var fileList = getChecedValueInLocalTree();
-                if (fileList.length !== 0) {
-                    var userUploadPath = $.fn.zTree.getZTreeObj("treeDemo").getNodesByFilter(function (node) {
-                        return node.level === 0;
-                    }, true).id + "/userUpload";
-                    if (fileList.indexOf(userUploadPath) === -1) {
-                        fileList.splice(0, 0, userUploadPath);
-                    }
-                    dataList = fileList.toString();
-                }
+            // 关系数据表
+            $.each($(".select-database input:checked"), function (k, v) {
+                sqlDataList.push($(v).attr("keyval"));
+            });
+
+            // 文件数据（包含在线上传）
+            fileDataList = getChecedValueInLocalTree();
+            var userUploadPathNoChecked = $.fn.zTree.getZTreeObj("treeDemo").getNodesByFilter(function (node) {
+                return (node.level === 1 && node.isParent && node.id.endsWith("userUpload") && !node.checked);
+            }, true);
+            if (userUploadPathNoChecked !== null && uploadFilePath.length > 0) {
+                fileDataList.push(userUploadPathNoChecked.id);
             }
-            if (dataList.length === 0) {
+
+            // 格式化参数
+            var reg = new RegExp(',', "g");
+            resourceData["resourceId"] = resourceId;
+            resourceData["sqlDataList"] = sqlDataList.length === 0 ? "" : sqlDataList.toString().replace(reg, ";");
+            resourceData["fileDataList"] = fileDataList.length === 0 ? "" : fileDataList.toString().replace(reg, ";");
+
+            if (!resourceData.sqlDataList && !resourceData.fileDataList) {
                 secondFlag = true;
-                return
+                return;
             }
-            var reg2 = new RegExp(',', "g");
-            dataList = dataList.replace(reg2, ';');
             $.ajax({
-                // url: ctx + "/resource/addResourceSecondStep",
                 url: ctx + "/resource/addResourceSecondStepCopy",
                 type: "POST",
-                /*data: {
-                    resourceId: resourceId,
-                    publicType: publicType,
-                    dataList: dataList
-                },*/
-                data: {
-                    resourceId: resourceId,
-                    sqlDataList: " engler_system;hutchinson_system",
-                    fileDataList: "E:\\\\logs;E:\\\\logs\\\\2019-04;E:\\\\logs\\\\2019-04\\\\portal-04-07-2019-1.log.gz;E:\\\\logs\\\\2019-04\\\\portal-04-15-2019-1.log.gz"
-                },
+                data: resourceData,
                 success: function (data) {
-                    // console.log(data)
+                    console.log(data)
                 },
                 error: function (data) {
                     console.log("请求失败")
                 }
-            })
+            });
+
             userGroupList()
         }
 
@@ -1171,21 +1170,13 @@
                         tags: [""],
                     });
                     $("#dataSourceDesID").val(totalList.createdByOrganization);
-                    var publicContentList = totalList.publicContent.split(";");
-                    var typeNum = (totalList.publicType === "mysql" || totalList.publicType === "") ? 0 : 1;
-                    $("[name='ways']:eq(" + typeNum + ")").prop("checked", true);
-                    if (typeNum === 0) {
-                        for (var i = 0; i < publicContentList.length; i++) {
-                            $("[keyval='" + publicContentList[i] + "']").prop("checked", true)
-                        }
-                    } else {
-                        var fileId = totalList.filePath;
-                        fileId = fileId.substr(0, fileId.length - 1);
-                        var str = fileId.replace(/%_%/g, "/");
-                        $(".select-database").hide();
-                        $(".select-local").show();
 
+                    // 关系型数据回显赋值
+                    var publicContentList = totalList.publicContent.split(";");
+                    for (var i = 0; i < publicContentList.length; i++) {
+                        $("[keyval='" + publicContentList[i] + "']").prop("checked", true)
                     }
+
                     userList = totalList.userGroupId.split(",");
 
                     //xiajl20190310增加，显示扩展元数据信息
@@ -1226,9 +1217,6 @@
                     if (zTreeObj != null) {
                         zTreeObj.destroy();//用之前先销毁tree
                     }
-                    // TODO 不提交且部署时请注释
-                    // debugger
-                    // data.nodeList[0].id = data.nodeList[0].id.replace(/\//g, "\\");
                     var fileNodes = data.nodeList;
                     var zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, fileNodes);
 

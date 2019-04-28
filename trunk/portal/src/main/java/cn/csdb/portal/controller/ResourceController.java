@@ -355,8 +355,8 @@ public class ResourceController {
         resource.setdCount(0);
         resource.setvCount(0);
         System.out.println(extMetadata);
-        List<Map<String,Object>> list = new ArrayList<>();
-        if (StringUtils.isNotEmpty(extMetadata)){
+        List<Map<String, Object>> list = new ArrayList<>();
+        if (StringUtils.isNotEmpty(extMetadata)) {
             JSONObject json = JSONObject.parseObject(extMetadata);
             for (Map.Entry<String, Object> map : json.entrySet()) {
                 Map<String, Object> item = new HashMap<>();
@@ -390,7 +390,7 @@ public class ResourceController {
             metaTemplate.setPublishOrgnization(publishOrganization);
             metaTemplate.setEmail(email);
             metaTemplate.setPhoneNum(phoneNum);
-            if (list.size() > 0){
+            if (list.size() > 0) {
                 metaTemplate.setExtMetadata(list);
             }
             metaTemplateService.add(metaTemplate);
@@ -523,6 +523,7 @@ public class ResourceController {
         boolean sqlDataListIsNullOrEmpty = Strings.isNullOrEmpty(sqlDataListString);
         String fileDataListString = resourceDataList.getFileDataList();
         boolean fileDataListIsNullOrEmpty = Strings.isNullOrEmpty(fileDataListString);
+        BigDecimal memorySize = new BigDecimal(0);
 
         if (!sqlDataListIsNullOrEmpty) {
             resource.setPublicContent(sqlDataListString);
@@ -533,7 +534,7 @@ public class ResourceController {
                 BigDecimal tableLength = resourceService.getTableLength(subject, tableName);
                 allTableLength = allTableLength.add(tableLength);
             }
-            resource.setToMemorySize(allTableLength.toString());
+            memorySize = memorySize.add(allTableLength);
 
             BigDecimal allTableRow = new BigDecimal(0);
             for (String tableName : sqlDataList) {
@@ -555,12 +556,13 @@ public class ResourceController {
                     fileNumber++;
                 }
             }
-            resource.setToMemorySize(allFileLength.toString());
+            memorySize = memorySize.add(allFileLength);
             resource.setToFilesNumber(fileNumber);
         }
 
+        resource.setToMemorySize(memorySize.toString());
         if (!sqlDataListIsNullOrEmpty && !fileDataListIsNullOrEmpty) {
-            resource.setPublicType("mix");
+            resource.setPublicType("mysql+file");
         } else if (!sqlDataListIsNullOrEmpty && fileDataListIsNullOrEmpty) {
             resource.setPublicType("mysql");
             resource.setToFilesNumber(0);
@@ -569,13 +571,13 @@ public class ResourceController {
             resource.setToRecordNumber(0);
         }
 
-/*        if (StringUtils.isNotBlank(resource.getUserGroupId())) {
+        if (StringUtils.isNotBlank(resource.getUserGroupId())) {
             resource.setStatus("1");
         } else {
             resource.setStatus("-1");
         }
         String resId = resourceService.save(resource);
-        jsonObject.put("resourceId", resId);*/
+        jsonObject.put("resourceId", resId);
 
         return jsonObject;
     }
@@ -994,8 +996,8 @@ public class ResourceController {
         String[] filePathArry = new String[0];
 
         List<FileTreeNode> nodeList = new ArrayList<FileTreeNode>();
-        String filePath = (String) request.getSession().getAttribute("FtpFilePath") + "file";
-//        String filePath="D:\\workspace";
+//        String filePath = (String) request.getSession().getAttribute("FtpFilePath") + "file";
+        String filePath = "G:\\home\\vftpuser\\ftpUsertestdb\\file";
         File dirFile = new File(filePath);
         JSONObject jsonObject = new JSONObject();
         if (resource != null) {

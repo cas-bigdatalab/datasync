@@ -334,7 +334,7 @@ public class ResourceService {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 long aLong = resultSet.getLong(1);
-                bigDecimal.add(new BigDecimal(aLong));
+                bigDecimal = bigDecimal.add(new BigDecimal(aLong));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -370,7 +370,7 @@ public class ResourceService {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 long aLong = resultSet.getLong(1);
-                bigDecimal.add(new BigDecimal(aLong));
+                bigDecimal = bigDecimal.add(new BigDecimal(aLong));
             }
         } catch (SQLException e) {
             e.printStackTrace();
