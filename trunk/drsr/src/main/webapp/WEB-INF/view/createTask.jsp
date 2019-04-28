@@ -261,6 +261,7 @@
                             </div>
                         </div>
                     </div>
+                    <span style="color: red;font-size: 15px;" id="PreviewPoint"></span>
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="editTableFieldComsSaveId" data-dismiss="modal" class="btn red">关闭
@@ -810,9 +811,10 @@
                             },
                             dataType: "json",
                             success: function (data) {
-
+                                $("#PreviewPoint")[0].innerHTML="";
                                 if(data.dataSize>10){
-                                    toastr["warning"]("预览仅展示前十条数据！");
+                                    $("#PreviewPoint")[0].innerHTML="*预览仅展示前十条数据";
+                                    // toastr["warning"]("预览仅展示前十条数据！");
                                 }
 
                                 for(var key in data.maps){
