@@ -3,7 +3,7 @@
  */
 
 $(function () {
-    //xiajl20171108
+    //xiajl20190425
     template.helper("dateFormat", formatDate);
     getData(1);
 
@@ -27,7 +27,6 @@ $(function () {
 $("#isTemplate").change(function(){
     if ($(this).prop("checked") ){
         $("#divTemplate").css("display","");
-        //xiajl20171101增加
         $("#metaTemplateName").val($("#Task_dataName").val() +"元数据模板");
         $(this).val("true");
         //选择模板失效
@@ -46,21 +45,19 @@ $("#isSelectTemplate").change(function(){
     if ($(this).prop("checked") ){
         $("#divSelectTemplate").css("display","");
 
-        //xiajl20171101增加
         $("#isTemplate").prop("checked","");
         $("#isTemplate").attr("checked",false);
         $("#isTemplate").attr("disabled","disabled");
     }
     else{
         $("#divSelectTemplate").css("display","none");
-
         $("#isTemplate").removeAttr("disabled");
     }
 });
 
 
 
-//xiajl20171105
+//xiajl20190425
 //获取元数据模板信息数据
 function getData(pageNo) {
     $.ajax({
@@ -68,12 +65,11 @@ function getData(pageNo) {
         type: "get",
         dataType: "json",
         data: {
-            "templateName":"",
+            "subjectCode":sub,
             "pageNo": pageNo,
             "pageSize": 10
         },
         success: function (data) {
-            console.log(data);
             var html = template("systemTmpl", data);
             $("#metaTemplateList").empty();
             $("#metaTemplateList").append(html);
@@ -118,51 +114,57 @@ function selectData(id) {
         url: ctx + "/metaTemplate/templateDetail/" + id ,
         type: "get",
         dataType: "json",
-        success: function (result) {
-            //console.log("20171106:" + JSON.stringify(result));
-            //$("#coreMetaTree").empty();
-            if (result.xsdData) {
-                var xsdData = result.xsdData;
-                //generateTree($("#coreMetaTree"), xsdData);
+        success: function (data) {
+            if (data.metaTemplate) {
+                $("#Task_dataName").val(data.metaTemplate.title);
+                $("#dataDescribeID").val(data.metaTemplate.introduction);
+                $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
+                var path = data.metaTemplate.imagePath;
+                $('#cutimg').attr('src', path);
+                $('#imgPath').val(data.metaTemplate.imagePath);
 
-                if (result.metaData)
-                    bindTreeData($("#coreMetaTree"), result.metaData);
-                if (jQuery().datepicker) {
-                    $('.date-picker').datepicker({
-                        rtl: Metronic.isRTL(),
-                        orientation: "left",
-                        autoclose: true,
-                        language: "zh-CN",
-                        format: "yyyy-mm-dd"
+                $("#select2_tags").val(data.metaTemplate.keyword);
+                $("#select2_tags").select2({
+                    tags: true,
+                    multiple: true,
+                    tags: [""]
+                });
+                $("#centerCatalogId").val(data.metaTemplate.catalogId);
+                initCenterResourceCatalog("#jstree-demo", data.metaTemplate.catalogId);
+                $("#startTime").val(convertMilsToDateString(data.metaTemplate.startTime));
+                $("#endTime").val(convertMilsToDateString(data.metaTemplate.endTime));
+                $("#dataSourceDesID").val(data.metaTemplate.createdByOrganization);
+                $("#create_Organization").val(data.metaTemplate.createOrgnization);
+                $("#create_person").val(data.metaTemplate.createPerson);
+
+                $("#createTime").val(convertMilsToDateString(data.metaTemplate.creatorCreateTime));
+                $("#publish_Organization").val(data.metaTemplate.publishOrgnization);
+                $("#Task_email").val(data.metaTemplate.email);
+                $("#Task_phone").val(data.metaTemplate.phoneNum);
+
+                //xiajl20190310增加，显示扩展元数据信息
+                if (data.metaTemplate.extMetadata){
+                    $("#divExtMetadata input,select").each(function () {
+                        var str = this.name;
+                        var valueStr = "";
+                        for (var i = 0; i < data.metaTemplate.extMetadata.length; i++) {
+                            $.each(data.metaTemplate.extMetadata[i], function (key, value) {
+                                if (key == str) {
+                                    valueStr = value;
+                                }
+                            })
+                        }
+                        $(this).val(valueStr);
                     });
-                    //$('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
                 }
-                if ($(".jstree-node .copy"))
-                    $(".jstree-node .copy").unbind("click");
-                $(".jstree-node .copy").click(function (e) {
-                    e.preventDefault();
-                    var currentTarget = $(e.currentTarget);
-                    copyNode(currentTarget);
-                });
-                //当必填项文本框失去焦点时，对文本框内容进行校验
-                $(".jstree-node :input.required").blur(function (e) {
-                    var input = $(e.currentTarget);
-                    checkRequiredInput(input);
-                });
-                $(".jstree-node :input[valueType]:not(.required)").change(function (e) {
-                    var input = $(e.currentTarget);
-                    checkSpecificTypeNoRequired(input);
-                });
-                $(".jstree-node :input").change(function () {
-                    $(container).find(".button-save").removeAttr("disabled");
-                });
                 toastr["success"]("读取模板数据成功！", "读取模板数据成功！");
             } else {
-                bootbox.alert("核心元数据规范文件丢失，无法修改核心元数据！");
+                toastr["error"]("读取模板数据错误！", "读取模板数据错误！");
             }
         },
         error: function () {
-            bootbox.alert("网络发生错误！");
+            toastr["error"]("读取模板数据错误！", "读取模板数据错误！");
         }
     });
+
 }

@@ -4,6 +4,7 @@ import cn.csdb.portal.model.MetaTemplate;
 import com.google.common.collect.Lists;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -71,6 +73,44 @@ public class MetaTemplateDao {
         basicQuery.with(new Sort(orders));
         List<MetaTemplate> list = mongoTemplate.find(basicQuery,MetaTemplate.class);
         return list;
+    }
+
+    /**
+     * 分页查询列表
+     * @param subjectCode:主题库代码
+     * @param start：开始序号
+     * @param pageSize:每页条数
+     * @return
+     */
+    public List<MetaTemplate> getListByPage(String subjectCode, int start, int pageSize){
+        QueryBuilder queryBuilder = QueryBuilder.start();
+        if (StringUtils.isNotEmpty(subjectCode)){
+            queryBuilder = queryBuilder.and("subjectCode").is(subjectCode);
+        }
+        DBObject query = queryBuilder.get();
+        BasicQuery basicQuery = new BasicQuery(query);
+        Sort.Order order = new Sort.Order(Sort.Direction.DESC,"metaTemplateCreateDate");
+        List<Sort.Order> orders = new ArrayList<>();
+        orders.add(order);
+        basicQuery.with(new Sort(orders));
+        basicQuery.skip(start);
+        basicQuery.limit(pageSize);
+        return mongoTemplate.find(basicQuery,MetaTemplate.class);
+    }
+
+    /**
+     * 获取满足条件的记录条数
+     * @param subjectCode:主题库代码
+     * @return:long
+     */
+    public long countByPage(String subjectCode){
+        QueryBuilder queryBuilder = QueryBuilder.start();
+        if (StringUtils.isNotEmpty(subjectCode)){
+            queryBuilder = queryBuilder.and("subjectCode").is(subjectCode);
+        }
+        DBObject query = queryBuilder.get();
+        BasicQuery basicQuery = new BasicQuery(query);
+        return mongoTemplate.count(basicQuery,MetaTemplate.class);
     }
 
     /**
