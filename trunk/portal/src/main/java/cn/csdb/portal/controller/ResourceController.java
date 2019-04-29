@@ -996,8 +996,8 @@ public class ResourceController {
         String[] filePathArry = new String[0];
 
         List<FileTreeNode> nodeList = new ArrayList<FileTreeNode>();
-//        String filePath = (String) request.getSession().getAttribute("FtpFilePath") + "file";
-        String filePath = "G:\\home\\vftpuser\\ftpUsertestdb\\file";
+        String filePath = (String) request.getSession().getAttribute("FtpFilePath") + "file";
+//        String filePath="D:\\workspace";
         File dirFile = new File(filePath);
         JSONObject jsonObject = new JSONObject();
         if (resource != null) {
