@@ -148,17 +148,17 @@
 <input type="hidden" id="FtpFilePath" value="${sessionScope.FtpFilePath}"/>
 
 <script type="text/html" id="addSheetTable">
-    <div>
-    <select id="checkedDataSheetTable2" name="relationTable" class="relationTable">
+    <div id="div_addID">
+        <select name="relationTable" class="relationTable">
         <option value="null" name="">--请选择表名--</option>
         {{each list as value i}}
         <option value="{{value}}">{{value}}</option>
         {{/each}}
     </select>
-    <select id="tableColunm_id2" name="relationColumn">
+        <select name="relationColumn" class="relationColumn">
         <option value="null" name="">--请选择列名--</option>
     </select>
-    <span id="remove_id" onclick="func_removeSheetDate()"><i class="fa fa-trash"></i></span>
+        <span id="remove_id"><i class="fa fa-trash" onclick="func_removeSheetDate(this)"></i></span>
     </div>
 </script>
 
@@ -218,7 +218,7 @@
     <div id="model_Datasheet" style="">
         <div>
             <form id="form_DataSheet">
-                <input type="text" name="DisplayType" value="3" style="display: none">
+                <input type="text" id="DisplayType" name="DisplayType" value="3" style="display: none">
                 {{each listData as value}}
                 <input type="text" id="sheetDataTable1" name="tableName" value="{{value.tableName}}"
                        style="display: none">
@@ -238,11 +238,9 @@
                     <option value="null" name="">--请选择列名--</option>
                 </select>
                 <span id="addTable_id" onclick="func_addSheetTable()"><i class="fa fa-plus"></i>增加</span>
-
-                <br/>
                 <%--<label>显示风格</label> <input type="checkbox" value=""/>字段一<input type="checkbox" value=""/>字段二<input type="checkbox" value=""/>字段三--%>
                 <br/>
-                <div id="addTableList">
+                <div id="addTableList" style="margin-left: 60px;">
 
                 </div>
                 <input type="button" onclick="func_saveTypeDatasheet()" value="确定" class="btn btn-success"
@@ -324,12 +322,12 @@
         $("#described").click(function () {
             $("#undescribe").hide();
             $("#isdescribe").show();
-            $("#staticSourceTableChoiceModal").hide();
+            $("#staticSourceTableChoiceModalNew").hide();
         });
         $("#nodescribe").click(function () {
             $("#isdescribe").hide();
             $("#undescribe").show();
-            $("#staticSourceTableChoiceModal").hide();
+            $("#staticSourceTableChoiceModalNew").hide();
         });
 
         function chooseTable(subjectCode, flag) {
@@ -420,11 +418,10 @@
                     data: {"tableName": tableName, "subjectCode": sub, "columnName": columnName},
                     dataType: "json",
                     success: function (data) {
-                        debugger;
                         data["listData"] = listData;
-
                         $("#showTypeDataDetail").empty();
                         $('#showTypeDataModal').modal({backdrop: "static"});
+                        // if(data.list)
                         var html = template("templTypeDatasheet", data);
                         $("#showTypeDataDetail").append(html);
                         $("#checkedDataSheetTable").on("change", function () {
@@ -439,7 +436,7 @@
                                 success: function (data) {
                                     $("#tableColunm_id").html("");
                                     var column = data.list;
-                                    var s = "<option value='null' name=''>--请选择列名--</option>";
+                                    var s = "";
                                     for (var i = 0; i < column.length; i++) {
                                         if (column[i] === "PORTALID") {
 
@@ -458,7 +455,6 @@
             }
             if (myOption === '5') {
                 $("#showTypeDataDetail").empty();
-                // $("#showTypeDataModal").modal("show");
                 $('#showTypeDataModal').modal({backdrop: "static"});
                 var html = template("templTypeFile", {"listData": listData});
                 $("#showTypeDataDetail").append(html);
@@ -527,11 +523,12 @@
             });
             $("#isdescribe").hide();
             $("#undescribe").show();
-            $("#staticSourceTableChoiceModal").hide();
+            $("#staticSourceTableChoiceModalNew").hide();
         }
 
         //    关联数据表
         function func_saveTypeDatasheet() {
+
             var tName = $("#checkedDataSheetTable option:selected").val();
             var tColumn = $("#tableColunm_id option:selected").val();
             if (tName === "null") {
@@ -558,11 +555,20 @@
                     }
                 }
 
+                var DisplayType = $("#DisplayType").val();
+                var tableName = $("#sheetDataTable1").val();
+                var columnName = $("#sheetDatacolumn1").val();
 
                 $.ajax({
                     type: "post",
                     url: "${ctx}/saveTypeDatasheet",
-                    data: data,
+                    data: {
+                        "DisplayType": DisplayType,
+                        "tableName": tableName,
+                        "columnName": columnName,
+                        "tables": tables.join(","),
+                        "columns": columns.join(",")
+                    },
                     dataType: "json",
                     success: function (data) {
 
@@ -605,7 +611,7 @@
         }
 
         //增加多个关联表字段
-        function func_addSheetTable(i) {
+        function func_addSheetTable() {
             if($("#checkedDataSheetTable").val()!=="null" && $("#tableColunm_id").val()!=="null"){
 
                 var tables=[];
@@ -615,18 +621,17 @@
 
                 var tableName = $("#sheetDataTable1").val();
                 var columnName = $("#sheetDatacolumn1").val();
-                var select_id=
                 $.ajax({
                     type: "post",
                     url: "${ctx}/getDatasheetTable",
                     data: {"tableName": tableName, "subjectCode": sub, "columnName": columnName},
                     dataType: "json",
                     success: function (data) {
-                        data
                         var html = template("addSheetTable", data);
                         $("#addTableList").append(html);
-                        $("#checkedDataSheetTable2").on("change", function () {
-                            var tName = $("#checkedDataSheetTable2 option:selected").val();//选中的值
+                        $("#div_addID .relationTable").on("change", function () {
+                            var _this = this;
+                            var tName = $(_this).find('option:selected').text();//选中的值
                             //级联查询表字段
                             $.ajax({
                                 type: "post",
@@ -634,9 +639,10 @@
                                 data: {"tableName": tName, "subjectCode": sub},
                                 dataType: "json",
                                 success: function (data) {
-                                    $("#tableColunm_id2").html("");
+                                    $(_this).parent().find('.relationColumn').html("");
                                     var column = data.list;
-                                    var s = "<option value='null' name=''>--请选择列名--</option>";
+                                    // var s = "<option value='null' name=''>--请选择列名--</option>";
+                                    var s = "";
                                     for (var i = 0; i < column.length; i++) {
                                         if (column[i] === "PORTALID") {
 
@@ -644,7 +650,7 @@
                                             s += "<option value='" + column[i] + "'>" + column[i] + "</option>"
                                         }
                                     }
-                                    $("#tableColunm_id2").append(s);
+                                    $(_this).parent().find('.relationColumn').append(s);
                                 }
                             })
 
@@ -657,6 +663,10 @@
 
         }
 
+        //    删除关联表字段
+        function func_removeSheetDate(i) {
+            $(i).parent().parent().remove();
+        }
     </script>
 </div>
 

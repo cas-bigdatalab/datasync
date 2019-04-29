@@ -18,14 +18,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -94,10 +93,10 @@ public class TableFieldComsController {
     //    数据字段配置，显示类型配置--URL
     @RequestMapping("/saveTypeURL")
     @ResponseBody
-    public JSONObject saveTypeURL(int DisplayType, String tableName, String columnName, String optionMode, String address) {
+    public JSONObject saveTypeURL(int DisplayType, String tableName, String columnName, String optionMode, String address, HttpSession session) {
         JSONObject jsonObject = new JSONObject();
-//         System.out.println(tableName+"..."+columnName);
-        showTypeInfService.saveTypeURL(DisplayType, tableName, columnName, optionMode, address);
+        String subjectCode = String.valueOf(session.getAttribute("SubjectCode"));
+        showTypeInfService.saveTypeURL(DisplayType, tableName, columnName, optionMode, address, subjectCode);
         jsonObject.put("success", "success");
         return jsonObject;
     }
@@ -105,9 +104,10 @@ public class TableFieldComsController {
     //    数据字段配置，显示类型配置--URL
     @RequestMapping("/saveTypeEnum")
     @ResponseBody
-    public JSONObject saveTypeEnum(int DisplayType, String tableName, String columnName, String optionMode, String address, String enumData) {
+    public JSONObject saveTypeEnum(int DisplayType, String tableName, String columnName, String optionMode, String address, String enumData, HttpSession session) {
         JSONObject jsonObject = new JSONObject();
-        showTypeInfService.saveTypeEnum(DisplayType, tableName, columnName, optionMode, address, enumData);
+        String subjectCode = String.valueOf(session.getAttribute("SubjectCode"));
+        showTypeInfService.saveTypeEnum(DisplayType, tableName, columnName, optionMode, address, enumData, subjectCode);
 //        System.out.println(tableName+"..."+columnName);
         jsonObject.put("success", "success");
         return jsonObject;
@@ -140,21 +140,24 @@ public class TableFieldComsController {
     //    查询出该表关联的数据表
     @RequestMapping("/getDatasheetTable")
     @ResponseBody
-    public JSONObject getDatasheetTable(String tableName,String subjectCode){
+    public JSONObject getDatasheetTable(String tableName, String subjectCode, String columnName) {
         JSONObject jsonObject=new JSONObject();
-        DataSrc datasrc=getDataSrc(subjectCode);
-        List<String> list = dataSrcService.relationalDatabaseTableList(datasrc);
-        for(int i=0;i<list.size();i++){
-            if(list.get(i).equals(tableName)){
-                list.remove(list.get(i));
-            }
-        }
+//        DataSrc datasrc=getDataSrc(subjectCode);
+//        List<String> list = dataSrcService.relationalDatabaseTableList(datasrc);
+//        for(int i=0;i<list.size();i++){
+//            if(list.get(i).equals(tableName)){
+//                list.remove(list.get(i));
+//            }
+//        }
+        List<String> list = showTypeInfService.getAllDescribed(subjectCode, tableName, columnName);
         jsonObject.put("list",list);
         return jsonObject;
     }
+
+    //    级联查询出该表字段
     @RequestMapping("/getDatasheetTableColumn")
     @ResponseBody
-    public JSONObject getDatasheetTableColumn(String tableName,String subjectCode){
+    public JSONObject getDatasheetTableColumn(String tableName, String subjectCode){
         JSONObject jsonObject=new JSONObject();
         DataSrc datasrc=getDataSrc(subjectCode);
         List<String> list = dataSrcService.getColumnName(datasrc,tableName);
@@ -165,19 +168,24 @@ public class TableFieldComsController {
 //    保存关联表字段数据
     @RequestMapping("/saveTypeDatasheet")
     @ResponseBody
-    public JSONObject saveTypeDatasheet(int DisplayType, String tableName, String columnName, String relationTable, String relationColumn){
+    public JSONObject saveTypeDatasheet(int DisplayType, String tableName, String columnName, String tables, String columns, HttpSession session) {
         JSONObject jsonObject=new JSONObject();
-//        System.out.println(relationTable+"..."+relationColumn);
-      showTypeInfService.saveTypeDatasheet(DisplayType,tableName,columnName,relationTable,relationColumn);
+        String subjectCode = String.valueOf(session.getAttribute("SubjectCode"));
+        String s_Table[] = tables.split(",");
+        String s_column[] = columns.split(",");
+        for (int i = 0; i < s_Table.length; i++)
+            System.out.println(s_Table[i] + "..." + s_column[i]);
+        showTypeInfService.saveTypeDatasheet(DisplayType, tableName, columnName, s_Table, s_column, subjectCode);
         return jsonObject;
     }
 
 //    保存文件类型
     @RequestMapping("/saveTypeFile")
     @ResponseBody
-    public JSONObject saveTypeFile(int DisplayType, String tableName, String columnName, String address, String optionMode,String Separator){
+    public JSONObject saveTypeFile(int DisplayType, String tableName, String columnName, String address, String optionMode, String Separator, HttpSession session) {
         JSONObject jsonObject=new JSONObject();
-        showTypeInfService.saveTypeFile(DisplayType,tableName,columnName,address,optionMode,Separator);
+        String subjectCode = String.valueOf(session.getAttribute("SubjectCode"));
+        showTypeInfService.saveTypeFile(DisplayType, tableName, columnName, address, optionMode, Separator, subjectCode);
         return jsonObject;
     }
 

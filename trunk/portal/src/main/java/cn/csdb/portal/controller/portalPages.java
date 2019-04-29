@@ -91,7 +91,6 @@ public class portalPages {
             subject = checkUserService.getSubjectByCode(u.getSubjectCode());
             model.addAttribute("subject", subject);
         }
-
         return "authorizationPage";
     }
 }

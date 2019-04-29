@@ -8,13 +8,14 @@ import java.util.List;
 public class ShowTypeDetail {
     private int status; //最外层保存使用，确定--删除相关列的status等于1的数据，取消，删除相关列status=2的数据
     private int type;  //字段显示类型
-    private String columnName;//枚举暂用（sql）
-    private String optionMode; //选项模式，
-    private String relationTable;//关联表名，枚举暂用（sql）
-    private String relationColumn;//关联表中列，枚举暂用（sql）
+    private String columnName; //枚举暂用（sql）
+    private String optionMode;  //选项模式，
+    private String relationTable; //枚举使用（sql）
+    private String relationColumnK; //枚举使用列1（sql）
+    private String relationColumnV; //字典枚举，列2
     private String address;//缺省值，主路径
     private String Separator;//分隔符
-    private List<EnumData> enumData; //枚举类型对应关系
+    private List<EnumData> enumData; //枚举类型对应关系，关联表使用（表名、列名）
 
     public String getColumnName() {
         return columnName;
@@ -40,12 +41,20 @@ public class ShowTypeDetail {
         this.relationTable = relationTable;
     }
 
-    public String getRelationColumn() {
-        return relationColumn;
+    public String getRelationColumnK() {
+        return relationColumnK;
     }
 
-    public void setRelationColumn(String relationColumn) {
-        this.relationColumn = relationColumn;
+    public void setRelationColumnK(String relationColumnK) {
+        this.relationColumnK = relationColumnK;
+    }
+
+    public String getRelationColumnV() {
+        return relationColumnV;
+    }
+
+    public void setRelationColumnV(String relationColumnV) {
+        this.relationColumnV = relationColumnV;
     }
 
     public String getAddress() {
