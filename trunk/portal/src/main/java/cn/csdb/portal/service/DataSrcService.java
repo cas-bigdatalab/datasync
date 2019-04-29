@@ -11,10 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.*;
-import java.util.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,9 +33,16 @@ public class DataSrcService {
     public List<String> relationalDatabaseTableList(DataSrc dataSrc) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
-        if (connection == null)
+        if (connection == null) {
             return null;
-        return dataSource.getTableList(connection);
+        }
+        List<String> tableList = dataSource.getTableList(connection);
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tableList;
     }
 
     //    表结构
