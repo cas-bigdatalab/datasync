@@ -45,8 +45,9 @@
         .commentsList label {
             padding-top: 0px !important;
         }
-        .shenhe a{
-            border-radius: 6px!important;
+
+        .shenhe a {
+            border-radius: 6px !important;
         }
     </style>
 </head>
@@ -469,10 +470,12 @@
         <td>{{i + 1}}</td>
         <td><a href="javascript:void(0)" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')">{{value.title}}</a>
         </td>
-        {{if value.publicType == 'mysql' ||value.publicType == '' }}
+        {{if value.publicType == 'mysql' || value.publicType == '' }}
         <td>mysql</td>
         {{else if value.publicType == 'file'}}
         <td>file</td>
+        {{else}}
+        <td>mysql+file</td>
         {{/if}}
         <%-- <td style="word-break: break-all">{{value.createdByOrganization}}</td>--%>
         <td>{{dateFormat(value.creationDate)}}</td>
@@ -505,7 +508,8 @@
                         </td>
                         <td width="5"></td>
                         {{/if}}
-                        <td class="shanchu"><a href="javascript:;"  onclick="removeData('{{value.id}}');"><i class="fa fa-window-close-o" aria-hidden="true"></i> 删除</a>
+                        <td class="shanchu"><a href="javascript:;" onclick="removeData('{{value.id}}');"><i
+                                class="fa fa-window-close-o" aria-hidden="true"></i> 删除</a>
                         </td>
                     </shiro:hasRole>
 
@@ -523,12 +527,14 @@
                         {{/if}}
 
                         {{if value.status == '-1'}}
-                        <td class="chakan"><a href="javascript:;" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')">
+                        <td class="chakan"><a href="javascript:;"
+                                              onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')">
                             <i class="fa fa-eye" aria-hidden="true"></i> 查看</a></td>
                         <td width="5"></td>
 
                         {{else if value.status != '-1'}}
-                        <td class="chakan"><a href="javascript:;" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')">
+                        <td class="chakan"><a href="javascript:;"
+                                              onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')">
                             <i class="fa fa-eye" aria-hidden="true"></i> 查看</a></td>
                         <td width="5"></td>
 
@@ -590,16 +596,17 @@
             tableConfiguration2(1, publicType, resourceState, resourceName);
         })
         <%--$("#bd-data").delegate(".upload-data", "click", function () {--%>
-            <%--var id = $(this).attr("keyIdTd");--%>
-            <%--console.log(id)--%>
-            <%--window.location.href = "${ctx}/resource/editResource?resourceId=" + id;--%>
+        <%--var id = $(this).attr("keyIdTd");--%>
+        <%--console.log(id)--%>
+        <%--window.location.href = "${ctx}/resource/editResource?resourceId=" + id;--%>
         <%--})--%>
 
-      function editdatarelease(i) {
+        function editdatarelease(i) {
             var id = $(i).attr("keyIdTd");
             console.log(id);
             window.location.href = "${ctx}/resource/editResource?resourceId=" + id;
         }
+
         var validData = {
             errorElement: 'span', //default input error message container
             errorClass: 'help-block help-block-error', // default input error message class
