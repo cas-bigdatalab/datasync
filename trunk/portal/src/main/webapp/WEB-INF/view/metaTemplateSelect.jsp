@@ -10,6 +10,7 @@
 <div class="row" style="padding-top:20px;padding-bottom:20px;padding-left: 20px;padding-right: 20px;">
     <div>
         <div class="col-md-12">
+            <p><span style="color: red;">*</span> 为必填项</p>
             <input type="checkbox" id="isSelectTemplate" name="isSelectTemplate">选择从模板中填写数据
         </div>
     </div>

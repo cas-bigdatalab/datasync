@@ -113,7 +113,7 @@
                                             <div class="col-md-5" style="padding-top:13px">
                                                 <input type="text" class="form-control" name="Task_dataName"
                                                        required="required"
-                                                       id="Task_dataName" placeholder="请输入名称">
+                                                       id="Task_dataName" placeholder="请输入名称（不少于15字符）">
                                             </div>
 
                                         </div>
@@ -126,7 +126,7 @@
 
 
                                                     <textarea type="text" class="form-control" cols="30" rows="4"
-                                                              placeholder="数据集简介信息"
+                                                              placeholder="数据集简介信息（不少于50字符）"
                                                               id="dataDescribeID" name="dataDescribeID"
                                                               required="required"></textarea>
 
@@ -152,6 +152,7 @@
                                                             <input type="hidden" id="tag" name="tag" val=""/>
                                                             <input type="hidden" id="imgFlagNum" val=""/>
                                                         </div>
+                                                        <span>图片规格为800*600</span><br/>
                                                         <span class="btn default btn-file" id="checkPicture">
                                                             <span class="fileinput-new">
                                                             选择一个图片</span>
@@ -370,26 +371,20 @@
 
                                 <div class="tab-pane" id="tab2">
 
-                                    <div style="font-size: 18px">
-                                        <span>数据源:</span>
-                                        <input name="ways" type="radio" checked="checked" value="DB" id="aaa"/>
-                                        <label for="aaa" style="font-size: 18px;color: #1CA04C">数据库表</label>
-                                        <input name="ways" type="radio" value="LH" id="bbb"/>
-                                        <label for="bbb" style="font-size: 18px;color: #1CA04C">文件型数据</label>
-                                    </div>
+
                                     <div style="height: 15px"></div>
                                     <div style="overflow: hidden" class="select-database">
                                         <div class="col-md-2" style="font-size: 18px;text-align:left;margin: 0 -15px ">
-                                            <span>选择表资源</span>
+                                            <span>选择表资源:</span>
                                         </div>
                                         <div class="col-md-9">
                                             <div class="row undeslist">
                                             </div>
                                         </div>
                                     </div>
-                                    <div style="overflow: hidden;display: none" class="select-local">
+                                    <div style="overflow: hidden;" class="select-local">
                                         <div class="col-md-2" style="font-size: 18px;text-align:left;margin: 0 -15px ">
-                                            <span>选择文件资源</span>
+                                            <span>选择文件资源：</span>
                                         </div>
                                         <div class="col-md-6 col-md-offset-1" style="font-size: 18px">
                                             <ul id="fileContainerTree" class="ztree" style="width: 100%;"></ul>
@@ -584,6 +579,7 @@
             maxFileCount: 10,
             dropZoneEnabled: false,
             showPreview: true,
+            showRemove: false,
             layoutTemplates: { // 设置预览框中的按钮
                 actionUpload: ''    //设置为空可去掉上传按钮
                 // actionDelete:''  //设置为空可去掉删除按钮
@@ -1134,7 +1130,7 @@
             })
         }
 
-        function addResourceSecondStep() {
+        function addResourceSecondStep_() {
             secondFlag = false;
             var dataList = "";
             if (publicType === "mysql") {
@@ -1179,6 +1175,48 @@
                     console.log("请求失败")
                 }
             })
+        }
+
+        function addResourceSecondStep() {
+            var resourceData = {}, sqlDataList = [], fileDataList;
+
+            // 关系数据表
+            $.each($(".select-database input:checked"), function (k, v) {
+                sqlDataList.push($(v).attr("keyval"));
+            });
+
+            // 文件数据（包含在线上传）
+            fileDataList = getChecedValueInLocalTree();
+            var userUploadPathNoChecked = $.fn.zTree.getZTreeObj("fileContainerTree").getNodesByFilter(function (node) {
+                return (node.level === 1 && node.isParent && node.id.endsWith("userUpload") && !node.checked);
+            }, true);
+            if (userUploadPathNoChecked !== null && uploadFilePath.length > 0) {
+                fileDataList.push(userUploadPathNoChecked.id);
+            }
+
+            // 格式化参数
+            var reg = new RegExp(',', "g");
+            resourceData["resourceId"] = resourceId;
+            resourceData["sqlDataList"] = sqlDataList.length === 0 ? "" : sqlDataList.toString().replace(reg, ";");
+            resourceData["fileDataList"] = fileDataList.length === 0 ? "" : fileDataList.toString().replace(reg, ";");
+
+            if (!resourceData.sqlDataList && !resourceData.fileDataList) {
+                secondFlag = true;
+                return;
+            }
+            $.ajax({
+                url: ctx + "/resource/addResourceSecondStepCopy",
+                type: "POST",
+                data: resourceData,
+                success: function (data) {
+                    console.log(data)
+                },
+                error: function (data) {
+                    console.log("请求失败")
+                }
+            });
+
+            userGroupList()
         }
 
         function addResourceThirdStep() {

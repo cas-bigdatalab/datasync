@@ -100,7 +100,7 @@
                                             <div class="col-md-5" style="padding-top:13px">
                                                 <input type="text" class="form-control" name="Task_dataName"
                                                        required="required"
-                                                       id="Task_dataName" placeholder="请输入名称">
+                                                       id="Task_dataName" placeholder="请输入名称（不少于15字）">
                                             </div>
 
                                         </div>
@@ -113,7 +113,7 @@
 
 
                                                     <textarea type="text" class="form-control" cols="30" rows="4"
-                                                              placeholder="数据集简介信息"
+                                                              placeholder="数据集简介信息（不少于50字符）"
                                                               id="dataDescribeID" name="dataDescribeID"
                                                               required="required"></textarea>
 
@@ -580,6 +580,30 @@
                 addResourceThirdStep()
             });
 
+            $('.selectData').datepicker({
+                language: 'zh-CN'
+            });
+
+            $('.selectData').each(function () {
+                $(this).datepicker('clearDates');
+            });
+
+            $("#select2_tags").change(function () {
+                $("#submit_form2").validate(validData2).element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
+            });
+
+            $('.selectData:eq(0)').datepicker().on("changeDate", function (ev) {
+                firstTime = new Date(ev.date).getTime();
+                $(".timeVili").removeClass("custom-error");
+                $(".timeVili:eq(1)").hide()
+            });
+
+            $('.selectData:eq(1)').datepicker().on("changeDate", function (ev) {
+                lastTime = new Date(ev.date).getTime();
+                $(".timeVili").removeClass("custom-error");
+                $(".timeVili:eq(1)").hide()
+            });
+
             getResourceById();
 
             initFileTree();
@@ -612,23 +636,6 @@
             uploadFilePath.splice(pathIndex, 1);
             return ftpFilePath;
         }
-
-        $('.selectData').datepicker({
-            language: 'zh-CN'
-        });
-        $('.selectData').each(function () {
-            $(this).datepicker('clearDates');
-        });
-        $('.selectData:eq(0)').datepicker().on("changeDate", function (ev) {
-            firstTime = new Date(ev.date).getTime();
-            $(".timeVili").removeClass("custom-error");
-            $(".timeVili:eq(1)").hide()
-        });
-        $('.selectData:eq(1)').datepicker().on("changeDate", function (ev) {
-            lastTime = new Date(ev.date).getTime();
-            $(".timeVili").removeClass("custom-error");
-            $(".timeVili:eq(1)").hide()
-        });
 
         var validData = {
             errorElement: 'span', //default input error message container
@@ -766,10 +773,6 @@
             return resurceDir;
         }, "请选择资源目录");
 
-        $("#select2_tags").change(function () {
-            $("#submit_form2").validate(validData2).element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
-        });
-
         $("#submit_form1").validate(validData);
         $("#submit_form2").validate(validData2);
 
@@ -839,7 +842,6 @@
         }
 
         $(".progress-bar-success").width(initNum * 33 + "%");
-
 
         relationalDatabaseTableList();
 
