@@ -391,6 +391,7 @@
         });
 
         function typeTemplate(myOption, listData, columnName) {
+            debugger
             if (myOption === '1') {
 
             }
@@ -553,9 +554,19 @@
                 });
                 for(var i=0;i<datas.length;i++){
                     if(i%2===0){
-                       tables.push(datas[i]);
+                        if (datas[i] === null || datas[i] === "null") {
+                            toastr.warning("请选择表名！");
+                            return;
+                        } else {
+                            tables.push(datas[i]);
+                        }
                     }else{
-                        columns.push(datas[i]);
+                        if (datas[i] === null || datas[i] === "null") {
+                            toastr.warning("请选择列明名！");
+                            return;
+                        } else {
+                            columns.push(datas[i]);
+                        }
                     }
                 }
 
@@ -734,7 +745,8 @@
                     var showTypeDetailList = data.showTypeInfmsg.showTypeDetailList;
                     for (var i = 0; i < showTypeDetailList.length; i++) {
                         if (showTypeDetailList[i].columnName === columnName && showTypeDetailList[i].status === 1) {
-                            var option = showTypeDetailList[i].type + 1;
+                            var option = '';
+                            option = showTypeDetailList[i].type + 1 + '';
                             typeTemplate(option, listData, columnName);
                         }
                     }
