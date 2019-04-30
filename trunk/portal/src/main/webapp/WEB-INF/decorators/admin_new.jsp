@@ -182,8 +182,6 @@
                                         <%--class="fa fa-bars"></i>元数据模板管理</a></li>--%>
                                         <%--</ul>--%>
                                 </li>
-                                <li class=""><a href="${ctx}/metaTemplate/toMateTemMsgList"><i class="fa fa-bars"></i>元数据模板管理</a>
-                                </li>
                                 <li><a class="" href="${ctx}/statisticalDataDetail"><i class="fa  fa-bar-chart"
                                                                                        aria-hidden="true"></i>
                                     数据统计管理</a>
@@ -216,6 +214,8 @@
                                     文件数据管理</a></li>
                                 <li><a href="${ctx}/dataRelease"><i class="fa fa-upload" aria-hidden="true"></i>
                                     数据发布管理</a></li>
+                                <li class=""><a href="${ctx}/metaTemplate/toMateTemMsgList"><i class="fa fa-bars"></i>元数据模板管理</a>
+                                </li>
                             </ul>
                         </shiro:hasRole>
 

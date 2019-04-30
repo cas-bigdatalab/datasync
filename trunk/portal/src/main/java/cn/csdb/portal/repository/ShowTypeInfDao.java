@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -24,12 +23,13 @@ public class ShowTypeInfDao {
     private MongoTemplate mongoTemplate;
 
     //该表是否设置过显示类型,是否有数据
-    public int checkData(String tableName) {
-        ShowTypeInf showTypeInf = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
+    public ShowTypeInf checkData(String tableName, String subjectCode) {
+        ShowTypeInf showTypeInf = mongoTemplate.findOne(new Query(Criteria.where("subjectCode").is(subjectCode)
+                .and("tableName").is(tableName)), ShowTypeInf.class);
         if (showTypeInf == null) {
-            return 0;
+            return null;
         } else {
-            return 1;
+            return showTypeInf;
         }
     }
 
@@ -85,9 +85,9 @@ public class ShowTypeInfDao {
     public void saveTypeURL(int DisplayType, String tableName, String columnName, String optionMode, String address, String subjectCode) {
         ShowTypeInf showTypeInf = setShowTypeInf(tableName, subjectCode);
         ShowTypeDetail showTypeDetail = setShowTypeDetail(DisplayType, columnName, optionMode, address);
-        int check = checkData(tableName);
-        if (check == 1) {
-            ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
+        ShowTypeInf s = checkData(tableName, subjectCode);
+        if (s != null) {
+//            ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
             showTypeInf.setTableComment(s.getTableComment());
             List<ShowTypeDetail> list = s.getShowTypeDetailList();
             int count = isColumn(list, columnName);
@@ -102,7 +102,7 @@ public class ShowTypeInfDao {
             list.add(showTypeDetail);
             showTypeInf.setShowTypeDetailList(list);
             Update update = Update.update("tableName", tableName).set("showTypeDetailList", list);
-            mongoTemplate.updateFirst(new Query(Criteria.where("tableName").is(tableName)), update, ShowTypeInf.class);
+            mongoTemplate.updateFirst(new Query(Criteria.where("subjectCode").is(subjectCode).and("tableName").is(tableName)), update, ShowTypeInf.class);
         } else {
             showTypeDetail.setStatus(1);
             List<ShowTypeDetail> list = new ArrayList<>();
@@ -130,14 +130,13 @@ public class ShowTypeInfDao {
     public void saveTypeEnumText(int DisplayType, String tableName, String columnName, String optionMode, Map<String, String> map, String subjectCode) {
         ShowTypeInf showTypeInf = setShowTypeInf(tableName, subjectCode);
         ShowTypeDetail showTypeDetail = setShowTypeDetail(DisplayType, columnName, optionMode, "");
-        int check = checkData(tableName);
+        ShowTypeInf s = checkData(tableName, subjectCode);
         List<EnumData> list1 = new ArrayList<>();
-        if (check == 1) {
+        if (s != null) {
 //            去掉ShowTypeInf中重复的ShowTypeDetail，
-            ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
+//            ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
             showTypeInf.setTableComment(s.getTableComment());
             List<ShowTypeDetail> list = s.getShowTypeDetailList();
-//            list=checkColumn(list,columnName);  //去掉要修改的列，重新插入一条
             int count = isColumn(list, columnName);
             if (count == 1) {
                 showTypeDetail.setStatus(2);
@@ -152,7 +151,7 @@ public class ShowTypeInfDao {
             list.add(showTypeDetail);
             showTypeInf.setShowTypeDetailList(list);
             Update update = Update.update("tableName", tableName).set("showTypeDetailList", list);
-            mongoTemplate.updateFirst(new Query(Criteria.where("tableName").is(tableName)), update, ShowTypeInf.class);
+            mongoTemplate.updateFirst(new Query(Criteria.where("subjectCode").is(subjectCode).and("tableName").is(tableName)), update, ShowTypeInf.class);
         } else {
             showTypeDetail.setStatus(1);
             list1 = getEnumDatas(map);
@@ -174,9 +173,9 @@ public class ShowTypeInfDao {
         showTypeDetail.setRelationColumnK(relationColumnK);
         showTypeDetail.setRelationColumnV(relationColumnV);
 
-        int check = checkData(tableName);
-        if (check == 1) {
-            ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
+        ShowTypeInf s = checkData(tableName, subjectCode);
+        if (s != null) {
+//            ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
             showTypeInf.setTableComment(s.getTableComment());
             List<ShowTypeDetail> list = s.getShowTypeDetailList();
             int count = isColumn(list, columnName);
@@ -218,8 +217,8 @@ public class ShowTypeInfDao {
 
 
     //    删除status=2的列的status=1的数据，并将status=2改为status=1；
-    public void updateSatusOne(String tableName) {
-        ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
+    public void updateSatusOne(String tableName, String subjectCode) {
+        ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("subjectCode").is(subjectCode).and("tableName").is(tableName)), ShowTypeInf.class);
         List<ShowTypeDetail> list = s.getShowTypeDetailList();
         List<String> columns = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
@@ -244,9 +243,9 @@ public class ShowTypeInfDao {
     }
 
     //    保存表名注释
-    public void saveTableComment(String tableName, String tableComment) {
+    public void saveTableComment(String tableName, String tableComment, String subjectCode) {
         Update update = Update.update("tableName", tableName).set("tableComment", tableComment);
-        mongoTemplate.updateFirst(new Query(Criteria.where("tableName").is(tableName)), update, ShowTypeInf.class);
+        mongoTemplate.updateFirst(new Query(Criteria.where("subjectCode").is("subjectCode").and("tableName").is(tableName)), update, ShowTypeInf.class);
     }
 
     //    保存关联数据表
@@ -261,9 +260,9 @@ public class ShowTypeInfDao {
             enumData.setValue(s_column[i]);
             enumDataList.add(enumData);
         }
-        int check = checkData(tableName);
-        if (check == 1) {
-            ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
+        ShowTypeInf s = checkData(tableName, subjectCode);
+        if (s != null) {
+//            ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
             showTypeInf.setTableComment(s.getTableComment());
             List<ShowTypeDetail> list = s.getShowTypeDetailList();
             int count = isColumn(list, columnName);
@@ -279,7 +278,7 @@ public class ShowTypeInfDao {
             list.add(showTypeDetail);
             showTypeInf.setShowTypeDetailList(list);
             Update update = Update.update("tableName", tableName).set("showTypeDetailList", list);
-            mongoTemplate.updateFirst(new Query(Criteria.where("tableName").is(tableName)), update, ShowTypeInf.class);
+            mongoTemplate.updateFirst(new Query(Criteria.where("subjectCode").is(subjectCode).and("tableName").is(tableName)), update, ShowTypeInf.class);
         }else{
             showTypeDetail.setEnumData(enumDataList);
             showTypeDetail.setStatus(1);
@@ -293,12 +292,11 @@ public class ShowTypeInfDao {
 //    保存文件类型
 public void saveTypeFile(int DisplayType, String tableName, String columnName, String address, String optionMode, String Separator, String subjectCode) {
     ShowTypeInf showTypeInf = setShowTypeInf(tableName, subjectCode);
-    address.replace(File.separator, "%_%");
         ShowTypeDetail showTypeDetail = setShowTypeDetail(DisplayType, columnName, optionMode, address);
         showTypeDetail.setSeparator(Separator);
-        int check = checkData(tableName);
-        if (check == 1) {
-            ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
+    ShowTypeInf s = checkData(tableName, subjectCode);
+    if (s != null) {
+//            ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
             showTypeInf.setTableComment(s.getTableComment());
             List<ShowTypeDetail> list = s.getShowTypeDetailList();
             int count = isColumn(list, columnName);
@@ -313,7 +311,7 @@ public void saveTypeFile(int DisplayType, String tableName, String columnName, S
             list.add(showTypeDetail);
             showTypeInf.setShowTypeDetailList(list);
             Update update = Update.update("tableName", tableName).set("showTypeDetailList", list);
-            mongoTemplate.updateFirst(new Query(Criteria.where("tableName").is(tableName)), update, ShowTypeInf.class);
+        mongoTemplate.updateFirst(new Query(Criteria.where("subjectCode").is(subjectCode).and("tableName").is(tableName)), update, ShowTypeInf.class);
         }else{
             showTypeDetail.setStatus(1);
             List<ShowTypeDetail> list = new ArrayList<>();
@@ -321,13 +319,6 @@ public void saveTypeFile(int DisplayType, String tableName, String columnName, S
             showTypeInf.setShowTypeDetailList(list);
             mongoTemplate.insert(showTypeInf);
         }
-    }
-
-//    查询该表设置的显示类型
-    public ShowTypeInf getShowTypeInf(String tableName){
-           ShowTypeInf showTypeInf=mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)),ShowTypeInf.class);
-
-           return showTypeInf;
     }
 
     //    查询已描述的所有表名
@@ -362,4 +353,17 @@ public void saveTypeFile(int DisplayType, String tableName, String columnName, S
         return list;
     }
 
+    //    保存文本类型
+    public void saveTypeText(String tableName, String column, String subjectCode) {
+        ShowTypeInf s = checkData(tableName, subjectCode);
+        List<ShowTypeDetail> list = s.getShowTypeDetailList();
+        ShowTypeDetail showTypeDetail = new ShowTypeDetail();
+        showTypeDetail.setType(0);
+        showTypeDetail.setStatus(1);
+        showTypeDetail.setColumnName(column);
+        list = checkColumn(list, column);
+        list.add(showTypeDetail);
+        Update update = Update.update("tableName", tableName).set("showTypeDetailList", list);
+        mongoTemplate.updateFirst(new Query(Criteria.where("subjectCode").is(subjectCode).and("tableName").is(tableName)), update, ShowTypeInf.class);
+    }
 }

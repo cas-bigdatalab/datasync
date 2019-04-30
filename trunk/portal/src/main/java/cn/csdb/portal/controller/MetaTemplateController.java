@@ -5,15 +5,8 @@ import cn.csdb.portal.service.MetaTemplateService;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
@@ -87,9 +80,10 @@ public class MetaTemplateController {
     }
     @ResponseBody
     @RequestMapping(value = "/getAllList")
-    public JSONObject getAllist() {
+    public JSONObject getAllist(HttpSession session) {
+        String subjectCode = session.getAttribute("SubjectCode").toString();
         JSONObject jsonObject = new JSONObject();
-        List<MetaTemplate> list = metaTemplateService.getAllList();
+        List<MetaTemplate> list = metaTemplateService.getAllList(subjectCode);
         jsonObject.put("list", list);
         return jsonObject;
     }

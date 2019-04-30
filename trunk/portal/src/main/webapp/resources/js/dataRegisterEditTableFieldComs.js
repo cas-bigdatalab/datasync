@@ -15,6 +15,7 @@ var sqlNum = 1;
 var curRefer = null;
 var ctx = '${ctx}';
 var S_flag="0";
+var showColumnType = [];
 /**
  *
  * @param obj
@@ -224,6 +225,8 @@ function getEditTableOrSqlFieldComs() {
     var tableInfos = null;
     var tableInfosListIndex = 0;
     var tableInfosIndex = 0;
+    showColumnType.splice(0, showColumnType.length);
+
     if ($(".fieldComsKey")) {
         $(".fieldComsKey").each(function (index, value, array) {
             var tableName = $(value).attr("tablename");
@@ -239,13 +242,14 @@ function getEditTableOrSqlFieldComs() {
             var columnNameLabel = $(value).attr("columnNameLabel");
             var dataType = $(value).attr("dataType");
             var fieldComs = $($(".fieldComsValue")[index]).val();
+            var selectType = $($(".sel")[index]).val();
+            showColumnType.push(selectType);
             tableInfos[tableInfosIndex++] = {
                 columnName: fieldName,
                 columnNameLabel: columnNameLabel,
                 columnComment: fieldComs,
                 dataType: dataType
             };
-
         });
     }
     return tableInfosList;
@@ -277,7 +281,8 @@ function saveTableFieldComs(curDataSubjectCode, tableInfos) {
                 "curDataSubjectCode": curDataSubjectCode,
                 "tableName": tableInfos[0].tableName,
                 "tableInfos": $.toJSON(tableInfos[0].tableInfos),
-                "tableComment":tableComment
+                "tableComment": tableComment,
+                "showColumnType": showColumnType.join(",")
             },
             dataType: "json",
             success: function () {
@@ -384,18 +389,5 @@ function editSqlFieldComs(sqlNum) {
     staticSourceTableChoice_edit(2, null, sub, sqlStr, "dataResource",S_flag);
 }
 
-function getshowTypeData(tableName){
 
-    $.ajax({
-        type: "post",
-        url: ctx +"/getShowTypeInfMsg",
-        data:{"tableName":tableName},
-        dataType: "json",
-        success: function (data) {
-            if(data.showTypeInfmsg!==null){
-                var showTypeInfmsg=data.showTypeInfmsg;
-                $("#tableComment").val(showTypeInfmsg.tableComment);
-            }
-        }
-    });
-}
+

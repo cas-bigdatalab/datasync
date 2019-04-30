@@ -43,18 +43,18 @@ public class SubjectMgmtController {
     public String addSubject(HttpServletRequest request, Subject subject, @RequestParam("image") MultipartFile image) {
 //        create ftp enviroment aotomatic
         Runtime runtime = Runtime.getRuntime();
-        try {
-
-            System.out.println("-----------------------");
-            String command1 = "chmod 777 /etc/vsftpd/vftpuseradd";
-            Runtime.getRuntime().exec(command1).waitFor();
-            Process process = runtime.exec("vftpuseradd "+subject.getFtpUser()+" "+subject.getFtpPassword());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//
+//            System.out.println("-----------------------");
+//            String command1 = "chmod 777 /etc/vsftpd/vftpuseradd";
+//            Runtime.getRuntime().exec(command1).waitFor();
+////            Process process = runtime.exec("vftpuseradd "+subject.getFtpUser()+" "+subject.getFtpPassword());
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         //input parameter check
         logger.info("enterring subjectMgmt-addSubject.");
         logger.info(subject);

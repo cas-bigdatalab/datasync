@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,8 +117,8 @@ public class MetaTemplateDao {
      * ：节点代码
      * @return
      */
-    public List<MetaTemplate> getAllList(){
-        List<MetaTemplate> list=mongoTemplate.findAll(MetaTemplate.class);
+    public List<MetaTemplate> getAllList(String subjectCode) {
+        List<MetaTemplate> list = mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)), MetaTemplate.class);
         return list;
     }
 

@@ -90,7 +90,7 @@ public class SubjectMgmtDao {
             System.out.println("-----------------------");
             String command1 = "chmod 777 /etc/vsftpd/vftpuseradd";
             runtime.exec(command1).waitFor();
-            Process process = runtime.exec("vftpuseradd "+subject.getFtpUser()+" "+subject.getFtpPassword());
+            Process process = runtime.exec("/etc/vsftpd/vftpuseradd "+subject.getFtpUser()+" "+subject.getFtpPassword());
 
         } catch (IOException e) {
             e.printStackTrace();
