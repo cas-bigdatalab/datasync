@@ -1,5 +1,6 @@
 package cn.csdb.portal.repository;
 
+import cn.csdb.portal.model.Described_Table;
 import cn.csdb.portal.model.EnumData;
 import cn.csdb.portal.model.ShowTypeDetail;
 import cn.csdb.portal.model.ShowTypeInf;
@@ -10,7 +11,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-import javax.swing.text.html.HTMLDocument;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -63,9 +64,10 @@ public class ShowTypeInfDao {
         return list;
     }
 
-    public ShowTypeInf setShowTypeInf(String tableName) {
+    public ShowTypeInf setShowTypeInf(String tableName, String subjectCode) {
         ShowTypeInf showTypeInf = new ShowTypeInf();
         showTypeInf.setTableName(tableName);
+        showTypeInf.setSubjectCode(subjectCode);
         return showTypeInf;
     }
 
@@ -80,13 +82,11 @@ public class ShowTypeInfDao {
     }
 
     //    保存URL类型
-    public void saveTypeURL(int DisplayType, String tableName, String columnName, String optionMode, String address) {
-        ShowTypeInf showTypeInf = setShowTypeInf(tableName);
+    public void saveTypeURL(int DisplayType, String tableName, String columnName, String optionMode, String address, String subjectCode) {
+        ShowTypeInf showTypeInf = setShowTypeInf(tableName, subjectCode);
         ShowTypeDetail showTypeDetail = setShowTypeDetail(DisplayType, columnName, optionMode, address);
-
         int check = checkData(tableName);
         if (check == 1) {
-
             ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
             showTypeInf.setTableComment(s.getTableComment());
             List<ShowTypeDetail> list = s.getShowTypeDetailList();
@@ -99,7 +99,6 @@ public class ShowTypeInfDao {
                 showTypeDetail.setStatus(2);
                 list = deleteColumn(list, columnName);
             }
-//            list=checkColumn(list,columnName);
             list.add(showTypeDetail);
             showTypeInf.setShowTypeDetailList(list);
             Update update = Update.update("tableName", tableName).set("showTypeDetailList", list);
@@ -128,8 +127,8 @@ public class ShowTypeInfDao {
     }
 
     //    保存枚举类型
-    public void saveTypeEnumText(int DisplayType, String tableName, String columnName, String optionMode, Map<String, String> map) {
-        ShowTypeInf showTypeInf = setShowTypeInf(tableName);
+    public void saveTypeEnumText(int DisplayType, String tableName, String columnName, String optionMode, Map<String, String> map, String subjectCode) {
+        ShowTypeInf showTypeInf = setShowTypeInf(tableName, subjectCode);
         ShowTypeDetail showTypeDetail = setShowTypeDetail(DisplayType, columnName, optionMode, "");
         int check = checkData(tableName);
         List<EnumData> list1 = new ArrayList<>();
@@ -167,11 +166,13 @@ public class ShowTypeInfDao {
     }
 
     //    枚举sql类型
-    public void saveTypeEnumSql(int DisplayType,String tableName, String columnName, String optionMode, String relationColumn,String relationTable) {
-        ShowTypeInf showTypeInf = setShowTypeInf(tableName);
+    public void saveTypeEnumSql(int DisplayType, String tableName, String columnName, String optionMode,
+                                String relationColumnK, String relationColumnV, String relationTable, String subjectCode) {
+        ShowTypeInf showTypeInf = setShowTypeInf(tableName, subjectCode);
         ShowTypeDetail showTypeDetail = setShowTypeDetail(DisplayType, columnName, optionMode, "");
         showTypeDetail.setRelationTable(relationTable);
-        showTypeDetail.setRelationColumn(relationColumn);
+        showTypeDetail.setRelationColumnK(relationColumnK);
+        showTypeDetail.setRelationColumnV(relationColumnV);
 
         int check = checkData(tableName);
         if (check == 1) {
@@ -249,12 +250,17 @@ public class ShowTypeInfDao {
     }
 
     //    保存关联数据表
-    public void  saveTypeDatasheet(int DisplayType, String tableName, String columnName, String relationTable, String relationColumn) {
-        ShowTypeInf showTypeInf = setShowTypeInf(tableName);
+    public void saveTypeDatasheet(int DisplayType, String tableName, String columnName, String[] s_Table, String[] s_column, String subjectCode) {
+        ShowTypeInf showTypeInf = setShowTypeInf(tableName, subjectCode);
         ShowTypeDetail showTypeDetail = setShowTypeDetail(DisplayType, columnName, "", "");
-        showTypeDetail.setRelationTable(relationTable);
-        showTypeDetail.setRelationColumn(relationColumn);
+        List<EnumData> enumDataList = new ArrayList<>();
 
+        for (int i = 0; i < s_Table.length; i++) {
+            EnumData enumData = new EnumData();
+            enumData.setKey(s_Table[i]);
+            enumData.setValue(s_column[i]);
+            enumDataList.add(enumData);
+        }
         int check = checkData(tableName);
         if (check == 1) {
             ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
@@ -269,11 +275,13 @@ public class ShowTypeInfDao {
                 showTypeDetail.setStatus(2);
                 list = deleteColumn(list, columnName);
             }
+            showTypeDetail.setEnumData(enumDataList);
             list.add(showTypeDetail);
             showTypeInf.setShowTypeDetailList(list);
             Update update = Update.update("tableName", tableName).set("showTypeDetailList", list);
             mongoTemplate.updateFirst(new Query(Criteria.where("tableName").is(tableName)), update, ShowTypeInf.class);
         }else{
+            showTypeDetail.setEnumData(enumDataList);
             showTypeDetail.setStatus(1);
             List<ShowTypeDetail> list = new ArrayList<>();
             list.add(showTypeDetail);
@@ -283,8 +291,9 @@ public class ShowTypeInfDao {
     }
 
 //    保存文件类型
-    public void saveTypeFile(int DisplayType, String tableName, String columnName, String address, String optionMode,String Separator){
-        ShowTypeInf showTypeInf = setShowTypeInf(tableName);
+public void saveTypeFile(int DisplayType, String tableName, String columnName, String address, String optionMode, String Separator, String subjectCode) {
+    ShowTypeInf showTypeInf = setShowTypeInf(tableName, subjectCode);
+    address.replace(File.separator, "%_%");
         ShowTypeDetail showTypeDetail = setShowTypeDetail(DisplayType, columnName, optionMode, address);
         showTypeDetail.setSeparator(Separator);
         int check = checkData(tableName);
@@ -319,6 +328,38 @@ public class ShowTypeInfDao {
            ShowTypeInf showTypeInf=mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)),ShowTypeInf.class);
 
            return showTypeInf;
+    }
+
+    //    查询已描述的所有表名
+    public List<Described_Table> getAllDescribed(String subjectCode) {
+        List<Described_Table> list = mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)), Described_Table.class);
+        return list;
+    }
+
+    //查询该列已经关联的表
+    public List<String> getSheetTable(String tableName, String column) {
+        ShowTypeInf showTypeInf = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
+        List<ShowTypeDetail> showTypeDetails = new ArrayList<>();
+        ShowTypeDetail showTypeDetail = new ShowTypeDetail();
+        List<String> list = new ArrayList<>();
+        if (showTypeInf != null) {
+            if (showTypeInf.getShowTypeDetailList() != null) {
+                showTypeDetails = showTypeInf.getShowTypeDetailList();
+                for (ShowTypeDetail s : showTypeDetails) {
+                    if (s.getColumnName().equals(column)) {
+                        showTypeDetail = s;
+                    }
+                }
+                List<EnumData> enumDataList = showTypeDetail.getEnumData();
+                if (enumDataList != null) {
+                    for (EnumData e : enumDataList) {
+                        list.add(e.getKey());
+                    }
+                }
+            }
+        }
+
+        return list;
     }
 
 }

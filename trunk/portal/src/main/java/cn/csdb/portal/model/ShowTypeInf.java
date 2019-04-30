@@ -18,9 +18,20 @@ public class ShowTypeInf {
     @Field("tableComment")
     private String tableComment;//表名注释
 
+    @Field("subjectCode")
+    private String subjectCode;
+
     @Field("showTypeDetailList")
     private List<ShowTypeDetail> showTypeDetailList;
 
+
+    public String getSubjectCode() {
+        return subjectCode;
+    }
+
+    public void setSubjectCode(String subjectCode) {
+        this.subjectCode = subjectCode;
+    }
 
     public String getId() {
         return id;

@@ -4,8 +4,8 @@ package cn.csdb.portal.model;
  * Created by shiba on 2019/4/24.
  */
 public class EnumData {
-    private String key;
-    private String value;
+    private String key; //枚举，关联数据表
+    private String value; //枚举，关联字段
 
     public String getKey() {
         return key;
