@@ -10,11 +10,16 @@
 <c:set value="${pageContext.request.contextPath}" var="ctx"/>
 <html>
 <head>
-    <title>烟草科研专业库管理与汇交工具</title>
+    <title>${applicationScope.systemPro['project.title']}</title>
     <link href="${ctx}/resources/bundles/bootstrapv3.3/css/bootstrap.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/login/css/home.css" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+        loginbg {
+            background: url(${applicationScope.systemPro['project.wallimg']}) center center no-repeat !important;
+        }
+    </style>
 </head>
     <body class="loginbg">
 
@@ -45,7 +50,8 @@
 
         <div class="loginbox">
             <%--<h3>数据资源汇聚传输工具</h3>--%>
-            <h3>烟草科研专业库管理与汇交工具</h3>
+            <h3>${applicationScope.systemPro['project.title']}</h3>
+            <%--<h3>烟草科研专业库管理与汇交工具</h3>--%>
             <table>
                 <tr>
                     <td>用户名：</td>
