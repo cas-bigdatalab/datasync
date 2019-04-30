@@ -132,33 +132,23 @@
                                                           method="post">
                                                         <div id="cutDiv"
                                                              style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
-                                                            <input type="hidden" id="x" name="x"/>
-                                                            <input type="hidden" id="y" name="y"/>
-                                                            <input type="hidden" id="w" name="w"/>
-                                                            <input type="hidden" id="h" name="h"/>
-                                                            <input type="hidden" id="tag" name="tag" val=""/>
-                                                            <input type="hidden" id="imgFlagNum" val=""/>
                                                         </div>
+                                                        <span>建议图片规格为800*600</span><br/>
                                                         <span class="btn default btn-file" id="checkPicture">
                                                             <span class="fileinput-new">
                                                             选择一个图片</span>
                                                             <input class="photo-file" id="fcupload" type="file"
-                                                                   name="imgFile" onchange="readURL(this);">
+                                                                   name="imgFile"
+                                                                   onchange="showImgAsDataURLAndValidataImg();">
                                                             </span>
                                                         <span id="uploadSpan" class="btn default btn-file"
                                                               style="display: none">
-                                                                <span class="fileinput-new">
-                                                            上传</span>
-                                                                <input type="button" onclick="doUpload();"/>
+                                                                 <span class="fileinput-new">
+                                                             上传</span>
+                                                                 <input type="button" onclick="doUpload();"/>
                                                         </span>
                                                     </form>
                                                     <div class="timeVili3" style="display: none">请上传选择图片,图片规格为800*600
-                                                    </div>
-                                                    <div class="clearfix margin-top-10">
-                                                        <%--   <span class="label label-danger">
-                                                       注意! </span>
-                                                                   图片只能在 IE10+, FF3.6+, Safari6.0+, Chrome6.0+ 和
-                                                                   Opera11.1+浏览器上预览。旧版本浏览器只能显示图片名称。--%>
                                                     </div>
                                                 </div>
                                             </div>
@@ -776,43 +766,6 @@
         $("#submit_form1").validate(validData);
         $("#submit_form2").validate(validData2);
 
-
-        //将图片截图并上传功能
-        var api = null;
-
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.readAsDataURL(input.files[0]);
-                reader.onload = function (event) {
-                    $('#cutimg').removeAttr('src');
-                    $('#cutimg').attr('src', event.target.result);
-                    $("#checkPicture").hide();
-                    $("#uploadSpan").show();
-                    // console.log(event.target.result)
-                    api = $.Jcrop('#cutimg', {
-                        setSelect: [10, 10, 100, 100],
-                        aspectRatio: 4 / 3,
-                        allowSelect: true,
-                        /* allowSelect:false,
-                         allowResize:false,*/
-                        onSelect: updateCoords,
-                        onChange: updateCoords
-                    });
-                };
-                if (api != undefined) {
-                    api.destroy();
-                }
-            }
-
-            function updateCoords(obj) {
-                $("#x").val(obj.x);
-                $("#y").val(obj.y);
-                $("#w").val(obj.w);
-                $("#h").val(obj.h);
-            };
-        }
-
         function doUpload() {
             $(".jcrop-holder").hide();
             var formData = new FormData($("#fileForm")[0]);
@@ -826,19 +779,62 @@
                 processData: false,
                 success: function (result) {
                     var resultJson = JSON.parse(result);
-                    // console.log(resultJson)
                     var filePath = resultJson.saveName;
                     $("#imgPath").val(resultJson.saveName);
-                    $('.jcrop-tracker').hide();
-                    $("#checkPicture").show();
-                    $("#uploadSpan").hide();
                     $('#cutimg').attr('src', filePath);
-                    $('#cutimg').show();
                 },
                 error: function (returndata) {
                     alert(returndata);
                 }
             });
+        }
+
+        function showImgAsDataURLAndValidataImg() {
+            var reader = new FileReader();
+            reader.readAsDataURL(event.target.files[0]);
+            reader.onload = function (event) {
+                $("img#cutimg").attr("src", event.target.result);
+                getImgNaturalDimensions($("img#cutimg")[0], function (dimensions) {
+                    var w = dimensions.w;
+                    var h = dimensions.h;
+                    var flg = true;
+
+                    // 验证图片信息
+                    if (w !== 800 && h !== 600) {
+                        if (w / h !== 800 / 600) {
+                            toastr["error"]("图片格式至少是 800*600 或 等比例格式", "错误！");
+                            flg = false;
+                        } else {
+                            toastr["warning"]("图片格式推荐800*600 格式", "警告！");
+                        }
+                    }
+                    if (flg) {
+                        $("#checkPicture").hide();
+                        $("#uploadSpan").show();
+                    }
+                })
+            }
+        }
+
+        // 获取图片大小
+        function getImgNaturalDimensions(oImg, callback) {
+            var nWidth, nHeight;
+            if (!oImg.naturalWidth) { // 现代浏览器
+
+                nWidth = oImg.naturalWidth;
+                nHeight = oImg.naturalHeight;
+                callback({w: nWidth, h: nHeight});
+
+            } else { // IE6/7/8
+                var nImg = new Image();
+
+                nImg.onload = function () {
+                    var nWidth = nImg.width,
+                        nHeight = nImg.height;
+                    callback({w: nWidth, h: nHeight});
+                }
+                nImg.src = oImg.src;
+            }
         }
 
         $(".progress-bar-success").width(initNum * 33 + "%");

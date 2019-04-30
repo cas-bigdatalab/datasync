@@ -5,7 +5,6 @@ import cn.csdb.portal.repository.TableFieldComsDao;
 import cn.csdb.portal.service.*;
 import cn.csdb.portal.utils.FileTreeNode;
 import cn.csdb.portal.utils.FileUploadUtil;
-import cn.csdb.portal.utils.ImgCut;
 import cn.csdb.portal.utils.PropertiesUtil;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
@@ -826,18 +825,12 @@ public class ResourceController {
         return jsonObject;
     }
 
-    //截图并上传
     @RequestMapping(value = "/uploadHeadImage", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject uploadHeadImage(
+    public JSONObject uploadHeadImageCopy(
             HttpServletRequest request,
-            @RequestParam(value = "x") String x,
-            @RequestParam(value = "y") String y,
-            @RequestParam(value = "h") String h,
-            @RequestParam(value = "w") String w,
             @RequestParam(value = "imgFile") MultipartFile imageFile
     ) throws Exception {
-        System.out.println("==========Start=============");
         JSONObject jsonObject = new JSONObject();
         String saveName = "";
         String configFilePath = SubjectMgmtController.class.getClassLoader().getResource("config.properties").getFile();
@@ -853,19 +846,9 @@ public class ResourceController {
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }
-                File file = new File(dir, saveName + "_src.jpg");
+                File file = new File(dir, saveName + ".jpg");
                 imageFile.transferTo(file);
-                String srcImagePath = resourcePath + "/" + saveName;
-                int imageX = Double.valueOf(x).intValue();
-                int imageY = Double.valueOf(y).intValue();
-                int imageH = Double.valueOf(h).intValue();
-                int imageW = Double.valueOf(w).intValue();
-                //这里开始截取操作
-                System.out.println("==========imageCutStart=============");
-                ImgCut.imgCut(srcImagePath, imageX, imageY, imageW, imageH);
-                System.out.println("==========imageCutEnd=============");
-                file.delete();
-                jsonObject.put("saveName", "/imagesPath/" + subjectCode + "/resources/" + saveName + "_cut.jpg");
+                jsonObject.put("saveName", "/imagesPath/" + subjectCode + "/resources/" + saveName + ".jpg");
             }
         }
         return jsonObject;
