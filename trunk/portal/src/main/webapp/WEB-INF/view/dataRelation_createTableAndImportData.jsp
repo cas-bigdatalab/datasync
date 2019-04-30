@@ -73,31 +73,22 @@
 <div id="staticSourceTableChoiceModal" class="modal fade" tabindex="-1" data-width="200">
     <div class="modal-dialog" style="min-width:600px;width:auto;max-width: 55%">
         <div class="modal-content">
-            <div class="modal-header bg-primary" style="background-color: #1e8753 !important;">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                        id="editTableFieldComsCloseId"></button>
+            <div class="modal-header bg-primary">
                 <h4 class="modal-title" id="relationalDatabaseModalTitle"
                     style="color: white;font-size: 18px;font-weight: 500;">预览数据</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="portlet box green-haze" style="border:0;">
+                        <div class="portlet box" style="border:0;">
                             <div class="portlet-title" style="display: none">
                             </div>
                             <div class="tab-content"
-                                 style="background-color: white;min-height:300px;max-height:70%;padding-top: 20px ; overflow: scroll;">
+                            >
                                 <div id="previewTableDataAndComsId" style="max-height: 400px;">
                                     <div class="skin skin-minimal">
                                         <table class="table table-hover table-bordered">
-                                            <thead>
-                                            <tr style="word-break: keep-all" id="pre-head">
-                                                <th>#</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody id="pre-body">
 
-                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -178,34 +169,41 @@
                     </div>
                 </form>
             </div>
-
             <h4>通过SQL语句，形成新表</h4>
-            <div class="col-md-12">
+            <div style="margin-left: 3%;">
                 <form id="selectSQL">
                     <div id="totalList">
-                        <div class="col-md-12">
-                            <div class="col-md-1">SQL查询</div>
-                            <%--style="text-align: right;margin-left: 35px;"--%>
+                        <div class="row">
+                            <div class="col-md-1">SQL查询:</div>
                             <div class="col-md-7">
                                 <input type="text" class="form-control sqlStatements inputVili" name="newSql">
-                                <%--<textarea class="form-control sqlStatements inputVili" placeholder="查询语句" name="newSql"></textarea>--%>
-                            </div>
-                            <div class="col-md-2" style="margin: 0 -15px">
-                                <input type="text" class="form-control inputVili" placeholder="新表名" name="newName">
-                                <%--<textarea class="form-control sqlStatements inputVili" placeholder="新表名" name="newName"></textarea>--%>
-                            </div>
-                            <div class="col-md-4" style="display: contents">
-                                <button type="button" class="btn blue preview">预览</button>
-                                <button type="button" class="btn green" onclick="createTableBySql(this)"><span
-                                        class="glyphicon glyphicon-plus"></span>创建表
-                                </button>
-                            </div>
-                            <div class="col-md-2" style="text-align: left;width: 20px;">
                             </div>
                         </div>
-                        <div id="sqlList"></div>
                     </div>
                 </form>
+            </div>
+            <h4>新的表名称</h4>
+            <div style="margin-left: 3%;">
+                <div class="row">
+                    <div class="col-md-1">新表名</div>
+                    <div class="col-md-7">
+                        <input type="text" class="form-control inputVili" placeholder="新表名" name="newName">
+                    </div>
+                </div>
+                <div style="height:20px"></div>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <button type="button" class="btn blue preview" onclick="previewSqlDataAndComs()">预览
+                        </button>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <button type="button" class="btn green" onclick="createTableBySql()"><span
+                                class="glyphicon glyphicon-plus"></span>创建表
+                        </button>
+                    </div>
+                    <div class="col-md-2" style="text-align: left;width: 20px;">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -238,8 +236,8 @@
         var li_excel = '<li class="active" value="0"><a id="createTableByExcel" href="#uploadExcel" data-toggle="tab">导入式建表</a></li>';
         var li_sql = '<li class="" value="1"><a id="createTableBySQL" href="#sql" data-toggle="tab">关联创建新表</a></li>';
         (function () {
+            // 默认excel导入式建表
             initExcelCreateTable();
-
             closableTab.afterCloseTab = function (item) {
                 if (!$(".nav.nav-tabs.activeTabs li")[0]) {
                     $("#uploadExcel").addClass("active");
@@ -247,6 +245,7 @@
                 }
             };
 
+            // 上传文件按钮
             var $inputs = $("#excelFile");
             [].forEach.call($inputs, function (e) {
                 var label = $inputs.next();
@@ -257,6 +256,7 @@
                 })
             });
 
+            // 初始化通过已有表创建新表
             initSqlCreateTable();
         })();
 
@@ -527,16 +527,6 @@
         }
 
         function initSqlCreateTable() {
-            $("#sqlList").on("click", ".removeSql", function () {
-                $(this).parent().parent().remove();
-            });
-            $("#totalList").on("click", ".preview", function () {
-                var $Str = $(this).parent().parent().find(".sqlStatements").val();
-                previewSqlDataAndComs(this);
-            });
-            $("#totalList").on("change", ".sqlStatements", function () {
-                $(this).css("border-color", "")
-            });
 
             $("#selectTable select.selectTable").on("change", function (event) {
                 var _this = $(event.currentTarget);
@@ -550,16 +540,132 @@
             })
         }
 
-        function createTableBySql(_this) {
-            var sql = validateSql(_this);
-            if (sql.flg !== "true") {
-                toastr["error"](sql.flg, "错误！");
+        /**
+         * @return {string}
+         */
+        function selectToSql() {
+            var selectSql = "";
+            var tableAName = $.trim($("#selectTableA").val());
+            if (tableAName === "选择表") {
+                toastr["warning"]("请选择表A", "警告");
+                return selectSql;
+            }
+
+            var relationA = $.trim($("#selectTableFieldA").val());
+            if (relationA === "") {
+                toastr["warning"]("请选择表A的关联字段", "警告");
+                return selectSql;
+            }
+            relationA = "a." + relationA;
+
+            var fieldsA = "";
+            $.each($("#checkBoxTableFieldA").find("input:checked"), function (k, v) {
+                var val = $.trim($(v).attr("id"));
+                fieldsA += val.replace("A", "a.") + ",";
+            });
+            if (fieldsA === "") {
+                toastr["warning"]("请选择表A的查询字段", "警告");
+                return selectSql;
+            }
+            fieldsA = fieldsA.slice(0, fieldsA.length - 1);
+
+            var tableBName = $.trim($("#selectTableB").val());
+            if (tableBName === "选择表") {
+                toastr["warning"]("请选择表B", "警告");
+                return selectSql;
+            }
+
+            var relationB = $.trim($("#selectTableFieldB").val());
+            if (relationB === "") {
+                toastr["warning"]("请选择表B的关联字段", "警告");
+                return selectSql;
+            }
+            relationB = "b." + relationB;
+
+            var fieldsB = "";
+            $.each($("#checkBoxTableFieldB").find("input:checked"), function (k, v) {
+                var val = $.trim($(v).attr("id"));
+                fieldsB += val.replace("B", "b.") + ",";
+            });
+            if (fieldsB === "") {
+                toastr["warning"]("请选择表B的查询字段", "警告");
+                return selectSql;
+            }
+            fieldsB = fieldsB.slice(0, fieldsB.length - 1);
+            selectSql = "SELECT " + fieldsA + "," + fieldsB + " FROM " + tableAName + " AS a LEFT JOIN " + tableBName + " AS b ON " + relationA + " = " + relationB;
+            return selectSql;
+        }
+
+        function inputToSql() {
+            var inputSql = $.trim($("input[name='newSql']").val());
+            return inputSql;
+        }
+
+        function previewSqlDataAndComs() {
+            var $title = $("#relationalDatabaseModalTitle");
+
+            var selectSql = inputToSql();
+
+            if (selectSql === "") {
+                selectSql = selectToSql();
+                if (selectSql === "") {
+                    return;
+                }
+                $title.html("预览数据:<span style='color:red'>通过联合关联</span>");
+            } else {
+                $title.html("预览数据:<span style='color:red'>通过sql查询</span>");
+            }
+            var sql = validateSql(selectSql);
+            if (sql.flag !== "true") {
+                toastr["error"](sql.flag, "错误！");
+                return;
+            }
+            previewSqlDataAndComs_real(selectSql);
+        }
+
+        function previewSqlDataAndComs_real(selectSql) {
+            $.ajax({
+                type: "POST",
+                url: "${ctx}/fileImport/previewSqlData",
+                dataType: "JSON",
+                data: {
+                    sqlString: selectSql
+                },
+                success: function (data) {
+                    $("#staticSourceTableChoiceModal").modal("show");
+                    var html = template("previewSqlData", {
+                        "data": data.data,
+                        "columnName": data.columnName
+                    });
+                    var $table = $("#previewTableDataAndComsId").find("table");
+                    $table.html("");
+                    $table.html(html);
+                    $table.nextAll().remove();
+                    if (data.range === "out") {
+                        $table.after("<p style='color: red'>查询结果大于10条，仅展示前10条</p>")
+                    }
+                }
+            })
+        }
+
+        function createTableBySql() {
+            var selectSql = inputToSql();
+            if (selectSql === "") {
+                selectSql = selectToSql();
+                if (selectSql === "") {
+                    return;
+                }
+            }
+            var sql = validateSql(selectSql);
+            if (sql.flag !== "true") {
+                toastr["error"](sql.flag, "错误！");
                 return;
             }
 
-            var tableName = validateTableName(_this);
-            if (tableName.flg !== "true") {
-                toastr["error"](tableName.flg, "错误！");
+            var newName = $.trim($($("input[name='newName']")).val());
+            var tableName = validateTableName(newName);
+            if (tableName.flag !== "true") {
+                toastr["error"](tableName.flag, "错误！");
                 return;
             }
             createTableBySql_real(sql.newSql, tableName.newName)
@@ -581,12 +687,12 @@
             })
         }
 
-        function validateSql(_this) {
+        function validateSql(selectSql) {
             var result = {};
-            var selectSql = $.trim($(_this).parent().parent().find('[name="newSql"]').val());
+
             if (selectSql.length === 0) {
-                toastr["error"]("查询语句不能为空", "错误！");
-                return;
+                result["flag"] = "查询语句不能为空";
+                return result;
             }
             result["newSql"] = selectSql;
             $.ajax({
@@ -598,18 +704,18 @@
                     newSql: selectSql
                 },
                 success: function (data) {
-                    result["flg"] = data;
+                    result["flag"] = data;
                 }
             });
             return result;
         }
 
-        function validateTableName(_this) {
+        function validateTableName(newName) {
             var result = {};
-            var newName = $.trim($(_this).parent().parent().find('[name="newName"]').val());
+
             if (newName.length === 0) {
-                toastr["error"]("请输入新的表名", "错误！");
-                return;
+                result["flag"] = "请输入新的表名";
+                return result;
             }
             result["newName"] = newName;
             $.ajax({
@@ -621,7 +727,7 @@
                     newName: newName
                 },
                 success: function (data) {
-                    result["flg"] = data;
+                    result["flag"] = data;
                 }
             });
             return result;
@@ -827,24 +933,6 @@
     </script>
 
     <%--sql建表新增--%>
-    <script type="text/html" id="addSql">
-        <div class="col-md-12" style="margin-bottom: 10px;margin-left: 35px;" name="aaaa">
-            <div class="col-md-2" style="text-align: right">SQL查询</div>
-            <div class="col-md-4">
-                <input type="text" class="form-control sqlStatements inputVili">
-            </div>
-            <div class="col-md-2" style="margin: 0 -15px">
-                <input type="text" class="form-control inputVili" placeholder="新表名 " name="sqlTableName">
-            </div>
-            <div class="col-md-4">
-                <button type="button" class="btn blue preview">预览</button>
-                <button type="button" class="btn red removeSql"><span class="glyphicon glyphicon-trash"></span>删除
-                </button>
-            </div>
-
-        </div>
-    </script>
-
     <script type="text/html" id="tableNameOption">
         {{each data as v i}}
         <option value="{{v}}">{{v}}</option>
@@ -873,6 +961,32 @@
             {{/each}}
         </div>
         {{/each}}
+    </script>
+
+    <%--预览sql--%>
+    <script type="text/html" id="previewSqlData">
+        <thead>
+        <tr>
+            {{each columnName as item i}}
+            <th class="text-center">
+                {{item}}
+            </th>
+            {{/each}}
+        </tr>
+        </thead>
+        <tbody id="pre-body">
+        {{each data as item i}}
+        <tr class="text-center">
+            {{each item as vv ii}}
+            {{if vv == "" || vv == null}}
+            <td>-</td>
+            {{else}}
+            <td>{{vv}}</td>
+            {{/if}}
+            {{/each}}
+        </tr>
+        {{/each}}
+        </tbody>
     </script>
 </div>
 <%--模板定义 结束--%>

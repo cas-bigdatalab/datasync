@@ -739,11 +739,71 @@ public class FileImportService {
         return tableIsExist ? tableName + ":已经存在" : "true";
     }
 
-    public JSONObject previewSqlData(String salString, String subjectCode) {
-        return null;
+    public JSONObject previewSqlData(String sqlString, String subjectCode) {
+        JSONObject jsonObject = new JSONObject();
+        String validateSqlString = validateSqlString(sqlString, subjectCode);
+        if (!"true".equals(validateSqlString)) {
+            return null;
+        }
+
+        DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
+        Connection connection = getConnection(dataSrc);
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
+
+            // 获取字段名称列表
+            List<String> columnName = new ArrayList<>();
+            ResultSetMetaData metaData = preparedStatement.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            for (int i = 1; i <= columnCount; i++) {
+                String columnName1 = metaData.getColumnName(i);
+                if (!"PORTALID".equalsIgnoreCase(columnName1)) {
+                    columnName.add(columnName1);
+                }
+            }
+
+            // 取得实际数据
+            ResultSet resultSet = preparedStatement.executeQuery();
+            List<ArrayList<String>> dataList = new ArrayList<ArrayList<String>>();
+            while (resultSet.next() && dataList.size() < 11) {
+                ArrayList<String> datas = new ArrayList<>();
+                for (String name : columnName) {
+                    String data = resultSet.getString(name);
+                    datas.add(data);
+                }
+                dataList.add(datas);
+            }
+            jsonObject.put("columnName", columnName);
+            if (dataList.size() > 10) {
+                jsonObject.put("range", "out");
+                jsonObject.put("data", dataList.subList(0, 10));
+            } else {
+                jsonObject.put("range", "in");
+                jsonObject.put("data", dataList);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            jsonObject.put("code", "error");
+            jsonObject.put("message", "预览sql异常");
+            return jsonObject;
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        jsonObject.put("code", "success");
+        return jsonObject;
     }
 
     public String createTableBySql(String newSql, String newName, String subjectCode) {
+        String validateSqlString = validateSqlString(newSql, subjectCode);
+        if (!"true".equals(validateSqlString)) {
+            return "请检查sql语句";
+        }
         DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
         Connection connection = getConnection(dataSrc);
         String ddl = DDL2SQLUtils.generateDDLFromSql(connection, newSql, newName);

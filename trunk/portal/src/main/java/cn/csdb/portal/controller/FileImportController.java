@@ -207,6 +207,8 @@ public class FileImportController {
         return jsonObject;
     }
 
+    @PostMapping("/previewSqlData")
+    @ResponseBody
     public JSONObject previewSqlData(String sqlString, HttpServletRequest request) {
         String subjectCode = request.getSession().getAttribute("SubjectCode").toString();
         return fileImportService.previewSqlData(sqlString, subjectCode);
