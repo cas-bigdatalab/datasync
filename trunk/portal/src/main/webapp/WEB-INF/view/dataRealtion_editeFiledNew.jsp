@@ -387,6 +387,10 @@
             data["clumnCommet"] = clumnCommet;
             var listData = [];
             listData.push(data);
+            typeTemplate(myOption, listData, columnName);
+        });
+
+        function typeTemplate(myOption, listData, columnName) {
             if (myOption === '1') {
 
             }
@@ -459,7 +463,7 @@
                 var html = template("templTypeFile", {"listData": listData});
                 $("#showTypeDataDetail").append(html);
             }
-        });
+        }
 
         function cancel_btn() {
             $('.selShow').find('option').eq(0).attr("selected", true);
@@ -666,6 +670,76 @@
         //    删除关联表字段
         function func_removeSheetDate(i) {
             $(i).parent().parent().remove();
+        }
+
+        //回显数据
+        function getshowTypeData(tableName) {
+            $.ajax({
+                type: "post",
+                // url: ctx +"/getShowTypeInfMsg",
+                url: "${ctx}/getShowTypeInfMsg",
+                data: {"tableName": tableName, "subjectCode": curDataSubjectCode},
+                dataType: "json",
+                success: function (data) {
+                    if (data.showTypeInfmsg !== null) {
+                        // debugger
+                        var showTypeInfmsg = data.showTypeInfmsg;
+                        $("#tableComment").val(showTypeInfmsg.tableComment);
+                        var showTypeDetailList = data.showTypeInfmsg.showTypeDetailList;
+
+                        if ($(".fieldComsKey")) {
+                            $(".fieldComsKey").each(function (index, value, array) {
+                                var columnName = $(value).attr("fieldName");
+                                var columnComment = $($(".fieldComsValue")[index]).val();
+
+                                for (var i = 0; i < showTypeDetailList.length; i++) {
+                                    if (showTypeDetailList[i].columnName === columnName) {
+                                        var type = showTypeDetailList[i].type + 1;
+                                        if (showTypeDetailList[i].type !== 0) {
+                                            var s = "<button onclick=\" func_checkTypeDetail('" + columnName + "','" + showTypeDetailList[i].type + "','" + columnComment + "')\">详情</button>";
+                                            $("#" + columnName).append(s);
+                                            $("#" + columnName).show();
+                                        } else {
+                                            $("#" + columnName).hide();
+                                        }
+                                        $($(".sel")[index]).val(type);
+                                    }
+                                }
+
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
+        // 回显数据
+        function func_checkTypeDetail(columnName, type, columnComment) {
+            debugger;
+            var tableName = $("#span_tableName").html();
+            var data = {};
+            data["columnName"] = columnName;
+            data["tableName"] = tableName;
+            data["clumnCommet"] = columnComment;
+            var listData = [];
+            listData.push(data);
+            $.ajax({
+                type: "post",
+                url: "${ctx}/getShowTypeInfMsg",
+                data: {"tableName": tableName, "subjectCode": sub},
+                dataType: "json",
+                success: function (data) {
+                    debugger
+                    var showTypeInfmsg = data.showTypeInfmsg;
+                    var showTypeDetailList = data.showTypeInfmsg.showTypeDetailList;
+                    for (var i = 0; i < showTypeDetailList.length; i++) {
+                        if (showTypeDetailList[i].columnName === columnName && showTypeDetailList[i].status === 1) {
+                            var option = showTypeDetailList[i].type + 1;
+                            typeTemplate(option, listData, columnName);
+                        }
+                    }
+                }
+            });
         }
     </script>
 </div>

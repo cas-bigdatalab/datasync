@@ -650,7 +650,10 @@ public class ResourceController {
                                             @RequestParam(name = "publishOrganization") String publishOrganization,
                                             @RequestParam(name = "createOrganization") String createOrganization,
                                             @RequestParam(name = "createPerson") String createPerson,
-                                            @RequestParam(name = "extMetadata") String extMetadata) {
+                                            @RequestParam(name = "extMetadata") String extMetadata,
+                                            @RequestParam(name = "metaTemplateName", required = false) String metaTemplateName,
+                                            @RequestParam(name = "memo", required = false) String memo,
+                                            @RequestParam(name = "isTemplate", required = false) String isTemplate) {
         String subjectCode = session.getAttribute("SubjectCode").toString();
         Subject subject = subjectService.findBySubjectCode(subjectCode);
         JSONObject jsonObject = new JSONObject();
@@ -698,9 +701,8 @@ public class ResourceController {
 
         //xiajl20190310 增加
         System.out.println(extMetadata);
-
+        List<Map<String, Object>> list = new ArrayList<>();
         if (StringUtils.isNotEmpty(extMetadata)) {
-            List<Map<String, Object>> list = new ArrayList<>();
             JSONObject json = JSONObject.parseObject(extMetadata);
             for (Map.Entry<String, Object> map : json.entrySet()) {
                 Map<String, Object> item = new HashMap<>();
@@ -708,6 +710,36 @@ public class ResourceController {
                 list.add(item);
             }
             resource.setExtMetadata(list);
+        }
+
+        //添加模板
+        if ("true".equals(isTemplate)) {
+            MetaTemplate metaTemplate = new MetaTemplate();
+            metaTemplate.setMetaTemplateName(metaTemplateName);
+            metaTemplate.setMemo(memo);
+            metaTemplate.setMetaTemplateCreator(session.getAttribute("userName").toString());
+            metaTemplate.setMetaTemplateCreateDate(new Date());
+            metaTemplate.setSubjectCode(subjectCode);
+
+            metaTemplate.setTitle(title);
+            metaTemplate.setIntroduction(introduction);
+            metaTemplate.setImagePath(imagePath);
+            metaTemplate.setKeyword(keyword);
+            metaTemplate.setCatalogId(catalogId);
+            metaTemplate.setStartTime(startDate);
+            metaTemplate.setEndTime(endDate);
+            metaTemplate.setCreatedByOrganization(createdByOrganization);
+            metaTemplate.setCreateOrgnization(createOrganization);
+            metaTemplate.setCreatePerson(createPerson);
+            metaTemplate.setCreatorCreateTime(creatorCreateTime);
+            metaTemplate.setPublishOrgnization(publishOrganization);
+            metaTemplate.setEmail(email);
+            metaTemplate.setPhoneNum(phoneNum);
+            if (list.size() > 0) {
+                metaTemplate.setExtMetadata(list);
+            }
+            metaTemplateService.add(metaTemplate);
+
         }
 
         String resId = resourceService.save(resource);

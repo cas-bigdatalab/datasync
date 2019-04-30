@@ -31,28 +31,32 @@
                     <input type="text" class="form-control  input-sm fieldComsValue" style="width: 60%"
                            name="order_customer_name" value="{{tableInfo.columnComment}}" clumnCommet="{{tableInfo.columnComment}}">
                 </td>
-                <td>
+                <td class="td_showType">
                     {{if tableInfo.dataType=='int'||tableInfo.dataType=='integer'||tableInfo.dataType=='float'||tableInfo.dataType=='double'}}
-                    <select id="sel_type1" class="sel">
-                        <option class="sel_type" value="文本型" on="1">文本型</option>
-                        <option class="sel_type" value="字典枚举型" on="3" >字典枚举型</option>
-                        <option class="sel_type" value="关联数据表" on="4" >关联数据表</option>
+                    <select class="sel">
+                        <option class="sel_type" value="1" on="1">文本型</option>
+                        <option class="sel_type" value="3" on="3">字典枚举型</option>
+                        <option class="sel_type" value="4" on="4">关联数据表</option>
                     </select>
                     {{else if tableInfo.dataType=='date'||tableInfo.dataType=='time'||tableInfo.dataType=='datetime'}}
-                    <select id="sel_type2" class="sel">
-                        <option class="sel_type" value="文本型" on="1">文本型</option>
-                        <option class="sel_type" value="字典枚举型" on="3" >字典枚举型</option>
-                        <option class="sel_type" value="关联数据表" on="4" >关联数据表</option>
+                    <select class="sel">
+                        <option class="sel_type" value="1" on="1">文本型</option>
+                        <option class="sel_type" value="3" on="3">字典枚举型</option>
+                        <option class="sel_type" value="4" on="4">关联数据表</option>
                     </select>
                     {{else}}
-                    <select id="sel_type3" class="sel">
-                    <option class="sel_type" value="文本型" on="1" >文本型</option>
-                    <option class="sel_type" value="URL" on="2" >URL</option>
-                    <option class="sel_type" value="字典枚举型" on="3" >字典枚举型</option>
-                    <option class="sel_type" value="关联数据表" on="4" >关联数据表</option>
-                    <option class="sel_type" value="文件型" on="5" >文件型</option>
+                    <select class="sel">
+                        <option class="sel_type" value="1" on="1">文本型</option>
+                        <option class="sel_type" value="2" on="2">URL</option>
+                        <option class="sel_type" value="3" on="3">字典枚举型</option>
+                        <option class="sel_type" value="4" on="4">关联数据表</option>
+                        <option class="sel_type" value="5" on="5">文件型</option>
                     </select>
                     {{/if}}
+                    <span class="checkTypeDetail" id="{{tableInfo.columnName}}"
+                          style="display: none;border: 1px blue solid;">
+                    </span>
+
                 </td>
             </tr>
             {{/each}}

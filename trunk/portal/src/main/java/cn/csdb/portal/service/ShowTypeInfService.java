@@ -1,6 +1,7 @@
 package cn.csdb.portal.service;
 
 import cn.csdb.portal.model.Described_Table;
+import cn.csdb.portal.model.ShowTypeDetail;
 import cn.csdb.portal.model.ShowTypeInf;
 import cn.csdb.portal.repository.ShowTypeInfDao;
 import org.springframework.stereotype.Service;
@@ -60,13 +61,42 @@ public class ShowTypeInfService {
     }
 
     //    保存表名注释
-    public void saveTableComment(String tableName, String tableComment) {
-        showTypeInfDao.saveTableComment(tableName, tableComment);
+    public void saveTableComment(String tableName, String tableComment, String subjectCode) {
+        showTypeInfDao.saveTableComment(tableName, tableComment, subjectCode);
     }
 
     //点击外层保存按钮
-    public void updateSatusOne(String tableName) {
-        showTypeInfDao.updateSatusOne(tableName);
+    public void updateSatusOne(String tableName, String s_column[], String s_type[], String subjectCode) {
+//删除status=2的列的status=1的数据，并将status=2改为status=1；
+        showTypeInfDao.updateSatusOne(tableName, subjectCode);
+        ShowTypeInf showTypeInf = showTypeInfDao.checkData(tableName, subjectCode);
+        if (showTypeInf != null) {
+            if (showTypeInf.getShowTypeDetailList() != null) {
+                List<ShowTypeDetail> showTypeDetailList = showTypeInf.getShowTypeDetailList();
+                for (int i = 0; i < showTypeDetailList.size(); i++) {
+                    for (int j = 0; j < s_column.length; j++) {
+                        if (showTypeDetailList.get(i).getColumnName().equals(s_column[j]) && s_type[j].equals("1")) {
+                            showTypeInfDao.saveTypeText(tableName, s_column[j], subjectCode);
+                        }
+                    }
+                }
+                for (int ii = 0; ii < s_column.length; ii++) {
+                    if (isColumnExit(showTypeDetailList, s_column[ii]) == 0) {
+                        showTypeInfDao.saveTypeText(tableName, s_column[ii], subjectCode);
+                    }
+                }
+
+            }
+        }
+    }
+
+    public int isColumnExit(List<ShowTypeDetail> showTypeDetailList, String columnName) {
+        for (int i = 0; i < showTypeDetailList.size(); i++) {
+            if (showTypeDetailList.get(i).getColumnName().equals(columnName)) {
+                return 1;
+            }
+        }
+        return 0;
     }
 
     //    数据库关联表
@@ -79,9 +109,9 @@ public class ShowTypeInfService {
         showTypeInfDao.saveTypeFile(DisplayType, tableName, columnName, address, optionMode, Separator, subjectCode);
     }
 
-    //    查询该表设置的显示类型
-    public ShowTypeInf getShowTypeInf(String tableName){
-        ShowTypeInf showTypeInf=showTypeInfDao.getShowTypeInf(tableName);
+    //    查询该表设置的显示类型,回显
+    public ShowTypeInf getShowTypeInf(String tableName, String subjectCode) {
+        ShowTypeInf showTypeInf = showTypeInfDao.checkData(tableName, subjectCode);
         return showTypeInf;
     }
 

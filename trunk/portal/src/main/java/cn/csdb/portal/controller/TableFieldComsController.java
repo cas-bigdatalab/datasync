@@ -69,10 +69,11 @@ public class TableFieldComsController {
                                          @RequestParam(required = false) String tableName,
                                          @RequestParam(required = false) String tableInfos,
                                          @RequestParam(required = false) String state,
-                                         String tableComment) {
+                                         String tableComment, String showColumnType) {
         JSONObject jsonObject = new JSONObject();
         List<TableInfo> tableInfosList = JSON.parseArray(tableInfos, TableInfo.class);
         boolean result = tableFieldComsService.insertTableFieldComs(curDataSubjectCode, tableName, tableInfosList, state);
+
         // 注释完整之后更新MySQL中的注释
         if ("1".equals(state)) {
             String realPath = request.getRealPath("/") + "temp/";
@@ -80,9 +81,15 @@ public class TableFieldComsController {
         }
 
 //        保存表名注释
-        showTypeInfService.saveTableComment(tableName, tableComment);
-//点击外层保存按钮
-        showTypeInfService.updateSatusOne(tableName);
+        showTypeInfService.saveTableComment(tableName, tableComment, curDataSubjectCode);
+
+        String s_column[] = new String[tableInfosList.size()];
+        for (int i = 0; i < tableInfosList.size(); i++) {
+            s_column[i] = tableInfosList.get(i).getColumnName();
+        }
+        String s_type[] = showColumnType.split(",");
+        //点击外层保存按钮
+        showTypeInfService.updateSatusOne(tableName, s_column, s_type, curDataSubjectCode);
 
         jsonObject.put("result", result);
         return jsonObject;
@@ -173,8 +180,8 @@ public class TableFieldComsController {
         String subjectCode = String.valueOf(session.getAttribute("SubjectCode"));
         String s_Table[] = tables.split(",");
         String s_column[] = columns.split(",");
-        for (int i = 0; i < s_Table.length; i++)
-            System.out.println(s_Table[i] + "..." + s_column[i]);
+//        for (int i = 0; i < s_Table.length; i++)
+//            System.out.println(s_Table[i] + "..." + s_column[i]);
         showTypeInfService.saveTypeDatasheet(DisplayType, tableName, columnName, s_Table, s_column, subjectCode);
         return jsonObject;
     }
@@ -193,13 +200,30 @@ public class TableFieldComsController {
 
     @RequestMapping("/getShowTypeInfMsg")
     @ResponseBody
-    public JSONObject getShowTypeInf(String tableName){
+    public JSONObject getShowTypeInf(String tableName, String subjectCode) {
         JSONObject jsonObject=new JSONObject();
-        ShowTypeInf showTypeInf=showTypeInfService.getShowTypeInf(tableName);
+        ShowTypeInf showTypeInf = showTypeInfService.getShowTypeInf(tableName, subjectCode);
         if(showTypeInf==null){
             jsonObject.put("alert",0);//此表没有设置过显示类型
+        } else {
+            jsonObject.put("showTypeInfmsg", showTypeInf);
+//            List<ShowTypeDetail> showTypeDetailList=showTypeInf.getShowTypeDetailList();
+//            List<Integer> typeList=new ArrayList<>();
+//            List<String> columnList=new ArrayList<>();
+//            for(ShowTypeDetail s:showTypeDetailList){
+//                 typeList.add(s.getType());
+//                 columnList.add(s.getColumnName());
+//            }
+//            jsonObject.put("showTypeDetailList",typeList);
+//            jsonObject.put("columnList",columnList);
         }
-        jsonObject.put("showTypeInfmsg",showTypeInf);
           return jsonObject;
     }
+//    @RequestMapping("/getOneTypeDetail")
+//    @ResponseBody
+//    public JSONObject getOneTypeDetail(String tableName,String subjectCode,String column){
+//        JSONObject jsonObject=new JSONObject();
+//
+//        return jsonObject;
+//    }
     }

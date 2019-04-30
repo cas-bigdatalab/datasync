@@ -62,8 +62,9 @@ public class MetaTemplateService {
     public long countByPage(String subjectCode){
         return metaTemplateDao.countByPage(subjectCode);
     }
-    public List<MetaTemplate> getAllList(){
-        return metaTemplateDao.getAllList();
+
+    public List<MetaTemplate> getAllList(String subjectCode) {
+        return metaTemplateDao.getAllList(subjectCode);
     }
 
     public void deleteById(String id){

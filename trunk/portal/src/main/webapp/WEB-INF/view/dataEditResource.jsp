@@ -345,7 +345,8 @@
                                             </c:forEach>
 
                                         </div>
-
+                                        <!-- 增加:创建元数据模板 -->
+                                        <%@ include file="./metaTemplateCreate.jsp" %>
 
                                     </form>
 
@@ -607,6 +608,7 @@
             getResourceById();
 
             initFileTree();
+            $("#isTemplate").val("false");
         });
 
         function removeFileFromFtpAndUploadFilePath(deleteFileName) {
@@ -859,6 +861,17 @@
                         toastr["error"]("请填写必须项目");
                         return
                     }
+                    // 判断模板名称是否填写
+                    if ($("#isTemplate").prop("checked")) {
+                        debugger
+                        if ($.trim($("#metaTemplateName").val()) == "") {
+                            toastr["error"]("请填写模板名称");
+                            firstFlag = true;
+                            initNum--;
+                            return;
+                        }
+                    }
+
                     $("#firststep").removeClass("item active");
                     $("#firststep").addClass("item finish");
                     $(".fabu_div2").html("数据发布 - 第2步，共3步");
@@ -929,6 +942,16 @@
             }
         }
 
+        $("#isTemplate").click(function () {
+            if ($("#isTemplate").is(':checked')) {
+                $("#metaTemplateName").val($("#Task_dataName").val());
+                $("#divTemplate").show();
+                $("#isTemplate").val("true");
+            } else {
+                $("#divTemplate").hide();
+                $("#isTemplate").val("false");
+            }
+        });
         function initCenterResourceCatalogTree(container, index) {
             $.ajax({
                 url: ctx + "/getLocalResCatalog",
@@ -1121,7 +1144,11 @@
                     publishOrganization: $("#publish_Organization").val(),
                     createOrganization: $("#create_Organization").val(),
                     createPerson: $("#create_person").val(),
-                    extMetadata: extData
+                    extMetadata: extData,
+                    //增加元数据模板
+                    isTemplate: $("#isTemplate").val(),
+                    metaTemplateName: $.trim($("#metaTemplateName").val()),
+                    memo: $("#memo").val()
                 },
                 success: function (data) {
                 },
