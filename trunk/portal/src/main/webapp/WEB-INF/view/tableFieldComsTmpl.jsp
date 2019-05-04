@@ -54,7 +54,7 @@
                     </select>
                     {{/if}}
                     <span class="checkTypeDetail" id="{{tableInfo.columnName}}"
-                          style="display: none;border: 1px blue solid;">
+                          style="display: none;">
                     </span>
 
                 </td>

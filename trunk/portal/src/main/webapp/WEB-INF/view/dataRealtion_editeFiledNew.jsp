@@ -178,7 +178,7 @@
             <input type="radio" value="3" name="optionMode"/><label>FTP链接</label>
             <input type="radio" value="4" name="optionMode"/><label>图片类型</label>
             <br/>
-            <label>缺省值 </label><input type="text" name="address">
+            <label>缺省值 </label><input type="text" name="address" id="url_id">
             <br/>
             <input type="button" onclick="func_saveTypeURL()" value="确定" class="btn btn-success" data-dismiss="modal">
             <input type="button" value="取消" class="btn btn-success" data-dismiss="modal" onclick="cancel_btn();">
@@ -225,8 +225,11 @@
                 <input type="text" id="sheetDatacolumn1" name="columnName" value="{{value.columnName}}"
                        style="display: none">
                 <input type="text" name="tableComment" value="{{value.clumnCommet}}" style="display: none">
+
                 <label>字段标题</label> {{value.columnName}}({{value.clumnCommet}})<br/>
                 {{/each}}
+                <div id="exit_table" style="display:none;border: 1px red solid;width:500px;height:50px;">
+                </div>
                 <label>关联字段 </label>
                 <select id="checkedDataSheetTable" name="relationTable" class="relationTable">
                     <option value="null" name="">--请选择表名--</option>
@@ -268,9 +271,9 @@
                 <input type="radio" value="2" name="optionMode"/>图片列表
                 <input type="radio" value="3" name="optionMode"/>视频列表
                 <br/>
-                <label>主路径</label> <input type="text" name="address"/>
+                <label>主路径</label> <input id="main_address" type="text" name="address"/>
                 <br/>
-                <label>分隔符</label> <input type="text" name="Separator"/>
+                <label>分隔符</label> <input id="separator_id" type="text" name="Separator"/>
                 <br/>
                 <input type="button" onclick="func_saveTypeFile()" value="确定" class="btn btn-success"
                        data-dismiss="modal">
@@ -391,7 +394,6 @@
         });
 
         function typeTemplate(myOption, listData, columnName) {
-            debugger
             if (myOption === '1') {
 
             }
@@ -423,10 +425,10 @@
                     data: {"tableName": tableName, "subjectCode": sub, "columnName": columnName},
                     dataType: "json",
                     success: function (data) {
+                        debugger
                         data["listData"] = listData;
                         $("#showTypeDataDetail").empty();
                         $('#showTypeDataModal').modal({backdrop: "static"});
-                        // if(data.list)
                         var html = template("templTypeDatasheet", data);
                         $("#showTypeDataDetail").append(html);
                         $("#checkedDataSheetTable").on("change", function () {
@@ -693,7 +695,6 @@
                 dataType: "json",
                 success: function (data) {
                     if (data.showTypeInfmsg !== null) {
-                        // debugger
                         var showTypeInfmsg = data.showTypeInfmsg;
                         $("#tableComment").val(showTypeInfmsg.tableComment);
                         var showTypeDetailList = data.showTypeInfmsg.showTypeDetailList;
@@ -726,7 +727,6 @@
 
         // 回显数据
         function func_checkTypeDetail(columnName, type, columnComment) {
-            debugger;
             var tableName = $("#span_tableName").html();
             var data = {};
             data["columnName"] = columnName;
@@ -740,7 +740,6 @@
                 data: {"tableName": tableName, "subjectCode": sub},
                 dataType: "json",
                 success: function (data) {
-                    debugger
                     var showTypeInfmsg = data.showTypeInfmsg;
                     var showTypeDetailList = data.showTypeInfmsg.showTypeDetailList;
                     for (var i = 0; i < showTypeDetailList.length; i++) {
@@ -748,6 +747,68 @@
                             var option = '';
                             option = showTypeDetailList[i].type + 1 + '';
                             typeTemplate(option, listData, columnName);
+                            if (showTypeDetailList[i].type === 1) {
+                                if (showTypeDetailList[i].optionMode === "1") {
+                                    // $("#selectSite option[value='1']").attr("selected", "selected");
+                                    $('input:radio[name=optionMode]')[0].checked = true;
+                                }
+                                if (showTypeDetailList[i].optionMode === "2") {
+                                    $('input:radio[name=optionMode]')[1].checked = true;
+                                }
+                                if (showTypeDetailList[i].optionMode === "3") {
+                                    $('input:radio[name=optionMode]')[2].checked = true;
+                                }
+                                if (showTypeDetailList[i].optionMode === "4") {
+                                    $('input:radio[name=optionMode]')[3].checked = true;
+                                }
+                                $("#url_id").val(showTypeDetailList[i].address);
+                            }
+                            if (showTypeDetailList[i].type === 2) {
+                                if (showTypeDetailList[i].optionMode === "1") {
+                                    $('input:radio[name=optionMode]')[0].checked = true;
+                                    var enmus = showTypeDetailList[i].enumData;
+                                    var s = "";
+                                    for (var k = 0; k < enmus.length; k++) {
+                                        s += enmus[k].key + "=" + enmus[k].value + ","
+                                    }
+                                    s = s.substr(0, s.length - 1);
+                                    $("#enum_text").val(s);
+                                }
+                                if (showTypeDetailList[i].optionMode === "2") {
+                                    $('input:radio[name=optionMode]')[1].checked = true;
+                                    var s = "select " + showTypeDetailList[i].relationColumnK + "," + showTypeDetailList[i].relationColumnV + " from " + showTypeDetailList[i].relationTable;
+                                    $("#enum_sql").show();
+                                    $("#enum_text").hide();
+                                    $("#enum_sql").val(s);
+                                }
+                            }
+
+                            if (showTypeDetailList[i].type === 3) {
+                                debugger;
+                                var enmus = showTypeDetailList[i].enumData;
+                                var ss = "";
+                                for (var k = 0; k < enmus.length; k++) {
+                                    var table = enmus[i].key;
+                                    var column = enmus[i].value;
+                                    // s+="<input value='"+ table+"'/><input value='"+ column+"'/><br/>";
+                                    ss += "<div><input value='" + table + "'/><input value='" + column + "'/><span id='remove_id'><i class='fa fa-trash' onclick=\"func_removeSheetDate(this)\"></i></span></div>";
+                                }
+                                $("#exit_table").show();
+                                $("#exit_table").append(ss);
+                            }
+                            if (showTypeDetailList[i].type === 4) {
+                                if (showTypeDetailList[i].optionMode === "1") {
+                                    $('input:radio[name=optionMode]')[0].checked = true;
+                                }
+                                if (showTypeDetailList[i].optionMode === "2") {
+                                    $('input:radio[name=optionMode]')[1].checked = true;
+                                }
+                                if (showTypeDetailList[i].optionMode === "3") {
+                                    $('input:radio[name=optionMode]')[2].checked = true;
+                                }
+                                $("#main_address").val(showTypeDetailList[i].address);
+                                $("#separator_id").val(showTypeDetailList[i].separator);
+                            }
                         }
                     }
                 }

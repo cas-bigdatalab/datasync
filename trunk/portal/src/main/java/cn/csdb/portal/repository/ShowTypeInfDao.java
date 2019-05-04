@@ -24,8 +24,7 @@ public class ShowTypeInfDao {
 
     //该表是否设置过显示类型,是否有数据
     public ShowTypeInf checkData(String tableName, String subjectCode) {
-        ShowTypeInf showTypeInf = mongoTemplate.findOne(new Query(Criteria.where("subjectCode").is(subjectCode)
-                .and("tableName").is(tableName)), ShowTypeInf.class);
+        ShowTypeInf showTypeInf = mongoTemplate.findOne(new Query(Criteria.where("subjectCode").is(subjectCode).and("tableName").is(tableName)), ShowTypeInf.class);
         if (showTypeInf == null) {
             return null;
         } else {
