@@ -228,7 +228,7 @@
 
                 <label>字段标题</label> {{value.columnName}}({{value.clumnCommet}})<br/>
                 {{/each}}
-                <div id="exit_table" style="display:none;border: 1px red solid;width:500px;height:50px;">
+                <div id="exit_table" style="display:none;width:500px;height:50px;">
                 </div>
                 <label>关联字段 </label>
                 <select id="checkedDataSheetTable" name="relationTable" class="relationTable">
