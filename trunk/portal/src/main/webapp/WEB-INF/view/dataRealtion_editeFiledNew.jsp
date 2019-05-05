@@ -528,9 +528,16 @@
                 success: function (data) {
                 }
             });
-            $("#isdescribe").hide();
-            $("#undescribe").show();
-            $("#staticSourceTableChoiceModalNew").hide();
+            if ($(".qiehuan_div li:eq(0) a").hasClass("active")) {
+                $("#isdescribe").hide();
+                $("#undescribe").show();
+                $("#staticSourceTableChoiceModalNew").hide();
+            } else {
+                $("#isdescribe").show();
+                $("#undescribe").hide();
+                $("#staticSourceTableChoiceModalNew").hide();
+            }
+
         }
 
         //    关联数据表

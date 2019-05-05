@@ -287,6 +287,15 @@ function saveTableFieldComs(curDataSubjectCode, tableInfos) {
             dataType: "json",
             success: function () {
                 toastr["success"]("保存成功！");
+                if ($(".qiehuan_div li:eq(0) a").hasClass("active")) {
+                    $("#isdescribe").hide();
+                    $("#undescribe").show();
+                    $("#staticSourceTableChoiceModalNew").hide();
+                } else {
+                    $("#isdescribe").show();
+                    $("#undescribe").hide();
+                    $("#staticSourceTableChoiceModalNew").hide();
+                }
                 chooseTable(curDataSubjectCode,0);
             }
         });
