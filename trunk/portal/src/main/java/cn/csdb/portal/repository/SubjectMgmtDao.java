@@ -70,7 +70,7 @@ public class SubjectMgmtDao {
     public int addSubject(Subject subject) {
         logger.info("enterring SubjectMgmtDao-addSubject");
         logger.info("ftpRootPath = " + ftpRootPath);
-        String ftpFilePath = ftpRootPath + subject.getFtpUser()+File.separator;
+        String ftpFilePath = ftpRootPath + subject.getFtpUser() + "/";
         logger.info("ftpFilePath = " + ftpFilePath);
         subject.setFtpFilePath(ftpFilePath);
         subject.setDbName(subject.getSubjectCode());

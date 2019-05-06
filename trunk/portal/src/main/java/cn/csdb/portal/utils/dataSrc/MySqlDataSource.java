@@ -47,7 +47,7 @@ public class MySqlDataSource extends IDataSource{
                 if (rs.getString(4) != null
                         && (rs.getString(4).equalsIgnoreCase("TABLE") || rs
                         .getString(4).equalsIgnoreCase("VIEW"))) {
-                    String tableName = rs.getString(3).toLowerCase();
+                    String tableName = rs.getString(3);
                     tables.add(tableName);
                 }
             }

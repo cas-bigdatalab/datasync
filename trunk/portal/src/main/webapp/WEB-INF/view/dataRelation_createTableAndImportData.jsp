@@ -753,19 +753,6 @@
                     tableNameList = tableNameList.concat(data.list)
                 }
             });
-            $.ajax({
-                async: false,
-                type: "POST",
-                url: "${ctx}/relationalDatabaseTableList",
-                dataType: "JSON",
-                data: {
-                    subjectCode: sub,
-                    flag: "0"
-                },
-                success: function (data) {
-                    tableNameList = tableNameList.concat(data.list)
-                }
-            });
             var sort = tableNameList.sort();
             sort.splice(0, 0, "选择表");
             var html = template("tableNameOption", {"data": sort});

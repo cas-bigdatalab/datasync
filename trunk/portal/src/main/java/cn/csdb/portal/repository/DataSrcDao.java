@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.io.File;
 import java.sql.*;
-import java.util.*;
 import java.util.Date;
+import java.util.*;
 
 /**
  * Created by huangwei on 2016/4/7.
@@ -250,7 +250,7 @@ public class DataSrcDao {
                 if (rs.getString(4) != null
                         && (rs.getString(4).equalsIgnoreCase("TABLE") || rs
                         .getString(4).equalsIgnoreCase("VIEW"))) {
-                    String tableName = rs.getString(3).toLowerCase();
+                    String tableName = rs.getString(3);
                     l.add(tableName);
                 }
             }
