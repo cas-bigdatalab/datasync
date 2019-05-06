@@ -29,5 +29,27 @@
         <beans:prop key="dbPort">3306</beans:prop>
     </util:properties>
 
+    <util:properties id="menus">
+        <beans:prop key="organization_title">
+            学科节点
+        </beans:prop>
+
+        <beans:prop key="systemRole_root">
+            学科节点后台管理系统
+        </beans:prop>
+
+        <beans:prop key="systemRole_admin">
+            学科节点构建与发布工具
+        </beans:prop>
+
+        <beans:prop key="login">
+            科学学科节点构建与发布工具
+        </beans:prop>
+
+        <beans:prop key="copyright">
+            <!--@中国烟草总公司郑州烟草研究院 本网站由国家烟草专卖局科技司主管、中国烟草科技信息中心承办_0-->
+            019-2025 @ 中国科学院计算机网络信息中心 版权所有
+        </beans:prop>
+    </util:properties>
 
 </beans:beans>

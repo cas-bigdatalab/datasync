@@ -13,38 +13,13 @@
 <html>
 
 <head>
-    <title>
-        <shiro:hasRole name="admin">
-            主题库构建与发布工具
-        </shiro:hasRole>
-        <shiro:hasRole name="root">
-            学科数据后台管理系统
-        </shiro:hasRole>
-    </title>
     <style type="text/css">
-        .task-title {
-            line-height: 50px;
-            padding: 0 33px;
-            text-align: center;
-        }
-
         .task-title span {
             font-family: 'Arial Normal', 'Arial';
             font-weight: 400;
             font-style: normal;
             font-size: 28px;
             color: #000000;
-        }
-
-        .form-group {
-            overflow: hidden;
-        }
-
-        .messageCon {
-            background: -webkit-linear-gradient(whitesmoke, lightgrey); /* Safari 5.1 - 6.0 */
-            background: -o-linear-gradient(whitesmoke, lightgrey); /* Opera 11.1 - 12.0 */
-            background: -moz-linear-gradient(whitesmoke, lightgrey); /* Firefox 3.6 - 15 */
-            background: linear-gradient(whitesmoke, lightgrey); /* 标准的语法（必须放在最后） */
         }
 
         table.list td, table.list th {
@@ -58,78 +33,20 @@
 
 <body>
 
-<shiro:hasRole name="admin">
-    <h3><b>欢迎使用主题库构建与发布工具</b></h3>
-</shiro:hasRole>
-
 <shiro:hasRole name="root">
-    <%--<h1 style="margin-top: 20%;margin-left: 35%;"><b>欢迎使用学科数据后台管理系统</b></h1>--%>
-    <h1 style="margin-top: 20%;margin-left: 35%;"><b>欢迎使用主题库后台管理系统</b></h1>
+    <h1 style="margin-top: 20%;margin-left: 35%;"><b>欢迎使用${applicationScope.menus['systemRole_root']}</b></h1>
 </shiro:hasRole>
-<%--<shiro:hasRole name="admin">
-    <h3><b>欢迎使用主题库构建与发布工具</b></h3>
-    <hr>
-    <div class="task-title" style="font-size: 16px; font-weight: bold; padding-right:250px;text-align: center;">
-        <span>主题库节点信息</span>
-    </div>
-
-    <div class="messageCon"  style="font-size: 18px;padding: 25px 50px">
-
-
-
-            <div class="form-group">
-                <div  class="col-sm-4" style="text-align: right;font-weight: bold;color: #000000">主题库名称:</div>
-                <div class="col-sm-6" style="padding-left: 50px;">${subject.subjectName}</div>
-            </div>
-
-            <div class="form-group">
-                <div  class="col-sm-4 " style="text-align: right;font-weight: bold;color: #000000">主题库代码:</div>
-                <div class="col-sm-6" style="padding-left: 50px;">${subject.subjectCode}</div>
-            </div>
-
-            <div class="form-group">
-                <div  class="col-sm-4" style="text-align: right;font-weight: bold;color: #000000">管理员账号:</div>
-                <div class="col-sm-6" style="padding-left: 50px;">${subject.admin}</div>
-            </div>
-
-            &lt;%&ndash;<div class="form-group">
-                <label  class="col-sm-3 control-label">密码:</label>
-                <div class="col-sm-8">${subject.adminPasswd}</div>
-            </div>&ndash;%&gt;
-
-            <div class="form-group">
-                <div  class="col-sm-4" style="text-align: right;font-weight: bold;color: #000000">联系人:</div>
-                <div class="col-sm-6" style="padding-left: 50px;">${subject.contact}</div>
-            </div>
-
-            <div class="form-group">
-                <div  class="col-sm-4" style="text-align: right;font-weight: bold;color: #000000">电话:</div>
-                <div class="col-sm-6" style="padding-left: 50px;">${subject.phone}</div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-4" style="text-align: right;font-weight: bold;color: #000000">邮箱:</div>
-                <div class="col-sm-6" style="padding-left: 50px;">${subject.email}</div>
-            </div>
-
-
-            <div class="form-group">
-                <div  class="col-sm-4" style="text-align: right;font-weight: bold;color: #000000">描述:</div>
-                <div class="col-sm-6" style="padding-left: 50px;">${subject.brief}</div>
-            </div>
-    </div>
-
-</shiro:hasRole>--%>
 <shiro:hasRole name="admin">
+    <h3><b>欢迎使用${applicationScope.menus['systemRole_admin']}</b></h3>
     <div class="form">
         <table class="table list">
             <tbody>
             <tr>
-                <th>主题库名称:</th>
+                <th>${applicationScope.menus['organization_title']}名称:</th>
                 <td>${subject.subjectName}</td>
             </tr>
             <tr>
-                <th>主题库代码:</th>
+                <th>${applicationScope.menus['organization_title']}代码:</th>
                 <td>${subject.subjectCode}</td>
             </tr>
             <tr>

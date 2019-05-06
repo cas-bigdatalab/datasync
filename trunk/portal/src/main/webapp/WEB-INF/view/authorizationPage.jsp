@@ -48,7 +48,7 @@
         <table class="table list">
             <tbody>
             <tr>
-                <th>主题库名称:</th>
+                <th>${applicationScope.menus['organization_title']}名称:</th>
                 <td>${subject.subjectName}</td>
             </tr>
             <tr>

@@ -27,7 +27,7 @@
 <body>
 <div class="loginbg"></div>
 <div class="loginbox">
-    <h3>烟草科研主题库构建与发布工具</h3>
+    <h3>${applicationScope.menus['login']}</h3>
     <form action="${pageContext.request.contextPath}/login" method="post">
         <table>
             <tbody>

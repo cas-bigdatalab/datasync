@@ -17,10 +17,10 @@
 <head>
     <title>
         <shiro:hasRole name="admin">
-            主题库构建与发布工具
+            ${applicationScope.menus['systemRole_admin']}
         </shiro:hasRole>
         <shiro:hasRole name="root">
-            <%--学科数据后台管理系统--%>
+            ${applicationScope.menus['systemRole_root']}
         </shiro:hasRole>
     </title>
 
@@ -79,10 +79,6 @@
             padding-bottom: 10px;
         }
 
-        .btn {
-            border-radius: 6px !important;
-        }
-
         table td, table th {
             border-right: none !important;
             border-left: none !important;
@@ -96,22 +92,12 @@
             background: none !important;
         }
 
-        .alert.alert-info {
-            background-color: #cbe2fc !important;
-        }
-
-
         #upload-list th, #dataList th, #table_List1 th, #table_List2 th {
             background-color: #cbe2fc;
             text-align: center;
             font-size: 14px;
             font-weight: normal;
             color: #000;
-        }
-
-        button.btn.btn-danger {
-            background-color: #e5e5e5;
-            color: #333333
         }
 
         .right_div table tbody tr {
@@ -135,11 +121,10 @@
                 <div class="left_bottom">
                     <div class="left_top"><img src="${ctx}/resources/img/logo.png">
                         <shiro:hasRole name="admin">
-                            <span style="font-weight: bold;color: white;font-size: 20px;">主题库构建与发布工具</span>
+                            <span style="font-weight: bold;color: white;font-size: 20px;">${applicationScope.menus['systemRole_admin']}</span>
                         </shiro:hasRole>
                         <shiro:hasRole name="root">
-                            <%--<span style="font-weight: bold;color: white;font-size: 20px;">学科数据后台管理系统</span>--%>
-                            <span style="font-weight: bold;color: white;font-size: 20px;">主题库后台管理系统</span>
+                            <span style="font-weight: bold;color: white;font-size: 20px;">${applicationScope.menus['systemRole_root']}</span>
                         </shiro:hasRole>
                     </div>
                     <div class="user_div">
@@ -159,12 +144,9 @@
                     <div class="left_div">
                         <shiro:hasRole name="root">
                             <ul>
-                                    <%--<li><a href="${ctx}/subjectMgmt/subjectIndex"><i class="fa fa-cog"--%>
-                                    <%--aria-hidden="true"></i>--%>
-                                    <%--主题库节点注册管理</a>--%>
                                 <li><a href="${ctx}/subjectMgmt/subjectIndex"><i class="fa fa-cog"
                                                                                  aria-hidden="true"></i>
-                                    主题库注册管理</a>
+                                        ${applicationScope.menus['organization_title']}注册管理</a>
                                 </li>
                                 <li><a class="" href="${ctx}/resCatalog"><i class="fa fa-book"
                                                                             aria-hidden="true"></i> 数据分类管理</a>
@@ -192,7 +174,7 @@
                         <shiro:hasRole name="admin">
                             <ul>
                                 <li><a href="${ctx}/authorization"><i class="fa fa-cog" aria-hidden="true"></i>
-                                    专业库用户授权</a></li>
+                                        ${applicationScope.menus['organization_title']}用户授权</a></li>
                                 <li><a href="javaScript:void(0);"><i class="fa fa-database" aria-hidden="true"></i>
                                     关系数据管理</a>
                                     <ul>
@@ -232,11 +214,6 @@
             <div class="page-content" style="height:100%">
                 <div class="right_div">
                     <div id="content-top">
-                        <%--<div class="time_div">
-                            <a>
-                                <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
-                            </a>
-                        </div>--%>
                         <div class="fabu_div2"></div>
                     </div>
                     <div id="content">
@@ -249,9 +226,7 @@
     </div>
 </div>
 
-<%--<div class="foot_div">2019-2025 &copy; 中国科学院计算机网络信息中心 版权所有</div>--%>
-<div class="foot_div"> @中国烟草总公司郑州烟草研究院 本网站由国家烟草专卖局科技司主管、中国烟草科技信息中心承办
-</div>
+<div class="foot_div">${applicationScope.menus['copyright']}</div>
 
 
 <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
@@ -384,7 +359,6 @@
         $page_content.css("height", "95%");
 
 
-        /* $("#content").css("height", $page_content.height() - $("#content-top").height() - parseInt($(".fabu_div2").css("margin-bottom")) * 2 - parseInt($("div.right_div").css("padding-top")))*/
         $("#content").height("90%");
 
         $("#alltableName").niceScroll({cursorborder: "", cursorcolor: "#155aab", boxzoom: true}); // First scrollable DIV
