@@ -32,6 +32,18 @@ public class ShowTypeInfDao {
         }
     }
 
+    /**
+     * @Description: 根据subjectCode查询数据
+     * @Param: [subjectCode]
+     * @return: java.util.List<cn.csdb.portal.model.ShowTypeInf>
+     * @Author: zcy
+     * @Date: 2019/5/6
+     */
+    public List<ShowTypeInf> getShowTypeInfBySub(String subjectCode) {
+        List<ShowTypeInf> list = mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)), ShowTypeInf.class);
+        return list;
+    }
+
     //    判断该列是否设置过类型
     public List<ShowTypeDetail> checkColumn(List<ShowTypeDetail> list, String columnName) {
         for (int i = 0; i < list.size(); i++) {
@@ -244,7 +256,7 @@ public class ShowTypeInfDao {
     //    保存表名注释
     public void saveTableComment(String tableName, String tableComment, String subjectCode) {
         Update update = Update.update("tableName", tableName).set("tableComment", tableComment);
-        mongoTemplate.updateFirst(new Query(Criteria.where("subjectCode").is("subjectCode").and("tableName").is(tableName)), update, ShowTypeInf.class);
+        mongoTemplate.updateFirst(new Query(Criteria.where("subjectCode").is(subjectCode).and("tableName").is(tableName)), update, ShowTypeInf.class);
     }
 
     //    保存关联数据表
@@ -365,4 +377,5 @@ public void saveTypeFile(int DisplayType, String tableName, String columnName, S
         Update update = Update.update("tableName", tableName).set("showTypeDetailList", list);
         mongoTemplate.updateFirst(new Query(Criteria.where("subjectCode").is(subjectCode).and("tableName").is(tableName)), update, ShowTypeInf.class);
     }
+
 }

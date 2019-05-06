@@ -190,7 +190,9 @@
 <script type="text/html" id="tableNameTempl">
     {{each list as value i}}
     <li class="l3-menu">
-        <a href="javaScript:void(0)" onclick="editTableData(this,1)" id="{{value}}"><i class="fa fa-angle-right"></i>{{value}}</a>
+        <a href="javaScript:void(0)" onclick="editTableData(this,1)" id="{{value.tableName}}"
+           title="{{value.tableComment}}">
+            <i class="fa fa-angle-right"></i>{{value.tableName}}</a>
     </li>
     {{/each}}
 </script>
@@ -308,6 +310,7 @@
                     var delPORTALID;
                     var tabs = "";
                     var s = " ";
+                    var tableComment = data.tableComment;
                     s = "<table id='" + tableName + "' class='table table-hover biaoge' spellcheck='0' border='0'>" +
                         "<thead ><tr class='table_tr'>";
                     //表头
@@ -626,33 +629,69 @@
                     var columnComments = data.COLUMN_COMMENT;
                     var autoAddArr = data.autoAdd;
                     var pkColumnArr = data.pkColumn;
+                    var alert = data.alert;
                     var s = "";
                     for (var i = 0; i < strs2.length; i++) {
+
                         if (pkColumnArr[i] === "PRI" && autoAddArr[i] === "auto_increment") {
                             s += "<input style='display:none;'  type='text' name=" + strs2[i] + " value='0'/>";
                         } else if (pkColumnArr[i] === "PRI" && autoAddArr[i] !== "auto_increment") {
                             if (strs2[i] === "PORTALID") {
                                 s += "<input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='0'/>";
                             } else {
-                                s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td><input class='form-control' style='width: 100%;height:100%;'  name='" + strs2[i] + "' dataType='" + dataTypeArr[i] + "' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 10px;'></p></td></tr>";
+                                s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td>";
+                                var enumDataList = data.enumDataList;
+                                var flag = 0;
+                                for (var k = 0; k < enumDataList.length; k++) {
+                                    if (strs2[i] === enumDataList[k].key) {
+                                        flag = 1;
+                                        var sVal = enumDataList[k].value.split(",");
+                                        var selects = "<select class='form-control' style='width: 100%;height:100%;'  name='" + strs2[i] + "'>";
+                                        for (var kk = 0; kk < sVal.length; kk++) {
+                                            selects += "<option>" + sVal[kk] + "</option>";
+                                        }
+                                        selects += "</select>";
+                                        s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td>" + selects + "</td></tr>";
+
+                                    }
+                                }
+                                if (flag === 0)
+                                    s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td><td><input class='form-control' style='width: 100%;height:100%;'  name='" + strs2[i] + "' dataType='" + dataTypeArr[i] + "' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 10px;'></p></td></tr>";
+
                             }
                         } else {
-                            if(strs2[i] === "PORTALID"){
+                            if (strs2[i] === "PORTALID") {
                                 s += "<input style='display:none;' class='" + dataTypeArr[i] + "' type='text' name=" + strs2[i] + " value='0'/>";
-                            }else {
+                            } else {
                                 s += "<tr><td>" + strs2[i] + "</td><td>" + dataTypeArr[i] + "</td><td>" + columnComments[i] + "</td>";
 
                                 if (dataTypeArr[i] === "datetime") {
                                     s += "<td><input class='selectDataTime' style='width: 100%;height:100%;' id='" + strs2[i] + "' type='text'  placeholder='请选择'  /></td></tr>";
                                 } else if (dataTypeArr[i] === "date") {
                                     s += "<td><input class='selectData'  style='width: 100%;height:100%;' id='" + strs2[i] + "' type='text'  placeholder='请选择'/></td></tr>";
-                                } else if(dataTypeArr[i] === "time"){
+                                } else if (dataTypeArr[i] === "time") {
                                     s += "<td><input class='DataTime' style='width: 100%;height:100%;' id='" + strs2[i] + "' type='text'  placeholder='请选择'  /></td></tr>";
-                                }else{
-                                    s += "<td><input  id='" + strs2[i] + "' class='form-control' style='width:100%;height=100%'  name=" + strs2[i] + "  dataType='" + dataTypeArr[i] + "' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 10px;'></p></td></tr>";
+                                } else {
+                                    var enumDataList = data.enumDataList;
+                                    var flag = 0;
+                                    for (var k = 0; k < enumDataList.length; k++) {
+                                        if (strs2[i] === enumDataList[k].key) {
+                                            flag = 1;
+                                            var sVal = enumDataList[k].value.split(",");
+                                            var selects = "<select class='form-control' style='width: 100%;height:100%;'  name='" + strs2[i] + "'>";
+                                            for (var kk = 0; kk < sVal.length; kk++) {
+                                                selects += "<option>" + sVal[kk] + "</option>";
+                                            }
+                                            selects += "</select>";
+                                            s += "<td>" + selects + "</td></tr>";
+
+                                        }
+                                    }
+                                    if (flag === 0)
+                                        s += "<td><input  id='" + strs2[i] + "' class='form-control' style='width:100%;height=100%'  name=" + strs2[i] + "  dataType='" + dataTypeArr[i] + "' onblur=\"func_blur(this)\"/><p id='" + strs2[i] + "_id' style='display: none;color:red;font-size: 10px;'></p></td></tr>";
+                                }
                                 }
                             }
-                        }
                     }
                     // var html=template("adddataTmpl",data);
                     var s_add=" <button id='addbtn' class='btn btn-success' data-dismiss='modal' onclick=\"addTablefuntion('"+dataTypeArr+"','"+strs2+"','"+pkColumnArr+"','"+autoAddArr+"')\">保存</button>";

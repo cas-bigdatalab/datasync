@@ -1,20 +1,22 @@
 package cn.csdb.portal.controller;
 
-import cn.csdb.portal.model.DataComposeDemo;
-import cn.csdb.portal.model.DataSrc;
-import cn.csdb.portal.model.Subject;
+import cn.csdb.portal.model.*;
 import cn.csdb.portal.repository.CheckUserDao;
 import cn.csdb.portal.service.DataSrcService;
+import cn.csdb.portal.service.ShowTypeInfService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Controller
 public class EditDataController {
@@ -24,6 +26,8 @@ public class EditDataController {
     @Autowired
     private DataSrcService dataSrcService;
 
+    @Autowired
+    private ShowTypeInfService showTypeInfService;
 
 //    根据登录人员的subjectCode，获得对应数据库连接信息
     public DataSrc getDataSrc(String subjectCode){
@@ -46,8 +50,23 @@ public class EditDataController {
         DataSrc datasrc=getDataSrc(subjectCode);
         List<String> list = dataSrcService.relationalDatabaseTableList(datasrc);
 
-        System.out.println();
-        jsonObject.put("list", list);
+        List<ShowTypeInf> showTypeInfList1 = new ArrayList<>();
+        for (String s : list) {
+            if (showTypeInfService.getTableComment(s, subjectCode) != null) {
+                ShowTypeInf showTypeInf = showTypeInfService.getTableComment(s, subjectCode);
+                ShowTypeInf showTypeInf1 = new ShowTypeInf();
+                showTypeInf1.setTableName(s);
+                showTypeInf1.setTableComment(showTypeInf.getTableComment());
+                showTypeInfList1.add(showTypeInf1);
+            } else {
+                ShowTypeInf showTypeInf1 = new ShowTypeInf();
+                showTypeInf1.setTableName(s);
+                showTypeInf1.setTableComment("");
+                showTypeInfList1.add(showTypeInf1);
+            }
+        }
+
+        jsonObject.put("list", showTypeInfList1);
         jsonObject.put("dataSourceName", datasrc.getDataSourceName());
         return jsonObject;
     }
@@ -59,7 +78,6 @@ public class EditDataController {
         DataSrc datasrc=getDataSrc(subjectCode);
          List<Map<String,Object>> list=new ArrayList<>();
 
-//        Map<String,List<String>> map=dataSrcService.getColumnName(datasrc,tableName);
         Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);
         List<String> list3=map.get("COLUMN_NAME");
         List<String> list4=map.get("DATA_TYPE");
@@ -71,6 +89,12 @@ public class EditDataController {
         List<String> list1=new ArrayList<>();
         int countNum=dataSrcService.countData(datasrc,tableName);
         JSONObject jsonObject=new JSONObject();
+        ShowTypeInf showTypeInf = showTypeInfService.getTableComment(tableName, subjectCode);
+        if (showTypeInf != null) {
+            jsonObject.put("tableComment", showTypeInf.getTableComment());
+        } else {
+            jsonObject.put("tableComment", "");
+        }
         jsonObject.put("totalCount", countNum);
         jsonObject.put("currentPage", pageNo);
         jsonObject.put("pageSize", pageSize);
@@ -199,8 +223,6 @@ public class EditDataController {
 
         JSONObject jsonObject=new JSONObject();
         JSONArray jsonArray=JSONArray.parseArray(addData);
-//        System.out.println("请求成功！！！！"+tableName+"....."+addData+"..."+jsonArray.getJSONObject(1));
-
         String column="";
         String values="";
         DataSrc datasrc=getDataSrc(subjectCode);
@@ -294,19 +316,49 @@ public class EditDataController {
         jsonObject.put("COLUMN_COMMENT",list3);
         jsonObject.put("autoAdd",list4);
         jsonObject.put("pkColumn",list5);
-//        List<DataComposeDemo> d=new ArrayList<>();
-//        for(int i=0;i<list1.size();i++){
-//            DataComposeDemo composeDemo=new DataComposeDemo();
-//            composeDemo.setColName(list1.get(i));
-//            composeDemo.setAutoAdd(list4.get(i));
-//            composeDemo.setPkColumn(list5.get(i));
-//            composeDemo.setColumnComment(list3.get(i));
-//            composeDemo.setDataType(list2.get(i));
-////            composeDemo.setColumnType(list6.get(i));
-////            composeDemo.setData(list.get(i));
-//            d.add(composeDemo);
-//        }
-//        jsonObject.put("data",d);
+
+
+        List<EnumData> enumDataList = new ArrayList<>();
+//        判断该表是否设置过显示类型
+        ShowTypeInf showTypeInf = showTypeInfService.getTableComment(tableName, subjectCode);
+        if (showTypeInf == null) {
+            jsonObject.put("alert", 0);//该表没有设置过显示类型
+        } else {
+            for (int i = 0; i < list1.size(); i++) {
+                ShowTypeDetail showTypeDetail = showTypeInfService.getShowTypeDetail(showTypeInf, list1.get(i));
+                if (showTypeDetail != null) {
+                    EnumData enumData = new EnumData();
+                    String s = "";
+                    if (showTypeDetail.getType() == 2) {
+                        if (showTypeDetail.getOptionMode().equals("1")) { //文本串
+
+                            List<EnumData> enumText = showTypeDetail.getEnumData();
+
+                            for (EnumData e : enumText) {
+                                s += e.getValue() + ",";
+                            }
+                            enumData.setKey(list1.get(i));
+                            enumData.setValue(s);
+                            enumDataList.add(enumData);
+                        }
+                        if (showTypeDetail.getOptionMode().equals("2")) {  //sql
+                            String reTable = showTypeDetail.getRelationTable();
+                            String reColKey = showTypeDetail.getRelationColumnK();
+                            String reColVal = showTypeDetail.getRelationColumnV();
+                            List<String> list = dataSrcService.getDataByColumn(datasrc, tableName, list1.get(i));
+                            List<EnumData> enumSqlList = dataSrcService.getEnumData(datasrc, reTable, reColKey, reColVal);
+                            enumData = dataSrcService.enumCorresponding(list, enumSqlList);
+                            enumData.setKey(list1.get(i));
+                            enumDataList.add(enumData);
+                        }
+                    }
+                } else {
+                    jsonObject.put("alert", 0);//该列没有设置过显示类型
+                }
+            }
+            jsonObject.put("enumDataList", enumDataList);
+            jsonObject.put("alert", 1);
+        }
         return jsonObject;
     }
 

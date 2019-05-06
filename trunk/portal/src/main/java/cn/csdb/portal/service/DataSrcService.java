@@ -1,6 +1,7 @@
 package cn.csdb.portal.service;
 
 import cn.csdb.portal.model.DataSrc;
+import cn.csdb.portal.model.EnumData;
 import cn.csdb.portal.repository.DataSrcDao;
 import cn.csdb.portal.utils.SqlUtil;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
@@ -73,8 +74,6 @@ public class DataSrcService {
                 list5.add(set.getString("EXTRA"));
                 list6.add(set.getString("IS_NULLABLE"));
                 list7.add(set.getString("COLUMN_TYPE"));
-
-//                System.out.println(set.getString("COLUMN_KEY")+"..."+set.getString("EXTRA"));
             }
             map.put("COLUMN_NAME", list1);
             map.put("DATA_TYPE", list2);
@@ -98,26 +97,26 @@ public class DataSrcService {
         return map;
     }
 
-//    根据PORTALID查询数据
-    public List<String> getDataByPORTALID(DataSrc dataSrc, String tableName,String PORTALID){
+    //    根据PORTALID查询数据
+    public List<String> getDataByPORTALID(DataSrc dataSrc, String tableName, String PORTALID) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
-        List<String> list=new ArrayList<>();
+        List<String> list = new ArrayList<>();
         try {
             String sql = "SELECT * from " + tableName + " where PORTALID=?";
 
             PreparedStatement pst = connection.prepareStatement(sql);
-            pst.setString(1,PORTALID);
+            pst.setString(1, PORTALID);
             ResultSet set = pst.executeQuery();
             ResultSetMetaData rsm = set.getMetaData();
             while (set.next()) {
                 for (int i = 1; i <= rsm.getColumnCount(); i++) {
-                    if (set.getString(rsm.getColumnName(i)) == null||set.getString(rsm.getColumnName(i)).equals("")){
+                    if (set.getString(rsm.getColumnName(i)) == null || set.getString(rsm.getColumnName(i)).equals("")) {
                         list.add("");
-                    }else {
+                    } else {
                         list.add(set.getString(rsm.getColumnName(i)));
                     }
-                    System.out.println("aaaaaaaallll"+set.getString(rsm.getColumnName(i)));
+                    System.out.println("aaaaaaaallll" + set.getString(rsm.getColumnName(i)));
                 }
             }
 
@@ -135,6 +134,7 @@ public class DataSrcService {
         }
         return list;
     }
+
     //    删除表数据
     public int deleteDate(String tableName, String delPORTALID, DataSrc dataSrc) {
         int i = 0;
@@ -167,14 +167,7 @@ public class DataSrcService {
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
         List<String> list1 = new ArrayList<>();
         try {
-
-//            String sql = " SELECT a.column_Name AS columnName,CASE WHEN p.column_Name IS NULL THEN 'false' ELSE 'true'END AS pkColumn,CASE WHEN a.extra = 'auto_increment' " +
-//                    "THEN  'true'  ELSE 'false' END AS autoAdd,a.data_type jdbcType, column_COMMENT descr FROM information_schema. COLUMNS a  " +
-//                    "LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS p ON a.table_schema = p.table_schema AND a.table_name = p.TABLE_NAME AND a.COLUMN_NAME = p.COLUMN_NAME AND p.constraint_name = 'PRIMARY' " +
-//                    "WHERE a.table_schema = ? AND a.table_name = ? ORDER BY  a.ordinal_position";
-            String sql="SELECT COLUMN_NAME FROM information_schema. COLUMNS WHERE table_schema = ? AND table_name = ? ";
-
-//            String sql="select  COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT from information_schema.COLUMNS where TABLE_SCHEMA= ? and table_name =?";
+            String sql = "SELECT COLUMN_NAME FROM information_schema. COLUMNS WHERE table_schema = ? AND table_name = ? ";
             PreparedStatement pst = connection.prepareStatement(sql);
             pst.setString(1, dataSrc.getDatabaseName());
             pst.setString(2, tableName);
@@ -271,7 +264,7 @@ public class DataSrcService {
         return i;
     }
 
-    //    分页
+    //    分页，统计数据总数
     public int countData(DataSrc dataSrc, String tableName) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
@@ -300,33 +293,6 @@ public class DataSrcService {
         return count;
     }
 
-//    根据主键查询数据条数
-    public int countByPrimaryKey(DataSrc dataSrc, String tableName,String columnName,Object pkus){
-        int n=0;
-        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
-        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
-        try {
-         String sql="select count(*) as num from  "+ tableName + " where  "+columnName +"= ?";
-            PreparedStatement pst = connection.prepareStatement(sql);
-            pst.setObject(1,pkus);
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                n = rs.getInt("num");
-            }
-            pst.close();
-            rs.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                connection.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return n;
-    }
-
     //    连接mysql数据库，根据表明查出所有数据，供编辑
     public List<Map<String, Object>> getTableData(DataSrc dataSrc, String tableName, int pageNo, int pageSize) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
@@ -350,7 +316,6 @@ public class DataSrcService {
                     } else {
                         map.put(rsm.getColumnName(i), set.getString(rsm.getColumnName(i)));
                     }
-//                       System.out.println("第"+i+"列的值"+"列名："+rsm.getColumnName(i)+",,,"+set.getString(rsm.getColumnName(i)));
                 }
                 listMap.add(map);
             }
@@ -368,82 +333,21 @@ public class DataSrcService {
         return listMap;
     }
 
-//    显示表数据测试
-public List<List<Object>> getTableDataTestTmpl(DataSrc dataSrc, String tableName, int pageNo, int pageSize) {
-    IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
-    Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
-    List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
-    List<List<Object>> lists=new ArrayList<>();
 
-    int start = pageSize * (pageNo - 1);
-    try {
-//           select COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT from information_schema.COLUMNS where table_name = '表名' and table_schema = '数据库名称';
-        String sql = "select * from " + tableName + " limit " + start + " ," + pageSize + "";
-
-        //         时间格式的数据怎么获得
-        PreparedStatement pst = connection.prepareStatement(sql);
-        ResultSet set = pst.executeQuery();
-        ResultSetMetaData rsm = set.getMetaData();
-        while (set.next()) {
-          List<Object> list=new ArrayList<>();
-            for (int i = 1; i <= rsm.getColumnCount(); i++) {
-                if (set.getString(rsm.getColumnName(i)) == null) {
-//                    map.put(rsm.getColumnName(i), "");
-                    list.add("");
-                } else {
-//                    map.put(rsm.getColumnName(i), set.getString(rsm.getColumnName(i)));
-                    list.add(set.getString(rsm.getColumnName(i)));
-                }
-//                       System.out.println("第"+i+"列的值"+"列名："+rsm.getColumnName(i)+",,,"+set.getString(rsm.getColumnName(i)));
-            }
-            lists.add(list);
-        }
-        pst.close();
-        set.close();
-    } catch (Exception e) {
-        e.printStackTrace();
-    } finally {
-        try {
-            connection.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    return lists;
-}
-
-    //    连接mysql数据库，根据表明查出所有数据，供编辑
-    public List<List<Object>> getTableData1(DataSrc dataSrc, String tableName, int pageNo, int pageSize) {
+    public List<EnumData> getEnumData(DataSrc dataSrc, String tableName, String colK, String colV) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
-        List<List<Object>> list = new ArrayList<>();
-        int start = pageSize * (pageNo - 1);
+        List<EnumData> list = new ArrayList<>();
         try {
-//           select COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT from information_schema.COLUMNS where table_name = '表名' and table_schema = '数据库名称';
-            String sql = "select * from " + tableName + " limit " + start + " ," + pageSize + "";
-
-            //         时间格式的数据怎么获得
+            String sql = "select distinct " + colK + "," + colV + " from " + tableName;
             PreparedStatement pst = connection.prepareStatement(sql);
             ResultSet set = pst.executeQuery();
-            ResultSetMetaData rsm = set.getMetaData();
-
             while (set.next()) {
-//                Map<String, Object> map = new HashMap<>();
-                List<Object> list1=new ArrayList<>();
-                for (int i = 1; i <= rsm.getColumnCount(); i++) {
-//                    if (set.getString(rsm.getColumnName(i)) == null) {
-//                        map.put(rsm.getColumnName(i), "");
-//                    } else {
-//                        map.put(rsm.getColumnName(i), set.getString(rsm.getColumnName(i)));
-//                    }
-                    list1.add(rsm.getColumnName(i));
-//                       System.out.println("第"+i+"列的值"+"列名："+rsm.getColumnName(i)+",,,"+set.getString(rsm.getColumnName(i)));
-                }
-//                listMap.add(map);
-                list.add(list1);
+                EnumData enumData = new EnumData();
+                enumData.setKey(set.getString(colK));
+                enumData.setValue(set.getString(colV));
+                list.add(enumData);
             }
-            pst.close();
-            set.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -456,6 +360,68 @@ public List<List<Object>> getTableDataTestTmpl(DataSrc dataSrc, String tableName
         return list;
     }
 
+    public List<String> getDataByColumn(DataSrc dataSrc, String tableName, String columnName) {
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        List<String> list = new ArrayList<>();
+        try {
+            String sql = "select distinct " + columnName + " from " + tableName;
+            PreparedStatement pst = connection.prepareStatement(sql);
+            ResultSet set = pst.executeQuery();
+            while (set.next()) {
+                list.add(set.getString(columnName));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
+    //    显示表数据
+    public List<List<Object>> getTableDataTestTmpl(DataSrc dataSrc, String tableName, int pageNo, int pageSize) {
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+        List<List<Object>> lists = new ArrayList<>();
+
+        int start = pageSize * (pageNo - 1);
+        try {
+//           select COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT from information_schema.COLUMNS where table_name = '表名' and table_schema = '数据库名称';
+            String sql = "select * from " + tableName + " limit " + start + " ," + pageSize + "";
+
+            PreparedStatement pst = connection.prepareStatement(sql);
+            ResultSet set = pst.executeQuery();
+            ResultSetMetaData rsm = set.getMetaData();
+            while (set.next()) {
+                List<Object> list = new ArrayList<>();
+                for (int i = 1; i <= rsm.getColumnCount(); i++) {
+                    if (set.getString(rsm.getColumnName(i)) == null) {
+                        list.add("");
+                    } else {
+                        list.add(set.getString(rsm.getColumnName(i)));
+                    }
+                }
+                lists.add(list);
+            }
+            pst.close();
+            set.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return lists;
+    }
 
     public boolean validateSql(String sql, int dataSourceId) {
         if (!SqlUtil.validateSelectSql(sql)) {
@@ -467,6 +433,20 @@ public List<List<Object>> getTableDataTestTmpl(DataSrc dataSrc, String tableName
         if (connection == null)
             return false;
         return dataSource.validateSql(connection, sql);
+    }
+
+    public EnumData enumCorresponding(List<String> list, List<EnumData> enumDataList) {
+        EnumData enumDataList1 = new EnumData();
+        String ss = "";
+        for (String s : list) {
+            for (EnumData e : enumDataList) {
+                if (s.equals(e.getKey())) {
+                    ss += e.getValue() + ",";
+                }
+            }
+        }
+        enumDataList1.setValue(ss);
+        return enumDataList1;
     }
 
 }

@@ -91,7 +91,7 @@
                                         备注：</label><input type="text" value="" name="tableComment" id="tableComment">
                                     </div>
                                     <div class="tab-pane active" id="editTableFieldComsId"
-                                         style="width:99%;max-height:70%;overflow: hidden;overflow: auto;">
+                                         style="width:99%;max-height:70%;overflow: hidden;">
                                     </div>
 
                                     <div class="tab-pane" id="previewTableDataAndComsId"
@@ -103,7 +103,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" id="editTableFieldComsSaveId" data-dismiss="modal">保存
+                    <button type="button" class="btn btn-success" id="editTableFieldComsSaveId" data-dismiss="modal"
+                            onclick="fun_saveTbaleFields()">保存
                     </button>
                     <button type="button" data-dismiss="modal" class="btn default" id="editTableFieldComsCloseId" onclick="func_cancelBtn()">取消
                     </button>
@@ -241,7 +242,6 @@
                     <option value="null" name="">--请选择列名--</option>
                 </select>
                 <span id="addTable_id" onclick="func_addSheetTable()"><i class="fa fa-plus"></i>增加</span>
-                <%--<label>显示风格</label> <input type="checkbox" value=""/>字段一<input type="checkbox" value=""/>字段二<input type="checkbox" value=""/>字段三--%>
                 <br/>
                 <div id="addTableList" style="margin-left: 60px;">
 
@@ -273,7 +273,12 @@
                 <br/>
                 <label>主路径</label> <input id="main_address" type="text" name="address"/>
                 <br/>
-                <label>分隔符</label> <input id="separator_id" type="text" name="Separator"/>
+                <label>分隔符</label>
+                <%--<input id="separator_id" type="text" name="Separator"/>--%>
+                <select id="separator_id" name="Separator">
+                    <option value=";" name="">;</option>
+                    <option value=",">,</option>
+                </select>
                 <br/>
                 <input type="button" onclick="func_saveTypeFile()" value="确定" class="btn btn-success"
                        data-dismiss="modal">
@@ -419,45 +424,7 @@
                         tableName = $(value).attr("tablename");
                     })
                 }
-                $.ajax({
-                    type: "post",
-                    url: "${ctx}/getDatasheetTable",
-                    data: {"tableName": tableName, "subjectCode": sub, "columnName": columnName},
-                    dataType: "json",
-                    success: function (data) {
-                        debugger
-                        data["listData"] = listData;
-                        $("#showTypeDataDetail").empty();
-                        $('#showTypeDataModal').modal({backdrop: "static"});
-                        var html = template("templTypeDatasheet", data);
-                        $("#showTypeDataDetail").append(html);
-                        $("#checkedDataSheetTable").on("change", function () {
-                            var tName = $("#checkedDataSheetTable option:selected").val();//选中的值
-
-                            //级联查询表字段
-                            $.ajax({
-                                type: "post",
-                                url: "${ctx}/getDatasheetTableColumn",
-                                data: {"tableName": tName, "subjectCode": sub},
-                                dataType: "json",
-                                success: function (data) {
-                                    $("#tableColunm_id").html("");
-                                    var column = data.list;
-                                    var s = "";
-                                    for (var i = 0; i < column.length; i++) {
-                                        if (column[i] === "PORTALID") {
-
-                                        } else {
-                                            s += "<option value='" + column[i] + "'>" + column[i] + "</option>"
-                                        }
-                                    }
-                                    $("#tableColunm_id").append(s);
-                                }
-                            })
-
-                        })
-                    }
-                });
+                getSheetTable(tableName, columnName, listData);
 
             }
             if (myOption === '5') {
@@ -466,6 +433,48 @@
                 var html = template("templTypeFile", {"listData": listData});
                 $("#showTypeDataDetail").append(html);
             }
+        }
+
+        //关联数据表
+        function getSheetTable(tableName, columnName, listData) {
+            $.ajax({
+                type: "post",
+                url: "${ctx}/getDatasheetTable",
+                data: {"tableName": tableName, "subjectCode": sub, "columnName": columnName},
+                dataType: "json",
+                success: function (data) {
+                    data["listData"] = listData;
+                    $("#showTypeDataDetail").empty();
+                    $('#showTypeDataModal').modal({backdrop: "static"});
+                    var html = template("templTypeDatasheet", data);
+                    $("#showTypeDataDetail").append(html);
+                    $("#checkedDataSheetTable").on("change", function () {
+                        var tName = $("#checkedDataSheetTable option:selected").val();//选中的值
+
+                        //级联查询表字段
+                        $.ajax({
+                            type: "post",
+                            url: "${ctx}/getDatasheetTableColumn",
+                            data: {"tableName": tName, "subjectCode": sub},
+                            dataType: "json",
+                            success: function (data) {
+                                $("#tableColunm_id").html("");
+                                var column = data.list;
+                                var s = "";
+                                for (var i = 0; i < column.length; i++) {
+                                    if (column[i] === "PORTALID") {
+
+                                    } else {
+                                        s += "<option value='" + column[i] + "'>" + column[i] + "</option>"
+                                    }
+                                }
+                                $("#tableColunm_id").append(s);
+                            }
+                        })
+
+                    })
+                }
+            });
         }
 
         function cancel_btn() {
@@ -531,10 +540,12 @@
             if ($(".qiehuan_div li:eq(0) a").hasClass("active")) {
                 $("#isdescribe").hide();
                 $("#undescribe").show();
+                $(".qiehuan_div").show();
                 $("#staticSourceTableChoiceModalNew").hide();
             } else {
                 $("#isdescribe").show();
                 $("#undescribe").hide();
+                $(".qiehuan_div").show();
                 $("#staticSourceTableChoiceModalNew").hide();
             }
 
@@ -665,7 +676,6 @@
                                 success: function (data) {
                                     $(_this).parent().find('.relationColumn').html("");
                                     var column = data.list;
-                                    // var s = "<option value='null' name=''>--请选择列名--</option>";
                                     var s = "";
                                     for (var i = 0; i < column.length; i++) {
                                         if (column[i] === "PORTALID") {
@@ -694,14 +704,14 @@
 
         //回显数据
         function getshowTypeData(tableName) {
+            debugger
             $.ajax({
                 type: "post",
-                // url: ctx +"/getShowTypeInfMsg",
                 url: "${ctx}/getShowTypeInfMsg",
                 data: {"tableName": tableName, "subjectCode": curDataSubjectCode},
                 dataType: "json",
                 success: function (data) {
-                    if (data.showTypeInfmsg !== null) {
+                    if (data.alert === 1) {
                         var showTypeInfmsg = data.showTypeInfmsg;
                         $("#tableComment").val(showTypeInfmsg.tableComment);
                         var showTypeDetailList = data.showTypeInfmsg.showTypeDetailList;
@@ -712,7 +722,7 @@
                                 var columnComment = $($(".fieldComsValue")[index]).val();
 
                                 for (var i = 0; i < showTypeDetailList.length; i++) {
-                                    if (showTypeDetailList[i].columnName === columnName) {
+                                    if (showTypeDetailList[i].columnName === columnName && showTypeDetailList[i].status === 1) {
                                         var type = showTypeDetailList[i].type + 1;
                                         if (showTypeDetailList[i].type !== 0) {
                                             var s = "<button onclick=\" func_checkTypeDetail('" + columnName + "','" + showTypeDetailList[i].type + "','" + columnComment + "')\">详情</button>";
@@ -753,8 +763,8 @@
                         if (showTypeDetailList[i].columnName === columnName && showTypeDetailList[i].status === 1) {
                             var option = '';
                             option = showTypeDetailList[i].type + 1 + '';
-                            typeTemplate(option, listData, columnName);
                             if (showTypeDetailList[i].type === 1) {
+                                typeTemplate(option, listData, columnName);
                                 if (showTypeDetailList[i].optionMode === "1") {
                                     // $("#selectSite option[value='1']").attr("selected", "selected");
                                     $('input:radio[name=optionMode]')[0].checked = true;
@@ -771,6 +781,7 @@
                                 $("#url_id").val(showTypeDetailList[i].address);
                             }
                             if (showTypeDetailList[i].type === 2) {
+                                typeTemplate(option, listData, columnName);
                                 if (showTypeDetailList[i].optionMode === "1") {
                                     $('input:radio[name=optionMode]')[0].checked = true;
                                     var enmus = showTypeDetailList[i].enumData;
@@ -794,16 +805,72 @@
                                 debugger;
                                 var enmus = showTypeDetailList[i].enumData;
                                 var ss = "";
-                                for (var k = 0; k < enmus.length; k++) {
-                                    var table = enmus[i].key;
-                                    var column = enmus[i].value;
-                                    // s+="<input value='"+ table+"'/><input value='"+ column+"'/><br/>";
-                                    ss += "<div><input value='" + table + "'/><input value='" + column + "'/><span id='remove_id'><i class='fa fa-trash' onclick=\"func_removeSheetDate(this)\"></i></span></div>";
+                                // getSheetTable(tableName,columnName,listData);
+                                // $("#checkedDataSheetTable option[value='ani']").attr("selected", true);
+                                // $("#checkedDataSheetTable").val('ani');
+                                // $("#tableColunm_id").val('name');
+                                if (enmus !== null || enmus !== "") {
+                                    $.ajax({
+                                        type: "post",
+                                        url: "${ctx}/getDatasheetTable",
+                                        data: {"tableName": tableName, "subjectCode": sub, "columnName": columnName},
+                                        dataType: "json",
+                                        success: function (data) {
+                                            data["listData"] = listData;
+                                            $("#showTypeDataDetail").empty();
+
+                                            $('#showTypeDataModal').modal({backdrop: "static"});
+                                            var html = template("templTypeDatasheet", data);
+                                            $("#showTypeDataDetail").append(html);
+                                            for (var k = 0; k < enmus.length; k++) {
+                                                var table = enmus[i].key;
+                                                var column = enmus[i].value;
+                                                // ss += "<div><input value='" + table + "'/><input value='" + column + "'/><span id='remove_id'><i class='fa fa-trash' onclick=\"func_removeSheetDate(this)\"></i></span></div>";
+                                                var templ = template("addSheetTable", data);
+                                                $("#exit_table").append(templ);
+                                                $("#checkedDataSheetTable").val('ani');
+                                                $("#tableColunm_id").val('name');
+                                                $("#exit_table").show();
+
+                                            }
+                                            // $("#exit_table").append(ss);
+
+
+                                            $("#checkedDataSheetTable").on("change", function () {
+                                                var tName = $("#checkedDataSheetTable option:selected").val();//选中的值
+
+                                                //级联查询表字段
+                                                <%--$.ajax({--%>
+                                                <%--type: "post",--%>
+                                                <%--url: "${ctx}/getDatasheetTableColumn",--%>
+                                                <%--data: {"tableName": tName, "subjectCode": sub},--%>
+                                                <%--dataType: "json",--%>
+                                                <%--success: function (data) {--%>
+                                                <%--$("#tableColunm_id").html("");--%>
+                                                <%--var column = data.list;--%>
+                                                <%--var s = "";--%>
+                                                <%--for (var i = 0; i < column.length; i++) {--%>
+                                                <%--if (column[i] === "PORTALID") {--%>
+
+                                                <%--} else {--%>
+                                                <%--s += "<option value='" + column[i] + "'>" + column[i] + "</option>"--%>
+                                                <%--}--%>
+                                                <%--}--%>
+                                                <%--$("#tableColunm_id").append(s);--%>
+                                                <%--}--%>
+                                                <%--})--%>
+
+                                            })
+                                        }
+                                    });
                                 }
-                                $("#exit_table").show();
-                                $("#exit_table").append(ss);
+
+                                $("#checkedDataSheetTable option[value='+ enums[0].key +']").attr("selected", "selected");
+
+
                             }
                             if (showTypeDetailList[i].type === 4) {
+                                typeTemplate(option, listData, columnName);
                                 if (showTypeDetailList[i].optionMode === "1") {
                                     $('input:radio[name=optionMode]')[0].checked = true;
                                 }

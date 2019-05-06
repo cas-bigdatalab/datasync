@@ -207,15 +207,7 @@ public class TableFieldComsController {
             jsonObject.put("alert",0);//此表没有设置过显示类型
         } else {
             jsonObject.put("showTypeInfmsg", showTypeInf);
-//            List<ShowTypeDetail> showTypeDetailList=showTypeInf.getShowTypeDetailList();
-//            List<Integer> typeList=new ArrayList<>();
-//            List<String> columnList=new ArrayList<>();
-//            for(ShowTypeDetail s:showTypeDetailList){
-//                 typeList.add(s.getType());
-//                 columnList.add(s.getColumnName());
-//            }
-//            jsonObject.put("showTypeDetailList",typeList);
-//            jsonObject.put("columnList",columnList);
+            jsonObject.put("alert", 1);//此表设置过显示类型
         }
           return jsonObject;
     }

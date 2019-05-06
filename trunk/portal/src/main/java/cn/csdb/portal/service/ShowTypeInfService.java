@@ -40,7 +40,7 @@ public class ShowTypeInfService {
             String s_col = c2[1].trim();
             String s_col2 = c3[0].trim();
             String s_Table = c3[1].trim();
-            String relationTable=s_Table;
+            String relationTable = s_Table;
             String relationColumnK = s_col;
             String relationColumnV = s_col2;
 
@@ -115,6 +115,8 @@ public class ShowTypeInfService {
         return showTypeInf;
     }
 
+
+    //    关联的表都是已描述的表
     public List<String> getAllDescribed(String subjectCode, String tableName, String columnName) {
         List<Described_Table> list = showTypeInfDao.getAllDescribed(subjectCode); //已描述表
         List<String> list1 = new ArrayList<>();
@@ -125,20 +127,51 @@ public class ShowTypeInfService {
                 }
             }
         }
-        List<String> exitTable = showTypeInfDao.getSheetTable(tableName, columnName);
-        if (exitTable != null) {
-            for (int i = 0; i < list1.size(); i++) {
-                for (int j = 0; j < exitTable.size(); j++) {
-                    if (list1.get(i).equals(exitTable.get(j))) {
-                        list1.remove(i);
-                    }
-                }
-            }
-        } else {
-            return list1;
-        }
+//        将已经关联的表过滤掉
+//        List<String> exitTable = showTypeInfDao.getSheetTable(tableName, columnName);
+//        if (exitTable != null) {
+//            for (int i = 0; i < list1.size(); i++) {
+//                for (int j = 0; j < exitTable.size(); j++) {
+//                    if (list1.get(i).equals(exitTable.get(j))) {
+//                        list1.remove(i);
+//                    }
+//                }
+//            }
+//        } else {
+//            return list1;
+//        }
 
         return list1;
     }
 
+    /**
+     * @Description: 查询表名注释
+     * @Param: [subjectCode]
+     * @return: java.util.List<cn.csdb.portal.model.ShowTypeInf>
+     * @Author: zcy
+     * @Date: 2019/5/6
+     */
+    public ShowTypeInf getTableComment(String tableName, String subjectCode) {
+        ShowTypeInf showTypeInf = showTypeInfDao.checkData(tableName, subjectCode);
+        return showTypeInf;
     }
+
+    /**
+     * @Description: 判断该列是否设置过显示类型
+     * @Param: [showTypeInf, columnName]
+     * @return: cn.csdb.portal.model.ShowTypeDetail
+     * @Author: zcy
+     * @Date: 2019/5/6
+     */
+    public ShowTypeDetail getShowTypeDetail(ShowTypeInf showTypeInf, String columnName) {
+        List<ShowTypeDetail> list = showTypeInf.getShowTypeDetailList();
+        for (ShowTypeDetail s : list) {
+            if (s.getColumnName().equals(columnName) && s.getStatus() == 1) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+
+}

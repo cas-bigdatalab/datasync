@@ -82,6 +82,7 @@ function staticSourceTableChoice_edit(editIsChoiceTableOrSql, obj, subjectCode, 
         }
         $("#undescribe").hide();
         $("#isdescribe").hide();
+        $(".qiehuan_div").hide();
         $("#staticSourceTableChoiceModalNew").show();
         $("#span_tableName").html(tableNameOrSql);
 
@@ -151,73 +152,49 @@ function preSaveEditTableFieldComs() {
  * 保存coms信息
  */
 function saveEditTableFieldComs() {
+    debugger
     if (curTableName || curSQL) {
         var fieldComsList = getEditTableOrSqlFieldComs();
         var tableInfos = $.toJSON(fieldComsList);
         if (curEditIsChoiceTableOrSql == 1) {
             $(curSourceTableChoice).attr("coms", tableInfos.toString());
             saveTableFieldComs(curDataSubjectCode, fieldComsList);
-        } /*else if (curEditIsChoiceTableOrSql == 2) {
-            if (curSQLStrIndex == 0) {
-                $("#sqlStr").attr("coms", tableInfos.toString());
-            } else {
-                $("#sqlStr" + curSQLStrIndex).attr("coms", tableInfos.toString());
-            }
-            saveSQLFieldComs(curDataSourceId, curSQL, fieldComsList);
-        }*/
+        }
         curSourceTableChoice = null;
         curTableName = null;
         curEditIsChoiceTableOrSql = 0;
-        // if (curRefer != "dataService") {
-/*
-        curDataSourceId = null;
-*/
         curSQL = null;
         curRefer = null;
-        // }
     }
 }
 
 $(function () {
-
-
     $("#previewTableDataAndComsButtonId").bind("click", function () {
         if (curEditIsChoiceTableOrSql == 1) {
             var tableInfos = getEditTableOrSqlFieldComs();
             previewTableDataAndComs(curDataSubjectCode, tableInfos);
-        } /*else if (curEditIsChoiceTableOrSql == 2) {
-            var tableInfos = getEditTableOrSqlFieldComs();
-            previewSqlDataAndComs(curDataSourceId, tableInfos);
-        }*/
+        }
     });
-
-    // $("#editTableFieldComsCancelId").bind("click", function () {
-    //     if (curEditIsChoiceTableOrSql == 1) {
-    //         $(curSourceTableChoice).attr("checked", false);
-    //     }
-    //     curSourceTableChoice = null;
-    //     curDataSourceId = null;
-    //     curTableName = null;
-    //     curRefer = null;
-    // });
-
     //点击保存按钮
-    $("#editTableFieldComsSaveId").bind("click", saveEditTableFieldComs);
+    // $("#editTableFieldComsSaveId").bind("click", saveEditTableFieldComs);
     $("#editTableFieldComsCloseId").bind("click", function () {
             $("#staticSourceTableChoiceModal").hide();
             $("#staticSourceTableChoiceModalNew").hide();
         }
-        // function () {
-        // if (curEditIsChoiceTableOrSql == 1) {
-        //     $(curSourceTableChoice).attr("checked", false);
-        // }
-        // curSourceTableChoice = null;
-        // curDataSourceId = null;
-        // curTableName = null;
-        // curRefer = null;
-        // }
     );
 });
+
+//点击保存按钮
+function fun_saveTbaleFields() {
+    var tableComment = $("#tableComment").val();
+    if (tableComment === "" || tableComment === null) {
+        toastr["warning"]("表名注释不能为空！");
+        return;
+    } else {
+        saveEditTableFieldComs();
+    }
+
+}
 
 function getEditTableOrSqlFieldComs() {
     var tableInfosList = [];
@@ -237,7 +214,6 @@ function getEditTableOrSqlFieldComs() {
                 tableInfosIndex = 0;
                 tableNameVar = tableName;
             }
-            // var fieldName = $(value).text();
             var fieldName = $(value).attr("fieldName");
             var columnNameLabel = $(value).attr("columnNameLabel");
             var dataType = $(value).attr("dataType");
@@ -271,8 +247,13 @@ function saveTableFieldComs(curDataSubjectCode, tableInfos) {
                 state = "0";
             }
     }
+
     if (tableInfos && tableInfos.length == 1) {
         var tableComment=$("#tableComment").val();
+        if (tableComment === "" || tableComment === null) {
+            toastr["warning"]("表名注释不能为空！");
+            return;
+        }
         $.ajax({
             type: "POST",
             url: ctx + '/saveTableFieldComs',
@@ -290,10 +271,12 @@ function saveTableFieldComs(curDataSubjectCode, tableInfos) {
                 if ($(".qiehuan_div li:eq(0) a").hasClass("active")) {
                     $("#isdescribe").hide();
                     $("#undescribe").show();
+                    $(".qiehuan_div").show();
                     $("#staticSourceTableChoiceModalNew").hide();
                 } else {
                     $("#isdescribe").show();
                     $("#undescribe").hide();
+                    $(".qiehuan_div").show();
                     $("#staticSourceTableChoiceModalNew").hide();
                 }
                 chooseTable(curDataSubjectCode,0);
