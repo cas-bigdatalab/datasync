@@ -144,7 +144,6 @@ public class ResourceController {
 
     @RequestMapping(value = "editResource")
     public ModelAndView resourceEdit(String resourceId, Model model) {
-        //ModelAndView mv = new ModelAndView("editResource");
         ModelAndView mv = new ModelAndView("dataEditResource");
         mv.addObject("resourceId", resourceId);
         List<MetadataTemplate> list = metadataTemplateService.getAll();
@@ -405,114 +404,12 @@ public class ResourceController {
     /**
      * Function Description: 添加资源第二步保存
      *
-     * @param: [resourceId, publicType, dataList]
-     * @return: com.alibaba.fastjson.JSONObject
-     * @auther: hw
-     * @date: 2018/11/2 10:45
+     * @param session          获取当前节点编码
+     * @param resourceDataList 序列化参数
      */
+    @RequestMapping("/addResourceSecondStep")
     @ResponseBody
-    @RequestMapping(value = "addResourceSecondStep")
-    public JSONObject addResourceSecondStep(HttpSession session,
-                                            @RequestParam(name = "resourceId") String resourceId,
-                                            @RequestParam(name = "publicType") String publicType,
-                                            @RequestParam(name = "dataList") String dataList) {
-        String subjectCode = session.getAttribute("SubjectCode").toString();
-        Subject subject = subjectService.findBySubjectCode(subjectCode);
-        JSONObject jsonObject = new JSONObject();
-        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
-        if (publicType.equals("mysql")) {
-            resource.setPublicContent(dataList);
-            resource.setToFilesNumber(0);
-            resource.setPublicType("mysql");
-            List<String> tableList = Arrays.asList(dataList.split(";"));
-            //计算存储量
-            int allCount = 0;
-            for (String tableName : tableList) {
-                Map<String, Map<String, String>> tableColumns = resourceService.getTableColumns(subject.getDbHost(), subject.getDbPort(), subject.getDbUserName(), subject.getDbPassword(), subject.getDbName(), tableName);
-                int column = tableColumns.size() - 1;
-                List<String> list = new ArrayList<>();
-                list.add(tableName);
-                int row = resourceService.getRecordCount(subject.getDbHost(), subject.getDbPort(), subject.getDbUserName(), subject.getDbPassword(), subject.getDbName(), list);
-                allCount += row * column;
-            }
-            Double allCountDouble = 225.0 / (75000 / allCount) / 1024;
-            String str = String.format("%.2f", allCountDouble);
-            resource.setToMemorySize(str);
-            int rowCount = resourceService.getRecordCount(subject.getDbHost(), subject.getDbPort(), subject.getDbUserName(), subject.getDbPassword(), subject.getDbName(), tableList);
-            resource.setToRecordNumber(rowCount);
-        } else if (publicType.equals("file")) {
-            resource.setPublicType("file");
-            StringBuffer sb = new StringBuffer();
-            Double size = 0.00;
-            if (StringUtils.isNoneBlank(dataList)) {
-                String[] s = dataList.split(";");
-                for (String str : s) {
-                    str = str.replaceAll("%_%", "/");
-                    File file = new File(str);
-                    if (file.isDirectory()) {
-                        /*Collection<File> files = FileUtils.listFiles(file, null, true);
-                        for (File file1 : files) {
-                            String fp = file1.getPath();
-                            size += file1.length();
-                            if (fp.indexOf("\\") > -1) {
-                                fp = fp.replaceAll("\\\\", "/");
-                            }
-                            sb.append(fp + ";");
-                        }*/
-                        sb.append(str + ";");
-                        size += file.length();
-                    } else {
-                        sb.append(str + ";");
-                        size += file.length();
-                    }
-                }
-            }
-            String[] filePaths = sb.toString().split(";");
-            //清空以前保存的文件记录
-            resourceService.deleteFileInfo(resourceId);
-            int i = 0;
-            for (String str : filePaths) {
-                FileInfo fileInfo = new FileInfo();
-                int one = str.lastIndexOf("/");
-                fileInfo.setFile_name(str.substring((one + 1), str.length()));
-                int two = str.lastIndexOf(".");
-                fileInfo.setPreviewType(str.substring((two + 1), str.length()));
-                fileInfo.setFile_path(str);
-                File file = new File(str);
-                if (file.exists() && file.isFile()) {
-                    Double d = Double.valueOf(file.length()) / 1024 / 1024;
-                    NumberFormat nf = NumberFormat.getNumberInstance();
-                    nf.setMaximumFractionDigits(4);
-                    fileInfo.setSize(nf.format(d));
-                }
-                fileInfo.getSize();
-                fileInfo.setResourceId(resourceId);
-                fileInfo.setTime(new Date());
-                resourceService.saveFileInfo(fileInfo);
-                i++;
-            }
-            resource.setFilePath(sb.toString().replace("/", "%_%"));
-            Double toMemorySize = size / 1024 / 1024;
-            NumberFormat nf = NumberFormat.getNumberInstance();
-            nf.setMaximumFractionDigits(4);
-            resource.setToMemorySize(nf.format(toMemorySize));
-            resource.setToRecordNumber(0);
-            resource.setToFilesNumber(i);
-        }
-        if (StringUtils.isNotBlank(resource.getUserGroupId())) {
-            resource.setStatus("1");
-        } else {
-            resource.setStatus("-1");
-        }
-        String resId = resourceService.save(resource);
-        jsonObject.put("resourceId", resId);
-        return jsonObject;
-    }
-
-
-    @RequestMapping("/addResourceSecondStepCopy")
-    @ResponseBody
-    public JSONObject addResourceSecondStepCopy(HttpSession session, resourceDataList resourceDataList) {
+    public JSONObject addResourceSecondStep(HttpSession session, resourceDataList resourceDataList) {
         JSONObject jsonObject = new JSONObject();
         String subjectCode = session.getAttribute("SubjectCode").toString();
         Subject subject = subjectService.findBySubjectCode(subjectCode);
@@ -541,6 +438,8 @@ public class ResourceController {
                 allTableRow = allTableRow.add(tableRow);
             }
             resource.setToRecordNumber(allTableRow.longValue());
+        } else {
+            resource.setPublicContent("");
         }
 
         if (!fileDataListIsNullOrEmpty) {
@@ -557,24 +456,22 @@ public class ResourceController {
             }
             memorySize = memorySize.add(allFileLength);
             resource.setToFilesNumber(fileNumber);
+        } else {
+            resource.setFilePath("");
         }
 
         resource.setToMemorySize(memorySize.toString());
         if (!sqlDataListIsNullOrEmpty && !fileDataListIsNullOrEmpty) {
-            resource.setPublicType("mysql+file");
+            resource.setPublicType("RDB+FILE");
         } else if (!sqlDataListIsNullOrEmpty && fileDataListIsNullOrEmpty) {
-            resource.setPublicType("mysql");
+            resource.setPublicType("RDB");
             resource.setToFilesNumber(0);
         } else if (sqlDataListIsNullOrEmpty && !fileDataListIsNullOrEmpty) {
-            resource.setPublicType("file");
+            resource.setPublicType("FILE");
             resource.setToRecordNumber(0);
         }
 
-        if (StringUtils.isNotBlank(resource.getUserGroupId())) {
-            resource.setStatus("1");
-        } else {
-            resource.setStatus("-1");
-        }
+        resource.setStatus("1");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
 

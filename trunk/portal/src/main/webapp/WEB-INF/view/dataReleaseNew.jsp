@@ -470,13 +470,7 @@
         <td>{{i + 1}}</td>
         <td><a href="javascript:void(0)" onclick="showData('{{value.id}}','{{value.publicType}}','{{value.status}}')">{{value.title}}</a>
         </td>
-        {{if value.publicType == 'mysql' || value.publicType == '' }}
-        <td>mysql</td>
-        {{else if value.publicType == 'file'}}
-        <td>file</td>
-        {{else}}
-        <td>mysql+file</td>
-        {{/if}}
+        <td>{{value.publicType}}</td>
         <%-- <td style="word-break: break-all">{{value.createdByOrganization}}</td>--%>
         <td>{{dateFormat(value.creationDate)}}</td>
 

@@ -71,10 +71,6 @@
             <td class="item" id="secondstep">
                 <div class="number">2</div>
                 <span>实体数据</span></td>
-            <td></td>
-            <td class="item" id="thirdstep">
-                <div class="number">3</div>
-                <span>权限设置</span></td>
         </tr>
     </table>
 </div>
@@ -506,7 +502,6 @@
         var sub = '${sessionScope.SubjectCode}';
         var initNum = 1;
         var firstFlag = false;
-        var secondFlag = false;
         var resourceId = sdoId;
         var publicType = "mysql";
         var firstTime;
@@ -568,7 +563,7 @@
             });
 
             $(".button-submit").click(function () {
-                addResourceThirdStep()
+                addResourceSecondStep();
             });
 
             $('.selectData').datepicker({
@@ -843,23 +838,95 @@
 
         relationalDatabaseTableList();
 
+        function showThirdStep() {
+            $("#secondstep").removeClass("item active");
+            $("#secondstep").addClass("item finish");
+            $(".fabu_div2").html("数据发布 - 第3步，共3步");
+            $("#thirdstep").removeClass("item");
+            $("#thirdstep").addClass("item active");
+            $(".rate").css("width", "100%");
+
+            $("#staNum").html(initNum);
+            $(".progress-bar-success").width(initNum * 33 + "%");
+            $("#tab2").removeClass("active");
+            $("#tab3").addClass("active");
+            $(".steps li:eq(2)").addClass("active");
+            $(".button-submit").show();
+            $(".btn-primary").hide()
+        }
+
+        function returnFirstStep() {
+            $("#secondstep").removeClass("item active");
+            $("#secondstep").addClass("item");
+            $(".fabu_div2").html("数据发布 - 第1步，共3步");
+            $("#firststep").removeClass("item finish");
+            $("#firststep").addClass("item active");
+            $(".rate").css("width", "0");
+
+            $("#staNum").html(initNum);
+            $(".progress-bar-success").width(initNum * 100 + "%");
+            $("#tab2").removeClass("active");
+            $("#tab1").addClass("active");
+            $(".steps li:eq(1)").removeClass("active");
+
+            $(".btn-default").hide();
+            $(".btn-primary").show();
+            $(".button-submit").hide();
+        }
+
+        function returnSecondStep() {
+            $("#thirdstep").removeClass("item active");
+            $("#thirdstep").addClass("item");
+            $(".fabu_div2").html("数据发布 - 第2步，共3步");
+            $("#secondstep").removeClass("item finish");
+            $("#secondstep").addClass("item active");
+            $(".rate").css("width", "50%");
+
+            $("#staNum").html(initNum);
+            $(".progress-bar-success").width(initNum * 33 + "%");
+            $("#tab3").removeClass("active");
+            $("#tab2").addClass("active");
+            $(".steps li:eq(2)").removeClass("active");
+            $(".btn-primary").show();
+            $(".button-submit").hide()
+        }
+
+        function showSecondStep() {
+            $("#firststep").removeClass("item active");
+            $("#firststep").addClass("item finish");
+            $(".fabu_div2").html("数据发布 - 第2步，共3步");
+            $("#secondstep").removeClass("item");
+            $("#secondstep").addClass("item active");
+            $(".rate").css("width", "50%");
+
+            $("#staNum").html(initNum);
+            $(".progress-bar-success").width(initNum * 33 + "%");
+            $("#tab1").removeClass("active");
+            $("#tab2").addClass("active");
+            $(".steps li:eq(1)").addClass("active");
+            $(".btn-default").show();
+            $(".button-submit").show();
+            $(".btn-primary").hide()
+        }
+
+        // flag    true:下一项  false:上一项
         function fromAction(flag) {
             if (flag) {
                 ++initNum;
                 if (initNum === 2) {
-                    if (resourceId == "") {
+                    if (resourceId === "") {
                         addResourceFirstStep()
                     } else {
                         editResourceFirstStep()
                     }
                     if (firstFlag) {
-                        initNum--
+                        initNum--;
                         toastr["error"]("请填写必须项目");
                         return
                     }
+
                     // 判断模板名称是否填写
                     if ($("#isTemplate").prop("checked")) {
-                        debugger
                         if ($.trim($("#metaTemplateName").val()) == "") {
                             toastr["error"]("请填写模板名称");
                             firstFlag = true;
@@ -868,72 +935,14 @@
                         }
                     }
 
-                    $("#firststep").removeClass("item active");
-                    $("#firststep").addClass("item finish");
-                    $(".fabu_div2").html("数据发布 - 第2步，共3步");
-                    $("#secondstep").removeClass("item");
-                    $("#secondstep").addClass("item active");
-                    $(".rate").css("width", "50%");
-
-                    $("#staNum").html(initNum)
-                    $(".progress-bar-success").width(initNum * 33 + "%");
-                    $("#tab1").removeClass("active")
-                    $("#tab2").addClass("active")
-                    $(".steps li:eq(1)").addClass("active")
-                    $(".btn-default").show();
-                } else if (initNum === 3) {
-                    addResourceSecondStep();
-                    if (secondFlag) {
-                        initNum--
-                        toastr["error"]("请选择至少一项");
-                        return
-                    }
-                    $("#secondstep").removeClass("item active");
-                    $("#secondstep").addClass("item finish");
-                    $(".fabu_div2").html("数据发布 - 第3步，共3步");
-                    $("#thirdstep").removeClass("item");
-                    $("#thirdstep").addClass("item active");
-                    $(".rate").css("width", "100%");
-
-                    $("#staNum").html(initNum)
-                    $(".progress-bar-success").width(initNum * 33 + "%");
-                    $("#tab2").removeClass("active")
-                    $("#tab3").addClass("active")
-                    $(".steps li:eq(2)").addClass("active")
-                    $(".button-submit").show()
-                    $(".btn-primary").hide()
+                    showSecondStep();
                 }
             } else {
-                --initNum
-                if (initNum == 1) {
-                    $("#secondstep").removeClass("item active");
-                    $("#secondstep").addClass("item");
-                    $(".fabu_div2").html("数据发布 - 第1步，共3步");
-                    $("#firststep").removeClass("item finish");
-                    $("#firststep").addClass("item active");
-                    $(".rate").css("width", "0");
-
-                    $("#staNum").html(initNum)
-                    $(".progress-bar-success").width(initNum * 33 + "%");
-                    $("#tab2").removeClass("active")
-                    $("#tab1").addClass("active")
-                    $(".steps li:eq(1)").removeClass("active")
-                    $(".btn-default").hide();
-                } else if (initNum == 2) {
-                    $("#thirdstep").removeClass("item active");
-                    $("#thirdstep").addClass("item");
-                    $(".fabu_div2").html("数据发布 - 第2步，共3步");
-                    $("#secondstep").removeClass("item finish");
-                    $("#secondstep").addClass("item active");
-                    $(".rate").css("width", "50%");
-
-                    $("#staNum").html(initNum)
-                    $(".progress-bar-success").width(initNum * 33 + "%");
-                    $("#tab3").removeClass("active")
-                    $("#tab2").addClass("active")
-                    $(".steps li:eq(2)").removeClass("active")
-                    $(".btn-primary").show()
-                    $(".button-submit").hide()
+                --initNum;
+                if (initNum === 1) {
+                    returnFirstStep();
+                } else if (initNum === 2) {
+                    returnSecondStep();
                 }
             }
         }
@@ -997,27 +1006,6 @@
             })
         }
 
-        function userGroupList() {
-            $.ajax({
-                url: ctx + "/resource/getUserGroups",
-                type: "GET",
-                async: false,
-                success: function (data) {
-                    var list = JSON.parse(data);
-                    var tabCon = template("dataUserList", list);
-                    $("#permissions").append(tabCon);
-                    $('#permissions').select2().val(userList).trigger("change");
-                    $('#permissions').select2({
-                        placeholder: "请选择用户",
-                        allowClear: true,
-                    });
-                },
-                error: function () {
-                    console.log("请求失败")
-                }
-            })
-        }
-
         function addResourceSecondStep() {
             var resourceData = {}, sqlDataList = [], fileDataList;
 
@@ -1042,22 +1030,22 @@
             resourceData["fileDataList"] = fileDataList.length === 0 ? "" : fileDataList.toString().replace(reg, ";");
 
             if (!resourceData.sqlDataList && !resourceData.fileDataList) {
-                secondFlag = true;
+                toastr["error"]("请选择至少一项");
                 return;
             }
             $.ajax({
-                url: ctx + "/resource/addResourceSecondStepCopy",
+                url: ctx + "/resource/addResourceSecondStep",
                 type: "POST",
                 data: resourceData,
                 success: function (data) {
-                    console.log(data)
+                    console.log(data);
+                    window.location.href = "${ctx}/dataRelease"
                 },
                 error: function (data) {
                     console.log("请求失败")
                 }
             });
 
-            userGroupList()
         }
 
         function addResourceThirdStep() {

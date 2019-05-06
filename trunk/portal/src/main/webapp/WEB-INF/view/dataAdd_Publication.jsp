@@ -1119,53 +1119,6 @@
             })
         }
 
-        function addResourceSecondStep_() {
-            secondFlag = false;
-            var dataList = "";
-            if (publicType === "mysql") {
-                var $ele = $("[name='resTable']:checked");
-
-                $ele.each(function () {
-                    dataList += $(this).attr("keyval") + ";"
-                })
-            } else {
-                var fileList = getChecedValueInLocalTree();
-                if (fileList.length !== 0) {
-                    var userUploadPath = $.fn.zTree.getZTreeObj("treeDemo").getNodesByFilter(function (node) {
-                        return node.level === 0;
-                    }, true).id + "/userUpload";
-                    if (fileList.indexOf(userUploadPath) === -1) {
-                        fileList.splice(0, 0, userUploadPath);
-                    }
-                    dataList = fileList.toString();
-                }
-            }
-
-            if (dataList.length === 0) {
-                secondFlag = true;
-                return
-            }
-            var reg2 = new RegExp(',', "g");
-            dataList = dataList.replace(reg2, ';');
-
-            console.log(dataList);
-            $.ajax({
-                url: ctx + "/resource/addResourceSecondStep",
-                type: "POST",
-                data: {
-                    resourceId: resourceId,
-                    publicType: publicType,
-                    dataList: dataList
-                },
-                success: function (data) {
-                    console.log(data)
-                },
-                error: function (data) {
-                    console.log("请求失败")
-                }
-            })
-        }
-
         function addResourceSecondStep() {
             var resourceData = {}, sqlDataList = [], fileDataList;
 
@@ -1194,7 +1147,7 @@
                 return;
             }
             $.ajax({
-                url: ctx + "/resource/addResourceSecondStepCopy",
+                url: ctx + "/resource/addResourceSecondStep",
                 type: "POST",
                 data: resourceData,
                 success: function (data) {
@@ -1287,41 +1240,6 @@
             })
         }
 
-        // $('#fileContainerTree').jstree({
-        //     'core': {
-        //         'data': function (node, cb) {
-        //             var children;
-        //             if (node.id == '#') {
-        //                 children = initFileTree();
-        //             } else {
-        //                 children = getFileList(node.id);
-        //             }
-        //             generateChildJson(children);
-        //             cb.call(this, children);
-        //         }
-        //     },
-        //     "plugins": [
-        //         "checkbox", "wholerow"
-        //     ]
-        // }).bind('select_node.jstree', function (e, data) {
-        //     data.instance.open_all(data.node.id);
-        // }).bind("deselect_node.jstree", function (e, data) {
-        //     $("#fileDescribeDiv").html("");
-        //     var ref = $('#fileContainerTree').jstree(true);//获得整个树
-        //     var sel = ref.get_selected(false);
-        //     for(var i = 0; i <sel.length; i++){
-        //         var str = sel[i].replace(/%_%/g, "/");
-        //         $("#fileDescribeDiv").append("<div name="+ str+"><span>"+str +"</span></div>")
-        //     }
-        // }).bind("after_open.jstree", function (e ,data) {
-        //     $("#fileDescribeDiv").html("");
-        //     var ref = $('#fileContainerTree').jstree(true);//获得整个树
-        //     var sel = ref.get_selected(false);
-        //     for(var i = 0; i <sel.length; i++){
-        //         var str = sel[i].replace(/%_%/g, "/");
-        //         $("#fileDescribeDiv").append("<div name="+ str+"><span>"+str +"</span></div>")
-        //     }
-        // });
         function initFileTree() {
             var root;
             $.ajax({
@@ -1340,34 +1258,6 @@
                 }
             });
             // return root;
-        }
-
-        function getFileList(folderPath) {
-            var children;
-            $.ajax({
-                url: "${ctx}/resource/treeNode",
-                type: "get",
-                data: {'filePath': folderPath},
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    children = data;
-                }
-            });
-            return children;
-        }
-
-        function generateChildJson(childArray) {
-            console.log(childArray)
-            for (var i = 0; i < childArray.length; i++) {
-                var child = childArray[i];
-                if (child.type == 'directory') {
-                    child.children = true;
-                    child.icon = "jstree-folder";
-                } else {
-                    child.icon = "jstree-file";
-                }
-            }
         }
 
         var setting = {
