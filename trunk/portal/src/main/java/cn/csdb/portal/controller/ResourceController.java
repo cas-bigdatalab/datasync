@@ -556,8 +556,8 @@ public class ResourceController {
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setTitle(title);
         String oldImagePath = resource.getImagePath();
-        if (!Strings.isNullOrEmpty(imagePath) && !Strings.isNullOrEmpty(oldImagePath)) {
-            if (oldImagePath.equals(imagePath)) {
+        if (!Strings.isNullOrEmpty(imagePath)) {
+            if (imagePath.equals(oldImagePath)) {
                 resource.setImagePath(oldImagePath);
             } else {
                 File f = new File(oldImagePath);
@@ -589,7 +589,7 @@ public class ResourceController {
         resource.setPublishOrgnization(publishOrganization);
         resource.setCreateOrgnization(createOrganization);
         resource.setCreatePerson(createPerson);
-        if (StringUtils.isNotBlank(resource.getUserGroupId())) {
+        if (StringUtils.isNotBlank(resource.getToMemorySize())) {
             resource.setStatus("1");
         } else {
             resource.setStatus("-1");

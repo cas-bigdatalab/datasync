@@ -79,6 +79,10 @@
             padding-bottom: 10px;
         }
 
+        .btn {
+            border-radius: 6px !important;
+        }
+
         table td, table th {
             border-right: none !important;
             border-left: none !important;
@@ -92,12 +96,22 @@
             background: none !important;
         }
 
+        .alert.alert-info {
+            background-color: #cbe2fc !important;
+        }
+
+
         #upload-list th, #dataList th, #table_List1 th, #table_List2 th {
             background-color: #cbe2fc;
             text-align: center;
             font-size: 14px;
             font-weight: normal;
             color: #000;
+        }
+
+        button.btn.btn-danger {
+            background-color: #e5e5e5;
+            color: #333333
         }
 
         .right_div table tbody tr {

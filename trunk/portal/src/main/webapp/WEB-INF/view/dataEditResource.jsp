@@ -137,12 +137,6 @@
                                                                    name="imgFile"
                                                                    onchange="showImgAsDataURLAndValidataImg();">
                                                             </span>
-                                                        <span id="uploadSpan" class="btn default btn-file"
-                                                              style="display: none">
-                                                                 <span class="fileinput-new">
-                                                             上传</span>
-                                                                 <input type="button" onclick="doUpload();"/>
-                                                        </span>
                                                     </form>
                                                     <div class="timeVili3" style="display: none">请上传选择图片,图片规格为800*600
                                                     </div>
@@ -393,10 +387,10 @@
                         <div class="form-actions">
                             <div class="row">
                                 <div class="col-md-offset-3 col-md-9">
-                                    <a href="javascript:;" class="btn btn-default" onclick="fromAction(false)"
+                                    <a href="javascript:;" class="btn btn-default last" onclick="fromAction(false)"
                                        style="display: none;margin-left: 10%">
                                         上一步 </a>
-                                    <a href="javascript:;" class="btn btn-primary" onclick="fromAction(true)"
+                                    <a href="javascript:;" class="btn btn-primary next" onclick="fromAction(true)"
                                        style="margin-left: 30%;">
                                         下一步
                                     </a>
@@ -510,7 +504,7 @@
         var userList;
 
         $(function () {
-            $(".fabu_div2").html("数据发布 - 第1步，共3步");
+            $(".fabu_div2").html("数据发布 - 第1步，共2步");
 
             $("#file-1").fileinput({
                 uploadAsync: false,
@@ -789,7 +783,7 @@
         function showImgAsDataURLAndValidataImg() {
             var reader = new FileReader();
             reader.readAsDataURL(event.target.files[0]);
-            reader.onload = function (event) {
+            reader.onloadend = function (event) {
                 $("img#cutimg").attr("src", event.target.result);
                 getImgNaturalDimensions($("img#cutimg")[0], function (dimensions) {
                     var w = dimensions.w;
@@ -806,8 +800,7 @@
                         }
                     }
                     if (flg) {
-                        $("#checkPicture").hide();
-                        $("#uploadSpan").show();
+                        doUpload();
                     }
                 })
             }
@@ -838,75 +831,40 @@
 
         relationalDatabaseTableList();
 
-        function showThirdStep() {
-            $("#secondstep").removeClass("item active");
-            $("#secondstep").addClass("item finish");
-            $(".fabu_div2").html("数据发布 - 第3步，共3步");
-            $("#thirdstep").removeClass("item");
-            $("#thirdstep").addClass("item active");
-            $(".rate").css("width", "100%");
-
-            $("#staNum").html(initNum);
-            $(".progress-bar-success").width(initNum * 33 + "%");
-            $("#tab2").removeClass("active");
-            $("#tab3").addClass("active");
-            $(".steps li:eq(2)").addClass("active");
-            $(".button-submit").show();
-            $(".btn-primary").hide()
-        }
-
         function returnFirstStep() {
             $("#secondstep").removeClass("item active");
             $("#secondstep").addClass("item");
-            $(".fabu_div2").html("数据发布 - 第1步，共3步");
+            $(".fabu_div2").html("数据发布 - 第1步，共2步");
             $("#firststep").removeClass("item finish");
             $("#firststep").addClass("item active");
             $(".rate").css("width", "0");
 
             $("#staNum").html(initNum);
-            $(".progress-bar-success").width(initNum * 100 + "%");
             $("#tab2").removeClass("active");
             $("#tab1").addClass("active");
             $(".steps li:eq(1)").removeClass("active");
 
-            $(".btn-default").hide();
-            $(".btn-primary").show();
+            $(".last").hide();
+            $(".next").show();
             $(".button-submit").hide();
-        }
-
-        function returnSecondStep() {
-            $("#thirdstep").removeClass("item active");
-            $("#thirdstep").addClass("item");
-            $(".fabu_div2").html("数据发布 - 第2步，共3步");
-            $("#secondstep").removeClass("item finish");
-            $("#secondstep").addClass("item active");
-            $(".rate").css("width", "50%");
-
-            $("#staNum").html(initNum);
-            $(".progress-bar-success").width(initNum * 33 + "%");
-            $("#tab3").removeClass("active");
-            $("#tab2").addClass("active");
-            $(".steps li:eq(2)").removeClass("active");
-            $(".btn-primary").show();
-            $(".button-submit").hide()
         }
 
         function showSecondStep() {
             $("#firststep").removeClass("item active");
             $("#firststep").addClass("item finish");
-            $(".fabu_div2").html("数据发布 - 第2步，共3步");
+            $(".fabu_div2").html("数据发布 - 第2步，共2步");
             $("#secondstep").removeClass("item");
             $("#secondstep").addClass("item active");
-            $(".rate").css("width", "50%");
+            $(".rate").css("width", "100%");
 
             $("#staNum").html(initNum);
             $(".progress-bar-success").width(initNum * 33 + "%");
             $("#tab1").removeClass("active");
             $("#tab2").addClass("active");
             $(".steps li:eq(1)").addClass("active");
-            $(".btn-default").show();
+            $(".last").show();
             $(".button-submit").show();
-            $(".btn-primary").hide()
+            $(".next").hide()
         }
 
         // flag    true:下一项  false:上一项
@@ -927,7 +885,7 @@
 
                     // 判断模板名称是否填写
                     if ($("#isTemplate").prop("checked")) {
-                        if ($.trim($("#metaTemplateName").val()) == "") {
+                        if ($.trim($("#metaTemplateName").val()) === "") {
                             toastr["error"]("请填写模板名称");
                             firstFlag = true;
                             initNum--;
@@ -939,11 +897,7 @@
                 }
             } else {
                 --initNum;
-                if (initNum === 1) {
                     returnFirstStep();
-                } else if (initNum === 2) {
-                    returnSecondStep();
-                }
             }
         }
 

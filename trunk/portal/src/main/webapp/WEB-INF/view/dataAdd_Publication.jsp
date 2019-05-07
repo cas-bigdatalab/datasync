@@ -82,10 +82,6 @@
             <td class="item" id="secondstep">
                 <div class="number">2</div>
                 <span>实体数据</span></td>
-            <td></td>
-            <td class="item" id="thirdstep">
-                <div class="number">3</div>
-                <span>权限设置</span></td>
         </tr>
     </table>
 </div>
@@ -103,7 +99,7 @@
                                           onfocusout="true"
                                           method="POST">
 
-                                        <jsp:include page="metaTemplateSelect.jsp" ></jsp:include>
+                                        <jsp:include page="metaTemplateSelect.jsp"></jsp:include>
 
                                         <div class="form-group">
                                             <label class="control-label col-md-3" for="Task_dataName">数据集名称 <span
@@ -157,12 +153,6 @@
                                                                    name="imgFile"
                                                                    onchange="showImgAsDataURLAndValidataImg();">
                                                             </span>
-                                                        <span id="uploadSpan" class="btn default btn-file"
-                                                              style="display: none">
-                                                                 <span class="fileinput-new">
-                                                             上传</span>
-                                                                 <input type="button" onclick="doUpload();"/>
-                                                        </span>
                                                     </form>
                                                     <div class="timeVili3" style="display: none">请上传选择图片,图片规格为800*600
                                                     </div>
@@ -203,11 +193,11 @@
                                             <div class="col-md-5" style="padding-top:13px">
                                                 <div class="input-group input-daterange">
                                                     <input type="text" class="form-control selectData"
-                                                           data-date-format="yyyy-mm-dd" name="startTime"  id="startTime"
+                                                           data-date-format="yyyy-mm-dd" name="startTime" id="startTime"
                                                            placeholder="起始时间">
                                                     <div class="input-group-addon">to</div>
                                                     <input type="text" class="form-control selectData"
-                                                           data-date-format="yyyy-mm-dd" name="endTime"   id="endTime"
+                                                           data-date-format="yyyy-mm-dd" name="endTime" id="endTime"
                                                            placeholder="结束时间">
                                                 </div>
                                                 <div class="timeVili" style="display: none">请正确选择时间</div>
@@ -419,10 +409,10 @@
                         <div class="form-actions">
                             <div class="row">
                                 <div class="col-md-offset-3 col-md-9">
-                                    <a href="javascript:;" class="btn btn-default" onclick="fromAction(false)"
+                                    <a href="javascript:;" class="btn btn-default last" onclick="fromAction(false)"
                                        style="display: none;margin-left: 10%">
                                         上一步 </a>
-                                    <a href="javascript:;" class="btn btn-primary" onclick="fromAction(true)"
+                                    <a href="javascript:;" class="btn btn-primary next" onclick="fromAction(true)"
                                        style="margin-left: 30%;">
                                         下一步
                                     </a>
@@ -513,9 +503,9 @@
     <script type="text/javascript" src="${ctx}/resources/bundles/jquery-form/jquery.form.js"></script>
     <script type="text/javascript"
             src="${ctx}/resources/bundles/bootstrap-new-fileinput/bootstrap-fileinput.js"></script>
-     <script src="${ctx}/resources/js/metaTemplate.js"></script>
+    <script src="${ctx}/resources/js/metaTemplate.js"></script>
 
-        <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
+    <script src="${ctx}/resources/bundles/jstree/dist/jstree.js"></script>
     <script src="${ctx}/resources/js/metaTemplate.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2_locale_zh-CN.js"></script>
@@ -547,12 +537,12 @@
             required: "这是必填字段",
             date: "请输入有效的日期",
             number: "请输入有效的数字",
-            digits: "只能输入数字",
+            digits: "只能输入数字"
         });
 
         $(function () {
             // $(".time_div").html("");
-            $(".fabu_div2").html("数据发布 - 第1步，共3步");
+            $(".fabu_div2").html("数据发布 - 第1步，共2步");
             initFileTree();
         });
 
@@ -804,10 +794,9 @@
         }
 
         function showImgAsDataURLAndValidataImg() {
-            debugger
             var reader = new FileReader();
             reader.readAsDataURL(event.target.files[0]);
-            reader.onload = function (event) {
+            reader.onloadend = function (event) {
                 $("img#cutimg").attr("src", event.target.result);
                 getImgNaturalDimensions($("img#cutimg")[0], function (dimensions) {
                     var w = dimensions.w;
@@ -824,9 +813,10 @@
                         }
                     }
                     if (flg) {
-                        $("#checkPicture").hide();
-                        $("#uploadSpan").show();
+                        doUpload();
                         $("#imgFlagNum").val(2);
+                    } else {
+                        $("#imgFlagNum").val(1);
                     }
                 })
             }
@@ -854,61 +844,85 @@
         }
 
         $(".progress-bar-success").width(initNum * 33 + "%");
-        $("[name='ways']").on("change", function () {
-            if (this.value == "DB") {
-                $(".select-database").show();
-                $(".select-local").hide();
-                publicType = "mysql"
-            } else {
-                $(".select-database").hide();
-                $(".select-local").show();
-                publicType = "file"
-            }
-        })
+
         $("[name='need_checked']").on("change", function () {
-            var $index = $("[name='need_checked']").index($(this))
-            if ($(this).val() != "" && $(this).val().trim() != "") {
-                $("[name='need_checked']:eq(" + $index + ")").removeClass("custom-error")
-                $("[name='need_message']:eq(" + $index + ")").hide()
+            var $index = $("[name='need_checked']").index($(this));
+            if ($(this).val() !== "" && $(this).val().trim() !== "") {
+                $("[name='need_checked']:eq(" + $index + ")").removeClass("custom-error");
+                $("[name='need_message']:eq(" + $index + ")").hide();
                 $(".required:eq(" + $index + ")").parent().removeClass("custom-error")
             }
-        })
+        });
         $("#task_email").on("change", function () {
             $("[name='data_email']").hide()
-        })
+        });
         $("#task_phone").on("change", function () {
             $("[name='data_phone']").hide()
-        })
+        });
         $(".undeslist").delegate("input", "click", function () {
             staticSourceTableChoice(1, this, sub, $(this).attr("keyval"), "dataResource")
             $("#previewTableDataAndComsButtonId").click()
-        })
+        });
 
         $(".button-submit").click(function () {
-            addResourceThirdStep()
-        })
+            addResourceSecondStep();
+        });
 
         initCenterResourceCatalogTree($("#jstree-demo"));
         relationalDatabaseTableList();
-        userGroupList()
+
+        function showSecondStep() {
+            $("#firststep").removeClass("item active");
+            $("#firststep").addClass("item finish");
+            $(".fabu_div2").html("数据发布 - 第2步，共2步");
+            $("#secondstep").removeClass("item");
+            $("#secondstep").addClass("item active");
+            $(".rate").css("width", "100%");
+
+            $("#staNum").html(initNum);
+            $(".progress-bar-success").width(initNum * 33 + "%");
+            $("#tab1").removeClass("active");
+            $("#tab2").addClass("active");
+            $(".steps li:eq(1)").addClass("active");
+            $(".last").show();
+            $(".next").hide();
+            $(".button-submit").show();
+        }
+
+        function returnFirstStep() {
+            $("#secondstep").removeClass("item active");
+            $("#secondstep").addClass("item");
+            $(".fabu_div2").html("数据发布 - 第1步，共2步");
+            $("#firststep").removeClass("item finish");
+            $("#firststep").addClass("item active");
+            $(".rate").css("width", "0");
+
+            $("#staNum").html(initNum);
+            $("#tab2").removeClass("active");
+            $("#tab1").addClass("active");
+            $(".steps li:eq(1)").removeClass("active");
+            $(".last").hide();
+            $(".next").show();
+            $(".button-submit").hide();
+        }
 
         function fromAction(flag) {
             if (flag) {
                 ++initNum;
-                if (initNum == 2) {
-                    if (resourceId == "") {
+                if (initNum === 2) {
+                    if (resourceId === "") {
                         addResourceFirstStep()
                     } else {
                         editResourceFirstStep()
                     }
                     if (firstFlag) {
-                        initNum--
+                        initNum--;
                         toastr["error"]("请填写必须项目");
                         return
                     }
                     //xiajl20190424 判断模板名称是否填写
-                    if ($("#isTemplate").prop("checked")){
-                        if ($.trim($("#metaTemplateName").val()) == ""){
+                    if ($("#isTemplate").prop("checked")) {
+                        if ($.trim($("#metaTemplateName").val()) === "") {
                             toastr["error"]("请填写模板名称");
                             firstFlag = true;
                             initNum--;
@@ -916,73 +930,12 @@
                         }
                     }
 
-                    $("#firststep").removeClass("item active");
-                    $("#firststep").addClass("item finish");
-                    $(".fabu_div2").html("数据发布 - 第2步，共3步");
-                    $("#secondstep").removeClass("item");
-                    $("#secondstep").addClass("item active");
-                    $(".rate").css("width", "50%");
-
-                    $("#staNum").html(initNum)
-                    $(".progress-bar-success").width(initNum * 33 + "%");
-                    $("#tab1").removeClass("active")
-                    $("#tab2").addClass("active")
-                    $(".steps li:eq(1)").addClass("active")
-                    $(".btn-default").show();
-                } else if (initNum == 3) {
-
-                    addResourceSecondStep()
-                    if (secondFlag) {
-                        initNum--
-                        toastr["error"]("请选择至少一项");
-                        return
-                    }
-                    $("#secondstep").removeClass("item active");
-                    $("#secondstep").addClass("item finish");
-                    $(".fabu_div2").html("数据发布 - 第3步，共3步");
-                    $("#thirdstep").removeClass("item");
-                    $("#thirdstep").addClass("item active");
-                    $(".rate").css("width", "100%");
-
-                    $("#staNum").html(initNum)
-                    $(".progress-bar-success").width(initNum * 33 + "%");
-                    $("#tab2").removeClass("active")
-                    $("#tab3").addClass("active")
-                    $(".steps li:eq(2)").addClass("active")
-                    $(".button-submit").show()
-                    $(".btn-primary").hide()
+                    showSecondStep();
                 }
             } else {
-                --initNum
-                if (initNum == 1) {
-                    $("#secondstep").removeClass("item active");
-                    $("#secondstep").addClass("item");
-                    $(".fabu_div2").html("数据发布 - 第1步，共3步");
-                    $("#firststep").removeClass("item finish");
-                    $("#firststep").addClass("item active");
-                    $(".rate").css("width", "0");
-
-                    $("#staNum").html(initNum)
-                    $(".progress-bar-success").width(initNum * 33 + "%");
-                    $("#tab2").removeClass("active")
-                    $("#tab1").addClass("active")
-                    $(".steps li:eq(1)").removeClass("active")
-                    $(".btn-default").hide();
-                } else if (initNum == 2) {
-                    $("#thirdstep").removeClass("item active");
-                    $("#thirdstep").addClass("item");
-                    $(".fabu_div2").html("数据发布 - 第2步，共3步");
-                    $("#secondstep").removeClass("item finish");
-                    $("#secondstep").addClass("item active");
-                    $(".rate").css("width", "50%");
-
-                    $("#staNum").html(initNum)
-                    $(".progress-bar-success").width(initNum * 33 + "%");
-                    $("#tab3").removeClass("active")
-                    $("#tab2").addClass("active")
-                    $(".steps li:eq(2)").removeClass("active")
-                    $(".btn-primary").show()
-                    $(".button-submit").hide()
+                --initNum;
+                if (initNum === 1) {
+                    returnFirstStep();
                 }
             }
         }
@@ -1005,8 +958,6 @@
             })
         }
 
-
-
         function relationalDatabaseTableList() {
             $.ajax({
                 url: ctx + "/resource/relationalDatabaseTableList",
@@ -1018,25 +969,6 @@
                     $(".undeslist").append(tabCon);
                 },
                 error: function (data) {
-                    console.log("请求失败")
-                }
-            })
-        }
-
-        function userGroupList() {
-            $.ajax({
-                url: ctx + "/resource/getUserGroups",
-                type: "GET",
-                success: function (data) {
-                    var list = JSON.parse(data)
-                    var tabCon = template("dataUserList", list);
-                    $("#permissions").append(tabCon);
-                    $('#permissions').select2({
-                        placeholder: "请选择用户",
-                        allowClear: true
-                    });
-                },
-                error: function () {
                     console.log("请求失败")
                 }
             })
@@ -1103,9 +1035,9 @@
                     createPerson: $("#create_person").val(),
                     extMetadata: extData,
                     //xiajl20190424增加
-                    isTemplate:$("#isTemplate").val(),
-                    metaTemplateName:$.trim($("#metaTemplateName").val()),
-                    memo:$("#memo").val()
+                    isTemplate: $("#isTemplate").val(),
+                    metaTemplateName: $.trim($("#metaTemplateName").val()),
+                    memo: $("#memo").val()
                 },
                 success: function (data) {
                     var data = JSON.parse(data)
@@ -1143,7 +1075,7 @@
             resourceData["fileDataList"] = fileDataList.length === 0 ? "" : fileDataList.toString().replace(reg, ";");
 
             if (!resourceData.sqlDataList && !resourceData.fileDataList) {
-                secondFlag = true;
+                toastr["error"]("请选择至少一项");
                 return;
             }
             $.ajax({
@@ -1151,14 +1083,13 @@
                 type: "POST",
                 data: resourceData,
                 success: function (data) {
-                    console.log(data)
+                    console.log(data);
+                    window.location.href = "${ctx}/dataRelease"
                 },
                 error: function (data) {
                     console.log("请求失败")
                 }
             });
-
-            userGroupList()
         }
 
         function addResourceThirdStep() {
@@ -1212,6 +1143,18 @@
             } else {
                 createTime = $.trim($("#createTime").val());
             }
+
+            //xiajl20190310
+            var d = {};
+            var t = $("#submit_form2").serializeArray();
+            $.each(t, function () {
+                console.log(this.name);
+                if (this.name.indexOf("ext_") >= 0) {
+                    d[this.name] = this.value;
+                }
+            });
+            var extData = JSON.stringify(d);
+
             $.ajax({
                 url: ctx + "/resource/editResourceFirstStep",
                 type: "POST",
@@ -1227,10 +1170,11 @@
                     endTime: $('.selectData:eq(1)').val(),
                     email: $("#Task_email").val(),
                     phoneNum: $("#Task_phone").val(),
-                    createTime: createTime,
+                    creatorCreateTimeString: createTime,
                     publishOrganization: $("#publish_Organization").val(),
                     createOrganization: $("#create_Organization").val(),
-                    createPerson: $("#create_person").val()
+                    createPerson: $("#create_person").val(),
+                    extMetadata: extData
                 },
                 success: function (data) {
                 },
@@ -1391,7 +1335,7 @@
 
 
         function initCenterResourceCatalog(container, index) {
-            alert('begin------' + index );
+            alert('begin------' + index);
             $.ajax({
                 url: ctx + "/getLocalResCatalog",
                 type: "get",

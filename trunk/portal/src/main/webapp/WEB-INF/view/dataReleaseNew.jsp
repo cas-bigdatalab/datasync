@@ -935,7 +935,7 @@
                         $("#file-endTime").html(convertMilsToDateString(dataList.endTime))
                         $("#file-createdByOrganization").html(dataList.createdByOrganization)
                         $("#file-createdBy").html(dataList.createPerson)
-                        $("#file-creationDate").html(convertMilsToDateString(dataList.creationDate))
+                        $("#file-creationDate").html(convertMilsToDateString(dataList.creatorCreateTime))
                         $("#file-organizationName").html(dataList.organizationName)
                         $("#file-mail").html(dataList.mail)
                         $("#file-phoneNum").html(dataList.phoneNum)
