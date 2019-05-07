@@ -229,7 +229,7 @@
 
                 <label>字段标题</label> {{value.columnName}}({{value.clumnCommet}})<br/>
                 {{/each}}
-                <div id="exit_table" style="display:none;width:500px;height:50px;">
+                <div id="exit_table" style="display:none;width:500px;">
                 </div>
                 <label>关联字段 </label>
                 <select id="checkedDataSheetTable" name="relationTable" class="relationTable">
@@ -437,15 +437,16 @@
 
         //关联数据表
         function getSheetTable(tableName, columnName, listData) {
+            $("#showTypeDataDetail").empty();
+            $('#showTypeDataModal').modal({backdrop: "static"});
             $.ajax({
                 type: "post",
                 url: "${ctx}/getDatasheetTable",
                 data: {"tableName": tableName, "subjectCode": sub, "columnName": columnName},
                 dataType: "json",
+                async: false,
                 success: function (data) {
                     data["listData"] = listData;
-                    $("#showTypeDataDetail").empty();
-                    $('#showTypeDataModal').modal({backdrop: "static"});
                     var html = template("templTypeDatasheet", data);
                     $("#showTypeDataDetail").append(html);
                     $("#checkedDataSheetTable").on("change", function () {
@@ -704,7 +705,6 @@
 
         //回显数据
         function getshowTypeData(tableName) {
-            debugger
             $.ajax({
                 type: "post",
                 url: "${ctx}/getShowTypeInfMsg",
@@ -756,6 +756,7 @@
                 url: "${ctx}/getShowTypeInfMsg",
                 data: {"tableName": tableName, "subjectCode": sub},
                 dataType: "json",
+                async: false,
                 success: function (data) {
                     var showTypeInfmsg = data.showTypeInfmsg;
                     var showTypeDetailList = data.showTypeInfmsg.showTypeDetailList;
@@ -802,71 +803,62 @@
                             }
 
                             if (showTypeDetailList[i].type === 3) {
+                                // getSheetTable(tableName, columnName, listData);
+                                typeTemplate(option, listData, columnName);
                                 debugger;
                                 var enmus = showTypeDetailList[i].enumData;
-                                var ss = "";
-                                // getSheetTable(tableName,columnName,listData);
-                                // $("#checkedDataSheetTable option[value='ani']").attr("selected", true);
-                                // $("#checkedDataSheetTable").val('ani');
-                                // $("#tableColunm_id").val('name');
+                                var sheetTable = new Array();
+                                $("#exit_table").html("");
                                 if (enmus !== null || enmus !== "") {
                                     $.ajax({
                                         type: "post",
                                         url: "${ctx}/getDatasheetTable",
                                         data: {"tableName": tableName, "subjectCode": sub, "columnName": columnName},
                                         dataType: "json",
+                                        async: false,
                                         success: function (data) {
-                                            data["listData"] = listData;
-                                            $("#showTypeDataDetail").empty();
-
-                                            $('#showTypeDataModal').modal({backdrop: "static"});
-                                            var html = template("templTypeDatasheet", data);
-                                            $("#showTypeDataDetail").append(html);
-                                            for (var k = 0; k < enmus.length; k++) {
-                                                var table = enmus[i].key;
-                                                var column = enmus[i].value;
-                                                // ss += "<div><input value='" + table + "'/><input value='" + column + "'/><span id='remove_id'><i class='fa fa-trash' onclick=\"func_removeSheetDate(this)\"></i></span></div>";
-                                                var templ = template("addSheetTable", data);
-                                                $("#exit_table").append(templ);
-                                                $("#checkedDataSheetTable").val('ani');
-                                                $("#tableColunm_id").val('name');
-                                                $("#exit_table").show();
-
-                                            }
-                                            // $("#exit_table").append(ss);
-
-
-                                            $("#checkedDataSheetTable").on("change", function () {
-                                                var tName = $("#checkedDataSheetTable option:selected").val();//选中的值
-
-                                                //级联查询表字段
-                                                <%--$.ajax({--%>
-                                                <%--type: "post",--%>
-                                                <%--url: "${ctx}/getDatasheetTableColumn",--%>
-                                                <%--data: {"tableName": tName, "subjectCode": sub},--%>
-                                                <%--dataType: "json",--%>
-                                                <%--success: function (data) {--%>
-                                                <%--$("#tableColunm_id").html("");--%>
-                                                <%--var column = data.list;--%>
-                                                <%--var s = "";--%>
-                                                <%--for (var i = 0; i < column.length; i++) {--%>
-                                                <%--if (column[i] === "PORTALID") {--%>
-
-                                                <%--} else {--%>
-                                                <%--s += "<option value='" + column[i] + "'>" + column[i] + "</option>"--%>
-                                                <%--}--%>
-                                                <%--}--%>
-                                                <%--$("#tableColunm_id").append(s);--%>
-                                                <%--}--%>
-                                                <%--})--%>
-
-                                            })
+                                            sheetTable = data.list;
                                         }
                                     });
+                                    var ss = "";
+                                    for (var k = 0; k < enmus.length; k++) {
+                                        var s_Table = enmus[k].key;
+                                        var s_columnN = enmus[k].value;
+                                        var s_columns = new Array();
+                                        $.ajax({
+                                            type: "post",
+                                            url: "${ctx}/getDatasheetTableColumn",
+                                            data: {"tableName": s_Table, "subjectCode": sub},
+                                            dataType: "json",
+                                            async: false,
+                                            success: function (data) {
+                                                s_columns = data.list;
+                                            }
+                                        });
+
+                                        ss = "<div><select>";
+                                        for (var j = 0; j < sheetTable.length; j++) {
+                                            if (s_Table === sheetTable[j]) {
+                                                ss += "<option selected>" + sheetTable[j] + "</option>"
+                                            } else {
+                                                ss += "<option>" + sheetTable[j] + "</option>"
+                                            }
+                                        }
+                                        ss += "</select><select>";
+                                        for (var ii = 0; ii < s_columns.length; ii++) {
+                                            if (s_columns[ii] === "PORTALID") {
+                                            }
+                                            if (s_columnN === s_columns[ii]) {
+                                                ss += "<option selected>" + s_columns[ii] + "</option>"
+                                            } else {
+                                                ss += "<option>" + s_columns[ii] + "</option>"
+                                            }
+                                        }
+                                        ss += "</select><span id='remove_id'><i class='fa fa-trash' onclick=\"func_removeSheetDate(this)\"></i></span></div>";
+                                        $("#exit_table").append(ss);
+                                    }
+                                    $("#exit_table").show();
                                 }
-
-                                $("#checkedDataSheetTable option[value='+ enums[0].key +']").attr("selected", "selected");
-
 
                             }
                             if (showTypeDetailList[i].type === 4) {

@@ -110,6 +110,7 @@ public class EditDataController {
        return jsonObject;
     }
 
+
 //    显示表数据，使用template，建立数据类，未完成
     @ResponseBody
     @RequestMapping("/showTableDataTestTmpl")
@@ -140,91 +141,25 @@ public class EditDataController {
         return jsonObject;
     }
 
-
-    @RequestMapping("/saveTableData")
-    @ResponseBody
-    public JSONObject saveTableData(@Param("olddata") String olddata, @Param("newdata") String newdata){
-        JSONObject jsonObject=new JSONObject();
-
-         JSONArray jsonArray1=JSONArray.parseArray(olddata);
-         JSONArray jsonArray2=JSONArray.parseArray(newdata);
-
-         JSONObject tableNameObjext=jsonArray1.getJSONObject(0);
-        JSONObject dbNameObjext=jsonArray1.getJSONObject(1);
-        String tableName= tableNameObjext.getString("value");
-        String dbName=dbNameObjext.getString("value");
-
-        DataSrc datasrc=getDataSrc(dbName);
-        Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);
-
-        List<String> list1=map.get("pkColumn");
-        List<String> list2=map.get("autoAdd");
-        List<String> list3=map.get("IS_NULLABLE");
-
-
-//        条件设置,拼串
-        String conditionstr=" where ";
-        for(int i=2;i<jsonArray1.size();i++){
-            String column=jsonArray1.getJSONObject(i).getString("name");
-//            String value=jsonArray1.getJSONObject(i).getString("value");
-//            if(!value.equals("")&& value!=null && !value.equals("null")) {
-//                conditionstr += "" + column + "= '" + value + "' and ";
-//            }
-            if("PORTALID".equals(column)) {
-                String value=jsonArray1.getJSONObject(i).getString("value");
-                conditionstr += " PORTALID  = '" + value + "' ";
-            }
-        }
-
-  //更新的数据
-     String updatestr=" set ";
-        int j=0;
-        for(int i=2;i<jsonArray2.size();i++){
-
-            String column=jsonArray2.getJSONObject(i).getString("name");
-            String value=jsonArray2.getJSONObject(i).getString("value");
-
-            if(list3.get(i-2).equals("NO") && (value.equals("null")||value.equals(""))){
-                jsonObject.put("data","-2+"+column);//该列不能为空
-                return jsonObject;
-            }
-
-            if(!value.equals(jsonArray1.getJSONObject(i).getString("value"))) {
-                if(value.equals("") && !jsonArray1.getJSONObject(i).getString("value").equals("")){
-                    updatestr += "" + column + "= null , ";
-                    j++;
-                }else {
-                    updatestr += "" + column + "= '" + value + "' , ";
-                    j++;
-                }
-            }
-        }
-        if(j==0){
-            jsonObject.put("data","1");
-            return jsonObject;
-        }
-        int l=conditionstr.length();
-//        String s1=conditionstr.substring(0,l-5);
-        String s1=conditionstr;
-        int ll=updatestr.length();
-        String s2=updatestr.substring(0,ll-2);
-        int n=dataSrcService.updateDate(s1,s2,tableName,datasrc);
-        if(n==1){
-            jsonObject.put("data","1");
-        }else{
-            jsonObject.put("data","0");
-        }
-        return jsonObject;
-    }
-
+    /**
+     * @Description: 新增数据，点击保存按钮
+     * @Param: [subjectCode, tableName, addData, enumnCoumn]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @Author: zcy
+     * @Date: 2019/5/7
+     */
     @RequestMapping("/addTableData")
     @ResponseBody
-    public JSONObject addTableData(String subjectCode,String tableName,String  addData){
+    public JSONObject addTableData(String subjectCode, String tableName, String addData, String enumnCoumn){
 
         JSONObject jsonObject=new JSONObject();
         JSONArray jsonArray=JSONArray.parseArray(addData);
         String column="";
         String values="";
+        String enumnCoumns[] = enumnCoumn.split(",");
+//
+        ShowTypeInf showTypeInf = showTypeInfService.getShowTypeInf(tableName, subjectCode);
+
         DataSrc datasrc=getDataSrc(subjectCode);
         Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);
 
@@ -246,6 +181,32 @@ public class EditDataController {
                         jsonObject.put("prikey",col);
                         return jsonObject;
                     }
+//                    if(showTypeInf!=null) {
+//                        for (int ii = 0; ii < enumnCoumns.length; ii++) {
+//                            if(col.equals(enumnCoumns[ii])){
+//                                ShowTypeDetail showTypeDetail = showTypeInfService.getShowTypeDetail(showTypeInf, enumnCoumns[ii]);
+//                                if (showTypeDetail != null) {
+//                                    if(showTypeDetail.getOptionMode().equals("1")){
+//                                        List<EnumData> list=showTypeDetail.getEnumData();
+//                                        for(EnumData e:list){
+//                                            if(val.equals(e.getValue())){
+//                                                val=e.getKey();
+//                                            }
+//                                        }
+//                                    }
+//                                    if(showTypeDetail.getOptionMode().equals("2")){
+//                                        String reTable=showTypeDetail.getRelationTable();
+//                                        String recolK=showTypeDetail.getRelationColumnK();
+//                                        String recolV=showTypeDetail.getRelationColumnV();
+//                                        val=dataSrcService.getSqlEnumData(datasrc,reTable,recolK,recolV,val);
+//                                    }
+//                                }
+//                            }
+//
+//                        }
+//                    }
+                    val = getEnumKeyByVal(showTypeInf, enumnCoumns, col, val, datasrc);
+
                     column += "" + col + " ,";
                     values += "'" + val + "' ,";
                 }else{
@@ -257,20 +218,42 @@ public class EditDataController {
                 String uuid = UUID.randomUUID().toString();
                 column+="PORTALID ,";
                 values+="'"+uuid+"' ,";
-            }else{   //不是主键
-                if(val!=null&& !val.equals("")){
+            } else{
+                if(val!=null&& !val.equals("")) {
+
+//                    if(showTypeInf!=null) {
+//                        for (int ii = 0; ii < enumnCoumns.length; ii++) {
+//                            if(col.equals(enumnCoumns[ii])){
+//                                ShowTypeDetail showTypeDetail = showTypeInfService.getShowTypeDetail(showTypeInf, enumnCoumns[ii]);
+//                                if (showTypeDetail != null) {
+//                                    if(showTypeDetail.getOptionMode().equals("1")){
+//                                        List<EnumData> list=showTypeDetail.getEnumData();
+//                                        for(EnumData e:list){
+//                                            if(val.equals(e.getValue())){
+//                                                val=e.getKey();
+//                                            }
+//                                        }
+//                                    }
+//                                    if(showTypeDetail.getOptionMode().equals("2")){
+//                                        String reTable=showTypeDetail.getRelationTable();
+//                                        String recolK=showTypeDetail.getRelationColumnK();
+//                                        String recolV=showTypeDetail.getRelationColumnV();
+//                                        val=dataSrcService.getSqlEnumData(datasrc,reTable,recolK,recolV,val);
+//                                    }
+//                                }
+//                            }
+//
+//                        }
+//                    }
+                    val = getEnumKeyByVal(showTypeInf, enumnCoumns, col, val, datasrc);
                     column += "" + col + " ,";
                     values += "'" + val + "' ,";
-                }else if(!col.equals("PORTALID") && list3.get(i).equals("NO")){
-                    jsonObject.put("data","-2+"+col);//该列不能为空
+                }else if(!col.equals("PORTALID") && list3.get(i).equals("NO")) {
+                    jsonObject.put("data", "-2+" + col);    //该列不能为空
                     return jsonObject;
                 }
             }
         }
-//        表随机主键
-//        String uuid = UUID.randomUUID().toString();
-//        column+="PORTALID";
-//        values+="'"+uuid+"'";
 
         column=column.substring(0,column.length()-1);
         values=values.substring(0,values.length()-1);
@@ -299,6 +282,33 @@ public class EditDataController {
         return jsonObject;
     }
 
+    public String getEnumKeyByVal(ShowTypeInf showTypeInf, String[] enumnCoumns, String col, String val, DataSrc datasrc) {
+        if (showTypeInf != null) {
+            for (int ii = 0; ii < enumnCoumns.length; ii++) {
+                if (col.equals(enumnCoumns[ii])) {
+                    ShowTypeDetail showTypeDetail = showTypeInfService.getShowTypeDetail(showTypeInf, enumnCoumns[ii]);
+                    if (showTypeDetail != null) {
+                        if (showTypeDetail.getOptionMode().equals("1")) {
+                            List<EnumData> list = showTypeDetail.getEnumData();
+                            for (EnumData e : list) {
+                                if (val.equals(e.getValue())) {
+                                    val = e.getKey();
+                                }
+                            }
+                        }
+                        if (showTypeDetail.getOptionMode().equals("2")) {
+                            String reTable = showTypeDetail.getRelationTable();
+                            String recolK = showTypeDetail.getRelationColumnK();
+                            String recolV = showTypeDetail.getRelationColumnV();
+                            val = dataSrcService.getSqlEnumData(datasrc, reTable, recolK, recolV, val);
+                        }
+                    }
+                }
+
+            }
+        }
+        return val;
+    }
 
     @ResponseBody
     @RequestMapping("/toaddTableData")
@@ -324,42 +334,46 @@ public class EditDataController {
         if (showTypeInf == null) {
             jsonObject.put("alert", 0);//该表没有设置过显示类型
         } else {
-            for (int i = 0; i < list1.size(); i++) {
-                ShowTypeDetail showTypeDetail = showTypeInfService.getShowTypeDetail(showTypeInf, list1.get(i));
-                if (showTypeDetail != null) {
-                    EnumData enumData = new EnumData();
-                    String s = "";
-                    if (showTypeDetail.getType() == 2) {
-                        if (showTypeDetail.getOptionMode().equals("1")) { //文本串
-
-                            List<EnumData> enumText = showTypeDetail.getEnumData();
-
-                            for (EnumData e : enumText) {
-                                s += e.getValue() + ",";
-                            }
-                            enumData.setKey(list1.get(i));
-                            enumData.setValue(s);
-                            enumDataList.add(enumData);
-                        }
-                        if (showTypeDetail.getOptionMode().equals("2")) {  //sql
-                            String reTable = showTypeDetail.getRelationTable();
-                            String reColKey = showTypeDetail.getRelationColumnK();
-                            String reColVal = showTypeDetail.getRelationColumnV();
-                            List<String> list = dataSrcService.getDataByColumn(datasrc, tableName, list1.get(i));
-                            List<EnumData> enumSqlList = dataSrcService.getEnumData(datasrc, reTable, reColKey, reColVal);
-                            enumData = dataSrcService.enumCorresponding(list, enumSqlList);
-                            enumData.setKey(list1.get(i));
-                            enumDataList.add(enumData);
-                        }
-                    }
-                } else {
-                    jsonObject.put("alert", 0);//该列没有设置过显示类型
-                }
-            }
+            enumDataList = getEnumData(list1, showTypeInf, datasrc, tableName);
             jsonObject.put("enumDataList", enumDataList);
             jsonObject.put("alert", 1);
         }
         return jsonObject;
+    }
+
+    public List<EnumData> getEnumData(List<String> list1, ShowTypeInf showTypeInf, DataSrc datasrc, String tableName) {
+        List<EnumData> enumDataList = new ArrayList<>();
+        for (int i = 0; i < list1.size(); i++) {
+            ShowTypeDetail showTypeDetail = showTypeInfService.getShowTypeDetail(showTypeInf, list1.get(i));
+            if (showTypeDetail != null) {
+                EnumData enumData = new EnumData();
+                String s = "";
+                if (showTypeDetail.getType() == 2) {
+                    if (showTypeDetail.getOptionMode().equals("1")) { //文本串
+
+                        List<EnumData> enumText = showTypeDetail.getEnumData();
+
+                        for (EnumData e : enumText) {
+                            s += e.getValue() + ",";
+                        }
+                        enumData.setKey(list1.get(i));
+                        enumData.setValue(s);
+                        enumDataList.add(enumData);
+                    }
+                    if (showTypeDetail.getOptionMode().equals("2")) {  //sql
+                        String reTable = showTypeDetail.getRelationTable();
+                        String reColKey = showTypeDetail.getRelationColumnK();
+                        String reColVal = showTypeDetail.getRelationColumnV();
+                        List<String> list = dataSrcService.getDataByColumn(datasrc, tableName, list1.get(i));
+                        List<EnumData> enumSqlList = dataSrcService.getEnumData(datasrc, reTable, reColKey, reColVal);
+                        enumData = dataSrcService.enumCorresponding(list, enumSqlList);
+                        enumData.setKey(list1.get(i));
+                        enumDataList.add(enumData);
+                    }
+                }
+            }
+        }
+        return enumDataList;
     }
 
     @RequestMapping("toupdateTableData")
@@ -381,17 +395,73 @@ public class EditDataController {
         jsonObject.put("autoAdd",list4);
         jsonObject.put("pkColumn",list5);
         jsonObject.put("COLUMN_TYPE",list6);
-        List<String> list=dataSrcService.getDataByPORTALID(datasrc,tableName,PORTALID);
-        jsonObject.put("data",list);
+        List<String> list7 = dataSrcService.getDataByPORTALID(datasrc, tableName, PORTALID);
+
+        List<EnumData> enumDataList = new ArrayList<>();
+//        判断该表是否设置过显示类型
+        ShowTypeInf showTypeInf = showTypeInfService.getTableComment(tableName, subjectCode);
+        if (showTypeInf == null) {
+            jsonObject.put("alert", 0);//该表没有设置过显示类型
+        } else {
+            for (int i = 0; i < list1.size(); i++) {
+                ShowTypeDetail showTypeDetail = showTypeInfService.getShowTypeDetail(showTypeInf, list1.get(i));
+                if (showTypeDetail != null) {
+                    EnumData enumData = new EnumData();
+                    if (showTypeDetail.getType() == 2) {
+                        String s = "";
+                        if (showTypeDetail.getOptionMode().equals("1")) { //文本串
+
+                            List<EnumData> enumText = showTypeDetail.getEnumData();
+
+                            for (EnumData e : enumText) {
+                                if (list7.get(i).equals(e.getKey())) {
+                                    list7.set(i, e.getValue());
+                                }
+                                s += e.getValue() + ",";
+                            }
+                            enumData.setKey(list1.get(i));
+                            enumData.setValue(s);
+                            enumDataList.add(enumData);
+
+                        }
+                        String s_val = "";
+                        if (showTypeDetail.getOptionMode().equals("2")) {  //sql
+                            String reTable = showTypeDetail.getRelationTable();
+                            String reColKey = showTypeDetail.getRelationColumnK();
+                            String reColVal = showTypeDetail.getRelationColumnV();
+                            List<String> list = dataSrcService.getDataByColumn(datasrc, tableName, list1.get(i));
+                            List<EnumData> enumSqlList = dataSrcService.getEnumData(datasrc, reTable, reColKey, reColVal);
+                            for (String ss : list) {
+                                for (EnumData e : enumSqlList) {
+                                    if (ss.equals(e.getKey())) {
+                                        s_val += e.getValue() + ",";
+                                    }
+                                    if (list7.get(i).equals(e.getKey())) {
+                                        list7.set(i, e.getValue());
+                                    }
+                                }
+                            }
+                            enumData.setValue(s_val);
+                            enumData.setKey(list1.get(i));
+                            enumDataList.add(enumData);
+                        }
+                    }
+                }
+            }
+        }
+        jsonObject.put("enumDataList", enumDataList);
+        jsonObject.put("data", list7);
         return jsonObject;
     }
 
 
-    @RequestMapping("/saveTableDataTest")
+    @RequestMapping("/saveTableData")
     @ResponseBody
-    public JSONObject saveTableDataTest(@Param("newdata") String newdata,String subjectCode,String tableName,String delPORTALID){
+    public JSONObject saveTableData(@Param("newdata") String newdata, String subjectCode, String tableName, String delPORTALID, String enumColumn){
         JSONObject jsonObject=new JSONObject();
-//        System.out.println(newdata);
+        String enumnCoumns[] = enumColumn.split(",");
+//
+        ShowTypeInf showTypeInf = showTypeInfService.getShowTypeInf(tableName, subjectCode);
         JSONArray jsonArray2=JSONArray.parseArray(newdata);
         DataSrc datasrc=getDataSrc(subjectCode);
         Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);
@@ -406,7 +476,7 @@ public class EditDataController {
 //        条件设置,拼串
         String conditionstr=" where ";
                 conditionstr += " PORTALID  = '" + delPORTALID + "' ";
-//
+
         for(int i=0;i<jsonArray2.size();i++){
             String column=jsonArray2.getJSONObject(i).getString("name");
             String value=jsonArray2.getJSONObject(i).getString("value");
@@ -418,9 +488,8 @@ public class EditDataController {
             }
             if(list1.get(i).equals("PRI")){
               int n=dataSrcService.checkPriKey(datasrc,tableName,value,column);
-              if(n>1){
-//                  System.out.println("主键重复"+n);
-                  jsonObject.put("data","-1");           //该列不能为空
+              if(n>1) {
+                  jsonObject.put("data", "-1");           //主键重复
                   return jsonObject;
               }
             }
@@ -429,6 +498,7 @@ public class EditDataController {
             }else if((list.get(i).equals("")||list.get(i)==null)&&(value.equals("")||value==null)){
 
             }else {
+                value = getEnumKeyByVal(showTypeInf, enumnCoumns, column, value, datasrc);
                 updatestr += "" + column + "= '" + value + "' , ";
             }
         }
@@ -451,9 +521,9 @@ public class EditDataController {
         return jsonObject;
     }
 
-    @RequestMapping("toupdateTableDatatest")
+    @RequestMapping("toCheckTableData")
     @ResponseBody
-    public JSONObject toupdateTableDatatest(String subjectCode,String tableName,String PORTALID){
+    public JSONObject toCheckTableData(String subjectCode, String tableName, String PORTALID){
         JSONObject jsonObject=new JSONObject();
         DataSrc datasrc=getDataSrc(subjectCode);
         Map<String,List<String>> map=dataSrcService.getTableStructure(datasrc,tableName);

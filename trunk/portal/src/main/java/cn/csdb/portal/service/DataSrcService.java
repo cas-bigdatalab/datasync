@@ -435,6 +435,13 @@ public class DataSrcService {
         return dataSource.validateSql(connection, sql);
     }
 
+    /**
+     * @Description:
+     * @Param: [list, enumDataList]
+     * @return: cn.csdb.portal.model.EnumData
+     * @Author: zcy
+     * @Date: 2019/5/7
+     */
     public EnumData enumCorresponding(List<String> list, List<EnumData> enumDataList) {
         EnumData enumDataList1 = new EnumData();
         String ss = "";
@@ -447,6 +454,38 @@ public class DataSrcService {
         }
         enumDataList1.setValue(ss);
         return enumDataList1;
+    }
+
+    /**
+     * @Description: 新增数据，sql类型，根据val的值回找key值
+     * @Param: [dataSrc, tableName, recolK, recolV]
+     * @return: java.lang.String
+     * @Author: zcy
+     * @Date: 2019/5/7
+     */
+    public String getSqlEnumData(DataSrc dataSrc, String tableName, String recolK, String recolV, String recolValue) {
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        String colKey = "";
+        try {
+
+            String sql = "select distinct " + recolK + " from " + tableName + " where " + recolV + "='" + recolValue + "'";
+            System.out.println(sql);
+            PreparedStatement pst = connection.prepareStatement(sql);
+            ResultSet set = pst.executeQuery();
+            while (set.next()) {
+                colKey = set.getString(recolK);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return colKey;
     }
 
 }
