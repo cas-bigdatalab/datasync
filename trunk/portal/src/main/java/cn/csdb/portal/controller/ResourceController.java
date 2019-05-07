@@ -5,7 +5,6 @@ import cn.csdb.portal.repository.TableFieldComsDao;
 import cn.csdb.portal.service.*;
 import cn.csdb.portal.utils.FileTreeNode;
 import cn.csdb.portal.utils.FileUploadUtil;
-import cn.csdb.portal.utils.PropertiesUtil;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
@@ -14,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +60,9 @@ public class ResourceController {
     private MetadataTemplateService metadataTemplateService;
     @Resource
     private MetaTemplateService metaTemplateService;
+
+    @Value("#{systemPro['imagesPath']}")
+    private String imagesPath;
 
     private Logger logger = LoggerFactory.getLogger(ResourceController.class);
 
@@ -762,9 +765,8 @@ public class ResourceController {
     ) throws Exception {
         JSONObject jsonObject = new JSONObject();
         String saveName = "";
-        String configFilePath = SubjectMgmtController.class.getClassLoader().getResource("config.properties").getFile();
         String subjectCode = (String) request.getSession().getAttribute("SubjectCode");
-        String resourcePath = PropertiesUtil.GetValueByKey(configFilePath, "imagesPath");
+        String resourcePath = imagesPath;
         resourcePath += "/" + subjectCode + "/resources";
         if (imageFile != null) {
             if (FileUploadUtil.allowUpload(imageFile.getContentType())) {

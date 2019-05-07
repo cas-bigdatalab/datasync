@@ -1,8 +1,8 @@
 package cn.csdb.portal.controller;
 
 import cn.csdb.portal.service.FileNetService;
-import cn.csdb.portal.utils.ConfigUtil;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +28,9 @@ public class FileNetController {
 
     @Resource
     private FileNetService fileNetService;
+
+    @Value("#{systemPro['ResourceExtraFile']}")
+    private String ResourceExtraFile;
 
 
     /**
@@ -79,7 +82,7 @@ public class FileNetController {
         boolean win = ftpRootPath.endsWith("\\");
         if (linux || win) {
             ftpRootPath = ftpRootPath.substring(0, ftpRootPath.length() - 1);
-            ftpRootPath += File.separator + "file";
+            ftpRootPath += "/file";
             return ftpRootPath;
         }
         return ftpRootPath;
@@ -225,8 +228,7 @@ public class FileNetController {
     public List<String> unloadFileOnLocal(HttpServletRequest request) {
         MultipartRequest multipartRequest = (MultipartRequest) request;
         String ftpRootPath = removeFtpRootLastSeparator(request);
-        String configFilePath = FileNetController.class.getClassLoader().getResource("config.properties").getFile();
-        String ResourceExtraFile = ConfigUtil.getConfigItem(configFilePath, "ResourceExtraFile");
+        String ResourceExtraFile = this.ResourceExtraFile;
         String parentURI = ftpRootPath + ResourceExtraFile;
         List<MultipartFile> files = multipartRequest.getMultiFileMap().get("file_data");
         List<String> filePath = new ArrayList<>(10);

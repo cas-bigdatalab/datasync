@@ -2,7 +2,6 @@ package cn.csdb.portal.service;
 
 import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.repository.CheckUserDao;
-import cn.csdb.portal.utils.ConfigUtil;
 import cn.csdb.portal.utils.FtpUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.fileupload.FileItem;
@@ -44,15 +43,8 @@ public class FileUploadService {
             String host = mysql.getDbHost();
             String userName = mysql.getFtpUser();
             String password = mysql.getFtpPassword();
-            String configFilePath = FileUploadService.class.getClassLoader().getResource("config.properties").getFile();
-            String port = ConfigUtil.getConfigItem(configFilePath, "FrpPort");
-            String ftpRootPath = ConfigUtil.getConfigItem(configFilePath, "FtpRootPath");
-            boolean connect = ftpUtil.connect(host, Integer.parseInt(port), userName, password);
             boolean upload = ftpUtil.upload(name, fileItem.getInputStream());
             System.out.println(upload);
-//            ftpUtil.disconnect();
-
-//            ftpUtil.uploadFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
