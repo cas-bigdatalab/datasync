@@ -18,6 +18,7 @@
     <title>数据发布管理系统</title>
     <link href="${ctx}/resources/css/dataUpload.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
+    <link href="${ctx}/resources/bundles/select2/select2.css" rel="stylesheet" type="text/css"/>
     <style type="text/css">
         .arrListSty {
             display: inline-block;
@@ -66,8 +67,8 @@
             <label style="padding-left: 10px;color:black">数据类型:</label>
             <select id="resourcePublicType" class="form-control" style="width: 120px">
                 <option value="">全部</option>
-                <option value="mysql">mysql</option>
-                <option value="file">file</option>
+                <option value="mysql">RDB</option>
+                <option value="file">FILE</option>
             </select>
 
 
@@ -433,9 +434,14 @@
                                                     * </span>
                             </label>
                             <div class="col-md-7" style="padding-top:13px">
-                                <span style="margin-right:10%"> <input id="radio1" type="radio" name="audit_status"
-                                                                       value="2" checked/>审核通过</span>
-                                <span><input id="radio2" type="radio" name="audit_status" value="0"/>审核未通过</span>
+                                <span style="margin-right:10%">
+                                    <input id="radio1" type="radio" name="audit_status" value="2" checked/>
+                                    <label for="radio1">审核通过</label>
+                                </span>
+                                <span>
+                                    <input id="radio2" type="radio" name="audit_status" value="0"/>
+                                    <label for="radio2">审核未通过</label>
+                                </span>
 
                             </div>
 
@@ -450,6 +456,19 @@
                                                               id="audit_content" name="audit_content"
                                                               required="required"></textarea>
 
+                            </div>
+                        </div>
+
+                        <div id="selectGroup" class="row">
+                            <div class="col-sm-2 text-right">
+                                <label for="permissions">
+                                    公开范围
+                                    <span class="required" aria-required="true" style="color: red">*</span>
+                                </label>
+                            </div>
+                            <div class="col-sm-8" style="padding-top: 7px;">
+                                <select class='form-control select2me' name='permissions' id='permissions' multiple>
+                                </select>
                             </div>
                         </div>
                     </form>
@@ -565,11 +584,17 @@
     </div>
     {{/each}}
 </script>
+<script type="text/html" id="groupOption">
+    {{each data as value i}}
+    <option value="{{value.groupName}}">{{value.groupName}}</option>
+    {{/each}}
+</script>
 </body>
 
 <!--为了加快页面加载速度，请把js文件放到这个div里-->
 <div id="siteMeshJavaScript">
-
+    <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2_locale_zh-CN.js"></script>
     <script type="text/javascript">
         var publicType = ""
         var resourceState = ""
@@ -621,7 +646,7 @@
                 },
                 audit_content: {
                     required: "请输入审核具体信息"
-                },
+                }
             },
             errorPlacement: function (error, element) { // render error placement for each input type
                 if (element.parent(".input-group").size() > 0) {
@@ -666,10 +691,10 @@
         }
 
         function auditRelease(id) {
-            $("#auditId").attr("auditId", id)
-            $("#audit_status option:eq(0)").prop("selected", true)
-            $("#audit_content").val("")
-            $("#AuditMessageList").empty()
+            $("#auditId").attr("auditId", id);
+            $("#audit_status option:eq(0)").prop("selected", true);
+            $("#audit_content").val("");
+            $("#AuditMessageList").empty();
             $.ajax({
                 url: "${ctx}/resource/getAuditMessage",
                 type: "GET",
@@ -681,6 +706,8 @@
                     console.log(list)
                     var tabCon = template("resourceTmp2", list);
                     $("#AuditMessageList").append(tabCon);
+                    initSelectGroup();
+                    $("#audit_content").val("审核通过!");
                     $("#auditModal").modal("show")
                 },
                 error: function () {
@@ -691,25 +718,30 @@
         }
 
         $("#auditId").click(function () {
-            // var auditContent = $("#audit_content").val();
+            var id, auditContent, userGroupId;
             if (statusres === "2") {
-                $("#audit_content").val("审核通过！");
+                if ($("#permissions").val().size === 0) {
+                    toastr["warning"]("请选择数据集的公开范围", "警告！");
+                    return;
+                } else {
+                    userGroupId = $("#permissions").val().toString();
+                }
+            } else if (statusres === "0") {
+                if (!$("#submit_form1").valid()) {
+                    return
+                }
             }
-            // alert("备注信息："+auditContent);
-            if (!$("#submit_form1").valid()) {
-                return
-            }
-            var id = $(this).attr("auditId");
-            // var status=$("#audit_status").val()
-            var auditContent = $("#audit_content").val();
-            var status = statusres;
+
+            id = $(this).attr("auditId");
+            auditContent = $("#audit_content").val();
             $.ajax({
                 url: "${ctx}/resource/audit",
                 type: "POST",
                 data: {
                     resourceId: id,
-                    status: status,
-                    auditContent: auditContent
+                    status: statusres,
+                    auditContent: auditContent,
+                    userGroupId: userGroupId
                 },
                 success: function (data) {
                     $('#auditModal').modal('hide');
@@ -742,10 +774,6 @@
                 }
             })
 
-        }
-
-        function resSend() {
-            window.location.href = "${ctx}/dataSourceDescribeEdit"
         }
 
         function showData(id, type, tabStatus) {
@@ -1061,18 +1089,69 @@
             ele.append(arrListStr)
         }
 
+        function initSelectGroup() {
+            var resourceId = $.trim($("#auditId").attr("auditid"));
+            var $permissions = $("#permissions");
+            $permissions.select2("destroy");
+            $permissions.find("option").remove();
+            var selectGroup;
+            $.ajax({
+                async: false,
+                type: "GET",
+                url: "${ctx}/resource/getUserGroups",
+                dataType: "JSON",
+                success: function (data) {
+                    var tabCon = template("groupOption", {"data": data.groupList});
+                    $permissions.append("<option value='公开组'>公开组</option>");
+                    $permissions.append(tabCon);
+                    selectGroup = $permissions.select2({
+                        placeholder: "请选择用户",
+                        allowClear: true
+                    });
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "${ctx}/resource/getResourceById",
+                dataType: "JSON",
+                data: {
+                    resourceId: resourceId
+                },
+                success: function (data) {
+                    var userGroupId = data.resource.userGroupId;
+                    if ($.trim(userGroupId).length !== 0) {
+                        selectGroup.select2().val(userGroupId.split(",")).trigger("change");
+                    }
+                }
+            });
+        }
+
         //    审核提示框
         $(function () {
             $(":radio").click(function () {
                 if (this.checked) {
                     if ($(this).attr("id") === "radio1") {
-                        $("#releas_remark").hide();
+                        // 审核通过
                         statusres = "2";
+                        $("#releas_remark").hide();
+                        $("#selectGroup").show();
+                        $("#audit_content").val("审核通过！");
                     }
                     if ($(this).attr("id") === "radio2") {
-                        $("#releas_remark").show();
+                        // 审核不通过
                         statusres = "0";
+                        $("#selectGroup").hide();
+                        $("#releas_remark").show();
+                        $("#audit_content").val("审核未通过！");
                     }
+                }
+            })
+
+            $("#permissions").on("select2-selecting", function (e) {
+                var val = e.val;
+                if (val === "公开组") {
+                    toastr["warning"]("选择公开组，当前数据集将会向所有用户开放", "警告！");
                 }
             })
         })

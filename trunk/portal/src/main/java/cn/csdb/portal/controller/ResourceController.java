@@ -823,7 +823,7 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping(value = "audit")
-    public JSONObject audit(HttpSession session, String resourceId, String status, String auditContent) {
+    public JSONObject audit(HttpSession session, String resourceId, String status, String auditContent, String userGroupId) {
         String auditPerson = session.getAttribute("userName").toString();
         JSONObject jo = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
@@ -831,6 +831,7 @@ public class ResourceController {
         long currentTimeMillis = System.currentTimeMillis();
         Date date = new Date(currentTimeMillis);
         resource.setAuditTime(date);
+        resource.setUserGroupId(userGroupId);
         AuditMessage auditMessage = new AuditMessage();
         auditMessage.setAuditTime(new Date());
         auditMessage.setAuditCom(auditContent);
