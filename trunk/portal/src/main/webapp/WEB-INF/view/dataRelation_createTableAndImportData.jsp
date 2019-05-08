@@ -11,34 +11,6 @@
     <title>Title</title>
 
     <style>
-        .file {
-            position: relative;
-            display: inline-block;
-            background: #D0EEFF;
-            border: 1px solid #99D3F5;
-            border-radius: 4px;
-            padding: 4px 12px;
-            overflow: hidden;
-            color: #1E88C7;
-            text-decoration: none;
-            text-indent: 0;
-            line-height: 20px;
-        }
-
-        .file input {
-            position: absolute;
-            font-size: 100px;
-            right: 0;
-            top: 0;
-            opacity: 0;
-        }
-
-        .file:hover {
-            background: #AADFFD;
-            border-color: #78C3F3;
-            color: #004974;
-            text-decoration: none;
-        }
 
         .inputfile {
             width: 0.1px;
@@ -116,7 +88,7 @@
 
 <div class="tab-content" style="background-color: white;">
     <%--导入式建表--%>
-    <div class="tab-pane active" id="uploadExcel" style="height: 200px;background: #dddddd">
+    <div class="tab-pane active" id="uploadExcel" style="height: 50%">
         <form name="form" id="fileForm" method="post" style="text-align: center;">
             <div style="padding-top: 5%;"></div>
             <a href="${ctx}/fileImport/getExcelTemplate" style="font-size: 19px;">点击下载Excel模板</a><br/>
@@ -131,46 +103,54 @@
 
     <%--关联创建表--%>
     <div class="tab-pane" id="sql">
-        <div style="width: 100%;height: 80%;background: #dddddd">
+        <div style="width: 100%;height: 90%;padding: 20px 20px;">
             <p></p>
-            <h4>通过联合表A和表B，形成新表</h4>
+            <h4><a style="color: blue;font-weight: bolder;">通过联合表A和表B，形成新表</a></h4>
             <div style="margin-left: 3%;">
                 <form id="selectTable">
                     <div class="row" id="tableA">
-                        <div class="col-md-1"> 关联表A</div>
+                        <div class="col-md-1 text-right"> 关联表A</div>
                         <div class="col-md-4">
                             <select id="selectTableA" class="selectTable">
                             </select>
                         </div>
+                        <div class="col-md-1 text-right">表A关联字段</div>
                         <div class="col-md-4">
                             <select id="selectTableFieldA" class="">
 
                             </select>
                         </div>
                     </div>
-                    <div id="checkBoxTableFieldA"></div>
+                    <div class="row">
+                        <div class="col-md-1 text-right">表A字段</div>
+                    </div>
+                    <div id="checkBoxTableFieldA" class="checkBoxTableField"></div>
 
                     <div class="row" style="height: 20px"></div>
 
                     <div class="row" id="tableB">
-                        <div class="col-md-1"> 关联表B</div>
+                        <div class="col-md-1 text-right"> 关联表B</div>
                         <div class="col-md-4">
                             <select id="selectTableB" class="selectTable">
 
                             </select>
                         </div>
+                        <div class="col-md-1 text-right">表B关联字段</div>
                         <div class="col-md-4">
                             <select id="selectTableFieldB" class="">
 
                             </select>
                         </div>
                     </div>
-                    <div id="checkBoxTableFieldB">
+                    <div class="row">
+                        <div class="col-md-1 text-right">表B字段</div>
+                    </div>
+                    <div id="checkBoxTableFieldB" class="checkBoxTableField">
                     </div>
                 </form>
             </div>
-            <h4>通过SQL语句，形成新表</h4>
-            <div style="margin-left: 3%;">
+            <h4><a style="color: blue;font-weight: bolder;">通过SQL语句，形成新表</a></h4>
+            <div style="margin-left: 3%;display:none">
                 <form id="selectSQL">
                     <div id="totalList">
                         <div class="row">
@@ -537,6 +517,16 @@
             $("#createTableBySQL").on("click", function () {
                 resetSelectAndCheckBox();
                 getTableName();
+            });
+
+            $("h4 a").click(function () {
+                var $div = $(this).parent().next("div");
+                var isHidden = $div.is(":hidden");
+                if (isHidden) {
+                    $div.show();
+                } else {
+                    $div.hide();
+                }
             })
         }
 
@@ -787,8 +777,8 @@
                     var _thisID = _this.attr("id");
                     var owner = _thisID.slice(_thisID.length - 1, _thisID.length);
                     var fieldCheckBox = template("tableFieldCheckBox", {"data": result, "owner": owner});
-                    _this.parent().parent().next().html("");
-                    _this.parent().parent().next().html(fieldCheckBox);
+                    _this.parent().parent().nextAll(".checkBoxTableField:eq(0)").html("");
+                    _this.parent().parent().nextAll(".checkBoxTableField:eq(0)").html(fieldCheckBox);
                 }
             })
         }
