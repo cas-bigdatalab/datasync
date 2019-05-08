@@ -88,7 +88,7 @@ public class HttpServiceController {
             }
             sqlfilePathBuffer.append(siteFtpPath + fileName + ";");
             if (dataTask.getDataTaskType().equals("mysql")) {
-                String sqlZip = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + dataTask.getDataTaskId() + ".zip";
+                String sqlZip = siteFtpPath + dataTask.getDataTaskId() + ".zip";
 //                System.out.println("-------sqlZip"+sqlZip);
                 File sqlfiles = new File(sqlZip);
                 ZipUtil zipUtil = new ZipUtil();
