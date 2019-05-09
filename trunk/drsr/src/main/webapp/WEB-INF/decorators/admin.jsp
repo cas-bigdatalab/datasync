@@ -257,6 +257,11 @@
             background-color: #339e69;
         }
 
+        .page-sidebar .page-sidebar-menu > li{
+            text-align: left;
+            margin-left: 2%;
+        }
+
     </style>
 
 </head>
@@ -317,7 +322,7 @@ if(userName != null && userName.length()>6){
                 <li>
                     <a href="${ctx}/subjectInfo" onmousemove="img1Over(this)" onmouseout="img1Out(this)">
                         <%--<i class="icon-wren"></i>--%>
-                        <span class="title"><img class="img1" style="width: 24px;display: inline;"  src="${ctx}/resources/login/img/icon04.png">&nbsp;主题库节点信息</span>
+                        <span class="title"><img class="img1" style="width: 24px;display: inline;"  src="${ctx}/resources/login/img/icon04.png">&nbsp;数据节点信息</span>
                         <span class="arrow "></span>
                     </a>
                 </li>
