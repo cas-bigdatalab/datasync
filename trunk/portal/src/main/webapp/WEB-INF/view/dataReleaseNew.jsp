@@ -720,8 +720,8 @@
         $("#auditId").click(function () {
             var id, auditContent, userGroupId;
             if (statusres === "2") {
-                if ($("#permissions").val().size === 0) {
-                    toastr["warning"]("请选择数据集的公开范围", "警告！");
+                if ($("#permissions").val() === null) {
+                    toastr["info"]("请选择数据集的公开范围", "提示！");
                     return;
                 } else {
                     userGroupId = $("#permissions").val().toString();
@@ -1102,7 +1102,7 @@
                 dataType: "JSON",
                 success: function (data) {
                     var tabCon = template("groupOption", {"data": data.groupList});
-                    $permissions.append("<option value='公开组'>公开组</option>");
+                    $permissions.append("<option value='public'>公开组</option>");
                     $permissions.append(tabCon);
                     selectGroup = $permissions.select2({
                         placeholder: "请选择用户",
@@ -1146,12 +1146,19 @@
                         $("#audit_content").val("审核未通过！");
                     }
                 }
-            })
+            });
 
             $("#permissions").on("select2-selecting", function (e) {
                 var val = e.val;
-                if (val === "公开组") {
-                    toastr["warning"]("选择公开组，当前数据集将会向所有用户开放", "警告！");
+                if (val === "public") {
+                    toastr["info"]("选择公开组，当前数据集将会向所有注册用户开放", "提示！");
+                    $("#permissions").select2().val(['public']).trigger("change")
+                } else {
+                    var selected = $("#permissions").val();
+                    if (selected !== null && selected.indexOf("public") !== -1) {
+                        toastr["info"]("当前数据集已经向所有注册用户开放", "提示！");
+                        return false;
+                    }
                 }
             })
         })
