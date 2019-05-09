@@ -214,13 +214,13 @@ public class FtpUtil {
             //对远程目录的处理
             String remoteFileName = fileName.replace("%_%",File.separator);
 //            System.out.println("-------------remoteFileName"+remoteFileName);
-            if (remoteFilepath.contains("/")) {
-//                remoteFileName = remoteFilepath.substring(remoteFilepath.lastIndexOf("/") + 1);
-                //创建服务器远程目录结构，创建失败直接返回
-                if (CreateDirecroty(remoteFilepath, ftpClient) == UploadStatus.Create_Directory_Fail) {
-                    return UploadStatus.Create_Directory_Fail;
-                }
-            }
+//            if (remoteFilepath.contains("/")) {
+////                remoteFileName = remoteFilepath.substring(remoteFilepath.lastIndexOf("/") + 1);
+//                //创建服务器远程目录结构，创建失败直接返回
+//                if (CreateDirecroty(remoteFilepath, ftpClient) == UploadStatus.Create_Directory_Fail) {
+//                    return UploadStatus.Create_Directory_Fail;
+//                }
+//            }
             ftpClient.changeWorkingDirectory("/temp/");
             //检查远程是否存在文件
             FTPFile[] files = ftpClient.listFiles(new String(remoteFileName.getBytes("GBK"), "iso-8859-1"));
