@@ -397,6 +397,12 @@
                         var item = {'id': tableName, 'name': tableName, 'closable': true, 'template': tabs};
                         closableTab.addTab(item); // 执行创建页签
                         fun_limit(subjectCode, tableName, data);
+                        closableTab.addTabComment({
+                            'id': tableName,
+                            'tableComment': tableComment,
+                            'closable': true,
+                            'template': tabs
+                        })
                     } else {
                         tabs = "";
                         $(ids).html(" ");

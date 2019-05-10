@@ -50,11 +50,16 @@ var closableTab = {
             }
         })*/
     },
-
+    addTabComment: function (tabItem) {
+        var tableComment = tabItem.tableComment;
+        var id = "tab_seed_" + tabItem.id;
+        $('#' + id).attr("title", tableComment);
+    },
     // 关闭之后的操作
     afterCloseTab: function (item) {
 
     },
+
 
     // 初始化动态标签失败操作
     error: function (item) {
