@@ -108,7 +108,11 @@ public class ResourceDao {
             queryBuilder = queryBuilder.and("title").regex(Pattern.compile("^.*"+title+".*$"));
         }
         if (StringUtils.isNotEmpty(publicType)){
-            queryBuilder =queryBuilder.and("publicType").is(publicType);
+//            queryBuilder =queryBuilder.and("publicType").is(publicType);
+            List<String> l = new ArrayList<>(10);
+            l.add(publicType);
+            l.add("RDB+FILE");
+            queryBuilder = queryBuilder.and("publicType").in(l);
         }
         if (StringUtils.isNotEmpty(resState)){
             queryBuilder =queryBuilder.and("status").is(resState);

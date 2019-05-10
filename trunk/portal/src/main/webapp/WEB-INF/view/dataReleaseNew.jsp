@@ -67,8 +67,8 @@
             <label style="padding-left: 10px;color:black">数据类型:</label>
             <select id="resourcePublicType" class="form-control" style="width: 120px">
                 <option value="">全部</option>
-                <option value="mysql">RDB</option>
-                <option value="file">FILE</option>
+                <option value="RDB">RDB</option>
+                <option value="FILE">FILE</option>
             </select>
 
 

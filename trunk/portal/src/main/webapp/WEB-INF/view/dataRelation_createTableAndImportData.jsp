@@ -242,6 +242,10 @@
 
             // 初始化通过已有表创建新表
             initSqlCreateTable();
+
+            $("input[name='radioType']").click(function () {
+                $(this).next().trigger("click");
+            })
         })();
 
         function initExcelCreateTable() {
