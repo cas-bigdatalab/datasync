@@ -211,11 +211,4 @@ public class TableFieldComsController {
         }
           return jsonObject;
     }
-//    @RequestMapping("/getOneTypeDetail")
-//    @ResponseBody
-//    public JSONObject getOneTypeDetail(String tableName,String subjectCode,String column){
-//        JSONObject jsonObject=new JSONObject();
-//
-//        return jsonObject;
-//    }
     }
