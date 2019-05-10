@@ -142,7 +142,7 @@
                             onclick="fun_saveTbaleFields()">保存
                     </button>
                     <button type="button" data-dismiss="modal" class="btn default" id="editTableFieldComsCloseId"
-                            onclick="func_cancelBtn()">取消
+                            onclick="func_cancelBtn()">返回
                     </button>
                 </div>
             </div>
@@ -827,6 +827,7 @@
 
         //回显数据
         function getshowTypeData(tableName) {
+            $("#tableComment").val("");
             $.ajax({
                 type: "post",
                 url: "${ctx}/getShowTypeInfMsg",

@@ -216,41 +216,46 @@ public class ShowTypeInfDao {
     //    删除status=2的值
     public void deleteStatusTwo(String tableName) {
         ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("tableName").is(tableName)), ShowTypeInf.class);
-        List<ShowTypeDetail> list = s.getShowTypeDetailList();
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getStatus() == 2) {
-                list.remove(i);
+        if (s != null) {
+            List<ShowTypeDetail> list = s.getShowTypeDetailList();
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i).getStatus() == 2) {
+                    list.remove(i);
+                }
             }
+            Update update = Update.update("tableName", tableName).set("showTypeDetailList", list);
+            mongoTemplate.updateFirst(new Query(Criteria.where("tableName").is(tableName)), update, ShowTypeInf.class);
         }
-        Update update = Update.update("tableName", tableName).set("showTypeDetailList", list);
-        mongoTemplate.updateFirst(new Query(Criteria.where("tableName").is(tableName)), update, ShowTypeInf.class);
+
     }
 
 
     //    删除status=2的列的status=1的数据，并将status=2改为status=1；
     public void updateSatusOne(String tableName, String subjectCode) {
         ShowTypeInf s = mongoTemplate.findOne(new Query(Criteria.where("subjectCode").is(subjectCode).and("tableName").is(tableName)), ShowTypeInf.class);
-        List<ShowTypeDetail> list = s.getShowTypeDetailList();
-        List<String> columns = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getStatus() == 2) {
-                columns.add(list.get(i).getColumnName());
-            }
-        }
-        if (columns.size() > 0) {
+        if (s != null) {
+            List<ShowTypeDetail> list = s.getShowTypeDetailList();
+            List<String> columns = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
-                for (int ii = 0; ii < columns.size(); ii++) {
-                    if (list.get(i).getStatus() == 1 && list.get(i).getColumnName().equals(columns.get(ii))) {
-                        list.remove(i);
+                if (list.get(i).getStatus() == 2) {
+                    columns.add(list.get(i).getColumnName());
+                }
+            }
+            if (columns.size() > 0) {
+                for (int i = 0; i < list.size(); i++) {
+                    for (int ii = 0; ii < columns.size(); ii++) {
+                        if (list.get(i).getStatus() == 1 && list.get(i).getColumnName().equals(columns.get(ii))) {
+                            list.remove(i);
+                        }
                     }
                 }
             }
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).setStatus(1);
+            }
+            Update update = Update.update("tableName", tableName).set("showTypeDetailList", list);
+            mongoTemplate.updateFirst(new Query(Criteria.where("tableName").is(tableName)), update, ShowTypeInf.class);
         }
-        for (int i = 0; i < list.size(); i++) {
-            list.get(i).setStatus(1);
-        }
-        Update update = Update.update("tableName", tableName).set("showTypeDetailList", list);
-        mongoTemplate.updateFirst(new Query(Criteria.where("tableName").is(tableName)), update, ShowTypeInf.class);
     }
 
     //    保存表名注释

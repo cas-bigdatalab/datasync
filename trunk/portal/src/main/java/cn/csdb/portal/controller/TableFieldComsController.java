@@ -80,9 +80,6 @@ public class TableFieldComsController {
             tableFieldComsService.syncMySQLComment(curDataSubjectCode, tableName, tableInfosList, realPath);
         }
 
-//        保存表名注释
-        showTypeInfService.saveTableComment(tableName, tableComment, curDataSubjectCode);
-
         String s_column[] = new String[tableInfosList.size()];
         for (int i = 0; i < tableInfosList.size(); i++) {
             s_column[i] = tableInfosList.get(i).getColumnName();
@@ -90,6 +87,9 @@ public class TableFieldComsController {
         String s_type[] = showColumnType.split(",");
         //点击外层保存按钮
         showTypeInfService.updateSatusOne(tableName, s_column, s_type, curDataSubjectCode);
+
+//        保存表名注释
+        showTypeInfService.saveTableComment(tableName, tableComment, curDataSubjectCode);
 
         jsonObject.put("result", result);
         return jsonObject;
