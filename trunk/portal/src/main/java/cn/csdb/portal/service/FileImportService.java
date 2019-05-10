@@ -10,14 +10,18 @@ import cn.csdb.portal.utils.dataSrc.DDL2SQLUtils;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.ibatis.jdbc.ScriptRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.ByteArrayInputStream;
+import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * @ClassName FileImportService
@@ -708,8 +712,15 @@ public class FileImportService {
             e.printStackTrace();
             return "请输入查询语句";
         }
+
         if (!b) {
             return "查询语句错误";
+        }
+
+        // 不允许 使用 * 查询
+        boolean find = Pattern.compile(" \\* ").matcher(sqlString).find();
+        if (find) {
+            return "请明确查询的字段";
         }
         Connection connection = getConnection(dataSrc);
         try {
@@ -805,30 +816,17 @@ public class FileImportService {
         Connection connection = getConnection(dataSrc);
         String ddl = DDL2SQLUtils.generateDDLFromSql(connection, newSql, newName);
         String insert = DDL2SQLUtils.generateInsertSqlFromSQL(connection, newSql, newName);
-        try {
-            // 创建表
-            PreparedStatement ddlStatement = connection.prepareStatement(ddl);
-            ddlStatement.execute();
-
-            // 插入数据
-            PreparedStatement insertStatement = connection.prepareStatement(insert);
-            insertStatement.execute();
-        } catch (SQLException e) {
-            // 创建失败删除表
-            try {
-                connection.prepareStatement("DROP TABLE " + newName);
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-            e.printStackTrace();
-            return newName + "表创建失败";
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+        ScriptRunner runner = new ScriptRunner(connection);
+        // 下面配置不要随意更改，否则会出现各种问题
+        // 自动提交
+        runner.setAutoCommit(true);
+        runner.setFullLineDelimiter(false);
+        // 每条命令间的分隔符
+        runner.setDelimiter(";");
+        runner.setSendFullScript(false);
+        runner.setStopOnError(false);
+        runner.runScript(new InputStreamReader(new ByteArrayInputStream(ddl.getBytes())));
+        runner.runScript(new InputStreamReader(new ByteArrayInputStream(insert.getBytes())));
         return newName + "：创建成功";
     }
 }

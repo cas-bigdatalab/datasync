@@ -521,12 +521,9 @@
 
             $("h4 a").click(function () {
                 var $div = $(this).parent().next("div");
-                var isHidden = $div.is(":hidden");
-                if (isHidden) {
-                    $div.show();
-                } else {
-                    $div.hide();
-                }
+                var otherDiv = $("h4 a").parent().next("div").not($div);
+                otherDiv.hide();
+                $div.show();
             })
         }
 
@@ -534,17 +531,17 @@
          * @return {string}
          */
         function selectToSql() {
-            var selectSql = "";
+            var sqlString = "";
             var tableAName = $.trim($("#selectTableA").val());
             if (tableAName === "选择表") {
                 toastr["warning"]("请选择表A", "警告");
-                return selectSql;
+                return sqlString;
             }
 
             var relationA = $.trim($("#selectTableFieldA").val());
             if (relationA === "") {
                 toastr["warning"]("请选择表A的关联字段", "警告");
-                return selectSql;
+                return sqlString;
             }
             relationA = "a." + relationA;
 
@@ -555,20 +552,20 @@
             });
             if (fieldsA === "") {
                 toastr["warning"]("请选择表A的查询字段", "警告");
-                return selectSql;
+                return sqlString;
             }
             fieldsA = fieldsA.slice(0, fieldsA.length - 1);
 
             var tableBName = $.trim($("#selectTableB").val());
             if (tableBName === "选择表") {
                 toastr["warning"]("请选择表B", "警告");
-                return selectSql;
+                return sqlString;
             }
 
             var relationB = $.trim($("#selectTableFieldB").val());
             if (relationB === "") {
                 toastr["warning"]("请选择表B的关联字段", "警告");
-                return selectSql;
+                return sqlString;
             }
             relationB = "b." + relationB;
 
@@ -579,47 +576,59 @@
             });
             if (fieldsB === "") {
                 toastr["warning"]("请选择表B的查询字段", "警告");
-                return selectSql;
+                return sqlString;
             }
             fieldsB = fieldsB.slice(0, fieldsB.length - 1);
-            selectSql = "SELECT " + fieldsA + "," + fieldsB + " FROM " + tableAName + " AS a LEFT JOIN " + tableBName + " AS b ON " + relationA + " = " + relationB;
-            return selectSql;
+            sqlString = "SELECT " + fieldsA + "," + fieldsB + " FROM " + tableAName + " AS a LEFT JOIN " + tableBName + " AS b ON " + relationA + " = " + relationB;
+            return sqlString;
         }
 
         function inputToSql() {
-            var inputSql = $.trim($("input[name='newSql']").val());
+            var inputSql = "";
+            inputSql = $.trim($("input[name='newSql']").val());
+            if (inputSql.length === 0) {
+                toastr["warning"]("请输入SQL语句", "警告！");
+            }
             return inputSql;
         }
 
         function previewSqlDataAndComs() {
             var $title = $("#relationalDatabaseModalTitle");
-
-            var selectSql = inputToSql();
-
-            if (selectSql === "") {
-                selectSql = selectToSql();
-                if (selectSql === "") {
+            var sqlString, isTable, isSQL;
+            isTable = $("#selectTable").is(":visible");
+            isSQL = $("#selectSQL").is(":visible");
+            if (isTable) {
+                sqlString = selectToSql();
+                if (sqlString.length === 0) {
                     return;
                 }
                 $title.html("预览数据:<span style='color:red'>通过联合关联</span>");
-            } else {
+            } else if (isSQL) {
+                sqlString = inputToSql();
+                if (sqlString.length === 0) {
+                    return;
+                }
                 $title.html("预览数据:<span style='color:red'>通过sql查询</span>");
+            } else {
+                return;
             }
-            var sql = validateSql(selectSql);
+
+            var sql = validateSql(sqlString);
+
             if (sql.flag !== "true") {
                 toastr["error"](sql.flag, "错误！");
                 return;
             }
-            previewSqlDataAndComs_real(selectSql);
+            previewSqlDataAndComs_real(sqlString);
         }
 
-        function previewSqlDataAndComs_real(selectSql) {
+        function previewSqlDataAndComs_real(sqlString) {
             $.ajax({
                 type: "POST",
                 url: "${ctx}/fileImport/previewSqlData",
                 dataType: "JSON",
                 data: {
-                    sqlString: selectSql
+                    sqlString: sqlString
                 },
                 success: function (data) {
                     $("#staticSourceTableChoiceModal").modal("show");
@@ -639,14 +648,24 @@
         }
 
         function createTableBySql() {
-            var selectSql = inputToSql();
-            if (selectSql === "") {
-                selectSql = selectToSql();
-                if (selectSql === "") {
+            var sqlString, isTable, isSQL;
+            isTable = $("#selectTable").is(":visible");
+            isSQL = $("#selectSQL").is(":visible");
+            if (isTable) {
+                sqlString = selectToSql();
+                if (sqlString.length === 0) {
                     return;
                 }
+            } else if (isSQL) {
+                sqlString = inputToSql();
+                if (sqlString.length === 0) {
+                    return;
+                }
+            } else {
+                return;
             }
-            var sql = validateSql(selectSql);
+
+            var sql = validateSql(sqlString);
             if (sql.flag !== "true") {
                 toastr["error"](sql.flag, "错误！");
                 return;
@@ -677,21 +696,17 @@
             })
         }
 
-        function validateSql(selectSql) {
+        function validateSql(sqlString) {
             var result = {};
 
-            if (selectSql.length === 0) {
-                result["flag"] = "查询语句不能为空";
-                return result;
-            }
-            result["newSql"] = selectSql;
+            result["newSql"] = sqlString;
             $.ajax({
                 async: false,
                 url: "${ctx}/fileImport/validateSqlString",
                 type: "POST",
                 dataType: "JSON",
                 data: {
-                    newSql: selectSql
+                    newSql: sqlString
                 },
                 success: function (data) {
                     result["flag"] = data;

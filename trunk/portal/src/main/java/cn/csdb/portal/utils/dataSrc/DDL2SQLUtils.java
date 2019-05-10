@@ -1,7 +1,6 @@
 package cn.csdb.portal.utils.dataSrc;
 
 import com.alibaba.fastjson.JSONObject;
-import com.mongodb.util.JSON;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,6 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @program: DataSync
@@ -201,9 +201,10 @@ public class DDL2SQLUtils {
 
                 sb.append(",");
             }
-            if (sb.toString().endsWith(",")) {
-                sb.replace(sb.length() - 1, sb.length(), " ");
-            }
+//            if (sb.toString().endsWith(",")) {
+//                sb.replace(sb.length() - 1, sb.length(), " ");
+//            }
+            sb.append("\nPORTALID VARCHAR(36) COMMENT '中心端系统ID' PRIMARY KEY");
             sb.append("\n);\n");
 
         } catch (Exception e) {
@@ -239,7 +240,10 @@ public class DDL2SQLUtils {
                         result.append("'" + outputValue + "'");
                     }
                 }
-                result.append(");\n");
+                String s = UUID.randomUUID().toString();
+                result.append(",'");
+                result.append(s);
+                result.append("');\n");
             }
             rs.close();
             stmt.close();
@@ -340,43 +344,43 @@ public class DDL2SQLUtils {
             while (res.next()) {
                 name = res.getString("COLUMN_NAME");
                 boolean contains = fields.contains(name);
-                if (!contains){
-                    jsonObject.put("code","error");
-                    jsonObject.put("message",name+"不存在");
+                if (!contains) {
+                    jsonObject.put("code", "error");
+                    jsonObject.put("message", name + "不存在");
                     return jsonObject;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            jsonObject.put("code","error");
-            jsonObject.put("message","比较字段名称异常");
+            jsonObject.put("code", "error");
+            jsonObject.put("message", "比较字段名称异常");
             return jsonObject;
         }
-        jsonObject.put("code","success");
-       return jsonObject;
+        jsonObject.put("code", "success");
+        return jsonObject;
     }
 
     public static String createNewTable(Connection connection, String catalog, String schema, String table, List<String> fields, String pk) {
 //        StringBuilder sb = new StringBuilder("DROP TABLE IF EXISTS `" + table + "` ; ");
         StringBuilder sb = new StringBuilder("");
         sb.append("CREATE TABLE `" + table + "`(");
-        for(String f :fields){
+        for (String f : fields) {
             sb.append(f);
             sb.append(" VARCHAR(128),");
         }
-        if(sb.toString().endsWith(",")){
-            sb.replace(sb.length()-1,sb.length()," ");
+        if (sb.toString().endsWith(",")) {
+            sb.replace(sb.length() - 1, sb.length(), " ");
         }
         sb.append(");");
         return sb.toString();
     }
 
-    public static String insertSql(Connection connection,String tableName,List<List<String>> value){
-        StringBuilder sb = new StringBuilder("INSERT INTO `"+tableName+"`(");
+    public static String insertSql(Connection connection, String tableName, List<List<String>> value) {
+        StringBuilder sb = new StringBuilder("INSERT INTO `" + tableName + "`(");
         try {
             DatabaseMetaData metaData = connection.getMetaData();
             ResultSet res = metaData.getColumns(null, null, tableName, null);
-            while (res.next()){
+            while (res.next()) {
                 sb.append(res.getString("COLUMN_NAME"));
                 sb.append(",");
             }
@@ -384,25 +388,25 @@ public class DDL2SQLUtils {
             e.printStackTrace();
             System.out.println("Error: 生成insert语句获取列名称错误");
         }
-        if(sb.toString().endsWith(",")){
-            sb.replace(sb.length()-1,sb.length()," )");
+        if (sb.toString().endsWith(",")) {
+            sb.replace(sb.length() - 1, sb.length(), " )");
         }
         sb.append("values");
         Iterator<List<String>> iterator = value.iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             List<String> next = iterator.next();
             sb.append("( ");
             Iterator<String> iterator1 = next.iterator();
-            while (iterator1.hasNext()){
+            while (iterator1.hasNext()) {
                 String next1 = iterator1.next();
-                sb.append("'"+next1+"',");
+                sb.append("'" + next1 + "',");
             }
-            if(sb.toString().endsWith(",")){
-                sb.replace(sb.length()-1,sb.length()," ),");
+            if (sb.toString().endsWith(",")) {
+                sb.replace(sb.length() - 1, sb.length(), " ),");
             }
         }
-        if(sb.toString().endsWith(",")){
-            sb.replace(sb.length()-1,sb.length()," ");
+        if (sb.toString().endsWith(",")) {
+            sb.replace(sb.length() - 1, sb.length(), " ");
         }
         return sb.toString();
     }
