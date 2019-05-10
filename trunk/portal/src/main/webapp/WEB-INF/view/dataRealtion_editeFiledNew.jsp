@@ -34,30 +34,6 @@
         }
 
         .select_cass {
-            /*border: solid 1px #E5E5E5;*/
-            /*background: #FFFFFF;*/
-            /*margin: 5px 5px 5px 5px;*/
-            /*padding: 5px !important;*/
-            /*display: inline !important;*/
-            /*font-size: 10px;*/
-            /*width: 200px;*/
-            /*background: -webkit-gradient(*/
-            /*linear,*/
-            /*left top,*/
-            /*left 25,*/
-            /*from(#FFFFFF),*/
-            /*color-stop(4%, #EEEEEE),*/
-            /*to(#FFFFFF)*/
-            /*);*/
-            /*background: -moz-linear-gradient(*/
-            /*top,*/
-            /*#FFFFFF,*/
-            /*#EEEEEE 1px,*/
-            /*#FFFFFF 25px*/
-            /*);*/
-            /*-moz-box-shadow: 0px 0px 8px #f0f0f0;*/
-            /*-webkit-box-shadow: 0px 0px 8px #f0f0f0;*/
-            /*box-shadow: 0px 0px 8px #f0f0f0;*/
             font-size: 14px;
             font-weight: normal;
             color: #333333;
@@ -149,7 +125,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="text-align: center">
                     <button type="button" class="btn btn-success" id="editTableFieldComsSaveId" data-dismiss="modal"
                             onclick="fun_saveTbaleFields()">保存
                     </button>
