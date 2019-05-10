@@ -187,8 +187,8 @@
                         </shiro:hasRole>
                         <shiro:hasRole name="admin">
                             <ul>
-                                <li><a href="${ctx}/authorization"><i class="fa fa-cog" aria-hidden="true"></i>
-                                        ${applicationScope.menus['organization_title']}用户授权</a></li>
+                                    <%--<li><a href="${ctx}/authorization"><i class="fa fa-cog" aria-hidden="true"></i>
+                                            ${applicationScope.menus['organization_title']}用户授权</a></li>--%>
                                 <li><a href="javaScript:void(0);"><i class="fa fa-database" aria-hidden="true"></i>
                                     关系数据管理</a>
                                     <ul>

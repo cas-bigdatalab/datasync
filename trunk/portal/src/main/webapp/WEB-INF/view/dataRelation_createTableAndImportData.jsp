@@ -105,7 +105,8 @@
     <div class="tab-pane" id="sql">
         <div style="width: 100%;height: 90%;padding: 20px 20px;">
             <p></p>
-            <h4><a style="color: blue;font-weight: bolder;">通过联合表A和表B，形成新表</a></h4>
+            <h4><input type="radio" name="radioType" id="tableRadio" checked><a
+                    style="color: blue;font-weight: bolder;">方式1：通过联合表A和表B，形成新表</a></h4>
             <div style="margin-left: 3%;">
                 <form id="selectTable">
                     <div class="row" id="tableA">
@@ -149,7 +150,9 @@
                     </div>
                 </form>
             </div>
-            <h4><a style="color: blue;font-weight: bolder;">通过SQL语句，形成新表</a></h4>
+            <div style="width: 100%;height: 30px"></div>
+            <h4><input type="radio" name="radioType" id="sqlRadio"><a style="color: blue;font-weight: bolder;">方式2：通过SQL语句，形成新表</a>
+            </h4>
             <div style="margin-left: 3%;display:none">
                 <form id="selectSQL">
                     <div id="totalList">
@@ -162,7 +165,8 @@
                     </div>
                 </form>
             </div>
-            <h4>新的表名称</h4>
+            <div style="width: 100%;height: 30px"></div>
+            <h4 style="font-weight: bold">新的表名称</h4>
             <div style="margin-left: 3%;">
                 <div class="row">
                     <div class="col-md-1">新表名</div>
@@ -520,6 +524,7 @@
             });
 
             $("h4 a").click(function () {
+                $(this).parent().find("input").prop("checked", true);
                 var $div = $(this).parent().next("div");
                 var otherDiv = $("h4 a").parent().next("div").not($div);
                 otherDiv.hide();

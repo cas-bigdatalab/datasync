@@ -4,12 +4,11 @@ import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.model.User;
 import cn.csdb.portal.repository.SubjectMgmtDao;
 import cn.csdb.portal.repository.UserDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import cn.csdb.portal.utils.MD5Util;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -31,11 +30,10 @@ public class SubjectMgmtService {
      * Function Description:
      *
      * @param subject, the wrapped object which contains information of the subject ot be added
-     * @return  addSubjectNotice, a notice inform user if create subject success or not
+     * @return addSubjectNotice, a notice inform user if create subject success or not
      */
     @Transactional
-    public String addSubject(Subject subject)
-    {
+    public String addSubject(Subject subject) {
         String addSubjectNotice = "";
 
         //添加 数据节点理员 账号
@@ -44,7 +42,7 @@ public class SubjectMgmtService {
         User subjectUser = new User();
         subjectUser.setUserName(admin);
         subjectUser.setLoginId(admin);
-        subjectUser.setPassword(adminPasswd);
+        subjectUser.setPassword(MD5Util.encryptPassword(admin, adminPasswd, "cnic.cn"));
         subjectUser.setSubjectCode(subject.getSubjectCode());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd  HH:mm:ss");
         subjectUser.setCreateTime(sdf.format(new Date()));
@@ -55,12 +53,9 @@ public class SubjectMgmtService {
 
         // 添加 数据节点
         int addedRowCnt = subjectMgmtDao.addSubject(subject);
-        if (addedRowCnt == 1)
-        {
+        if (addedRowCnt == 1) {
             addSubjectNotice = "添加数据节点：成功！";
-        }
-        else
-        {
+        } else {
             addSubjectNotice = "添加数据节点：失败！";
         }
         return addSubjectNotice;
@@ -71,13 +66,12 @@ public class SubjectMgmtService {
      * Function Description:
      *
      * @param id, the id of Subject to be deleted
-     * @return  deleteSubjectNotice, a notice inform user the deletion result
+     * @return deleteSubjectNotice, a notice inform user the deletion result
      * @author zzl
      * @date 2018/10/23
      */
     @Transactional
-    public int deleteSubject(String id)
-    {
+    public int deleteSubject(String id) {
         String deleteSubjectNotice = "";
         Subject subject = subjectMgmtDao.findSubjectById(id);
         String admin = subject.getAdmin();
@@ -92,13 +86,12 @@ public class SubjectMgmtService {
      * Function Description:
      *
      * @param subject the subject to be updated
-     * @return  updatedSubjectNotice a notice which inform user update result.
+     * @return updatedSubjectNotice a notice which inform user update result.
      * @author zzl
      * @date 2018/10/23
      */
     @Transactional
-    public String updateSubject(Subject subject)
-    {
+    public String updateSubject(Subject subject) {
         String updatedSubjectNotice = "";
 
         String admin = subject.getAdmin();
@@ -116,12 +109,9 @@ public class SubjectMgmtService {
         userDao.updateUser(subjectUser);
 
         int modifiedRowCnt = subjectMgmtDao.updateSubject(subject);
-        if (modifiedRowCnt == 1)
-        {
+        if (modifiedRowCnt == 1) {
             updatedSubjectNotice = "修改数据节点：成功！";
-        }
-        else
-        {
+        } else {
             updatedSubjectNotice = "修改数据节点：失败！";
         }
 
@@ -136,8 +126,7 @@ public class SubjectMgmtService {
      * @author zzl
      * @date 2018/10/23
      */
-    public List<Subject> querySubject(String subjectNameFilter, int requestedPage)
-    {
+    public List<Subject> querySubject(String subjectNameFilter, int requestedPage) {
         return subjectMgmtDao.querySubject(subjectNameFilter, requestedPage);
     }
 
@@ -148,8 +137,7 @@ public class SubjectMgmtService {
      * @author zzl
      * @date 2018/10/23
      */
-    public long getTotalPages(String subjectNameFilter)
-    {
+    public long getTotalPages(String subjectNameFilter) {
         return subjectMgmtDao.getTotalPages(subjectNameFilter);
     }
 
@@ -161,52 +149,44 @@ public class SubjectMgmtService {
      * @author zzl
      * @date 2018/10/23
      */
-    public Subject findSubjectById(String id)
-    {
+    public Subject findSubjectById(String id) {
         return subjectMgmtDao.findSubjectById(id);
     }
 
     /**
-     *
-     * Function Description: 
+     * Function Description:
      *
      * @param: [code]
      * @return: cn.csdb.portal.model.Subject
      * @auther: hw
      * @date: 2018/10/22 15:13
      */
-    public Subject findByCode(String code){
+    public Subject findByCode(String code) {
         return subjectMgmtDao.findByCode(code);
     }
 
 
     /**
      * Function Description:
-     *
      */
-    public long querySubjectCode(String subjectCode)
-    {
+    public long querySubjectCode(String subjectCode) {
         return subjectMgmtDao.querySubjectCode(subjectCode);
     }
 
 
-    public long queryAdmin(String userName)
-    {
+    public long queryAdmin(String userName) {
         return subjectMgmtDao.queryAdmin(userName);
     }
 
-    public long getTotalSubject(String subjectNameFilter)
-    {
+    public long getTotalSubject(String subjectNameFilter) {
         return subjectMgmtDao.getTotalSubject(subjectNameFilter);
     }
 
-    public List<Subject> getSubjectCodeList()
-    {
+    public List<Subject> getSubjectCodeList() {
         return subjectMgmtDao.getSubjectCodeList();
     }
 
-    public String getLastSerialNo()
-    {
+    public String getLastSerialNo() {
         return subjectMgmtDao.getLastSerialNo();
     }
 }

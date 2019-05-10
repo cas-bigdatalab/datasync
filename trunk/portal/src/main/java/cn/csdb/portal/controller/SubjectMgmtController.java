@@ -2,10 +2,12 @@ package cn.csdb.portal.controller;
 
 import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.service.SubjectMgmtService;
+import cn.csdb.portal.utils.MD5Util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -87,8 +89,7 @@ public class SubjectMgmtController {
      *
      * @param subject, the subject to be added
      */
-    private void generateFtpInfo(Subject subject)
-    {
+    private void generateFtpInfo(Subject subject) {
         String ftpUser = "ftpUser" + subject.getSubjectCode();
         String ftpPassword = "ftpPassword" + subject.getSubjectCode();
 
@@ -107,8 +108,7 @@ public class SubjectMgmtController {
         String subjectCode = request.getParameter("subjectCode");
         String imagesPath = this.imagesPath;
         imagesPath += "/" + subjectCode;
-        if (!(new File(imagesPath).exists()))
-        {
+        if (!(new File(imagesPath).exists())) {
             new File(imagesPath).mkdir();
         }
 
@@ -145,7 +145,7 @@ public class SubjectMgmtController {
     /**
      * Function Description:
      *
-     * @param id, the id of Subject to be deleted
+     * @param id,      the id of Subject to be deleted
      * @param pageNum, the page which contains the deleted subject, this parameter is designed for request redirect
      * @return redirectStr, the request is redirected to querySubject interface
      */
@@ -165,25 +165,30 @@ public class SubjectMgmtController {
      * Function Description:
      *
      * @param subject the subject to be updated
-     * @param image the image field
+     * @param image   the image field
      * @return redirectStr, the request is redirected to querySubject interface
      */
     @RequestMapping(value = "/updateSubject", method = RequestMethod.POST)
     @ResponseBody
-    public String updateSubject(HttpServletRequest request, Subject subject, @RequestParam(name="image", required = false) MultipartFile image) {
+    public String updateSubject(HttpServletRequest request, Subject subject, @RequestParam(name = "image", required = false) MultipartFile image) {
         logger.info("SubjectMgmtController-updateSubject");
         logger.info("SubjectMgmtController-updateSubject -" + subject);
         logger.info("updating image");
         String newImagePath = "";
         try {
             newImagePath = updateImage(request, subject, image);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         subject.setImagePath(newImagePath);
         logger.info("updated image");
+        Subject subjectByCode = subjectMgmtService.findByCode(subject.getSubjectCode());
+        if (!Strings.isBlank(subject.getAdminPasswd())) {
+            String securityPassword = MD5Util.encryptPassword(subject.getSubjectCode(), subject.getAdminPasswd(), "cnic.cn");
+            subject.setAdminPasswd(securityPassword);
+        } else {
+            subject.setAdminPasswd(subjectByCode.getAdminPasswd());
+        }
         String updateSubjectNotice = subjectMgmtService.updateSubject(subject);
         logger.info("update subject completed. updateSubjectNotice = " + updateSubjectNotice);
 
@@ -191,10 +196,10 @@ public class SubjectMgmtController {
     }
 
     /**
-     *  Function Description: update image is designed to save the file user selected on UpdateSubjectDialog
+     * Function Description: update image is designed to save the file user selected on UpdateSubjectDialog
      *
      * @param subject the subject to be updated
-     * @param image the image to be saved
+     * @param image   the image to be saved
      * @return imagePath the absolute local filesystem path of the image
      */
     private String updateImage(HttpServletRequest request, Subject subject, MultipartFile image) {
@@ -206,11 +211,9 @@ public class SubjectMgmtController {
         if ((image != null) && (image.getOriginalFilename() != "")) {
             deleteImage(tmpSubject.getImagePath());
             imagePath = saveImage(request, image);
-        }
-        else if ((image != null) && (image.getOriginalFilename() == null)){
-            imagePath = saveImage(request,image);
-        }
-        else {
+        } else if ((image != null) && (image.getOriginalFilename() == null)) {
+            imagePath = saveImage(request, image);
+        } else {
             imagePath = tmpSubject.getImagePath();
         }
 
@@ -218,7 +221,8 @@ public class SubjectMgmtController {
     }
 
     /**
-     *  Function Description: when user select a image on UpdateSubjectDialog, we must delete the previous one before store the new image
+     * Function Description: when user select a image on UpdateSubjectDialog, we must delete the previous one before store the new image
+     *
      * @param imagePath
      */
     private void deleteImage(String imagePath) {
@@ -239,6 +243,7 @@ public class SubjectMgmtController {
         ModelAndView mv = new ModelAndView("subjectMgmt");
         return mv;
     }
+
     @RequestMapping(value = "/subjectDes")
     public ModelAndView subjectDes(HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("subjectDesigned");
@@ -248,7 +253,7 @@ public class SubjectMgmtController {
 
     @ResponseBody
     @RequestMapping(value = "/querySubject")
-    public JSONObject querySubject(HttpServletRequest request, @RequestParam(value="subjectNameFilter") String subjectNameFilter, @RequestParam(value="pageNum",required = true) int currentPage) {
+    public JSONObject querySubject(HttpServletRequest request, @RequestParam(value = "subjectNameFilter") String subjectNameFilter, @RequestParam(value = "pageNum", required = true) int currentPage) {
         logger.info("enterring SubjectMgmtController-querySubject[currentPage = " + currentPage + "]");
 
         long totalPages = 0;
@@ -289,6 +294,7 @@ public class SubjectMgmtController {
 
     /**
      * Function Description: check if the subject code has been used
+     *
      * @param subjectCode, the subject code user give
      * @return 1/0, 1 exists, 0 no
      */
@@ -301,12 +307,9 @@ public class SubjectMgmtController {
         logger.info("queried subjectCodeCnt - cntOfTheCode = " + cntOfTheCode);
 
         boolean retValue = false;
-        if (cntOfTheCode > 0)
-        {
+        if (cntOfTheCode > 0) {
             retValue = false;
-        }
-        else
-        {
+        } else {
             retValue = true;
         }
         return retValue;
@@ -314,6 +317,7 @@ public class SubjectMgmtController {
 
     /**
      * Function Description: check if the subject code has been used
+     *
      * @param admin, admin
      * @return 1/0, 1 exists, 0 no
      */
@@ -326,12 +330,9 @@ public class SubjectMgmtController {
         logger.info("queried userNameCnt - cntOfUserName = " + cntOfAdmin);
 
         boolean retValue = false;
-        if (cntOfAdmin > 0)
-        {
+        if (cntOfAdmin > 0) {
             retValue = false;
-        }
-        else
-        {
+        } else {
             retValue = true;
         }
 
@@ -340,8 +341,7 @@ public class SubjectMgmtController {
 
     @RequestMapping(value = "/getNextSerialNo")
     @ResponseBody
-    public String getNextSerialNo(HttpServletRequest request)
-    {
+    public String getNextSerialNo(HttpServletRequest request) {
         String nextSerialNo = "";
         String lastSerialNo = "";
         lastSerialNo = subjectMgmtService.getLastSerialNo();
