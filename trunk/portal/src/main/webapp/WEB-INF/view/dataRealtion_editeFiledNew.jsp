@@ -293,8 +293,10 @@
                     <label class="col-sm-3 control-label regislabel">已关联表</label>
                     <div id="exit_table" style="margin-left: 185px;margin-bottom: 20px">
                     </div>
+                    <div id="addTable_id_edit" onclick="func_addSheetTable()"
+                         style="display: none;margin-left: 550px;margin-bottom: 20px;"><a><i
+                            class="fa fa-plus"></i>增加</a></div>
                 </div>
-                <%--<div id="addTable_id_edit" onclick="func_add_edit()" style="display: none;margin-left: 550px;"><a><i class="fa fa-plus"></i>增加</a></div>--%>
                 <div id="FirstSheetId" class="form-group">
                     <label class="col-sm-3 control-label regislabel">关联字段:</label>
                     <div class="form-group">
@@ -307,7 +309,6 @@
                         <select id="tableColunm_id" name="relationColumn" class="form-control select_cass">
                         <option value="null" name="">--请选择列名--</option>
                     </select>
-                        <%--<span id="removeOne" style="display: none"><i class="fa fa-trash" onclick="func_removeSheetDate(this)"></i></span>--%>
                         <span id="addTable_id" onclick="func_addSheetTable()"><a><i class="fa fa-plus"></i>增加</a></span>
                     </div>
                 </div>
@@ -976,9 +977,9 @@
                                         ss += "</select><span id='remove_id'><i class='fa fa-trash' onclick=\"func_removeSheetDate(this)\"></i></span></div>";
                                         $("#exit_table").append(ss);
                                     }
-                                    // $("#addTable_id_edit").show();
+                                    $("#addTable_id_edit").show();
                                     $("#exit_div").show();
-                                    // $("#FirstSheetId").hide();
+                                    $("#FirstSheetId").remove();
                                 }
                                 //    重新选择关联表
                                 $("#exit_div #exit_table .select_cass").on("change", function () {
@@ -1024,12 +1025,6 @@
                     }
                 }
             });
-        }
-
-        function func_add_edit() {
-            $("#FirstSheetId").show();
-            $("#removeOne").show();
-            $("#addTable_id_edit").hide();
         }
     </script>
 </div>
