@@ -1335,7 +1335,6 @@
 
 
         function initCenterResourceCatalog(container, index) {
-            alert('begin------' + index);
             $.ajax({
                 url: ctx + "/getLocalResCatalog",
                 type: "get",
