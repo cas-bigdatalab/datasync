@@ -1,8 +1,8 @@
 package cn.csdb.portal.webservice;
 
-import cn.csdb.portal.controller.SubjectMgmtController;
 import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.service.SubjectService;
+import cn.csdb.portal.utils.MD5Util;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,24 +26,25 @@ public class WebAPI {
     private SubjectService subjectService;
 
     @RequestMapping(value = "/getSubject/{subjectCode}", method = RequestMethod.GET)
-    public JSONObject getSubject(@PathVariable("subjectCode") String subjectCode){
+    public JSONObject getSubject(@PathVariable("subjectCode") String subjectCode) {
         JSONObject jsonObject = new JSONObject();
         Subject subject = subjectService.findBySubjectCode(subjectCode);
-        jsonObject.put("data",subject);
+        jsonObject.put("data", subject);
         return jsonObject;
     }
 
 
     @RequestMapping(value = "/getSubjectByUser/{userName}", method = RequestMethod.GET)
-    public JSONObject getSubjectByUser(@PathVariable("userName") String userName){
+    public JSONObject getSubjectByUser(@PathVariable("userName") String userName) {
         JSONObject jsonObject = new JSONObject();
         Subject subject = subjectService.findByUser(userName);
-        jsonObject.put("data",subject);
+        jsonObject.put("data", subject);
         return jsonObject;
     }
 
     /**
      * Function Description: subject user login
+     *
      * @param request
      * @param userName
      * @param password
@@ -58,14 +59,12 @@ public class WebAPI {
         JSONObject loginObject = new JSONObject();
         String loginNotice = "";
         int loginStatus = 0; // log success or not， 0 ：success, 1: failed, notice : username or password is wrong
-        loginStatus = subjectService.validateLogin(userName, password);
+        String securityPassword = MD5Util.encryptPassword(userName, password, "cnic.cn");
+        loginStatus = subjectService.validateLogin(userName, securityPassword);
 
-        if (loginStatus == 0)
-        {
+        if (loginStatus == 0) {
             loginNotice = "登录失败：用户名或者密码错误";
-        }
-        else
-        {
+        } else {
             loginNotice = "登录成功！";
         }
 
