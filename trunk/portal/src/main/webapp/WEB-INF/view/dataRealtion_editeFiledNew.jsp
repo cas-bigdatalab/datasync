@@ -34,30 +34,41 @@
         }
 
         .select_cass {
-            border: solid 1px #E5E5E5;
-            background: #FFFFFF;
-            margin: 5px 5px 5px 5px;
-            padding: 5px !important;
-            display: inline !important;
-            font-size: 10px;
+            /*border: solid 1px #E5E5E5;*/
+            /*background: #FFFFFF;*/
+            /*margin: 5px 5px 5px 5px;*/
+            /*padding: 5px !important;*/
+            /*display: inline !important;*/
+            /*font-size: 10px;*/
+            /*width: 200px;*/
+            /*background: -webkit-gradient(*/
+            /*linear,*/
+            /*left top,*/
+            /*left 25,*/
+            /*from(#FFFFFF),*/
+            /*color-stop(4%, #EEEEEE),*/
+            /*to(#FFFFFF)*/
+            /*);*/
+            /*background: -moz-linear-gradient(*/
+            /*top,*/
+            /*#FFFFFF,*/
+            /*#EEEEEE 1px,*/
+            /*#FFFFFF 25px*/
+            /*);*/
+            /*-moz-box-shadow: 0px 0px 8px #f0f0f0;*/
+            /*-webkit-box-shadow: 0px 0px 8px #f0f0f0;*/
+            /*box-shadow: 0px 0px 8px #f0f0f0;*/
+            font-size: 14px;
+            font-weight: normal;
+            color: #333333;
+            background-color: white;
+            border: 1px solid #e5e5e5;
+            box-shadow: none;
+            height: 34px;
+            padding: 6px 12px;
+            display: inline;
             width: 200px;
-            background: -webkit-gradient(
-                    linear,
-                    left top,
-                    left 25,
-                    from(#FFFFFF),
-                    color-stop(4%, #EEEEEE),
-                    to(#FFFFFF)
-            );
-            background: -moz-linear-gradient(
-                    top,
-                    #FFFFFF,
-                    #EEEEEE 1px,
-                    #FFFFFF 25px
-            );
-            -moz-box-shadow: 0px 0px 8px #f0f0f0;
-            -webkit-box-shadow: 0px 0px 8px #f0f0f0;
-            box-shadow: 0px 0px 8px #f0f0f0;
+            margin: 5px 5px 5px 5px;
         }
 
         form label.regislabel {
@@ -87,8 +98,8 @@
     </div>
     <%--数据配置页面--%>
     <div class="tab-pane" id="staticSourceTableChoiceModalNew"
-         style="min-height: 400px;overflow: hidden;display: none;">
-        <div style="height:600px;width:auto;max-width: 100%">
+         style="min-height: 500px;overflow: hidden;display: none;">
+        <div style="min-height:500px;width:auto;max-width: 100%">
             <div>
                 <div>
                     <h4 id="relationalDatabaseModalTitle">编辑表字段注释</h4>
@@ -123,10 +134,11 @@
                                     <div>
                                         <label>表名：</label><span id="span_tableName"></span> <label
                                             style="margin-left: 30px;"> <label style="color:red;">*</label>
-                                        备注：</label><input type="text" value="" name="tableComment" id="tableComment">
+                                        备注：</label><input type="text" value="" name="tableComment" id="tableComment"
+                                                          class="form-control" style="display: inline;width: 180px;">
                                     </div>
                                     <div class="tab-pane active" id="editTableFieldComsId"
-                                         style="width:99%;max-height:70%;overflow: hidden;">
+                                         style="width:99%;max-height:70%;overflow: hidden;overflow: auto;">
                                     </div>
 
                                     <div class="tab-pane" id="previewTableDataAndComsId"
@@ -158,24 +170,19 @@
                         id="showTypeDataModalClosedId"></button>
                 <h4 class="modal-title" id="showTypeDataModalTitle">显示类型</h4>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="width: 100%">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="portlet box green-haze" style="border:0;">
                             <div class="tab-content" style="background-color: white;max-height:70%;max-width:100%; ">
                                 <div class="tab-pane active" id="showTypeDataDetail"
-                                     style="width:99%;max-height:70%;overflow: hidden;">
+                                     style="width:99%;max-height:70%;overflow: hidden;overflow-y: auto">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <%--<div class="modal-footer">--%>
-            <%--<button type="button" class="btn btn-success" id="showTypeDataSaveId" data-dismiss="modal">保存--%>
-            <%--</button>--%>
-            <%--<button type="button" data-dismiss="modal" class="btn default">取消</button>--%>
-            <%--</div>--%>
         </div>
     </div>
 </div>
@@ -185,7 +192,7 @@
 <input type="hidden" id="FtpFilePath" value="${sessionScope.FtpFilePath}"/>
 
 <script type="text/html" id="addSheetTable">
-    <div id="div_addID" style="margin-left: 167px;">
+    <div id="div_addID" style="margin-left: 168px;">
         <select name="relationTable" class="relationTable select_cass">
             <option value="null" name="">--请选择表名--</option>
             {{each list as value i}}
@@ -208,11 +215,14 @@
             <input type="text" name="columnName" value="{{value.columnName}}" style="display: none">
             <input type="text" name="tableComment" value="{{value.clumnCommet}}" style="display: none">
             <div class="form-group">
-                <label class="col-sm-3 control-label regislabel">字段标题:</label>&nbsp;&nbsp; {{value.columnName}}
-                {{if value.columnName !="" && value.columnName!=null }}
+                <label class="col-sm-3 control-label regislabel">字段标题:</label>
+                <div class="col-sm-8">
+                    {{value.columnName}}
+                    {{if value.clumnCommet !="" && value.clumnCommet!=null }}
                 ({{value.clumnCommet}})
                 {{/if}}
                 {{/each}}
+                </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label regislabel">选项模式:</label>
@@ -249,11 +259,13 @@
             <input type="text" name="columnName" value="{{value.columnName}}" style="display: none">
             <input type="text" name="tableComment" value="{{value.clumnCommet}}" style="display: none">
             <div class="form-group">
-                <label class="col-sm-3 control-label regislabel">字段标题:</label>&nbsp;&nbsp;{{value.columnName}}
-                {{if value.columnName!="" && value.columnName!=null }}
+                <label class="col-sm-3 control-label regislabel">字段标题:</label>
+                <div class="col-sm-8">{{value.columnName}}
+                    {{if value.clumnCommet!="" && value.clumnCommet!=null }}
                 ({{value.clumnCommet}})
                 {{/if}}
                 {{/each}}
+                </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label regislabel">选项模式:</label>
@@ -293,31 +305,37 @@
                        style="display: none">
                 <input type="text" name="tableComment" value="{{value.clumnCommet}}" style="display: none">
                 <div class="form-group">
-                    <label class="col-sm-3 control-label regislabel">字段标题:</label> &nbsp;&nbsp;{{value.columnName}}
-                    {{if value.columnName!="" && value.columnName!=null }}
+                    <label class="col-sm-3 control-label regislabel">字段标题:</label>
+                    <div class="col-sm-8">{{value.columnName}}
+                        {{if value.clumnCommet!="" && value.clumnCommet!=null }}
                     ({{value.clumnCommet}})
                     {{/if}}
                 {{/each}}
+                    </div>
                 </div>
                 <div id="exit_div" style="display:none;" class="form-group">
                     <label class="col-sm-3 control-label regislabel">已关联表</label>
                     <div id="exit_table" style="margin-left: 185px;margin-bottom: 20px">
                     </div>
                 </div>
+                <%--<div id="addTable_id_edit" onclick="func_add_edit()" style="display: none;margin-left: 550px;"><a><i class="fa fa-plus"></i>增加</a></div>--%>
                 <div id="FirstSheetId" class="form-group">
-                    <label class="col-sm-3 control-label regislabel">关联字段 </label>
+                    <label class="col-sm-3 control-label regislabel">关联字段:</label>
+                    <div class="form-group">
                     <select id="checkedDataSheetTable" name="relationTable" class="relationTable select_cass">
                         <option value="null" name="">--请选择表名--</option>
                         {{each list as value i}}
                         <option value="{{value}}">{{value}}</option>
                         {{/each}}
                     </select>
-                    <select id="tableColunm_id" name="relationColumn" class="select_cass">
+                        <select id="tableColunm_id" name="relationColumn" class="form-control select_cass">
                         <option value="null" name="">--请选择列名--</option>
                     </select>
-                    <span id="addTable_id" onclick="func_addSheetTable()"><i class="fa fa-plus"></i>增加</span>
+                        <%--<span id="removeOne" style="display: none"><i class="fa fa-trash" onclick="func_removeSheetDate(this)"></i></span>--%>
+                        <span id="addTable_id" onclick="func_addSheetTable()"><a><i class="fa fa-plus"></i>增加</a></span>
+                    </div>
                 </div>
-                <div id="addTableList">
+                <div id="addTableList" style="margin-top: -30px;">
 
                 </div>
                 <div class="modal-footer">
@@ -341,11 +359,13 @@
                 <input type="text" name="columnName" value="{{value.columnName}}" style="display: none">
                 <input type="text" name="tableComment" value="{{value.clumnCommet}}" style="display: none">
                 <div class="form-group">
-                    <label class="col-sm-3 control-label regislabel">字段标题:</label>&nbsp;&nbsp; {{value.columnName}}
-                    {{if value.columnName!=""|| value.columnName!=null }}
+                    <label class="col-sm-3 control-label regislabel">字段标题:</label>
+                    <div class="col-sm-8">{{value.columnName}}
+                        {{if value.clumnCommet!=""|| value.clumnCommet!=null }}
                     ({{value.clumnCommet}})
                     {{/if}}
                     {{/each}}
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label regislabel">显示类型:</label>
@@ -364,7 +384,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label regislabel">分隔符:</label>
                     <div class="col-sm-8">
-                        <select id="separator_id" name="Separator" class="select_cass">
+                        <select id="separator_id" name="Separator" class="form-control">
                             <option value=";" name="">;</option>
                             <option value=",">,</option>
                         </select>
@@ -848,7 +868,7 @@
                                     if (showTypeDetailList[i].columnName === columnName && showTypeDetailList[i].status === 1) {
                                         var type = showTypeDetailList[i].type + 1;
                                         if (showTypeDetailList[i].type !== 0) {
-                                            var s = "<button onclick=\" func_checkTypeDetail('" + columnName + "','" + showTypeDetailList[i].type + "','" + columnComment + "')\">详情</button>";
+                                            var s = "<button onclick=\" func_checkTypeDetail('" + columnName + "','" + showTypeDetailList[i].type + "','" + columnComment + "')\" class='btn default'>详情</button>";
                                             $("#" + columnName).append(s);
                                             $("#" + columnName).show();
                                         } else {
@@ -980,8 +1000,9 @@
                                         ss += "</select><span id='remove_id'><i class='fa fa-trash' onclick=\"func_removeSheetDate(this)\"></i></span></div>";
                                         $("#exit_table").append(ss);
                                     }
-                                    // $("#exit_table").show();
+                                    // $("#addTable_id_edit").show();
                                     $("#exit_div").show();
+                                    // $("#FirstSheetId").hide();
                                 }
                                 //    重新选择关联表
                                 $("#exit_div #exit_table .select_cass").on("change", function () {
@@ -1027,6 +1048,12 @@
                     }
                 }
             });
+        }
+
+        function func_add_edit() {
+            $("#FirstSheetId").show();
+            $("#removeOne").show();
+            $("#addTable_id_edit").hide();
         }
     </script>
 </div>

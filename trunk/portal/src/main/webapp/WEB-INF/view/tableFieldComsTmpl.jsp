@@ -33,19 +33,19 @@
                 </td>
                 <td class="td_showType">
                     {{if tableInfo.dataType=='int'||tableInfo.dataType=='integer'||tableInfo.dataType=='float'||tableInfo.dataType=='double'}}
-                    <select class="sel">
+                    <select class="sel form-control" style="width: 150px;display: inline">
                         <option class="sel_type" value="1" on="1">文本型</option>
                         <option class="sel_type" value="3" on="3">字典枚举型</option>
                         <option class="sel_type" value="4" on="4">关联数据表</option>
                     </select>
                     {{else if tableInfo.dataType=='date'||tableInfo.dataType=='time'||tableInfo.dataType=='datetime'}}
-                    <select class="sel">
+                    <select class="sel form-control" style="width: 150px;display: inline">
                         <option class="sel_type" value="1" on="1">文本型</option>
                         <option class="sel_type" value="3" on="3">字典枚举型</option>
                         <option class="sel_type" value="4" on="4">关联数据表</option>
                     </select>
                     {{else}}
-                    <select class="sel">
+                    <select class="sel form-control" style="width: 150px;display: inline">
                         <option class="sel_type" value="1" on="1">文本型</option>
                         <option class="sel_type" value="2" on="2">URL</option>
                         <option class="sel_type" value="3" on="3">字典枚举型</option>
