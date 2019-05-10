@@ -2,6 +2,7 @@ package cn.csdb.portal.controller;
 
 import cn.csdb.portal.model.User;
 import cn.csdb.portal.service.CheckUserService;
+import cn.csdb.portal.utils.MD5Util;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -28,7 +29,8 @@ public class CheckUserController {
 
         //获取当前用户
         Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getLoginId(), user.getPassword());
+
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getLoginId(), MD5Util.encryptPassword(user.getLoginId(), user.getPassword(), "cnic.cn"));
         Cookie[] cookies = request.getCookies();
         try {
             if (user.getUserName() == null && user.getPassword() == null) {

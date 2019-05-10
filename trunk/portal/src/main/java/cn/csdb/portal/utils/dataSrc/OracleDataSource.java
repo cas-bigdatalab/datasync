@@ -46,12 +46,6 @@ public class OracleDataSource extends IDataSource {
         } catch (SQLException e) {
             logger.error("查询失败", e);
             return null;
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                logger.error("数据连接关闭错误", e);
-            }
         }
     }
 

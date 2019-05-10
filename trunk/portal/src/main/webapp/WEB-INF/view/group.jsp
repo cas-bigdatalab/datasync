@@ -481,11 +481,14 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-3 control-label" for="passwordForUpdate">
-                                密&nbsp;&nbsp;&nbsp;&nbsp;码<span style="color: red;">*</span>
+                            <label class="col-md-3 control-label" for="resetPassword">
+                                <%--密&nbsp;&nbsp;&nbsp;&nbsp;码<span style="color: red;">*</span>--%>
+                                <input type="checkbox" id="resetPassword">
+                                重置密码<span style="color: red;">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" placeholder="请输入密码"  id="passwordForUpdate" name="passwordForUpdate" required="required">
+                                <input disabled="disabled" type="text" class="form-control" placeholder="请输入密码"
+                                       id="passwordForUpdate" name="passwordForUpdate" required="required">
                             </div>
                         </div>
                         <div class="form-group">
@@ -578,6 +581,15 @@
         var validEditData;
 
         $(function () {
+            $("#resetPassword").on('click', function () {
+                var currentTarget = event.currentTarget;
+                var isChecked = $(currentTarget).is(":checked");
+                if (isChecked) {
+                    $("#passwordForUpdate").removeAttrs("disabled");
+                } else {
+                    $("#passwordForUpdate").attr("disabled", "disabled");
+                }
+            })
             template.helper("dateFormat", formatDate);
             getData(1);
 
@@ -1267,6 +1279,8 @@
 
         function updateUser(updateBtn)
         {
+            $("#resetPassword").prop("checked", false);
+            $("#passwordForUpdate").prop("checked", false);
             var idOfUser = $(updateBtn).parent().parent().parent().parent().parent().attr("id");
 
             $.ajax(
@@ -1283,7 +1297,7 @@
                         $("#idForUpdate").html(data.id);
                         $("#userNameForUpdate").val(data.userName);
                         $("#loginIdForUpdate").val(data.loginId);
-                        $("#passwordForUpdate").val(data.password);
+                        // $("#passwordForUpdate").val(data.password);
 
                         var subjectCodeArr = data.subjectCode.split(",");
                         console.log("getUserById - subjectCodeArr - " + subjectCodeArr);

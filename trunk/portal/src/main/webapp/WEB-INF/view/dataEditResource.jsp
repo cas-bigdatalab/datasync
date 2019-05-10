@@ -926,17 +926,17 @@
                     } else {
 
                     }
-                    $(container).jstree(data).bind("select_node.jstree", function (event, selected) {
+                    $(container).jstree(data).on("select_node.jstree", function (event, selected) {
                         /*$(".button-save").removeAttr("disabled");*/
                         $("#centerCatalogId").val(selected.node.id);
                         $(".timeVili2").removeClass("custom-error")
                         $(".timeVili2:eq(1)").hide()
-                    }).on("loaded.jstree", function (event, data) {
+                    }).on("ready.jstree", function (event, data) {
                         //这两句化是在loaded所有的树节点后，然后做的选中操作，这点是需要注意的，loaded.jstree 这个函数
                         //取消选中，然后选中某一个节点
                         $(container).jstree("deselect_all", true);
                         //$("#keyKamokuCd").val()是选中的节点id，然后后面的一个参数 true表示的是不触发默认select_node.change的事件
-                        $(container).jstree('select_node', index, true);
+                        $(container).jstree('select_node', index);
                     });
                 }
             })

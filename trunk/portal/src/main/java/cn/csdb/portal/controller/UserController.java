@@ -2,11 +2,12 @@ package cn.csdb.portal.controller;
 
 import cn.csdb.portal.model.User;
 import cn.csdb.portal.service.UserService;
+import cn.csdb.portal.utils.MD5Util;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -132,6 +133,13 @@ public class UserController {
         user.setCreateTime(sdf.format(new Date()));
         user.setStat(1);
         user.setRole("普通用户");
+        if (!Strings.isBlank(user.getPassword())) {
+            String securityPassword = MD5Util.encryptPassword(user.getLoginId(), user.getPassword(), "cnic.cn");
+            user.setPassword(securityPassword);
+        } else {
+            User userById = userService.getUserById(user.getId());
+            user.setPassword(userById.getPassword());
+        }
         int updatedUserCnt = userService.updateUser(user);
         logger.info("user cnt updated : updatedUserCnt = " + updatedUserCnt);
 

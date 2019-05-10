@@ -55,12 +55,6 @@ public class MySqlDataSource extends IDataSource{
         } catch (SQLException e) {
             logger.error("查询发生错误", e);
             return null;
-        } finally {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                logger.error("数据连接关闭错误", e);
-            }
         }
 
     }
