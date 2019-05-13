@@ -240,13 +240,13 @@ public class FileSourceController {
     }
 
     @RequestMapping(value="/downloadFile")
-    public String downloads(String dataTaskId,HttpServletResponse response) throws Exception{
-        DataTask dataTask = dataTaskService.get(dataTaskId);
+    public String downloads(String fileName,HttpServletResponse response) throws Exception{
+//        DataTask dataTask = dataTaskService.get(dataTaskId);
 /*
         String	path = "/logs/";
 */
         String path = "/logs/";
-        String  fileName = dataTask.getDataTaskName()+"log.txt";
+//        String  fileName = dataTask.getDataTaskName()+"log.txt";
         //1、设置response 响应头
         response.reset();
         response.setCharacterEncoding("UTF-8");

@@ -252,7 +252,7 @@ public class DataTaskController {
                                            String datataskName,
                                            String dataRelTableList,
                                            String sqlTableNameEnList,
-                                           @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList) {
+                                           @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList,String sync,String period) {
         String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
         String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         JSONObject jsonObject = new JSONObject();
@@ -280,6 +280,8 @@ public class DataTaskController {
         Format dateFormat = new SimpleDateFormat("MMddHHmmssS");
         dateFormat.format(rightNow.getTime(), sb, HELPER_POSITION );*/
         datatask.setDataTaskId(datataskName);
+        datatask.setSync(sync);
+        datatask.setPeriod(period);
         int flag = dataTaskService.insertDatatask(datatask);
         jsonObject.put("result",flag);
         if(flag < 0){
@@ -466,7 +468,7 @@ public class DataTaskController {
                                              String datataskName,
                                              String dataRelTableList,
                                              String sqlTableNameEnList,
-                                             @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList) {
+                                             @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList,String sync,String period) {
         String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
         String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         JSONObject jsonObject = new JSONObject();
@@ -477,6 +479,8 @@ public class DataTaskController {
         datatask.setSqlString(dataRelSqlList);
         datatask.setSqlTableNameEn(sqlTableNameEnList);
         datatask.setCreateTime(new Date());
+        datatask.setSync(sync);
+        datatask.setPeriod(period);
         DataSrc dataSrc=dataSrcService.findById(dataSourceId);
         if(dataSrc!=null){
             if("mysql".equals(dataSrc.getDatabaseType())){
@@ -591,6 +595,23 @@ public class DataTaskController {
             jsonObject.put("result",2);//全部位路径，没有文件
             return  jsonObject;
         }
+
+
+
+
     }
+        @ResponseBody
+        @RequestMapping(value="updateSyncPeriod",method = RequestMethod.POST)
+        public JSONObject updateSyncPeriod(String datataskId, String period) {
+            JSONObject jsonObject = new JSONObject();
+            DataTask datatask = dataTaskService.get(datataskId);
+            datatask.setPeriod(period);
+            int flag = dataTaskService.update(datatask);
+            jsonObject.put("result",flag);
+            if(flag < 0){
+                return  jsonObject;
+            }
+            return jsonObject;
+        }
 
 }

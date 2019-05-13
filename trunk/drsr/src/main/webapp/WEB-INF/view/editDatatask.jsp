@@ -123,11 +123,24 @@
                             <div class="col-md-2" style="margin: 0 -15px">
                                 <input type="text" class="form-control inputVili" placeholder="新表名" name="sqlTableName">
                             </div>
-                            <div class="col-md-4">
-                                <button type="button" class="btn blue preview">预览</button>
-                                <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>SQL查询</button>
-                            </div>
-                            <div class="col-md-2" style="text-align: left">
+                            <div class="col-md-4" style="width: 40% !important;">
+                                <div style="float: left;">
+                                    <button type="button" class="btn blue preview">预览</button>
+                                    <button type="button" class="btn green" onclick="addSql()"><span class="glyphicon glyphicon-plus"></span>SQL查询</button>  &nbsp;同步:<input type="checkbox"  id="ifsync" value="true">
+                                </div>
+                                <div style="float: left;">
+                                    <select id="syncSelect" class="form-control" style="font-size: 14px; display: none;">
+                                        <option value="" disabled selected hidden>周期</option>
+                                        <option value="3">3小时</option>
+                                        <option value="6">6小时</option>
+                                        <option value="24">天</option>
+                                        <option value="168">周</option>
+                                        <option value="720">月</option>
+                                    </select>
+                                </div>
+                             </div>
+
+                            <%--<div class="col-md-2" style="text-align: left">--%>
                             </div>
                         </div>
                         <div id="sqlList"></div>
@@ -370,6 +383,18 @@
         var taskNameFlag=false
         var validSql = true;
         var remoteZTree, rMenu;
+
+        $("#ifsync")[0].checked=false;//火狐浏览器默认选中
+
+        $("#ifsync").change(function() {
+            if( $("#ifsync")[0].checked==true){
+                $("#syncSelect")[0].style.display="block";
+            }else{
+                $("#syncSelect")[0].style.display="none";
+            }
+            // alert("Option changed!");
+        });
+
         dateDef = dateDef.Format("yyyyMMddhhmmss");
         $("#dataTaskName").val("数据任务"+dateDef)
         $("#dataTaskName").change(function () {
@@ -516,7 +541,7 @@
             $(this).parent().parent().remove();
         })
         $("#totalList").delegate(".preview","click",function () {
-            var $Str =$(this).parent().parent().find(".sqlStatements").val();
+            var $Str =$(this).parent().parent().parent().find(".sqlStatements").val();
             previewSqlDataAndComs(dataRelSrcId,$Str)
         })
         $("#totalList").delegate(".sqlStatements","change",function () {
@@ -549,6 +574,18 @@
         }
         <!--create relation task -->
         function sendRelationTask() {
+
+            var sync=false;
+            var period=0;//周期
+            if($("#ifsync").parent()[0].className=="checked"){
+                sync=true;
+                period=$("#syncSelect").val();
+                if(period=="" || period==null){
+                    toastr["error"]("请选择同步周期！");
+                    return;
+                }
+            }
+
             var dataRelSqlTableList="";
             var $eleChecked = $("[name='relationBox']:checked")
             var numChecked = $eleChecked.size();
@@ -645,7 +682,9 @@
                     dataRelSqlList:dataRelSqlList,
                     datataskName:$("#dataTaskName").val(),
                     sqlTableNameEnList:dataRelSqlTableList,
-                    datataskId:sdoId
+                    datataskId:sdoId,
+                    sync:sync,
+                    period:period
                 },
                 complete : function(XMLHttpRequest,status){ //请求完成后最终执行参数
                     if(status=='timeout'){//超时,status还有success,error等值的情况
@@ -797,6 +836,15 @@
                     if(typeNum ==0){
                         $("#aaa").click()
                     }
+
+                    if(dataTaskCon.sync=="true"){
+                        // document.getElementById("ifsync").checked=true;
+                        $("#ifsync").parent()[0].className="checked";
+                        $("#syncSelect")[0].style.display="block";
+                        $("#syncSelect option[value='"+dataTaskCon.period+"']").attr("selected","selected");
+                    }
+
+
                     if(dataTaskCon.dataTaskType == "mysql" || dataTaskCon.dataTaskType=="sqlserver"){
                         dataRelSrcId=dataTaskCon.dataSourceId
                         $("#"+dataRelSrcId).prop("selected",true)

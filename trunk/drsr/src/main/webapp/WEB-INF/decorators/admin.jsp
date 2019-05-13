@@ -13,7 +13,7 @@
 <html>
 <head>
     <%--<title>数据资源汇聚传输工具</title>--%>
-    <title>${applicationScope.systemPro['project.title']}</title>
+    <title>${applicationScope.systemPro['title']}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
@@ -139,7 +139,7 @@
             width: 18%;
             height: 87.545%;
             float: left;
-            background: #e1e5e3 url(${applicationScope.systemPro['project.wrapperimg']}) bottom no-repeat;
+            background: #e1e5e3 url(${applicationScope.systemPro['wrapperimg']}) bottom no-repeat;
             background-size: 100%;
         }
         .page-content-wrapper {
@@ -285,7 +285,7 @@ if(userName != null && userName.length()>6){
         <div class="page-logo" style="width: auto;margin: auto;position: absolute;top: 0;left: 0;bottom: 0;right: 0;">
             <a href="#">
                 <%--<h4 style="font-size: 21px;margin-top: 10px;margin-bottom: 10px;">数据资源汇聚传输工具</h4>--%>
-                <h4 style="font-size: 21px;margin-top: 10px;margin-bottom: 10px;">${applicationScope.systemPro['project.title']}</h4>
+                <h4 style="font-size: 21px;margin-top: 10px;margin-bottom: 10px;">${applicationScope.systemPro['title']}</h4>
             </a>
         </div>
 
@@ -383,7 +383,7 @@ if(userName != null && userName.length()>6){
 <!-- BEGIN FOOTER -->
 <div class="page-footer" style="text-align: center;background-color: #454241;height: 4.92% !important;">
     <div class="page-footer-inner" style="color: #FFF;float: none;">
-        ${applicationScope.systemPro['project.footer']}
+        #2019-2025 &copy; ${applicationScope.systemPro['footer']}
 
     </div>
     <div class="scroll-to-top">

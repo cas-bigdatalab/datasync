@@ -11,6 +11,7 @@ import cn.csdb.drsr.service.LoginService;
 import cn.csdb.drsr.utils.ConfigUtil;
 import cn.csdb.drsr.utils.FileUtil;
 import cn.csdb.drsr.utils.FtpUtil;
+import cn.csdb.drsr.utils.sync.SyncUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
@@ -30,6 +31,7 @@ import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,6 +56,9 @@ public class DataSyncController {
     private DataTaskService dataTaskService;
     @Resource
     private DataSrcService dataSrcService;
+
+    @Resource
+    private JdbcTemplate jdbcTemplate;
 
     private Logger logger = LoggerFactory.getLogger(DataSyncController.class);
 
@@ -238,6 +243,7 @@ public class DataSyncController {
                             pw.println(current1+":"+"=========================解压流程结束========================" + "\n");
                         }
                         dataTask.setStatus("1");
+                        dataTask.setSynctime(new Date());
 //                        ftpUtil.removeDirectory(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+".zip");
                        // ftpUtil.deleteFile(ftpRootPath+subjectCode+"_"+dataTask.getDataTaskId()+".zip");
                         dataTaskService.update(dataTask);
@@ -361,6 +367,25 @@ public class DataSyncController {
             e.printStackTrace();
             System.out.println("暂停异常！");
         }
+    }
+
+    @ResponseBody
+    @RequestMapping("changeSyncStatus")
+    public int changeSyncStatus(String taskId,String sync){
+        SyncUtil syncUtil=new SyncUtil();
+        DataTask dataTask = dataTaskService.get(String.valueOf(taskId));
+        JSONObject jsonObject=null;
+        int result=-1;
+        if("true".equals(sync)){
+            jsonObject =syncUtil.executeTask(dataTask, jdbcTemplate);
+            if (jsonObject.size() != 0 && "success".equals(jsonObject.getString("result"))) {
+                 dataTask.setSynctime(new Date());
+            }
+        }
+
+        dataTask.setSync(sync);
+        result=dataTaskService.update(dataTask);
+        return  result;
     }
 
 }

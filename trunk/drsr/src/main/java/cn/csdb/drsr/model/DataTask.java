@@ -26,6 +26,33 @@ public class DataTask {
     private DataSrc dataSrc;
     private String remoteuploadpath;
     private String fileSize;
+    private String sync;//是否同步
+    private String period;//周期
+    private Date synctime;//同步时间
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
+    }
+
+    public Date getSynctime() {
+        return synctime;
+    }
+
+    public void setSynctime(Date synctime) {
+        this.synctime = synctime;
+    }
+
+    public String getSync() {
+        return sync;
+    }
+
+    public void setSync(String sync) {
+        this.sync = sync;
+    }
 
     public String getFileSize() {
         return fileSize;

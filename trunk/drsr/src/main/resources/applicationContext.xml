@@ -117,4 +117,8 @@
     <import resource="spring-cache.xml"/>
     <!-- 权限控制配置文件  -->
     <import resource="spring-shiro.xml"/>
+
+    <bean id="TimmerController" class="cn.csdb.drsr.utils.sync.TimmerController" init-method="start">
+        <property name="jdbcTemplate" ref="jdbcTemplate"/>
+    </bean>
 </beans>
