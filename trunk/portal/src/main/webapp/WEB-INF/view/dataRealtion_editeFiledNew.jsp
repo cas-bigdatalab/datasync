@@ -142,8 +142,8 @@
     <div class="modal-dialog" style="height:600px;width:auto;max-width: 40%">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                        id="showTypeDataModalClosedId"></button>
+                <%--<button type="button" class="close" data-dismiss="modal" aria-hidden="true"--%>
+                <%--id="showTypeDataModalClosedId"></button>--%>
                 <h4 class="modal-title" id="showTypeDataModalTitle">显示类型</h4>
             </div>
             <div class="modal-body" style="width: 100%">
@@ -192,7 +192,7 @@
             <input type="text" name="tableComment" value="{{value.clumnCommet}}" style="display: none">
             <div class="form-group">
                 <label class="col-sm-3 control-label regislabel">字段标题:</label>
-                <div class="col-sm-8">
+                <div class="col-sm-8" style="margin-top: 8px">
                     {{value.columnName}}
                     {{if value.clumnCommet !="" && value.clumnCommet!=null }}
                 ({{value.clumnCommet}})
@@ -202,10 +202,10 @@
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label regislabel">选项模式:</label>
-                <div class="col-sm-8">
-                    <input type="radio" value="1" checked="checked" name="optionMode"/><label>网页链接</label>
-                    <input type="radio" value="2" name="optionMode"/><label>邮箱链接</label>
-                    <input type="radio" value="3" name="optionMode"/><label>FTP链接</label>
+                <div class="col-sm-8" style="margin-top: 8px">
+                    <input type="radio" value="1" checked="checked" name="optionMode"/><label>网页链接</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" value="2" name="optionMode"/><label>邮箱链接</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="radio" value="3" name="optionMode"/><label>FTP链接</label>&nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" value="4" name="optionMode"/><label>图片类型</label>
                 </div>
             </div>
@@ -236,7 +236,7 @@
             <input type="text" name="tableComment" value="{{value.clumnCommet}}" style="display: none">
             <div class="form-group">
                 <label class="col-sm-3 control-label regislabel">字段标题:</label>
-                <div class="col-sm-8">{{value.columnName}}
+                <div class="col-sm-8" style="margin-top: 8px">{{value.columnName}}
                     {{if value.clumnCommet!="" && value.clumnCommet!=null }}
                 ({{value.clumnCommet}})
                 {{/if}}
@@ -245,9 +245,9 @@
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label regislabel">选项模式:</label>
-                <div class="col-sm-8">
+                <div class="col-sm-8" style="margin-top: 8px">
                     <input type="radio" value="1" name="optionMode" checked="checked"
-                           onclick="selectTypeEnum(this.value)"/>来自文本串
+                           onclick="selectTypeEnum(this.value)"/>来自文本串 &nbsp;&nbsp;&nbsp;&nbsp;
                     <input type="radio" value="2" name="optionMode" onclick="selectTypeEnum(this.value)"/>来自sql表字段
                 </div>
             </div>
@@ -282,7 +282,7 @@
                 <input type="text" name="tableComment" value="{{value.clumnCommet}}" style="display: none">
                 <div class="form-group">
                     <label class="col-sm-3 control-label regislabel">字段标题:</label>
-                    <div class="col-sm-8">{{value.columnName}}
+                    <div class="col-sm-8" style="margin-top: 8px">{{value.columnName}}
                         {{if value.clumnCommet!="" && value.clumnCommet!=null }}
                     ({{value.clumnCommet}})
                     {{/if}}
@@ -337,7 +337,7 @@
                 <input type="text" name="tableComment" value="{{value.clumnCommet}}" style="display: none">
                 <div class="form-group">
                     <label class="col-sm-3 control-label regislabel">字段标题:</label>
-                    <div class="col-sm-8">{{value.columnName}}
+                    <div class="col-sm-8" style="margin-top: 8px">{{value.columnName}}
                         {{if value.clumnCommet!=""|| value.clumnCommet!=null }}
                     ({{value.clumnCommet}})
                     {{/if}}
@@ -346,9 +346,9 @@
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label regislabel">显示类型:</label>
-                    <div class="col-sm-8">
-                        <input type="radio" value="1" name="optionMode"/>附件列表
-                        <input type="radio" value="2" name="optionMode"/>图片列表
+                    <div class="col-sm-8" style="margin-top: 8px">
+                        <input type="radio" value="1" name="optionMode"/>附件列表 &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" value="2" name="optionMode"/>图片列表 &nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="radio" value="3" name="optionMode"/>视频列表
                     </div>
                 </div>

@@ -276,10 +276,14 @@
             data: {"subjectCode": subjectCode},
             success: function (data) {
                 $("#alltableName").html("");
-                console.log(data);
+                // console.log(data);
                 var html = template("tableNameTempl", data);
                 $("#alltableName").append(html);
                 $("#alltableName").show();
+                if (data.list != null) {
+                    $("#btn_addTableData").show();
+                    editTable_func(subjectCode, data.list[0].tableName, 1);
+                }
             }
         });
 
@@ -300,13 +304,13 @@
                 data: {"subjectCode": subjectCode, "tableName": tableName, "pageNo": pageNo},
                 dataType: "json",
                 success: function (data) {
-                    console.log(data);
+                    // console.log(data);
                     var arr = data.columns;
                     var dataType = data.dataType;
                     var columnComment = data.columnComment;
                     var dataArry = data.dataDatil;
                     var count=dataArry.length;
-                    console.log(dataArry);
+                    // console.log(dataArry);
                     var delPORTALID;
                     var tabs = "";
                     var s = " ";
@@ -509,7 +513,7 @@
                     var dataType = data.dataType;
                     var columnComment = data.columnComment;
                     var dataArry = data.dataDatil;
-                    console.log(dataArry);
+                    // console.log(dataArry);
                     var count=dataArry.length;
                     var delPORTALID;
                     var tabs = "";
