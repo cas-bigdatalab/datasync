@@ -375,7 +375,7 @@
 
         $("#content").height("90%");
 
-        $("#alltableName").niceScroll({cursorborder: "", cursorcolor: "#155aab", boxzoom: true}); // First scrollable DIV
+        // $("#alltableName").niceScroll({cursorborder: "", cursorcolor: "#155aab", boxzoom: true}); // First scrollable DIV
     });
 
 </script>
