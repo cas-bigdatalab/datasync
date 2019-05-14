@@ -61,9 +61,10 @@ function staticSourceTableChoice(editIsChoiceTableOrSql, obj, subjectCode, table
 }
 
 function staticSourceTableChoice_edit(editIsChoiceTableOrSql, obj, subjectCode, tableNameOrSql, refer,flag) {
+    debugger;
     $("#span_tableName").html("");
     S_flag=flag;
-    if (refer == "dataService" || !obj || obj.checked) {
+    if (refer == "dataService" || refer == "dataResource"/* || !obj || obj.checked*/) {
         $('#editTableFieldComsId').html("");
         $('#previewTableDataAndComsId').html("");
 
@@ -153,7 +154,6 @@ function preSaveEditTableFieldComs() {
  * 保存coms信息
  */
 function saveEditTableFieldComs() {
-    debugger
     if (curTableName || curSQL) {
         var fieldComsList = getEditTableOrSqlFieldComs();
         var tableInfos = $.toJSON(fieldComsList);
@@ -187,7 +187,6 @@ $(function () {
 
 //点击保存按钮
 function fun_saveTbaleFields() {
-    debugger;
     var tableComment = $("#tableComment").val();
     if (tableComment === "" || tableComment === null) {
         toastr["warning"]("表名注释不能为空！");
@@ -234,7 +233,6 @@ function getEditTableOrSqlFieldComs() {
 }
 
 function saveTableFieldComs(curDataSubjectCode, tableInfos) {
-    debugger
     var state = "1";
     for (var index in tableInfos) {
         for (var key in tableInfos[index].tableInfos)
