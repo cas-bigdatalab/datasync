@@ -532,4 +532,16 @@ public class UserDao {
         return updatedUserCnt;
     }
 
+    public int validateLogin(String userName, String password) {
+        int loginStatus = 0;
+        DBObject query = QueryBuilder.start().and("loginId").is(userName).and("password").is(password).get();
+        BasicQuery basicQuery = new BasicQuery(query);
+        List<User> list = mongoTemplate.find(basicQuery, User.class);
+        if (list.size() != 0) {
+            loginStatus = 1;
+        }
+
+        return loginStatus;
+    }
+
 }

@@ -4,8 +4,8 @@ import cn.csdb.portal.model.User;
 import cn.csdb.portal.repository.UserDao;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
@@ -86,5 +86,12 @@ public class UserService {
     public long queryLoginId(String loginId)
     {
         return userDao.queryLoginId(loginId);
+    }
+
+    public int validateLogin(String userName, String password) {
+        int loginStatus = 0;
+        loginStatus = userDao.validateLogin(userName, password);
+
+        return loginStatus;
     }
 }

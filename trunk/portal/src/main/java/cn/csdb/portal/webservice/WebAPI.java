@@ -2,6 +2,7 @@ package cn.csdb.portal.webservice;
 
 import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.service.SubjectService;
+import cn.csdb.portal.service.UserService;
 import cn.csdb.portal.utils.MD5Util;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.logging.log4j.LogManager;
@@ -24,6 +25,9 @@ public class WebAPI {
 
     @Resource
     private SubjectService subjectService;
+
+    @Resource
+    private UserService userService;
 
     @RequestMapping(value = "/getSubject/{subjectCode}", method = RequestMethod.GET)
     public JSONObject getSubject(@PathVariable("subjectCode") String subjectCode) {
@@ -60,7 +64,7 @@ public class WebAPI {
         String loginNotice = "";
         int loginStatus = 0; // log success or not， 0 ：success, 1: failed, notice : username or password is wrong
         String securityPassword = MD5Util.encryptPassword(userName, password, "cnic.cn");
-        loginStatus = subjectService.validateLogin(userName, securityPassword);
+        loginStatus = userService.validateLogin(userName, securityPassword);
 
         if (loginStatus == 0) {
             loginNotice = "登录失败：用户名或者密码错误";
