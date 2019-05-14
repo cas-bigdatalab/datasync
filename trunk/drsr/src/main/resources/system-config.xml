@@ -18,7 +18,7 @@
         <!--<beans:prop key="title">烟草科研专业库管理与汇交工具</beans:prop>-->
         <beans:prop key="wrapperimg">/resources/login/img/left_bg.png</beans:prop>
         <beans:prop key="wallimg">/resources/login/img/bg4-bak.jpg</beans:prop>
-        <beans:prop key="footer">中国科学院计算机网络信息中心 版权所有</beans:prop>
+        <beans:prop key="footer">  2019-2025 @ 中国科学院计算机网络信息中心 版权所有</beans:prop>
         <!--<beans:prop key="uploadfile">resources/uploadfile/</beans:prop>-->
 
     </util:properties>

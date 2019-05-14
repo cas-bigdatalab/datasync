@@ -134,7 +134,7 @@
                         </div>
                     </div>
                     <div id="totalList">
-                        <div class="col-md-12" style="margin-bottom: 10px;padding-top: 50px;" >
+                        <div class="col-md-12" style="margin-bottom: 10px;margin-top: 50px;" >
                             <div class="col-md-2" style="text-align: right;margin-left: 35px;">SQL查询</div>
                             <div class="col-md-4">
                                 <input type="text" class="form-control sqlStatements inputVili" >
@@ -602,8 +602,8 @@
         }
         <!--create relation task -->
         function sendRelationTask() {
-            var sync=false;
-            var period=0;//周期
+            var sync="";
+            var period="";//周期
             if(document.getElementById("ifsync").checked){
                 sync=true;
                 period=$("#syncSelect").val();

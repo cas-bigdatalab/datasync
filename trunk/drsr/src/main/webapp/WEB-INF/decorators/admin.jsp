@@ -383,7 +383,7 @@ if(userName != null && userName.length()>6){
 <!-- BEGIN FOOTER -->
 <div class="page-footer" style="text-align: center;background-color: #454241;height: 4.92% !important;">
     <div class="page-footer-inner" style="color: #FFF;float: none;">
-        #2019-2025 &copy; ${applicationScope.systemPro['footer']}
+       ${applicationScope.systemPro['footer']}
 
     </div>
     <div class="scroll-to-top">
