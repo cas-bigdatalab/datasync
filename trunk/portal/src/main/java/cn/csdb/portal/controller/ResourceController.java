@@ -456,6 +456,7 @@ public class ResourceController {
                 if (!Objects.equals(fileLength.intValue(), 0)) {
                     fileNumber++;
                 }
+                saveFileInfo(filepath, fileLength, resourceDataList.getResourceId());
             }
             memorySize = memorySize.add(allFileLength);
             resource.setToFilesNumber(fileNumber);
@@ -479,6 +480,24 @@ public class ResourceController {
         jsonObject.put("resourceId", resId);
 
         return jsonObject;
+    }
+
+    private void saveFileInfo(String filePath, BigDecimal fileSize, String resourceId) {
+        File file = new File(filePath);
+        if (file.exists() && file.isFile()) {
+            int i = file.getName().lastIndexOf(".");
+            String name = file.getName().substring(0, i);
+            String suffixName = file.getName().substring(i + 1, file.getName().length());
+            FileInfo fileInfo = new FileInfo();
+            fileInfo.setFile_name(name);
+            fileInfo.setFile_path(filePath);
+            fileInfo.setPreviewType(suffixName);
+            fileInfo.setSize(fileSize.toString());
+            fileInfo.setResourceId(resourceId);
+            fileInfo.setTime(new Date());
+            resourceService.saveFileInfo(fileInfo);
+            System.out.println("执行fileInfo插入");
+        }
     }
 
     /**
