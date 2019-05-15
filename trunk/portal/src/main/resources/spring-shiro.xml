@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xmlns:util="http://www.springframework.org/schema/util"
-	   xmlns="http://www.springframework.org/schema/beans"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans
-     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-     http://www.springframework.org/schema/util   
-     http://www.springframework.org/schema/util/spring-util-3.0.xsd"
-	   default-lazy-init="true">
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+       default-lazy-init="true">
 
     <description>spring shiro 配置文件</description>
 
     <!-- 缓存配置文件 -->
-    <import resource="spring-cache.xml"/>
+    <!--<import resource="spring-cache.xml"/>-->
 
     <bean id="roleOrFilter" class="cn.csdb.portal.common.CustomRolesAuthorizationFilter"><!--自定义的filter-->
     </bean>

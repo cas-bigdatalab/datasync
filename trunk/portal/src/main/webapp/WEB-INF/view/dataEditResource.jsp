@@ -1002,28 +1002,6 @@
 
         }
 
-        function addResourceThirdStep() {
-            var $preEle = $("#permissions").val();
-            if ($preEle == null) {
-                toastr["error"]("请选择用户组");
-                return
-            }
-            $.ajax({
-                url: ctx + "/resource/addResourceThirdStep",
-                type: "POST",
-                data: {
-                    resourceId: resourceId,
-                    userGroupIdList: $preEle.toString()
-                },
-                success: function (data) {
-                    window.location.href = "${ctx}/dataRelease"
-                },
-                error: function (data) {
-                    console.log("请求失败")
-                }
-            })
-        }
-
         function editResourceFirstStep() {
             firstFlag = false
             if ((firstTime == null && lastTime != null) || (firstTime != null && lastTime == null) || (firstTime > lastTime)) {

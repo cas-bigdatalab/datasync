@@ -15,7 +15,7 @@
     <util:properties id="systemPro" location="classpath:cas_urls.properties">
         <!-- xsd文件相关-->
         <!--<beans:prop key="xsdPath">/usr/local/sdc/xsd</beans:prop>-->
-        <beans:prop key="ftpServerAddr">10.0.86.77</beans:prop>
+        <beans:prop key="ftpServerAddr">${dataAssemblerHost}</beans:prop>
         <beans:prop key="ftpServerPort">21</beans:prop>
 
         <!--一定要以/结尾-->
@@ -23,10 +23,10 @@
         <!--一定要以/开始-->
         <beans:prop key="ftpFilePath">/file</beans:prop>
 
-        <beans:prop key="dbUserName">root</beans:prop>
-        <beans:prop key="dbPassword">123456</beans:prop>
-        <beans:prop key="dbHost">10.0.86.77</beans:prop>
-        <beans:prop key="dbPort">3306</beans:prop>
+        <beans:prop key="dbUserName">${db.username}</beans:prop>
+        <beans:prop key="dbPassword">${db.password}</beans:prop>
+        <beans:prop key="dbHost">${dataAssemblerHost}</beans:prop>
+        <beans:prop key="dbPort">${db.port}</beans:prop>
     </util:properties>
 
     <util:properties id="menus">

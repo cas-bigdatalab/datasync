@@ -487,7 +487,7 @@ public class ResourceController {
         if (file.exists() && file.isFile()) {
             int i = file.getName().lastIndexOf(".");
             String name = file.getName().substring(0, i);
-            String suffixName = file.getName().substring(i + 1, file.getName().length());
+            String suffixName = file.getName().substring(i + 1, file.getName().length()).toLowerCase();
             FileInfo fileInfo = new FileInfo();
             fileInfo.setFile_name(name);
             fileInfo.setFile_path(filePath);
@@ -498,30 +498,6 @@ public class ResourceController {
             resourceService.saveFileInfo(fileInfo);
             System.out.println("执行fileInfo插入");
         }
-    }
-
-    /**
-     * Function Description: 添加资源第三步保存
-     *
-     * @param: [resourceId, userGroupIdList]
-     * @return: com.alibaba.fastjson.JSONObject
-     * @auther: hw
-     * @date: 2018/11/2 11:19
-     */
-    @ResponseBody
-    @RequestMapping(value = "addResourceThirdStep")
-    public JSONObject addResourceThirdStep(HttpSession session,
-                                           @RequestParam(name = "resourceId") String resourceId,
-                                           @RequestParam(name = "userGroupIdList") String userGroupIdList) {
-        String subjectCode = session.getAttribute("SubjectCode").toString();
-        Subject subject = subjectService.findBySubjectCode(subjectCode);
-        JSONObject jsonObject = new JSONObject();
-        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
-        resource.setUserGroupId(userGroupIdList);
-        resource.setStatus("1");
-        String resId = resourceService.save(resource);
-        jsonObject.put("resourceId", resId);
-        return jsonObject;
     }
 
     /**
@@ -742,35 +718,6 @@ public class ResourceController {
             resource.setToRecordNumber(0);
             resource.setToFilesNumber(i);
         }
-        if (StringUtils.isNotBlank(resource.getUserGroupId())) {
-            resource.setStatus("1");
-        } else {
-            resource.setStatus("-1");
-        }
-        String resId = resourceService.save(resource);
-        jsonObject.put("resourceId", resId);
-        return jsonObject;
-    }
-
-    /**
-     * Function Description: 编辑资源保存第三步
-     *
-     * @param: [resourceId, userGroupIdList]
-     * @return: com.alibaba.fastjson.JSONObject
-     * @auther: hw
-     * @date: 2018/11/2 14:53
-     */
-    @ResponseBody
-    @RequestMapping(value = "editResourceThirdStep")
-    public JSONObject editResourceThirdStep(HttpSession session,
-                                            @RequestParam(name = "resourceId") String resourceId,
-                                            @RequestParam(name = "userGroupIdList") String userGroupIdList) {
-        String subjectCode = session.getAttribute("SubjectCode").toString();
-        Subject subject = subjectService.findBySubjectCode(subjectCode);
-        JSONObject jsonObject = new JSONObject();
-        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
-        resource.setUserGroupId(userGroupIdList);
-        resource.setStatus("1");
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
         return jsonObject;
