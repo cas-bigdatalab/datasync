@@ -276,7 +276,6 @@
             data: {"subjectCode": subjectCode},
             success: function (data) {
                 $("#alltableName").html("");
-                // console.log(data);
                 var html = template("tableNameTempl", data);
                 $("#alltableName").append(html);
                 $("#alltableName").show();
@@ -304,13 +303,11 @@
                 data: {"subjectCode": subjectCode, "tableName": tableName, "pageNo": pageNo},
                 dataType: "json",
                 success: function (data) {
-                    // console.log(data);
                     var arr = data.columns;
                     var dataType = data.dataType;
                     var columnComment = data.columnComment;
                     var dataArry = data.dataDatil;
                     var count=dataArry.length;
-                    // console.log(dataArry);
                     var delPORTALID;
                     var tabs = "";
                     var s = " ";
@@ -382,10 +379,12 @@
                                     i++;
                                 }
                             }
-                            ss += "<td align='center'><table class='0' cellspacing='0' border='0' align='center'><tr>" +
-                                "<td class='bianji'><a src='#' onclick=\" updateData('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
-                                "<i class='fa fa-pencil-square-o' aria-hidden='true'></i>修改</a></td><td width='1'></td>" +
-                                "<td class='chakan'><a href='#' onclick=\"checkDada('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
+                            ss += "<td align='center'><table class='0' cellspacing='0' border='0' align='center'><tr>";
+                            if (data.isSync === 0) {
+                                ss += "<td class='bianji'><a src='#' onclick=\" updateData('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
+                                    "<i class='fa fa-pencil-square-o' aria-hidden='true'></i>修改</a></td><td width='1'></td>";
+                            }
+                            ss += "<td class='chakan'><a href='#' onclick=\"checkDada('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
                                 "<i class='fa fa-eye' aria-hidden='true'></i>查看</a></td><td width='1'></td>" +
                                 "<td class='shanchu'><a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "','"+ count +"')\">" +
                                 "<i class='fa fa-trash-o fa-fw' aria-hidden='true'></i>删除</a></td></tr></table></td></tr>";
@@ -584,10 +583,19 @@
                                     i++;
                                 }
                             }
-                            ss += "<td align='center'><table class='0' cellspacing='0' border='0' align='center'><tr>" +
-                                "<td class='bianji'><a src='#' onclick=\" updateData('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
-                                "<i class='fa fa-pencil-square-o' aria-hidden='true'></i>修改</a></td><td width='1'></td>" +
-                                "<td class='chakan'><a href='#' onclick=\"checkDada('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
+                            // ss += "<td align='center'><table class='0' cellspacing='0' border='0' align='center'><tr>" +
+                            //     "<td class='bianji'><a src='#' onclick=\" updateData('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
+                            //     "<i class='fa fa-pencil-square-o' aria-hidden='true'></i>修改</a></td><td width='1'></td>" +
+                            //     "<td class='chakan'><a href='#' onclick=\"checkDada('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
+                            //     "<i class='fa fa-eye' aria-hidden='true'></i>查看</a></td><td width='1'></td>" +
+                            //     "<td class='shanchu'><a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "','"+ count +"')\">" +
+                            //     "<i class='fa fa-trash-o fa-fw' aria-hidden='true'></i>删除</a></td></tr></table></td></tr>";
+                            ss += "<td align='center'><table class='0' cellspacing='0' border='0' align='center'><tr>";
+                            if (data.isSync === 0) {
+                                ss += "<td class='bianji'><a src='#' onclick=\" updateData('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
+                                    "<i class='fa fa-pencil-square-o' aria-hidden='true'></i>修改</a></td><td width='1'></td>";
+                            }
+                            ss += "<td class='chakan'><a href='#' onclick=\"checkDada('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
                                 "<i class='fa fa-eye' aria-hidden='true'></i>查看</a></td><td width='1'></td>" +
                                 "<td class='shanchu'><a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "','"+ count +"')\">" +
                                 "<i class='fa fa-trash-o fa-fw' aria-hidden='true'></i>删除</a></td></tr></table></td></tr>";

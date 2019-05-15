@@ -4,6 +4,7 @@ import cn.csdb.portal.model.*;
 import cn.csdb.portal.repository.CheckUserDao;
 import cn.csdb.portal.service.DataSrcService;
 import cn.csdb.portal.service.ShowTypeInfService;
+import cn.csdb.portal.service.SynchronizationTablesService;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.annotations.Param;
@@ -28,6 +29,9 @@ public class EditDataController {
 
     @Autowired
     private ShowTypeInfService showTypeInfService;
+
+    @Autowired
+    private SynchronizationTablesService synchronizationTablesService;
 
 //    根据登录人员的subjectCode，获得对应数据库连接信息
     public DataSrc getDataSrc(String subjectCode){
@@ -95,11 +99,13 @@ public class EditDataController {
         } else {
             jsonObject.put("tableComment", "");
         }
+        int check = synchronizationTablesService.isSynchronizationTable(tableName, subjectCode);
         jsonObject.put("totalCount", countNum);
         jsonObject.put("currentPage", pageNo);
         jsonObject.put("pageSize", pageSize);
         jsonObject.put("totalPages", countNum % pageSize == 0 ? countNum / pageSize : countNum / pageSize + 1);
 
+        jsonObject.put("isSync", check);
          jsonObject.put("dataDatil",list);
          jsonObject.put("columns",list3);
         jsonObject.put("dataType",list4);
@@ -181,30 +187,6 @@ public class EditDataController {
                         jsonObject.put("prikey",col);
                         return jsonObject;
                     }
-//                    if(showTypeInf!=null) {
-//                        for (int ii = 0; ii < enumnCoumns.length; ii++) {
-//                            if(col.equals(enumnCoumns[ii])){
-//                                ShowTypeDetail showTypeDetail = showTypeInfService.getShowTypeDetail(showTypeInf, enumnCoumns[ii]);
-//                                if (showTypeDetail != null) {
-//                                    if(showTypeDetail.getOptionMode().equals("1")){
-//                                        List<EnumData> list=showTypeDetail.getEnumData();
-//                                        for(EnumData e:list){
-//                                            if(val.equals(e.getValue())){
-//                                                val=e.getKey();
-//                                            }
-//                                        }
-//                                    }
-//                                    if(showTypeDetail.getOptionMode().equals("2")){
-//                                        String reTable=showTypeDetail.getRelationTable();
-//                                        String recolK=showTypeDetail.getRelationColumnK();
-//                                        String recolV=showTypeDetail.getRelationColumnV();
-//                                        val=dataSrcService.getSqlEnumData(datasrc,reTable,recolK,recolV,val);
-//                                    }
-//                                }
-//                            }
-//
-//                        }
-//                    }
                     val = getEnumKeyByVal(showTypeInf, enumnCoumns, col, val, datasrc);
 
                     column += "" + col + " ,";
@@ -220,31 +202,6 @@ public class EditDataController {
                 values+="'"+uuid+"' ,";
             } else{
                 if(val!=null&& !val.equals("")) {
-
-//                    if(showTypeInf!=null) {
-//                        for (int ii = 0; ii < enumnCoumns.length; ii++) {
-//                            if(col.equals(enumnCoumns[ii])){
-//                                ShowTypeDetail showTypeDetail = showTypeInfService.getShowTypeDetail(showTypeInf, enumnCoumns[ii]);
-//                                if (showTypeDetail != null) {
-//                                    if(showTypeDetail.getOptionMode().equals("1")){
-//                                        List<EnumData> list=showTypeDetail.getEnumData();
-//                                        for(EnumData e:list){
-//                                            if(val.equals(e.getValue())){
-//                                                val=e.getKey();
-//                                            }
-//                                        }
-//                                    }
-//                                    if(showTypeDetail.getOptionMode().equals("2")){
-//                                        String reTable=showTypeDetail.getRelationTable();
-//                                        String recolK=showTypeDetail.getRelationColumnK();
-//                                        String recolV=showTypeDetail.getRelationColumnV();
-//                                        val=dataSrcService.getSqlEnumData(datasrc,reTable,recolK,recolV,val);
-//                                    }
-//                                }
-//                            }
-//
-//                        }
-//                    }
                     val = getEnumKeyByVal(showTypeInf, enumnCoumns, col, val, datasrc);
                     column += "" + col + " ,";
                     values += "'" + val + "' ,";

@@ -442,7 +442,7 @@
                     var list = data.list;
                     for (var i = 0; i < list.length; i++) {
                         html += "<span style='width:33%;height:40px;padding-left: 0px;font-size: 15px' class='col-md-6'>" +
-                            "<input hidden type='radio' id='" + list[i] + "' name='mapTable'  value='" + list[i] + "'>&nbsp;<label for='" + list[i] + "'> <a href='#' onclick=\"staticSourceTableChoice_edit(1,this" + ",'" + sub1 + "','" + list[i] + "','dataResource','" + flag + "')\">" + list[i] + "</a></label></span>"
+                            "<input hidden type='radio' id='" + list[i] + "' name='mapTable'  value='" + list[i] + "'><label for='" + list[i] + "'> <a href='#' onclick=\"staticSourceTableChoice_edit(1,this" + ",'" + sub1 + "','" + list[i] + "','dataResource','" + flag + "')\">" + list[i] + "</a></label></span>"
                     }
                     html += "</div><input type='text' class='form-control' name='maptableinput' id='maptableinput' style='display:none;'/></div></div>";
                     if (flag == '0') {
