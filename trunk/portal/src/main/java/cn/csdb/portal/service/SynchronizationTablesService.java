@@ -18,7 +18,7 @@ public class SynchronizationTablesService {
      * @Date: 2019/5/13
      */
     public int isSynchronizationTable(String tableName, String subjectCode) {
-        if (synchronizationTablesDao.getListSync(subjectCode, tableName) != null) {
+        if (synchronizationTablesDao.selectOneBySubjectCodeAndTableName(subjectCode, tableName) != null) {
             return 1;
         }
         return 0;

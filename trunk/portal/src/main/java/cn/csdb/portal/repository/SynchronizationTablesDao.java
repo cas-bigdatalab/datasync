@@ -16,13 +16,13 @@ public class SynchronizationTablesDao {
     private MongoTemplate mongoTemplate;
 
     /**
-     * @Description: 根据subject查询同步表名
-     * @Param: [subjectCode]
-     * @return: java.util.List<cn.csdb.portal.model.SynchronizationTables>
+     * @Description: 根据表名和subjectCode查询该表是否同步
+     * @Param: [subjectCode, tableName]
+     * @return: cn.csdb.portal.model.SynchronizationTables
      * @Author: zcy
-     * @Date: 2019/5/13
+     * @Date: 2019/5/15
      */
-    public SynchronizationTables getListSync(String subjectCode, String tableName) {
+    public SynchronizationTables selectOneBySubjectCodeAndTableName(String subjectCode, String tableName) {
         SynchronizationTables synchronizationTables = mongoTemplate.findOne(new Query(Criteria.where("subjectCode").is(subjectCode).and("tableName").is(tableName)), SynchronizationTables.class);
         return synchronizationTables;
     }
