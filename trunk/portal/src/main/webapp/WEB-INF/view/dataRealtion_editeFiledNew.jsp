@@ -53,6 +53,17 @@
             text-align: right;
             vertical-align: middle;
         }
+
+        table {
+            border-collapse: inherit !important;
+        }
+
+        table td {
+            border-right: none !important;
+            border-left: none !important;
+            border-bottom: none !important;
+        }
+
     </style>
 </head>
 

@@ -68,7 +68,7 @@
 
 <script type="text/html" id="previewTableDataAndComsTmpl">
     <div class="skin skin-minimal">
-        <table class="table table-hover table-bordered" border="0">
+        <table class="table table-hover table-bordered" border="0" style="table-layout: fixed;">
             {{each datas as itemList i}}
             {{if i == 0}}
             <thead>
@@ -86,11 +86,11 @@
             {{/if}}
 
             {{if i != 0}}
-            <tbody>
+            <tbody border="0">
             <tr>
                 <td>{{i}}</td>
                 {{each itemList as item j}}
-                <td>{{item}}</td>
+                <td title="{{item}}" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">{{item}}</td>
                 {{/each}}
             </tr>
             </tbody>
