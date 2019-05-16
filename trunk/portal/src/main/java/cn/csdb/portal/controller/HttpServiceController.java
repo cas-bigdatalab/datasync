@@ -185,4 +185,32 @@ public class HttpServiceController {
         JSONObject jsonObject = new TreeNode().jsTreeNodes(rootPath, async);
         return jsonObject;
     }
+
+
+
+    @ResponseBody
+    @RequestMapping(value = "syncDataTask", method = {RequestMethod.POST, RequestMethod.GET})
+    public int syncDataTask(@RequestBody String requestString) {
+        System.out.println(requestString);
+        JSONObject requestJson = JSON.parseObject(requestString);
+        String syncFilePath = requestJson.get("syncFilePath").toString();
+        String subjectCode = requestJson.get("subjectCode").toString();
+
+
+        String structDBFile=syncFilePath+File.separator+"syncStruct.sql";
+        String dataDBFile=syncFilePath+File.separator+"syncData.sql";
+        Subject subject = subjectMgmtService.findByCode(subjectCode);
+        String username = configPropertyService.getProperty("db.username");
+        String password = configPropertyService.getProperty("db.password");
+        String dbName = subject.getDbName();
+        SqlUtil sqlUtil = new SqlUtil();
+        try {
+            System.out.println("passwprd------" + password);
+            sqlUtil.importSql("localhost", username, password, dbName, structDBFile, dataDBFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 1;
+    }
 }

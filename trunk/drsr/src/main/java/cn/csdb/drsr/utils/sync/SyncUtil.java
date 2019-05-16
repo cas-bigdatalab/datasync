@@ -23,6 +23,7 @@ import java.util.Date;
 public class SyncUtil {
 
     private Logger logger = LoggerFactory.getLogger(DataTaskService.class);
+    public ScpUtils scpUtils=new ScpUtils();
 
     public JSONObject executeTask(DataTask dataTask,JdbcTemplate jdbcTemplate) {
         String fileName ="Sync"+dataTask.getDataTaskName()+"log.txt";//文件名及类型
@@ -104,9 +105,32 @@ public class SyncUtil {
             }
 
             StringBuffer allSql=new StringBuffer();
-            allSql.append(sqlSb);
+//            allSql.append(sqlSb);
             allSql.append(dataSb);
             allSql.append(endSb);
+
+            //创建sql文件
+            File sqlFilePath  = new File(System.getProperty("drsr.framework.root")+"syncSql");
+            if(!sqlFilePath.exists()){
+                sqlFilePath.mkdirs();
+            }
+            File filePath = new File(sqlFilePath + File.separator + dataTask.getDataTaskId());
+
+            if (!filePath.exists() || !filePath.isDirectory()) {
+                filePath.mkdirs();
+            }
+
+            SYNCSQLUtils.generateFile(filePath.getPath(), "syncData.sql", allSql.toString());
+            SYNCSQLUtils.generateFile(filePath.getPath(), "syncStruct.sql", sqlSb.toString());
+            String[] strArray={filePath.getPath()+File.separator+"syncStruct.sql", filePath.getPath()+File.separator+"syncData.sql"};
+            scpUtils.scpUpload(strArray,dataTask.getDataTaskId(),dataTask.getSubjectCode());
+
+
+
+
+
+
+
 
             //if (StringUtils.isNotEmpty(sqlString) && StringUtils.isNotEmpty(sqlTableNameEn)) {
             //    sqlSb.append(DDL2SQLUtils.generateDDLFromSql(connection, sqlString, sqlTableNameEn));
@@ -120,18 +144,19 @@ public class SyncUtil {
 //            logger.info("=========================SQL数据内容:==========================\n" + endSb.toString() + "\n");
             logger.info("=========================开始同步==========================\n");
             pw.println(current+":"+"=========================开始执行脚本========================" + "\n");
-            String configFilePath = LoginService.class.getClassLoader().getResource("drsr.properties").getFile();
-            String portalUrl = ConfigUtil.getConfigItem(configFilePath, "PortalUrl");
-            String port = ConfigUtil.getConfigItem(configFilePath, "port");
-            String userName = ConfigUtil.getConfigItem(configFilePath, "userName");
-            String password = ConfigUtil.getConfigItem(configFilePath, "password");
-            IDataSource portalDataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
-            portalConnection = portalDataSource.getConnection(portalUrl.replaceAll("/",""), port,
-                    userName, password, dataTask.getSubjectCode());
-            Statement stmt=portalConnection.createStatement();
-            System.out.println(allSql+"");
-           boolean result=stmt.execute(allSql+"");
-            jsonObject.put("result","success");
+
+//            String configFilePath = LoginService.class.getClassLoader().getResource("drsr.properties").getFile();
+//            String portalUrl = ConfigUtil.getConfigItem(configFilePath, "PortalUrl");
+//            String port = ConfigUtil.getConfigItem(configFilePath, "port");
+//            String userName = ConfigUtil.getConfigItem(configFilePath, "userName");
+//            String password = ConfigUtil.getConfigItem(configFilePath, "password");
+//            IDataSource portalDataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+//            portalConnection = portalDataSource.getConnection(portalUrl.replaceAll("/",""), port,
+//                    userName, password, dataTask.getSubjectCode());
+//            Statement stmt=portalConnection.createStatement();
+//            System.out.println(allSql+"");
+//           boolean result=stmt.execute(allSql+"");
+//            jsonObject.put("result","success");
             pw.println(current+":"+"=========================同步流程结束========================" + "\n");
             logger.info("=========================同步流程结束========================" + "\n");
 
@@ -143,14 +168,14 @@ public class SyncUtil {
             logger.error(current+":"+"导出失败，result = false" + "\n");
             pw.println(current+":"+"=========================同步流程失败,开始执行回滚操作========================" + "\n");
             pw.println(current+":"+"失败原因"+ex + "\n");
-            try {
-                portalConnection.rollback();//如果两句sql语句中只要有一个语句出错，则回滚，都不执行
-                pw.println(current+":"+"=========================回滚操作成功========================" + "\n");
-            } catch (SQLException e1) {
-                pw.println(current+":"+"=========================回滚操作失败========================" + "\n");
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
+//            try {
+//                //portalConnection.rollback();//如果两句sql语句中只要有一个语句出错，则回滚，都不执行
+//                pw.println(current+":"+"=========================回滚操作成功========================" + "\n");
+//            } catch (SQLException e1) {
+//                pw.println(current+":"+"=========================回滚操作失败========================" + "\n");
+//                // TODO Auto-generated catch block
+//                e1.printStackTrace();
+//            }
             logger.info("=========================同步流程结束========================" + "\n");
         }finally {
             try {
@@ -158,7 +183,7 @@ public class SyncUtil {
                 pw.close();
                 fw.close();
                 connection.close();
-                portalConnection.close();
+              //  portalConnection.close();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (SQLException e) {
