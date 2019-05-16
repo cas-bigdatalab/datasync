@@ -16,8 +16,8 @@ public class SynchronizationTable {
     private Long frequency; // 同步频次 毫秒值
     @Field("sqlString")
     private String sqlString; // 关联创建时的 DDL
-    @Field("lastModify")
-    private Long lastModify; // 最后一次修改的时间 毫秒值
+    @Field("lastModifyTime")
+    private Long lastModifyTime; // 最后一次修改的时间 毫秒值
 
     public String getId() {
         return id;
@@ -44,7 +44,7 @@ public class SynchronizationTable {
     }
 
     public Long getFrequency() {
-        return frequency;
+        return frequency == null ? 0L : frequency;
     }
 
     public void setFrequency(Long frequency) {
@@ -59,11 +59,11 @@ public class SynchronizationTable {
         this.sqlString = sqlString;
     }
 
-    public Long getLastModify() {
-        return lastModify;
+    public Long getLastModifyTime() {
+        return lastModifyTime == null ? 0L : lastModifyTime;
     }
 
-    public void setLastModify(Long lastModify) {
-        this.lastModify = lastModify;
+    public void setLastModifyTime(Long lastModifyTime) {
+        this.lastModifyTime = lastModifyTime;
     }
 }

@@ -1,6 +1,5 @@
 package cn.csdb.portal.repository;
 
-import cn.csdb.portal.common.SynchronizeTable;
 import cn.csdb.portal.model.SynchronizationTable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -17,7 +16,7 @@ public class SynchronizationTablesDao {
     @Resource
     private MongoTemplate mongoTemplate;
 
-    public void save(SynchronizeTable synchronizeTable) {
+    public void save(SynchronizationTable synchronizeTable) {
         mongoTemplate.save(synchronizeTable);
     }
 

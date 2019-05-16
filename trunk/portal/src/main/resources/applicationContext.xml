@@ -101,4 +101,10 @@
     <import resource="spring-cache.xml"/>
     <!-- 权限控制配置文件  -->
     <import resource="spring-shiro.xml"/>
+
+    <!--同步指定表-->
+    <bean id="TimmerController" class="cn.csdb.portal.common.SynchronizeTable" init-method="start">
+        <property name="fileImportService" ref="fileImportService"/>
+        <property name="synchronizationTablesDao" ref="synchronizationTablesDao"/>
+    </bean>
 </beans>

@@ -2,8 +2,10 @@ package cn.csdb.portal.service;
 
 import cn.csdb.portal.model.DataSrc;
 import cn.csdb.portal.model.Subject;
+import cn.csdb.portal.model.SynchronizationTable;
 import cn.csdb.portal.model.TableField;
 import cn.csdb.portal.repository.CheckUserDao;
+import cn.csdb.portal.repository.SynchronizationTablesDao;
 import cn.csdb.portal.utils.Excel2ListIncludeNull;
 import cn.csdb.portal.utils.SqlUtil;
 import cn.csdb.portal.utils.dataSrc.DDL2SQLUtils;
@@ -17,9 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.io.ByteArrayInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.sql.*;
+import java.util.Date;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -35,6 +37,8 @@ public class FileImportService {
     private Logger logger = LoggerFactory.getLogger(FileImportService.class);
     @Resource
     private CheckUserDao checkUserDao;
+    @Resource
+    private SynchronizationTablesDao synchronizationTablesDao;
 
     @Transactional
     public JSONObject processExcel(String tempFilePath, String subjectCode) {
@@ -829,4 +833,87 @@ public class FileImportService {
         runner.runScript(new InputStreamReader(new ByteArrayInputStream(insert.getBytes())));
         return newName + "：创建成功";
     }
+
+    public String createSynchronizeTask(String newSql, String newName, String subjectCode) {
+        SynchronizationTable synchronizationTable = new SynchronizationTable();
+        synchronizationTable.setFrequency(1000 * 20L);
+        synchronizationTable.setLastModifyTime(new Date().getTime());
+        synchronizationTable.setSqlString(newSql);
+        synchronizationTable.setSubjectCode(subjectCode);
+        synchronizationTable.setTableName(newName);
+        synchronizationTablesDao.save(synchronizationTable);
+        return "true";
+    }
+
+    public synchronized String SynchronizeTask(String sqlString, String tempTableName, String subjectCode, String tableName) {
+        DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
+        Connection connection = getConnection(dataSrc);
+        String ddl = DDL2SQLUtils.generateDDLFromSql(connection, sqlString, tempTableName);
+        String insert = DDL2SQLUtils.generateInsertSqlFromSQL(connection, sqlString, tempTableName);
+        PrintWriter printWriter = null;
+        try {
+            connection.setAutoCommit(false);
+            ScriptRunner runner = new ScriptRunner(connection);
+            // 下面配置不要随意更改，否则会出现各种问题
+            runner.setAutoCommit(true); // 自动提交
+            runner.setFullLineDelimiter(false);
+            runner.setDelimiter(";"); // 每条命令间的分隔符
+            runner.setSendFullScript(false); // 分步执行
+            runner.setStopOnError(true); // sql异常终止执行
+            printWriter = getPrintWriter(tableName);
+            runner.setLogWriter(printWriter);// 执行日志输出
+            runner.runScript(new InputStreamReader(new ByteArrayInputStream(ddl.getBytes())));
+            runner.runScript(new InputStreamReader(new ByteArrayInputStream(insert.getBytes())));
+
+            String deleteTempTable = "DROP TABLE IF EXISTS " + tableName + " ;\n";
+            String renameTable = "RENAME TABLE " + tempTableName + " to " + tableName + " ;";
+            String successSql = deleteTempTable.concat(renameTable);
+            runner.runScript(new InputStreamReader(new ByteArrayInputStream(successSql.getBytes())));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            printWriter.println("========error========");
+            printWriter.println(e.getMessage());
+            printWriter.println("========error========");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            printWriter.println("========error========");
+            printWriter.println(e.getMessage());
+            printWriter.println("========error========");
+            return e.getMessage();
+        } finally {
+            printWriter.flush();
+            printWriter.close();
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return "true";
+    }
+
+    private PrintWriter getPrintWriter(String tableName) {
+        PrintWriter printWriter = null;
+        FileWriter fileWriter;
+        String logFilePath = "/logs/" + tableName + ".log";
+        File logFile = new File(logFilePath);
+        if (!logFile.getParentFile().exists()) {
+            logFile.getParentFile().mkdirs();
+        }
+
+        try {
+            if (!logFile.exists()) {
+                logFile.createNewFile();
+                System.out.println("创建：" + logFilePath);
+            }
+            fileWriter = new FileWriter(logFile, true);
+            printWriter = new PrintWriter(fileWriter);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return printWriter;
+    }
+
 }

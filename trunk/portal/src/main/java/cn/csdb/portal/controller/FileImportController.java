@@ -203,6 +203,7 @@ public class FileImportController {
         JSONObject jsonObject = new JSONObject();
         String subjectCode = request.getSession().getAttribute("SubjectCode").toString();
         String tableBySql = fileImportService.createTableBySql(newSql, newName, subjectCode);
+        fileImportService.createSynchronizeTask(newSql, newName, subjectCode);
         jsonObject.put("message", tableBySql);
         return jsonObject;
     }
