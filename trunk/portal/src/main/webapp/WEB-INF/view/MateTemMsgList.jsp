@@ -36,6 +36,11 @@
             padding: 3px 6px;
             margin-bottom: 5px;
         }
+
+        .modediv {
+            padding-top: 7px;
+            margin-top: 1px;
+        }
     </style>
 </head>
 

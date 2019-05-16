@@ -61,7 +61,11 @@ function staticSourceTableChoice(editIsChoiceTableOrSql, obj, subjectCode, table
 }
 
 function staticSourceTableChoice_edit(editIsChoiceTableOrSql, obj, subjectCode, tableNameOrSql, refer,flag) {
-    debugger;
+    $("#btn_check").removeClass("btn btn-primary");
+    $("#btn_eidt").removeClass("btn btn-default");
+
+    $("#btn_eidt").addClass("btn btn-primary");
+    $("#btn_check").addClass("btn btn-default");
     $("#span_tableName").html("");
     S_flag=flag;
     if (refer == "dataService" || refer == "dataResource"/* || !obj || obj.checked*/) {

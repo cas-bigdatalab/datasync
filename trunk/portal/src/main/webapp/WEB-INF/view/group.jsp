@@ -322,9 +322,10 @@
     {{each list}}
     <tr>
         <td style="display:table-cell; vertical-align:middle ; text-align: center;" >{{(currentPage-1)*pageSize+$index+1}}</td>
-        <td style="display:table-cell; vertical-align:middle" ><a href="javascript:editData('{{$value.id}}');">{{$value.groupName}}</a>
+        <td style="display:table-cell; vertical-align:middle;text-align: center;"><a
+                href="javascript:editData('{{$value.id}}');">{{$value.groupName}}</a>
         </td>
-        <td style="display:table-cell; vertical-align:middle ;text-align: left;">{{$value.desc}}</td>
+        <td style="display:table-cell; vertical-align:middle ;text-align: center;">{{$value.desc}}</td>
         <td style="display:table-cell; vertical-align:middle ;text-align: center;">{{dateFormat($value.createTime)}}</td>
         <td style="display:table-cell; vertical-align:middle;text-align: center;" id="a{{$value.id}}" >
                 <%--<button class="btn default btn-xs green" onclick="addUserData('{{$value.id}}')"><i class="fa fa-user"></i>添加用户</button>--%>

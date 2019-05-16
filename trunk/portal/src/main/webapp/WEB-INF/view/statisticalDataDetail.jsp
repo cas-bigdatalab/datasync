@@ -51,18 +51,13 @@
             /*margin-right: 10%;*/
         }
 
-        /*.report-title{border-bottom: #ccc 1px solid; height: 20px;}*/
-        /*.report-title h4{background-color: #fff; float:left; font-size: 18px; color:#296ebf; padding-right: 5px;}*/
-        /*.report-title div{float: left; width: 25px; height: 20px; border-bottom: #296ebf 1px solid;}*/
-        /*.report-title a.more{float: right; background: #fff; padding-left: 5px; padding-top:8px;}*/
-
     </style>
 </head>
 <body>
 <div class="tap_div" style="margin-top:15px;">
     <div id="div1" style="width: 100%;height:400px;">
         <div class="report-title">
-            <h4><i class="fa fa-caret-right"></i>${applicationScope.menus['organization_title']}访问量下载TOP10统计</h4>
+            <h4><i class="fa fa-caret-right"></i>${applicationScope.menus['organization_title']}访问量下载量TOP10统计</h4>
             <div></div>
             <a href="#" class="more" onclick="func_moreDetail()">查看更多</a>
         </div>

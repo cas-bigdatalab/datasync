@@ -114,11 +114,11 @@
                                                           class="form-control" style="display: inline;width: 180px;">
                                     </div>
                                     <div class="tab-pane active" id="editTableFieldComsId"
-                                         style="width:99%;max-height:70%;overflow: hidden;overflow: auto;">
+                                         style="width:99%;max-height:70%;overflow: auto;">
                                     </div>
 
                                     <div class="tab-pane" id="previewTableDataAndComsId"
-                                         style="width:99%;max-height:70%;overflow: hidden;overflow: auto;">
+                                         style="width:99%;max-height:70%;overflow: auto;">
                                     </div>
                                 </div>
                             </div>
@@ -338,7 +338,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label regislabel">字段标题:</label>
                     <div class="col-sm-8" style="margin-top: 8px">{{value.columnName}}
-                        {{if value.clumnCommet!=""|| value.clumnCommet!=null }}
+                        {{if value.clumnCommet!="" && value.clumnCommet!=null }}
                     ({{value.clumnCommet}})
                     {{/if}}
                     {{/each}}
