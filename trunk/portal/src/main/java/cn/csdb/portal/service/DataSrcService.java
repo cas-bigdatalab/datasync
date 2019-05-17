@@ -488,4 +488,32 @@ public class DataSrcService {
         return colKey;
     }
 
+    public List<String> searchTableNames(DataSrc dataSrc) {
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection conn = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        List<String> list = new ArrayList<String>();
+        try {
+            if (conn != null) {
+                System.out.println("数据库连接成功");
+            }
+            String sql = "select table_name from information_schema.tables where table_schema='" + dataSrc.getDatabaseName() + "'";
+            Statement statement = conn.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+            while (result.next()) {
+                list.add(result.getString("TABLE_NAME"));
+//            System.out.println(result.getString("TABLE_NAME"));
+            }
+            result.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
 }

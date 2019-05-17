@@ -52,7 +52,8 @@ public class EditDataController {
     public JSONObject showTable(String subjectCode){
         JSONObject jsonObject=new JSONObject();
         DataSrc datasrc=getDataSrc(subjectCode);
-        List<String> list = dataSrcService.relationalDatabaseTableList(datasrc);
+//        List<String> list = dataSrcService.relationalDatabaseTableList(datasrc);
+        List<String> list = dataSrcService.searchTableNames(datasrc);
 
         List<ShowTypeInf> showTypeInfList1 = new ArrayList<>();
         for (String s : list) {

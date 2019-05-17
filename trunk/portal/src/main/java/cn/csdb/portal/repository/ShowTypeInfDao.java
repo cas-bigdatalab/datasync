@@ -44,7 +44,13 @@ public class ShowTypeInfDao {
         return list;
     }
 
-    //    判断该列是否设置过类型
+    /**
+     * @Description: 移除已设置的显示类型
+     * @Param: [list, columnName]
+     * @return: java.util.List<cn.csdb.portal.model.ShowTypeDetail>
+     * @Author: zcy
+     * @Date: 2019/5/17
+     */
     public List<ShowTypeDetail> checkColumn(List<ShowTypeDetail> list, String columnName) {
         for (int i = 0; i < list.size(); i++) {
             if (columnName.equals(list.get(i).getColumnName())) {
@@ -54,7 +60,14 @@ public class ShowTypeInfDao {
         return list;
     }
 
-    //    判断该列是否设置过显示类型
+
+    /**
+     * @Description: 判断该列是否设置过显示类型
+     * @Param: [list, columnName]
+     * @return: int
+     * @Author: zcy
+     * @Date: 2019/5/17
+     */
     public int isColumn(List<ShowTypeDetail> list, String columnName) {
         int count = 0;
         for (int i = 0; i < list.size(); i++) {
@@ -65,7 +78,13 @@ public class ShowTypeInfDao {
         return count;
     }
 
-    //    删除status的数据
+    /**
+     * @Description: 删除status=2的数据
+     * @Param: [list, columnName]
+     * @return: java.util.List<cn.csdb.portal.model.ShowTypeDetail>
+     * @Author: zcy
+     * @Date: 2019/5/17
+     */
     public List<ShowTypeDetail> deleteColumn(List<ShowTypeDetail> list, String columnName) {
         for (int i = 0; i < list.size(); i++) {
             if (columnName.equals(list.get(i).getColumnName()) && list.get(i).getStatus() == 2) {
