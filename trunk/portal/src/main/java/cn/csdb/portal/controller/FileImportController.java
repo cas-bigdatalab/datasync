@@ -1,9 +1,11 @@
 package cn.csdb.portal.controller;
 
+import cn.csdb.portal.model.Period;
 import cn.csdb.portal.model.TableField;
 import cn.csdb.portal.service.FileImportService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -199,11 +201,14 @@ public class FileImportController {
 
     @PostMapping("/createTableBySql")
     @ResponseBody
-    public JSONObject createTableBySql(String newSql, String newName, HttpServletRequest request) {
+    public JSONObject createTableBySql(String newSql, String newName, String period, HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
         String subjectCode = request.getSession().getAttribute("SubjectCode").toString();
         String tableBySql = fileImportService.createTableBySql(newSql, newName, subjectCode);
-        fileImportService.createSynchronizeTask(newSql, newName, subjectCode);
+        if (!Strings.isBlank(period)) {
+            long periodTime = Period.valueOf(period).getDataTime();
+            fileImportService.createSynchronizeTask(newSql, newName, subjectCode, periodTime);
+        }
         jsonObject.put("message", tableBySql);
         return jsonObject;
     }

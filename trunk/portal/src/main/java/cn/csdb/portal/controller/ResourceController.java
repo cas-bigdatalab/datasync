@@ -702,7 +702,7 @@ public class ResourceController {
                     Double d = Double.valueOf(file.length()) / 1024 / 1024;
                     NumberFormat nf = NumberFormat.getNumberInstance();
                     nf.setMaximumFractionDigits(4);
-                    fileInfo.setSize(nf.format(d));
+                    fileInfo.setSize(Long.toString(file.length()));
                 }
                 fileInfo.getSize();
                 fileInfo.setResourceId(resourceId);
@@ -714,7 +714,7 @@ public class ResourceController {
             Double toMemorySize = size / 1024 / 1024;
             NumberFormat nf = NumberFormat.getNumberInstance();
             nf.setMaximumFractionDigits(4);
-            resource.setToMemorySize(nf.format(toMemorySize));
+            resource.setToMemorySize(size.toString());
             resource.setToRecordNumber(0);
             resource.setToFilesNumber(i);
         }

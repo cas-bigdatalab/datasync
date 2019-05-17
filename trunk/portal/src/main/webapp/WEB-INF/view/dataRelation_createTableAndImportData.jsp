@@ -169,9 +169,22 @@
             <h4 style="font-weight: bold">新的表名称</h4>
             <div style="margin-left: 3%;">
                 <div class="row">
-                    <div class="col-md-1">新表名</div>
-                    <div class="col-md-7">
+                    <div class="col-md-1 text-right"><strong>新表名</strong></div>
+                    <div class="col-md-3">
                         <input type="text" class="form-control inputVili" placeholder="新表名" name="newName">
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-1 text-right"><input type="checkbox" id="synchronizeTable"/><label
+                            for="synchronizeTable">同步更新表</label></div>
+                    <div class="col-md-2">
+                        <select id="period" style="display: none;">
+                            <option value="0">请选择同步周期</option>
+                            <option value="HALF_OF_THE_DAY">12小时</option>
+                            <option value="DAY">天</option>
+                            <option value="WEEK">周</option>
+                            <option value="MONTH">月</option>
+                            <option value="YEAR">年</option>
+                        </select>
                     </div>
                 </div>
                 <div style="height:20px"></div>
@@ -245,6 +258,17 @@
 
             $("input[name='radioType']").click(function () {
                 $(this).next().trigger("click");
+            });
+
+            $("#synchronizeTable").on("click", function () {
+                var $_this = $(this);
+                var $period = $("#period");
+                var checked = $_this.is(":checked");
+                if (checked) {
+                    $period.show();
+                } else {
+                    $period.hide();
+                }
             })
         })();
 
@@ -696,7 +720,8 @@
                 dataType: "JSON",
                 data: {
                     newSql: newSql,
-                    newName: newName
+                    newName: newName,
+                    period: $.trim($("#period").val())
                 },
                 success: function (data) {
                     console.log(data);
@@ -748,7 +773,7 @@
         }
 
         function resetSelectAndCheckBox() {
-            $("select").html("");
+            $("select:not('#period')").html("");
             $("#checkBoxTableFieldA").html("");
             $("#checkBoxTableFieldB").html("");
         }

@@ -30,7 +30,7 @@ public class SynchronizeTable {
 
     public void start() {
         Timer timer = new Timer();
-        timer.schedule(new SynchronizeTableTimer(fileImportService, synchronizationTablesDao), 0, 1000 * 20000);
+        timer.schedule(new SynchronizeTableTimer(fileImportService, synchronizationTablesDao), 0, 1000 * 20);
     }
 }
 
@@ -79,29 +79,30 @@ class SynchronizeTableTimer extends TimerTask {
         }
     }
 
-    class SynchronizeTableTask implements Runnable {
-        private FileImportService fileImportService;
-        private SynchronizationTablesDao synchronizationTablesDao;
-        private SynchronizationTable synchronizationTable;
+}
 
-        public SynchronizeTableTask() {
-        }
+class SynchronizeTableTask implements Runnable {
+    private FileImportService fileImportService;
+    private SynchronizationTablesDao synchronizationTablesDao;
+    private SynchronizationTable synchronizationTable;
 
-        public SynchronizeTableTask(FileImportService fileImportService, SynchronizationTablesDao synchronizationTablesDao, SynchronizationTable synchronizationTable) {
-            this.fileImportService = fileImportService;
-            this.synchronizationTablesDao = synchronizationTablesDao;
-            this.synchronizationTable = synchronizationTable;
-        }
+    public SynchronizeTableTask() {
+    }
 
-        @Override
-        public void run() {
-            String tableName = synchronizationTable.getTableName();
-            String sqlString = synchronizationTable.getSqlString();
-            String subjectCode = synchronizationTable.getSubjectCode();
-            String tempTableName = tableName.concat("_dataassembler");
-            fileImportService.SynchronizeTask(sqlString, tempTableName, subjectCode, tableName);
-            synchronizationTable.setLastModifyTime(new Date().getTime());
-            synchronizationTablesDao.save(synchronizationTable);
-        }
+    public SynchronizeTableTask(FileImportService fileImportService, SynchronizationTablesDao synchronizationTablesDao, SynchronizationTable synchronizationTable) {
+        this.fileImportService = fileImportService;
+        this.synchronizationTablesDao = synchronizationTablesDao;
+        this.synchronizationTable = synchronizationTable;
+    }
+
+    @Override
+    public void run() {
+        String tableName = synchronizationTable.getTableName();
+        String sqlString = synchronizationTable.getSqlString();
+        String subjectCode = synchronizationTable.getSubjectCode();
+        String tempTableName = tableName.concat("_dataassembler");
+        fileImportService.SynchronizeTask(sqlString, tempTableName, subjectCode, tableName);
+        synchronizationTable.setLastModifyTime(new Date().getTime());
+        synchronizationTablesDao.save(synchronizationTable);
     }
 }

@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,8 @@ public class FileImportService {
     private CheckUserDao checkUserDao;
     @Resource
     private SynchronizationTablesDao synchronizationTablesDao;
+    @Value("${synchronizeTableLogs}")
+    private String synchronizeTableLogs;
 
     @Transactional
     public JSONObject processExcel(String tempFilePath, String subjectCode) {
@@ -834,9 +837,9 @@ public class FileImportService {
         return newName + "：创建成功";
     }
 
-    public String createSynchronizeTask(String newSql, String newName, String subjectCode) {
+    public String createSynchronizeTask(String newSql, String newName, String subjectCode, Long periodTime) {
         SynchronizationTable synchronizationTable = new SynchronizationTable();
-        synchronizationTable.setFrequency(1000 * 20L);
+        synchronizationTable.setFrequency(periodTime);
         synchronizationTable.setLastModifyTime(new Date().getTime());
         synchronizationTable.setSqlString(newSql);
         synchronizationTable.setSubjectCode(subjectCode);
@@ -845,7 +848,7 @@ public class FileImportService {
         return "true";
     }
 
-    public synchronized String SynchronizeTask(String sqlString, String tempTableName, String subjectCode, String tableName) {
+    public String SynchronizeTask(String sqlString, String tempTableName, String subjectCode, String tableName) {
         DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
         Connection connection = getConnection(dataSrc);
         String ddl = DDL2SQLUtils.generateDDLFromSql(connection, sqlString, tempTableName);
@@ -897,7 +900,7 @@ public class FileImportService {
     private PrintWriter getPrintWriter(String tableName) {
         PrintWriter printWriter = null;
         FileWriter fileWriter;
-        String logFilePath = "/logs/" + tableName + ".log";
+        String logFilePath = synchronizeTableLogs + "/" + tableName + ".log";
         File logFile = new File(logFilePath);
         if (!logFile.getParentFile().exists()) {
             logFile.getParentFile().mkdirs();
