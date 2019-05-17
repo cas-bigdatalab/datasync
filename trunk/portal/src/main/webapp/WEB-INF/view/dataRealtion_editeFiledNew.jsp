@@ -358,7 +358,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label regislabel">显示类型:</label>
                     <div class="col-sm-8" style="margin-top: 8px">
-                        <input type="radio" value="1" name="optionMode"/>附件列表 &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" value="1" name="optionMode" checked="checked"/>附件列表 &nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="radio" value="2" name="optionMode"/>图片列表 &nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="radio" value="3" name="optionMode"/>视频列表
                     </div>
