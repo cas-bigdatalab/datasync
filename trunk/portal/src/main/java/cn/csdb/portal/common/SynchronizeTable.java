@@ -30,7 +30,7 @@ public class SynchronizeTable {
 
     public void start() {
         Timer timer = new Timer();
-        timer.schedule(new SynchronizeTableTimer(fileImportService, synchronizationTablesDao), 0, 1000 * 20);
+        timer.schedule(new SynchronizeTableTimer(fileImportService, synchronizationTablesDao), 0, 1000 * 200);
     }
 }
 

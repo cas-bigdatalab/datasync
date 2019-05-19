@@ -78,9 +78,12 @@ public class UserController {
         user.setCreateTime(sdf.format(new Date()));
         user.setStat(1);
         user.setRole("普通用户");
+        user.setCreateType("dataAssembler");
         logger.info("user to be added = " + user);
 
         int addedUserCnt = 0;
+        String securityPassword = MD5Util.encryptPassword(user.getLoginId(), user.getPassword(), "cnic.cn");
+        user.setPassword(securityPassword);
         try {
             addedUserCnt = userService.addUser(user);
         }
@@ -102,16 +105,6 @@ public class UserController {
         logger.info("deletedUserCnt = " + deletedUserCnt);
         return deletedUserCnt;
     }
-
-    /*@RequestMapping(value="/updateGroup")
-    public String updateGroups(HttpServletRequest request, @RequestParam(value = "loginId") String loginId, @RequestParam(value = "group") String group)
-    {
-        logger.info("enter updateGroups - parameters[loginId = " + loginId + ", group = " + group);
-        int updatedUserCnt = userService.updateGroups(loginId, group);
-        logger.info("after updateGroups - updatedUserCnt = " + updatedUserCnt);
-
-        return "updateGroupsNotice： update groups successfully.";
-    }*/
 
     @ResponseBody
     @RequestMapping(value = "/getUserById")
