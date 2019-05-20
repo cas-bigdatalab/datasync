@@ -63,7 +63,8 @@
 
         </ul>
     </div>
-    <div id="btn_addTableData" style="float:left;width:5%;margin-right: 5%;margin-left: 2%;display: none;">
+
+    <div id="btn_addTableData" style="float:left;width:5%;margin-left: 7%;display: none;">
         <button class="btn btn-primary" type="button"  onclick="add_function()"><a href="#" style="color: white;"><i
                 class="fa fa-plus"></i>增加</a></button>
     </div>
@@ -654,20 +655,22 @@
                                 } else if (dataTypeArr[i] === "time") {
                                     s += "<td><input class='DataTime' style='width: 100%;height:100%;' id='" + strs2[i] + "' type='text'  placeholder='请选择'  /></td></tr>";
                                 } else {
-                                    var enumDataList = data.enumDataList;
                                     var flag = 0;
-                                    for (var k = 0; k < enumDataList.length; k++) {
-                                        if (strs2[i] === enumDataList[k].key) {
-                                            flag = 1;
-                                            enumColumn.push(strs2[i]);
-                                            var sVal = enumDataList[k].value.split(",");
-                                            var selects = "<select class='form-control' style='width: 100%;height:100%;'  name='" + strs2[i] + "' id='" + strs2[i] + "'>";
-                                            for (var kk = 0; kk < sVal.length; kk++) {
-                                                selects += "<option>" + sVal[kk] + "</option>";
-                                            }
-                                            selects += "</select>";
-                                            s += "<td>" + selects + "</td></tr>";
+                                    if (data.alert === 1) {
+                                        var enumDataList = data.enumDataList;
+                                        for (var k = 0; k < enumDataList.length; k++) {
+                                            if (strs2[i] === enumDataList[k].key) {
+                                                flag = 1;
+                                                enumColumn.push(strs2[i]);
+                                                var sVal = enumDataList[k].value.split(",");
+                                                var selects = "<select class='form-control' style='width: 100%;height:100%;'  name='" + strs2[i] + "' id='" + strs2[i] + "'>";
+                                                for (var kk = 0; kk < sVal.length; kk++) {
+                                                    selects += "<option>" + sVal[kk] + "</option>";
+                                                }
+                                                selects += "</select>";
+                                                s += "<td>" + selects + "</td></tr>";
 
+                                            }
                                         }
                                     }
                                     if (flag === 0) {

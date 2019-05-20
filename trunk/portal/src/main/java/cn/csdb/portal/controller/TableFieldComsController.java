@@ -4,12 +4,9 @@ package cn.csdb.portal.controller;
  * Created by Administrator on 2017/4/19 0019.
  */
 
-import cn.csdb.portal.model.DataSrc;
 import cn.csdb.portal.model.ShowTypeInf;
-import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.model.TableInfo;
-import cn.csdb.portal.repository.CheckUserDao;
-import cn.csdb.portal.service.DataSrcService;
+import cn.csdb.portal.service.EditDataService;
 import cn.csdb.portal.service.ShowTypeInfService;
 import cn.csdb.portal.service.TableFieldComsService;
 import com.alibaba.fastjson.JSON;
@@ -39,10 +36,7 @@ public class TableFieldComsController {
     private ShowTypeInfService showTypeInfService;
 
     @Autowired
-    private CheckUserDao checkUserDao;
-
-    @Autowired
-    private DataSrcService dataSrcService;
+    private EditDataService editDataService;
     /**
      * 获取表的字段注释
      *
@@ -130,20 +124,6 @@ public class TableFieldComsController {
         return jsonObject;
     }
 
-
-    //    根据登录人员的subjectCode，获得对应数据库连接信息
-    public DataSrc getDataSrc(String subjectCode){
-        Subject subject=checkUserDao.getSubjectByCode(subjectCode);
-        DataSrc datasrc = new DataSrc();
-        datasrc.setDatabaseName(subject.getDbName());//数据库名
-        datasrc.setDatabaseType("mysql");          //数据库类型
-        datasrc.setHost(subject.getDbHost());       //连接地址
-        datasrc.setPort(subject.getDbPort());       //端口号
-        datasrc.setUserName(subject.getDbUserName());  //用户名
-        datasrc.setPassword(subject.getDbPassword());  //密码
-        return datasrc;
-    }
-
     //    查询出该表关联的数据表
     @RequestMapping("/getDatasheetTable")
     @ResponseBody
@@ -166,8 +146,8 @@ public class TableFieldComsController {
     @ResponseBody
     public JSONObject getDatasheetTableColumn(String tableName, String subjectCode){
         JSONObject jsonObject=new JSONObject();
-        DataSrc datasrc=getDataSrc(subjectCode);
-        List<String> list = dataSrcService.getColumnName(datasrc,tableName);
+//        DataSrc datasrc=getDataSrc(subjectCode);
+        List<String> list = editDataService.getColumnName(subjectCode, tableName);
         jsonObject.put("list",list);
         return jsonObject;
     }
