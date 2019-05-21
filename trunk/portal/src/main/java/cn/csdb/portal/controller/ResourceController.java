@@ -5,11 +5,11 @@ import cn.csdb.portal.repository.TableFieldComsDao;
 import cn.csdb.portal.service.*;
 import cn.csdb.portal.utils.FileTreeNode;
 import cn.csdb.portal.utils.FileUploadUtil;
+import cn.csdb.portal.utils.FileUtil;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,6 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -405,14 +404,14 @@ public class ResourceController {
 
 
     /**
-     * Function Description: 添加资源第二步保存
+     *  添加|编辑资源第二步保存
      *
      * @param session          获取当前节点编码
      * @param resourceDataList 序列化参数
      */
     @RequestMapping("/addResourceSecondStep")
     @ResponseBody
-    public JSONObject addResourceSecondStep(HttpSession session, resourceDataList resourceDataList) {
+    public JSONObject addResourceSecondStep(HttpSession session, ResourceDataList resourceDataList) {
         JSONObject jsonObject = new JSONObject();
         String subjectCode = session.getAttribute("SubjectCode").toString();
         Subject subject = subjectService.findBySubjectCode(subjectCode);
@@ -422,19 +421,26 @@ public class ResourceController {
         boolean sqlDataListIsNullOrEmpty = Strings.isNullOrEmpty(sqlDataListString);
         String fileDataListString = resourceDataList.getFileDataList();
         boolean fileDataListIsNullOrEmpty = Strings.isNullOrEmpty(fileDataListString);
+
+        // 统计当前数据集总存储量
         BigDecimal memorySize = new BigDecimal(0);
 
+        // "RDB型"数据集参数
         if (!sqlDataListIsNullOrEmpty) {
             resource.setPublicContent(sqlDataListString);
             List<String> sqlDataList = Arrays.asList(sqlDataListString.split(";"));
 
+            // "RDB型"数据存储量
             BigDecimal allTableLength = new BigDecimal(0);
             for (String tableName : sqlDataList) {
                 BigDecimal tableLength = resourceService.getTableLength(subject, tableName);
                 allTableLength = allTableLength.add(tableLength);
             }
+            resource.setToRdbMemorySize(allTableLength.longValue());
+
             memorySize = memorySize.add(allTableLength);
 
+            // "RDB型"数据条数
             BigDecimal allTableRow = new BigDecimal(0);
             for (String tableName : sqlDataList) {
                 BigDecimal tableRow = resourceService.getTableRow(subject, tableName);
@@ -445,9 +451,12 @@ public class ResourceController {
             resource.setPublicContent("");
         }
 
+        // "FILE型"数据集参数
         if (!fileDataListIsNullOrEmpty) {
             resource.setFilePath(fileDataListString);
             List<String> filePathList = Arrays.asList(fileDataListString.split(";"));
+
+            // "FILE型"数据集存储量 以及 文件数量
             BigDecimal allFileLength = new BigDecimal(0);
             int fileNumber = 0;
             for (String filepath : filePathList) {
@@ -458,13 +467,18 @@ public class ResourceController {
                 }
                 saveFileInfo(filepath, fileLength, resourceDataList.getResourceId());
             }
-            memorySize = memorySize.add(allFileLength);
+            resource.setToFilesMemorySize(allFileLength.longValue());
             resource.setToFilesNumber(fileNumber);
+
+            memorySize = memorySize.add(allFileLength);
+
         } else {
             resource.setFilePath("");
         }
 
         resource.setToMemorySize(memorySize.toString());
+
+        // 判断数据集类型
         if (!sqlDataListIsNullOrEmpty && !fileDataListIsNullOrEmpty) {
             resource.setPublicType("RDB+FILE");
         } else if (!sqlDataListIsNullOrEmpty && fileDataListIsNullOrEmpty) {
@@ -482,6 +496,13 @@ public class ResourceController {
         return jsonObject;
     }
 
+    /**
+     * 描述数据集中文件的信息
+     *
+     * @param filePath   文件路径
+     * @param fileSize   文件大小
+     * @param resourceId 文件所属数据集ID
+     */
     private void saveFileInfo(String filePath, BigDecimal fileSize, String resourceId) {
         File file = new File(filePath);
         if (file.exists() && file.isFile()) {
@@ -641,88 +662,6 @@ public class ResourceController {
         return jsonObject;
     }
 
-    /**
-     * Function Description: 编辑资源保存第二步
-     *
-     * @param: [resourceId, publicType, dataList]
-     * @return: com.alibaba.fastjson.JSONObject
-     * @auther: hw
-     * @date: 2018/11/2 14:52
-     */
-    @ResponseBody
-    @RequestMapping(value = "editResourceSecondStep")
-    public JSONObject editResourceSecondStep(HttpSession session,
-                                             @RequestParam(name = "resourceId") String resourceId,
-                                             @RequestParam(name = "publicType") String publicType,
-                                             @RequestParam(name = "dataList") String dataList) {
-        String subjectCode = session.getAttribute("SubjectCode").toString();
-        Subject subject = subjectService.findBySubjectCode(subjectCode);
-        JSONObject jsonObject = new JSONObject();
-        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
-        if (publicType.equals("mysql")) {
-            resource.setPublicContent(dataList);
-            resource.setToFilesNumber(0);
-            resource.setPublicType("mysql");
-            List<String> tableList = Arrays.asList(dataList.split(";"));
-            int rowCount = resourceService.getRecordCount(subject.getDbHost(), subject.getDbPort(), subject.getDbUserName(), subject.getDbPassword(), subject.getDbName(), tableList);
-            resource.setToRecordNumber(rowCount);
-        } else if (publicType.equals("file")) {
-            resource.setPublicType("file");
-            StringBuffer sb = new StringBuffer();
-            Double size = 0.00;
-            if (StringUtils.isNoneBlank(dataList)) {
-                String[] s = dataList.split(";");
-                for (String str : s) {
-                    str = str.replaceAll("%_%", "/");
-                    File file = new File(str);
-                    if (file.isDirectory()) {
-                        Collection<File> files = FileUtils.listFiles(file, null, true);
-                        for (File file1 : files) {
-                            String fp = file1.getPath();
-                            size += file1.length();
-                            if (fp.indexOf("\\") > -1) {
-                                fp = fp.replaceAll("\\\\", "/");
-                            }
-                            sb.append(fp + ";");
-                        }
-                    }
-                }
-            }
-            String[] filePaths = sb.toString().split(";");
-            //清空以前保存的文件记录
-            resourceService.deleteFileInfo(resourceId);
-            int i = 0;
-            for (String str : filePaths) {
-                FileInfo fileInfo = new FileInfo();
-                int one = str.lastIndexOf("/");
-                fileInfo.setFile_name(str.substring((one + 1), str.length()));
-                fileInfo.setFile_path(str);
-                File file = new File(str);
-                if (file.exists() && file.isFile()) {
-                    Double d = Double.valueOf(file.length()) / 1024 / 1024;
-                    NumberFormat nf = NumberFormat.getNumberInstance();
-                    nf.setMaximumFractionDigits(4);
-                    fileInfo.setSize(Long.toString(file.length()));
-                }
-                fileInfo.getSize();
-                fileInfo.setResourceId(resourceId);
-                fileInfo.setTime(new Date());
-                resourceService.saveFileInfo(fileInfo);
-                i++;
-            }
-            resource.setFilePath(sb.toString().replace("/", "%_%"));
-            Double toMemorySize = size / 1024 / 1024;
-            NumberFormat nf = NumberFormat.getNumberInstance();
-            nf.setMaximumFractionDigits(4);
-            resource.setToMemorySize(size.toString());
-            resource.setToRecordNumber(0);
-            resource.setToFilesNumber(i);
-        }
-        String resId = resourceService.save(resource);
-        jsonObject.put("resourceId", resId);
-        return jsonObject;
-    }
-
     @RequestMapping(value = "/uploadHeadImage", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject uploadHeadImageCopy(
@@ -752,7 +691,7 @@ public class ResourceController {
     }
 
     /**
-     * Function Description: 查看资源
+     *  查看资源
      *
      * @param: [resourceId]
      * @return: com.alibaba.fastjson.JSONObject
@@ -760,13 +699,19 @@ public class ResourceController {
      * @date: 2018/11/6 14:54
      */
     @ResponseBody
-    @RequestMapping(value = "resourceDetail")
+    @RequestMapping(value = "/resourceDetail")
     public JSONObject resourceDetail(String resourceId) {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
-        ResCatalog_Mongo resCatalog_mongo = resCatalogService.getLocalResCatalogNodeById(resource.getCatalogId());
+        ResCatalog_Mongo resCatalog_mongo = resCatalogService.selectResCatalogNodeByRid(resource.getCatalogId());
         jsonObject.put("resCatalog", resCatalog_mongo);
+        String toFilesMemorySize = FileUtil.formateFileLength(resource.getToFilesMemorySize());
+        String toRdbMemorySize = FileUtil.formateFileLength(resource.getToRdbMemorySize());
+        String toMemorySize = FileUtil.formateFileLength(Long.valueOf(resource.getToMemorySize()));
         jsonObject.put("resource", resource);
+        jsonObject.put("toFilesMemorySize", toFilesMemorySize);
+        jsonObject.put("toRdbMemorySize", toRdbMemorySize);
+        jsonObject.put("toMemorySize", toMemorySize);
         return jsonObject;
     }
 

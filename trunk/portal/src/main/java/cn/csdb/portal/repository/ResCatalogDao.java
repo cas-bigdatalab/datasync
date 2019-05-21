@@ -1,23 +1,15 @@
 package cn.csdb.portal.repository;
 
 import cn.csdb.portal.model.ResCatalog_Mongo;
-import cn.csdb.portal.repository.mapper.ResCatalogMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -104,20 +96,13 @@ public class ResCatalogDao {
 
 
     public ResCatalog_Mongo getLocalResCatalogNodeById(String resCatalogId) {
-        /*String sql = "select * from t_localcatalog where id=?";
-        return jdbcTemplate.query(sql, new Object[]{resCatalogId}, new ResCatalogMapper()).get(0);*/
-/*
-        return mongoTemplate.find(new Query(Criteria.where("id").is(resCatalogId)),ResCatalog_Mongo.class).get(0);
-*/
-/*
-        List<ResCatalog_Mongo> resCatalog_mongos = mongoTemplate.find(new Query(Criteria.where("id").is(Integer.parseInt(resCatalogId))),ResCatalog_Mongo.class);
-*/
         ResCatalog_Mongo resCatalog_mongos = mongoTemplate.findById(resCatalogId,ResCatalog_Mongo.class);
-        /*if(resCatalog_mongos!=null&&resCatalog_mongos.size()>0){
-            return resCatalog_mongos.get(0);
-        }else{
-            return null;
-        }*/
+        return resCatalog_mongos;
+
+    }
+
+    public ResCatalog_Mongo selectResCatalogNodeByRid(String rid) {
+        ResCatalog_Mongo resCatalog_mongos = mongoTemplate.findOne(new Query(Criteria.where("rid").is(Integer.parseInt(rid))), ResCatalog_Mongo.class);
         return resCatalog_mongos;
 
     }

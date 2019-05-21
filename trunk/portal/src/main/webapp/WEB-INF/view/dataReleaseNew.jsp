@@ -28,7 +28,7 @@
             margin-bottom: 5px;
         }
 
-        #relModal .form-group div, #fileModal .form-group div {
+        #allModal .form-group div {
             word-break: break-all;
         }
 
@@ -55,6 +55,7 @@
 
 <body>
 <input type="hidden" id="subjectCode" value="${sessionScope.SubjectCode}"/>
+
 <div class="alert alert-info fabu_div" role="alert">
     <!--查询条件 -->
     <div class="row">
@@ -92,6 +93,7 @@
         </form>
     </div>
 </div>
+
 <div class="upload-table" style="background: #fff;">
     <div class="table-message">列表加载中......</div>
     <table class="table table-bordered data-table" id="upload-list">
@@ -115,7 +117,8 @@
         <div class="page-list" style="float: right; padding-right: 15px;"></div>
     </div>
 </div>
-<div id="relModal" class="modal fade" tabindex="-1" data-width="400">
+
+<div id="allModal" class="modal fade" tabindex="-1" data-width="400">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary">
@@ -124,287 +127,134 @@
                 <h4 class="modal-title">数据集详情查看</h4>
             </div>
             <div class="modal-body" style="max-height: 500px;overflow: auto">
-                <div class="commentsList" id="mysqlComments" style="display: none; ">
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">审核人姓名&nbsp;&nbsp;:</label>
-                            <div class="col-sm-9" id="mysqlCommentsName">aaa</div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">审核时间&nbsp;&nbsp;:</label>
-                            <div class="col-sm-9" id="mysqlCommentsTime">bbb</div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">审核内容&nbsp;&nbsp;:</label>
-                            <div class="col-sm-9" id="mysqlCommentsContent">vvvv</div>
-                        </div>
-                    </form>
-                </div>
                 <form class="form-horizontal">
-                    <%--<div class="form-group">
-                        <label class="col-sm-3 control-label">数据源ID:</label>
-                        <div class="col-sm-8 modediv" id="rel-dataSourceId"></div>
-                    </div>--%>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">审核人姓名&nbsp;&nbsp;:</label>
+                        <div class="col-sm-9" id="CommentsName">aaa</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">审核时间&nbsp;&nbsp;:</label>
+                        <div class="col-sm-9" id="CommentsTime">bbb</div>
+                    </div>
+                    <div class="form-group">
+                            <label class="col-sm-3 control-label">审核内容&nbsp;&nbsp;:</label>
+                        <div class="col-sm-9" id="CommentsContent">vvvv</div>
+                        </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">数据集标识:</label>
-                        <div class="col-sm-8 modediv" id="rel-pid"></div>
+                        <div class="col-sm-8 modediv" id="pid"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">数据集名称:</label>
-                        <div class="col-sm-8 modediv" id="rel-title"></div>
+                        <div class="col-sm-8 modediv" id="title"></div>
                     </div>
                     <div class="form-group" style="word-break: break-all">
                         <label class="col-sm-3 control-label">发布类型:</label>
-                        <div class="col-sm-8 modediv" id="rel-publicType"></div>
+                        <div class="col-sm-8 modediv" id="publicType"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">简介:</label>
-                        <div class="col-sm-8 modediv" id="rel-introduction" style="work-break:break-all"></div>
+                        <div class="col-sm-8 modediv" id="introduction" style="work-break:break-all"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">发布图片:</label>
-                        <div class="col-sm-8 modediv" id="rel-imagePath">
-                            <img src="" style="max-width:160px; " alt="">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">资源关键词:</label>
-                        <div class="col-sm-8 modediv" id="rel-keyword"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">分类目录ID:</label>
-                        <div class="col-sm-8 modediv" id="rel-catalogId"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">开始时间:</label>
-                        <div class="col-sm-8 modediv" id="rel-startTime"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">结束时间:</label>
-                        <div class="col-sm-8 modediv" id="rel-endTime"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">版权声明:</label>
-                        <div class="col-sm-8 modediv" id="rel-createdByOrganization"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">状态:</label>
-                        <div class="col-sm-8 modediv" id="rel-status"></div>
-                    </div>
-                    <%-- <div class="form-group">
-                         <label class="col-sm-3 control-label">资源填写状态:</label>
-                         <div class="col-sm-8 modediv" id="rel-resState"></div>
-                     </div>--%>
-
-
-                    <%--<div class="form-group">
-                        <label class="col-sm-3 control-label">字段注释:</label>
-                        <div class="col-sm-8 modediv" id="rel-fieldComs"></div>
-                    </div>--%>
-                    <%--<div class="form-group">
-                        <label class="col-sm-3 control-label">专业库代码:</label>
-                        <div class="col-sm-8 modediv" id="rel-subjectCode"></div>
-                    </div>--%>
-                    <hr style="border-bottom:1px dashed #111;">
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">创建人员:</label>
-                        <div class="col-sm-8 modediv" id="rel-createdBy"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">创建者机构:</label>
-                        <div class="col-sm-8 modediv" id="rel-createOrgnization"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">创建日期:</label>
-                        <div class="col-sm-8 modediv" id="rel-creationDate"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">发布者机构:</label>
-                        <div class="col-sm-8 modediv" id="rel-publishOrgnization"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">发布者邮件:</label>
-                        <div class="col-sm-8 modediv" id="rel-email"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">发布者电话:</label>
-                        <div class="col-sm-8 modediv" id="rel-phoneNum"></div>
-                    </div>
-
-                    <%--<div class="form-group">
-                        <label class="col-sm-3 control-label">分类:</label>
-                        <div class="col-sm-8 modediv" id="rel-taxonomy"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">格式:</label>
-                        <div class="col-sm-8 modediv" id="rel-dataFormat"></div>
-                    </div>--%>
-
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">最新发布日期:</label>
-                        <div class="col-sm-8 modediv" id="rel-updateDate"></div>
-                    </div>
-
-                    <%--<div class="form-group">
-                        <label class="col-sm-3 control-label">引用格式:</label>
-                        <div class="col-sm-8 modediv" id="rel-citation"></div>
-                    </div>--%>
-                    <hr style="border-bottom:1px dashed #111;">
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">实体表名:</label>
-                        <div class="col-sm-8 modediv" id="rel-publicContent"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">总存储量(MB):</label>
-                        <div class="col-sm-8 modediv" id="rel-toMemorySize"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">总文件数:</label>
-                        <div class="col-sm-8 modediv" id="rel-toFilesNumber"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">总记录数:</label>
-                        <div class="col-sm-8 modediv" id="rel-toRecordNumber"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">用户组:</label>
-                        <div class="col-sm-8 modediv" id="rel-userGroupId"></div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-
-                <button type="button" data-dismiss="modal" class="btn btn-success">关闭</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="fileModal" class="modal fade" tabindex="-1" data-width="400">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title">数据集详情查看</h4>
-            </div>
-            <div class="modal-body" style="max-height: 500px;overflow: auto">
-                <div class="commentsList" id="fileComments" style="display: none">
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">审核人姓名&nbsp;&nbsp;:</label>
-                            <div class="col-sm-9" id="fileCommentsName">aaa</div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">审核时间&nbsp;&nbsp;:</label>
-                            <div class="col-sm-9" id="fileCommentsTime">bbb</div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">审核内容&nbsp;&nbsp;:</label>
-                            <div class="col-sm-9" id="fileCommentsContent">vvvv</div>
-                        </div>
-                    </form>
-                </div>
-                <form class="form-horizontal">
-                    <%--<div class="form-group">
-                        <label class="col-sm-3 control-label">数据源ID:</label>
-                        <div class="col-sm-8 modediv" id="file-dataSourceId"></div>
-                    </div>--%>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">数据集标识:</label>
-                        <div class="col-sm-8 modediv" id="file-pid"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">数据集名称:</label>
-                        <div class="col-sm-8 modediv" id="file-title"></div>
-                    </div>
-                    <div class="form-group" style="word-break: break-all">
-                        <label class="col-sm-3 control-label">发布类型:</label>
-                        <div class="col-sm-8 modediv" id="file-publicType"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">简介:</label>
-                        <div class="col-sm-8 modediv" id="file-introduction" style="work-break:break-all"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">发布图片:</label>
-                        <div class="col-sm-8 modediv" id="file-imagePath">
+                        <div class="col-sm-8 modediv" id="imagePath">
                             <img src="" style="max-width:160px;" alt="">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">资源关键词:</label>
-                        <div class="col-sm-8 modediv" id="file-keyword"></div>
+                        <div class="col-sm-8 modediv" id="keyword"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">分类目录ID:</label>
-                        <div class="col-sm-8 modediv" id="file-catalogId"></div>
+                        <div class="col-sm-8 modediv" id="catalogId"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">分类目录名称:</label>
+                        <div class="col-sm-8 modediv" id="catalogName"></div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-3 control-label">开始时间:</label>
-                        <div class="col-sm-8 modediv" id="file-startTime"></div>
+                        <div class="col-sm-8 modediv" id="startTime"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">结束时间:</label>
-                        <div class="col-sm-8 modediv" id="file-endTime"></div>
+                        <div class="col-sm-8 modediv" id="endTime"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">版权声明:</label>
-                        <div class="col-sm-8 modediv" id="file-createdByOrganization"></div>
+                        <div class="col-sm-8 modediv" id="createdByOrganization"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">状态:</label>
-                        <div class="col-sm-8 modediv" id="file-status"></div>
+                        <div class="col-sm-8 modediv" id="status"></div>
                     </div>
                     <hr style="border-bottom:1px dashed #111;">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">创建人员:</label>
-                        <div class="col-sm-8 modediv" id="file-createdBy"></div>
+                        <div class="col-sm-8 modediv" id="createdBy"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">创建者机构:</label>
-                        <div class="col-sm-8 modediv" id="file-createOrgnization"></div>
+                        <div class="col-sm-8 modediv" id="createOrgnization"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">创建日期:</label>
-                        <div class="col-sm-8 modediv" id="file-creationDate"></div>
+                        <div class="col-sm-8 modediv" id="creationDate"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">发布者机构:</label>
-                        <div class="col-sm-8 modediv" id="file-publishOrgnization"></div>
+                        <div class="col-sm-8 modediv" id="publishOrgnization"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">发布者邮件:</label>
-                        <div class="col-sm-8 modediv" id="file-email"></div>
+                        <div class="col-sm-8 modediv" id="email"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">发布者电话:</label>
-                        <div class="col-sm-8 modediv" id="file-phoneNum"></div>
+                        <div class="col-sm-8 modediv" id="phoneNum"></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label">最新发布日期:</label>
-                        <div class="col-sm-8 modediv" id="file-updateDate"></div>
+                        <div class="col-sm-8 modediv" id="updateDate"></div>
                     </div>
                     <hr style="border-bottom:1px dashed #111;">
-                    <div class="form-group">
+                    <div class="form-group FILE">
                         <label class="col-sm-3 control-label">实体文件路径:</label>
-                        <div class="col-sm-8 modediv" id="file-filePath"></div>
+                        <div class="col-sm-8 modediv" id="filePath"></div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">总存储量(MB):</label>
-                        <div class="col-sm-8 modediv" id="file-toMemorySize"></div>
-                    </div>
-                    <div class="form-group">
+                    <div class="form-group FILE">
                         <label class="col-sm-3 control-label">总文件数:</label>
-                        <div class="col-sm-8 modediv" id="file-toFilesNumber"></div>
+                        <div class="col-sm-8 modediv" id="toFilesNumber"></div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group FILE">
+                        <label class="col-sm-3 control-label">总文大小:</label>
+                        <div class="col-sm-8 modediv" id="toFilesMemorySize"></div>
+                    </div>
+
+                    <div class="form-group RDB">
+                        <label class="col-sm-3 control-label">实体表名:</label>
+                        <div class="col-sm-8 modediv" id="publicContent"></div>
+                    </div>
+                    <div class="form-group RDB">
                         <label class="col-sm-3 control-label">总记录数:</label>
-                        <div class="col-sm-8 modediv" id="file-toRecordNumber"></div>
+                        <div class="col-sm-8 modediv" id="toRecordNumber"></div>
                     </div>
+                    <div class="form-group RDB">
+                        <label class="col-sm-3 control-label">总记大小:</label>
+                        <div class="col-sm-8 modediv" id="toRdbMemorySize"></div>
+                    </div>
+
+                    <div class="form-group RDBFILE">
+                        <label class="col-sm-3 control-label">总存储量:</label>
+                        <div class="col-sm-8 modediv" id="toMemorySize"></div>
+                    </div>
+
                     <div class="form-group">
                         <label class="col-sm-3 control-label">用户组:</label>
-                        <div class="col-sm-8 modediv" id="file-userGroupId"></div>
+                        <div class="col-sm-8 modediv" id="userGroupId"></div>
                     </div>
                 </form>
             </div>
@@ -415,6 +265,7 @@
         </div>
     </div>
 </div>
+
 <div id="auditModal" class="modal fade" tabindex="-1" data-width="400">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -483,6 +334,7 @@
         </div>
     </div>
 </div>
+
 <script type="text/html" id="resourceTmp1">
     {{each resourceList as value i}}
     <tr keyIdTr="{{value.id}}">
@@ -564,6 +416,7 @@
     </tr>
     {{/each}}
 </script>
+
 <script type="text/html" id="resourceTmp2">
     {{each auditMessageList as value i}}
     <div class="commentsList">
@@ -584,6 +437,7 @@
     </div>
     {{/each}}
 </script>
+
 <script type="text/html" id="groupOption">
     {{each data as value i}}
     <option value="{{value.groupName}}">{{value.groupName}}</option>
@@ -596,9 +450,9 @@
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/select2/select2_locale_zh-CN.js"></script>
     <script type="text/javascript">
-        var publicType = ""
-        var resourceState = ""
-        var resourceName = ""
+        var publicType = "";
+        var resourceState = "";
+        var resourceName = "";
         var statusres = "2";
         $(function () {
             template.helper("dateFormat", formatDate);
@@ -808,169 +662,105 @@
             $.ajax({
                 url: "${ctx}/resource/resourceDetail",
                 type: "GET",
+                dataType: "JSON",
                 data: {
                     resourceId: id
                 },
                 success: function (data) {
-                    console.log(JSON.parse(data))
-                    var dataList = JSON.parse(data).resource;
-                    console.log(dataList)
-                    if (type == "mysql" || type == "") {
-                        $("#rel-dataSourceId").html(id)
-                        $("#rel-email").html(dataList.email)
-                        $("#rel-catalogId").html(dataList.catalogId)
-                        $("#rel-imagePath img").attr("src", dataList.imagePath)
-                        $("#rel-status").html(tabStatus)
-                        $("#rel-resState").html(dataList.resState)
-                        $("#rel-publicType").html("mysql")
-                        $("#rel-publishOrgnization").html(dataList.publishOrgnization)
-                        $("#rel-createOrgnization").html(dataList.createOrgnization)
-                        var $publicContent = $("#rel-publicContent")
-                        listSpan(dataList.publicContent, ";", $publicContent)
-                        var $filePath = $("#rel-filePath")
-                        /*var filrStr = dataList.filePath.substr(0, dataList.filePath.length - 1);
-                        listSpan(filrStr,";",$filePath)*/
-                        $("#rel-fileName").html(dataList.fileName)
-                        $("#rel-fieldComs").html(dataList.fieldComs)
-                        $("#rel-subjectCode").html(dataList.subjectCode)
-                        $("#rel-pid").html(id)
-                        $("#rel-title").html(dataList.title)
-                        $("#rel-introduction").html(dataList.introduction)
-                        var $keyword = $("#rel-keyword")
-                        listSpan(dataList.keyword, ",", $keyword)
-                        $("#rel-taxonomy").html(dataList.taxonomy)
-                        $("#rel-dataFormat").html(dataList.dataFormat)
-                        if (dataList.startTime == null) {
-                            $("#rel-startTime").parent().hide()
-                        } else {
-                            $("#rel-startTime").parent().show()
-                        }
-                        if (dataList.endTime == null) {
-                            $("#rel-endTime").parent().hide()
-                        } else {
-                            $("#rel-endTime").parent().show()
-                        }
-                        if (dataList.createdByOrganization == "") {
-                            $("#rel-createdByOrganization").parent().hide()
-                        } else {
-                            $("#rel-createdByOrganization").parent().show()
-                        }
-                        if (dataList.createPerson == "") {
-                            $("#rel-createdBy").parent().hide()
-                        } else {
-                            $("#rel-createdBy").parent().show()
-                        }
-                        if (dataList.creationDate == null) {
-                            $("#rel-creationDate").parent().hide()
-                        } else {
-                            $("#rel-creationDate").parent().show()
-                        }
-                        if (dataList.phoneNum == "") {
-                            $("#rel-phoneNum").parent().hide()
-                        } else {
-                            $("#rel-phoneNum").parent().show()
-                        }
-                        if (dataList.toMemorySize == "") {
-                            $("#rel-toMemorySize").parent().hide()
-                        } else {
-                            $("#rel-toMemorySize").parent().show()
-                        }
-                        $("#rel-startTime").html(convertMilsToDateString(dataList.startTime))
-                        $("#rel-endTime").html(convertMilsToDateString(dataList.endTime))
-                        $("#rel-createdByOrganization").html(dataList.createdByOrganization)
-                        $("#rel-createdBy").html(dataList.createPerson)
-                        $("#rel-creationDate").html(convertMilsToDateString(dataList.creatorCreateTime))
-                        $("#rel-organizationName").html(dataList.organizationName)
-                        $("#rel-mail").html(dataList.mail)
-                        $("#rel-phoneNum").html(dataList.phoneNum)
-                        $("#rel-updateDate").html(convertMilsToDateTimeString(dataList.updateDate))
-                        $("#rel-citation").html(dataList.citation)
-                        $("#rel-toMemorySize").html(dataList.toMemorySize)
-                        $("#rel-toFilesNumber").html(dataList.toFilesNumber)
-                        $("#rel-toRecordNumber").html(dataList.toRecordNumber)
-                        var $userGroupId = $("#rel-userGroupId")
-                        listSpan(dataList.userGroupId, ",", $userGroupId)
-                        /* $("#rel-userGroupId").html(dataList.userGroupId)*/
-                        $("#relModal").modal("show")
+                    var resource = data.resource;
+                    var resCatalog = data.resCatalog;
+                    $("#dataSourceId").html(id);
+                    $("#email").html(resource.email);
+                    $("#catalogId").html(resCatalog.rid);
+                    $("#catalogName").html(resCatalog.name);
+                    $("#imagePath img").attr("src", resource.imagePath);
+                    $("#status").html(tabStatus);
+                    $("#resState").html(resource.resState);
+                    $("#publishOrgnization").html(resource.publishOrgnization);
+                    $("#createOrgnization").html(resource.createOrgnization);
+                    $("#publicType").html(resource.publicType);
+                    var $publicContent = $("#publicContent");
+                    listSpan(resource.publicContent, ";", $publicContent);
+                    var $filePath = $("#filePath");
+                    var str = resource.filePath.replace(/%_%/g, "/");
+                    var filrStr = str.substr(0, str.length - 1);
+                    listSpan(filrStr, ";", $filePath);
+                    $("#fileName").html(resource.fileName);
+                    $("#fieldComs").html(resource.fieldComs);
+                    $("#subjectCode").html(resource.subjectCode);
+                    $("#pid").html(id);
+                    $("#title").html(resource.title);
+                    $("#introduction").html(resource.introduction);
+                    var $keyword = $("#keyword");
+                    listSpan(resource.keyword, ",", $keyword);
+                    $("#taxonomy").html(resource.taxonomy);
+                    $("#dataFormat").html(resource.dataFormat);
+                    if (resource.startTime == null) {
+                        $("#startTime").parent().hide()
                     } else {
-                        $("#file-dataSourceId").html(id)
-                        $("#file-email").html(dataList.email)
-                        $("#file-catalogId").html(dataList.catalogId)
-                        // $("#file-imagePath").html(dataList.imagePath)
-                        $("#file-imagePath img").attr("src", dataList.imagePath)
-                        $("#file-status").html(tabStatus)
-                        $("#file-resState").html(dataList.resState)
-                        $("#file-publishOrgnization").html(dataList.publishOrgnization)
-                        $("#file-createOrgnization").html(dataList.createOrgnization)
-                        $("#file-publicType").html("file")
-                        var $publicContent = $("#file-publicContent")
-                        listSpan(dataList.publicContent, ";", $publicContent)
-                        var $filePath = $("#file-filePath")
-                        var str = dataList.filePath.replace(/%_%/g, "/");
-                        var filrStr = str.substr(0, str.length - 1);
-                        listSpan(filrStr, ";", $filePath)
-                        $("#file-fileName").html(dataList.fileName)
-                        $("#file-fieldComs").html(dataList.fieldComs)
-                        $("#file-subjectCode").html(dataList.subjectCode)
-                        $("#file-pid").html(id)
-                        $("#file-title").html(dataList.title)
-                        $("#file-introduction").html(dataList.introduction)
-                        var $keyword = $("#file-keyword")
-                        listSpan(dataList.keyword, ",", $keyword)
-                        $("#file-taxonomy").html(dataList.taxonomy)
-                        $("#file-dataFormat").html(dataList.dataFormat)
-                        if (dataList.startTime == null) {
-                            $("#file-startTime").parent().hide()
-                        } else {
-                            $("#file-startTime").parent().show()
-                        }
-                        if (dataList.endTime == null) {
-                            $("#file-endTime").parent().hide()
-                        } else {
-                            $("#file-endTime").parent().show()
-                        }
-                        if (dataList.createdByOrganization == "") {
-                            $("#file-createdByOrganization").parent().hide()
-                        } else {
-                            $("#file-createdByOrganization").parent().show()
-                        }
-                        if (dataList.createPerson == "") {
-                            $("#file-createdBy").parent().hide()
-                        } else {
-                            $("#file-createdBy").parent().show()
-                        }
-                        if (dataList.creationDate == null) {
-                            $("#file-creationDate").parent().hide()
-                        } else {
-                            $("#file-creationDate").parent().show()
-                        }
-                        if (dataList.phoneNum == "") {
-                            $("#file-phoneNum").parent().hide()
-                        } else {
-                            $("#file-phoneNum").parent().show()
-                        }
-                        if (dataList.toMemorySize == "") {
-                            $("#file-toMemorySize").parent().hide()
-                        } else {
-                            $("#file-toMemorySize").parent().show()
-                        }
-                        $("#file-startTime").html(convertMilsToDateString(dataList.startTime))
-                        $("#file-endTime").html(convertMilsToDateString(dataList.endTime))
-                        $("#file-createdByOrganization").html(dataList.createdByOrganization)
-                        $("#file-createdBy").html(dataList.createPerson)
-                        $("#file-creationDate").html(convertMilsToDateString(dataList.creatorCreateTime))
-                        $("#file-organizationName").html(dataList.organizationName)
-                        $("#file-mail").html(dataList.mail)
-                        $("#file-phoneNum").html(dataList.phoneNum)
-                        $("#file-updateDate").html(convertMilsToDateTimeString(dataList.updateDate))
-                        $("#file-citation").html(dataList.citation)
-                        $("#file-toMemorySize").html(dataList.toMemorySize)
-                        $("#file-toFilesNumber").html(dataList.toFilesNumber)
-                        $("#file-toRecordNumber").html(dataList.toRecordNumber)
-                        var $userGroupId = $("#file-userGroupId")
-                        listSpan(dataList.userGroupId, ",", $userGroupId)
-                        $("#fileModal").modal("show")
+                        $("#startTime").parent().show()
                     }
+                    if (resource.endTime == null) {
+                        $("#endTime").parent().hide()
+                    } else {
+                        $("#endTime").parent().show()
+                    }
+                    if (resource.createdByOrganization === "") {
+                        $("#createdByOrganization").parent().hide()
+                    } else {
+                        $("#createdByOrganization").parent().show()
+                    }
+                    if (resource.createPerson === "") {
+                        $("#createdBy").parent().hide()
+                    } else {
+                        $("#createdBy").parent().show()
+                    }
+                    if (resource.creationDate == null) {
+                        $("#creationDate").parent().hide()
+                    } else {
+                        $("#creationDate").parent().show()
+                    }
+                    if (resource.phoneNum === "") {
+                        $("#phoneNum").parent().hide()
+                    } else {
+                        $("#phoneNum").parent().show()
+                    }
+
+                    if (resource.publicType === "RDB") {
+                        $(".FILE").hide();
+                        $(".RDB").show();
+                        $(".RDBFILE").hide();
+                    } else if (resource.publicType === "FILE") {
+                        $(".FILE").show();
+                        $(".RDB").hide();
+                        $(".RDBFILE").hide();
+                    } else {
+                        $(".FILE").show();
+                        $(".RDB").show();
+                        $(".RDBFILE").show();
+                    }
+
+                    $("#startTime").html(convertMilsToDateString(resource.startTime));
+                    $("#endTime").html(convertMilsToDateString(resource.endTime));
+                    $("#createdByOrganization").html(resource.createdByOrganization);
+                    $("#createdBy").html(resource.createPerson);
+                    $("#creationDate").html(convertMilsToDateString(resource.creatorCreateTime));
+                    $("#organizationName").html(resource.organizationName);
+                    $("#mail").html(resource.mail);
+                    $("#phoneNum").html(resource.phoneNum);
+                    $("#updateDate").html(convertMilsToDateTimeString(resource.updateDate));
+                    $("#citation").html(resource.citation);
+
+                    $("#toFilesNumber").html(resource.toFilesNumber);
+                    $("#toFilesMemorySize").html(data.toFilesMemorySize);
+
+                    $("#toRecordNumber").html(resource.toRecordNumber);
+                    $("#toRdbMemorySize").html(data.toRdbMemorySize);
+
+                    $("#toMemorySize").html(data.toMemorySize);
+                    var $userGroupId = $("#userGroupId");
+                    listSpan(resource.userGroupId, ",", $userGroupId);
+                    $("#allModal").modal("show");
                 },
                 error: function () {
                     $(".table-message").html("请求失败");

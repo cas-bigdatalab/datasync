@@ -78,10 +78,14 @@ public class Resource {
     private String citation; //引用格式
     @Field("toMemorySize")
     private String toMemorySize;  //总存储量
+    @Field("toFilesMemorySize")
+    private long toFilesMemorySize;// 文件存储量
     @Field("toFilesNumber")
     private long toFilesNumber;  //总文件数
+    @Field("toRdbMemorySize")
+    private long toRdbMemorySize; // 关系型数据存储量
     @Field("toRecordNumber")
-    private long toRecordNumber; //总记录数
+    private long toRecordNumber; //关系型数据总条目数
     @Field("userGroupId")
     private String userGroupId;
     @Field("publishOrgnization")
@@ -365,6 +369,22 @@ public class Resource {
 
     public void setToMemorySize(String toMemorySize) {
         this.toMemorySize = toMemorySize;
+    }
+
+    public long getToFilesMemorySize() {
+        return toFilesMemorySize;
+    }
+
+    public void setToFilesMemorySize(long toFilesMemorySize) {
+        this.toFilesMemorySize = toFilesMemorySize;
+    }
+
+    public long getToRdbMemorySize() {
+        return toRdbMemorySize;
+    }
+
+    public void setToRdbMemorySize(long toRdbMemorySize) {
+        this.toRdbMemorySize = toRdbMemorySize;
     }
 
     public long getToFilesNumber() {

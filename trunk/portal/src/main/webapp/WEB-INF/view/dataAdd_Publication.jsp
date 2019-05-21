@@ -804,18 +804,11 @@
                     var flg = true;
 
                     // 验证图片信息
-                    if (w !== 800 && h !== 600) {
-                        if (w / h !== 800 / 600) {
-                            toastr["error"]("图片格式至少是 800*600 或 等比例格式", "错误！");
-                            flg = false;
-                        } else {
-                            toastr["warning"]("图片格式推荐800*600 格式", "警告！");
-                        }
-                    }
-                    if (flg) {
+                    if (0.7 < h / w && h / w < 0.8) {
                         doUpload();
                         $("#imgFlagNum").val(2);
                     } else {
+                        toastr["error"]("图片格式至少是 宽/长 在0.7和0.8之间", "错误！");
                         $("#imgFlagNum").val(1);
                     }
                 })

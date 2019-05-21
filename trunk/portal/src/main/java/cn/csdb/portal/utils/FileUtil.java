@@ -317,6 +317,32 @@ public class FileUtil {
         return files;
     }
 
+    /**
+     * @return 文件大小进位 例：1024B —> 1KB
+     */
+    public static String formateFileLength(long fileLength) {
+        if (fileLength <= 1024) {
+            return fileLength + " B";
+        } else {
+            fileLength /= 1024;
+        }
+
+        if (fileLength <= 1024) {
+            return fileLength + "KB";
+        } else {
+            fileLength /= 1024;
+        }
+
+        //因为如果以MB || GB为单位的话，要保留最后1位小数，
+        //因此，把此数乘以100之后再取余
+        if (fileLength <= 1024) {
+            fileLength = fileLength * 100;
+            return (fileLength / 100) + "." + (fileLength % 100) + "MB";
+        } else {
+            fileLength = fileLength * 100;
+            return (fileLength / 100) + "." + (fileLength % 100) + "GB";
+        }
+    }
     private enum CopyCheck {
         ALLOW,
         MYSELF,

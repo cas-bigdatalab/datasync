@@ -5,7 +5,7 @@ package cn.csdb.portal.model;
  * @Date 2019/4/26 19:06
  * @Description 数据集 绑定的实体数据
  **/
-public class resourceDataList {
+public class ResourceDataList {
 
     private String resourceId; // 数据集Id
     private String sqlDataList; // sql表名
