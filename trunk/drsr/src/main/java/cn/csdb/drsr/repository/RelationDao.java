@@ -8,6 +8,8 @@ import cn.csdb.drsr.utils.dataSrc.IDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import java.sql.*;
@@ -39,8 +41,9 @@ public class RelationDao{
     }
 
     public List<DataSrc> queryRelationData(){
-        String querySql = "select * from t_datasource WHERE DataSourceType = 'db'";
-        List<DataSrc>queryData = jdbcTemplate.query(querySql,new DataSrcMapper());
+        String subjectCode = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
+        String querySql = "select * from t_datasource WHERE DataSourceType = 'db' and SubjectCode ='"+subjectCode+"'";
+        List<DataSrc> queryData = jdbcTemplate.query(querySql,new DataSrcMapper());
         return queryData;
     }
 

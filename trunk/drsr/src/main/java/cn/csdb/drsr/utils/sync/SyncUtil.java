@@ -3,27 +3,42 @@ package cn.csdb.drsr.utils.sync;
 
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
+import cn.csdb.drsr.model.UserInformation;
 import cn.csdb.drsr.repository.mapper.DataSrcMapper;
+import cn.csdb.drsr.repository.mapper.UserInfoMapper;
 import cn.csdb.drsr.service.DataTaskService;
 import cn.csdb.drsr.service.LoginService;
 import cn.csdb.drsr.utils.ConfigUtil;
 import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
 import cn.csdb.drsr.utils.dataSrc.IDataSource;
+import cn.csdb.drsr.utils.ftpUtils.FtpUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SyncUtil {
 
     private Logger logger = LoggerFactory.getLogger(DataTaskService.class);
-    public ScpUtils scpUtils=new ScpUtils();
 
     public JSONObject executeTask(DataTask dataTask,JdbcTemplate jdbcTemplate) {
         String fileName ="Sync"+dataTask.getDataTaskName()+"log.txt";//文件名及类型
@@ -86,7 +101,7 @@ public class SyncUtil {
             for (String table : tables) {
                 if (StringUtils.isNotEmpty(table)) {
                     endSb.append(" DROP TABLE  IF EXISTS "+table+"; \n");
-                    endSb.append(" RENAME TABLE "+table+"_bak to "+table+"; \n");
+                    endSb.append(" RENAME TABLE "+table+"_sync_bak to "+table+"; \n");
                     sqlSb.append(SYNCSQLUtils.generateDDLFromTable(connection, null, null, table));
                     dataSb.append(SYNCSQLUtils.generateInsertSqlFromTable(connection, null, null, table));
                     dataSb.append("\n");
@@ -98,7 +113,7 @@ public class SyncUtil {
             for (int i=0;i<sqlArray.length;i++){
                 if (StringUtils.isNotEmpty(sqlArray[i]) && StringUtils.isNotEmpty(sqlTableArray[i])) {
                     endSb.append(" DROP TABLE  IF EXISTS "+sqlTableArray[i]+"; \n");
-                    endSb.append(" RENAME TABLE "+sqlTableArray[i]+"_bak to "+sqlTableArray[i]+"; \n");
+                    endSb.append(" RENAME TABLE "+sqlTableArray[i]+"_sync_bak to "+sqlTableArray[i]+"; \n");
                     sqlSb.append(SYNCSQLUtils.generateDDLFromSql(connection, sqlArray[i], sqlTableArray[i]));
                     dataSb.append(SYNCSQLUtils.generateInsertSqlFromSQL(connection, sqlArray[i], sqlTableArray[i]));
                 }
@@ -122,42 +137,47 @@ public class SyncUtil {
 
             SYNCSQLUtils.generateFile(filePath.getPath(), "syncData.sql", allSql.toString());
             SYNCSQLUtils.generateFile(filePath.getPath(), "syncStruct.sql", sqlSb.toString());
-            String[] strArray={filePath.getPath()+File.separator+"syncStruct.sql", filePath.getPath()+File.separator+"syncData.sql"};
-            scpUtils.scpUpload(strArray,dataTask.getDataTaskId(),dataTask.getSubjectCode());
+           // String[] strArray={filePath.getPath()+File.separator+"syncStruct.sql", filePath.getPath()+File.separator+"syncData.sql"};
+            FileInputStream in=new FileInputStream(new File(filePath.getPath()+File.separator+"syncStruct.sql"));
+            FileInputStream in2=new FileInputStream(new File(filePath.getPath()+File.separator+"syncData.sql"));
+
+
+            //获取登录人员信息 begin
+            UserInformation userInformationt=new UserInformation();
+            StringBuffer usersql = new StringBuffer("select * from user_information where SubjectCode=? ORDER BY ID DESC");
+            List<Object> params = Lists.newArrayList();
+            params.add(dataTask.getSubjectCode());
+            List<UserInformation> userInformationList= jdbcTemplate.query(usersql.toString(), params.toArray(), new UserInfoMapper());
+            userInformationt=userInformationList.get(0);
+            //获取登录人员信息 end
+
+
+            Map<String ,InputStream > fileMap=new HashMap<>();
+            fileMap.put("syncStruct.sql",in);
+            fileMap.put("syncData.sql",in2);
+            boolean test = FtpUtil.uploadFile(userInformationt.getDbHost(), userInformationt.getFtpUser(), userInformationt.getFtpPassword(), 21, "/temp/", fileMap);
+         //   scpUtils.scpUpload(strArray,dataTask.getDataTaskId(),dataTask.getSubjectCode());
 
 
 
 
-
-
-
-
-            //if (StringUtils.isNotEmpty(sqlString) && StringUtils.isNotEmpty(sqlTableNameEn)) {
-            //    sqlSb.append(DDL2SQLUtils.generateDDLFromSql(connection, sqlString, sqlTableNameEn));
-            //    dataSb.append(DDL2SQLUtils.generateInsertSqlFromSQL(connection, sqlString, sqlTableNameEn));
-            //}
             pw.println("###########SQL数据表结构:###########\n" + sqlSb.toString() + "\n");
             pw.println("###########SQL数据内容:###########\n" + dataSb.toString() + "\n");
             pw.println("###########数据库脚本:###########\n" +endSb.toString()+ "\n");
-//            logger.info("=========================SQL数据表结构:========================\n" + sqlSb.toString() + "\n");
-//            logger.info("=========================SQL数据内容:==========================\n" + dataSb.toString() + "\n");
-//            logger.info("=========================SQL数据内容:==========================\n" + endSb.toString() + "\n");
+
+
             logger.info("=========================开始同步==========================\n");
             pw.println(current+":"+"=========================开始执行脚本========================" + "\n");
+            String syncResult=callRemoteSyncMethod("/home/vftpuser/ftpUser"+dataTask.getSubjectCode()+"/temp",dataTask.getSubjectCode());
 
-//            String configFilePath = LoginService.class.getClassLoader().getResource("drsr.properties").getFile();
-//            String portalUrl = ConfigUtil.getConfigItem(configFilePath, "PortalUrl");
-//            String port = ConfigUtil.getConfigItem(configFilePath, "port");
-//            String userName = ConfigUtil.getConfigItem(configFilePath, "userName");
-//            String password = ConfigUtil.getConfigItem(configFilePath, "password");
-//            IDataSource portalDataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
-//            portalConnection = portalDataSource.getConnection(portalUrl.replaceAll("/",""), port,
-//                    userName, password, dataTask.getSubjectCode());
-//            Statement stmt=portalConnection.createStatement();
-//            System.out.println(allSql+"");
-//           boolean result=stmt.execute(allSql+"");
-//            jsonObject.put("result","success");
-            pw.println(current+":"+"=========================同步流程结束========================" + "\n");
+            if("1".equals(syncResult)){
+                pw.println(current+":"+"=========================同步流程结束========================" + "\n");
+                jsonObject.put("result", "success");
+            }else{
+                pw.println(current+":"+"=========================同步流程失败========================" + "\n");
+                jsonObject.put("result", "false");
+
+            }
             logger.info("=========================同步流程结束========================" + "\n");
 
         } catch (Exception ex) {
@@ -228,5 +248,43 @@ public class SyncUtil {
 
         return str.toString();
     }
+
+
+    public String callRemoteSyncMethod(String syncFilePath,String subjectCode){
+        HttpClient httpClient = null;
+        HttpPost postMethod = null;
+        HttpResponse response = null;
+        String reponseContent="";
+        JSONObject requestJSON = new JSONObject();
+        httpClient = HttpClients.createDefault();
+        requestJSON.put("syncFilePath",syncFilePath);
+        requestJSON.put("subjectCode",subjectCode);
+        String requestString = JSONObject.toJSONString(requestJSON);
+        String portalUrl="10.0.86.77";
+//                    postMethod = new HttpPost("http://localhost:8080/portal/service/getDataTask");
+        postMethod = new HttpPost("http://"+portalUrl+"/service/syncDataTask");
+//                    postMethod = new HttpPost(portalUrl);
+        postMethod.addHeader("Content-type", "application/json; charset=utf-8");
+//                    postMethod.addHeader("X-Authorization", "AAAA");//设置请求头
+        postMethod.setEntity(new StringEntity(requestString, Charset.forName("UTF-8")));
+        try {
+            response = httpClient.execute(postMethod);//获取响应
+            int statusCode = response.getStatusLine().getStatusCode();
+            System.out.println("HTTP Status Code:" + statusCode);
+            if (statusCode != HttpStatus.SC_OK) {
+                System.out.println("HTTP请求未成功！HTTP Status Code:" + response.getStatusLine());
+            }
+            HttpEntity httpEntity = response.getEntity();
+            reponseContent = EntityUtils.toString(httpEntity);
+            EntityUtils.consume(httpEntity);//释放资源
+            System.out.println("响应内容：" + reponseContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        return reponseContent;
+    }
+
 
 }

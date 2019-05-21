@@ -3,6 +3,7 @@ package cn.csdb.drsr.controller;
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
 import cn.csdb.drsr.model.FileTreeNode;
+import cn.csdb.drsr.model.UserInformation;
 import cn.csdb.drsr.service.*;
 import cn.csdb.drsr.utils.ConfigUtil;
 import cn.csdb.drsr.utils.FileUtil;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import sun.util.resources.cldr.ga.LocaleNames_ga;
 
@@ -46,6 +49,9 @@ public class DataTaskController {
     private FileResourceService fileResourceService;
     @Resource
     private DataSrcService dataSrcService;
+    @Resource
+    private UserInfoService userInfoService;
+
 
     private static final FieldPosition HELPER_POSITION = new FieldPosition(0);
     private FtpUtil ftpUtil=new FtpUtil();
@@ -121,8 +127,11 @@ public class DataTaskController {
                                    @RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize,
                                    @RequestParam(name = "datataskType", required = false) String datataskType,
                                    @RequestParam(name = "status", required = false) String status){
-        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
-        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+        String subjectCode = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
+
+        UserInformation userInformation=userInfoService.getUserInfoByCode(subjectCode);
+       // String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+//        String subjectCode =userInformation.getSubjectCode();
         JSONObject jsonObject = new JSONObject();
         List<DataTask> dataTasks = dataTaskService.getDatataskByPage((pageNo-1)*pageSize,pageSize,datataskType,status, subjectCode);
         int totalCount = dataTaskService.getCount(datataskType,status,subjectCode);
@@ -253,8 +262,11 @@ public class DataTaskController {
                                            String dataRelTableList,
                                            String sqlTableNameEnList,
                                            @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList,String sync,String period) {
-        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
-        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+       // String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
+
+        UserInformation userInformation=userInfoService.getUserInfoByCode(subjectCode);
+       // String subjectCode =userInformation.getSubjectCode();
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);
@@ -294,8 +306,11 @@ public class DataTaskController {
     @ResponseBody
     @RequestMapping(value="saveFileDatatask",method = RequestMethod.POST)
     public JSONObject saveFileDatatask(int dataSourceId, String datataskName,String[] nodes,String[] remotePath){
-        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
-        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+        String subjectCode = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
+
+        UserInformation userInformation=userInfoService.getUserInfoByCode(subjectCode);
+      //  String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+       // String subjectCode =userInformation.getSubjectCode();
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = new DataTask();
         datatask.setDataSourceId(dataSourceId);
@@ -469,8 +484,11 @@ public class DataTaskController {
                                              String dataRelTableList,
                                              String sqlTableNameEnList,
                                              @RequestParam(name = "dataRelSqlList", required = false)String dataRelSqlList,String sync,String period) {
-        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
-        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+        //String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
+
+        UserInformation userInformation=userInfoService.getUserInfoByCode(subjectCode);
+       // String subjectCode =userInformation.getSubjectCode();
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = dataTaskService.get(datataskId);
         datatask.setDataSourceId(dataSourceId);
@@ -506,8 +524,11 @@ public class DataTaskController {
     @ResponseBody
     @RequestMapping(value="updateFileDatatask",method = RequestMethod.POST)
     public JSONObject updateFileDatatask(String datataskId,int dataSourceId, String datataskName,String[] nodes,String[] attr,String[] remotePath){
-        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
-        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+//      String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String subjectCode = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
+
+        UserInformation userInformation=userInfoService.getUserInfoByCode(subjectCode);
+     //   String subjectCode =userInformation.getSubjectCode();
         JSONObject jsonObject = new JSONObject();
         DataTask datatask = dataTaskService.get(datataskId);
         datatask.setDataSourceId(dataSourceId);

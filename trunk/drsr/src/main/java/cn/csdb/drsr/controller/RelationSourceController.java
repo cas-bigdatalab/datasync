@@ -2,8 +2,10 @@ package cn.csdb.drsr.controller;
 
 import cn.csdb.drsr.model.TableInfo;
 import cn.csdb.drsr.model.TableInfoR;
+import cn.csdb.drsr.model.UserInformation;
 import cn.csdb.drsr.service.LoginService;
 import cn.csdb.drsr.service.RelationShipService;
+import cn.csdb.drsr.service.UserInfoService;
 import cn.csdb.drsr.utils.ConfigUtil;
 import cn.csdb.drsr.utils.dataSrc.DataSourceFactory;
 import cn.csdb.drsr.utils.dataSrc.IDataSource;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.stereotype.Controller;
 
@@ -40,6 +44,8 @@ public class RelationSourceController {
     private Logger logger = LoggerFactory.getLogger(RelationSourceController.class);
     @Resource
     private RelationShipService relationShipService;
+    @Resource
+    private UserInfoService userInfoService;
 
     @RequestMapping("/deleteData")
     public
@@ -62,8 +68,11 @@ public class RelationSourceController {
         //格式化当前日期
         String currentTime = SimpleDateFormat.format(current_date.getTime());
         DataSrc datasrc = new DataSrc();
-        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
-        datasrc.setSubjectCode(ConfigUtil.getConfigItem(configFilePath, "SubjectCode"));
+        String subjectCode = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
+
+       // UserInformation userInformation=userInfoService.getUserInfoByCode(subjectCode);
+       // String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        datasrc.setSubjectCode(subjectCode);
         datasrc.setDataSourceName(dataSourceName);
         datasrc.setDataSourceType(dataSourceType);
         datasrc.setDatabaseName(dataBaseName);
@@ -148,8 +157,9 @@ public class RelationSourceController {
         if (num == null) {
             num = 1;
         }
-        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
-        String SubjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+        String SubjectCode = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
+       // String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+       // String SubjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
         Map map = relationShipService.queryTotalPage(SubjectCode);
         List<DataSrc> relationDataOfThisPage = relationShipService.queryPage(num,SubjectCode);
         JSONObject jsonObject = new JSONObject();
@@ -172,8 +182,9 @@ public class RelationSourceController {
     @RequestMapping(value = "findAllDBSrc")
     public @ResponseBody
     List<DataSrc> findAllDBSrc() {
-        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
-        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+//        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+//        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+        String subjectCode = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
         return relationShipService.findAllBySubjectCode(subjectCode);
     }
 

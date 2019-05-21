@@ -3,6 +3,7 @@ package cn.csdb.drsr.service;
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
 import cn.csdb.drsr.model.FileTreeNode;
+import cn.csdb.drsr.model.UserInformation;
 import cn.csdb.drsr.repository.FileResourceDao;
 import cn.csdb.drsr.utils.ConfigUtil;
 import cn.csdb.drsr.utils.TreeNode;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -33,6 +35,9 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
+
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import top.jfunc.json.JsonArray;
 import top.jfunc.json.impl.JSONArray;
 
@@ -50,6 +55,9 @@ public class FileResourceService {
 
     @Resource
     private FileResourceDao fileResourceDao;
+
+    @Resource
+    private UserInfoService userInfoService;
 
     @Transactional
     public String addData(DataSrc datasrc) {
@@ -416,9 +424,11 @@ public class FileResourceService {
         String configFilePath = LoginService.class.getClassLoader().getResource("drsr.properties").getFile();
         String portalUrl = ConfigUtil.getConfigItem(configFilePath, "PortalUrl");
         String loginApiPath = "/service/treeNodeAsync";
+        String subjectCode = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
 
-        String configFilePath2 = LoginService.class.getClassLoader().getResource("config.properties").getFile();
-        String ftpUserName= ConfigUtil.getConfigItem(configFilePath2, "FtpUser");
+        UserInformation userInformation=userInfoService.getUserInfoByCode(subjectCode);
+        //String configFilePath2 = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String ftpUserName=userInformation.getFtpUser();
 
         org.apache.http.client.HttpClient httpClient = null;
         HttpPost postMethod = null;

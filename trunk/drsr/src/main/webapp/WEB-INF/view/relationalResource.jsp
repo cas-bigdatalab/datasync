@@ -430,6 +430,13 @@
 
         }
         $("#addSqlSource").click(function () {
+            $("#databaseName").empty();//初始化select
+            $("#port").val("3306");
+            $("#dataBaseNameDiv")[0].style.display="none";//隐藏数据库输入框
+            $("#saveButton")[0].style.display="none";//隐藏保存按钮
+            $("#checkButton")[0].style.display="inline";//显示检查按钮
+            $("#dataBaseName")[0].innerHTML="数据库名称<span style='color: red;'>\t\t\t\t\t\t\t\t\t\t\t\t\t* </span>";
+            $("#dataSourceName")[0].className="form-control";
             $("#relationalSourceModal").modal('show');
             var $sqlFrom =$('#relationalSourceForm')
             handleValidation($sqlFrom);

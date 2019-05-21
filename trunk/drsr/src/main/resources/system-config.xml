@@ -13,7 +13,8 @@
     <annotation-driven/>
 
     <util:properties id="systemPro" location="classpath:cas_urls.properties">
-        <beans:prop key="title">教务大数据资源汇聚传输工具</beans:prop>
+        <!--<beans:prop key="title">教务大数据资源汇聚传输工具</beans:prop>-->
+        <beans:prop key="title">分布式多源异构资源汇聚传输系统</beans:prop>
         <!--<beans:prop key="title">数据资源汇聚传输工具</beans:prop>-->
         <!--<beans:prop key="title">烟草科研专业库管理与汇交工具</beans:prop>-->
         <beans:prop key="wrapperimg">/resources/login/img/left_bg.png</beans:prop>

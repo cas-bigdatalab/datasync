@@ -2,12 +2,10 @@ package cn.csdb.drsr.controller;
 
 import cn.csdb.drsr.model.DataSrc;
 import cn.csdb.drsr.model.DataTask;
+import cn.csdb.drsr.model.UserInformation;
 import cn.csdb.drsr.repository.DataSrcDao;
 import cn.csdb.drsr.repository.DataTaskDao;
-import cn.csdb.drsr.service.ConfigPropertyService;
-import cn.csdb.drsr.service.DataSrcService;
-import cn.csdb.drsr.service.DataTaskService;
-import cn.csdb.drsr.service.LoginService;
+import cn.csdb.drsr.service.*;
 import cn.csdb.drsr.utils.ConfigUtil;
 import cn.csdb.drsr.utils.FileUtil;
 import cn.csdb.drsr.utils.FtpUtil;
@@ -36,6 +34,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import java.io.*;
@@ -64,6 +64,8 @@ public class DataSyncController {
 
     public FtpUtil ftpUtil=new FtpUtil();
 
+    @Resource
+    private UserInfoService userInfoService;
 
 
     /**
@@ -123,14 +125,17 @@ public class DataSyncController {
             }
         }
         dataTaskService.insertLog(dataTask.getDataTaskId(),"true");
-        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
-        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
-        String host = ConfigUtil.getConfigItem(configFilePath, "FtpHost");
-        String userName = ConfigUtil.getConfigItem(configFilePath, "FtpUser");
-        String password = ConfigUtil.getConfigItem(configFilePath, "FtpPassword");
-        String port = ConfigUtil.getConfigItem(configFilePath, "FrpPort");
-        String ftpRootPath = ConfigUtil.getConfigItem(configFilePath, "FtpRootPath");
-        String portalUrl = ConfigUtil.getConfigItem(configFilePath, "PortalUrl");
+        String subjectCode = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
+
+        UserInformation userInformation=userInfoService.getUserInfoByCode(subjectCode);
+        String configFilePath = LoginService.class.getClassLoader().getResource("drsr.properties").getFile();
+//        String subjectCode = userInformation.getSubjectCode();
+        String userName = userInformation.getFtpUser();
+        String password = userInformation.getFtpPassword();
+        String host = ConfigUtil.getConfigItem(configFilePath, "host");
+        String port = ConfigUtil.getConfigItem(configFilePath, "ftpPort");
+        String ftpRootPath = ConfigUtil.getConfigItem(configFilePath, "ftpRootPath");
+        String portalUrl =ConfigUtil.getConfigItem(configFilePath, "PortalUrl");
 /*
         DataTask dataTask = dataTaskService.get(dataTaskId);
 */
@@ -380,11 +385,15 @@ public class DataSyncController {
             jsonObject =syncUtil.executeTask(dataTask, jdbcTemplate);
             if (jsonObject.size() != 0 && "success".equals(jsonObject.getString("result"))) {
                  dataTask.setSynctime(new Date());
+                dataTask.setSync(sync);
+                result=dataTaskService.update(dataTask);
             }
+        }else{
+            dataTask.setSync(sync);
+            result=dataTaskService.update(dataTask);
         }
 
-        dataTask.setSync(sync);
-        result=dataTaskService.update(dataTask);
+
         return  result;
     }
 

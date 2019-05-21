@@ -91,6 +91,7 @@ public class SqlUtil {
         } catch (Exception e) {
             error = e;
             e.printStackTrace();
+            conn.rollback();
         } finally {
             close(conn);
             /*if (pw != null) {
