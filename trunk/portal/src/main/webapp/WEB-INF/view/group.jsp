@@ -345,7 +345,7 @@
     {{each list}}
     <tr>
         <td style="display:table-cell; vertical-align:middle ; text-align: center;">
-            {{(currentPage-1)*pageSize+$index+1}}
+            {{$index+1}}
         </td>
         <td style="display:table-cell; vertical-align:middle;text-align: center;"><a
                 href="javascript:editData('{{$value.id}}');">{{$value.groupName}}</a>
@@ -382,7 +382,7 @@
 <script type="text/html" id="userListTable">
     {{each list}}
     <tr>
-        <td style="text-align: center">{{(curUserPageNum-1) * pageSize + 1 + $index}}</td>
+        <td style="text-align: center">{{1 + $index}}</td>
         <td style="text-align: center">{{$value.userName}}</td>
         <td style="text-align: center">{{$value.loginId}}</td>
         <td style="text-align: center">{{$value.createTime}}</td>
@@ -778,7 +778,7 @@
 
     <script type="text/javascript">
         var ctx = '${ctx}';
-        var currentPageNo = 1;
+        var currentGroupNo = 1;
         var validatorAdd;
         var groupUsersSelect2;
         var validAddData;
@@ -1136,7 +1136,7 @@
                     $("#message-group1").show()
                     $("#message-group2").show()
                     $("#currentPageNo").html(data.currentPage);
-                    currentPageNo = data.currentPage;
+                    currentGroupNo = data.currentPage;
                     $("#totalPages").html(data.totalPages);
                     $("#totalCount").html(data.totalCount);
                     if (data.totalCount == 0) {
@@ -1165,7 +1165,7 @@
                         firstClass: 'first'
                     }).on('page', function (event, num) {
                         getData(num);
-                        currentPageNo = num;
+                        currentGroupNo = num;
                     });
                 }
             });
@@ -1175,6 +1175,10 @@
 
             bootbox.confirm("<span style='font-size:16px;'>确定要删除此条记录吗？</span>", function (r) {
                 if (r) {
+                    var currentPageListSize = $.trim($("div.active table:eq(0)>tbody>tr:last>td:eq(0)").text());
+                    if (currentPageListSize === "1") {
+                        currentGroupNo = --currentGroupNo === 0 ? 1 : currentGroupNo;
+                    }
                     $.ajax({
                         url: ctx + "/group/delete/" + id,
                         type: "post",
@@ -1182,7 +1186,7 @@
                         success: function (data) {
                             if (data.result == 'ok') {
                                 toastr["success"]("删除成功！", "数据删除");
-                                getData(currentPageNo);
+                                getData(currentGroupNo);
                                 //删除用户组的同时,刷新用户列表信息
                                 searchUser();
                             } else {
@@ -1226,7 +1230,7 @@
                         $("#addModal").modal("hide");
                         $("#groupNameAdd").val("");
                         $("#descAdd").val("");
-                        getData(currentPageNo);
+                        getData(currentGroupNo);
                     } else {
                         toastr["error"]("添加失败！", "添加用户组");
                     }
@@ -1287,7 +1291,7 @@
                     if (data.result == 'ok') {
                         toastr["success"]("编辑成功！", "用户组编辑");
                         $("#editModal").modal("hide");
-                        getData(currentPageNo);
+                        getData(currentGroupNo);
                     } else {
                         toastr["error"]("编辑失败！", "用户组编辑");
                     }
@@ -1490,6 +1494,10 @@
                 function (result) {
                     if (result) {
                         var deleteUrl = "${ctx}/user/deleteUser";
+                        var currentPageListSize = $.trim($("div.active table:eq(0)>tbody>tr:last>td:eq(0)").text());
+                        if (currentPageListSize === "1") {
+                            currentUserPage = --currentUserPage === 0 ? 1 : currentUserPage;
+                        }
                         $.ajax({
                             url: deleteUrl,
                             type: "get",

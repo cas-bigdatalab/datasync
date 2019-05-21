@@ -204,10 +204,11 @@ public class FileImportController {
     public JSONObject createTableBySql(String newSql, String newName, String period, HttpServletRequest request) {
         JSONObject jsonObject = new JSONObject();
         String subjectCode = request.getSession().getAttribute("SubjectCode").toString();
+        String loginId = request.getSession().getAttribute("LoginId").toString();
         String tableBySql = fileImportService.createTableBySql(newSql, newName, subjectCode);
         if (!Strings.isBlank(period)) {
             long periodTime = Period.valueOf(period).getDataTime();
-            fileImportService.createSynchronizeTask(newSql, newName, subjectCode, periodTime);
+            fileImportService.createSynchronizeTask(newSql, newName, subjectCode, periodTime, loginId);
         }
         jsonObject.put("message", tableBySql);
         return jsonObject;

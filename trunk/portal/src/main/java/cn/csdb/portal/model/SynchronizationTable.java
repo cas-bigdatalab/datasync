@@ -12,6 +12,8 @@ public class SynchronizationTable {
     private String tableName; //同步表名
     @Field("subjectCode")
     private String subjectCode;
+    @Field("loginId")
+    private String loginId;
     @Field("frequency")
     private Long frequency; // 同步频次 毫秒值
     @Field("sqlString")
@@ -41,6 +43,14 @@ public class SynchronizationTable {
 
     public void setSubjectCode(String subjectCode) {
         this.subjectCode = subjectCode;
+    }
+
+    public String getLoginId() {
+        return loginId;
+    }
+
+    public void setLoginId(String loginId) {
+        this.loginId = loginId;
     }
 
     public Long getFrequency() {

@@ -81,7 +81,7 @@
     <tr>
         <td style="display:none;">{{$value.id}}</td>
         <td style="display:none;">{{$value.serialNo}}</td>
-        <td style="text-align: center;">{{(pageNum-1)*pageSize + $index + 1}}</td>
+        <td style="text-align: center;">{{ $index + 1}}</td>
         <td style="text-align: center">{{$value.subjectName}}</td>
         <td style="text-align: center">{{$value.subjectCode}}</td>
         <td style="text-align: center">{{$value.admin}}</td>
@@ -820,6 +820,10 @@
                         bootbox.confirm("<span style='font-size: 16px'>${applicationScope.menus['organization_title']}相关信息很重要，请再次确认要删除吗?</span>", function (result) {
                             if (result) {
                                     var deleteUrl = "${ctx}/subjectMgmt/deleteSubject?id=" + id + "&pageNum=" + 1;
+                                var currentPageList = $("#subjectList>tr:last>td:eq(2)").text();
+                                if (currentPageList === "1") {
+                                    currentPage = --currentPage === 0 ? 1 : currentPage;
+                                }
                                     $.ajax({
                                         url: deleteUrl,
                                         type: "get",

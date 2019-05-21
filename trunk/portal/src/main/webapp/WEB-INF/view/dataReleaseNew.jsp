@@ -611,14 +611,9 @@
             resourceState = $("#resourceState option:selected").val();
         });
         $("#seachResource").click(function () {
-            resourceName = $("#resourceName").val()
-            tableConfiguration2(1, publicType, resourceState, resourceName);
-        })
-        <%--$("#bd-data").delegate(".upload-data", "click", function () {--%>
-        <%--var id = $(this).attr("keyIdTd");--%>
-        <%--console.log(id)--%>
-        <%--window.location.href = "${ctx}/resource/editResource?resourceId=" + id;--%>
-        <%--})--%>
+            resourceName = $("#resourceName").val();
+            tableConfiguration2(currentPageNumber(), publicType, resourceState, resourceName);
+        });
 
         function editdatarelease(i) {
             var id = $(i).attr("keyIdTd");
@@ -745,7 +740,7 @@
                 },
                 success: function (data) {
                     $('#auditModal').modal('hide');
-                    tableConfiguration2(1, "", "", "")
+                    tableConfiguration2(currentPageNumber(), "", "", "")
                 },
                 error: function () {
                     console.log("请求失败")
@@ -765,7 +760,7 @@
                             resourceId: id,
                         },
                         success: function (data) {
-                            tableConfiguration2(1, "", "", "")
+                            tableConfiguration2(currentPageNumber(), "", "", "")
                         },
                         error: function () {
                             console.log("请求失败")
@@ -1047,6 +1042,19 @@
 
         }
 
+        /**
+         *
+         * @returns 当前页码 如果当前数据操作完没有数据 则返回上一页码
+         */
+        function currentPageNumber() {
+            var currentPage = $("ul.pagination.bootpag li.active").text();
+            var currentPageListSize = $("tr[keyidtr]:last td:eq(0)").text();
+            if (currentPageListSize === 1) {
+                currentPage = --currentPage === 0 ? 1 : currentPage;
+            }
+            return currentPage;
+        }
+
         function removeData(id) {
             bootbox.confirm("<span style='font-size: 16px'>确认要删除此条记录吗?</span>", function (r) {
                 if (r) {
@@ -1058,7 +1066,7 @@
                         },*/
                         success: function (data) {
                             toastr["success"]("删除成功");
-                            tableConfiguration2(1, publicType, resourceState, resourceName);
+                            tableConfiguration2(currentPageNumber(), publicType, resourceState, resourceName);
                         },
                         error: function () {
                             console.log("请求失败");

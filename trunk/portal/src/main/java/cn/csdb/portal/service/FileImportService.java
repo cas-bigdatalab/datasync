@@ -837,13 +837,14 @@ public class FileImportService {
         return newName + "：创建成功";
     }
 
-    public String createSynchronizeTask(String newSql, String newName, String subjectCode, Long periodTime) {
+    public String createSynchronizeTask(String newSql, String newName, String subjectCode, Long periodTime, String loginId) {
         SynchronizationTable synchronizationTable = new SynchronizationTable();
         synchronizationTable.setFrequency(periodTime);
         synchronizationTable.setLastModifyTime(new Date().getTime());
         synchronizationTable.setSqlString(newSql);
         synchronizationTable.setSubjectCode(subjectCode);
         synchronizationTable.setTableName(newName);
+        synchronizationTable.setLoginId(loginId);
         synchronizationTablesDao.save(synchronizationTable);
         return "true";
     }
