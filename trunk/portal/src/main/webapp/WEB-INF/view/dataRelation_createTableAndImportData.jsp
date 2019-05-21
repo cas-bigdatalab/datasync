@@ -528,7 +528,7 @@
                             success: function (data) {
                                 var parse = data;
                                 if (parse.code === "success") {
-                                    initExcelCreateTable();
+                                    $("div.qiehuan_div li.active i").trigger("onclick");
                                     toastr["info"]("提示！", parse.message);
                                 }
                             }
@@ -848,9 +848,9 @@
                     <th>excel字段注释</th>
                     <th>字段类型</th>
                     <th>字段长度</th>
-                    <th>
+                    <th class="text-center">
                         是否主键
-                        <button class="btn btn-default" id="clearPK" type="button">清除</button>
+                        <button class="btn btn-default" id="clearPK" type="button">清除选中的主键</button>
                     </th>
                 </tr>
                 </thead>
@@ -880,7 +880,7 @@
                     <td>
                         <input fieldLength={{v[0]}} placeholder="请输入字段长度"/>
                     </td>
-                    <td><input fieldPk="{{v[0]}}" name="isPK" type="radio"/></td>
+                    <td class="text-center"><input fieldPk="{{v[0]}}" name="isPK" type="radio"/></td>
                 </tr>
                 {{/if}}
                 {{/each}}
@@ -901,7 +901,7 @@
                     <th>表中字段注释</th>
                     <th>excel字段名称</th>
                     <th>excel字段注释</th>
-                    <th>是否主键</th>
+                    <th class="text-center">是否主键</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -940,9 +940,9 @@
                     {{/each}}
 
                     {{if v[2] == "PRI"}}
-                    <td><input type="radio" name="isPK" fieldPk="{{v[0]}}" checked disabled/></td>
+                    <td class="text-center"><input type="radio" name="isPK" fieldPk="{{v[0]}}" checked disabled/></td>
                     {{else }}
-                    <td><input type="radio" name="isPK" disabled/></td>
+                    <td class="text-center"><input type="radio" name="isPK" disabled/></td>
                     {{/if}}
                 </tr>
                 {{/if}}
