@@ -62,6 +62,8 @@ public class ResourceDao {
     }
 
     public void saveDeleteId(String id){
+        Query query = Query.query(Criteria.where("resourceId").is(id));
+        mongoTemplate.remove(query, ResourceDelete.class);
         ResourceDelete resourceDelete = new ResourceDelete();
         resourceDelete.setResourceId(id);
         mongoTemplate.save(resourceDelete);
