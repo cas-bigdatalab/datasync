@@ -56,6 +56,8 @@ public class HttpServiceController {
         String subjectCode = requestJson.get("subjectCode").toString();
         String dataTaskString = requestJson.get("dataTask").toString();
         DataTask dataTask = JSON.parseObject(dataTaskString, DataTask.class);
+        String [] tableName=dataTask.getTableName().split(";");
+        saveSyncTableName(tableName);
 //        String realPath = dataTask.getRealPath();
         Subject subject = subjectMgmtService.findByCode(subjectCode);
         String siteFtpPath = subject.getFtpFilePath();
@@ -208,10 +210,27 @@ public class HttpServiceController {
         try {
             System.out.println("passwprd------" + password);
             sqlUtil.importSql("localhost", username, password, dbName, structDBFile, dataDBFile);
+            File file=new File(structDBFile);
+            File file2=new File(dataDBFile);
+            if(file.exists()){
+                boolean result=file.delete();
+                System.out.println("删除文件："+structDBFile+"  "+result+"");
+            }
+            if(file2.exists()){
+                boolean result=file2.delete();
+                System.out.println("删除文件："+dataDBFile+"   "+result+"");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         return 1;
+    }
+
+    public String saveSyncTableName(String[] tableName){
+
+//        mongoTemplate.save();
+
+        return "";
     }
 }

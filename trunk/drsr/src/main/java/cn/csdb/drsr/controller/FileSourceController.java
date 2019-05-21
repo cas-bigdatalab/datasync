@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -59,8 +61,9 @@ public class FileSourceController {
         if(filePath.substring(start,end).equals(File.separator+"") || filePath.substring(start,end).equals("/")){
             filePath=filePath.substring(0,filePath.length()-1);
         }
-        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
-        String SubjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+//        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+//        String SubjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+        String SubjectCode = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
         Date current_date = new Date();
         //设置日期格式化样式为：yyyy-MM-dd
         SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -115,6 +118,11 @@ public class FileSourceController {
     String edit(String dataSourceId, String dataSourceName, String dataSourceType,
                 String fileType,String filePath) {
         logger.debug("编辑功能开始,开始插入");
+        int start=filePath.length()-1;
+        int end=filePath.length();
+        if(filePath.substring(start,end).equals(File.separator+"") || filePath.substring(start,end).equals("/")){
+            filePath=filePath.substring(0,filePath.length()-1);
+        }
         Date current_date = new Date();
         //设置日期格式化样式为：yyyy-MM-dd
         SimpleDateFormat SimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -207,8 +215,9 @@ public class FileSourceController {
         if(num==null){
             num = 1;
         }
-        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
-        String SubjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+//        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+//        String SubjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+        String SubjectCode = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
         Map map = fileResourceService.queryTotalPage(SubjectCode);
         List<DataSrc> fileDataOfThisPage = fileResourceService.queryPage(num,SubjectCode);
         JSONObject jsonObject = new JSONObject();
@@ -282,9 +291,10 @@ public class FileSourceController {
      */
     @RequestMapping(value="findAllFileSrc")
     public @ResponseBody List<DataSrc> findAllFileSrc(){
-        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
-        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
-        return fileResourceService.findAll(subjectCode);
+//        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+//        String subjectCode = ConfigUtil.getConfigItem(configFilePath, "SubjectCode");
+        String SubjectCode = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
+        return fileResourceService.findAll(SubjectCode);
     }
 
     /**

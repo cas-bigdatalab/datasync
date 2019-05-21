@@ -1,20 +1,32 @@
 package cn.csdb.drsr.service;
 
 import cn.csdb.drsr.controller.LoginController;
+import cn.csdb.drsr.model.UserInformation;
 import cn.csdb.drsr.utils.ConfigUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.UUID;
 
 
 @Service
 public class LoginService
 {
-    private static final Logger logger = LogManager.getLogger(LoginController.class);
+    @Resource
+    private JdbcTemplate jdbcTemplate;
 
+    @Resource
+    private UserInfoService userInfoService;
+
+    private static final Logger logger = LogManager.getLogger(LoginController.class);
     public int validateLogin(String userName, String password)
     {
         //1、访问中心端验证登录是否成功
@@ -60,7 +72,7 @@ public class LoginService
     private boolean getSubjectConfig(String userName)
     {
         String configFilePathDrsr = LoginService.class.getClassLoader().getResource("drsr.properties").getFile();
-        String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        //String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
 
         String portalUrl = ConfigUtil.getConfigItem(configFilePathDrsr, "PortalUrl");
         String getSubjectApiPath = "/api/getSubjectByUser/" + userName;
@@ -123,18 +135,54 @@ public class LoginService
         {
             brief = dataMap.get("brief").toString();
         }
+        String dbHost="";
+        if (dataMap.get("dbHost") != null)
+        {
+            dbHost = dataMap.get("dbHost").toString();
+        }
+        String dbPort="";
+        if (dataMap.get("dbPort") != null)
+        {
+            dbPort = dataMap.get("dbPort").toString();
+        }
 
-        ConfigUtil.setConfigItem(configFilePath, "IsInitialized", "true");
-        ConfigUtil.setConfigItem(configFilePath, "SubjectName", subjectName);
-        ConfigUtil.setConfigItem(configFilePath, "SubjectCode", subjectCode);
-        ConfigUtil.setConfigItem(configFilePath, "Admin", admin);
-        ConfigUtil.setConfigItem(configFilePath, "AdminPasswd", adminPasswd);
-        ConfigUtil.setConfigItem(configFilePath, "Contact", contact);
-        ConfigUtil.setConfigItem(configFilePath, "Phone", phone);
-        ConfigUtil.setConfigItem(configFilePath, "Email", email);
-        ConfigUtil.setConfigItem(configFilePath, "FtpUser", ftpUser);
-        ConfigUtil.setConfigItem(configFilePath, "FtpPassword", ftpPassword);
-        ConfigUtil.setConfigItem(configFilePath, "Brief", brief);
+
+        UserInformation userInformation=new UserInformation();
+        SimpleDateFormat sDateFormat=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String date=sDateFormat.format(new Date());
+
+
+//      userInformation.setID(UUID.randomUUID().toString());
+        userInformation.setSubjectName(subjectName);
+        userInformation.setSubjectCode(subjectCode);
+        userInformation.setAdmin(admin);
+        userInformation.setAdminPasswd(adminPasswd);
+        userInformation.setContact(contact);
+        userInformation.setPhone(phone);
+        userInformation.setEmail(email);
+        userInformation.setFtpUser(ftpUser);
+        userInformation.setFtpPassword(ftpPassword);
+        userInformation.setBrief(brief);
+        userInformation.setLoginDate(date);
+        userInformation.setDbHost(dbHost);
+        userInformation.setDbPort(dbPort);
+
+
+        userInfoService.saveUserinfo(userInformation);
+
+
+
+//        ConfigUtil.setConfigItem(configFilePath, "IsInitialized", "true");
+//        ConfigUtil.setConfigItem(configFilePath, "SubjectName", subjectName);
+//        ConfigUtil.setConfigItem(configFilePath, "SubjectCode", subjectCode);
+//        ConfigUtil.setConfigItem(configFilePath, "Admin", admin);
+//        ConfigUtil.setConfigItem(configFilePath, "AdminPasswd", adminPasswd);
+//        ConfigUtil.setConfigItem(configFilePath, "Contact", contact);
+//        ConfigUtil.setConfigItem(configFilePath, "Phone", phone);
+//        ConfigUtil.setConfigItem(configFilePath, "Email", email);
+//        ConfigUtil.setConfigItem(configFilePath, "FtpUser", ftpUser);
+//        ConfigUtil.setConfigItem(configFilePath, "FtpPassword", ftpPassword);
+//        ConfigUtil.setConfigItem(configFilePath, "Brief", brief);
 
         return true;
     }

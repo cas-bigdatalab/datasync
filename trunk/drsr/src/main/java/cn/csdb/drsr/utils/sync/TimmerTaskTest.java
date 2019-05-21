@@ -29,16 +29,24 @@ public class TimmerTaskTest extends TimerTask {
         System.out.println("本次检查日期：" + date);
         System.out.println("本次需同步任务条数："+list.size()+"条");
         for(int num=0;num<list.size();num++) {
-            int n = num + 1;
-            long time = new Date().getTime() - list.get(num).getSynctime().getTime();
-            long hour = time / nh;// 计算差多少小时
-            if(hour>=Long.valueOf(list.get(num).getPeriod())){
-                SyncUtil syncUtil = new SyncUtil();
-                JSONObject jsonObject = syncUtil.executeTask(list.get(num), jdbcTemplate);
-                if (jsonObject.size() != 0 && "success".equals(jsonObject.getString("result"))) {
-                    jdbcTemplate.update("update t_datatask set SyncTime='" + new Date().getTime() + "' where datataskid='" + list.get(num).getDataTaskId() + "'");
+            try{
+                int n = num + 1;
+                long time = new Date().getTime() - list.get(num).getSynctime().getTime();
+                long hour = time / nh;// 计算差多少小时
+                if(hour>=Long.valueOf(list.get(num).getPeriod())){
+                    SyncUtil syncUtil = new SyncUtil();
+                    JSONObject jsonObject = syncUtil.executeTask(list.get(num), jdbcTemplate);
+                    if (jsonObject.size() != 0 && "success".equals(jsonObject.getString("result"))) {
+                        jdbcTemplate.update("update t_datatask set SyncTime='" + new Date().getTime() + "' where datataskid='" + list.get(num).getDataTaskId() + "'");
+                    }
                 }
+            }catch(Exception e){
+                e.printStackTrace();
+                System.out.println("此任务出错，跳过继续执行！ 任务："+list.get(num).getDataTaskId());
+                continue;
+
             }
+
          }
 
     }

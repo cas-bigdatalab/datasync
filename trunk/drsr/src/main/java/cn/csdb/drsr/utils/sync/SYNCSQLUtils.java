@@ -14,11 +14,11 @@ public class SYNCSQLUtils {
      * generate a ddl sql from tables
      */
     public static String generateDDLFromTable(Connection jdbcConnection, String catalog, String schema,
-                                        String table) {
+                                        String table) throws SQLException {
         StringBuilder sb = new StringBuilder();
         boolean portalIdExist = portalIdExist(jdbcConnection, table, "table");
-        sb.append("DROP TABLE IF EXISTS " + table + "_bak ; \n");
-        sb.append("CREATE TABLE " + table + "_bak (");
+        sb.append("DROP TABLE IF EXISTS " + table + "_sync_bak ; \n");
+        sb.append("CREATE TABLE " + table + "_sync_bak (");
 
         try {
             DatabaseMetaData meta = jdbcConnection.getMetaData();
@@ -148,8 +148,8 @@ public class SYNCSQLUtils {
         StringBuilder sb = new StringBuilder();
         try {
             boolean portalIdExist = portalIdExist(jdbcConnection, sql, "sql");
-            sb.append("DROP TABLE IF EXISTS " + logicTable + "_bak ;\n ");
-            sb.append("CREATE TABLE " + logicTable + "_bak(");
+            sb.append("DROP TABLE IF EXISTS " + logicTable + "_sync_bak ;\n ");
+            sb.append("CREATE TABLE " + logicTable + "_sync_bak(");
             DatabaseMetaData meta = jdbcConnection.getMetaData();
             PreparedStatement preparedStatement = jdbcConnection.prepareStatement(sql);
             ResultSet res = preparedStatement.executeQuery();
@@ -253,7 +253,7 @@ public class SYNCSQLUtils {
             int columnCount = metaData.getColumnCount();
 
             while (rs.next()) {
-                result.append("INSERT INTO " + logicTable + "_bak VALUES (");
+                result.append("INSERT INTO " + logicTable + "_sync_bak VALUES (");
                 for (int i = 0; i < columnCount; i++) {
                     if (i > 0) {
                         result.append(", ");
@@ -300,7 +300,7 @@ public class SYNCSQLUtils {
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();
             while (rs.next()) {
-                result.append("INSERT INTO " + table + "_bak (");
+                result.append("INSERT INTO " + table + "_sync_bak (");
                 for (int j = 1; j <= columnCount; j++) {
                     result.append(metaData.getColumnLabel(j) + ",");
                 }
@@ -360,10 +360,21 @@ public class SYNCSQLUtils {
         return false;
     }
 
-    private static boolean portalIdExist(Connection jdbcConnection, String string, String type) {
+    private static boolean portalIdExist(Connection jdbcConnection, String string, String type) throws SQLException {
         String sql = "";
         if ("table".equals(type)) {
-            sql = "DESC " + string;
+
+            if (jdbcConnection.getMetaData().getDriverName().toUpperCase().indexOf("MYSQL") != -1) {
+                sql = "DESC " + string;
+
+            } else if (jdbcConnection.getMetaData().getDriverName().toUpperCase().indexOf("ORACLE") != -1) {
+                sql = "select COLUMN_NAME,DATA_TYPE,DATA_LENGTH  from user_tab_cols where table_name='"+ string+"'";
+
+            }else if (jdbcConnection.getMetaData().getDriverName().toUpperCase().indexOf("SQL SERVER") != -1) {
+                //sqljdbc与sqljdbc4不同，sqlserver中间有空格
+
+            }
+
         } else {
             sql = string;
         }

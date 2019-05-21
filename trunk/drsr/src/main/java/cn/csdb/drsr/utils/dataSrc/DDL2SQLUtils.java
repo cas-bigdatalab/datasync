@@ -20,7 +20,7 @@ public class DDL2SQLUtils {
      * generate a ddl sql from tables
      */
     public static String generateDDLFromTable(Connection jdbcConnection, String catalog, String schema,
-                                        String table) {
+                                        String table) throws SQLException {
         StringBuilder sb = new StringBuilder();
         boolean portalIdExist = portalIdExist(jdbcConnection, table, "table");
         sb.append("DROP TABLE IF EXISTS " + table + " ; \n");
@@ -364,10 +364,19 @@ public class DDL2SQLUtils {
         return false;
     }
 
-    private static boolean portalIdExist(Connection jdbcConnection, String string, String type) {
+    private static boolean portalIdExist(Connection jdbcConnection, String string, String type) throws SQLException {
         String sql = "";
         if ("table".equals(type)) {
-            sql = "DESC " + string;
+            if (jdbcConnection.getMetaData().getDriverName().toUpperCase().indexOf("MYSQL") != -1) {
+                sql = "DESC " + string;
+
+            } else if (jdbcConnection.getMetaData().getDriverName().toUpperCase().indexOf("ORACLE") != -1) {
+                sql = "select COLUMN_NAME,DATA_TYPE,DATA_LENGTH  from user_tab_cols where table_name='"+ string+"'";
+
+            }else if (jdbcConnection.getMetaData().getDriverName().toUpperCase().indexOf("SQL SERVER") != -1) {
+                //sqljdbc与sqljdbc4不同，sqlserver中间有空格
+
+            }
         } else {
             sql = string;
         }

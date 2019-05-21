@@ -7,6 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import java.io.File;
@@ -41,8 +43,9 @@ public class FileResourceDao {
     }
 
     public List<DataSrc> queryRelationData(){
-        String querySql = "select * from t_datasource";
-        List<DataSrc>queryData = jdbcTemplate.query(querySql,new DataSrcMapper());
+        String subjectCode = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
+        String querySql = "select * from t_datasource where  DataSourceType = 'file' and SubjectCode='"+subjectCode+"'";
+        List<DataSrc> queryData = jdbcTemplate.query(querySql,new DataSrcMapper());
         return queryData;
     }
 
