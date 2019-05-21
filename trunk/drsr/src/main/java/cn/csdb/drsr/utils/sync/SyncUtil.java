@@ -39,7 +39,6 @@ import java.util.Map;
 public class SyncUtil {
 
     private Logger logger = LoggerFactory.getLogger(DataTaskService.class);
-    public ScpUtils scpUtils=new ScpUtils();
 
     public JSONObject executeTask(DataTask dataTask,JdbcTemplate jdbcTemplate) {
         String fileName ="Sync"+dataTask.getDataTaskName()+"log.txt";//文件名及类型
