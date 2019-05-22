@@ -15,10 +15,10 @@
 <head>
     <title>数据记录管理</title>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
-    <link rel="Stylesheet" href="${ctx}/resources/css/common.css"/>
+    <%--<link rel="Stylesheet" href="${ctx}/resources/css/common.css"/>--%>
     <link rel="Stylesheet" href="${ctx}/resources/css/jquery.jerichotab.css"/>
     <link rel="stylesheet" href="${ctx}/resources/bundles/font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">
+    <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">--%>
     <link href="${ctx}/resources/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/css/home.css" type="text/css"/>
 
@@ -65,13 +65,17 @@
         .input-group .input-group-btn button {
             background: #0097d7;
             border: none;
-            /*padding: 0 12px;*/
         }
 
         .input-group input {
             border: none;
             border-radius: 5px;
         }
+
+        .fa {
+            font-size: 14px !important;
+        }
+
     </style>
 
 </head>
@@ -284,12 +288,11 @@
 </body>
 <div id="siteMeshJavaScript">
     <script src="${ctx}/resources/bundles/bootstrap-closable-tab/bootstrap-closable-tab.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
+    <%--<script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>--%>
+    <%--<script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>--%>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
 
-<%--<script src="${ctx}/resources/bundles/jedate/jedate.min.js"></script>--%>
     <script type="text/javascript">
 
         var subjectCode = '${sessionScope.SubjectCode}';
@@ -299,23 +302,26 @@
                 $("#btn_addTableData").hide();
             }
         };
-        $.ajax({
-            url: "${ctx}/showTable",
-            type: "post",
-            dataType: "json",
-            data: {"subjectCode": subjectCode},
-            success: function (data) {
-                $("#alltableName").html("");
-                var html = template("tableNameTempl", data);
-                $("#alltableName").append(html);
-                $("#alltableName").show();
-                if (data.list != null) {
-                    $("#btn_addTableData").show();
-                    var searchKey = "";
-                    editTable_func(subjectCode, data.list[0].tableName, 1, searchKey);
+        $(function () {
+            $.ajax({
+                url: "${ctx}/showTable",
+                type: "post",
+                dataType: "json",
+                data: {"subjectCode": subjectCode},
+                success: function (data) {
+                    $("#alltableName").html("");
+                    var html = template("tableNameTempl", data);
+                    $("#alltableName").append(html);
+                    $("#alltableName").show();
+                    if (data.list != null) {
+                        $("#btn_addTableData").show();
+                        var searchKey = "";
+                        editTable_func(subjectCode, data.list[0].tableName, 1, searchKey);
+                    }
                 }
-            }
+            });
         });
+
 
         function editTableData(i) {
             var searchKey = "";

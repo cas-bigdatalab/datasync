@@ -64,6 +64,10 @@
             border-bottom: none !important;
         }
 
+        .fa {
+            font-size: 14px !important;
+        }
+
     </style>
 </head>
 
