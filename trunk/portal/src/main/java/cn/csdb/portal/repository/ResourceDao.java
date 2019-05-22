@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -29,7 +30,7 @@ import java.util.regex.Pattern;
  **/
 @Repository
 public class ResourceDao {
-    @javax.annotation.Resource
+    @Resource
     private MongoTemplate mongoTemplate;
 
     /**
@@ -159,7 +160,7 @@ public class ResourceDao {
 
 //    根据subjectCode查询
     public long getBySubject(String subjectCode){
-        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)),cn.csdb.portal.model.Resource.class);
+        List<cn.csdb.portal.model.Resource> list = mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode).and("status").is("2")), cn.csdb.portal.model.Resource.class);
 //        Aggregation aggregation=Aggregation.newAggregation(Aggregation.match(Criteria.where("subjectCode").is(subjectCode)),
 //                                Aggregation.group("subjectCode").sum("vCount").as("visitCount"));
 //        AggregationResults<cn.csdb.portal.model.Resource> result=
@@ -176,7 +177,7 @@ public class ResourceDao {
 
 
     public long getDownladCount(String subjectCode){
-        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)),cn.csdb.portal.model.Resource.class);
+        List<cn.csdb.portal.model.Resource> list = mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode).and("status").is("2")), cn.csdb.portal.model.Resource.class);
         long l=0;
         if(list.size()>0){
             for(cn.csdb.portal.model.Resource r:list){
@@ -188,7 +189,7 @@ public class ResourceDao {
 
 //    统计数据集访问量
     public List<cn.csdb.portal.model.Resource> getResourceVisit(){
-        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query().with(new Sort(Sort.Direction.DESC,
+        List<cn.csdb.portal.model.Resource> list = mongoTemplate.find(new Query(Criteria.where("status").is("2")).with(new Sort(Sort.Direction.DESC,
                                                   "vCount")),cn.csdb.portal.model.Resource.class);
 
         return list;
@@ -196,7 +197,7 @@ public class ResourceDao {
 
 //    统计数据集下载量
     public List<cn.csdb.portal.model.Resource> getResourceDown(){
-        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query().with(new Sort(Sort.Direction.DESC,
+        List<cn.csdb.portal.model.Resource> list = mongoTemplate.find(new Query(Criteria.where("status").is("2")).with(new Sort(Sort.Direction.DESC,
                 "dCount")),cn.csdb.portal.model.Resource.class);
 
         return list;
@@ -204,14 +205,14 @@ public class ResourceDao {
 
 //根据专题统计该专题内访问量,降序
     public List <cn.csdb.portal.model.Resource> getResouceVisitBySCode(String subjectCode,int pageNum,int pageSize){
-        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)).with(new Sort(Sort.Direction.DESC,
+        List<cn.csdb.portal.model.Resource> list = mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode).and("status").is("2")).with(new Sort(Sort.Direction.DESC,
                 "vCount")).skip((pageNum-1)*pageSize).limit(pageSize),cn.csdb.portal.model.Resource.class);
         return list;
     }
 
     //根据专题统计该专题内访问量,升序序
     public List <cn.csdb.portal.model.Resource> getResouceVisitBySCodeASC(String subjectCode,int pageNum,int pageSize){
-        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)).with(new Sort(Sort.Direction.ASC,
+        List<cn.csdb.portal.model.Resource> list = mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode).and("status").is("2")).with(new Sort(Sort.Direction.ASC,
                 "vCount")).skip((pageNum-1)*pageSize).limit(pageSize),cn.csdb.portal.model.Resource.class);
         return list;
     }
@@ -219,20 +220,20 @@ public class ResourceDao {
 
     //    根据专题统计该专题内数据集数量
 public int  countBySubjectCode(String subjectCode){
-    List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)),cn.csdb.portal.model.Resource.class);
+    List<cn.csdb.portal.model.Resource> list = mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode).and("status").is("2")), cn.csdb.portal.model.Resource.class);
     return list.size();
 }
 
     //根据专题统计该专题内访问量
     public List <cn.csdb.portal.model.Resource> getResouceDownBySCode(String subjectCode,int pageNo,int pageSize){
-        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)).with(new Sort(Sort.Direction.DESC,
+        List<cn.csdb.portal.model.Resource> list = mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode).and("status").is("2")).with(new Sort(Sort.Direction.DESC,
                 "dCount")).skip((pageNo-1)*pageSize).limit(pageSize),cn.csdb.portal.model.Resource.class);
         return list;
     }
 
     //根据专题统计该专题内访问量
     public List <cn.csdb.portal.model.Resource> getResouceDownBySCodeASC(String subjectCode,int pageNo,int pageSize){
-        List<cn.csdb.portal.model.Resource> list=mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode)).with(new Sort(Sort.Direction.ASC,
+        List<cn.csdb.portal.model.Resource> list = mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode).and("status").is("2")).with(new Sort(Sort.Direction.ASC,
                 "dCount")).skip((pageNo-1)*pageSize).limit(pageSize),cn.csdb.portal.model.Resource.class);
         return list;
     }

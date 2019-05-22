@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Controller
 public class EditDataController {
@@ -60,14 +59,14 @@ public class EditDataController {
         }
 
         jsonObject.put("list", showTypeInfList1);
-//        jsonObject.put("dataSourceName", datasrc.getDataSourceName());
+        jsonObject.put("dataSourceName", subjectCode);
         return jsonObject;
     }
 
     @ResponseBody
     @RequestMapping("/showTableData")
-        public JSONObject test(String subjectCode, String tableName,@RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
-                               @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
+        public JSONObject test(String subjectCode, String tableName, @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
+                               @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, String searchKey) {
 //        DataSrc datasrc=getDataSrc(subjectCode);
          List<Map<String,Object>> list=new ArrayList<>();
 
@@ -78,9 +77,10 @@ public class EditDataController {
         List<String> list6=map.get("pkColumn");
         List<String> list7=map.get("autoAdd");
         List<String> list8=map.get("COLUMN_TYPE");
-        list = editDataService.getTableData(subjectCode, tableName, pageNo, pageSize);
+        list = editDataService.getTableData(subjectCode, tableName, pageNo, pageSize, searchKey, list3);
         List<String> list1=new ArrayList<>();
-        int countNum = editDataService.countData(subjectCode, tableName);
+        int countNum = editDataService.countData(subjectCode, tableName, searchKey, list3);
+
         JSONObject jsonObject=new JSONObject();
         ShowTypeInf showTypeInf = showTypeInfService.getTableComment(tableName, subjectCode);
         if (showTypeInf != null) {
@@ -121,7 +121,7 @@ public class EditDataController {
 
         list = editDataService.getTableDataTestTmpl(subjectCode, tableName, pageNo, pageSize);
         List<String> list1=new ArrayList<>();
-        int countNum = editDataService.countData(subjectCode, tableName);
+        int countNum = editDataService.countData(subjectCode, tableName, subjectCode, list3);
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("totalCount", countNum);
         jsonObject.put("currentPage", pageNo);
@@ -149,13 +149,10 @@ public class EditDataController {
 
         JSONObject jsonObject=new JSONObject();
         JSONArray jsonArray=JSONArray.parseArray(addData);
-        String column="";
-        String values="";
         String enumnCoumns[] = enumnCoumn.split(",");
 //
-        ShowTypeInf showTypeInf = showTypeInfService.getShowTypeInf(tableName, subjectCode);
+//        ShowTypeInf showTypeInf = showTypeInfService.getShowTypeInf(tableName, subjectCode);
 
-//        DataSrc datasrc=getDataSrc(subjectCode);
         Map<String, List<String>> map = editDataService.getTableStructure(subjectCode, tableName);
 
         List<String> list1=map.get("pkColumn");
@@ -166,51 +163,30 @@ public class EditDataController {
             String col = jsonArray.getJSONObject(i).getString("columnName");
             String val = jsonArray.getJSONObject(i).getString("columnValue");
 
-            if(list1.get(i).equals("PRI") && list2.get(i).equals("auto_increment")){ //有主键且自增
-                System.out.println(jsonArray.getJSONObject(i).getString("columnName"));
-
-            }else if(list1.get(i).equals("PRI") && !list2.get(i).equals("auto_increment") && !col.equals("PORTALID")){   //有主键但不自增，判断新增主键是否重复
+            if (list1.get(i).equals("PRI") && !list2.get(i).equals("auto_increment") && !col.equals("PORTALID")) {   //有主键但不自增，判断新增主键是否重复
                 if(val!=null && !val.equals("")){
-                    if (editDataService.checkPriKey(subjectCode, tableName, val, col) == 1) {
+                    if (editDataService.checkPriKey(subjectCode, tableName, val, col) == 1) { //主键重复
                         jsonObject.put("data","0");
                         jsonObject.put("prikey",col);
                         return jsonObject;
                     }
-                    val = getEnumKeyByVal(showTypeInf, enumnCoumns, col, val, subjectCode);
-
-                    column += "" + col + " ,";
-                    values += "'" + val + "' ,";
                 }else{
-                    jsonObject.put("data","-1");
+                    jsonObject.put("data", "-1");//主键不自增但值为空
                     jsonObject.put("prikey",col);
                     return jsonObject;
                 }
-            }else if(col.equals("PORTALID")){
-                String uuid = UUID.randomUUID().toString();
-                column+="PORTALID ,";
-                values+="'"+uuid+"' ,";
-            } else{
-                if(val!=null&& !val.equals("")) {
-                    val = getEnumKeyByVal(showTypeInf, enumnCoumns, col, val, subjectCode);
-                    column += "" + col + " ,";
-                    values += "'" + val + "' ,";
-                }else if(!col.equals("PORTALID") && list3.get(i).equals("NO")) {
-                    jsonObject.put("data", "-2+" + col);    //该列不能为空
-                    return jsonObject;
-                }
+            } else if (!col.equals("PORTALID") && list3.get(i).equals("NO")) {
+                jsonObject.put("data", "-2+" + col);    //该列不能为空
+                return jsonObject;
             }
         }
-
-        column=column.substring(0,column.length()-1);
-        values=values.substring(0,values.length()-1);
-
-        int n = editDataService.addData(subjectCode, tableName, column, values);
+        int n = editDataService.addData(subjectCode, tableName, list1, list2, jsonArray, enumnCoumns);
         if(n==1){
             jsonObject.put("data","1");
         }else{
             jsonObject.put("data","-3");
         }
-          return jsonObject;
+        return jsonObject;
     }
 
     @RequestMapping("deleteData")
@@ -300,7 +276,7 @@ public class EditDataController {
                         List<EnumData> enumText = showTypeDetail.getEnumData();
 
                         for (EnumData e : enumText) {
-                            s += e.getValue() + ",";
+                            s += e.getValue() + "|_|";
                         }
                         enumData.setKey(list1.get(i));
                         enumData.setValue(s);
@@ -363,7 +339,7 @@ public class EditDataController {
                                 if (list7.get(i).equals(e.getKey())) {
                                     list7.set(i, e.getValue());
                                 }
-                                s += e.getValue() + ",";
+                                s += e.getValue() + "|_|";
                             }
                             enumData.setKey(list1.get(i));
                             enumData.setValue(s);
@@ -379,11 +355,13 @@ public class EditDataController {
                             List<EnumData> enumSqlList = editDataService.getEnumData(subjectCode, reTable, reColKey, reColVal);
                             for (String ss : list) {
                                 for (EnumData e : enumSqlList) {
-                                    if (ss.equals(e.getKey())) {
-                                        s_val += e.getValue() + ",";
-                                    }
-                                    if (list7.get(i).equals(e.getKey())) {
-                                        list7.set(i, e.getValue());
+                                    if (ss != null && e != null) {
+                                        if (ss.equals(e.getKey())) {
+                                            s_val += e.getValue() + "|_|";
+                                        }
+                                        if (list7.get(i).equals(e.getKey())) {
+                                            list7.set(i, e.getValue());
+                                        }
                                     }
                                 }
                             }
@@ -400,72 +378,52 @@ public class EditDataController {
         return jsonObject;
     }
 
-
+    /**
+     * @Description: 跟新数据保存
+     * @Param: [newdata, subjectCode, tableName, delPORTALID, enumColumn]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @Author: zcy
+     * @Date: 2019/5/22
+     */
     @RequestMapping("/saveTableData")
     @ResponseBody
-    public JSONObject saveTableData(@Param("newdata") String newdata, String subjectCode, String tableName, String delPORTALID, String enumColumn){
-        JSONObject jsonObject=new JSONObject();
+    public JSONObject saveTableData(@Param("newdata") String newdata, String subjectCode, String tableName, String delPORTALID, String enumColumn) {
+        JSONObject jsonObject = new JSONObject();
         String enumnCoumns[] = enumColumn.split(",");
-//
-        ShowTypeInf showTypeInf = showTypeInfService.getShowTypeInf(tableName, subjectCode);
-        JSONArray jsonArray2=JSONArray.parseArray(newdata);
-//        DataSrc datasrc=getDataSrc(subjectCode);
+        JSONArray jsonArray2 = JSONArray.parseArray(newdata);
         Map<String, List<String>> map = editDataService.getTableStructure(subjectCode, tableName);
 //        旧数据
-        List<String> list = editDataService.getDataByPORTALID(subjectCode, tableName, delPORTALID);
-        List<String> list1=map.get("pkColumn");    //主键
-        List<String> list2=map.get("autoAdd");
-        List<String> list3=map.get("IS_NULLABLE");  //不为空
+//    List<String> list = editDataService.getDataByPORTALID(subjectCode, tableName, delPORTALID);
+        List<String> list1 = map.get("pkColumn");    //主键
+//    List<String> list2=map.get("autoAdd");
+        List<String> list3 = map.get("IS_NULLABLE");  //不为空
 
-        //更新的数据
-        String updatestr=" set ";
-//        条件设置,拼串
-        String conditionstr=" where ";
-                conditionstr += " PORTALID  = '" + delPORTALID + "' ";
+        for (int i = 0; i < jsonArray2.size(); i++) {
+            String column = jsonArray2.getJSONObject(i).getString("name");
+            String value = jsonArray2.getJSONObject(i).getString("value");
 
-        for(int i=0;i<jsonArray2.size();i++){
-            String column=jsonArray2.getJSONObject(i).getString("name");
-            String value=jsonArray2.getJSONObject(i).getString("value");
-
-            if(list3.get(i).equals("NO") && (value ==null ||value.equals(""))){
-                jsonObject.put("data","-2+");           //该列不能为空
-                jsonObject.put("col",column);
+            if (list3.get(i).equals("NO") && (value == null || value.equals(""))) {
+                jsonObject.put("data", "-2+");           //该列不能为空
+                jsonObject.put("col", column);
                 return jsonObject;
             }
-            if(list1.get(i).equals("PRI")){
+            if (list1.get(i).equals("PRI")) {
                 int n = editDataService.checkPriKey(subjectCode, tableName, value, column);
-              if(n>1) {
-                  jsonObject.put("data", "-1");           //主键重复
-                  return jsonObject;
-              }
-            }
-            if(list.get(i).equals(value)){
-
-            }else if((list.get(i).equals("")||list.get(i)==null)&&(value.equals("")||value==null)){
-
-            }else {
-                value = getEnumKeyByVal(showTypeInf, enumnCoumns, column, value, subjectCode);
-                updatestr += "" + column + "= '" + value + "' , ";
+                if (n > 1) {
+                    jsonObject.put("data", "-1");           //主键重复
+                    return jsonObject;
+                }
             }
         }
-        if(updatestr.equals(" set ")){
-            jsonObject.put("data","1");
-            return jsonObject;
-        }
 
-        int ll=updatestr.length();
-        String s2=updatestr.substring(0,ll-2);
-        String s1=conditionstr;
-        System.out.println(s2+";;;;;"+s1);
-
-        int n = editDataService.updateDate(s1, s2, tableName, subjectCode);
-        if(n==1){
-            jsonObject.put("data","1");
-        }else{
-            jsonObject.put("data","0");
+        int n = editDataService.updateDate(tableName, subjectCode, jsonArray2, enumnCoumns, delPORTALID);
+        if (n == 1) {
+            jsonObject.put("data", "1");
+        } else {
+            jsonObject.put("data", "0");
         }
-        return jsonObject;
-    }
+    return jsonObject;
+}
 
     @RequestMapping("toCheckTableData")
     @ResponseBody

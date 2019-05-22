@@ -51,6 +51,9 @@
             /*margin-right: 10%;*/
         }
 
+        .fa {
+            font-size: 14px !important;
+        }
     </style>
 </head>
 <body>
@@ -240,308 +243,311 @@
         var colors = ['#4a8cd6', '#da6663', '#7e64a1', '#a987d6',
             '#58bae5', '#54d7b3', '#51c061', '#89c154', '#e2e061',
             '#e2b65f'];
-        $.ajax({
-            url: "${ctx}/ThemeStatisticVisit",
-            type: "post",
-            dataType: "json",
-            success: function (data) {
-                var chart = echarts.init(document.getElementById('datashowvisit'));
-                var option = {
-                    title: {
-                        text: '${applicationScope.menus['organization_title']}TOP10访问量',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'shadow',
-                            label: {
-                                show: true
-                            }
-                        }
-                    },
-                    legend: {
-                        data: data.name,
-                        x: 'center',
-                        top: 'bottom'
-                    },
-                    toolbox: {
-                        show: true,
-                        feature: {
-                            dataView: {show: true, readOnly: false},
-                            magicType: {show: true, type: ['line', 'bar']},
-                        }
-                    },
-                    xAxis: [{
-                        type: 'category',
-                        data: data.name,
-                        axisLabel: {
-                            interval: 0,
-                            rotate: 45,//倾斜度 -90 至 90 默认为0
-                            margin: 2
+        $(function () {
+            $.ajax({
+                url: "${ctx}/ThemeStatisticVisit",
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    var chart = echarts.init(document.getElementById('datashowvisit'));
+                    var option = {
+                        title: {
+                            text: '${applicationScope.menus['organization_title']}TOP10访问量',
+                            left: 'center'
                         },
-                        splitLine: {
-                            show: false
-                        }
-                    }],
-                    yAxis: [
-                        {
-                            type: 'value'
-                        }],
-                    series: [{
-                        name: '访问量',
-                        type: 'bar',
-                        barWidth: 25,
-                        data: data.visitCount,
-                        //配置样式
-                        itemStyle: {
-                            //通常情况下：
-                            normal: {
-                                //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
-                                color: function (params) {
-                                    var colorList = colors;
-                                    return colorList[params.dataIndex];
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow',
+                                label: {
+                                    show: true
                                 }
-                            }
-                        }
-                    }]
-                };
-                option["xAxis"][0]["axisLabel"] = axisLabel;
-                option["grid"] = grid;
-                chart.setOption(option);
-            }
-        });
-
-        $.ajax({
-            url: "${ctx}/ThemeStatisticDown",
-            type: "post",
-            dataType: "json",
-            success: function (data) {
-                var chart = echarts.init(document.getElementById('datashowdown'));
-                var option = {
-                    // color: ['#5182bb', '#be4f4f', '#9bbb5e', '#8064a1', '#4facc5', '#2d4d74'],
-                    title: {
-                        text: '${applicationScope.menus['organization_title']}TOP10下载量',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'shadow',
-                            label: {
-                                show: true
-                            }
-                        }
-                    },
-                    legend: {
-                        data: data.name,
-                        x: 'center',
-                        top: 'bottom'
-                    },
-                    toolbox: {
-                        show: true,
-                        feature: {
-                            dataView: {show: true, readOnly: false},
-                            magicType: {show: true, type: ['line', 'bar']},
-                        }
-                    },
-                    xAxis: [{
-                        type: 'category',
-                        data: data.name,
-                        axisLabel: {
-                            interval: 0,
-                            rotate: 45,//倾斜度 -90 至 90 默认为0
-                            margin: 2
-                        },
-                        splitLine: {
-                            show: false
-                        }
-                    }],
-                    yAxis: [
-                        {
-                            type: 'value'
-                        }],
-                    series: [{
-                        name: '下载量',
-                        type: 'bar',
-                        //设置柱子的宽度
-                        barWidth: 25,
-                        data: data.downCount,
-                        //配置样式
-                        itemStyle: {
-                            //通常情况下：
-                            normal: {
-                                //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
-                                color: function (params) {
-                                    var colorList = colors;
-                                    return colorList[params.dataIndex];
-                                }
-                            }
-                        }
-                    }]
-                };
-                option["xAxis"][0]["axisLabel"] = axisLabel;
-                option["grid"] = grid;
-                chart.setOption(option);
-            }
-        });
-
-        $.ajax({
-            url: "${ctx}/dataCollentionVisit",
-            type: "post",
-            dataType: "json",
-            success: function (data) {
-                var chart = echarts.init(document.getElementById('datacollectionvisit'));
-                var option = {
-                    // color: ['#5182bb', '#be4f4f', '#9bbb5e', '#8064a1', '#4facc5', '#2d4d74'],
-                    title: {
-                        text: '数据集TOP10访问量',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'shadow',
-                            label: {
-                                show: true
-                            }
-                        }
-                    },
-                    legend: {
-                        data: data.name,
-                        x: 'center',
-                        top: 'bottom'
-                    },
-                    toolbox: {
-                        show: true,
-                        feature: {
-                            dataView: {show: true, readOnly: false},
-                            magicType: {show: true, type: ['line', 'bar']},
-                        }
-                    },
-                    xAxis: [{
-                        type: 'category',
-                        data: data.name,
-                        axisLabel: {
-                            interval: 0,
-                            rotate: 45,//倾斜度 -90 至 90 默认为0
-                            margin: 2,
-                            textStyle: {
-                                // fontWeight: "bolder",
-                                // color: "#000000"
                             }
                         },
-                        splitLine: {
-                            show: false
-                        }
-                    }],
-                    yAxis: [
-                        {
-                            type: 'value'
+                        legend: {
+                            data: data.name,
+                            x: 'center',
+                            top: 'bottom'
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                dataView: {show: true, readOnly: false},
+                                magicType: {show: true, type: ['line', 'bar']},
+                            }
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            data: data.name,
+                            axisLabel: {
+                                interval: 0,
+                                rotate: 45,//倾斜度 -90 至 90 默认为0
+                                margin: 2
+                            },
+                            splitLine: {
+                                show: false
+                            }
                         }],
-                    series: [{
-                        name: '访问量',
-                        type: 'bar',
-                        barWidth: 25,
-                        data: data.visitCount,
-                        //配置样式
-                        itemStyle: {
-                            //通常情况下：
-                            normal: {
-                                //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
-                                color: function (params) {
-                                    var colorList = colors;
-                                    return colorList[params.dataIndex];
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }],
+                        series: [{
+                            name: '访问量',
+                            type: 'bar',
+                            barWidth: 25,
+                            data: data.visitCount,
+                            //配置样式
+                            itemStyle: {
+                                //通常情况下：
+                                normal: {
+                                    //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+                                    color: function (params) {
+                                        var colorList = colors;
+                                        return colorList[params.dataIndex];
+                                    }
                                 }
                             }
-                        }
-                    }]
-                };
-                option["xAxis"][0]["axisLabel"] = axisLabel;
-                option["grid"] = grid;
-                chart.setOption(option);
-            }
-        });
+                        }]
+                    };
+                    option["xAxis"][0]["axisLabel"] = axisLabel;
+                    option["grid"] = grid;
+                    chart.setOption(option);
+                }
+            });
 
-        $.ajax({
-            url: "${ctx}/dataCollentionDown",
-            type: "post",
-            dataType: "json",
-            success: function (data) {
-                var chart = echarts.init(document.getElementById('datacollectiondown'));
-                var option = {
-                    // color: ['#5182bb', '#be4f4f', '#9bbb5e', '#8064a1', '#4facc5', '#2d4d74'],
-                    title: {
-                        text: '数据集TOP10下载量',
-                        left: 'center'
-                    },
-                    tooltip: {
-                        trigger: 'axis',
-                        axisPointer: {
-                            type: 'shadow',
-                            label: {
-                                show: true
-                            }
-                        }
-                    },
-                    legend: {
-                        data: data.name,
-                        x: 'center',
-                        top: 'bottom'
-                    },
-                    toolbox: {
-                        show: true,
-                        feature: {
-                            dataView: {show: true, readOnly: false},
-                            magicType: {show: true, type: ['line', 'bar']},
-                        }
-                    },
-
-                    xAxis: [{
-                        type: 'category',
-                        data: data.name,
-                        splitLine: {     //去掉网格线
-                            show: false
-                        }
-                    }],
-                    yAxis: [
-                        {
-                            type: 'value'
-                        }],
-                    series: [{
-                        name: '下载量',
-                        type: 'bar',
-                        //设置柱子的宽度
-                        barWidth: 25,
-                        data: data.downCount,
-                        //配置样式
-                        itemStyle: {
-                            //通常情况下：
-                            normal: {
-                                //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
-                                color: function (params) {
-                                    var colorList = colors;
-                                    return colorList[params.dataIndex];
+            $.ajax({
+                url: "${ctx}/ThemeStatisticDown",
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    var chart = echarts.init(document.getElementById('datashowdown'));
+                    var option = {
+                        // color: ['#5182bb', '#be4f4f', '#9bbb5e', '#8064a1', '#4facc5', '#2d4d74'],
+                        title: {
+                            text: '${applicationScope.menus['organization_title']}TOP10下载量',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow',
+                                label: {
+                                    show: true
                                 }
                             }
-                        }
-                    }]
-                };
-                option["xAxis"][0]["axisLabel"] = axisLabel;
-                option["grid"] = grid;
-                chart.setOption(option);
-            }
+                        },
+                        legend: {
+                            data: data.name,
+                            x: 'center',
+                            top: 'bottom'
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                dataView: {show: true, readOnly: false},
+                                magicType: {show: true, type: ['line', 'bar']},
+                            }
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            data: data.name,
+                            axisLabel: {
+                                interval: 0,
+                                rotate: 45,//倾斜度 -90 至 90 默认为0
+                                margin: 2
+                            },
+                            splitLine: {
+                                show: false
+                            }
+                        }],
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }],
+                        series: [{
+                            name: '下载量',
+                            type: 'bar',
+                            //设置柱子的宽度
+                            barWidth: 25,
+                            data: data.downCount,
+                            //配置样式
+                            itemStyle: {
+                                //通常情况下：
+                                normal: {
+                                    //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+                                    color: function (params) {
+                                        var colorList = colors;
+                                        return colorList[params.dataIndex];
+                                    }
+                                }
+                            }
+                        }]
+                    };
+                    option["xAxis"][0]["axisLabel"] = axisLabel;
+                    option["grid"] = grid;
+                    chart.setOption(option);
+                }
+            });
+
+            $.ajax({
+                url: "${ctx}/dataCollentionVisit",
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    var chart = echarts.init(document.getElementById('datacollectionvisit'));
+                    var option = {
+                        // color: ['#5182bb', '#be4f4f', '#9bbb5e', '#8064a1', '#4facc5', '#2d4d74'],
+                        title: {
+                            text: '数据集TOP10访问量',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow',
+                                label: {
+                                    show: true
+                                }
+                            }
+                        },
+                        legend: {
+                            data: data.name,
+                            x: 'center',
+                            top: 'bottom'
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                dataView: {show: true, readOnly: false},
+                                magicType: {show: true, type: ['line', 'bar']},
+                            }
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            data: data.name,
+                            axisLabel: {
+                                interval: 0,
+                                rotate: 45,//倾斜度 -90 至 90 默认为0
+                                margin: 2,
+                                textStyle: {
+                                    // fontWeight: "bolder",
+                                    // color: "#000000"
+                                }
+                            },
+                            splitLine: {
+                                show: false
+                            }
+                        }],
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }],
+                        series: [{
+                            name: '访问量',
+                            type: 'bar',
+                            barWidth: 25,
+                            data: data.visitCount,
+                            //配置样式
+                            itemStyle: {
+                                //通常情况下：
+                                normal: {
+                                    //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+                                    color: function (params) {
+                                        var colorList = colors;
+                                        return colorList[params.dataIndex];
+                                    }
+                                }
+                            }
+                        }]
+                    };
+                    option["xAxis"][0]["axisLabel"] = axisLabel;
+                    option["grid"] = grid;
+                    chart.setOption(option);
+                }
+            });
+
+            $.ajax({
+                url: "${ctx}/dataCollentionDown",
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    var chart = echarts.init(document.getElementById('datacollectiondown'));
+                    var option = {
+                        // color: ['#5182bb', '#be4f4f', '#9bbb5e', '#8064a1', '#4facc5', '#2d4d74'],
+                        title: {
+                            text: '数据集TOP10下载量',
+                            left: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow',
+                                label: {
+                                    show: true
+                                }
+                            }
+                        },
+                        legend: {
+                            data: data.name,
+                            x: 'center',
+                            top: 'bottom'
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                dataView: {show: true, readOnly: false},
+                                magicType: {show: true, type: ['line', 'bar']},
+                            }
+                        },
+
+                        xAxis: [{
+                            type: 'category',
+                            data: data.name,
+                            splitLine: {     //去掉网格线
+                                show: false
+                            }
+                        }],
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }],
+                        series: [{
+                            name: '下载量',
+                            type: 'bar',
+                            //设置柱子的宽度
+                            barWidth: 25,
+                            data: data.downCount,
+                            //配置样式
+                            itemStyle: {
+                                //通常情况下：
+                                normal: {
+                                    //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
+                                    color: function (params) {
+                                        var colorList = colors;
+                                        return colorList[params.dataIndex];
+                                    }
+                                }
+                            }
+                        }]
+                    };
+                    option["xAxis"][0]["axisLabel"] = axisLabel;
+                    option["grid"] = grid;
+                    chart.setOption(option);
+                }
+            });
+
+            $.ajax({
+                url: "${ctx}/showAllTheme",
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    var html = template("showAllTheme", data);
+                    $("#showAllThemeSpan").append(html);
+                }
+            })
         });
 
-        $.ajax({
-            url: "${ctx}/showAllTheme",
-            type: "post",
-            dataType: "json",
-            success: function (data) {
-                var html = template("showAllTheme", data);
-                $("#showAllThemeSpan").append(html);
-            }
-        })
 
         function findBySubjectCode(i) {
             var subjectCode = $(i).attr("id");
