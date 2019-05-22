@@ -20,6 +20,11 @@ public class SynchronizationTable {
     private String sqlString; // 关联创建时的 DDL
     @Field("lastModifyTime")
     private Long lastModifyTime; // 最后一次修改的时间 毫秒值
+    @Field("systemName")
+    private String systemName; // 设置同步任务的系统所属
+    @Field("taskId")
+    private String taskId; // 任务Id
+
 
     public String getId() {
         return id;
@@ -75,5 +80,21 @@ public class SynchronizationTable {
 
     public void setLastModifyTime(Long lastModifyTime) {
         this.lastModifyTime = lastModifyTime;
+    }
+
+    public String getSystemName() {
+        return systemName;
+    }
+
+    public void setSystemName(String systemName) {
+        this.systemName = systemName;
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 }
