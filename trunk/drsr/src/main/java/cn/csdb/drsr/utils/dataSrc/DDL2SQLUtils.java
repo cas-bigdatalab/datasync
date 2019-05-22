@@ -375,6 +375,7 @@ public class DDL2SQLUtils {
 
             }else if (jdbcConnection.getMetaData().getDriverName().toUpperCase().indexOf("SQL SERVER") != -1) {
                 //sqljdbc与sqljdbc4不同，sqlserver中间有空格
+                sql = "sp_columns " + string;
 
             }
         } else {

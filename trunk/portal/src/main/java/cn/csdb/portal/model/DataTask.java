@@ -39,6 +39,14 @@ public class DataTask {
     private String status;
     @Field("remoteuploadpath")
     private String remoteuploadpath;
+    @Field("fileSize")
+    private String fileSize;
+    @Field("sync")
+    private String sync;//是否同步
+    @Field("period")
+    private String period;//周期
+    @Field("synctime")
+    private Date synctime;//同步时间
 
 
     public String getSubjectCode() {
@@ -143,5 +151,38 @@ public class DataTask {
 
     public void setRemoteuploadpath(String remoteuploadpath) {
         this.remoteuploadpath = remoteuploadpath;
+    }
+
+
+    public String getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(String fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public String getSync() {
+        return sync;
+    }
+
+    public void setSync(String sync) {
+        this.sync = sync;
+    }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
+    }
+
+    public Date getSynctime() {
+        return synctime;
+    }
+
+    public void setSynctime(Date synctime) {
+        this.synctime = synctime;
     }
 }
