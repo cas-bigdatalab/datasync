@@ -40,10 +40,7 @@ class SynchronizeTableTimer extends TimerTask {
 
     private SynchronizationTablesDao synchronizationTablesDao;
 
-    public SynchronizeTableTimer() {
-    }
-
-    public SynchronizeTableTimer(FileImportService fileImportService, SynchronizationTablesDao synchronizationTablesDao) {
+    SynchronizeTableTimer(FileImportService fileImportService, SynchronizationTablesDao synchronizationTablesDao) {
         this.fileImportService = fileImportService;
         this.synchronizationTablesDao = synchronizationTablesDao;
     }
@@ -67,16 +64,15 @@ class SynchronizeTableTimer extends TimerTask {
     /**
      * @return true:需要同步
      */
-    boolean compareTime(SynchronizationTable synchronizationTable) {
+    private boolean compareTime(SynchronizationTable synchronizationTable) {
         Long frequency = synchronizationTable.getFrequency();
-        Long lastModifyTime = synchronizationTable.getLastModifyTime();
-        Long currentTimeMillis = new Long(System.currentTimeMillis());
-        long l = currentTimeMillis - lastModifyTime;
-        if (l >= frequency) {
-            return true;
-        } else {
+        if (frequency == 0) {
             return false;
         }
+        Long lastModifyTime = synchronizationTable.getLastModifyTime();
+        Long currentTimeMillis = System.currentTimeMillis();
+        long l = currentTimeMillis - lastModifyTime;
+        return l >= frequency;
     }
 
 }
@@ -86,10 +82,7 @@ class SynchronizeTableTask implements Runnable {
     private SynchronizationTablesDao synchronizationTablesDao;
     private SynchronizationTable synchronizationTable;
 
-    public SynchronizeTableTask() {
-    }
-
-    public SynchronizeTableTask(FileImportService fileImportService, SynchronizationTablesDao synchronizationTablesDao, SynchronizationTable synchronizationTable) {
+    SynchronizeTableTask(FileImportService fileImportService, SynchronizationTablesDao synchronizationTablesDao, SynchronizationTable synchronizationTable) {
         this.fileImportService = fileImportService;
         this.synchronizationTablesDao = synchronizationTablesDao;
         this.synchronizationTable = synchronizationTable;

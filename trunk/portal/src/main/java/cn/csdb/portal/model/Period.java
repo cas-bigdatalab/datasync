@@ -6,6 +6,7 @@ package cn.csdb.portal.model;
  * @Description 频率换算毫秒值
  **/
 public enum Period {
+    TERMINATION(0L),
     HALF_OF_THE_DAY(1000L * 60 * 60 * 12),
     DAY(1000L * 60 * 60 * 24),
     WEEK(1000L * 60 * 60 * 24 * 7),

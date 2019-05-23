@@ -123,6 +123,7 @@ public class ResourceController {
     public JSONObject delete(@PathVariable("id") String id) {
         JSONObject jsonObject = new JSONObject();
         resourceService.delete(id);
+        resourceService.saveDeleteId(id);
         jsonObject.put("result", "ok");
         return jsonObject;
     }
@@ -490,6 +491,7 @@ public class ResourceController {
         }
 
         resource.setStatus("1");
+        resource.setCreationDate(new Date());
         String resId = resourceService.save(resource);
         jsonObject.put("resourceId", resId);
 
@@ -506,9 +508,9 @@ public class ResourceController {
     private void saveFileInfo(String filePath, BigDecimal fileSize, String resourceId) {
         File file = new File(filePath);
         if (file.exists() && file.isFile()) {
-            int i = file.getName().lastIndexOf(".");
-            String name = file.getName().substring(0, i);
-            String suffixName = file.getName().substring(i + 1, file.getName().length()).toLowerCase();
+            String name = file.getName();
+            int i = name.lastIndexOf(".");
+            String suffixName = name.substring(i + 1, name.length()).toLowerCase();
             FileInfo fileInfo = new FileInfo();
             fileInfo.setFile_name(name);
             fileInfo.setFile_path(filePath);
@@ -789,6 +791,8 @@ public class ResourceController {
         JSONObject jo = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setStatus("1");
+        resource.setvCount(0);
+        resource.setdCount(0);
         resourceService.saveDeleteId(resourceId);
         String newresourceId = resourceService.save(resource);
         if (StringUtils.isNotBlank(newresourceId)) {

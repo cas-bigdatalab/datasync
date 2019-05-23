@@ -4,6 +4,7 @@ import cn.csdb.portal.service.FileNetService;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartRequest;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -31,6 +33,8 @@ public class FileNetController {
 
     @Value("#{systemPro['ResourceExtraFile']}")
     private String ResourceExtraFile;
+    @Value("#{systemPro['synchronizeTableLogs']}")
+    private String synchronizeTableLogs;
 
 
     /**
@@ -99,6 +103,11 @@ public class FileNetController {
     public HttpServletResponse downloadFile(HttpServletRequest request, HttpServletResponse response, String selectPath) throws IOException {
         String ftpRootPath = removeFtpRootLastSeparator(request);
         selectPath = fileNetService.decodePath(selectPath, ftpRootPath);
+        downloadFile(response, selectPath);
+        return response;
+    }
+
+    private void downloadFile(HttpServletResponse response, String selectPath) throws IOException {
         File file = new File(selectPath);
         String fileName = file.getName();
         response.reset();
@@ -116,7 +125,6 @@ public class FileNetController {
         }
         out.close();
         input.close();
-        return response;
     }
 
 
@@ -240,5 +248,21 @@ public class FileNetController {
             filePath.add(parentURI + "/" + file.getOriginalFilename());
         }
         return filePath;
+    }
+
+    @GetMapping(value = "/downloadLog")
+    public HttpServletResponse downloadLog(HttpServletRequest request, HttpServletResponse response, String fileName) throws IOException {
+        String filePath = "G:" + synchronizeTableLogs + "/" + fileName;
+        File f = new File(filePath);
+        if (!f.exists()) {
+            ServletOutputStream out = response.getOutputStream();
+            OutputStreamWriter ow = new OutputStreamWriter(out, "GB2312");
+            ow.write("当前表还未执行过同步");
+            ow.flush();
+            ow.close();
+            return response;
+        }
+        downloadFile(response, filePath);
+        return response;
     }
 }

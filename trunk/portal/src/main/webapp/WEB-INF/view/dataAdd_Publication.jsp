@@ -142,7 +142,7 @@
                                                         <div id="cutDiv"
                                                              style="width: 200px; height: 150px;border: 1px solid rgb(169, 169, 169)">
                                                             <input type="hidden" id="imgFlagNum" val=""/>
-                                                            <img src="" id="cutimg"
+                                                            <img src="${ctx}/resources/img/imgtemp.jpg" id="cutimg"
                                                                  style="height:100%; width: 100%;display: block"/>
                                                         </div>
                                                         <span>建议图片规格为800*600</span><br/>
@@ -796,12 +796,11 @@
         function showImgAsDataURLAndValidataImg() {
             var reader = new FileReader();
             reader.readAsDataURL(event.target.files[0]);
-            reader.onloadend = function (event) {
+            reader.onload = function (event) {
                 $("img#cutimg").attr("src", event.target.result);
                 getImgNaturalDimensions($("img#cutimg")[0], function (dimensions) {
                     var w = dimensions.w;
                     var h = dimensions.h;
-                    var flg = true;
 
                     // 验证图片信息
                     if (0.7 < h / w && h / w < 0.8) {

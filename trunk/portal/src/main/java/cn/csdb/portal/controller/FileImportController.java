@@ -221,4 +221,19 @@ public class FileImportController {
         return fileImportService.previewSqlData(sqlString, subjectCode);
 
     }
+
+    @PostMapping(value = "/updateSynchronizeTable")
+    @ResponseBody
+    public void updateSynchronizeTable(String synchronizeId, String frequency) {
+        fileImportService.updateSynchronizeTable(synchronizeId, frequency);
+    }
+
+    @PostMapping("/selectSynchronizeInfo")
+    @ResponseBody
+    public JSONObject selectSynchronizeInfo(HttpServletRequest request) {
+        String loginId = request.getSession().getAttribute("LoginId").toString();
+        String subjectCode = request.getSession().getAttribute("SubjectCode").toString();
+        JSONObject jsonObject = fileImportService.selectSynchronizeInfo(loginId, subjectCode);
+        return jsonObject;
+    }
 }

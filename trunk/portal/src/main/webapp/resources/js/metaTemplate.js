@@ -118,10 +118,11 @@ function selectData(id) {
             if (data.metaTemplate) {
                 $("#Task_dataName").val(data.metaTemplate.title);
                 $("#dataDescribeID").val(data.metaTemplate.introduction);
-                $("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
+                /*$("#cutDiv").append('<img src="" id="cutimg" style="height:100%; width: 100%;display: block"/>');
                 var path = data.metaTemplate.imagePath;
                 $('#cutimg').attr('src', path);
-                $('#imgPath').val(data.metaTemplate.imagePath);
+                $('#imgPath').val(data.metaTemplate.imagePath);*/
+                $("#cutDiv#cutimg").attr("src", "${ctx}/resources/img/imgtemp.jpg");
 
                 $("#select2_tags").val(data.metaTemplate.keyword);
                 $("#select2_tags").select2({

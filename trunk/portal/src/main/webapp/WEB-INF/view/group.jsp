@@ -465,7 +465,7 @@
                             <label class=" col-sm-3 control-label" for="idCard">证件号:<span
                                     style="color: red;">*</span></label>
                             <div class="col-sm-9">
-                                <input id="idCard" class="form-control" type="text" name="idCard" placeholder="请输入真实姓名">
+                                <input id="idCard" class="form-control" type="text" name="idCard" placeholder="请输入证件号">
                             </div>
                         </div>
                         <div class="form-group">

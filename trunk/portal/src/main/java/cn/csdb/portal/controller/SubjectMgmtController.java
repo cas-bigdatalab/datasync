@@ -184,7 +184,7 @@ public class SubjectMgmtController {
         logger.info("updated image");
         Subject subjectByCode = subjectMgmtService.findByCode(subject.getSubjectCode());
         if (!Strings.isBlank(subject.getAdminPasswd())) {
-            String securityPassword = MD5Util.encryptPassword(subject.getSubjectCode(), subject.getAdminPasswd(), "cnic.cn");
+            String securityPassword = MD5Util.encryptPassword(subject.getAdmin(), subject.getAdminPasswd(), "cnic.cn");
             subject.setAdminPasswd(securityPassword);
         } else {
             subject.setAdminPasswd(subjectByCode.getAdminPasswd());

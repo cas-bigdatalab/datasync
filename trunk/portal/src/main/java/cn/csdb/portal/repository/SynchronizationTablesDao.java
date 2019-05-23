@@ -44,11 +44,9 @@ public class SynchronizationTablesDao {
         return synchronizationTables;
     }
 
-    public void updataByIdAndFrequency(String synchronizeId, String frequency) {
+    public void updateByIdAndFrequency(String synchronizeId, String frequency) {
         long dataTime = Period.valueOf(frequency).getDataTime();
         Update update = Update.update("frequency", dataTime);
         SynchronizationTable id = mongoTemplate.findAndModify(new Query(Criteria.where("_id").is(synchronizeId)), update, SynchronizationTable.class);
-        String s = id.toString();
-        System.out.println(s);
     }
 }

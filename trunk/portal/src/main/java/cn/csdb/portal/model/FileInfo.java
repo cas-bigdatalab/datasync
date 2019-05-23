@@ -26,6 +26,8 @@ public class FileInfo {
     private Date time;
     @Field("previewType")
     private String previewType;
+    @Field("fileStatus")
+    private String fileStatus; // 0:删除 1:在用
 
     public String getId() {
         return id;
@@ -81,5 +83,13 @@ public class FileInfo {
 
     public void setPreviewType(String previewType) {
         this.previewType = previewType;
+    }
+
+    public String getFileStatus() {
+        return fileStatus;
+    }
+
+    public void setFileStatus(String fileStatus) {
+        this.fileStatus = fileStatus;
     }
 }

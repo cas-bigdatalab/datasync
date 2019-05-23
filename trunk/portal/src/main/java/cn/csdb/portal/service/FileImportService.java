@@ -918,4 +918,20 @@ public class FileImportService {
         return printWriter;
     }
 
+    public JSONObject selectSynchronizeInfo(String loginId, String subjectCode) {
+        JSONObject jsonObject = new JSONObject();
+        List<SynchronizationTable> synchronizationTables = synchronizationTablesDao.selectSynchronizeInfo(loginId, subjectCode);
+        Map<String, Period> map = new HashMap<>(16);
+        for (SynchronizationTable synchronizationTable : synchronizationTables) {
+            Period period = Period.selectPeriodByDataTime(synchronizationTable.getFrequency());
+            map.put(synchronizationTable.getId(), period);
+        }
+        jsonObject.put("list", synchronizationTables);
+        jsonObject.put("select", map);
+        return jsonObject;
+    }
+
+    public void updateSynchronizeTable(String synchronizeId, String frequency) {
+        synchronizationTablesDao.updateByIdAndFrequency(synchronizeId, frequency);
+    }
 }

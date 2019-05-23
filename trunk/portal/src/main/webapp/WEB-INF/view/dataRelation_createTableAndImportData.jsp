@@ -76,6 +76,44 @@
         </div>
     </div>
 </div>
+
+<div id="synchronizeConfigurationAndLog" class="modal fade" tabindex="-1" data-width="200">
+    <div class="modal-dialog" style="width:600px;width:auto;max-width: 50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                        id="editTableFieldComsCloseId11"></button>
+                <h4 class="modal-title" id="title_id1">同步设置与记录</h4>
+
+            </div>
+
+            <div class="modal-body" style="overflow:auto;max-height: 500px;">
+
+                <div class="tab-content"
+                     style="background-color: white;max-height:50%;padding-top: -10px ;">
+                    <div style="margin-left: 1%;margin-right: 1%;width:98%;">
+                        <table class="table table-bordered data-table" border="0">
+                            <thead>
+                            <tr class='table_tr'>
+                                <th>表名</th>
+                                <th>频率</th>
+                                <th>日志</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="update_div" class="modal-footer">
+                <%--<button id="updatebtn"  style="width: 80px;height: 30px; border: 1px solid #cad9ea;">保存</button>--%>
+            </div>
+        </div>
+    </div>
+</div>
 <%--弹窗页定义 结束--%>
 
 
@@ -178,13 +216,16 @@
                             for="synchronizeTable">同步更新表</label></div>
                     <div class="col-md-2">
                         <select id="period" style="display: none;">
-                            <option value="0">请选择同步周期</option>
+                            <option value="TERMINATION">请选择同步周期</option>
                             <option value="HALF_OF_THE_DAY">12小时</option>
                             <option value="DAY">天</option>
                             <option value="WEEK">周</option>
                             <option value="MONTH">月</option>
                             <option value="YEAR">年</option>
                         </select>
+                    </div>
+                    <div class="col-md-2 text-left">
+                        <a onclick="showSynchronizeDialog()"><strong>同步设置与记录</strong></a>
                     </div>
                 </div>
                 <div style="height:20px"></div>
@@ -269,6 +310,34 @@
                 } else {
                     $period.hide();
                 }
+            });
+
+            $(document).on("focus", ".synchronizeTable", function () {
+                var $_this = $(event.target);
+                $_this.data("last", $_this.val());
+            });
+
+            $(document).on("change", ".synchronizeTable", function () {
+                var $_this = $(event.target);
+                var val = $_this.val();
+                bootbox.confirm("当前操作会变更表的同步频率确定要修改么？", function (r) {
+                    if (r) {
+                        var id = $_this.attr("id");
+                        $.ajax({
+                            type: "POST",
+                            url: "${ctx}/fileImport/updateSynchronizeTable",
+                            dataType: "JSON",
+                            data: {
+                                "synchronizeId": id,
+                                "frequency": val
+                            },
+                            success: function (data) {
+                            }
+                        })
+                    } else {
+                        $_this.val($_this.data("last"));
+                    }
+                });
             })
         })();
 
@@ -832,6 +901,27 @@
             })
         }
 
+        // 同步设置与记录
+        function showSynchronizeDialog() {
+            $("#synchronizeConfigurationAndLog").modal("show");
+            var $tbody = $("#synchronizeConfigurationAndLog tbody");
+            $.ajax({
+                type: "POST",
+                url: "${ctx}/fileImport/selectSynchronizeInfo",
+                dataType: "JSON",
+                data: {},
+                success: function (data) {
+                    var html = template("synchronizeConfiguration", {"list": data.list});
+                    debugger;
+                    $tbody.html("");
+                    $tbody.html(html);
+                    $.each(data.select, function (key, value) {
+                        $("#" + key).val(value);
+                    })
+                }
+            })
+        }
+
     </script>
 </div>
 <%--js 结束--%>
@@ -1013,6 +1103,34 @@
         </tr>
         {{/each}}
         </tbody>
+    </script>
+
+    <%--同步设置与记录列表--%>
+    <script type="text/html" id="synchronizeConfiguration">
+        {{each list as value i}}
+        <tr>
+            <td>{{value.tableName}}</td>
+            <td>
+                <select class="synchronizeTable" id="{{value.id}}">
+                    <option value="TERMINATION">
+                        {{if value.frequency == 0}}
+                        请选择同步周期
+                        {{else}}
+                        停止当前同步操作
+                        {{/if}}
+                    </option>
+                    <option value="HALF_OF_THE_DAY">12小时</option>
+                    <option value="DAY">天</option>
+                    <option value="WEEK">周</option>
+                    <option value="MONTH">月</option>
+                    <option value="YEAR">年</option>
+                </select>
+            </td>
+            <td>
+                <a href="${ctx}/fileNet/downloadLog?fileName={{value.tableName}}.log" target="_Blank">点击下载日志</a>
+            </td>
+        </tr>
+        {{/each}}
     </script>
 </div>
 <%--模板定义 结束--%>
