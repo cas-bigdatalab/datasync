@@ -759,8 +759,12 @@
                             datataskId:id
                         },
                         success:function (data) {
-                            toastr["success"]("删除成功");
-                            tableConfiguration2(1,dataSourceName,dataSourceStatus);
+                            if(data=="1"){
+                                toastr["success"]("删除成功");
+                                tableConfiguration2(1,dataSourceName,dataSourceStatus);
+                            }else if(data=="2"){
+                                toastr["warning"]("处于“定期同步”状态下的任务需要先关闭“定时同步”才能删除！");
+                            }
                         },
                         error:function () {
                             console.log("请求失败");

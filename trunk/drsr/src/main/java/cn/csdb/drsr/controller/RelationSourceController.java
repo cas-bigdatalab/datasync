@@ -296,8 +296,9 @@ public class RelationSourceController {
         connection=dataSource.getConnection(host,port,userName,password,"");
         if(connection==null){
             result="0";
+            jsonObject.put("result",result);
             System.out.println("数据库连接创建失败！");
-            return  null;
+            return  jsonObject;
         }
 
         connection.close();

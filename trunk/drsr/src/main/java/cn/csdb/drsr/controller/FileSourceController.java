@@ -264,20 +264,25 @@ public class FileSourceController {
                 "attachment;fileName="+ URLEncoder.encode(fileName, "UTF-8"));
 
         File file = new File(path,fileName);
-        //2、 读取文件--输入流
-        InputStream input=new FileInputStream(file);
-        //3、 写出文件--输出流
-        OutputStream out = response.getOutputStream();
-        byte[] buff =new byte[1024];
-        int index=0;
-        //4、执行 写出操作
-        while((index= input.read(buff))!= -1){
-            out.write(buff, 0, index);
-            out.flush();
+        if(file.exists()){
+            //2、 读取文件--输入流
+            InputStream input=new FileInputStream(file);
+            //3、 写出文件--输出流
+            OutputStream out = response.getOutputStream();
+            byte[] buff =new byte[1024];
+            int index=0;
+            //4、执行 写出操作
+            while((index= input.read(buff))!= -1){
+                out.write(buff, 0, index);
+                out.flush();
+            }
+            out.close();
+            input.close();
+            return null;
+        }else{
+            return  null;
         }
-        out.close();
-        input.close();
-        return null;
+
     }
 
     /**

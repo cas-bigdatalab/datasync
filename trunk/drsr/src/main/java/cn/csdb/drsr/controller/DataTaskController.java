@@ -177,6 +177,7 @@ public class DataTaskController {
     @ResponseBody
     public int deleteDatatask(String datataskId){
         List<DataTask> dataTaskList=dataTaskService.getdatataskById(datataskId);
+        int result=0;
         //删除本地生成的文件夹
         if(dataTaskList.size()!=0){
             if("file".equals(dataTaskList.get(0).getDataTaskType())){
@@ -185,6 +186,10 @@ public class DataTaskController {
                     file.delete();
                 }
             }else{
+                if("true".equals(dataTaskList.get(0).getSync())){
+                    result=2;//请关闭同步操作！
+                    return result;
+                }
                 String path=dataTaskList.get(0).getFilePath().replaceAll("%_%","/");
                 File file=new File(path.substring(0,path.lastIndexOf("/")));
                 File[] fs = file.listFiles();
@@ -199,7 +204,7 @@ public class DataTaskController {
 
             }
         }
-        int result=dataTaskService.deleteDatataskById(datataskId);
+        result=dataTaskService.deleteDatataskById(datataskId);
         if("1".equals(result+"")){
             //dataTaskService.get
         }

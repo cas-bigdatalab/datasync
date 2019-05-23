@@ -191,4 +191,6 @@ public class DataTask {
     public void setLogPath(String logPath) {
         LogPath = logPath;
     }
+
+
 }

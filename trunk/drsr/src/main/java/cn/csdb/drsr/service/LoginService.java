@@ -9,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -145,6 +147,11 @@ public class LoginService
         {
             dbPort = dataMap.get("dbPort").toString();
         }
+
+        //登陸成功
+      ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().setAttribute("subjectCode",userName);
+      ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().setAttribute("userName",subjectCode);
+        String ss = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
 
 
         UserInformation userInformation=new UserInformation();

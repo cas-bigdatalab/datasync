@@ -87,9 +87,9 @@ public class LoginController {
             System.out.println();
         }
         String retView = loginStatus+"";
-        if(loginStatus==1){
-            request.getSession().setAttribute("userName", userName);
-        }
+//        if(loginStatus==1){
+//            request.getSession().setAttribute("userName", userName);
+//        }
 
 
 //        if (loginStatus == 1)
