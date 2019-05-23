@@ -280,7 +280,11 @@ public class ShowTypeInfDao {
     //    保存表名注释
     public void saveTableComment(String tableName, String tableComment, String subjectCode) {
         Update update = Update.update("tableName", tableName).set("tableComment", tableComment);
-        mongoTemplate.updateFirst(new Query(Criteria.where("subjectCode").is(subjectCode).and("tableName").is(tableName)), update, ShowTypeInf.class);
+        ShowTypeInf showTypeInf1 = checkData(tableComment, subjectCode);
+        if (showTypeInf1.getTableComment().equals(tableComment)) {
+        } else {
+            mongoTemplate.updateFirst(new Query(Criteria.where("subjectCode").is(subjectCode).and("tableName").is(tableName)), update, ShowTypeInf.class);
+        }
     }
 
     //    保存关联数据表
@@ -389,7 +393,7 @@ public void saveTypeFile(int DisplayType, String tableName, String columnName, S
     }
 
     //    保存文本类型
-    public void saveTypeText(String tableName, String column, String subjectCode) {
+    public void saveTypeText(String tableName, String column, String subjectCode, String tableComment) {
         ShowTypeInf s = checkData(tableName, subjectCode);
         List<ShowTypeDetail> list = s.getShowTypeDetailList();
         ShowTypeDetail showTypeDetail = new ShowTypeDetail();
@@ -398,8 +402,26 @@ public void saveTypeFile(int DisplayType, String tableName, String columnName, S
         showTypeDetail.setColumnName(column);
         list = checkColumn(list, column);
         list.add(showTypeDetail);
-        Update update = Update.update("tableName", tableName).set("showTypeDetailList", list);
+        Update update = Update.update("tableName", tableName).set("showTypeDetailList", list).set("tableComment", tableComment);
         mongoTemplate.updateFirst(new Query(Criteria.where("subjectCode").is(subjectCode).and("tableName").is(tableName)), update, ShowTypeInf.class);
+    }
+
+    //    新建数据
+    public void insertShowTypeInf(String tableComment, String tableName, String subjectCode, String s_column[]) {
+        ShowTypeInf showTypeInf = new ShowTypeInf();
+        showTypeInf.setTableComment(tableComment);
+        showTypeInf.setTableName(tableName);
+        showTypeInf.setSubjectCode(subjectCode);
+        List<ShowTypeDetail> list = new ArrayList<>();
+        for (int i = 0; i < s_column.length; i++) {
+            ShowTypeDetail showTypeDetail = new ShowTypeDetail();
+            showTypeDetail.setType(0);
+            showTypeDetail.setStatus(1);
+            showTypeDetail.setColumnName(s_column[i]);
+            list.add(showTypeDetail);
+        }
+        showTypeInf.setShowTypeDetailList(list);
+        mongoTemplate.insert(showTypeInf);
     }
 
 }
