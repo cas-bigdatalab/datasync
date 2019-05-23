@@ -118,6 +118,12 @@
             background-color: #FFFFff !important;
         }
 
+        .left_top {
+            padding-left: 0px !important;
+            padding-top: 17px;
+            text-align: center;
+        }
+
     </style>
 
 </head>
@@ -133,7 +139,8 @@
             <%--NEW BAR ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！--%>
             <div class="page-sidebar" style="width: 18%">
                 <div class="left_bottom">
-                    <div class="left_top"><img src="${ctx}/resources/img/logo.png">
+                    <div class="left_top">
+                        <%--<img src="${ctx}/resources/img/logo.png">--%>
                         <shiro:hasRole name="admin">
                             <span style="font-weight: bold;color: white;font-size: 20px;">${applicationScope.menus['systemRole_admin']}</span>
                         </shiro:hasRole>

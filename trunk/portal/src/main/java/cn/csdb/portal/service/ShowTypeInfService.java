@@ -44,12 +44,7 @@ public class ShowTypeInfService {
             String relationColumnK = s_col;
             String relationColumnV = s_col2;
 
-            System.out.println(s_col + "..." + s_col2 + "..." + s_Table);
-//            if (columnName.equals(s_col)) {
-//                relationColumn = s_col2;
-//            }else if(columnName.equals(s_col2)){
-//                relationColumn=s_col;
-//            }
+//            System.out.println(s_col + "..." + s_col2 + "..." + s_Table);
 
             showTypeInfDao.saveTypeEnumSql(DisplayType, tableName, columnName, optionMode, relationColumnK, relationColumnV, relationTable, subjectCode);
         }
@@ -73,6 +68,7 @@ public class ShowTypeInfService {
         ShowTypeInf showTypeInf = showTypeInfDao.checkData(tableName, subjectCode);
         if (showTypeInf != null) {
             if (showTypeInf.getShowTypeDetailList() != null) {
+//                如果该表中的字段已经设置了显示类型，如果showColumnType->s_type==1,保存为文本类型
                 List<ShowTypeDetail> showTypeDetailList = showTypeInf.getShowTypeDetailList();
                 for (int i = 0; i < showTypeDetailList.size(); i++) {
                     for (int j = 0; j < s_column.length; j++) {
@@ -81,6 +77,7 @@ public class ShowTypeInfService {
                         }
                     }
                 }
+//                如果该字段没有设置过显示类型，默认保存为文本类型
                 for (int ii = 0; ii < s_column.length; ii++) {
                     if (isColumnExit(showTypeDetailList, s_column[ii]) == 0) {
                         showTypeInfDao.saveTypeText(tableName, s_column[ii], subjectCode, tableComment);
@@ -88,6 +85,7 @@ public class ShowTypeInfService {
                 }
             }
         } else {
+//            如果表中没有该表显示类型的设置，新建数据，所有字段默认设置文本型
             showTypeInfDao.insertShowTypeInf(tableComment, tableName, subjectCode, s_column);
 
 
