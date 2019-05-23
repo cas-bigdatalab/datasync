@@ -162,7 +162,6 @@
     <div class="pic-item" style="width:210px;float: left; height: 200px;margin: 15px;">
         <a href="javaScript:void(0)" id="{{value.subjectCode}}" onclick="findBySubjectCode(this)">
             <img src="{{value.imagePath}}" width="200px" height="150px"/>
-            <%--<img src="{{value.imagePath}}" width="100%;"/>--%>
             <span style="text-align: center;font-weight: bolder;font-size: smaller;display: block;">{{value.subjectName}}</span>
         </a>
     </div>
@@ -171,12 +170,6 @@
 
 <script type="text/html" id="showThemeDetial11">
     {{each subject as value i}}
-    <%--<span style="width:13%;margin-left: 3%;float: left">--%>
-    <%--<img src="${ctx}/{{value.imagePath}}"/>--%>
-    <%--<br/>--%>
-    <%--<p>{{value.subjectName}}</p>--%>
-    <%--</span>--%>
-    <%--<span style="float: left;">简介：{{value.contact}}</span>--%>
     <div class="pic-item" style=" width: 17%; float: left;height: 150px;margin-bottom: 50px;">
         <img src="{{value.imagePath}}" width="200px" height="150px"/>
         <h5 style="text-align: center;">{{value.subjectName}}</h5>
@@ -191,8 +184,6 @@
 <script type="text/html" id="single_tbodyTemplent">
     {{each vCount as value i}}
     <tr>
-        <%--<a href="${applicationScope.systemPro['cas.url.prefix']}/login?service=${applicationScope.systemPro['dataexplore.url']}/shiro-cas">登录</a>--%>
-        <%--<td><a href="http://10.0.86.85/DataExplore/sdo/detail&id={{value.id}}">{{value.title}}</a></td>--%>
         <td><a href="${applicationScope.systemPro['dataexplore.url']}/{{value.id}}">{{value.title}}</a></td>
         <td>{{value.vCount}}</td>
         <td>{{value.dCount}}</td>
@@ -244,6 +235,8 @@
             '#58bae5', '#54d7b3', '#51c061', '#89c154', '#e2e061',
             '#e2b65f'];
         $(function () {
+
+            //统计主题库内访问量前十
             $.ajax({
                 url: "${ctx}/ThemeStatisticVisit",
                 type: "post",
@@ -315,7 +308,7 @@
                     chart.setOption(option);
                 }
             });
-
+            //统计主题库内下载量前十
             $.ajax({
                 url: "${ctx}/ThemeStatisticDown",
                 type: "post",
@@ -389,7 +382,7 @@
                     chart.setOption(option);
                 }
             });
-
+            //统计数据集访问量前十
             $.ajax({
                 url: "${ctx}/dataCollentionVisit",
                 type: "post",
@@ -466,7 +459,7 @@
                     chart.setOption(option);
                 }
             });
-
+            //统计数据集下载量前十
             $.ajax({
                 url: "${ctx}/dataCollentionDown",
                 type: "post",
@@ -536,7 +529,7 @@
                     chart.setOption(option);
                 }
             });
-
+            //查询出所有主题库
             $.ajax({
                 url: "${ctx}/showAllTheme",
                 type: "post",

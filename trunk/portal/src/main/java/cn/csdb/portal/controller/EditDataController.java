@@ -33,13 +33,17 @@ public class EditDataController {
     private EditDataService editDataService;
 
 
-
+    /**
+     * @Description: 显示所有表
+     * @Param: [subjectCode]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @Author: zcy
+     * @Date: 2019/5/23
+     */
     @ResponseBody
     @RequestMapping("/showTable")
     public JSONObject showTable(String subjectCode){
         JSONObject jsonObject=new JSONObject();
-//        DataSrc datasrc=getDataSrc(subjectCode);
-//        List<String> list = dataSrcService.relationalDatabaseTableList(datasrc);
         List<String> list = editDataService.searchTableNames(subjectCode);
 
         List<ShowTypeInf> showTypeInfList1 = new ArrayList<>();
@@ -63,12 +67,18 @@ public class EditDataController {
         return jsonObject;
     }
 
+    /**
+     * @Description: 查询表数据
+     * @Param: [subjectCode, tableName, pageNo, pageSize, searchKey]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @Author: zcy
+     * @Date: 2019/5/23
+     */
     @ResponseBody
     @RequestMapping("/showTableData")
-        public JSONObject test(String subjectCode, String tableName, @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
-                               @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, String searchKey) {
-//        DataSrc datasrc=getDataSrc(subjectCode);
-         List<Map<String,Object>> list=new ArrayList<>();
+    public JSONObject test(String subjectCode, String tableName, @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
+                           @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, String searchKey) {
+        List<Map<String,Object>> list=new ArrayList<>();
 
         Map<String, List<String>> map = editDataService.getTableStructure(subjectCode, tableName);
         List<String> list3=map.get("COLUMN_NAME");
@@ -78,7 +88,6 @@ public class EditDataController {
         List<String> list7=map.get("autoAdd");
         List<String> list8=map.get("COLUMN_TYPE");
         list = editDataService.getTableData(subjectCode, tableName, pageNo, pageSize, searchKey, list3);
-        List<String> list1=new ArrayList<>();
         int countNum = editDataService.countData(subjectCode, tableName, searchKey, list3);
 
         JSONObject jsonObject=new JSONObject();
@@ -95,14 +104,14 @@ public class EditDataController {
         jsonObject.put("totalPages", countNum % pageSize == 0 ? countNum / pageSize : countNum / pageSize + 1);
 
         jsonObject.put("isSync", check);
-         jsonObject.put("dataDatil",list);
-         jsonObject.put("columns",list3);
+        jsonObject.put("dataDatil",list);
+        jsonObject.put("columns",list3);
         jsonObject.put("dataType",list4);
         jsonObject.put("columnComment",list5);
         jsonObject.put("pkColumn",list6);
         jsonObject.put("autoAdd",list7);
         jsonObject.put("columnType",list8);
-       return jsonObject;
+        return jsonObject;
     }
 
 
@@ -111,7 +120,7 @@ public class EditDataController {
     @RequestMapping("/showTableDataTestTmpl")
     public JSONObject showTableDataTestTmpl(String subjectCode, String tableName,@RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
                            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
-//        DataSrc datasrc=getDataSrc(subjectCode);
+     
         List<List<Object>> list=new ArrayList<>();
 
         Map<String, List<String>> map = editDataService.getTableStructure(subjectCode, tableName);
@@ -120,7 +129,6 @@ public class EditDataController {
         List<String> list5=map.get("COLUMN_COMMENT");
 
         list = editDataService.getTableDataTestTmpl(subjectCode, tableName, pageNo, pageSize);
-        List<String> list1=new ArrayList<>();
         int countNum = editDataService.countData(subjectCode, tableName, subjectCode, list3);
         JSONObject jsonObject=new JSONObject();
         jsonObject.put("totalCount", countNum);
@@ -150,8 +158,6 @@ public class EditDataController {
         JSONObject jsonObject=new JSONObject();
         JSONArray jsonArray=JSONArray.parseArray(addData);
         String enumnCoumns[] = enumnCoumn.split(",");
-//
-//        ShowTypeInf showTypeInf = showTypeInfService.getShowTypeInf(tableName, subjectCode);
 
         Map<String, List<String>> map = editDataService.getTableStructure(subjectCode, tableName);
 
@@ -189,9 +195,16 @@ public class EditDataController {
         return jsonObject;
     }
 
+    /**
+     * @Description: 删除表数据
+     * @Param: [subjectCode, tableName, delPORTALID]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @Author: zcy
+     * @Date: 2019/5/23
+     */
     @RequestMapping("deleteData")
     @ResponseBody
-    public JSONObject deleteData(String subjectCode,String tableName,String delPORTALID){
+    public JSONObject deleteData(String subjectCode, String tableName, String delPORTALID){
         JSONObject jsonObject=new JSONObject();
         System.out.println(subjectCode+",,,"+tableName+",,,"+delPORTALID);
 //        DataSrc datasrc=getDataSrc(subjectCode);
@@ -204,34 +217,13 @@ public class EditDataController {
         return jsonObject;
     }
 
-    public String getEnumKeyByVal(ShowTypeInf showTypeInf, String[] enumnCoumns, String col, String val, String subjectCode) {
-        if (showTypeInf != null) {
-            for (int ii = 0; ii < enumnCoumns.length; ii++) {
-                if (col.equals(enumnCoumns[ii])) {
-                    ShowTypeDetail showTypeDetail = showTypeInfService.getShowTypeDetail(showTypeInf, enumnCoumns[ii]);
-                    if (showTypeDetail != null) {
-                        if (showTypeDetail.getOptionMode().equals("1")) {
-                            List<EnumData> list = showTypeDetail.getEnumData();
-                            for (EnumData e : list) {
-                                if (val.equals(e.getValue())) {
-                                    val = e.getKey();
-                                }
-                            }
-                        }
-                        if (showTypeDetail.getOptionMode().equals("2")) {
-                            String reTable = showTypeDetail.getRelationTable();
-                            String recolK = showTypeDetail.getRelationColumnK();
-                            String recolV = showTypeDetail.getRelationColumnV();
-                            val = editDataService.getSqlEnumData(subjectCode, reTable, recolK, recolV, val);
-                        }
-                    }
-                }
-
-            }
-        }
-        return val;
-    }
-
+    /**
+     * @Description: 点击新增数据
+     * @Param: [subjectCode, tableName]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @Author: zcy
+     * @Date: 2019/5/23
+    */ 
     @ResponseBody
     @RequestMapping("/toaddTableData")
     public JSONObject toaddTableData(String subjectCode,String tableName){
@@ -298,11 +290,17 @@ public class EditDataController {
         return enumDataList;
     }
 
+    /**
+     * @Description: 点击更新数据
+     * @Param: [subjectCode, tableName, PORTALID]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @Author: zcy
+     * @Date: 2019/5/23
+     */
     @RequestMapping("toupdateTableData")
     @ResponseBody
-    public JSONObject toupdateTableData(String subjectCode,String tableName,String PORTALID){
+    public JSONObject toupdateTableData(String subjectCode, String tableName, String PORTALID){
         JSONObject jsonObject=new JSONObject();
-//        DataSrc datasrc=getDataSrc(subjectCode);
         Map<String, List<String>> map = editDataService.getTableStructure(subjectCode, tableName);
         List<String> list1=map.get("COLUMN_NAME");
         List<String> list2=map.get("DATA_TYPE");//字段类型
@@ -395,7 +393,6 @@ public class EditDataController {
 //        旧数据
 //    List<String> list = editDataService.getDataByPORTALID(subjectCode, tableName, delPORTALID);
         List<String> list1 = map.get("pkColumn");    //主键
-//    List<String> list2=map.get("autoAdd");
         List<String> list3 = map.get("IS_NULLABLE");  //不为空
 
         for (int i = 0; i < jsonArray2.size(); i++) {
@@ -422,14 +419,20 @@ public class EditDataController {
         } else {
             jsonObject.put("data", "0");
         }
-    return jsonObject;
-}
+        return jsonObject;
+    }
 
+    /**
+     * @Description: 查看数据
+     * @Param: [subjectCode, tableName, PORTALID]
+     * @return: com.alibaba.fastjson.JSONObject
+     * @Author: zcy
+* @Date: 2019/5/23 
+*/
     @RequestMapping("toCheckTableData")
     @ResponseBody
     public JSONObject toCheckTableData(String subjectCode, String tableName, String PORTALID){
         JSONObject jsonObject=new JSONObject();
-//        DataSrc datasrc=getDataSrc(subjectCode);
         Map<String, List<String>> map = editDataService.getTableStructure(subjectCode, tableName);
         List<String> list1=map.get("COLUMN_NAME");
         List<String> list2=map.get("DATA_TYPE");//字段类型
@@ -446,8 +449,8 @@ public class EditDataController {
         jsonObject.put("pkColumn",list5);
         jsonObject.put("COLUMN_TYPE",list6);
         List<String> list = editDataService.getDataByPORTALID(subjectCode, tableName, PORTALID);
-        List<DataComposeDemo> d=new ArrayList<>();
-        for(int i=0;i<list7.size();i++){
+        List<DataComposeDemo> dataComposeDemos=new ArrayList<>();
+        for(int i = 0; i<list7.size(); i++){
             DataComposeDemo composeDemo=new DataComposeDemo();
             composeDemo.setColName(list7.get(i));
             composeDemo.setAutoAdd(list4.get(i));
@@ -456,10 +459,9 @@ public class EditDataController {
             composeDemo.setDataType(list2.get(i));
             composeDemo.setColumnType(list6.get(i));
             composeDemo.setData(list.get(i));
-            d.add(composeDemo);
+            dataComposeDemos.add(composeDemo);
         }
-//        jsonObject.put("data",list);
-        jsonObject.put("data",d);
+        jsonObject.put("data",dataComposeDemos);
         return jsonObject;
     }
 

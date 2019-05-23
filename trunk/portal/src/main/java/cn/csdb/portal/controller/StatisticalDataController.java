@@ -29,12 +29,6 @@ public class StatisticalDataController {
     @Autowired
     private SubjectService subjectService;
 
-//    @RequestMapping("/statisticalDataDetail")
-//    public ModelAndView index6(){
-//        ModelAndView modelAndView=new ModelAndView("statisticalDataDetail");
-//
-//        return modelAndView;
-//    }
 
     @RequestMapping("/ThemeStatisticVisit")
     @ResponseBody
@@ -84,14 +78,12 @@ public class StatisticalDataController {
         List<String> subName=new ArrayList<>();
         List<Integer>   visitCount=new ArrayList<>();
         List<Resource> list=statisticalDataService.getResourcVisit();
-        int i=0;
-        for(Resource r:list){
-            if (i<10){
-                subName.add(r.getTitle());
-                visitCount.add(r.getvCount());
-                i++;
-            }else{
-                break;
+        if (list != null) {
+            for (Resource r : list) {
+                if (r != null) {
+                    subName.add(r.getTitle());
+                    visitCount.add(r.getvCount());
+                }
             }
         }
         jsonObject.put("name",subName);
@@ -105,14 +97,12 @@ public class StatisticalDataController {
         List<String> subName=new ArrayList<>();
         List<Integer>   downCount=new ArrayList<>();
         List<Resource> list=statisticalDataService.getResourcDown();
-        int i=0;
-        for(Resource r:list){
-            if (i<10){
-                subName.add(r.getTitle());
-                downCount.add(r.getdCount());
-                i++;
-            }else{
-                break;
+        if (list != null) {
+            for (Resource r : list) {
+                if (r != null) {
+                    subName.add(r.getTitle());
+                    downCount.add(r.getdCount());
+                }
             }
         }
         jsonObject.put("name",subName);

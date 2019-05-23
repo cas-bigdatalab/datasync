@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-//import cn.csdb.portal.model.Resource;
 
 
 /**
@@ -161,11 +160,6 @@ public class ResourceDao {
 //    根据subjectCode查询
     public long getBySubject(String subjectCode){
         List<cn.csdb.portal.model.Resource> list = mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode).and("status").is("2")), cn.csdb.portal.model.Resource.class);
-//        Aggregation aggregation=Aggregation.newAggregation(Aggregation.match(Criteria.where("subjectCode").is(subjectCode)),
-//                                Aggregation.group("subjectCode").sum("vCount").as("visitCount"));
-//        AggregationResults<cn.csdb.portal.model.Resource> result=
-//                                    mongoTemplate.aggregate(aggregation,"resource",cn.csdb.portal.model.Resource.class);
-//        List<cn.csdb.portal.model.Resource> list=result.getMappedResults();
         long l=0;
         if(list.size()>0){
             for(cn.csdb.portal.model.Resource r:list){
@@ -190,7 +184,7 @@ public class ResourceDao {
 //    统计数据集访问量
     public List<cn.csdb.portal.model.Resource> getResourceVisit(){
         List<cn.csdb.portal.model.Resource> list = mongoTemplate.find(new Query(Criteria.where("status").is("2")).with(new Sort(Sort.Direction.DESC,
-                                                  "vCount")),cn.csdb.portal.model.Resource.class);
+                "vCount")).skip(0).limit(10), cn.csdb.portal.model.Resource.class);
 
         return list;
     }
@@ -198,7 +192,7 @@ public class ResourceDao {
 //    统计数据集下载量
     public List<cn.csdb.portal.model.Resource> getResourceDown(){
         List<cn.csdb.portal.model.Resource> list = mongoTemplate.find(new Query(Criteria.where("status").is("2")).with(new Sort(Sort.Direction.DESC,
-                "dCount")),cn.csdb.portal.model.Resource.class);
+                "dCount")).skip(0).limit(10), cn.csdb.portal.model.Resource.class);
 
         return list;
     }

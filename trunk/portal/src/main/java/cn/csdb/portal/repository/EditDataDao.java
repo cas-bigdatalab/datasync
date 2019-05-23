@@ -293,7 +293,6 @@ public class EditDataDao {
             for (int i = 0, j = 1; i < jsonArray.size(); i++) {
                 String col = jsonArray.getJSONObject(i).getString("columnName");
                 Object val = jsonArray.getJSONObject(i).getString("columnValue");
-                System.out.println(val);
                 if (pkyList.get(i).equals("PRI") && addAuto.get(i).equals("auto_increment")) { //有主键且自增
                 } else {
                     if (col.equals("PORTALID")) {
@@ -327,11 +326,18 @@ public class EditDataDao {
         return check;
     }
 
+    /**
+     * @Description: 获得字典枚举数据
+     * @Param: [showTypeInf, enumnCoumns, col, val, dataSrc]
+     * @return: java.lang.Object
+     * @Author: zcy
+     * @Date: 2019/5/23
+     */
     public Object getEnumKeyByVal(ShowTypeInf showTypeInf, String[] enumnCoumns, String col, Object val, DataSrc dataSrc) {
         if (showTypeInf != null) {
             for (int ii = 0; ii < enumnCoumns.length; ii++) {
                 if (col.equals(enumnCoumns[ii])) {
-                    ShowTypeDetail showTypeDetail = getShowTypeDetail(showTypeInf, enumnCoumns[ii]);
+                    ShowTypeDetail showTypeDetail = selectShowTypeDetail(showTypeInf, enumnCoumns[ii]);
                     if (showTypeDetail != null) {
                         if (showTypeDetail.getOptionMode().equals("1")) {
                             List<EnumData> list = showTypeDetail.getEnumData();
@@ -355,7 +361,14 @@ public class EditDataDao {
         return val;
     }
 
-    public ShowTypeDetail getShowTypeDetail(ShowTypeInf showTypeInf, String columnName) {
+    /**
+     * @Description:
+     * @Param: [showTypeInf, columnName]
+     * @return: cn.csdb.portal.model.ShowTypeDetail
+     * @Author: zcy
+     * @Date: 2019/5/23
+     */
+    public ShowTypeDetail selectShowTypeDetail(ShowTypeInf showTypeInf, String columnName) {
         List<ShowTypeDetail> list = showTypeInf.getShowTypeDetailList();
         for (ShowTypeDetail s : list) {
             if (s.getColumnName().equals(columnName) && s.getStatus() == 1) {
@@ -481,6 +494,13 @@ public class EditDataDao {
         return listMap;
     }
 
+    /**
+     * @Description: 检索
+     * @Param: [dataSrc, tableName, pageNo, pageSize, searchKey, columnName]
+     * @return: java.util.List<java.util.Map < java.lang.String , java.lang.Object>>
+     * @Author: zcy
+     * @Date: 2019/5/23
+*/ 
     public List<Map<String, Object>> selectTableDataBySearchKey(DataSrc dataSrc, String tableName, int pageNo, int pageSize, String searchKey, List<String> columnName) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
@@ -533,6 +553,13 @@ public class EditDataDao {
         return listMap;
     }
 
+    /**
+     * @Description: 根据检索词查询数据总条数
+     * @Param: [dataSrc, tableName, searchKey, columnName]
+     * @return: int
+     * @Author: zcy
+     * @Date: 2019/5/23
+*/
     public int countDataBySerachKey(DataSrc dataSrc, String tableName, String searchKey, List<String> columnName) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
@@ -574,6 +601,13 @@ public class EditDataDao {
         return count;
     }
 
+    /**
+     * @Description: 获得字典枚举的数据
+     * @Param: [dataSrc, tableName, colK, colV]
+     * @return: java.util.List<cn.csdb.portal.model.EnumData>
+     * @Author: zcy
+     * @Date: 2019/5/23
+     */
     public List<EnumData> getEnumData(DataSrc dataSrc, String tableName, String colK, String colV) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
@@ -600,6 +634,13 @@ public class EditDataDao {
         return list;
     }
 
+    /**
+     * @Description: 根据列名查询数据
+     * @Param: [dataSrc, tableName, columnName]
+     * @return: java.util.List<java.lang.String>
+     * @Author: zcy
+     * @Date: 2019/5/23
+     */
     public List<String> getDataByColumn(DataSrc dataSrc, String tableName, String columnName) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
@@ -703,6 +744,13 @@ public class EditDataDao {
         return colKey;
     }
 
+    /**
+     * @Description: 获取该数据库内所有表名
+     * @Param: [dataSrc]
+     * @return: java.util.List<java.lang.String>
+     * @Author: zcy
+     * @Date: 2019/5/23
+     */
     public List<String> searchTableNames(DataSrc dataSrc) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection conn = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
