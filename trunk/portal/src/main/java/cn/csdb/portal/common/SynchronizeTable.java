@@ -50,7 +50,7 @@ class SynchronizeTableTimer extends TimerTask {
 
     @Override
     public void run() {
-        List<SynchronizationTable> all = synchronizationTablesDao.selectAll();
+        List<SynchronizationTable> all = synchronizationTablesDao.selectAllOfDataAssembler();
 
         for (SynchronizationTable synchronizationTable : all) {
             boolean needSynchronize = compareTime(synchronizationTable);

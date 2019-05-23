@@ -22,4 +22,20 @@ public enum Period {
         return this.dataTime;
     }
 
+    /**
+     * 根据毫秒值反向获得key
+     *
+     * @param dataTime
+     * @return
+     */
+    public static Period selectPeriodByDataTime(Long dataTime) {
+        for (Period period : Period.values()) {
+            boolean equalTime = period.getDataTime() == dataTime;
+            if (equalTime) {
+                return period;
+            }
+        }
+        return null;
+    }
+
 }

@@ -1,9 +1,6 @@
 package cn.csdb.portal.service;
 
-import cn.csdb.portal.model.DataSrc;
-import cn.csdb.portal.model.Subject;
-import cn.csdb.portal.model.SynchronizationTable;
-import cn.csdb.portal.model.TableField;
+import cn.csdb.portal.model.*;
 import cn.csdb.portal.repository.CheckUserDao;
 import cn.csdb.portal.repository.SynchronizationTablesDao;
 import cn.csdb.portal.utils.Excel2ListIncludeNull;
@@ -845,6 +842,7 @@ public class FileImportService {
         synchronizationTable.setSubjectCode(subjectCode);
         synchronizationTable.setTableName(newName);
         synchronizationTable.setLoginId(loginId);
+        synchronizationTable.setSystemName("DataAssembler");
         synchronizationTablesDao.save(synchronizationTable);
         return "true";
     }
