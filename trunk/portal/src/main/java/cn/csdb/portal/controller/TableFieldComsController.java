@@ -80,10 +80,10 @@ public class TableFieldComsController {
         }
         String s_type[] = showColumnType.split(",");
         //点击外层保存按钮
-        showTypeInfService.updateSatusOne(tableName, s_column, s_type, curDataSubjectCode);
+        showTypeInfService.updateSatusOne(tableName, s_column, s_type, curDataSubjectCode, tableComment);
 
 //        保存表名注释
-        showTypeInfService.saveTableComment(tableName, tableComment, curDataSubjectCode);
+//        showTypeInfService.saveTableComment(tableName, tableComment, curDataSubjectCode);
 
         jsonObject.put("result", result);
         return jsonObject;

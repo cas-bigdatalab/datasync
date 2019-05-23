@@ -66,8 +66,9 @@ public class ShowTypeInfService {
     }
 
     //点击外层保存按钮
-    public void updateSatusOne(String tableName, String s_column[], String s_type[], String subjectCode) {
-//删除status=2的列的status=1的数据，并将status=2改为status=1；
+    public void updateSatusOne(String tableName, String s_column[], String s_type[], String subjectCode, String tableComment) {
+
+        //删除status=2的列的status=1的数据，并将status=2改为status=1；
         showTypeInfDao.updateSatusOne(tableName, subjectCode);
         ShowTypeInf showTypeInf = showTypeInfDao.checkData(tableName, subjectCode);
         if (showTypeInf != null) {
@@ -76,17 +77,20 @@ public class ShowTypeInfService {
                 for (int i = 0; i < showTypeDetailList.size(); i++) {
                     for (int j = 0; j < s_column.length; j++) {
                         if (showTypeDetailList.get(i).getColumnName().equals(s_column[j]) && s_type[j].equals("1")) {
-                            showTypeInfDao.saveTypeText(tableName, s_column[j], subjectCode);
+                            showTypeInfDao.saveTypeText(tableName, s_column[j], subjectCode, tableComment);
                         }
                     }
                 }
                 for (int ii = 0; ii < s_column.length; ii++) {
                     if (isColumnExit(showTypeDetailList, s_column[ii]) == 0) {
-                        showTypeInfDao.saveTypeText(tableName, s_column[ii], subjectCode);
+                        showTypeInfDao.saveTypeText(tableName, s_column[ii], subjectCode, tableComment);
                     }
                 }
-
             }
+        } else {
+            showTypeInfDao.insertShowTypeInf(tableComment, tableName, subjectCode, s_column);
+
+
         }
     }
 
