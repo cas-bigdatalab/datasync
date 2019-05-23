@@ -752,6 +752,7 @@ public class ResourceController {
         auditMessage.setAuditPerson(auditPerson);
         auditMessageService.save(auditMessage);
         String returnId = resourceService.save(resource);
+        resourceService.updateFileInfoTime(resourceId);
         if (StringUtils.isNotBlank(resourceId)) {
             jo.put("result", "success");
         } else {

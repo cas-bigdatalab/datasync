@@ -395,4 +395,8 @@ public class ResourceService {
         }
         return bigDecimal;
     }
+
+    public void updateFileInfoTime(String resourceId) {
+        resourceDao.updateFileInfoTime(resourceId);
+    }
 }

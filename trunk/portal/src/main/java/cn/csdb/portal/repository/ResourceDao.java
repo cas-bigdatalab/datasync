@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -243,5 +244,11 @@ public class ResourceDao {
         List<cn.csdb.portal.model.Resource> list = mongoTemplate.find(new Query(Criteria.where("subjectCode").is(subjectCode).and("status").is("2")).with(new Sort(Sort.Direction.ASC,
                 "dCount")).skip((pageNo - 1) * pageSize).limit(pageSize), cn.csdb.portal.model.Resource.class);
         return list;
+    }
+
+    public void updateFileInfoTime(String resourceId) {
+        Query query = new Query(Criteria.where("resourceId").is(resourceId));
+        Update time = new Update().set("time", new Date());
+        mongoTemplate.findAndModify(query, time, FileInfo.class);
     }
 }

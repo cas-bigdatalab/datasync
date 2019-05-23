@@ -149,14 +149,14 @@ public class TableFieldComsService {
             tableFieldComs.setCreateTime(new Date());
             tableFieldComs.setUriEx(uriEx);
             tableFieldComs.setUriHash(uriHash);
-            tableFieldComsDao.saveTableFieldComs(tableFieldComs,subject.getSubjectCode(),subject.getDbName(),tableName,state);
+            tableFieldComsDao.saveTableFieldComs(tableFieldComs, subject.getSubjectCode(), subject.getDbName(), tableName, state);
             return true;
         }
         tableFieldComs.setUpdateTime(new Date());
         String fieldComs = tableFieldComs.getFieldComs();
         if (StringUtils.isBlank(fieldComs)) {
             tableFieldComs.setFieldComs(fieldComs);
-            tableFieldComsDao.updateFieldComs(tableFieldComs,subject.getSubjectCode(),subject.getDbName(),tableName,state);
+            tableFieldComsDao.updateFieldComs(tableFieldComs, subject.getSubjectCode(), subject.getDbName(), tableName, state);
             return true;
         }
         List<TableInfo> tableInfosPre = JSON.parseArray(fieldComs, TableInfo.class);
@@ -171,7 +171,7 @@ public class TableFieldComsService {
                 return true;
             }
         }));
-        tableFieldComsDao.updateFieldComs(tableFieldComs,subject.getSubjectCode(),subject.getDbName(),tableName,state);
+        tableFieldComsDao.updateFieldComs(tableFieldComs, subject.getSubjectCode(), subject.getDbName(), tableName, state);
         return true;
     }
 
@@ -263,8 +263,10 @@ public class TableFieldComsService {
      */
     private String getSqlScript(String curDataSubjectCode, String tableName, Connection connection, String realPath, List<TableInfo> tableInfosList) throws SQLException, IOException {
         StringBuffer sb = new StringBuffer();
-        String getTableMate = "select column_name `name`, COLUMN_TYPE `type`, COLUMN_COMMENT `comment`  from information_schema.`COLUMNS` where TABLE_SCHEMA='" + curDataSubjectCode + "'AND TABLE_NAME='" + tableName + "'";
+        String getTableMate = "SELECT COLUMN_NAME `name`, COLUMN_TYPE `type`, COLUMN_COMMENT `comment`  FROM information_schema.`COLUMNS` WHERE TABLE_SCHEMA=? AND TABLE_NAME=?";
         PreparedStatement preparedStatement = connection.prepareStatement(getTableMate);
+        preparedStatement.setString(1, curDataSubjectCode);
+        preparedStatement.setString(2, tableName);
         ResultSet resultSet = preparedStatement.executeQuery();
         // 生成alert 语句
         Map<String, String> map = new HashMap<>(16);
