@@ -15,10 +15,10 @@
 <head>
     <title>数据记录管理</title>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
-    <link rel="Stylesheet" href="${ctx}/resources/css/common.css"/>
+    <%--<link rel="Stylesheet" href="${ctx}/resources/css/common.css"/>--%>
     <link rel="Stylesheet" href="${ctx}/resources/css/jquery.jerichotab.css"/>
     <link rel="stylesheet" href="${ctx}/resources/bundles/font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">
+    <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">--%>
     <link href="${ctx}/resources/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/css/home.css" type="text/css"/>
 
@@ -50,6 +50,32 @@
             background-color: #FFFFff;
         }
 
+        .input-group {
+            position: relative;
+            display: table;
+            border-collapse: separate;
+            width: 11%;
+            height: 30px;
+        }
+
+        .input-group .form-control {
+            display: table-cell;
+        }
+
+        .input-group .input-group-btn button {
+            background: #0097d7;
+            border: none;
+        }
+
+        .input-group input {
+            border: none;
+            border-radius: 5px;
+        }
+
+        .fa {
+            font-size: 14px !important;
+        }
+
     </style>
 
 </head>
@@ -58,13 +84,19 @@
 
 
     <!-- 此处是相关代码 -->
-    <div style="float: left; width: 88%;overflow: hidden;">
+    <div style="float: left; width: 82%;overflow: hidden;">
         <ul style="" id="ul_div111" class="nav nav-tabs activeTabs" role="tablist">
 
         </ul>
     </div>
-
-    <div id="btn_addTableData" style="float:left;width:5%;margin-left: 7%;display: none;">
+    <div class="input-group" style="float: left;margin-left: 1%;">
+        <input type="text" name="searchKey" class="form-control" placeholder="输入关键词" value=""/>
+        <span class="input-group-btn">
+                    <button type="button" id="btnSearch" onclick="searchTableData(this)"><img
+                            src="${ctx}/resources/img/ico06.png"></button>
+                </span>
+    </div>
+    <div id="btn_addTableData" style="float:right;width:5%;margin-rightt: 2%;display: none;">
         <button class="btn btn-primary" type="button"  onclick="add_function()"><a href="#" style="color: white;"><i
                 class="fa fa-plus"></i>增加</a></button>
     </div>
@@ -256,52 +288,66 @@
 </body>
 <div id="siteMeshJavaScript">
     <script src="${ctx}/resources/bundles/bootstrap-closable-tab/bootstrap-closable-tab.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
+    <%--<script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>--%>
+    <%--<script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>--%>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
 
-<%--<script src="${ctx}/resources/bundles/jedate/jedate.min.js"></script>--%>
     <script type="text/javascript">
 
         var subjectCode = '${sessionScope.SubjectCode}';
+        var userName = "${sessionScope.userName}";
         closableTab.afterCloseTab = function (item){
             if (!$(".nav.nav-tabs.activeTabs li")[0]) {
                 $("#btn_addTableData").hide();
             }
         };
-        $.ajax({
-            url: "${ctx}/showTable",
-            type: "post",
-            dataType: "json",
-            data: {"subjectCode": subjectCode},
-            success: function (data) {
-                $("#alltableName").html("");
-                var html = template("tableNameTempl", data);
-                $("#alltableName").append(html);
-                $("#alltableName").show();
-                if (data.list != null) {
-                    $("#btn_addTableData").show();
-                    editTable_func(subjectCode, data.list[0].tableName, 1);
+        $(function () {
+            $.ajax({
+                url: "${ctx}/showTable",
+                type: "post",
+                dataType: "json",
+                data: {"subjectCode": subjectCode},
+                success: function (data) {
+                    $("#alltableName").html("");
+                    var html = template("tableNameTempl", data);
+                    $("#alltableName").append(html);
+                    $("#alltableName").show();
+                    if (data.list != null) {
+                        $("#btn_addTableData").show();
+                        var searchKey = "";
+                        editTable_func(subjectCode, data.list[0].tableName, 1, searchKey);
+                    }
                 }
-            }
+            });
         });
 
+
         function editTableData(i) {
+            var searchKey = "";
             $("#btn_addTableData").show();
             var tableName = $(i).attr("id");
-            var subjectCode = userName;
             var pageNo = 1;
-            editTable_func(subjectCode, tableName, pageNo);
+            editTable_func(subjectCode, tableName, pageNo, searchKey);
+        }
+
+        function searchTableData(i) {
+            var searchKey = $(i).parent().siblings("input").val();
+            var tableName = $("#ul_div111 li.active a").text();
+
+            $("#btn_addTableData").show();
+            var pageNo = 1;
+            // editTable_func(subjectCode, tableName, pageNo,searchKey);
+            clickPageButton(subjectCode, tableName, pageNo, searchKey);
         }
 
         //数据编辑
-        function editTable_func(subjectCode, tableName, pageNo) {
+        function editTable_func(subjectCode, tableName, pageNo, searchKey) {
             var ids = "#tab_container_" + tableName;
             $.ajax({
                 type: "post",
                 url: "${ctx}/showTableData",
-                data: {"subjectCode": subjectCode, "tableName": tableName, "pageNo": pageNo},
+                data: {"subjectCode": subjectCode, "tableName": tableName, "pageNo": pageNo, "searchKey": searchKey},
                 dataType: "json",
                 success: function (data) {
                     var arr = data.columns;
@@ -400,7 +446,7 @@
 
                         var item = {'id': tableName, 'name': tableName, 'closable': true, 'template': tabs};
                         closableTab.addTab(item); // 执行创建页签
-                        fun_limit(subjectCode, tableName, data);
+                        fun_limit(subjectCode, tableName, data, searchKey);
                         closableTab.addTabComment({
                             'id': tableName,
                             'tableComment': tableComment,
@@ -464,7 +510,7 @@
         /**
          * 分页
          * **/
-        function fun_limit(subjectCode, tableName, data) {
+        function fun_limit(subjectCode, tableName, data, searchKey) {
             var currentPageNo = "#currentPageNo" + tableName;
             var totalPage = "#totalPages" + tableName;
             var totalCount = "#totalCount" + tableName;
@@ -495,18 +541,18 @@
                 lastClass: 'last',
                 firstClass: 'first'
             }).on('page', function (event, num) {
-                clickPageButton(subjectCode, tableName, num);
+                clickPageButton(subjectCode, tableName, num, searchKey);
             });
         }
 
         //各个页签分页
-        function clickPageButton(subjectCode, tableName, num) {
+        function clickPageButton(subjectCode, tableName, num, searchKey) {
             var ids = "#tab_container_" + tableName;
             $(ids).html("");
             $.ajax({
                 type: "post",
                 url: "${ctx}/showTableData",
-                data: {"subjectCode": subjectCode, "tableName": tableName, "pageNo": num},
+                data: {"subjectCode": subjectCode, "tableName": tableName, "pageNo": num, "searchKey": searchKey},
                 dataType: "json",
                 success: function (data) {
                     var arr = data.columns;
@@ -584,13 +630,6 @@
                                     i++;
                                 }
                             }
-                            // ss += "<td align='center'><table class='0' cellspacing='0' border='0' align='center'><tr>" +
-                            //     "<td class='bianji'><a src='#' onclick=\" updateData('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
-                            //     "<i class='fa fa-pencil-square-o' aria-hidden='true'></i>修改</a></td><td width='1'></td>" +
-                            //     "<td class='chakan'><a href='#' onclick=\"checkDada('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
-                            //     "<i class='fa fa-eye' aria-hidden='true'></i>查看</a></td><td width='1'></td>" +
-                            //     "<td class='shanchu'><a href='#' onclick=\"deleteDate('" + delPORTALID + "','" + tableName + "','" + subjectCode + "','"+ count +"')\">" +
-                            //     "<i class='fa fa-trash-o fa-fw' aria-hidden='true'></i>删除</a></td></tr></table></td></tr>";
                             ss += "<td align='center'><table class='0' cellspacing='0' border='0' align='center'><tr>";
                             if (data.isSync === 0) {
                                 ss += "<td class='bianji'><a src='#' onclick=\" updateData('" + delPORTALID + "','" + tableName + "','" + subjectCode + "')\">" +
@@ -609,7 +648,7 @@
                             "当前第&nbsp;<span style='color:blue;' id='currentPageNo" + tableName + "'></span>&nbsp;页,&nbsp;共&nbsp;<span style='color:blue;' id='totalPages" + tableName + "'></span>页，<span style='color:blue;' id='totalCount" + tableName + "'></span>" +
                             "条数据</div><div style='float: right;' ><div id='pagination" + tableName + "'></div></div></div>";
                         $(ids).append(tabs);
-                        fun_limit(subjectCode, tableName, data);
+                        fun_limit(subjectCode, tableName, data, searchKey);
                     } else {
                         $(ids).html(" ");
                         tabs = "<h5 style='font-size: 20px;text-align: center;margin-right: 30%;'>该表暂时没有数据</h5>";
@@ -662,10 +701,12 @@
                                             if (strs2[i] === enumDataList[k].key) {
                                                 flag = 1;
                                                 enumColumn.push(strs2[i]);
-                                                var sVal = enumDataList[k].value.split(",");
+                                                var sVal = enumDataList[k].value.split("|_|");
                                                 var selects = "<select class='form-control' style='width: 100%;height:100%;'  name='" + strs2[i] + "' id='" + strs2[i] + "'>";
                                                 for (var kk = 0; kk < sVal.length; kk++) {
-                                                    selects += "<option>" + sVal[kk] + "</option>";
+                                                    if (sVal[kk] !== "" && sVal[kk] !== null) {
+                                                        selects += "<option>" + sVal[kk] + "</option>";
+                                                    }
                                                 }
                                                 selects += "</select>";
                                                 s += "<td>" + selects + "</td></tr>";
@@ -743,6 +784,7 @@
                     datacon[i] = "";
                 } else {
                     var flag = 0;
+                    // alert(enumColumns.length+".."+$("#" + S_column[i] + " option:selected").val());
                     for (var k = 0; k < enumColumns.length; k++) {
                         if (S_column[i] === enumColumns[k]) {
                             flag = 1;
@@ -1006,7 +1048,9 @@
                         toastr.error("添加数据失败，"+ data.prikey+"的值已存在！");
                     } else if (data.data === "1") {
                         toastr.success("添加成功!");
-                        clickPageButton(subjectCode, tableName, currentPage);
+                        // var searchKey=$(".input-group input").val();
+                        var searchKey = "";
+                        clickPageButton(subjectCode, tableName, currentPage, searchKey);
                         $("#staticAddData").modal("hide");
                     } else if (data.data === "-1") {
                         toastr.error("添加数据失败，"+ data.prikey +"不能为空！");
@@ -1074,13 +1118,15 @@
                                     if (strs2[i] === enumDataList[k].key) {
                                         flag = 1;
                                         enumColumn.push(strs2[i]);
-                                        var sVal = enumDataList[k].value.split(",");
+                                        var sVal = enumDataList[k].value.split("|_|");
                                         var selects = "<select class='form-control' style='width: 100%;height:100%;'  name='" + strs2[i] + "' id='" + getinput_id + "'>";
                                         for (var kk = 0; kk < sVal.length; kk++) {
                                             if (strs[i] === sVal[kk]) {
                                                 selects += "<option selected>" + sVal[kk] + "</option>";
                                             } else {
-                                                selects += "<option>" + sVal[kk] + "</option>";
+                                                if (sVal[kk] !== "" && sVal[kk] !== null) {
+                                                    selects += "<option>" + sVal[kk] + "</option>";
+                                                }
                                             }
 
                                         }
@@ -1671,27 +1717,6 @@
                             }
                         }
 
-                        //date数据类型判断
-                        // if (dataTypeArr[i] === "date" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
-                        //     // var reg = /^(\d{4})-(\d{2})-(\d{2})$/;
-                        //     var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
-                        //     var regExp = new RegExp(reg);
-                        //     if (!regExp.test(checkdataArr[i])) {
-                        //         toastr.warning(columnName[i]+" 字段是时间格式,正确格式应为: xxxx-xx-xx ");
-                        //         return;
-                        //     }
-                        // }
-                        //
-                        // //datetime数据类型判断
-                        // if (dataTypeArr[i] === "datetime" && checkdataArr[i] !== null && checkdataArr[i] !== "" && checkdataArr[i] !== "null") {
-                        //     var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/;
-                        //     var regExp = new RegExp(reg);
-                        //     if (!regExp.test(checkdataArr[i])) {
-                        //         toastr.warning(columnName[i]+" 字段正确格式应为: xxxx-xx-xx xx:xx:xx ");
-                        //         return;
-                        //     }
-                        // }
-
                         //decimal数据类型判断
                         if (checkdataArr[i] !== null && checkdataArr[i] !== "" && dataTypeArr[i] === "decimal") {
                             // var col_type_str = S_columnType[i].split(",");
@@ -1740,7 +1765,8 @@
                         //成功消息提示，默认背景为浅绿色
                         toastr.success("更新成功!");
                         $("#staticUpdateData").modal("hide");
-                        clickPageButton(subjectCode, tableName, currentPage);
+                        var searchKey = "";
+                        clickPageButton(subjectCode, tableName, currentPage, searchKey);
                     } else if(data.data === "-1"){
                         toastr.error("主键重复！");
                     }else{
@@ -1778,7 +1804,8 @@
                         success: function (data) {
                             if (data.data === "1") {
                                 toastr.success("删除成功!");
-                                clickPageButton(subjectCode, tableName, currentPage);
+                                var searchKey = "";
+                                clickPageButton(subjectCode, tableName, currentPage, searchKey);
 
                             }
                             if (data.data === "0") {

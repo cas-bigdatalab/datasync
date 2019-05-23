@@ -2,6 +2,7 @@ package cn.csdb.portal.controller;
 
 import cn.csdb.portal.model.DataTask;
 import cn.csdb.portal.model.Subject;
+import cn.csdb.portal.model.SynchronizationTable;
 import cn.csdb.portal.service.ConfigPropertyService;
 import cn.csdb.portal.service.DataTaskService;
 import cn.csdb.portal.service.SubjectMgmtService;
@@ -11,14 +12,21 @@ import cn.csdb.portal.utils.TreeNode;
 import cn.csdb.portal.utils.ZipUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.mongodb.DBObject;
+import com.mongodb.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.data.mongodb.core.query.Query;
 
+import javax.xml.ws.Action;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -42,6 +50,9 @@ public class HttpServiceController {
     @Autowired
     private ConfigPropertyService configPropertyService;
 
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
     @Value("#{systemPro['ftpRootPath']}")
     private String ftpRootPath;
 
@@ -56,8 +67,12 @@ public class HttpServiceController {
         String subjectCode = requestJson.get("subjectCode").toString();
         String dataTaskString = requestJson.get("dataTask").toString();
         DataTask dataTask = JSON.parseObject(dataTaskString, DataTask.class);
-        String [] tableName=dataTask.getTableName().split(";");
-        saveSyncTableName(tableName);
+        if(!"file".equals(dataTask.getDataTaskType())){
+            if("true".equals(dataTask.getSync())){
+                saveSyncTableName(dataTask);
+            }
+        }
+
 //        String realPath = dataTask.getRealPath();
         Subject subject = subjectMgmtService.findByCode(subjectCode);
         String siteFtpPath = subject.getFtpFilePath();
@@ -139,10 +154,27 @@ public class HttpServiceController {
                 structDBFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + "struct.sql";
                 System.out.println("dataDBFile---------" + dataDBFile);
                 System.out.println("structDBFile---------" + structDBFile);
+            }else if (dataTask.getDataTaskType().equals("sqlserver")) {
+//                String sqlZip = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + dataTask.getDataTaskId() + ".zip";
+                String sqlZip = siteFtpPath + dataTask.getDataTaskId() + ".zip";
+//                System.out.println("-------sqlZip"+sqlZip);
+                File sqlfiles = new File(sqlZip);
+                ZipUtil zipUtil = new ZipUtil();
+                try {
+                    zipUtil.unZip(sqlfiles, siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql");
+                    zipFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql";
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                dataDBFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + "data.sql";
+                structDBFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + "struct.sql";
+                System.out.println("dataDBFile---------" + dataDBFile);
+                System.out.println("structDBFile---------" + structDBFile);
             }
         }
         dataTask.setSqlFilePath(sqlfilePathBuffer.toString());
-        if (dataTask.getDataTaskType().equals("mysql") || "oracle".equals(dataTask.getDataTaskType())) {
+        if (dataTask.getDataTaskType().equals("mysql") || "oracle".equals(dataTask.getDataTaskType()) || "sqlserver".equals(dataTask.getDataTaskType())) {
             String username = configPropertyService.getProperty("db.username");
             String password = configPropertyService.getProperty("db.password");
             String dbName = subject.getDbName();
@@ -196,9 +228,18 @@ public class HttpServiceController {
     public int syncDataTask(@RequestBody String requestString) {
         System.out.println(requestString);
         JSONObject requestJson = JSON.parseObject(requestString);
+        String dataTaskString = requestJson.get("dataTask").toString();
+        DataTask dataTask = JSON.parseObject(dataTaskString, DataTask.class);
         String syncFilePath = requestJson.get("syncFilePath").toString();
         String subjectCode = requestJson.get("subjectCode").toString();
 
+        if("true".equals(dataTask.getSync()) && !"false".equals(syncFilePath) ){//启动同步操作
+            saveSyncTableName(dataTask);
+        }else if("false".equals(syncFilePath)){
+            Query query = Query.query(Criteria.where("taskId").is(dataTask.getDataTaskId()));
+            mongoTemplate.remove(query, SynchronizationTable.class);
+            return 1;
+        }
 
         String structDBFile=syncFilePath+File.separator+"syncStruct.sql";
         String dataDBFile=syncFilePath+File.separator+"syncData.sql";
@@ -227,9 +268,47 @@ public class HttpServiceController {
         return 1;
     }
 
-    public String saveSyncTableName(String[] tableName){
+    @ResponseBody
+    @RequestMapping(value = "saveSyncTableName", method = {RequestMethod.POST, RequestMethod.GET})
+    public String saveSyncTableName(DataTask dataTask){
 
-//        mongoTemplate.save();
+        //查询任务是否已存在
+        DBObject dbObject = QueryBuilder.start().and("taskId").is(dataTask.getDataTaskId()).get();
+        Query query = new BasicQuery(dbObject);
+        List<SynchronizationTable> synchronizationTableList = mongoTemplate.find(query, SynchronizationTable.class);
+        if(synchronizationTableList.size()!=0){
+            System.out.println("此次为任务的重新上传！");
+            return  "";
+        }
+
+        String tableStr=dataTask.getTableName();
+        String tableStr2=dataTask.getSqlTableNameEn();
+        System.out.println("保存同步表： "+tableStr+"  "+tableStr2);
+        if(!";".equals(tableStr) && tableStr!=null && !"".equals(tableStr)){
+            String [] array=tableStr.split(";");
+            for(String tableName:array){
+                System.out.println("开始保存数据！");
+                SynchronizationTable synchronizationTable=new SynchronizationTable();
+                synchronizationTable.setTableName(tableName);
+                synchronizationTable.setSubjectCode(dataTask.getSubjectCode());
+                synchronizationTable.setTaskId(dataTask.getDataTaskId());//任务id
+                synchronizationTable.setSystemName("dataPipe");//分布端标识
+                mongoTemplate.save(synchronizationTable);
+            }
+        }
+        if(!";".equals(tableStr2) && tableStr2!=null && !"".equals(tableStr2)){
+            String [] array=tableStr2.split(";");
+            for(String tableName:array){
+                System.out.println("开始保存数据！");
+                SynchronizationTable synchronizationTable=new SynchronizationTable();
+                synchronizationTable.setTableName(tableName);
+                synchronizationTable.setSubjectCode(dataTask.getSubjectCode());
+                synchronizationTable.setTaskId(dataTask.getDataTaskId());//任务id
+                synchronizationTable.setSystemName("dataPipe");//分布端标识
+                mongoTemplate.save(synchronizationTable);
+            }
+        }
+
 
         return "";
     }

@@ -5,9 +5,11 @@ import cn.csdb.portal.model.EnumData;
 import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.repository.CheckUserDao;
 import cn.csdb.portal.repository.EditDataDao;
+import com.alibaba.fastjson.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -98,9 +100,9 @@ public class EditDataService {
      * @Author: zcy
      * @Date: 2019/5/20
      */
-    public int updateDate(String condition, String setData, String tableName, String subjectCode) {
+    public int updateDate(String tableName, String subjectCode, JSONArray jsonArray, String[] enumnCoumns, String delPORTALID) {
         DataSrc dataSrc = getDataSrc(subjectCode);
-        int i = editDataDao.updateDate(condition, setData, tableName, dataSrc);
+        int i = editDataDao.updateDate(tableName, dataSrc, jsonArray, subjectCode, enumnCoumns, delPORTALID);
         return i;
     }
 
@@ -113,10 +115,9 @@ public class EditDataService {
      * @Author: zcy
      * @Date: 2019/5/20
      */
-    public int addData(String subjectCode, String tableName, String col, String val) {
+    public int addData(String subjectCode, String tableName, List<String> pkyList, List<String> addAuto, JSONArray jsonArray, String[] enumnCoumns) {
         DataSrc dataSrc = getDataSrc(subjectCode);
-        int i = editDataDao.addData(dataSrc, tableName, col, val);
-
+        int i = editDataDao.addData(dataSrc, tableName, pkyList, addAuto, jsonArray, subjectCode, enumnCoumns);
         return i;
     }
 
@@ -141,9 +142,15 @@ public class EditDataService {
      * @Author: zcy
      * @Date: 2019/5/20
      */
-    public int countData(String subjectCode, String tableName) {
+    public int countData(String subjectCode, String tableName, String searchKey, List<String> columnName) {
         DataSrc dataSrc = getDataSrc(subjectCode);
-        int count = editDataDao.countData(dataSrc, tableName);
+        int count = 0;
+        if (searchKey == null || searchKey.equals("")) {
+            count = editDataDao.countData(dataSrc, tableName);
+        } else {
+            count = editDataDao.countDataBySerachKey(dataSrc, tableName, searchKey, columnName);
+        }
+
 
         return count;
     }
@@ -156,9 +163,14 @@ public class EditDataService {
      * @Author: zcy
      * @Date: 2019/5/20
      */
-    public List<Map<String, Object>> getTableData(String subjectCode, String tableName, int pageNo, int pageSize) {
+    public List<Map<String, Object>> getTableData(String subjectCode, String tableName, int pageNo, int pageSize, String searchKey, List<String> columnName) {
         DataSrc dataSrc = getDataSrc(subjectCode);
-        List<Map<String, Object>> listMap = editDataDao.getTableData(dataSrc, tableName, pageNo, pageSize);
+        List<Map<String, Object>> listMap = new ArrayList<>();
+        if (searchKey.equals("") || searchKey == null) {
+            listMap = editDataDao.getTableData(dataSrc, tableName, pageNo, pageSize);
+        } else {
+            listMap = editDataDao.selectTableDataBySearchKey(dataSrc, tableName, pageNo, pageSize, searchKey, columnName);
+        }
 
         return listMap;
     }
@@ -202,10 +214,14 @@ public class EditDataService {
     public EnumData enumCorresponding(List<String> list, List<EnumData> enumDataList) {
         EnumData enumDataList1 = new EnumData();
         String ss = "";
-        for (String s : list) {
-            for (EnumData e : enumDataList) {
-                if (s.equals(e.getKey())) {
-                    ss += e.getValue() + ",";
+        if (list != null && enumDataList != null) {
+            for (String s : list) {
+                for (EnumData e : enumDataList) {
+                    if (s != null && e != null) {
+                        if (s.equals(e.getKey())) {
+                            ss += e.getValue() + "|_|";
+                        }
+                    }
                 }
             }
         }

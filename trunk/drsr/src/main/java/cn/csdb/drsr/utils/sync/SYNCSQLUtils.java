@@ -54,7 +54,7 @@ public class SYNCSQLUtils {
 
                 sb.append("\n" + name);
                 if ((type.startsWith("VARCHAR")) || (type.equals("CHAR")) || (type.equals("NUMBER"))
-                        || (type.equals("NUMERIC")) || (type.equals("BLOB"))) {
+                        || (type.equals("NUMERIC")) || (type.equals("BLOB")) || (type.equals("nvarchar"))) {
                     if (chiffresApresVirgule == 0)
                         sb.append(" " + type + "(" + size + ")");
                     else
@@ -372,7 +372,7 @@ public class SYNCSQLUtils {
 
             }else if (jdbcConnection.getMetaData().getDriverName().toUpperCase().indexOf("SQL SERVER") != -1) {
                 //sqljdbc与sqljdbc4不同，sqlserver中间有空格
-
+                sql = "sp_columns " + string;
             }
 
         } else {

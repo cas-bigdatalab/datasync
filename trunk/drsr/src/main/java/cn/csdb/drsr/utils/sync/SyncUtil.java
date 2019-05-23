@@ -168,7 +168,7 @@ public class SyncUtil {
 
             logger.info("=========================开始同步==========================\n");
             pw.println(current+":"+"=========================开始执行脚本========================" + "\n");
-            String syncResult=callRemoteSyncMethod("/home/vftpuser/ftpUser"+dataTask.getSubjectCode()+"/temp",dataTask.getSubjectCode());
+            String syncResult=callRemoteSyncMethod("/home/vftpuser/ftpUser"+dataTask.getSubjectCode()+"/temp",dataTask);
 
             if("1".equals(syncResult)){
                 pw.println(current+":"+"=========================同步流程结束========================" + "\n");
@@ -250,17 +250,25 @@ public class SyncUtil {
     }
 
 
-    public String callRemoteSyncMethod(String syncFilePath,String subjectCode){
+    public String callRemoteSyncMethod(String syncFilePath,DataTask dataTask){
+        String subjectCode=dataTask.getSubjectCode();
         HttpClient httpClient = null;
         HttpPost postMethod = null;
         HttpResponse response = null;
         String reponseContent="";
+        dataTask.setSync("true");
         JSONObject requestJSON = new JSONObject();
         httpClient = HttpClients.createDefault();
+        String dataTaskString = JSONObject.toJSONString(dataTask);
         requestJSON.put("syncFilePath",syncFilePath);
         requestJSON.put("subjectCode",subjectCode);
+        requestJSON.put("dataTask",dataTaskString);
+
+
         String requestString = JSONObject.toJSONString(requestJSON);
-        String portalUrl="10.0.86.77";
+        String configFilePathDrsr = LoginService.class.getClassLoader().getResource("drsr.properties").getFile();
+        //String configFilePath = LoginService.class.getClassLoader().getResource("config.properties").getFile();
+        String portalUrl = ConfigUtil.getConfigItem(configFilePathDrsr, "PortalUrl");
 //                    postMethod = new HttpPost("http://localhost:8080/portal/service/getDataTask");
         postMethod = new HttpPost("http://"+portalUrl+"/service/syncDataTask");
 //                    postMethod = new HttpPost(portalUrl);

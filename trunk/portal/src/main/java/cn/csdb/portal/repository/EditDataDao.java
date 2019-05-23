@@ -2,21 +2,25 @@ package cn.csdb.portal.repository;
 
 import cn.csdb.portal.model.DataSrc;
 import cn.csdb.portal.model.EnumData;
+import cn.csdb.portal.model.ShowTypeDetail;
+import cn.csdb.portal.model.ShowTypeInf;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
+import com.alibaba.fastjson.JSONArray;
 import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class EditDataDao {
+
+    @Resource
+    private ShowTypeInfDao showTypeInfDao;
     /**
      * @Description: 获取表结构
      * @Param: [dataSrc, tableName]
@@ -99,7 +103,7 @@ public class EditDataDao {
                     } else {
                         list.add(set.getString(rsm.getColumnName(i)));
                     }
-                    System.out.println("aaaaaaaallll" + set.getString(rsm.getColumnName(i)));
+//                    System.out.println("查询" + set.getString(rsm.getColumnName(i)));
                 }
             }
 
@@ -187,20 +191,56 @@ public class EditDataDao {
 
     /**
      * @Description: 更新数据
-     * @Param: [condition, setData, tableName, dataSrc]
+     * @Param: [tableName, dataSrc, jsonArray2, subjectCode, enumnCoumns, delPORTALID]
      * @return: int
      * @Author: zcy
-     * @Date: 2019/5/20
+     * @Date: 2019/5/22
      */
-    public int updateDate(String condition, String setData, String tableName, DataSrc dataSrc) {
-        int i = 0;
+    public int updateDate(String tableName, DataSrc dataSrc, JSONArray jsonArray2, String subjectCode,
+                          String[] enumnCoumns, String delPORTALID) {
+        int check = 0;
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        ShowTypeInf showTypeInf = showTypeInfDao.checkData(tableName, subjectCode);
+//       旧数据
+        List<String> list = getDataByPORTALID(dataSrc, tableName, delPORTALID);
         try {
-            String sql = "update " + tableName + "" + setData + condition;
-            System.out.println("更新：" + sql);
+            String updatestr = " set ";
+            for (int i = 0; i < jsonArray2.size(); i++) {
+                String column = jsonArray2.getJSONObject(i).getString("name");
+                Object value = jsonArray2.getJSONObject(i).getString("value");
+                if (list.get(i).equals(value)) {
+
+                } else if ((list.get(i).equals("") || list.get(i) == null) && (value.equals("") || value == null)) {
+
+                } else {
+                    updatestr += "" + column + " = ? , ";
+                }
+            }
+            if (updatestr.equals(" set ")) {
+                check = 1;
+                return check;
+            }
+            updatestr = updatestr.substring(0, updatestr.length() - 2);
+            String conditionstr = " PORTALID  = '" + delPORTALID + "' ";
+            String sql = "update " + tableName + "" + updatestr + " where " + conditionstr;
+
             PreparedStatement pst = connection.prepareStatement(sql);
-            i = pst.executeUpdate();
+            for (int i = 0, j = 1; i < jsonArray2.size(); i++) {
+                String column = jsonArray2.getJSONObject(i).getString("name");
+                Object value = jsonArray2.getJSONObject(i).getString("value");
+                if (list.get(i).equals(value)) {
+
+                } else if ((list.get(i).equals("") || list.get(i) == null) && (value.equals("") || value == null)) {
+
+                } else {
+                    value = getEnumKeyByVal(showTypeInf, enumnCoumns, column, value, dataSrc);
+                    pst.setObject(j, value);
+                    j++;
+                }
+            }
+            System.out.println("更新：" + sql);
+            check = pst.executeUpdate();
             pst.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -211,29 +251,69 @@ public class EditDataDao {
                 e.printStackTrace();
             }
         }
-        return i;
+        return check;
     }
 
     /**
-     * 新增数据
-     *
-     * @Description:
-     * @Param: [dataSrc, tableName, col, val]
+     * @Description: 新增数据
+     * @Param: [dataSrc, tableName, pkyList, addAuto, jsonArray, subjectCode, enumnCoumns]
      * @return: int
      * @Author: zcy
-     * @Date: 2019/5/20
+     * @Date: 2019/5/22
      */
-    public int addData(DataSrc dataSrc, String tableName, String col, String val) {
+    public int addData(DataSrc dataSrc, String tableName, List<String> pkyList, List<String> addAuto, JSONArray jsonArray, String subjectCode, String[] enumnCoumns) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
-        int i = 0;
+        int check = 0;
+        ShowTypeInf showTypeInf = showTypeInfDao.checkData(tableName, subjectCode);
         try {
-            String sql = "insert into  " + tableName + "(" + col + ")  values(" + val + ")";
-            System.out.println("新增：" + sql);
-            PreparedStatement pst = connection.prepareStatement(sql);
-            i = pst.executeUpdate();
+            String columns = "";
+            String values = "";
+            for (int i = 0; i < jsonArray.size(); i++) {
+                String col = jsonArray.getJSONObject(i).getString("columnName");
+                Object val = jsonArray.getJSONObject(i).getString("columnValue");
+                if (pkyList.get(i).equals("PRI") && addAuto.get(i).equals("auto_increment")) { //有主键且自增
+                } else {
+                    if (!val.toString().equals("") && val != null) {
+                        columns += "" + col + " ,";
+                        values += " ? ,";
+                    }
+                    if (col.equals("PORTALID")) {
+                        columns += "" + col + " ,";
+                        values += " ? ,";
+                    }
 
-            System.out.println("影响数据行：" + i);
+                }
+            }
+            columns = columns.substring(0, columns.length() - 1);
+            values = values.substring(0, values.length() - 1);
+
+            String sql = "insert into  " + tableName + "(" + columns + ")  values(" + values + ")";
+            PreparedStatement pst = connection.prepareStatement(sql);
+            for (int i = 0, j = 1; i < jsonArray.size(); i++) {
+                String col = jsonArray.getJSONObject(i).getString("columnName");
+                Object val = jsonArray.getJSONObject(i).getString("columnValue");
+                System.out.println(val);
+                if (pkyList.get(i).equals("PRI") && addAuto.get(i).equals("auto_increment")) { //有主键且自增
+                } else {
+                    if (col.equals("PORTALID")) {
+                        String uuid = UUID.randomUUID().toString();
+                        pst.setObject(j, uuid);
+                        j++;
+                    } else {
+                        if (!val.toString().equals("") && val != null) {
+                            val = getEnumKeyByVal(showTypeInf, enumnCoumns, col, val, dataSrc);
+                            pst.setObject(j, val);
+                            j++;
+                        }
+                    }
+
+                }
+            }
+            System.out.println("新增：" + sql);
+            check = pst.executeUpdate();
+
+            System.out.println("影响数据行：" + check);
             pst.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -244,9 +324,46 @@ public class EditDataDao {
                 e.printStackTrace();
             }
         }
-        return i;
+        return check;
     }
 
+    public Object getEnumKeyByVal(ShowTypeInf showTypeInf, String[] enumnCoumns, String col, Object val, DataSrc dataSrc) {
+        if (showTypeInf != null) {
+            for (int ii = 0; ii < enumnCoumns.length; ii++) {
+                if (col.equals(enumnCoumns[ii])) {
+                    ShowTypeDetail showTypeDetail = getShowTypeDetail(showTypeInf, enumnCoumns[ii]);
+                    if (showTypeDetail != null) {
+                        if (showTypeDetail.getOptionMode().equals("1")) {
+                            List<EnumData> list = showTypeDetail.getEnumData();
+                            for (EnumData e : list) {
+                                if (val.equals(e.getValue())) {
+                                    val = e.getKey();
+                                }
+                            }
+                        }
+                        if (showTypeDetail.getOptionMode().equals("2")) {
+                            String reTable = showTypeDetail.getRelationTable();
+                            String recolK = showTypeDetail.getRelationColumnK();
+                            String recolV = showTypeDetail.getRelationColumnV();
+                            val = getSqlEnumData(dataSrc, reTable, recolK, recolV, val);
+                        }
+                    }
+                }
+
+            }
+        }
+        return val;
+    }
+
+    public ShowTypeDetail getShowTypeDetail(ShowTypeInf showTypeInf, String columnName) {
+        List<ShowTypeDetail> list = showTypeInf.getShowTypeDetailList();
+        for (ShowTypeDetail s : list) {
+            if (s.getColumnName().equals(columnName) && s.getStatus() == 1) {
+                return s;
+            }
+        }
+        return null;
+    }
     /**
      * @Description: 判断主键是否重复
      * @Param: [dataSrc, tableName, primaryKey, colName]
@@ -364,6 +481,98 @@ public class EditDataDao {
         return listMap;
     }
 
+    public List<Map<String, Object>> selectTableDataBySearchKey(DataSrc dataSrc, String tableName, int pageNo, int pageSize, String searchKey, List<String> columnName) {
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+        int start = pageSize * (pageNo - 1);
+        searchKey = "%" + searchKey + "%";
+        try {
+            String s = "";
+            for (int j = 0; j < columnName.size(); j++) {
+                if (!columnName.get(j).equals("PORTALID")) {
+                    s += columnName.get(j) + " like ? or ";
+                }
+            }
+            s = s.substring(0, s.length() - 3);
+            String sql = "select * from " + tableName + " where " + s + " limit " + start + " ," + pageSize + "";
+
+            PreparedStatement pst = connection.prepareStatement(sql);
+            for (int j = 0, i = 1; j < columnName.size(); j++) {
+                if (!columnName.get(j).equals("PORTALID")) {
+                    pst.setObject(i, searchKey);
+                    i++;
+                }
+            }
+            System.out.println("sql：" + sql);
+            ResultSet set = pst.executeQuery();
+            ResultSetMetaData rsm = set.getMetaData();
+
+            while (set.next()) {
+                Map<String, Object> map = new HashMap<>();
+                for (int i = 1; i <= rsm.getColumnCount(); i++) {
+                    if (set.getString(rsm.getColumnName(i)) == null) {
+                        map.put(rsm.getColumnName(i), "");
+                    } else {
+                        map.put(rsm.getColumnName(i), set.getString(rsm.getColumnName(i)));
+                    }
+                }
+                listMap.add(map);
+            }
+            pst.close();
+            set.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return listMap;
+    }
+
+    public int countDataBySerachKey(DataSrc dataSrc, String tableName, String searchKey, List<String> columnName) {
+        IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
+        Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
+        int count = 0;
+        try {
+            searchKey = "%" + searchKey + "%";
+            String s = "";
+            for (int j = 0; j < columnName.size(); j++) {
+                if (!columnName.get(j).equals("PORTALID")) {
+                    s += columnName.get(j) + " like ? or ";
+                }
+            }
+            s = s.substring(0, s.length() - 3);
+            String sql = "select count(*) as num from " + tableName + " where " + s;
+
+            //         时间格式的数据怎么获得
+            PreparedStatement pst = connection.prepareStatement(sql);
+            for (int j = 0, i = 1; j < columnName.size(); j++) {
+                if (!columnName.get(j).equals("PORTALID")) {
+                    pst.setObject(i, searchKey);
+                    i++;
+                }
+            }
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                count = rs.getInt("num");
+            }
+            pst.close();
+            rs.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return count;
+    }
 
     public List<EnumData> getEnumData(DataSrc dataSrc, String tableName, String colK, String colV) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
@@ -461,26 +670,6 @@ public class EditDataDao {
         return lists;
     }
 
-    /**
-     * @Description:
-     * @Param: [list, enumDataList]
-     * @return: cn.csdb.portal.model.EnumData
-     * @Author: zcy
-     * @Date: 2019/5/7
-     */
-    public EnumData enumCorresponding(List<String> list, List<EnumData> enumDataList) {
-        EnumData enumDataList1 = new EnumData();
-        String ss = "";
-        for (String s : list) {
-            for (EnumData e : enumDataList) {
-                if (s.equals(e.getKey())) {
-                    ss += e.getValue() + ",";
-                }
-            }
-        }
-        enumDataList1.setValue(ss);
-        return enumDataList1;
-    }
 
     /**
      * @Description: 新增数据，sql类型，根据val的值回找key值
@@ -489,7 +678,7 @@ public class EditDataDao {
      * @Author: zcy
      * @Date: 2019/5/7
      */
-    public String getSqlEnumData(DataSrc dataSrc, String tableName, String recolK, String recolV, String recolValue) {
+    public String getSqlEnumData(DataSrc dataSrc, String tableName, String recolK, String recolV, Object recolValue) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
         String colKey = "";

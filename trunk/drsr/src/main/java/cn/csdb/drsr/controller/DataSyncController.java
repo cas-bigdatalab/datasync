@@ -389,8 +389,11 @@ public class DataSyncController {
                 result=dataTaskService.update(dataTask);
             }
         }else{
+            //取消同步
             dataTask.setSync(sync);
             result=dataTaskService.update(dataTask);
+           SyncUtil syncUtil1=new SyncUtil();
+           syncUtil.callRemoteSyncMethod("false",dataTask);
         }
 
 
