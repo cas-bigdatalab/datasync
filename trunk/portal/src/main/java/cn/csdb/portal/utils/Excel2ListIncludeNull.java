@@ -248,12 +248,13 @@ public class Excel2ListIncludeNull {
                     thisStr = value.toString();
                     break;
                 case NUMBER:
-                    if (formatString != null) {
+                    /*if (formatString != null) {
                         thisStr = formatter.formatRawCellContents(Double.parseDouble(value), formatIndex, formatString).trim();
                     } else {
                         thisStr = value;
-                    }
-                    thisStr = thisStr.replace("_", "").trim();
+                    }*/
+//                    thisStr = thisStr.replace("_", "").trim();
+                    thisStr = value.toString();
                     break;
                 case DATE:
                     try {

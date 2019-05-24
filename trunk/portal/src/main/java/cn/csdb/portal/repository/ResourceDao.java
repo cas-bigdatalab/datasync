@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -248,7 +247,10 @@ public class ResourceDao {
 
     public void updateFileInfoTime(String resourceId) {
         Query query = new Query(Criteria.where("resourceId").is(resourceId));
-        Update time = new Update().set("time", new Date());
-        mongoTemplate.findAndModify(query, time, FileInfo.class);
+        List<FileInfo> fileInfos = mongoTemplate.find(query, FileInfo.class);
+        for (FileInfo fileInfo : fileInfos) {
+            fileInfo.setTime(new Date());
+            mongoTemplate.save(fileInfo);
+        }
     }
 }

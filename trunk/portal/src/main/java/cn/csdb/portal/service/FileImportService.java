@@ -10,6 +10,10 @@ import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.jdbc.ScriptRunner;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,7 +49,7 @@ public class FileImportService {
         JSONObject jsonObject = new JSONObject();
 
         // 解析excel
-        Map<String, List<List<String>>> mapSheet = parseExcel2(tempFilePath);
+        Map<String, List<List<String>>> mapSheet = parseExcel(tempFilePath);
         int sheetSize = mapSheet.keySet().size();
         if (sheetSize == 0) {
             jsonObject.put("code", "error");
@@ -117,7 +121,7 @@ public class FileImportService {
     public JSONObject createTableAndInsertValue(String tableName, List<TableField> tableFields, String tempFilePath, String subjectCode) {
         JSONObject jsonObject = new JSONObject();
         Map<String, List<List<String>>> mapSheet = new LinkedHashMap<>();
-        mapSheet = parseExcel2(tempFilePath);
+        mapSheet = parseExcel(tempFilePath);
 
         // 获取当前用户的MySQL连接
         DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
@@ -172,7 +176,7 @@ public class FileImportService {
     public JSONObject onlyInsertValue(String tableName, List<TableField> tableFields, String tempFilePath, String subjectCode) {
         JSONObject jsonObject = new JSONObject();
         Map<String, List<List<String>>> mapSheet = new LinkedHashMap<>();
-        mapSheet = parseExcel2(tempFilePath);
+        mapSheet = parseExcel(tempFilePath);
         // 获取当前用户的MySQL连接
         DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
         Connection connection = null;
@@ -239,7 +243,7 @@ public class FileImportService {
 
 
     /**
-     * 处理excel生成 Map<表名，List<行值>>
+     * 基于事件处理excel生成 Map<表名，List<行值>>
      *
      * @param fileName
      * @return
@@ -255,6 +259,48 @@ public class FileImportService {
         return map;
     }
 
+
+    /**
+     * 基于XSSFWorkbook对象处理Excel生成 Map<表名，List<行值>>
+     *
+     * @param fileName Excel全路径
+     * @return
+     */
+    private Map<String, List<List<String>>> parseExcel(String fileName) {
+        File excelFile = new File(fileName);
+        XSSFWorkbook workbook = null;
+        Map<String, List<List<String>>> map = new HashMap<>();
+        List<List<String>> rowList = null;
+        try {
+            workbook = new XSSFWorkbook(new FileInputStream(excelFile));
+            int numberOfSheets = workbook.getNumberOfSheets();
+            for (int i = 0; i < numberOfSheets; i++) {
+                XSSFSheet sheetAt = workbook.getSheetAt(i);
+                int lastRowNum = sheetAt.getLastRowNum();
+                rowList = new ArrayList<List<String>>(lastRowNum);
+                for (int r = 0; r < lastRowNum; r++) {
+                    XSSFRow row = sheetAt.getRow(r);
+                    short lastCellNum = row.getLastCellNum();
+                    List<String> cellList = new ArrayList<String>(lastCellNum);
+                    for (int c = 0; c < lastCellNum; c++) {
+                        XSSFCell cell = row.getCell(c);
+                        String s = cell == null ? "" : cell.toString();
+                        cellList.add(s);
+                    }
+                    rowList.add(cellList);
+                }
+                if (rowList.size() == 0) {
+                    break;
+                }
+                String sheetName = sheetAt.getSheetName();
+                map.put(sheetName, rowList);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error("解析Excel异常！！！");
+        }
+        return map;
+    }
 
     /**
      * 根据当前用户获取相关连接信息
