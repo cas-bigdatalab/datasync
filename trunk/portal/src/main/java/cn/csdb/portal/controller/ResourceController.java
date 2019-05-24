@@ -791,7 +791,7 @@ public class ResourceController {
     public JSONObject stopResource(String resourceId) {
         JSONObject jo = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
-        resource.setStatus("1");
+        resource.setStatus("-1");
         resource.setvCount(0);
         resource.setdCount(0);
         resourceService.saveDeleteId(resourceId);
