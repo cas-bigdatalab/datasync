@@ -242,6 +242,13 @@ public class EditDataService {
         return colKey;
     }
 
+    /**
+     * @Description: 查询mysql中所有表名
+     * @Param: [subjectCode]
+     * @return: java.util.List<java.lang.String>
+     * @Author: zcy
+     * @Date: 2019/5/24
+     */
     public List<String> searchTableNames(String subjectCode) {
         DataSrc dataSrc = getDataSrc(subjectCode);
         List<String> list = editDataDao.searchTableNames(dataSrc);

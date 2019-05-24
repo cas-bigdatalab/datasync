@@ -4,7 +4,7 @@ import cn.csdb.portal.model.*;
 import cn.csdb.portal.repository.CheckUserDao;
 import cn.csdb.portal.repository.TableFieldComsDao;
 import cn.csdb.portal.service.DataRMDBService;
-import cn.csdb.portal.service.DataSrcService;
+import cn.csdb.portal.service.EditDataService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
@@ -26,8 +26,6 @@ import java.util.List;
 @Controller
 public class DataSourceController {
     private Logger logger= LoggerFactory.getLogger(DataSourceController.class);
-    @Autowired
-    private DataSrcService dataSrcService;
 
     @Autowired
     private DataRMDBService dataRMDBservice;
@@ -37,6 +35,9 @@ public class DataSourceController {
 
     @Autowired
     private CheckUserDao checkUserDao;
+
+    @Autowired
+    private EditDataService editDataService;
 
     @RequestMapping(value="/dataResourceStaticRegister1")
     public String dataResourceRegister1(){
@@ -65,7 +66,8 @@ public class DataSourceController {
         datasrc.setUserName(subject.getDbUserName());
         datasrc.setPassword(subject.getDbPassword());
         if("0".equals(flag)) {
-            List<String> list = dataSrcService.relationalDatabaseTableList(datasrc);
+//            List<String> list = dataSrcService.relationalDatabaseTableList(datasrc);
+            List<String> list = editDataService.searchTableNames(subjectCode);
             List<Described_Table> list_describe = tableFieldComsDao.queryDescribeTable(subject.getDbName());
             for (Described_Table described_table : list_describe) {
                 list.remove(described_table.getTableName());
