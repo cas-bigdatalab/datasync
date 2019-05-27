@@ -151,8 +151,6 @@ public class LoginService
         //登陸成功
       ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().setAttribute("subjectCode",userName);
       ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().setAttribute("userName",subjectCode);
-        String ss = (String) ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest().getSession().getAttribute("userName");
-
 
         UserInformation userInformation=new UserInformation();
         SimpleDateFormat sDateFormat=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");

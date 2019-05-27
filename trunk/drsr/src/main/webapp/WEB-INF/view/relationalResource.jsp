@@ -271,6 +271,7 @@
                                                 <option value="SqlServer">SqlServer</option>--%>
                                                 <option value="mysql">MySql</option>
                                                 <option value="oracle">Oracle</option>
+                                               <option value="sqlserver">SqlServer</option>
                                             </select>
                                         </div>
                                     </div>

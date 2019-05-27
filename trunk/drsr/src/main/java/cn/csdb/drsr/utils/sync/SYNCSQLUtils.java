@@ -54,11 +54,12 @@ public class SYNCSQLUtils {
 
                 sb.append("\n" + name);
                 if ((type.startsWith("VARCHAR")) || (type.equals("CHAR")) || (type.equals("NUMBER"))
-                        || (type.equals("NUMERIC")) || (type.equals("BLOB")) || (type.equals("nvarchar"))) {
+                        || (type.equals("NUMERIC")) || (type.equals("BLOB")) || (type.equals("nvarchar")) || (type.equals("NVARCHAR2") || (type.equals("NVARCHAR") || (type.equals("nvarchar2"))))) {
                     if (chiffresApresVirgule == 0)
                         sb.append(" " + type + "(" + size + ")");
                     else
-                        sb.append(" " + type + "(" + size + "," + chiffresApresVirgule + ")");
+                        sb.append(" " + type + "(" + size + ")");
+//                        sb.append(" " + type + "(" + size + "," + chiffresApresVirgule + ")");
                 } else {
                     sb.append(" " + type);
                 }
@@ -193,13 +194,13 @@ public class SYNCSQLUtils {
                 ss.append("\n" + name);
                 //sb.append("\n" + name);
                 if ((type.startsWith("VARCHAR")) || (type.equals("CHAR")) || (type.equals("NUMBER"))
-                        || (type.equals("NUMERIC")) || (type.equals("BLOB"))) {
+                        || (type.equals("NUMERIC")) || (type.equals("BLOB"))  || (type.equals("NVARCHAR2") || (type.equals("NVARCHAR") || (type.equals("nvarchar2"))))) {
                     if (chiffresApresVirgule == 0)
                         //sb.append(" " + type + "(" + size + ")");
                         ss.append(" " + type + "(" + size + ")");
                     else
                         //sb.append(" " + type + "(" + size + "," + chiffresApresVirgule + ")");
-                        ss.append(" " + type + "(" + size + "," + chiffresApresVirgule + ")");
+                        ss.append(" " + type + "(" + size + ")");
                 } else {
                     //sb.append(" " + type);
                     ss.append(" " + type);
