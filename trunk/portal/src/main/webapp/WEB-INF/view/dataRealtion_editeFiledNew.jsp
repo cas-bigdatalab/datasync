@@ -370,7 +370,10 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label regislabel">主路径:</label>
                     <div class="col-sm-8">
-                        <input id="main_address" type="text" name="address" class="form-control"/>
+                        {{each listData as value}}
+                        <input id="main_address" type="text" name="address" class="form-control"
+                               value="{{value.filePath}}"/>
+                        {{/each}}
                     </div>
                 </div>
                 <div class="form-group">
@@ -419,6 +422,7 @@
     <script>
         var ctx = '${ctx}', edit = false;
         var sub = '${sessionScope.SubjectCode}';
+        var filePath = "${filePath}";
         $(function () {
             chooseTable(sub, 0);
             $(".qiehuan_div li:eq(0) a").addClass("active");
@@ -499,6 +503,7 @@
             data["columnName"] = columnName;
             data["tableName"] = tableName;
             data["clumnCommet"] = clumnCommet;
+            data["filePath"] = filePath;
             var listData = [];
             listData.push(data);
             typeTemplate(myOption, listData, columnName);
