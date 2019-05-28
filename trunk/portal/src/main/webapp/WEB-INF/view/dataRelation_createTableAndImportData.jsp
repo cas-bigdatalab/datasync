@@ -212,8 +212,10 @@
                         <input type="text" class="form-control inputVili" placeholder="新表名" name="newName">
                     </div>
                     <div class="col-md-1"></div>
-                    <div class="col-md-1 text-right"><input type="checkbox" id="synchronizeTable"/><label
-                            for="synchronizeTable">同步更新表</label></div>
+                    <div class="col-md-2 text-right">
+                        <input type="checkbox" id="synchronizeTable"/>
+                        <label for="synchronizeTable">同步更新表</label>
+                    </div>
                     <div class="col-md-2">
                         <select id="period" style="display: none;">
                             <option value="TERMINATION">请选择同步周期</option>
@@ -294,6 +296,11 @@
                 })
             });
 
+            // 清除建表过程中的选中主键标识
+            $("body").on("click", "#clearPK", function () {
+                $("[name='isPK']").prop("checked", false);
+            });
+
             // 初始化通过已有表创建新表
             initSqlCreateTable();
 
@@ -312,11 +319,11 @@
                 }
             });
 
+            // 表同步弹窗
             $(document).on("focus", ".synchronizeTable", function () {
                 var $_this = $(event.target);
                 $_this.data("last", $_this.val());
             });
-
             $(document).on("change", ".synchronizeTable", function () {
                 var $_this = $(event.target);
                 var val = $_this.val();
@@ -939,8 +946,8 @@
                     <th>字段类型</th>
                     <th>字段长度</th>
                     <th class="text-center">
-                        是否主键
-                        <button class="btn btn-default" id="clearPK" type="button">清除选中的主键</button>
+                        设置主键
+                        <button class="btn btn-default" id="clearPK" type="button">清除设置</button>
                     </th>
                 </tr>
                 </thead>

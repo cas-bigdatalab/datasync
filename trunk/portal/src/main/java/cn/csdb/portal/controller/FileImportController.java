@@ -19,6 +19,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -205,12 +206,18 @@ public class FileImportController {
         JSONObject jsonObject = new JSONObject();
         String subjectCode = request.getSession().getAttribute("SubjectCode").toString();
         String loginId = request.getSession().getAttribute("LoginId").toString();
-        String tableBySql = fileImportService.createTableBySql(newSql, newName, subjectCode);
+        String tableBySql = null;
+        try {
+            tableBySql = fileImportService.createTableBySql(newSql, newName, subjectCode);
+            jsonObject.put("message", tableBySql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return jsonObject;
+        }
         if (!Strings.isBlank(period)) {
             long periodTime = Period.valueOf(period).getDataTime();
             fileImportService.createSynchronizeTask(newSql, newName, subjectCode, periodTime, loginId);
         }
-        jsonObject.put("message", tableBySql);
         return jsonObject;
     }
 

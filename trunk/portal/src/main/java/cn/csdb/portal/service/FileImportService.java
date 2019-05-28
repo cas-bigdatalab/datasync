@@ -9,6 +9,11 @@ import cn.csdb.portal.utils.dataSrc.DDL2SQLUtils;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
+import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.schema.Column;
+import net.sf.jsqlparser.statement.select.Select;
+import net.sf.jsqlparser.util.SelectUtils;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -776,10 +781,16 @@ public class FileImportService {
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
             preparedStatement.execute();
-            connection.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
             message = e.getMessage();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return message;
@@ -808,15 +819,16 @@ public class FileImportService {
         Connection connection = getConnection(dataSrc);
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlString);
+            ResultSet previewResult = preparedStatement.executeQuery();
 
             // 获取字段名称列表
             List<String> columnName = new ArrayList<>();
-            ResultSetMetaData metaData = preparedStatement.getMetaData();
+            ResultSetMetaData metaData = previewResult.getMetaData();
             int columnCount = metaData.getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
-                String columnName1 = metaData.getColumnName(i);
-                if (!"PORTALID".equalsIgnoreCase(columnName1)) {
-                    columnName.add(columnName1);
+                String c = metaData.getColumnLabel(i);
+                if (!"PORTALID".equalsIgnoreCase(c)) {
+                    columnName.add(c);
                 }
             }
 
@@ -857,26 +869,25 @@ public class FileImportService {
         return jsonObject;
     }
 
-    public String createTableBySql(String newSql, String newName, String subjectCode) {
+    public String createTableBySql(String newSql, String newName, String subjectCode) throws SQLException {
         String validateSqlString = validateSqlString(newSql, subjectCode);
         if (!"true".equals(validateSqlString)) {
             return "请检查sql语句";
         }
+        Select select = null;
+        try {
+            select = (Select) CCJSqlParserUtil.parse(newSql);
+            SelectUtils.addExpression(select, new Column("UUID() as PORTALID"));
+
+        } catch (JSQLParserException e) {
+            e.printStackTrace();
+            return "请检查sql语句";
+        }
+        String createBySelect = "CREATE TABLE " + newName + " ( " + select.toString() + " )";
         DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
         Connection connection = getConnection(dataSrc);
-        String ddl = DDL2SQLUtils.generateDDLFromSql(connection, newSql, newName);
-        String insert = DDL2SQLUtils.generateInsertSqlFromSQL(connection, newSql, newName);
-        ScriptRunner runner = new ScriptRunner(connection);
-        // 下面配置不要随意更改，否则会出现各种问题
-        // 自动提交
-        runner.setAutoCommit(true);
-        runner.setFullLineDelimiter(false);
-        // 每条命令间的分隔符
-        runner.setDelimiter(";");
-        runner.setSendFullScript(false);
-        runner.setStopOnError(false);
-        runner.runScript(new InputStreamReader(new ByteArrayInputStream(ddl.getBytes())));
-        runner.runScript(new InputStreamReader(new ByteArrayInputStream(insert.getBytes())));
+        PreparedStatement preparedStatement = connection.prepareStatement(createBySelect);
+        preparedStatement.execute();
         return newName + "：创建成功";
     }
 

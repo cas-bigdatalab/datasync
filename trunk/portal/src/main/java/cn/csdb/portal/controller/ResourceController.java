@@ -5,7 +5,6 @@ import cn.csdb.portal.repository.TableFieldComsDao;
 import cn.csdb.portal.service.*;
 import cn.csdb.portal.utils.FileTreeNode;
 import cn.csdb.portal.utils.FileUploadUtil;
-import cn.csdb.portal.utils.FileUtil;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
@@ -707,13 +706,10 @@ public class ResourceController {
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         ResCatalog_Mongo resCatalog_mongo = resCatalogService.selectResCatalogNodeByRid(resource.getCatalogId());
         jsonObject.put("resCatalog", resCatalog_mongo);
-        String toFilesMemorySize = FileUtil.formateFileLength(resource.getToFilesMemorySize());
-        String toRdbMemorySize = FileUtil.formateFileLength(resource.getToRdbMemorySize());
-        String toMemorySize = FileUtil.formateFileLength(Long.valueOf(resource.getToMemorySize()));
         jsonObject.put("resource", resource);
-        jsonObject.put("toFilesMemorySize", toFilesMemorySize);
-        jsonObject.put("toRdbMemorySize", toRdbMemorySize);
-        jsonObject.put("toMemorySize", toMemorySize);
+        jsonObject.put("toFilesMemorySize", resource.getToFilesMemorySize());
+        jsonObject.put("toRdbMemorySize", resource.getToRdbMemorySize());
+        jsonObject.put("toMemorySize", resource.getToMemorySize());
         return jsonObject;
     }
 

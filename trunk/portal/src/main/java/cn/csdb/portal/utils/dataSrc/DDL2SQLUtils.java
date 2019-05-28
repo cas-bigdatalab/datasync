@@ -156,7 +156,7 @@ public class DDL2SQLUtils {
             int columnCount = metaData.getColumnCount();
             for (int index = 1; index <= columnCount; index++) {
                 String columnLabel = metaData.getColumnLabel(index);
-                String name = metaData.getColumnName(index);
+                String name = metaData.getColumnLabel(index);
                 String tableName = metaData.getTableName(index);
                 int size = metaData.getColumnDisplaySize(index);
                 boolean nullable = "1".equals(String.valueOf(metaData.isNullable(index)));

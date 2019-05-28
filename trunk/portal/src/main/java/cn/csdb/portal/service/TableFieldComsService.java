@@ -295,7 +295,7 @@ public class TableFieldComsService {
         }
         ByteArrayInputStream bis = new ByteArrayInputStream(sb.toString().getBytes("UTF-8"));
         FileOutputStream fos = new FileOutputStream(tempFile);
-        byte[] b = new byte[1024];
+        byte[] b = new byte[1];
         int i = 0;
         while ((i = bis.read(b)) != -1) {
             fos.write(b);

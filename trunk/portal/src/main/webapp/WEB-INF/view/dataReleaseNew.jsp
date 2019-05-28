@@ -243,7 +243,7 @@
                         <div class="col-sm-8 modediv" id="toRecordNumber"></div>
                     </div>
                     <div class="form-group RDB">
-                        <label class="col-sm-3 control-label">总记大小:</label>
+                        <label class="col-sm-3 control-label">总记录大小:</label>
                         <div class="col-sm-8 modediv" id="toRdbMemorySize"></div>
                     </div>
 
