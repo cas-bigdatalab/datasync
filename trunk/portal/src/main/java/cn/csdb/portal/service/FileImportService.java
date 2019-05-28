@@ -5,7 +5,6 @@ import cn.csdb.portal.repository.CheckUserDao;
 import cn.csdb.portal.repository.SynchronizationTablesDao;
 import cn.csdb.portal.utils.Excel2ListIncludeNull;
 import cn.csdb.portal.utils.SqlUtil;
-import cn.csdb.portal.utils.dataSrc.DDL2SQLUtils;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
@@ -14,7 +13,6 @@ import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.util.SelectUtils;
-import org.apache.ibatis.jdbc.ScriptRunner;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -28,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.io.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -891,7 +890,7 @@ public class FileImportService {
         return newName + "：创建成功";
     }
 
-    public String createSynchronizeTask(String newSql, String newName, String subjectCode, Long periodTime, String loginId) {
+    public void createSynchronizeTask(String newSql, String newName, String subjectCode, Long periodTime, String loginId) {
         SynchronizationTable synchronizationTable = new SynchronizationTable();
         synchronizationTable.setFrequency(periodTime);
         synchronizationTable.setLastModifyTime(new Date().getTime());
@@ -901,44 +900,45 @@ public class FileImportService {
         synchronizationTable.setLoginId(loginId);
         synchronizationTable.setSystemName("DataAssembler");
         synchronizationTablesDao.save(synchronizationTable);
-        return "true";
     }
 
-    public String SynchronizeTask(String sqlString, String tempTableName, String subjectCode, String tableName) {
+    public void SynchronizeTask(String sqlString, String tempTableName, String subjectCode, String tableName) {
         DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
         Connection connection = getConnection(dataSrc);
-        String ddl = DDL2SQLUtils.generateDDLFromSql(connection, sqlString, tempTableName);
-        String insert = DDL2SQLUtils.generateInsertSqlFromSQL(connection, sqlString, tempTableName);
         PrintWriter printWriter = null;
         try {
-            connection.setAutoCommit(false);
-            ScriptRunner runner = new ScriptRunner(connection);
-            // 下面配置不要随意更改，否则会出现各种问题
-            runner.setAutoCommit(true); // 自动提交
-            runner.setFullLineDelimiter(false);
-            runner.setDelimiter(";"); // 每条命令间的分隔符
-            runner.setSendFullScript(false); // 分步执行
-            runner.setStopOnError(true); // sql异常终止执行
             printWriter = getPrintWriter(tableName);
-            runner.setLogWriter(printWriter);// 执行日志输出
-            runner.runScript(new InputStreamReader(new ByteArrayInputStream(ddl.getBytes())));
-            runner.runScript(new InputStreamReader(new ByteArrayInputStream(insert.getBytes())));
+            Date start = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String startTimeString = sdf.format(start);
+            printWriter.println("======== 开始执行同步表操作： " + tableName + "======== 时间：" + startTimeString);
+            printWriter.println("-------- 创建中间表 --------");
+            Select select = (Select) CCJSqlParserUtil.parse(sqlString);
+            SelectUtils.addExpression(select, new Column("UUID() as PORTALID"));
+            String createTempTableBySelect = "CREATE TABLE " + tempTableName + " ( " + select.toString() + " )";
+            printWriter.println(createTempTableBySelect);
+            connection.prepareStatement(createTempTableBySelect).execute();
 
-            String deleteTempTable = "DROP TABLE IF EXISTS " + tableName + " ;\n";
-            String renameTable = "RENAME TABLE " + tempTableName + " to " + tableName + " ;";
-            String successSql = deleteTempTable.concat(renameTable);
-            runner.runScript(new InputStreamReader(new ByteArrayInputStream(successSql.getBytes())));
+            printWriter.println("-------- 删除原始表 --------");
+            String deleteTempTable = "DROP TABLE IF EXISTS " + tableName;
+            connection.prepareStatement(deleteTempTable).execute();
+
+            printWriter.println("-------- 中间表重命名为同步表 --------");
+            String renameTable = "RENAME TABLE " + tempTableName + " TO " + tableName;
+            connection.prepareStatement(renameTable).execute();
+            Date end = new Date();
+            String endTimeString = sdf.format(end);
+            printWriter.println("======== 结束完成同步表操作： " + tableName + "======== 时间：" + endTimeString);
         } catch (SQLException e) {
             e.printStackTrace();
             printWriter.println("========error========");
             printWriter.println(e.getMessage());
             printWriter.println("========error========");
-        } catch (RuntimeException e) {
+        } catch (JSQLParserException e) {
             e.printStackTrace();
             printWriter.println("========error========");
             printWriter.println(e.getMessage());
             printWriter.println("========error========");
-            return e.getMessage();
         } finally {
             printWriter.flush();
             printWriter.close();
@@ -947,10 +947,12 @@ public class FileImportService {
                     connection.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    printWriter.println("========error========");
+                    printWriter.println(e.getMessage());
+                    printWriter.println("========error========");
                 }
             }
         }
-        return "true";
     }
 
     private PrintWriter getPrintWriter(String tableName) {
