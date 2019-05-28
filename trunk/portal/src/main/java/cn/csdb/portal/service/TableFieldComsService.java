@@ -94,7 +94,7 @@ public class TableFieldComsService {
             }
         }
         if (tableInfos != null && tableInfosCur != null) {
-            List intersectionList = ListUtils.intersection(tableInfosCur, tableInfos);//1 获取交集，取tableInfosCur中元素
+            List intersectionList = ListUtils.intersection(tableInfos, tableInfosCur);//1 获取交集，取tableInfosCur中元素
             tableInfos.removeAll(tableInfosCur);//2 去除重复元素
             tableInfos.addAll(intersectionList);//3 然后取并集
             maps.put(tableName, tableInfos);
