@@ -770,9 +770,10 @@
         $("#submit_form1").validate(validData)
         $("#submit_form2").validate(validData2)
 
-        function doUpload() {
+        function doUpload(resourceId) {
             $(".jcrop-holder").hide();
             var formData = new FormData($("#fileForm")[0]);
+            formData.append("resourceId", resourceId);
             $.ajax({
                 url: '${ctx}/resource/uploadHeadImage',
                 type: 'post',
@@ -782,10 +783,6 @@
                 contentType: false,
                 processData: false,
                 success: function (result) {
-                    var resultJson = JSON.parse(result);
-                    var filePath = resultJson.saveName;
-                    $("#imgPath").val(resultJson.saveName);
-                    $('#cutimg').attr('src', filePath);
                 },
                 error: function (returndata) {
                     alert(returndata);
@@ -804,7 +801,6 @@
 
                     // 验证图片信息
                     if (0.7 < h / w && h / w < 0.8) {
-                        doUpload();
                         $("#imgFlagNum").val(2);
                     } else {
                         toastr["error"]("图片格式至少是 宽/长 在0.7和0.8之间", "错误！");
@@ -1012,7 +1008,6 @@
                 type: "POST",
                 data: {
                     title: $("#Task_dataName").val(),
-                    imagePath: $("#imgPath").val(),
                     introduction: $("#dataDescribeID").val(),
                     keyword: keywordStr,
                     catalogId: $("#centerCatalogId").val(),
@@ -1033,9 +1028,8 @@
                 },
                 success: function (data) {
                     var data = JSON.parse(data)
-                    console.log(data)
-                    resourceId = data.resourceId
-                    console.log(resourceId)
+                    resourceId = data.resourceId;
+                    doUpload(resourceId)
                 },
                 error: function (data) {
                     console.log("请求失败")

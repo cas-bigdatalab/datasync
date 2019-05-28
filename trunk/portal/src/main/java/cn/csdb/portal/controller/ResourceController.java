@@ -303,7 +303,6 @@ public class ResourceController {
     @RequestMapping(value = "addResourceFirstStep")
     public JSONObject saveResourceFirstStep(HttpSession session,
                                             @RequestParam(name = "title") String title,
-                                            @RequestParam(name = "imagePath", required = false) String imagePath,
                                             @RequestParam(name = "introduction") String introduction,
                                             @RequestParam(name = "keyword") String keyword,
                                             @RequestParam(name = "catalogId") String catalogId,
@@ -326,7 +325,6 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = new cn.csdb.portal.model.Resource();
         resource.setTitle(title);
-        resource.setImagePath(imagePath);
         resource.setIntroduction(introduction);
         resource.setKeyword(keyword);
         resource.setCatalogId(catalogId);
@@ -378,7 +376,6 @@ public class ResourceController {
 
             metaTemplate.setTitle(title);
             metaTemplate.setIntroduction(introduction);
-            metaTemplate.setImagePath(imagePath);
             metaTemplate.setKeyword(keyword);
             metaTemplate.setCatalogId(catalogId);
             metaTemplate.setStartTime(startDate);
@@ -553,7 +550,6 @@ public class ResourceController {
     public JSONObject editResourceFirstStep(HttpSession session,
                                             @RequestParam(name = "resourceId") String resourceId,
                                             @RequestParam(name = "title") String title,
-                                            @RequestParam(name = "imagePath", required = false) String imagePath,
                                             @RequestParam(name = "introduction") String introduction,
                                             @RequestParam(name = "keyword") String keyword,
                                             @RequestParam(name = "catalogId") String catalogId,
@@ -575,17 +571,6 @@ public class ResourceController {
         JSONObject jsonObject = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         resource.setTitle(title);
-        String oldImagePath = resource.getImagePath();
-        if (!Strings.isNullOrEmpty(imagePath)) {
-            if (imagePath.equals(oldImagePath)) {
-                resource.setImagePath(oldImagePath);
-            } else {
-                File f = new File(oldImagePath);
-                f.delete();
-                resource.setImagePath(imagePath);
-            }
-        }
-
         resource.setIntroduction(introduction);
         resource.setKeyword(keyword);
         resource.setCatalogId(catalogId);
@@ -639,7 +624,6 @@ public class ResourceController {
 
             metaTemplate.setTitle(title);
             metaTemplate.setIntroduction(introduction);
-            metaTemplate.setImagePath(imagePath);
             metaTemplate.setKeyword(keyword);
             metaTemplate.setCatalogId(catalogId);
             metaTemplate.setStartTime(startDate);
@@ -663,32 +647,36 @@ public class ResourceController {
         return jsonObject;
     }
 
+    /**
+     * 创建数据集时处理图片上传
+     *
+     * @param resourceId 数据集ID为图片名称保证数据集图片唯一
+     * @throws Exception
+     */
     @RequestMapping(value = "/uploadHeadImage", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject uploadHeadImageCopy(
+    public void uploadHeadImage(
             HttpServletRequest request,
-            @RequestParam(value = "imgFile") MultipartFile imageFile
+            @RequestParam(value = "imgFile") MultipartFile imageFile,
+            @RequestParam(value = "resourceId") String resourceId
     ) throws Exception {
-        JSONObject jsonObject = new JSONObject();
-        String saveName = "";
         String subjectCode = (String) request.getSession().getAttribute("SubjectCode");
         String resourcePath = imagesPath;
         resourcePath += "/" + subjectCode + "/resources";
         if (imageFile != null) {
             if (FileUploadUtil.allowUpload(imageFile.getContentType())) {
-                String fileName = FileUploadUtil.rename(imageFile.getOriginalFilename());
-                int end = fileName.lastIndexOf(".");
-                saveName = fileName.substring(0, end);
                 File dir = new File(resourcePath);
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }
-                File file = new File(dir, saveName + ".jpg");
+                File file = new File(dir, resourceId + ".jpeg");
                 imageFile.transferTo(file);
-                jsonObject.put("saveName", "/imagesPath/" + subjectCode + "/resources/" + saveName + ".jpg");
+                cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+                String saveName = "/imagesPath/" + subjectCode + "/resources/" + resourceId + ".jpeg";
+                resource.setImagePath(saveName);
+                resourceService.save(resource);
             }
         }
-        return jsonObject;
     }
 
     /**
