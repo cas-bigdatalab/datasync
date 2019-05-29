@@ -57,6 +57,7 @@
     <orderEntry type="library" name="Maven: top.jfunc.common:converter:1.8.0" level="project" />
     <orderEntry type="library" name="Maven: top.jfunc.json:json-fastjson:1.8.0" level="project" />
     <orderEntry type="library" name="Maven: top.jfunc.json:json-common:1.8.0" level="project" />
+    <orderEntry type="library" name="Maven: ch.ethz.ganymed:ganymed-ssh2:build210" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-core:4.3.19.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:4.3.19.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:4.3.19.RELEASE" level="project" />

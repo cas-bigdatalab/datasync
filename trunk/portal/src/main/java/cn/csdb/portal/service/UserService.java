@@ -94,4 +94,8 @@ public class UserService {
 
         return loginStatus;
     }
+
+    public User selectUserBySubjectCode(String subjectCode){
+       return userDao.selectUserBySubjectCode(subjectCode);
+    }
 }
