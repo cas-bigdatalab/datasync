@@ -33,8 +33,8 @@
 
             <p>
                 您无权访问此页面。<br/>
-                请用其他账户登录
-                <a href="${applicationScope.systemPro['cas.url.prefix']}/logout?service=${applicationScope.systemPro['resreg.url']}/logout">退出</a>
+                <%--请用其他账户登录--%>
+                <%--<a href="${applicationScope.systemPro['cas.url.prefix']}/logout?service=${applicationScope.systemPro['resreg.url']}/logout">退出</a>--%>
             </p>
         </div>
     </div>

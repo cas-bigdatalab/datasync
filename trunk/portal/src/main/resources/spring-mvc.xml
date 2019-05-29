@@ -43,6 +43,9 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
+    <!--springMVC中获取配置文件属性-->
+    <context:property-placeholder location="classpath:/*.properties"/>
+
     <mvc:resources mapping="/resources/**" location="/resources/"/>
     <mvc:resources mapping="/upload/**" location="/upload/"/>
     <mvc:view-controller path="/403" view-name="403"/>

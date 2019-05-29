@@ -19,14 +19,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.data.mongodb.core.query.Query;
 
-import javax.xml.ws.Action;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -59,155 +58,14 @@ public class HttpServiceController {
     @Value("#{systemPro['ftpFilePath']}")
     private String ftpFilePath;
 
-    @ResponseBody
-    @RequestMapping(value = "getDataTask", method = {RequestMethod.POST, RequestMethod.GET})
-    public int getDataTask(@RequestBody String requestString) {
-        System.out.println(requestString);
-        JSONObject requestJson = JSON.parseObject(requestString);
-        String subjectCode = requestJson.get("subjectCode").toString();
-        String dataTaskString = requestJson.get("dataTask").toString();
-        DataTask dataTask = JSON.parseObject(dataTaskString, DataTask.class);
-        if(!"file".equals(dataTask.getDataTaskType())){
-            if("true".equals(dataTask.getSync())){
-                saveSyncTableName(dataTask);
-            }
-        }
+    @Value("${db.username}")
+    private String dbUserName;
 
-//        String realPath = dataTask.getRealPath();
-        Subject subject = subjectMgmtService.findByCode(subjectCode);
-        String siteFtpPath = subject.getFtpFilePath();
-        siteFtpPath += "temp/";
-        try {
-            FileUtil.createFileByPathAndType(siteFtpPath, "dir");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        dataTask.setSubjectCode(subject.getSubjectCode());
-        String sqlFilePath = dataTask.getSqlFilePath();
-        sqlFilePath = sqlFilePath.replaceAll("%_%", File.separator);
-        System.out.println("sqlFilePath========" + sqlFilePath);
-        String[] sqlfilePathList = sqlFilePath.split(";");
-        String filepath = dataTask.getFilePath();
-        StringBuffer sqlfilePathBuffer = new StringBuffer();
-        String structDBFile = "";
-        String dataDBFile = "";
-        String zipFile = "";
-        String unZipPath = "";
-        for (String fp : sqlfilePathList) {
-            if (fp.equals("")) {
-                continue;
-            }
-            String fileName = "";
-            if (fp.indexOf("/") > 0) {
-                fileName = fp.substring(fp.lastIndexOf("/") + 1);
-            } else if (fp.indexOf("\\") > 0) {
-                fileName = fp.substring(fp.lastIndexOf("\\") + 1);
-            }
-            sqlfilePathBuffer.append(siteFtpPath + fileName + ";");
-            if (dataTask.getDataTaskType().equals("mysql")) {
-                String sqlZip = siteFtpPath + dataTask.getDataTaskId() + ".zip";
-//                System.out.println("-------sqlZip"+sqlZip);
-                File sqlfiles = new File(sqlZip);
-                ZipUtil zipUtil = new ZipUtil();
-                try {
-                    zipUtil.unZip(sqlfiles, siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql");
-                    zipFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql";
+    @Value("${db.password}")
+    private String dbPassword;
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                dataDBFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + "data.sql";
-                structDBFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + "struct.sql";
-                System.out.println("dataDBFile---------" + dataDBFile);
-                System.out.println("structDBFile---------" + structDBFile);
-            } else if (dataTask.getDataTaskType().equals("file")) {
-                zipFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + ".zip";
-                System.out.println("+++++++++" + zipFile);
-//                System.out.println("=========="+fileName);
-//                unZipPath = siteFtpPath + File.separator + "file" + File.separator + subjectCode + "_" + dataTask.getDataTaskId();
-                unZipPath = dataTask.getRemoteuploadpath();
-                System.out.println("dataTask.getRemoteuploadpath()" + dataTask.getRemoteuploadpath());
-                File tempFile = new File(unZipPath);
-                if (!tempFile.exists()) {
-                    tempFile.mkdirs();
-                }
-
-                File f = new File(siteFtpPath + File.separator + "file" + File.separator);
-                if (!f.exists()) {
-                    f.mkdirs();
-                }
-
-            } else if (dataTask.getDataTaskType().equals("oracle")) {
-//                String sqlZip = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + dataTask.getDataTaskId() + ".zip";
-                String sqlZip = siteFtpPath + dataTask.getDataTaskId() + ".zip";
-//                System.out.println("-------sqlZip"+sqlZip);
-                File sqlfiles = new File(sqlZip);
-                ZipUtil zipUtil = new ZipUtil();
-                try {
-                    zipUtil.unZip(sqlfiles, siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql");
-                    zipFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql";
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                dataDBFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + "data.sql";
-                structDBFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + "struct.sql";
-                System.out.println("dataDBFile---------" + dataDBFile);
-                System.out.println("structDBFile---------" + structDBFile);
-            }else if (dataTask.getDataTaskType().equals("sqlserver")) {
-//                String sqlZip = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + dataTask.getDataTaskId() + ".zip";
-                String sqlZip = siteFtpPath + dataTask.getDataTaskId() + ".zip";
-//                System.out.println("-------sqlZip"+sqlZip);
-                File sqlfiles = new File(sqlZip);
-                ZipUtil zipUtil = new ZipUtil();
-                try {
-                    zipUtil.unZip(sqlfiles, siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql");
-                    zipFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql";
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                dataDBFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + "data.sql";
-                structDBFile = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql" + File.separator + "struct.sql";
-                System.out.println("dataDBFile---------" + dataDBFile);
-                System.out.println("structDBFile---------" + structDBFile);
-            }
-        }
-        dataTask.setSqlFilePath(sqlfilePathBuffer.toString());
-        if (dataTask.getDataTaskType().equals("mysql") || "oracle".equals(dataTask.getDataTaskType()) || "sqlserver".equals(dataTask.getDataTaskType())) {
-            String username = configPropertyService.getProperty("db.username");
-            String password = configPropertyService.getProperty("db.password");
-            String dbName = subject.getDbName();
-
-            SqlUtil sqlUtil = new SqlUtil();
-            try {
-                System.out.println("passwprd------" + password);
-                sqlUtil.importSql("localhost", username, password, dbName, structDBFile, dataDBFile);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        } else {
-            File file = new File(zipFile);
-            ZipUtil zipUtil = new ZipUtil();
-            try {
-                List<String> listName = zipUtil.unZip(file, unZipPath);
-                System.out.println("解压的文件名称集合" + listName.toString());
-                System.out.println("源路径：" + zipFile);
-                System.out.println("目标路径：" + unZipPath);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        dataTask.setDataTaskId(null);
-        dataTaskService.insertDataTask(dataTask);
-
-        // 删除上传无用的源文件
-        JSONObject jsonObject = FileUtil.deleteFolder(zipFile);
-        System.out.println("文件路径：" + zipFile);
-        System.out.println("文件删除状态：" + jsonObject.get("code"));
-        return 1;
-    }
+    @Value("${dataAssemblerHost}")
+    private String dataAssemblerHost;
 
     @RequestMapping(value = "/treeNodeAsync")
     @ResponseBody
@@ -221,6 +79,95 @@ public class HttpServiceController {
         return jsonObject;
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/getDataTask", method = {RequestMethod.POST, RequestMethod.GET})
+    public String executeDataTask(@RequestBody String requestString) {
+
+        // 解析请求字符串 获取dataTask对象
+        JSONObject requestJson = JSON.parseObject(requestString);
+        String subjectCode = requestJson.get("subjectCode").toString();
+        Subject subject = subjectMgmtService.findByCode(subjectCode);
+        String dataTaskString = requestJson.get("dataTask").toString();
+        DataTask dataTask = JSON.parseObject(dataTaskString, DataTask.class);
+        dataTask.setSubjectCode(subject.getSubjectCode());
+
+        // 记录需要同步的任务
+        String dataTaskType = dataTask.getDataTaskType();
+        if (!"file".equalsIgnoreCase(dataTaskType)) {
+            if ("true".equals(dataTask.getSync())) {
+                saveSyncTableName(dataTask);
+            }
+        }
+
+        // 创建操作空间
+        String siteFtpPath = subject.getFtpFilePath() + "temp/";
+        try {
+            FileUtil.createFileByPathAndType(siteFtpPath, "dir");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "DIR_ERROR";
+        }
+
+        // 上传的ZIP文件
+        String zipFilePath = "";
+        // 解压的路劲
+        String unzipFilePath = "";
+        // 定义语句脚本文件
+        String dmlFile = "";
+        // 操控语句脚本文件
+        String ddlFile = "";
+
+
+        if ("file".equalsIgnoreCase(dataTaskType)) {
+            // 文件类型任务 定位上传的ZIP 解压到指定位置
+            zipFilePath = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + ".zip";
+            unzipFilePath = dataTask.getRemoteuploadpath();
+            File tempFile = new File(unzipFilePath);
+            if (!tempFile.exists()) {
+                tempFile.mkdirs();
+            }
+
+            File file = new File(zipFilePath);
+            ZipUtil zipUtil = new ZipUtil();
+            try {
+                zipUtil.unZip(file, unzipFilePath);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "UNZIP_FILE_ERROR";
+            }
+        } else {
+            // 数据类型任务 定位上传的ZIP 解压到操作空间下某个以任务ID为名的路径下 执行其中的ddl脚本与dml脚本
+            zipFilePath = siteFtpPath + dataTask.getDataTaskId() + ".zip";
+            unzipFilePath = siteFtpPath + subjectCode + "_" + dataTask.getDataTaskId() + "_sql";
+            dmlFile = unzipFilePath + File.separator + "data.sql";
+            ddlFile = unzipFilePath + File.separator + "struct.sql";
+
+            try {
+                ZipUtil zipUtil = new ZipUtil();
+                zipUtil.unZip(new File(zipFilePath), unzipFilePath);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "UNZIP_SQL_ERROR";
+            }
+
+            String dbName = subject.getDbName();
+            SqlUtil sqlUtil = new SqlUtil();
+            try {
+                sqlUtil.importSql(dataAssemblerHost, dbUserName, dbPassword, dbName, ddlFile, dmlFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "EXECUTE_SQL_ERROR";
+            }
+
+            // 删除SQL脚本
+            FileUtil.deleteFolder(unzipFilePath);
+        }
+
+        // 删除ZIP文件
+        FileUtil.deleteFolder(zipFilePath);
+
+        return "SUCCESS";
+    }
 
 
     @ResponseBody
@@ -233,16 +180,16 @@ public class HttpServiceController {
         String syncFilePath = requestJson.get("syncFilePath").toString();
         String subjectCode = requestJson.get("subjectCode").toString();
 
-        if("true".equals(dataTask.getSync()) && !"false".equals(syncFilePath) ){//启动同步操作
+        if ("true".equals(dataTask.getSync()) && !"false".equals(syncFilePath)) {//启动同步操作
             saveSyncTableName(dataTask);
-        }else if("false".equals(syncFilePath)){
+        } else if ("false".equals(syncFilePath)) {
             Query query = Query.query(Criteria.where("taskId").is(dataTask.getDataTaskId()));
             mongoTemplate.remove(query, SynchronizationTable.class);
             return 1;
         }
 
-        String structDBFile=syncFilePath+File.separator+"syncStruct.sql";
-        String dataDBFile=syncFilePath+File.separator+"syncData.sql";
+        String structDBFile = syncFilePath + File.separator + "syncStruct.sql";
+        String dataDBFile = syncFilePath + File.separator + "syncData.sql";
         Subject subject = subjectMgmtService.findByCode(subjectCode);
         String username = configPropertyService.getProperty("db.username");
         String password = configPropertyService.getProperty("db.password");
@@ -251,15 +198,15 @@ public class HttpServiceController {
         try {
             System.out.println("passwprd------" + password);
             sqlUtil.importSql("localhost", username, password, dbName, structDBFile, dataDBFile);
-            File file=new File(structDBFile);
-            File file2=new File(dataDBFile);
-            if(file.exists()){
-                boolean result=file.delete();
-                System.out.println("删除文件："+structDBFile+"  "+result+"");
+            File file = new File(structDBFile);
+            File file2 = new File(dataDBFile);
+            if (file.exists()) {
+                boolean result = file.delete();
+                System.out.println("删除文件：" + structDBFile + "  " + result + "");
             }
-            if(file2.exists()){
-                boolean result=file2.delete();
-                System.out.println("删除文件："+dataDBFile+"   "+result+"");
+            if (file2.exists()) {
+                boolean result = file2.delete();
+                System.out.println("删除文件：" + dataDBFile + "   " + result + "");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -270,25 +217,25 @@ public class HttpServiceController {
 
     @ResponseBody
     @RequestMapping(value = "saveSyncTableName", method = {RequestMethod.POST, RequestMethod.GET})
-    public String saveSyncTableName(DataTask dataTask){
+    public String saveSyncTableName(DataTask dataTask) {
 
         //查询任务是否已存在
         DBObject dbObject = QueryBuilder.start().and("taskId").is(dataTask.getDataTaskId()).get();
         Query query = new BasicQuery(dbObject);
         List<SynchronizationTable> synchronizationTableList = mongoTemplate.find(query, SynchronizationTable.class);
-        if(synchronizationTableList.size()!=0){
+        if (synchronizationTableList.size() != 0) {
             System.out.println("此次为任务的重新上传！");
-            return  "";
+            return "";
         }
 
-        String tableStr=dataTask.getTableName();
-        String tableStr2=dataTask.getSqlTableNameEn();
-        System.out.println("保存同步表： "+tableStr+"  "+tableStr2);
-        if(!";".equals(tableStr) && tableStr!=null && !"".equals(tableStr)){
-            String [] array=tableStr.split(";");
-            for(String tableName:array){
+        String tableStr = dataTask.getTableName();
+        String tableStr2 = dataTask.getSqlTableNameEn();
+        System.out.println("保存同步表： " + tableStr + "  " + tableStr2);
+        if (!";".equals(tableStr) && tableStr != null && !"".equals(tableStr)) {
+            String[] array = tableStr.split(";");
+            for (String tableName : array) {
                 System.out.println("开始保存数据！");
-                SynchronizationTable synchronizationTable=new SynchronizationTable();
+                SynchronizationTable synchronizationTable = new SynchronizationTable();
                 synchronizationTable.setTableName(tableName);
                 synchronizationTable.setSubjectCode(dataTask.getSubjectCode());
                 synchronizationTable.setTaskId(dataTask.getDataTaskId());//任务id
@@ -296,11 +243,11 @@ public class HttpServiceController {
                 mongoTemplate.save(synchronizationTable);
             }
         }
-        if(!";".equals(tableStr2) && tableStr2!=null && !"".equals(tableStr2)){
-            String [] array=tableStr2.split(";");
-            for(String tableName:array){
+        if (!";".equals(tableStr2) && tableStr2 != null && !"".equals(tableStr2)) {
+            String[] array = tableStr2.split(";");
+            for (String tableName : array) {
                 System.out.println("开始保存数据！");
-                SynchronizationTable synchronizationTable=new SynchronizationTable();
+                SynchronizationTable synchronizationTable = new SynchronizationTable();
                 synchronizationTable.setTableName(tableName);
                 synchronizationTable.setSubjectCode(dataTask.getSubjectCode());
                 synchronizationTable.setTaskId(dataTask.getDataTaskId());//任务id
