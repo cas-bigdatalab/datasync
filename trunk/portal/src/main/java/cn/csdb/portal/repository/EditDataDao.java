@@ -470,7 +470,7 @@ public class EditDataDao {
             ResultSetMetaData rsm = set.getMetaData();
 
             while (set.next()) {
-                Map<String, Object> map = new HashMap<>();
+                Map<String, Object> map = new LinkedHashMap<>();
                 for (int i = 1; i <= rsm.getColumnCount(); i++) {
                     if (set.getString(rsm.getColumnName(i)) == null) {
                         map.put(rsm.getColumnName(i), "");
@@ -529,7 +529,7 @@ public class EditDataDao {
             ResultSetMetaData rsm = set.getMetaData();
 
             while (set.next()) {
-                Map<String, Object> map = new HashMap<>();
+                Map<String, Object> map = new LinkedHashMap<>();
                 for (int i = 1; i <= rsm.getColumnCount(); i++) {
                     if (set.getString(rsm.getColumnName(i)) == null) {
                         map.put(rsm.getColumnName(i), "");

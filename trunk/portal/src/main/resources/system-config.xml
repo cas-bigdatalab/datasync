@@ -31,7 +31,7 @@
 
     <util:properties id="menus">
         <beans:prop key="organization_title">
-            课题组
+            数据节点
         </beans:prop>
 
         <beans:prop key="systemRole_root">

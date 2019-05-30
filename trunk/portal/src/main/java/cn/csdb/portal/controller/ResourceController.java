@@ -59,6 +59,9 @@ public class ResourceController {
     @Resource
     private MetaTemplateService metaTemplateService;
 
+    @Resource
+    private UserService userService;
+
     @Value("#{systemPro['imagesPath']}")
     private String imagesPath;
 
@@ -772,14 +775,21 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping("stopResource")
-    public JSONObject stopResource(String resourceId) {
+    public JSONObject stopResource(String resourceId,String reason) {
         JSONObject jo = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        //        发送邮件
+        String subjectCode=resource.getSubjectCode();
+//        Subject subject=subjectService.findBySubjectCode(subjectCode);
+        User user=userService.selectUserBySubjectCode(subjectCode);
+        resourceService.sendForgotMail(user,resource,reason);
+
         resource.setStatus("-1");
         resource.setvCount(0);
         resource.setdCount(0);
         resourceService.saveDeleteId(resourceId);
         String newresourceId = resourceService.save(resource);
+
         if (StringUtils.isNotBlank(newresourceId)) {
             jo.put("result", "success");
         } else {

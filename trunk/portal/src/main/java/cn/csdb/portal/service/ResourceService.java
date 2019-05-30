@@ -1,9 +1,11 @@
 package cn.csdb.portal.service;
 
 import cn.csdb.portal.model.Subject;
+import cn.csdb.portal.model.User;
 import cn.csdb.portal.repository.DataSrcDao;
 import cn.csdb.portal.repository.ResourceDao;
 import cn.csdb.portal.utils.FileTreeNode;
+import cn.csdb.portal.utils.MailOperationUtil;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
@@ -398,5 +400,38 @@ public class ResourceService {
 
     public void updateFileInfoTime(String resourceId) {
         resourceDao.updateFileInfoTime(resourceId);
+    }
+
+    //发送通用邮件通知
+    public void sendForgotMail(User user, cn.csdb.portal.model.Resource resource, String reson){
+        //生成重置密码加密链接
+//        long endTimes = System.currentTimeMillis()+3600*1000;   //设置一小时有效时间
+//        String password1 = userDao.getByPassword(loginId); //获取该用户的密码
+//        String para = loginId+";"+password1+";"+endTimes; //拼接成串，用base64进行加密
+//        String encode = UrlUtils.enCryptAndEncode(para);
+
+        MailOperationUtil operation = new MailOperationUtil();
+        String userName = "vdbcloud@cnic.cn";
+        String host = "smtp.cnic.cn";
+        String password = "sdc123456";
+        String from = "vdbcloud@cnic.cn";
+        String addressee= user.getEmail();// 收件人
+        System.out.print("收件人为：" + addressee);
+        String title = "数据集停用通知邮件";
+        String resTitle=resource.getTitle();
+        //邮箱内容
+        StringBuffer sb = new StringBuffer();
+        sb.append("<!DOCTYPE>" + "<div bgcolor='#f1fcfa'   style='border:1px solid #d9f4ee; font-size:14px; line-height:22px; color:#005aa0;padding-left:1px;padding-top:5px;   padding-bottom:5px;'><span style='font-weight:bold;'>温馨提示：</span>"
+                + "<div style='width:950px;font-family:arial;'>尊敬的用户您好:<br/> 名称为&nbsp;'"+resTitle+"'&nbsp;的数据集已经停用。停用理由如下:<p>"+ reson+"</p>本邮件由系统自动发出，请勿回复。<br/>感谢您使用课题组数据管理与发布工具<br/></div>"
+                + "</div>");
+        try {
+            String res = operation.sendMail(userName,host, password,from, addressee,
+                    title, sb.toString());
+            System.out.print("发送成功！！！");
+            System.out.println(res);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.print(e);
+        }
     }
 }

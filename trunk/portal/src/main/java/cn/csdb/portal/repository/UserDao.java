@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
@@ -544,4 +545,8 @@ public class UserDao {
         return loginStatus;
     }
 
+   public User selectUserBySubjectCode(String subjectCode){
+        User user=mongoTemplate.findOne(new Query(Criteria.where("subjectCode").is(subjectCode)),User.class);
+        return user;
+    }
 }

@@ -18,9 +18,10 @@
     <%--<link rel="Stylesheet" href="${ctx}/resources/css/common.css"/>--%>
     <link rel="Stylesheet" href="${ctx}/resources/css/jquery.jerichotab.css"/>
     <link rel="stylesheet" href="${ctx}/resources/bundles/font-awesome-4.7.0/css/font-awesome.min.css">
-    <%--<link rel="stylesheet" type="text/css" href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css">--%>
     <link href="${ctx}/resources/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/css/home.css" type="text/css"/>
+    <link href="${ctx}/resources/bundles/timepicker/jquery.timepicker.css" type="text/css"/>
+    <link href="${ctx}/resources/bundles/bootstrap-datepicker/css/datepicker.css"/>
 
     <style type="text/css">
         /*超出隐藏*/
@@ -54,7 +55,7 @@
             position: relative;
             display: table;
             border-collapse: separate;
-            width: 11%;
+            width: 12%;
             height: 30px;
         }
 
@@ -63,7 +64,7 @@
         }
 
         .input-group .input-group-btn button {
-            background: #0097d7;
+            background: #4183ce;
             border: none;
         }
 
@@ -84,7 +85,7 @@
 
 
     <!-- 此处是相关代码 -->
-    <div style="float: left; width: 82%;overflow: hidden;">
+    <div style="float: left; width: 80%;overflow: hidden;">
         <ul style="" id="ul_div111" class="nav nav-tabs activeTabs" role="tablist">
 
         </ul>
@@ -92,11 +93,11 @@
     <div class="input-group" style="float: left;margin-left: 1%;">
         <input type="text" name="searchKey" class="form-control" placeholder="输入关键词" value=""/>
         <span class="input-group-btn">
-                    <button type="button" id="btnSearch" onclick="searchTableData(this)"><img
-                            src="${ctx}/resources/img/ico06.png"></button>
+                    <button type="button" id="btnSearch" onclick="searchTableData(this)" style="width: 31px;height: 34px"><img
+                            src="${ctx}/resources/img/ico06.png"     style="width: 20px; height: 21px;"></button>
                 </span>
     </div>
-    <div id="btn_addTableData" style="float:right;width:5%;margin-rightt: 2%;display: none;">
+    <div id="btn_addTableData" style="float:right;width:5%;margin-right: 1%;display: none;">
         <button class="btn btn-primary" type="button"  onclick="add_function()"><a href="#" style="color: white;"><i
                 class="fa fa-plus"></i>增加</a></button>
     </div>
@@ -288,10 +289,11 @@
 </body>
 <div id="siteMeshJavaScript">
     <script src="${ctx}/resources/bundles/bootstrap-closable-tab/bootstrap-closable-tab.js"></script>
-    <%--<script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>--%>
-    <%--<script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>--%>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
     <script type="text/javascript" src="${ctx}/resources/bundles/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script href="${ctx}/resources/bundles/timepicker/jquery.timepicker.js" type="text/css"></script>
 
     <script type="text/javascript">
 
@@ -329,6 +331,11 @@
             var tableName = $(i).attr("id");
             var pageNo = 1;
             editTable_func(subjectCode, tableName, pageNo, searchKey);
+            if($(".input-group input").val()!==null){
+                $(".input-group input").val("");
+                $(".input-group input").attr("placeholder","输入关键词");
+            }
+
         }
 
         function searchTableData(i) {
@@ -343,6 +350,7 @@
 
         //数据编辑
         function editTable_func(subjectCode, tableName, pageNo, searchKey) {
+            debugger;
             var ids = "#tab_container_" + tableName;
             $.ajax({
                 type: "post",
@@ -354,6 +362,7 @@
                     var dataType = data.dataType;
                     var columnComment = data.columnComment;
                     var dataArry = data.dataDatil;
+                    console.log(dataArry);
                     var count=dataArry.length;
                     var delPORTALID;
                     var tabs = "";
@@ -559,7 +568,6 @@
                     var dataType = data.dataType;
                     var columnComment = data.columnComment;
                     var dataArry = data.dataDatil;
-                    // console.log(dataArry);
                     var count=dataArry.length;
                     var delPORTALID;
                     var tabs = "";
@@ -1048,8 +1056,8 @@
                         toastr.error("添加数据失败，"+ data.prikey+"的值已存在！");
                     } else if (data.data === "1") {
                         toastr.success("添加成功!");
-                        // var searchKey=$(".input-group input").val();
-                        var searchKey = "";
+                        var searchKey=$(".input-group input").val();
+                        // var searchKey = "";
                         clickPageButton(subjectCode, tableName, currentPage, searchKey);
                         $("#staticAddData").modal("hide");
                     } else if (data.data === "-1") {
@@ -1083,8 +1091,6 @@
                 success: function (data) {
                     var dataTypeArr = data.DATA_TYPE;
                     var columnComments = data.COLUMN_COMMENT;
-                    var autoAddArr = data.autoAdd;
-                    var pkColumnArr = data.pkColumn;
                     var COLUMN_TYPE = data.COLUMN_TYPE;
                     var strs2=data.COLUMN_NAME;
                     var strs = data.data;
@@ -1110,7 +1116,7 @@
                             }else if(dataTypeArr[i]==="date"){
                                 s_tbody+="<td  style='width:40%;'><input class='selectData' id='"+ getinput_id +"' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "'  /></td></tr>";
                             }else if(dataTypeArr[i]==="time"){
-                                s_tbody += "<td  style='width:40%;'><input class='DataTime' id='" + getinput_id + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
+                                s_tbody += "<td  style='width:40%;'><input class='selectTime' id='" + getinput_id + "' type='text' style='width:100%;height=100%' placeholder='请选择' title='" + strs[i] + "' value='" + strs[i] + "' /></td></tr>";
                             }else {
                                 var enumDataList = data.enumDataList;
                                 var flag = 0;
@@ -1165,27 +1171,15 @@
                         format: "yyyy-mm-dd hh:ii:ss",
                         minView: 0,
                         minuteStep:1
-                        //第二种
-                        // format: 'yyyy-mm-dd hh:ii:ss',
-                        // autoclose: true,
-                        // minView: 0,
-                        // minuteStep:1
-                    //    第三种
-                    //     language:  'zh-CN',
-                    //     dateFormat: 'yyyy-mm-dd',//日期显示格式
-                    //     timeFormat:'HH:mm:ss',//时间显示格式
-                    //     todayBtn:  1,
-                    //     autoclose: 1,
-                    //     minView:0,  //0表示可以选择小时、分钟   1只可以选择小时
-                    //     minuteStep:1//分钟间隔1分钟
                     });
-                    $('.DataTime').datetimepicker({
+                    $('.selectTime').datetimepicker({
                         //第一种
                         language:'zh-CN',
                         autoclose: true,//选中之后自动隐藏日期选择框
                         clearBtn: true,//清除按钮
                         todayBtn: false,//今日按钮
                         format: "hh:ii:ss",
+                        // timeFormat: 'hh:mm:ss:l',
                         minView: 0,
                         minuteStep:1,
                         pickDate:false,
@@ -1765,7 +1759,8 @@
                         //成功消息提示，默认背景为浅绿色
                         toastr.success("更新成功!");
                         $("#staticUpdateData").modal("hide");
-                        var searchKey = "";
+                        // var searchKey = "";
+                        var searchKey=$(".input-group input").val();
                         clickPageButton(subjectCode, tableName, currentPage, searchKey);
                     } else if(data.data === "-1"){
                         toastr.error("主键重复！");
@@ -1804,7 +1799,8 @@
                         success: function (data) {
                             if (data.data === "1") {
                                 toastr.success("删除成功!");
-                                var searchKey = "";
+                                // var searchKey = "";
+                                var searchKey=$(".input-group input").val();
                                 clickPageButton(subjectCode, tableName, currentPage, searchKey);
 
                             }
@@ -1833,6 +1829,15 @@
                 }
             });
         }
+
+        $("#ul_div111 li a").live("click",function () {
+            if($(".input-group input").val()!==null){
+                $(".input-group input").val("");
+                $(".input-group input").attr("placeholder","输入关键词");
+            }
+        })
+
+
 
     </script>
 </div>
