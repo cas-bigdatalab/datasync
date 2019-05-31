@@ -775,11 +775,11 @@ public class ResourceController {
      */
     @ResponseBody
     @RequestMapping("stopResource")
-    public JSONObject stopResource(String resourceId,String reason) {
+    public JSONObject stopResource(String resourceId) {
         JSONObject jo = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
 
-        resource.setStatus("-1");
+        resource.setStatus("-1"); //未完成
         resource.setvCount(0);
         resource.setdCount(0);
         resourceService.saveDeleteId(resourceId);
@@ -790,12 +790,17 @@ public class ResourceController {
         } else {
             jo.put("result", "fail");
         }
+
+
+        return jo;
+    }
+    @RequestMapping("sendStopEmail")
+    public void sendStopEmail(String resourceId,String reason){
+        cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
         //        发送数据集停用邮件通知
         String subjectCode=resource.getSubjectCode();
         User user=userService.selectUserBySubjectCode(subjectCode);
         resourceService.sendForgotMail(user,resource,reason);
-
-        return jo;
     }
 
     @RequestMapping(value = "sqlValidation", method = RequestMethod.GET)

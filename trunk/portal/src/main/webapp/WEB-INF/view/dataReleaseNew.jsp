@@ -617,11 +617,19 @@
                             url: "${ctx}/resource/stopResource",
                             type: "POST",
                             data: {
-                                resourceId: id,
-                                reason:$("#reason").val()
+                                resourceId: id
                             },
                             success: function (data) {
-                                tableConfiguration2(currentPageNumber(), "", "", "")
+                                tableConfiguration2(currentPageNumber(), "", "", "");
+                            //    停用成功，发送邮件通知
+                                $.ajax({
+                                    url: "${ctx}/resource/sendStopEmail",
+                                    type: "POST",
+                                    data: {
+                                        resourceId: id,
+                                        reason:$("#reason").val()
+                                    }
+                            })
                             },
                             error: function () {
                                 console.log("请求失败")
