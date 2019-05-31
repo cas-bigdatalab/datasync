@@ -610,7 +610,7 @@
         function disableRelease(id) {
             var currentTargetName = $.trim($(event.currentTarget).parent().parent().parent().parent().parent().parent().find("td:eq(1)").text());
             bootbox.confirm("<span style='font-size: 16px'>确认停用<span style='font-size: 16px;color: #5b9bd1'>" + currentTargetName + "</span>么？</span>" +
-                "<div style='margin-top:2%;width: 80%;'><input id='reason' class='form-control' placeholder='请输入停用理由' value=''/><span id='span_alert' style='color:red;margin-left: 1%;'>*(必填)</span></div>", function (r) {
+                "<div style='margin-top:2%;width: 80%;'><textarea  id='reason' class='form-control' placeholder='请输入停用理由' value=''/><span id='span_alert' style='color:red;margin-left: 1%;'>*(必填)</span></div>", function (r) {
                 if (r) {
                     if($("#reason").val()!==null && $("#reason").val()!==""){
                         $.ajax({

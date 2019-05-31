@@ -778,11 +778,6 @@ public class ResourceController {
     public JSONObject stopResource(String resourceId,String reason) {
         JSONObject jo = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
-        //        发送邮件
-        String subjectCode=resource.getSubjectCode();
-//        Subject subject=subjectService.findBySubjectCode(subjectCode);
-        User user=userService.selectUserBySubjectCode(subjectCode);
-        resourceService.sendForgotMail(user,resource,reason);
 
         resource.setStatus("-1");
         resource.setvCount(0);
@@ -795,6 +790,11 @@ public class ResourceController {
         } else {
             jo.put("result", "fail");
         }
+        //        发送数据集停用邮件通知
+        String subjectCode=resource.getSubjectCode();
+        User user=userService.selectUserBySubjectCode(subjectCode);
+        resourceService.sendForgotMail(user,resource,reason);
+
         return jo;
     }
 
