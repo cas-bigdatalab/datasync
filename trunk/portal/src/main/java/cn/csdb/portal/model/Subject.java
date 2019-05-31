@@ -9,44 +9,44 @@ public class Subject {
     @Id
     private String id;
     @Field("subjectName")
-    private String subjectName;
+    private String subjectName; // 节点名称
     @Field("subjectCode")
-    private String subjectCode;
+    private String subjectCode; // 节点代码
     @Field("imagePath")
-    private String imagePath;
+    private String imagePath; // 节点图片
     @Field("brief")
-    private String brief;
+    private String brief; // 简介
     @Field("admin")
-    private String admin;
+    private String admin; // 登陆账号
     @Field("adminPasswd")
-    private String adminPasswd;
+    private String adminPasswd; // 登陆密码
     @Field("contact")
-    private String contact;
+    private String contact; // 负责人
     @Field("phone")
-    private String phone;
+    private String phone; // 手机号
     @Field("email")
-    private String email;
+    private String email; // 邮箱
     @Field("ftpUser")
-    private String ftpUser;
+    private String ftpUser; // ftp用户账号
     @Field("ftpPassword")
-    private String ftpPassword;
+    private String ftpPassword; // ftp密码
     @Field("SerialNo")
-    private String serialNo;
+    private String serialNo; // 排序序列
     @Field("ftpFilePath")
-    private String ftpFilePath;
+    private String ftpFilePath; // ftp根路径
     @Field("dbName")
-    private String dbName;
+    private String dbName; // 关系型数据库名称
     @Field("dbUserName")
-    private String dbUserName;
+    private String dbUserName; // 关系型数据库用户名
     @Field("dbPassword")
-    private String dbPassword;
+    private String dbPassword; // 关系型数据库密码
     @Field("dbHost")
-    private String dbHost;
+    private String dbHost; // 关系型数据库地址
     @Field("dbPort")
-    private String dbPort;
+    private String dbPort; // 关系型数据库端口号
 
-    private long visitCount;
-    private long downCont;
+    private long visitCount; // 访问量统计
+    private long downCont; // 下载量统计
 
     public long getVisitCount() {
         return visitCount;

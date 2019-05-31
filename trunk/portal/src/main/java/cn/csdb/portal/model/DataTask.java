@@ -14,33 +14,33 @@ import java.util.Date;
 @Document(collection = "t_datatask")
 public class DataTask {
     @Id
-    private String dataTaskId;
+    private String dataTaskId; // 任务ID
     @Field("dataSourceId")
-    private int dataSourceId;
+    private int dataSourceId; // 数据源ID
     @Field("subjectCode")
-    private String subjectCode;
+    private String subjectCode; // 节点代码
     @Field("dataTaskType")
-    private String dataTaskType;
+    private String dataTaskType; // 任务类型
     @Field("tableName")
-    private String tableName;
+    private String tableName; // 选中的表名称  多个以";"隔开
     @Field("sqlString")
-    private String sqlString;
+    private String sqlString; // 建表语句
     @Field("sqlTableNameEn")
-    private String sqlTableNameEn;
+    private String sqlTableNameEn; // 新增表名称
     @Field("sqlFilePath")
-    private String sqlFilePath;
+    private String sqlFilePath; // sql脚本路径
     @Field("filePath")
-    private String filePath;
+    private String filePath; // 上传文件绝对路径
     @Field("createTime")
-    private Date createTime;
+    private Date createTime; //创建时间
     @Field("creator")
-    private String creator;
+    private String creator; // 创建人
     @Field("status")
-    private String status;
+    private String status; // 状态 0：未上传 1：已上传
     @Field("remoteuploadpath")
-    private String remoteuploadpath;
+    private String remoteuploadpath; // 文件上传目标路径
     @Field("fileSize")
-    private String fileSize;
+    private String fileSize; // 选中上传文件的大小
     @Field("sync")
     private String sync;//是否同步
     @Field("period")

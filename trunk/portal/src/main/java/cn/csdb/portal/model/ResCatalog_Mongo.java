@@ -13,19 +13,19 @@ public class ResCatalog_Mongo {
     @Id
     private String objectId;
     @Field("rid")
-    private Integer rid;
+    private Integer rid; // 节点ID
     @Field("parentid")
-    private Integer parentid;
+    private Integer parentid; // 父节点ID
     @Field("name")
-    private String name;
+    private String name; // 节点名称
     @Field("level")
-    private Integer level;
+    private Integer level; // 节点等级
     @Field("nodeorder")
-    private Integer nodeorder;
+    private Integer nodeorder; // 节点排序
     @Field("updatetime")
-    private Date updatetime;
+    private Date updatetime; // 节点最后一次更新时间
     @Field("createtime")
-    private Date createtime;
+    private Date createtime; // 节点创建时间
 
     public String getObjectId() {
         return objectId;

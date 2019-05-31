@@ -10,8 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 元数据信息
+ *
  * @program: DataSync
- * @description: meta template
  * @author: xiajl
  * @create: 2019-03-08 13:58
  **/
@@ -20,19 +21,19 @@ public class MetadataTemplate {
     @Id
     private String id;
     @Field("extField")
-    private String extField;
+    private String extField; // 元数据字段英文名称
     @Field("extFieldName")
-    private String extFieldName;
+    private String extFieldName; // 元数据字段中文名称
     @Field("type")
-    private String type;
+    private String type; // 元数据类型
     @Field("sortOrder")
-    private int sortOrder;
+    private int sortOrder; // 元数据序列
     @Field("isMust")
-    private int isMust;
+    private int isMust; // 是否必须
     @Field("enumdata")
-    private String enumdata;
+    private String enumdata; // 枚举数据
     @Field("remark")
-    private String remark;
+    private String remark; // 元数据注释
     private List<String> enumdataList;
 
 

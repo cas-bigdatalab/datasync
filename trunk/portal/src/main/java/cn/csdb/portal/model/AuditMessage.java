@@ -7,8 +7,9 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.util.Date;
 
 /**
+ * 数据集审核过程信息
+ *
  * @program: DataSync
- * @description:
  * @author: huangwei
  * @create: 2018-11-22 10:52
  **/
@@ -17,13 +18,13 @@ public class AuditMessage {
     @Id
     private String id;
     @Field("resourceId")
-    private String resourceId;
+    private String resourceId; // 数据集ID
     @Field("auditCom")
-    private String auditCom;
+    private String auditCom; // 审核详情
     @Field("auditTime")
-    private Date auditTime;
+    private Date auditTime; // 审核时间
     @Field("auditPerson")
-    private String auditPerson;
+    private String auditPerson; // 审核人员
 
     public String getAuditPerson() {
         return auditPerson;

@@ -252,7 +252,9 @@ public class FileNetController {
 
     @GetMapping(value = "/downloadLog")
     public HttpServletResponse downloadLog(HttpServletRequest request, HttpServletResponse response, String fileName) throws IOException {
-        String filePath = "G:" + synchronizeTableLogs + "/" + fileName;
+        // TODO 部署时替换
+        String filePath = synchronizeTableLogs + "/" + fileName;
+//        String filePath = "G:" + synchronizeTableLogs + "/" + fileName;
         File f = new File(filePath);
         if (!f.exists()) {
             ServletOutputStream out = response.getOutputStream();

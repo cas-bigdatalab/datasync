@@ -1,6 +1,7 @@
 package cn.csdb.portal.model;
 
 /**
+ * 关联数据集的文件数据信息
  * Created by shiba on 2019/2/13.
  */
 
@@ -15,17 +16,17 @@ public class FileInfo {
     @Id
     private String id;
     @Field("file_name")
-    private String file_name;
+    private String file_name; // 文件名称
     @Field("file_path")
-    private String file_path;
+    private String file_path; // 文件绝对路径
     @Field("size")
-    private String size;
+    private String size; // 文件大小
     @Field("resourceId")
-    private String resourceId;
+    private String resourceId; // 关联所属的数据集ID
     @Field("time")
-    private Date time;
+    private Date time; // 文件与数据集发生关联关系的时间
     @Field("previewType")
-    private String previewType;
+    private String previewType; // 预览格式
     @Field("fileStatus")
     private String fileStatus; // 0:删除 1:在用
 
