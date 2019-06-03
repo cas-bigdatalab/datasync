@@ -232,7 +232,12 @@ public class DataSyncController {
                     String reponseContent = EntityUtils.toString(httpEntity);
                     EntityUtils.consume(httpEntity);//释放资源
                     System.out.println("响应内容：" + reponseContent);
-                    if(reponseContent.equals("1")){
+                    //DIR_ERROR  工作空间异常
+                    //UNZIP_FILE_ERROR  文件任务解压错误
+                    //UNZIP_SQL_ERROR 数据类型任务解压错误
+                    //EXECUTE_SQL_ERROR 数据类型任务执行错误
+                    //SUCCESS 成功
+                    if(reponseContent.equals("\"SUCCESS\"")){
                         if("mysql".equals(dataTask.getDataTaskType()) || "oracle".equals(dataTask.getDataTaskType())){
                             now = new Date();
                             dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
@@ -256,6 +261,7 @@ public class DataSyncController {
                         ftpUtil.progressMap.put(dataTask.getDataTaskId(),Long.valueOf(100));
                         return 1;
                     }else{
+                        System.out.println(reponseContent+"");
                         if("mysql".equals(dataTask.getDataTaskType()) || "oracle".equals(dataTask.getDataTaskType())){
                             now = new Date();
                             dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
