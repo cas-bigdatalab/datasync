@@ -3,10 +3,7 @@ package cn.csdb.portal.utils.dataSrc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 /**
@@ -21,19 +18,18 @@ public class MySqlDataSource extends IDataSource{
 
     @Override
     public Connection getConnection(String host, String port, String userName, String password, String databaseName) {
-//        try {
-//            Class.forName("com.mysql.jdbc.Driver");
-//            String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName;
-//            Connection connection = DriverManager.getConnection(url, userName, password);
-//            return connection;
-//        } catch (ClassNotFoundException e) {
-//            logger.error("缺少mysql驱动包", e);
-//            return null;
-//        } catch (SQLException e) {
-//            logger.error("无法获取连接", e);
-//            return null;
-//        }
-        return DataBaseSource.getConnection("com.mysql.jdbc.Driver", host, port, userName, password, databaseName);
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?Unicode=true&characterEncoding=UTF-8";
+            Connection connection = DriverManager.getConnection(url, userName, password);
+            return connection;
+        } catch (ClassNotFoundException e) {
+            logger.error("缺少mysql驱动包", e);
+            return null;
+        } catch (SQLException e) {
+            logger.error("无法获取连接", e);
+            return null;
+        }
     }
 
     @Override
