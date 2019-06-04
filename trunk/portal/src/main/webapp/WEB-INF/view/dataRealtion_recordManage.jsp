@@ -16,7 +16,7 @@
     <title>数据记录管理</title>
     <link href="${ctx}/resources/bundles/bootstrap-toastr/toastr.css" rel="stylesheet" type="text/css"/>
     <%--<link rel="Stylesheet" href="${ctx}/resources/css/common.css"/>--%>
-    <link rel="Stylesheet" href="${ctx}/resources/css/jquery.jerichotab.css"/>
+    <%--<link rel="Stylesheet" href="${ctx}/resources/css/jquery.jerichotab.css"/>--%>
     <link rel="stylesheet" href="${ctx}/resources/bundles/font-awesome-4.7.0/css/font-awesome.min.css">
     <link href="${ctx}/resources/css/bootstrap-datetimepicker.css" rel="stylesheet" type="text/css"/>
     <link href="${ctx}/resources/css/home.css" type="text/css"/>
@@ -468,7 +468,13 @@
                         var item = {'id': tableName, 'name': tableName, 'closable': true, 'template': tabs};
                         // 执行创建页签
                         closableTab.addTab(item);
-                        var click = " <h5 style='font-size: 20px;text-align: center;margin-right: 30%;'>该表暂时没有数据</h5>";
+                        var searchKey=$(".input-group input").val();
+                        var click="";
+                        if(searchKey===""||searchKey==null){
+                            click= " <h5 style='font-size: 20px;text-align: center;margin-right: 30%;'>该表暂时没有数据</h5>";
+                        }else{
+                            click = " <h5 style='font-size: 20px;text-align: center;margin-right: 30%;'>没有查询到相关数据</h5>";
+                        }
                         $(ids).append(click);
                     }
                 }
@@ -659,8 +665,13 @@
                         fun_limit(subjectCode, tableName, data, searchKey);
                     } else {
                         $(ids).html(" ");
-                        tabs = "<h5 style='font-size: 20px;text-align: center;margin-right: 30%;'>该表暂时没有数据</h5>";
-                        $(ids).append(tabs);
+                        var click="";
+                        if(searchKey===""||searchKey==null){
+                            click= " <h5 style='font-size: 20px;text-align: center;margin-right: 30%;'>该表暂时没有数据</h5>";
+                        }else{
+                            click = " <h5 style='font-size: 20px;text-align: center;margin-right: 30%;'>没有查询到相关数据</h5>";
+                        }
+                        $(ids).append(click);
                     }
                 }
             });
