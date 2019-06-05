@@ -444,6 +444,7 @@ public class FileResourceService {
         String reponseContent = EntityUtils.toString(entity);
         JSONArray jsonArray=new JSONArray("["+reponseContent+"]");
         Object json= jsonArray.get(0);
+        System.out.println(json.toString());
         String jsonStr=((JSONObject) json).get("data").toString();
 
         return jsonStr;
