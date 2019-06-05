@@ -186,7 +186,7 @@ public class DataTaskController {
                     file.delete();
                 }
             }else{
-                if("true".equals(dataTaskList.get(0).getSync())){
+                if("true".equals(dataTaskList.get(0).getSync()) &&  !"0".equals(dataTaskList.get(0).getStatus())){
                     result=2;//请关闭同步操作！
                     return result;
                 }
