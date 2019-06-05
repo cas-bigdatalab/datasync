@@ -26,6 +26,8 @@ public class Subject {
     private String phone; // 手机号
     @Field("email")
     private String email; // 邮箱
+    @Field("ftpServerAddr")
+    private String ftpServerAddr;
     @Field("ftpUser")
     private String ftpUser; // ftp用户账号
     @Field("ftpPassword")
@@ -142,6 +144,14 @@ public class Subject {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFtpServerAddr() {
+        return ftpServerAddr;
+    }
+
+    public void setFtpServerAddr(String ftpServerAddr) {
+        this.ftpServerAddr = ftpServerAddr;
     }
 
     public String getFtpUser() {

@@ -7,7 +7,9 @@ import net.sf.jsqlparser.statement.select.Select;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -44,7 +46,7 @@ public class SqlUtil {
 
     public void importSql(String host, String username, String password, String importDatabaseName, String structImportPath, String dataImportPath) throws Exception {
         String driver = "com.mysql.jdbc.Driver";
-        String url = "jdbc:mysql://" + host + "/" + importDatabaseName;
+        String url = "jdbc:mysql://" + host + "/" + importDatabaseName + "?Unicode=true&characterEncoding=UTF-8";
 
         Exception error = null;
         Connection conn = null;
