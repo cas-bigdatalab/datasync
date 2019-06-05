@@ -20,7 +20,7 @@ public class MySqlDataSource extends IDataSource{
     public Connection getConnection(String host, String port, String userName, String password, String databaseName) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?Unicode=true&characterEncoding=UTF-8";
+            String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?Unicode=true&characterEncoding=UTF-8&useSSL=false";
             Connection connection = DriverManager.getConnection(url, userName, password);
             return connection;
         } catch (ClassNotFoundException e) {
