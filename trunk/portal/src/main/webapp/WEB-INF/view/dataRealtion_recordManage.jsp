@@ -468,9 +468,9 @@
                         var item = {'id': tableName, 'name': tableName, 'closable': true, 'template': tabs};
                         // 执行创建页签
                         closableTab.addTab(item);
-                        var searchKey=$(".input-group input").val();
+                        var searchKey1=$(".input-group input").val();
                         var click="";
-                        if(searchKey===""||searchKey==null){
+                        if(searchKey1===""||searchKey1==null){
                             click= " <h5 style='font-size: 20px;text-align: center;margin-right: 30%;'>该表暂时没有数据</h5>";
                         }else{
                             click = " <h5 style='font-size: 20px;text-align: center;margin-right: 30%;'>没有查询到相关数据</h5>";
