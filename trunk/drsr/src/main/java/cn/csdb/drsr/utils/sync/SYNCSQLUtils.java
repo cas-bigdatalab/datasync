@@ -14,9 +14,9 @@ public class SYNCSQLUtils {
      * generate a ddl sql from tables
      */
     public static String generateDDLFromTable(Connection jdbcConnection, String catalog, String schema,
-                                        String table) throws SQLException {
+                                              String table) throws SQLException {
         StringBuilder sb = new StringBuilder();
-        boolean portalIdExist = portalIdExist(jdbcConnection, table, "table");
+//        boolean portalIdExist = portalIdExist(jdbcConnection, table, "table");
         sb.append("DROP TABLE IF EXISTS " + table + "_sync_bak ; \n");
         sb.append("CREATE TABLE " + table + "_sync_bak (");
 
@@ -70,7 +70,7 @@ public class SYNCSQLUtils {
 
                 sb.append(",");
             }
-            if(portalIdExist){
+            if (!portalIdExistCopy(sb)) {
                 sb.append("PORTALID VARCHAR(36) COMMENT '中心端系统ID',");
             }
         } catch (Exception e) {
@@ -148,7 +148,7 @@ public class SYNCSQLUtils {
     public static String generateDDLFromSql(Connection jdbcConnection, String sql, String logicTable) {
         StringBuilder sb = new StringBuilder();
         try {
-            boolean portalIdExist = portalIdExist(jdbcConnection, sql, "sql");
+//         t   boolean portalIdExist = portalIdExist(jdbcConnection, sql, "sql");
             sb.append("DROP TABLE IF EXISTS " + logicTable + "_sync_bak ;\n ");
             sb.append("CREATE TABLE " + logicTable + "_sync_bak(");
             DatabaseMetaData meta = jdbcConnection.getMetaData();
@@ -229,7 +229,7 @@ public class SYNCSQLUtils {
             if (sb.toString().endsWith(",")) {
                 sb.replace(sb.length()-1, sb.length(), " ");
             }
-            if(portalIdExist){
+            if (!portalIdExistCopy(sb)) {
                 sb.append(", \nPORTALID VARCHAR(36) COMMENT '中心端系统ID'");
             }
             sb.append("\n);\n");
@@ -246,13 +246,17 @@ public class SYNCSQLUtils {
      */
     public static String generateInsertSqlFromSQL(Connection jdbcConnection,  String sql, String logicTable) {
         StringBuilder result = new StringBuilder();
+        StringBuilder result2 = new StringBuilder();
         try {
-            boolean portalIdExist = portalIdExist(jdbcConnection, sql, "sql");
+//            boolean portalIdExist = portalIdExist(jdbcConnection, sql, "sql");
             PreparedStatement stmt = jdbcConnection.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();
-
+            for (int j = 1; j <= columnCount; j++) {
+                result2.append(metaData.getColumnLabel(j) + ",");
+            }
+            boolean ifPortalId=!portalIdExistCopy(result2);
             while (rs.next()) {
                 result.append("INSERT INTO " + logicTable + "_sync_bak VALUES (");
                 for (int i = 0; i < columnCount; i++) {
@@ -268,7 +272,7 @@ public class SYNCSQLUtils {
                         result.append("'" + outputValue + "'");
                     }
                 }
-                if(portalIdExist){
+                if(ifPortalId){
                     String s = UUID.randomUUID().toString();
                     result.append(",'" + s + "'");
                 }
@@ -293,19 +297,23 @@ public class SYNCSQLUtils {
      */
     public static String generateInsertSqlFromTable(Connection jdbcConnection, String catalog, String schema, String table) {
         StringBuilder result = new StringBuilder();
+        StringBuilder result2 = new StringBuilder();
         //result.append("DELETE FROM " + table + ";");
         try {
-            boolean portalIdExist = portalIdExist(jdbcConnection, table, "table");
+//            boolean portalIdExist = portalIdExist(jdbcConnection, table, "table");
             PreparedStatement stmt = jdbcConnection.prepareStatement("SELECT * FROM " + table);
             ResultSet rs = stmt.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();
+            boolean ifPortalId=false;//!portalIdExistCopy(result);
             while (rs.next()) {
+                result = new StringBuilder();
                 result.append("INSERT INTO " + table + "_sync_bak (");
                 for (int j = 1; j <= columnCount; j++) {
                     result.append(metaData.getColumnLabel(j) + ",");
                 }
-                if (portalIdExist) {
+                ifPortalId=!portalIdExistCopy(result);
+                if (!portalIdExistCopy(result)) {
                     result.replace(result.length() - 1, result.length(), ",PORTALID)");
                 } else {
                     result.replace(result.length() - 1, result.length(), ")");
@@ -324,10 +332,11 @@ public class SYNCSQLUtils {
                         result.append("'" + outputValue + "'");
                     }
                 }
-                if (portalIdExist) {
+                if (ifPortalId) {
                     result.append(",'" + UUID.randomUUID().toString() + "'");
                 }
                 result.append(");\n");
+                result2.append(result);
             }
             rs.close();
             stmt.close();
@@ -337,7 +346,7 @@ public class SYNCSQLUtils {
             e.printStackTrace();
             return "";
         }
-        return result.toString();
+        return result2.toString();
     }
 
 
@@ -361,39 +370,13 @@ public class SYNCSQLUtils {
         return false;
     }
 
-    private static boolean portalIdExist(Connection jdbcConnection, String string, String type) throws SQLException {
-        String sql = "";
-        if ("table".equals(type)) {
 
-            if (jdbcConnection.getMetaData().getDriverName().toUpperCase().indexOf("MYSQL") != -1) {
-                sql = "DESC " + string;
-
-            } else if (jdbcConnection.getMetaData().getDriverName().toUpperCase().indexOf("ORACLE") != -1) {
-                sql = "select COLUMN_NAME,DATA_TYPE,DATA_LENGTH  from user_tab_cols where table_name='"+ string+"'";
-
-            }else if (jdbcConnection.getMetaData().getDriverName().toUpperCase().indexOf("SQL SERVER") != -1) {
-                //sqljdbc与sqljdbc4不同，sqlserver中间有空格
-                sql = "sp_columns " + string;
-            }
-
-        } else {
-            sql = string;
-        }
-        boolean k = true;
-        try {
-            PreparedStatement preparedStatement = jdbcConnection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            ResultSetMetaData metaData = resultSet.getMetaData();
-            int columnCount = metaData.getColumnCount();
-            for (int i = 1; i <= columnCount; i++) {
-                String columnName = metaData.getColumnName(i);
-                if ("PORTALID".equals(columnName)) {
-                    k = false;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return k;
+    /**
+     * @param sb DDL create 语句
+     * @return 如果create语句中包含“PORTALID”字段返回 true
+     */
+    private static boolean portalIdExistCopy(StringBuilder sb) {
+        int flag = sb.indexOf("PORTALID");
+        return flag != -1;
     }
 }

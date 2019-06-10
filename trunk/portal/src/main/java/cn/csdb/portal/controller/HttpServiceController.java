@@ -197,7 +197,7 @@ public class HttpServiceController {
         SqlUtil sqlUtil = new SqlUtil();
         try {
             System.out.println("passwprd------" + password);
-            sqlUtil.importSql("localhost", username, password, dbName, structDBFile, dataDBFile);
+            sqlUtil.importSql(configPropertyService.getProperty("dataAssemblerHost"), username, password, dbName, structDBFile, dataDBFile);
             File file = new File(structDBFile);
             File file2 = new File(dataDBFile);
             if (file.exists()) {

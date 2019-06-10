@@ -247,12 +247,16 @@ public class DDL2SQLUtils {
      */
     public static String generateInsertSqlFromSQL(Connection jdbcConnection, String sql, String logicTable) {
         StringBuilder result = new StringBuilder();
+        StringBuilder result2 = new StringBuilder();
         try {
             PreparedStatement stmt = jdbcConnection.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();
-
+            for (int j = 1; j <= columnCount; j++) {
+                result2.append(metaData.getColumnLabel(j) + ",");
+            }
+            boolean ifPortalId=!portalIdExistCopy(result2);
             while (rs.next()) {
                 result.append("INSERT INTO " + logicTable + " VALUES (");
                 for (int i = 0; i < columnCount; i++) {
@@ -268,7 +272,7 @@ public class DDL2SQLUtils {
                         result.append("'" + outputValue + "'");
                     }
                 }
-                if (!portalIdExistCopy(result)) {
+                if (ifPortalId) {
                     String s = UUID.randomUUID().toString();
                     result.append(",'" + s + "'");
                 }
@@ -291,22 +295,27 @@ public class DDL2SQLUtils {
      */
     public static String generateInsertSqlFromTable(Connection jdbcConnection, String catalog, String schema, String table) {
         StringBuilder result = new StringBuilder();
+        StringBuilder result2 = new StringBuilder();
         //result.append("DELETE FROM " + table + ";");
         try {
             PreparedStatement stmt = jdbcConnection.prepareStatement("SELECT * FROM " + table);
             ResultSet rs = stmt.executeQuery();
             ResultSetMetaData metaData = rs.getMetaData();
             int columnCount = metaData.getColumnCount();
+            boolean ifPortalId=false;//!portalIdExistCopy(result);
             while (rs.next()) {
+                result = new StringBuilder();
                 result.append("INSERT INTO " + table + " (");
                 for (int j = 1; j <= columnCount; j++) {
                     result.append(metaData.getColumnLabel(j) + ",");
                 }
+                ifPortalId=!portalIdExistCopy(result);
                 if (!portalIdExistCopy(result)) {
                     result.replace(result.length() - 1, result.length(), ",PORTALID)");
                 } else {
                     result.replace(result.length() - 1, result.length(), ")");
                 }
+
                 result.append("VALUES (");
                 for (int i = 0; i < columnCount; i++) {
                     if (i > 0) {
@@ -321,10 +330,11 @@ public class DDL2SQLUtils {
                         result.append("'" + outputValue + "'");
                     }
                 }
-                if (!portalIdExistCopy(result)) {
+                if (ifPortalId) {
                     result.append(",'" + UUID.randomUUID().toString() + "'");
                 }
                 result.append(");\n");
+                result2.append(result);
             }
             rs.close();
             stmt.close();
@@ -334,7 +344,7 @@ public class DDL2SQLUtils {
             e.printStackTrace();
             return "";
         }
-        return result.toString();
+        return result2.toString();
     }
 
 

@@ -140,7 +140,7 @@ public class LoginService
         String dbHost="";
         if (dataMap.get("dbHost") != null)
         {
-            dbHost = dataMap.get("dbHost").toString();
+            dbHost = dataMap.get("ftpServerAddr").toString();
         }
         String dbPort="";
         if (dataMap.get("dbPort") != null)

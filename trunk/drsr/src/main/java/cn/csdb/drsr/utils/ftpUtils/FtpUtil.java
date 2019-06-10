@@ -32,9 +32,11 @@ public class FtpUtil {
                 System.out.println("FTP连接成功。");
             }
         } catch (SocketException e) {
+            System.out.println(ftpHost);
             e.printStackTrace();
             System.out.println("FTP的IP地址可能错误，请正确配置。");
         } catch (IOException e) {
+            System.out.println(ftpPort);
             e.printStackTrace();
             System.out.println("FTP的端口错误,请正确配置。");
         }
