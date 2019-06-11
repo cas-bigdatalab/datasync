@@ -225,7 +225,7 @@
     {{each list as value i}}
     <li class="l3-menu">
         <a href="javaScript:void(0)" onclick="editTableData(this,1)" id="{{value.tableName}}"
-           title="{{value.tableComment}}">
+           title="{{value.tableComment}}" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">
             <i class="fa fa-angle-right"></i>{{value.tableName}}</a>
     </li>
     {{/each}}
