@@ -18,18 +18,19 @@ public class MySqlDataSource extends IDataSource{
 
     @Override
     public Connection getConnection(String host, String port, String userName, String password, String databaseName) {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?Unicode=true&characterEncoding=UTF-8&useSSL=false";
-            Connection connection = DriverManager.getConnection(url, userName, password);
-            return connection;
-        } catch (ClassNotFoundException e) {
-            logger.error("缺少mysql驱动包", e);
-            return null;
-        } catch (SQLException e) {
-            logger.error("无法获取连接", e);
-            return null;
-        }
+//        try {
+//            Class.forName("com.mysql.jdbc.Driver");
+//            String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?Unicode=true&characterEncoding=UTF-8&useSSL=false";
+//            Connection connection = DriverManager.getConnection(url, userName, password);
+//            return connection;
+//        } catch (ClassNotFoundException e) {
+//            logger.error("缺少mysql驱动包", e);
+//            return null;
+//        } catch (SQLException e) {
+//            logger.error("无法获取连接", e);
+//            return null;
+//        }
+        return DataBaseSource.getConnection("com.mysql.jdbc.Driver", host, port, userName, password, databaseName);
     }
 
     @Override
