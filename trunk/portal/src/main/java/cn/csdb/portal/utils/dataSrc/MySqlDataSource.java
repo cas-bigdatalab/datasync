@@ -1,7 +1,10 @@
 package cn.csdb.portal.utils.dataSrc;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.sql.*;
 import java.util.*;
@@ -30,7 +33,13 @@ public class MySqlDataSource extends IDataSource{
 //            logger.error("无法获取连接", e);
 //            return null;
 //        }
-        return DataBaseSource.getConnection("com.mysql.jdbc.Driver", host, port, userName, password, databaseName);
+        try {
+            return DruidUtil.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //return DataBaseSource.getConnection("com.mysql.jdbc.Driver", host, port, userName, password, databaseName);
+        return null;
     }
 
     @Override
