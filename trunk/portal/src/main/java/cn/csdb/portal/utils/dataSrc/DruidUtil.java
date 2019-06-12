@@ -45,7 +45,7 @@ public class DruidUtil {
         //连接在池中的最小生存时间，单位毫秒
         druidDataSource.setMinEvictableIdleTimeMillis(300000);
         //申请连接时执行validationQuery检测连接是否有效(开启后会影响一些性能)
-        druidDataSource.setTestOnBorrow(false);
+        druidDataSource.setTestOnBorrow(true);
         //归还连接时执行validationQuery检测连接是否有效(开启后会影响一些性能)
         druidDataSource.setTestOnReturn(false);
         //建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
@@ -76,7 +76,6 @@ public class DruidUtil {
         Connection connection = null;
         try {
             connection = druidDataSource.getConnection();
-            System.out.println("666666666666666666666666666");
         }catch(SQLException e){
             e.printStackTrace();
         }
