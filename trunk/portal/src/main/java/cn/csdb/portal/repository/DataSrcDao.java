@@ -2,6 +2,8 @@ package cn.csdb.portal.repository;
 
 import cn.csdb.portal.model.DataSrc;
 import cn.csdb.portal.repository.mapper.DataSrcMapper;
+import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
+import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
@@ -242,9 +244,9 @@ public class DataSrcDao {
         boolean isValid = false;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection con = DriverManager.getConnection(url, userName, password);
-            ;
-
+            //Connection con = DriverManager.getConnection(url, userName, password);
+            IDataSource dataSource = DataSourceFactory.getDataSource("mysql");
+            Connection con = dataSource.getConnection(host, port, userName, password, databaseName);
             ResultSet rs = con.getMetaData().getTables(null, null, null, new String[]{"TABLE", "VIEW"});
             while (rs.next()) {
                 if (rs.getString(4) != null
@@ -254,7 +256,16 @@ public class DataSrcDao {
                     l.add(tableName);
                 }
             }
-            con.close();
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }finally {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                }
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -293,7 +304,9 @@ public class DataSrcDao {
         Map<String, Map<String, String>> colInfos = new HashMap<String, Map<String, String>>();
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(url, userName, password);
+            //con = DriverManager.getConnection(url, userName, password);
+            IDataSource dataSource = DataSourceFactory.getDataSource("mysql");
+            con = dataSource.getConnection(host, port, userName, password, databaseName);
             PreparedStatement statement = con.prepareStatement("SELECT  COLUMN_NAME ,DATA_TYPE,COLUMN_TYPE FROM information_schema.`COLUMNS` where" +
                     " TABLE_SCHEMA =? and TABLE_NAME =?");
             statement.setString(1, databaseName);
@@ -334,6 +347,13 @@ public class DataSrcDao {
             Statement statement = con.createStatement();
             boolean result = statement.execute(sql);
             statement.close();
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
             return result;
         } catch (SQLException e) {
             logger.error("", e);
@@ -347,7 +367,9 @@ public class DataSrcDao {
         int totalcount = 0;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection(url, userName, password);
+            //con = DriverManager.getConnection(url, userName, password);
+            IDataSource dataSource = DataSourceFactory.getDataSource("mysql");
+            con = dataSource.getConnection(host, port, userName, password, databaseName);
             Statement statement = con.createStatement();
             for (int i=0;i<tableName.size();i++){
                 String sql = "SELECT count(*) FROM "+tableName.get(i);
@@ -367,12 +389,13 @@ public class DataSrcDao {
             logger.error("查询列信息出错", e);
             return totalcount;
         } finally {
-            if (con != null)
+            if (con != null) {
                 try {
                     con.close();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+            }
         }
     }
 

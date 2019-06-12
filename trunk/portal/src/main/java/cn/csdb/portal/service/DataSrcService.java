@@ -39,6 +39,11 @@ public class DataSrcService {
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+            }
         }
         return tableList;
     }
@@ -51,8 +56,19 @@ public class DataSrcService {
         DataSrc dataSrc = dataSrcDao.findById(dataSourceId);
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
-        if (connection == null)
+        if (connection == null) {
             return false;
+        }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+            }
+        }
         return dataSource.validateSql(connection, sql);
     }
 
