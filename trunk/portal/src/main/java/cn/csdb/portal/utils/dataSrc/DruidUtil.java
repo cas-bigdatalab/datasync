@@ -16,7 +16,6 @@ import java.util.Properties;
  */
 public class DruidUtil {
     private DruidUtil() {}
-    private static DruidUtil single=null;
     private static DruidDataSource druidDataSource;
 
     static {
