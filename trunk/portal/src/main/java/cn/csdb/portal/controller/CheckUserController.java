@@ -87,7 +87,7 @@ public class CheckUserController {
                 }
 
                 //将该用户的数据库连接信息加入到Druid的连接信息中
-                try {
+               /* try {
                     //读取属性文件cas_urls.properties
                     String configFilePath = CheckUserController.class.getClassLoader().getResource("cas_urls.properties").getFile();
                     ConfigUtil.setConfigItem(configFilePath, "host", sub.getDbHost());
@@ -95,18 +95,9 @@ public class CheckUserController {
                     ConfigUtil.setConfigItem(configFilePath, "dbName", sub.getDbName());
                     ConfigUtil.setConfigItem(configFilePath, "username", sub.getDbUserName());
                     ConfigUtil.setConfigItem(configFilePath, "password", sub.getDbPassword());
-
-                    /*FileOutputStream oFile = new FileOutputStream(new File(String.valueOf(prop.getClass().getResourceAsStream("/cas_urls.properties"))));
-                    prop.setProperty("host", sub.getDbHost());
-                    prop.setProperty("port", sub.getDbPort());
-                    prop.setProperty("dbName", sub.getDbName());
-                    prop.setProperty("username", sub.getDbUserName());
-                    prop.setProperty("password", sub.getDbPassword());
-                    prop.store(oFile, "Druid Information");
-                    oFile.close();*/
                 } catch (Exception e) {
                     e.printStackTrace();
-                }
+                }*/
                 return "redirect:/loginSuccess";
             }
         } catch (Exception e) {
