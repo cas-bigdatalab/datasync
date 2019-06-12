@@ -1,11 +1,20 @@
 package cn.csdb.portal.utils.dataSrc;
 
+import cn.csdb.portal.utils.ConfigUtil;
+import cn.csdb.portal.utils.PropertiesUtil;
 import com.alibaba.druid.pool.DruidDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.sql.*;
 import java.util.*;
 
@@ -33,13 +42,14 @@ public class MySqlDataSource extends IDataSource{
 //            logger.error("无法获取连接", e);
 //            return null;
 //        }
+        //使用Druid连接池
         try {
-            return DruidUtil.getConnection();
+            return DruidUtil.getConnection("com.mysql.jdbc.Driver", host, port, userName, password, databaseName);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        //return DataBaseSource.getConnection("com.mysql.jdbc.Driver", host, port, userName, password, databaseName);
         return null;
+        //return DataBaseSource.getConnection("com.mysql.jdbc.Driver", host, port, userName, password, databaseName);
     }
 
     @Override
