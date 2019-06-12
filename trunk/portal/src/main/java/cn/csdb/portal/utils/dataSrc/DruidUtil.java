@@ -15,7 +15,6 @@ import java.util.Properties;
  * Druid连接池工具类
  */
 public class DruidUtil {
-    private DruidUtil() {}
     private static DruidDataSource druidDataSource;
 
     static {
