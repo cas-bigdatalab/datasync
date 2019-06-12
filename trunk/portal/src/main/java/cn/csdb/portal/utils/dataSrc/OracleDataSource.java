@@ -32,14 +32,7 @@ public class OracleDataSource extends IDataSource {
 //            logger.error("获取连接失败", e);
 //            return null;
 //        }
-        //使用Druid连接池
-        try {
-            return DruidUtil.getConnection("oracle.jdbc.driver.OracleDriver", host, port, userName, password, databaseName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-        //return DataBaseSource.getConnection("oracle.jdbc.driver.OracleDriver", host, port, userName, password, databaseName);
+        return DataBaseSource.getConnection("oracle.jdbc.driver.OracleDriver", host, port, userName, password, databaseName);
     }
 
     @Override

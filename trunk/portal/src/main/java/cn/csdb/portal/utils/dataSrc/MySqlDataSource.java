@@ -43,12 +43,7 @@ public class MySqlDataSource extends IDataSource{
 //            return null;
 //        }
         //使用Druid连接池
-        try {
-            return DruidUtil.getConnection("com.mysql.jdbc.Driver", host, port, userName, password, databaseName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return DruidUtil.getConnection();
         //return DataBaseSource.getConnection("com.mysql.jdbc.Driver", host, port, userName, password, databaseName);
     }
 

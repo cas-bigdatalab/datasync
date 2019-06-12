@@ -2,10 +2,15 @@ package cn.csdb.portal.controller;
 
 import cn.csdb.portal.model.User;
 import cn.csdb.portal.service.CheckUserService;
+import cn.csdb.portal.service.SubjectService;
+import cn.csdb.portal.utils.ConfigUtil;
 import cn.csdb.portal.utils.MD5Util;
+import com.sun.scenario.Settings;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.io.*;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -58,8 +65,8 @@ public class CheckUserController {
                     request.setAttribute("errorMsg", "请为该账号赋予可用角色！");
                     return "login";
                 }
+                cn.csdb.portal.model.Subject sub = checkUserService.getSubjectByCode(u.getSubjectCode());
                 if (u.getSubjectCode() != null) {
-                    cn.csdb.portal.model.Subject sub = checkUserService.getSubjectByCode(u.getSubjectCode());
                     if (sub == null) {
                         request.getSession().setAttribute("userName", u.getUserName());
                         request.getSession().setAttribute("LoginId", u.getLoginId());
@@ -77,6 +84,28 @@ public class CheckUserController {
                     request.getSession().setAttribute("userName", u.getUserName());
                     request.getSession().setAttribute("LoginId", u.getLoginId());
                     request.getSession().setAttribute("roles", roles);
+                }
+
+                //将该用户的数据库连接信息加入到Druid的连接信息中
+                try {
+                    //读取属性文件cas_urls.properties
+                    String configFilePath = CheckUserController.class.getClassLoader().getResource("cas_urls.properties").getFile();
+                    ConfigUtil.setConfigItem(configFilePath, "host", sub.getDbHost());
+                    ConfigUtil.setConfigItem(configFilePath, "port", sub.getDbPort());
+                    ConfigUtil.setConfigItem(configFilePath, "dbName", sub.getDbName());
+                    ConfigUtil.setConfigItem(configFilePath, "username", sub.getDbUserName());
+                    ConfigUtil.setConfigItem(configFilePath, "password", sub.getDbPassword());
+
+                    /*FileOutputStream oFile = new FileOutputStream(new File(String.valueOf(prop.getClass().getResourceAsStream("/cas_urls.properties"))));
+                    prop.setProperty("host", sub.getDbHost());
+                    prop.setProperty("port", sub.getDbPort());
+                    prop.setProperty("dbName", sub.getDbName());
+                    prop.setProperty("username", sub.getDbUserName());
+                    prop.setProperty("password", sub.getDbPassword());
+                    prop.store(oFile, "Druid Information");
+                    oFile.close();*/
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 return "redirect:/loginSuccess";
             }
