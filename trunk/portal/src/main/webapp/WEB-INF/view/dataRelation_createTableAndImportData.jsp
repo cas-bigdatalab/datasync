@@ -218,7 +218,7 @@
                     </div>
                     <div class="col-md-2">
                         <select id="period" style="display: none;">
-                            <option value="TERMINATION">请选择同步周期</option>
+                            <option value="">请选择同步周期</option>
                             <option value="HALF_OF_THE_DAY">12小时</option>
                             <option value="DAY">天</option>
                             <option value="WEEK">周</option>
