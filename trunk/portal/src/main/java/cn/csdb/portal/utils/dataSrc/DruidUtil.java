@@ -66,7 +66,7 @@ public class DruidUtil {
         prop.setProperty("poolPreparedStatements","false");
         prop.setProperty("maxPoolPreparedStatementPerConnectionSize","20");
         prop.setProperty("removeAbandoned","true");
-        prop.setProperty("removeAbandonedTimeout","180");
+        prop.setProperty("removeAbandonedTimeout","1800");
         prop.setProperty("logAbandoned","true");
         try {
             DruidDataSource druidDataSource = (DruidDataSource) DruidDataSourceFactory

@@ -885,6 +885,8 @@ public class FileImportService {
         String createBySelect = "CREATE TABLE " + newName + " ( " + select.toString() + " )";
         DataSrc dataSrc = getDataSrc(subjectCode, "mysql");
         Connection connection = getConnection(dataSrc);
+        PreparedStatement preparedStatement = connection.prepareStatement(createBySelect);
+        preparedStatement.execute();
         try {
             connection.close();
         } catch (SQLException e) {
@@ -895,8 +897,6 @@ public class FileImportService {
             } catch (SQLException e) {
             }
         }
-        PreparedStatement preparedStatement = connection.prepareStatement(createBySelect);
-        preparedStatement.execute();
         return newName + "：创建成功";
     }
 
