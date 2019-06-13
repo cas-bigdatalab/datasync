@@ -50,7 +50,7 @@ public class DruidUtil {
         prop.setProperty("driverClassName","com.mysql.jdbc.Driver");
         prop.setProperty("validationQuery","SELECT 1 FROM DUAL");
         prop.setProperty("url","jdbc:mysql://"+host+":"+port+"/"+databaseName);
-        prop.setProperty("connectionProperties","Unicode=true;characterEncoding=UTF-8;UseSSL=false");
+        prop.setProperty("connectionProperties","zeroDateTimeBehavior=convertToNull;Unicode=true;characterEncoding=UTF-8;UseSSL=false");
         prop.setProperty("username",username);
         prop.setProperty("password",password);
         prop.setProperty("initialSize","3");
