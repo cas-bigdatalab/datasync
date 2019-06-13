@@ -302,8 +302,8 @@
 
                         </div>
                         <div id="releas_remark" class="form-group " style="display: none;">
-                            <label class="control-label col-md-3" for="audit_content">审核详情<span class="required">
-                                                    * </span>
+                            <label class="control-label col-md-3" for="audit_content">审核详情
+                                <span class="required">* </span>
                             </label>
                             <div class="col-md-7" style="padding-top:13px">
                                                     <textarea type="text" class="form-control" cols="30" rows="4"
@@ -314,11 +314,11 @@
                             </div>
                         </div>
 
-                        <div id="selectGroup" class="row">
+                        <div id="selectGroup" class="form-group" style="margin-left: 64px;">
                             <div class="col-sm-2 text-right">
-                                <label for="permissions">
+                                <label for="permissions" class="control-label">
                                     公开范围
-                                    <span class="required" aria-required="true" style="color: red">*</span>
+                                    <span class="required">*</span>
                                 </label>
                             </div>
                             <div class="col-sm-8" style="padding-top: 7px;">

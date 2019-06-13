@@ -141,7 +141,7 @@
 
     <%--关联创建表--%>
     <div class="tab-pane" id="sql">
-        <div style="width: 100%;height: 90%;padding: 20px 20px;">
+        <div style="width: 100%;padding: 20px 20px;">
             <p></p>
             <h4><input type="radio" name="radioType" id="tableRadio" checked><a
                     style="color: blue;font-weight: bolder;">方式1：通过联合表A和表B，形成新表</a></h4>

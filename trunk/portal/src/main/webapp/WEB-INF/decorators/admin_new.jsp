@@ -165,7 +165,7 @@
                     <div class="left_div">
                         <shiro:hasRole name="root">
                             <ul>
-                                <li><a href="${ctx}/subjectMgmt/subjectIndex"><i class="fa fa-cog"
+                                <li><a  href="${ctx}/subjectMgmt/subjectIndex" style=" white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"><i class="fa fa-cog"
                                                                                  aria-hidden="true"></i>
                                         ${applicationScope.menus['organization_title']}注册管理</a>
                                 </li>
