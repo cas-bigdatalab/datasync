@@ -1,5 +1,6 @@
 package cn.csdb.portal.utils.dataSrc;
 
+import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.utils.ConfigUtil;
 import cn.csdb.portal.utils.PropertiesUtil;
 import com.alibaba.druid.pool.DruidDataSource;
@@ -30,7 +31,7 @@ public class MySqlDataSource extends IDataSource{
 
     @Override
     public Connection getConnection(String host, String port, String userName, String password, String databaseName) {
-        try {
+        /*try {
             Class.forName("com.mysql.jdbc.Driver");
             String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName + "?Unicode=true&characterEncoding=UTF-8&useSSL=false";
             Connection connection = DriverManager.getConnection(url, userName, password);
@@ -41,7 +42,24 @@ public class MySqlDataSource extends IDataSource{
         } catch (SQLException e) {
             logger.error("无法获取连接", e);
             return null;
+        }*/
+        DruidUtil druidUtil = DruidUtil.getInstance();
+        Boolean flag = druidUtil.containsId(host+port+databaseName);
+        if(flag){
+            try {
+                return druidUtil.getConnection(host+port+databaseName);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }else{
+            druidUtil.addDruidDataSource(host,port,userName,password,databaseName);
+            try {
+                return druidUtil.getConnection(host+port+databaseName);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+        return null;
         //使用Druid连接池
         //return DruidUtil.getConnection();
         //return DataBaseSource.getConnection("com.mysql.jdbc.Driver", host, port, userName, password, databaseName);

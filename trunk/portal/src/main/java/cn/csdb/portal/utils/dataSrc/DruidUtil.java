@@ -1,94 +1,92 @@
 package cn.csdb.portal.utils.dataSrc;
 
+import cn.csdb.portal.model.Subject;
 import com.alibaba.druid.pool.DruidDataSource;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
+import com.alibaba.druid.pool.DruidDataSourceFactory;
+import org.springframework.context.annotation.Bean;
 
-import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
-
+import java.sql.Connection;
 /**
- * Created by shibaoping on 2019/6/11.
+ * Created by shibaoping on 2019/6/13.
  * Druid连接池工具类
  */
 public class DruidUtil {
-    private static DruidDataSource druidDataSource;
+    private static DruidUtil single = null;
 
-    static {
-        druidDataSource = new DruidDataSource();
-        ClassPathResource classPathResource = new ClassPathResource("/cas_urls.properties");
-        Properties properties = null;
-        try {
-            properties = PropertiesLoaderUtils.loadProperties(classPathResource);
-            druidDataSource.setUrl(getJdbcUrl("com.mysql.jdbc.".trim(),
-                    properties.getProperty("host"), properties.getProperty("port"), properties.getProperty("dbName")));
-            druidDataSource.setUsername(properties.getProperty("username"));
-            druidDataSource.setPassword( properties.getProperty("password"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //初始化时建立物理连接的个数
-        druidDataSource.setInitialSize(5);
-        //最小连接池数量
-        druidDataSource.setMinIdle(5);
-        //最大连接池数量
-        druidDataSource.setMaxActive(20);
-        //获取连接时最大等待时间，单位毫秒
-        druidDataSource.setMaxWait(10000);
-        //连接间隔时间
-        druidDataSource.setTimeBetweenEvictionRunsMillis(60000);
-        //连接在池中的最小生存时间，单位毫秒
-        druidDataSource.setMinEvictableIdleTimeMillis(300000);
-        //申请连接时执行validationQuery检测连接是否有效(开启后会影响一些性能)
-        druidDataSource.setTestOnBorrow(true);
-        //归还连接时执行validationQuery检测连接是否有效(开启后会影响一些性能)
-        druidDataSource.setTestOnReturn(false);
-        //建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
-        druidDataSource.setTestWhileIdle(true);
-        //用来检测连接是否有效的SQL，要求是一个查询语句
-        druidDataSource.setValidationQuery("SELECT 1");
-        //对于长时间不使用的连接强制关闭
-        druidDataSource.setRemoveAbandoned(true);
-        //数据库连接超过三分钟开始关闭空闲连接 秒为单位
-        druidDataSource.setRemoveAbandonedTimeout(1800);
-        //是否缓存preparedStatement，也就是PSCache，在mysql5.5以下的版本中没有PSCache功能，建议关闭掉
-        druidDataSource.setPoolPreparedStatements(false);
-        //要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。
-        druidDataSource.setMaxPoolPreparedStatementPerConnectionSize(20);
-        //打印日志
-        druidDataSource.setLogAbandoned(true);
-        // 启用监控统计功能
-        try {
-            druidDataSource.setFilters("stat");
-        } catch (SQLException e) {
-            throw  new ExceptionInInitializerError(e);
-        }// for mysql
-        druidDataSource.setPoolPreparedStatements(false);
+    public static Map<String,DruidDataSource> map = new HashMap<>();
+
+    public DruidUtil() {
     }
 
-    //要考虑多线程的情况
-    public static Connection getConnection() {
-        Connection connection = null;
-        try {
-            connection = druidDataSource.getConnection();
-        }catch(SQLException e){
-            e.printStackTrace();
+    /**
+     * 获取实例 重启tomcat之后清空Druid连接池
+     * @return
+     */
+    @Bean(initMethod = "init", destroyMethod = "destroy")
+    public static DruidUtil getInstance(){
+        if (single == null) {
+            synchronized (DruidUtil.class) {
+                if (single == null) {
+                    single = new DruidUtil();
+                }
+            }
         }
-        return connection;
+        return single;
     }
 
-        //适配于不同数据库的JDBC连接
-        private static String getJdbcUrl(String driverClass, String host, String port, String db) {
+    //获取连接
+    public Connection getConnection(String id) throws SQLException {
+        DruidDataSource source = map.get(id);
+        return source.getConnection();
+    }
 
-        if (StringUtils.startsWith(driverClass,"oracle.jdbc.")) {
-            return "jdbc:oracle:thin:@" + host + ":" + port + ":" + db;
+    //新增连接池功能
+    public void addDruidDataSource(String host, String port, String username, String password, String databaseName){
+        Properties prop = new Properties();
+        prop.setProperty("driverClassName","com.mysql.jdbc.Driver");
+        prop.setProperty("validationQuery","SELECT 1 FROM DUAL");
+        prop.setProperty("url","jdbc:mysql://"+host+":"+port+"/"+databaseName);
+        prop.setProperty("connectionProperties","useUnicode=true;characterEncoding=UTF8;UseSSL=false");
+        prop.setProperty("username",username);
+        prop.setProperty("password",password);
+        prop.setProperty("initialSize","3");
+        prop.setProperty("maxActive","10");
+        prop.setProperty("minIdle","3");
+        prop.setProperty("maxWait","10000");
+        prop.setProperty("filters","stat");
+        prop.setProperty("timeBetweenEvictionRunsMillis","60000");
+        prop.setProperty("minEvictableIdleTimeMillis","300000");
+        prop.setProperty("testWhileIdle","true");
+        prop.setProperty("testOnBorrow","true");
+        prop.setProperty("testOnReturn","false");
+        prop.setProperty("poolPreparedStatements","false");
+        prop.setProperty("maxPoolPreparedStatementPerConnectionSize","20");
+        prop.setProperty("removeAbandoned","true");
+        prop.setProperty("removeAbandonedTimeout","1800");
+        prop.setProperty("logAbandoned","true");
+        try {
+            DruidDataSource druidDataSource = (DruidDataSource) DruidDataSourceFactory
+                    .createDataSource(prop);
+            map.put(host+port+databaseName,druidDataSource);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("新增数据库创建连接池失败！");
         }
-        if (StringUtils.startsWith(driverClass,"com.mysql.jdbc.")) {
-            return "jdbc:mysql://" + host + ":" + port + "/" +db+"?zeroDateTimeBehavior=convertToNull&Unicode=true&characterEncoding=UTF-8&useSSL=false";
-        }
-        return null;
+    }
+
+    //删除连接池
+    public void removeDruidDataSource(Subject subject){
+        DruidDataSource source = map.get(subject.getDbHost()+subject.getDbPort()+subject.getDbName());
+        source.close();
+        map.remove(subject.getDbHost()+subject.getDbPort()+subject.getDbName());
+    }
+
+    //查询连接池是否存在
+    public boolean containsId(String id){
+        return map.containsKey(id);
     }
 }

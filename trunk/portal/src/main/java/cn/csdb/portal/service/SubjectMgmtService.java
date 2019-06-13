@@ -5,6 +5,7 @@ import cn.csdb.portal.model.User;
 import cn.csdb.portal.repository.SubjectMgmtDao;
 import cn.csdb.portal.repository.UserDao;
 import cn.csdb.portal.utils.MD5Util;
+import cn.csdb.portal.utils.dataSrc.DruidUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -74,6 +75,11 @@ public class SubjectMgmtService {
     public int deleteSubject(String id) {
         String deleteSubjectNotice = "";
         Subject subject = subjectMgmtDao.findSubjectById(id);
+        //删除对应的数据库连接池
+        DruidUtil druidUtil = DruidUtil.getInstance();
+        if(druidUtil.containsId(subject.getDbHost()+subject.getDbPort()+subject.getDbName())){
+            druidUtil.removeDruidDataSource(subject);
+        }
         String admin = subject.getAdmin();
         userDao.deleteUserByLoginId(admin);
 
