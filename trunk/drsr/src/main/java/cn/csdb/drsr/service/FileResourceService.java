@@ -98,7 +98,9 @@ public class FileResourceService {
         int deletedRowCnt = fileResourceDao.deleteRelationData(id);
         if (deletedRowCnt == 1) {
             return "1";
-        } else {
+        } else if(deletedRowCnt==2){
+            return "2";
+        }else {
             return "0";
         }
     }

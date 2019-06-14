@@ -729,6 +729,8 @@
                             if (res == '1') {
                                 toastr["success"]("删除成功");
                                 tableConfiguration();
+                            }else if(res == '2'){
+                                toastr["warning"]("此数据源下有关联任务！");
                             } else {
                                 toastr["error"]("删除失败");
                             }

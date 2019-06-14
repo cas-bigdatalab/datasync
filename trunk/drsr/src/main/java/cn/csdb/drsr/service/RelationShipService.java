@@ -100,6 +100,9 @@ public class RelationShipService {
         {
             return "1";
         }
+        else if(deletedRowCnt == 2){
+            return "2";
+        }
         else
         {
             return "0";
@@ -121,7 +124,7 @@ public class RelationShipService {
 
     public String testCon(String dataSourceType,String host, String port, String userName, String password, String databaseName) {
         if("mysql".equals(dataSourceType)){
-            String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName;
+            String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName+"?useUnicode=true&characterEncoding=utf8&UseSSL=false";
             try {
                 Class.forName("com.mysql.jdbc.Driver");
                 Connection con = DriverManager.getConnection(url, userName, password);

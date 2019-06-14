@@ -66,8 +66,16 @@ public class RelationDao{
 
     public int deleteRelationData(int id)
     {
-        String deleteSql = "delete from t_datasource where DataSourceId = ?";
+
         Object[] args = new Object[]{id};
+        String selectSql="select * from t_datatask where DataSourceId=?";
+
+        int selectResult=jdbcTemplate.queryForList(selectSql,args).size();
+        if(selectResult!=0){
+            return 2;
+        }
+
+        String deleteSql = "delete from t_datasource where DataSourceId = ?";
 
         int deletedRowCnt = jdbcTemplate.update(deleteSql, args);
 
@@ -209,14 +217,13 @@ public class RelationDao{
 
         try {
             IDataSource dataSource = DataSourceFactory.getDataSource(dataBaseType);
-            connection = dataSource.getConnection(host, port, userName, password, "Tfs_Configuration");
+            connection = dataSource.getConnection(host, port, userName, password, "");
 
             // 获取Statement
             Statement stmt=connection.createStatement();
 
             //查询语句  获取当前账号下所有数据库
-            String query="select NAME from master..sysdatabases D where sid not in(select sid from master..syslogins where name='"+userName+"')";
-
+            String query="select name from sysdatabases;";
             //执行查询
             ResultSet rs=stmt.executeQuery(query);
             String name="";

@@ -238,7 +238,7 @@ public class DataSrcDao {
 
     public List<String> relationalDatabaseTableList(String host, String port, String userName, String password, String databaseName) {
         List<String> l = new ArrayList<String>();
-        String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName;
+        String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName+"?useUnicode=true&characterEncoding=utf8&UseSSL=false";
         boolean isValid = false;
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -288,7 +288,7 @@ public class DataSrcDao {
     }
 
     public Map<String, Map<String, String>> getTableColumns(String host, String port, String userName, String password, String databaseName, String tableName) {
-        String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName;
+        String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName+"?useUnicode=true&characterEncoding=utf8&UseSSL=false";
         Connection con = null;
         Map<String, Map<String, String>> colInfos = new HashMap<String, Map<String, String>>();
         try {
@@ -329,7 +329,7 @@ public class DataSrcDao {
         String host = dataSrc.getHost();
         String port = dataSrc.getPort();
         String databaseName = dataSrc.getDatabaseName();
-        String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName;
+        String url = "jdbc:mysql://" + host + ":" + port + "/" + databaseName+"?useUnicode=true&characterEncoding=utf8&UseSSL=false";
         try (Connection con = DriverManager.getConnection(url, dataSrc.getUserName(), dataSrc.getPassword())) {
             Statement statement = con.createStatement();
             boolean result = statement.execute(sql);

@@ -138,7 +138,7 @@ public class LoginService
             brief = dataMap.get("brief").toString();
         }
         String dbHost="";
-        if (dataMap.get("dbHost") != null)
+        if (dataMap.get("ftpServerAddr") != null)
         {
             dbHost = dataMap.get("ftpServerAddr").toString();
         }

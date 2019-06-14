@@ -64,8 +64,15 @@ public class FileResourceDao {
 
     public int deleteRelationData(int id)
     {
-        String deleteSql = "delete from t_datasource where DataSourceId = ?";
         Object[] args = new Object[]{id};
+        String selectSql="select * from t_datatask where DataSourceId=?";
+
+        int selectResult=jdbcTemplate.queryForList(selectSql,args).size();
+        if(selectResult!=0){
+            return 2;
+        }
+
+        String deleteSql = "delete from t_datasource where DataSourceId = ?";
 
         int deletedRowCnt = jdbcTemplate.update(deleteSql, args);
 
