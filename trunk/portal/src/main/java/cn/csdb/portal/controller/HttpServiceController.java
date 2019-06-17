@@ -153,7 +153,8 @@ public class HttpServiceController {
             String dbName = subject.getDbName();
             SqlUtil sqlUtil = new SqlUtil();
             try {
-                sqlUtil.importSql(dataAssemblerHost, dbUserName, dbPassword, dbName, ddlFile, dmlFile);
+                sqlUtil.importSql(dataAssemblerHost, dbUserName, dbPassword, dbName, ddlFile, "");
+                sqlUtil.insertSql(dataAssemblerHost, dbUserName, dbPassword, dbName, "", dmlFile);
             } catch (Exception e) {
                 e.printStackTrace();
                 return "EXECUTE_SQL_ERROR";
@@ -197,7 +198,8 @@ public class HttpServiceController {
         SqlUtil sqlUtil = new SqlUtil();
         try {
             System.out.println("passwprd------" + password);
-            sqlUtil.importSql(configPropertyService.getProperty("dataAssemblerHost"), username, password, dbName, structDBFile, dataDBFile);
+            sqlUtil.importSql(configPropertyService.getProperty("dataAssemblerHost"), username, password, dbName, structDBFile, "");
+            sqlUtil.insertSql(configPropertyService.getProperty("dataAssemblerHost"), username, password, dbName, "", dataDBFile);
             File file = new File(structDBFile);
             File file2 = new File(dataDBFile);
             if (file.exists()) {
