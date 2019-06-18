@@ -195,13 +195,16 @@ public class HttpServiceController {
         String username = configPropertyService.getProperty("db.username");
         String password = configPropertyService.getProperty("db.password");
         String dbName = subject.getDbName();
+        File file = new File(structDBFile);
+        File file2 = new File(dataDBFile);
         SqlUtil sqlUtil = new SqlUtil();
         try {
             System.out.println("passwprd------" + password);
             sqlUtil.importSql(configPropertyService.getProperty("dataAssemblerHost"), username, password, dbName, structDBFile, "");
             sqlUtil.insertSql(configPropertyService.getProperty("dataAssemblerHost"), username, password, dbName, "", dataDBFile);
-            File file = new File(structDBFile);
-            File file2 = new File(dataDBFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
             if (file.exists()) {
                 boolean result = file.delete();
                 System.out.println("删除文件：" + structDBFile + "  " + result + "");
@@ -210,8 +213,6 @@ public class HttpServiceController {
                 boolean result = file2.delete();
                 System.out.println("删除文件：" + dataDBFile + "   " + result + "");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         return 1;
