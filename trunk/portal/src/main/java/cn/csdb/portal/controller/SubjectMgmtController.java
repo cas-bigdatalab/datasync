@@ -31,6 +31,9 @@ public class SubjectMgmtController {
     @Value("#{systemPro['imagesPath']}")
     private String imagesPath;
 
+	@Value("#{systemPro['ftpServerAddr']}")
+	private String ftpServerAddr;
+
     @Autowired
     public void setProjectLibService(SubjectMgmtService subjectService) {
         this.subjectMgmtService = subjectService;
@@ -75,6 +78,7 @@ public class SubjectMgmtController {
         generateFtpInfo(subject);
         logger.info("generate ftp user and password completed!");
 
+		subject.setFtpServerAddr(ftpServerAddr);
         String addSubjectNotice = subjectMgmtService.addSubject(subject);
         logger.info("subject added, addSubjectNotice : " + addSubjectNotice);
 
