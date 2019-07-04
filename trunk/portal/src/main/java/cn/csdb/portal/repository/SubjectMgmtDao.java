@@ -549,7 +549,7 @@ public class SubjectMgmtDao {
 
         List<Subject> subjects = mongoTemplate.find(query, Subject.class);
 
-        if(subjects==null){
+        if(subjects.size()==0){
             return "0";
         }
 
