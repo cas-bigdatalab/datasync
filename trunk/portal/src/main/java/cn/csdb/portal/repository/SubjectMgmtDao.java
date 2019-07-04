@@ -549,6 +549,10 @@ public class SubjectMgmtDao {
 
         List<Subject> subjects = mongoTemplate.find(query, Subject.class);
 
+        if(subjects==null){
+            return "0";
+        }
+
         return subjects.get(0).getSerialNo();
     }
 }
