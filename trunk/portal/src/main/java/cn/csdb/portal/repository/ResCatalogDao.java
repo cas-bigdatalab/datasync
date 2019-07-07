@@ -56,7 +56,7 @@ public class ResCatalogDao {
         resCatalog.setNodeorder(resCatalog.getNodeorder());
         resCatalog.setUpdatetime(resCatalog.getUpdatetime());
         resCatalog.setCreatetime(resCatalog.getCreatetime());
-        resCatalog.setRid(res.getRid()+1);
+        resCatalog.setRid(resCatalog.getRid());
         mongoTemplate.save(resCatalog);
         return 1;
     }

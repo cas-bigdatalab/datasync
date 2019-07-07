@@ -35,7 +35,7 @@
      * ### jsTree core functionality
      */
 
-    // internal variables
+        // internal variables
     var instance_counter = 0,
         ccp_node = false,
         ccp_mode = false,
@@ -511,8 +511,8 @@
             this._data.core.original_container_html
                 .find("li").addBack()
                 .contents().filter(function () {
-                    return this.nodeType === 3 && (!this.nodeValue || /^\s+$/.test(this.nodeValue));
-                })
+                return this.nodeType === 3 && (!this.nodeValue || /^\s+$/.test(this.nodeValue));
+            })
                 .remove();
             this.element.html("<" + "ul class='jstree-container-ul jstree-children'><" + "li class='jstree-initial-node jstree-loading jstree-leaf jstree-last'><i class='jstree-icon jstree-ocl'></i><" + "a class='jstree-anchor' href='#'><i class='jstree-icon jstree-themeicon-hidden'></i>" + this.get_string("Loading ...") + "</a></li></ul>");
             this._data.core.li_height = this.get_container_ul().children("li:eq(0)").height() || 24;
@@ -3790,10 +3790,10 @@
                 pos = new_par.children.length;
             }
             if (!this.check("move_node", obj, new_par, pos, {
-                    'core': true,
-                    'is_multi': (old_ins && old_ins._id && old_ins._id !== this._id),
-                    'is_foreign': (!old_ins || !old_ins._id)
-                })) {
+                'core': true,
+                'is_multi': (old_ins && old_ins._id && old_ins._id !== this._id),
+                'is_foreign': (!old_ins || !old_ins._id)
+            })) {
                 this.settings.core.error.call(this, this._data.core.last_error);
                 return false;
             }
@@ -3963,10 +3963,10 @@
                 pos = new_par.children.length;
             }
             if (!this.check("copy_node", obj, new_par, pos, {
-                    'core': true,
-                    'is_multi': (old_ins && old_ins._id && old_ins._id !== this._id),
-                    'is_foreign': (!old_ins || !old_ins._id)
-                })) {
+                'core': true,
+                'is_multi': (old_ins && old_ins._id && old_ins._id !== this._id),
+                'is_foreign': (!old_ins || !old_ins._id)
+            })) {
                 this.settings.core.error.call(this, this._data.core.last_error);
                 return false;
             }
@@ -4182,12 +4182,12 @@
                 w = this.element.width(),
                 a = obj.children('.jstree-anchor'),
                 s = $('<span>'),
-            /*!
-             oi = obj.children("i:visible"),
-             ai = a.children("i:visible"),
-             w1 = oi.width() * oi.length,
-             w2 = ai.width() * ai.length,
-             */
+                /*!
+                 oi = obj.children("i:visible"),
+                 ai = a.children("i:visible"),
+                 w1 = oi.width() * oi.length,
+                 w2 = ai.width() * ai.length,
+                 */
                 t = default_text,
                 h1 = $("<" + "div />", {
                     css: {
@@ -5341,26 +5341,29 @@
                     "separator_before": false,
                     "separator_after": true,
                     "_disabled": false, //(this.check("create_node", data.reference, {}, "last")),
-                    "label": "Create",
+                    "label": "新增",
+                    "icon": "fa fa-plus-square-o",
                     "action": function (data) {
-                        var inst = $.jstree.reference(data.reference),
-                            obj = inst.get_node(data.reference);
-                        inst.create_node(obj, {}, "last", function (new_node) {
-                            setTimeout(function () {
-                                inst.edit(new_node);
-                            }, 0);
-                        });
+                        jstree_create();
                     }
+                    //     var inst = $.jstree.reference(data.reference),
+                    //         obj = inst.get_node(data.reference);
+                    //     inst.create_node(obj, {}, "last", function (new_node) {
+                    //         setTimeout(function () {
+                    //             inst.edit(new_node);
+                    //         }, 0);
+                    //     });
+                    // }
                 },
                 "rename": {
                     "separator_before": false,
                     "separator_after": false,
                     "_disabled": false, //(this.check("rename_node", data.reference, this.get_parent(data.reference), "")),
-                    "label": "Rename",
+                    "label": "重命名",
+                    "icon": "fa fa-edit",
                     /*
                      "shortcut"			: 113,
                      "shortcut_label"	: 'F2',
-                     "icon"				: "glyphicon glyphicon-leaf",
                      */
                     "action": function (data) {
                         var inst = $.jstree.reference(data.reference),
@@ -5370,32 +5373,35 @@
                 },
                 "remove": {
                     "separator_before": false,
-                    "icon": false,
+                    "icon": "fa fa-remove",
                     "separator_after": false,
                     "_disabled": false, //(this.check("delete_node", data.reference, this.get_parent(data.reference), "")),
-                    "label": "Delete",
+                    "label": "删除",
                     "action": function (data) {
-                        var inst = $.jstree.reference(data.reference),
-                            obj = inst.get_node(data.reference);
-                        if (inst.is_selected(obj)) {
-                            inst.delete_node(inst.get_selected());
-                        }
-                        else {
-                            inst.delete_node(obj);
-                        }
+                        jstree_delete();
+                        // var inst = $.jstree.reference(data.reference),
+                        //     obj = inst.get_node(data.reference);
+                        // if (inst.is_selected(obj)) {
+                        //     inst.delete_node(inst.get_selected());
+                        // }
+                        // else {
+                        //     inst.delete_node(obj);
+                        // }
+
                     }
                 },
                 "ccp": {
                     "separator_before": true,
-                    "icon": false,
+                    "icon": "fa fa-edit",
                     "separator_after": false,
-                    "label": "Edit",
+                    "label": "编辑",
                     "action": false,
                     "submenu": {
                         "cut": {
                             "separator_before": false,
                             "separator_after": false,
-                            "label": "Cut",
+                            "label": "剪切",
+                            "icon": "fa fa-cut",
                             "action": function (data) {
                                 var inst = $.jstree.reference(data.reference),
                                     obj = inst.get_node(data.reference);
@@ -5409,9 +5415,9 @@
                         },
                         "copy": {
                             "separator_before": false,
-                            "icon": false,
+                            "icon": "fa fa-copy",
                             "separator_after": false,
-                            "label": "Copy",
+                            "label": "复制",
                             "action": function (data) {
                                 var inst = $.jstree.reference(data.reference),
                                     obj = inst.get_node(data.reference);
@@ -5425,12 +5431,12 @@
                         },
                         "paste": {
                             "separator_before": false,
-                            "icon": false,
+                            "icon": "fa fa-clipboard",
                             "_disabled": function (data) {
                                 return !$.jstree.reference(data.reference).can_paste();
                             },
                             "separator_after": false,
-                            "label": "Paste",
+                            "label": "粘贴",
                             "action": function (data) {
                                 var inst = $.jstree.reference(data.reference),
                                     obj = inst.get_node(data.reference);
@@ -5515,7 +5521,7 @@
                 i = false;
             if (s.show_at_node || x === undefined || y === undefined) {
                 o = a.offset();
-                x = o.left;
+                x = o.left+50;
                 y = o.top + this._data.core.li_height;
             }
             if (this.settings.contextmenu.select_node && !this.is_selected(obj)) {
@@ -5634,10 +5640,10 @@
                     }
                     sep = false;
                     str += "<" + "li class='" + (val._class || "") + (val._disabled === true || ($.isFunction(val._disabled) && val._disabled({
-                            "item": val,
-                            "reference": vakata_context.reference,
-                            "element": vakata_context.element
-                        })) ? " vakata-contextmenu-disabled " : "") + "' " + (val.shortcut ? " data-shortcut='" + val.shortcut + "' " : '') + ">";
+                        "item": val,
+                        "reference": vakata_context.reference,
+                        "element": vakata_context.element
+                    })) ? " vakata-contextmenu-disabled " : "") + "' " + (val.shortcut ? " data-shortcut='" + val.shortcut + "' " : '') + ">";
                     str += "<" + "a href='#' rel='" + (vakata_context.items.length - 1) + "'>";
                     if ($.vakata.context.settings.icons) {
                         str += "<" + "i ";
@@ -5652,10 +5658,10 @@
                         str += "><" + "/i><" + "span class='vakata-contextmenu-sep'>&#160;<" + "/span>";
                     }
                     str += ($.isFunction(val.label) ? val.label({
-                            "item": i,
-                            "reference": vakata_context.reference,
-                            "element": vakata_context.element
-                        }) : val.label) + (val.shortcut ? ' <span class="vakata-contextmenu-shortcut vakata-contextmenu-shortcut-' + val.shortcut + '">' + (val.shortcut_label || '') + '</span>' : '') + "<" + "/a>";
+                        "item": i,
+                        "reference": vakata_context.reference,
+                        "element": vakata_context.element
+                    }) : val.label) + (val.shortcut ? ' <span class="vakata-contextmenu-shortcut vakata-contextmenu-shortcut-' + val.shortcut + '">' + (val.shortcut_label || '') + '</span>' : '') + "<" + "/a>";
                     if (val.submenu) {
                         tmp = $.vakata.context._parse(val.submenu, true);
                         if (tmp) {
@@ -6048,12 +6054,12 @@
                         ok = true;
                         for (t1 = 0, t2 = data.data.nodes.length; t1 < t2; t1++) {
                             ok = ok && ins.check((data.data.origin && (data.data.origin.settings.dnd.always_copy || (data.data.origin.settings.dnd.copy && (data.event.metaKey || data.event.ctrlKey)) ) ? "copy_node" : "move_node"), (data.data.origin && data.data.origin !== ins ? data.data.origin.get_node(data.data.nodes[t1]) : data.data.nodes[t1]), '#', 'last', {
-                                    'dnd': true,
-                                    'ref': ins.get_node('#'),
-                                    'pos': 'i',
-                                    'is_multi': (data.data.origin && data.data.origin !== ins),
-                                    'is_foreign': (!data.data.origin)
-                                });
+                                'dnd': true,
+                                'ref': ins.get_node('#'),
+                                'pos': 'i',
+                                'is_multi': (data.data.origin && data.data.origin !== ins),
+                                'is_foreign': (!data.data.origin)
+                            });
                             if (!ok) {
                                 break;
                             }
@@ -6120,12 +6126,12 @@
                                         }
                                     }
                                     ok = ok && ( (ins && ins.settings && ins.settings.dnd && ins.settings.dnd.check_while_dragging === false) || ins.check(op, (data.data.origin && data.data.origin !== ins ? data.data.origin.get_node(data.data.nodes[t1]) : data.data.nodes[t1]), p, ps, {
-                                            'dnd': true,
-                                            'ref': ins.get_node(ref.parent()),
-                                            'pos': v,
-                                            'is_multi': (data.data.origin && data.data.origin !== ins),
-                                            'is_foreign': (!data.data.origin)
-                                        }) );
+                                        'dnd': true,
+                                        'ref': ins.get_node(ref.parent()),
+                                        'pos': v,
+                                        'is_multi': (data.data.origin && data.data.origin !== ins),
+                                        'is_foreign': (!data.data.origin)
+                                    }) );
                                     if (!ok) {
                                         if (ins && ins.last_error) {
                                             laster = ins.last_error();
@@ -6598,8 +6604,8 @@
                 var i, j, f, r = this._data.search.res, s = [], o = $();
                 if (r && r.length) {
                     this._data.search.dom = $(this.element[0].querySelectorAll('#' + $.map(r, function (v) {
-                            return "0123456789".indexOf(v[0]) !== -1 ? '\\3' + v[0] + ' ' + v.substr(1).replace($.jstree.idregex, '\\$&') : v.replace($.jstree.idregex, '\\$&');
-                        }).join(', #')));
+                        return "0123456789".indexOf(v[0]) !== -1 ? '\\3' + v[0] + ' ' + v.substr(1).replace($.jstree.idregex, '\\$&') : v.replace($.jstree.idregex, '\\$&');
+                    }).join(', #')));
                     this._data.search.dom.children(".jstree-anchor").addClass('jstree-search');
                     if (this.settings.search.show_only_matches && this._data.search.res.length) {
                         for (i = 0, j = r.length; i < j; i++) {
@@ -6607,8 +6613,8 @@
                         }
                         s = $.vakata.array_remove_item($.vakata.array_unique(s), '#');
                         o = s.length ? $(this.element[0].querySelectorAll('#' + $.map(s, function (v) {
-                                return "0123456789".indexOf(v[0]) !== -1 ? '\\3' + v[0] + ' ' + v.substr(1).replace($.jstree.idregex, '\\$&') : v.replace($.jstree.idregex, '\\$&');
-                            }).join(', #'))) : $();
+                            return "0123456789".indexOf(v[0]) !== -1 ? '\\3' + v[0] + ' ' + v.substr(1).replace($.jstree.idregex, '\\$&') : v.replace($.jstree.idregex, '\\$&');
+                        }).join(', #'))) : $();
 
                         this.element.find(".jstree-node").hide().filter('.jstree-last').filter(function () {
                             return this.nextSibling;
@@ -6719,8 +6725,8 @@
                 p = $.vakata.array_unique(p);
                 this._search_open(p);
                 this._data.search.dom = $(this.element[0].querySelectorAll('#' + $.map(r, function (v) {
-                        return "0123456789".indexOf(v[0]) !== -1 ? '\\3' + v[0] + ' ' + v.substr(1).replace($.jstree.idregex, '\\$&') : v.replace($.jstree.idregex, '\\$&');
-                    }).join(', #')));
+                    return "0123456789".indexOf(v[0]) !== -1 ? '\\3' + v[0] + ' ' + v.substr(1).replace($.jstree.idregex, '\\$&') : v.replace($.jstree.idregex, '\\$&');
+                }).join(', #')));
                 this._data.search.res = r;
                 this._data.search.dom.children(".jstree-anchor").addClass('jstree-search');
             }

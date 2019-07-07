@@ -16,6 +16,7 @@
     <title>资源目录管理</title>
     <link href="${ctx}/resources/bundles/rateit/src/rateit.css" rel="stylesheet" type="text/css">
     <link href="${ctx}/resources/bundles/jstree/dist/themes/default/style.css" rel="stylesheet" type="text/css">
+    <link href="${ctx}/resources/bundles/layerJs/theme/default/layer.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
     <div class="col-md-4" >
@@ -55,6 +56,7 @@
     <script src="${ctx}/resources/bundles/rateit/src/jquery.rateit.js" type="text/javascript"></script>
     <script src="${ctx}/resources/bundles/artTemplate/template.js"></script>
     <script src="${ctx}/resources/js/subStrLength.js"></script>
+    <script src="${ctx}/resources/bundles/layerJs/layer.js"></script>
     <script src="${ctx}/resources/bundles/jstree/dist/jstree.js" type="text/javascript"></script>
     <script type="text/javascript">
         var ctx = '${ctx}';
@@ -65,26 +67,39 @@
                 type: "get",
                 dataType: "json",
                 data: {editable: false},
+                beforeSend:function(data){
+                    index = layer.load(1, {
+                        shade: [0.5,'#fff'] //0.1透明度的白色背景
+                    });
+                },
                 success: function (data) {
                     $('#jstree_show').jstree(data);
+                    $("#layui-layer-shade"+index+"").remove();
+                    $("#layui-layer"+index+"").remove();
                 }
             })
         });
+
+        // 所有节点都加载完后
+        $("#jstree_show").on("ready.jstree", function (event, data) {
+            data.instance.open_node(46); // 展开root节点
+        });
+
 
         function editTree() {
             if ($("#editRegon").html().trim() != "") {
                 return false;
             }
             deleteNodeArray = new Array();
-            var html = '<div class="row" style="margin-bottom:12px"> ' +
+            var html = '<div class="row" style="margin-bottom:5px"> ' +
                 '<button type="button" class="btn btn-default btn-sm" onclick="jstree_create();"><i class="glyphicon glyphicon-asterisk"></i> 添加</button> ' +
                 '<button type="button" class="btn btn-default btn-sm" onclick="jstree_rename();"><i class="glyphicon glyphicon-pencil"></i> 重命名</button> ' +
                 '<button type="button" class="btn btn-default btn-sm" onclick="jstree_delete();"><i class="glyphicon glyphicon-remove"></i> 删除</button> ' +
                 '</div> ' +
                 '<div id="jstree_edit" style="overflow: auto;margin-bottom: 25px;"></div> ' +
                 '<div id="jstree_edit" style="max-height:550px;margin-bottom: 25px;"></div> ' +
-                '<button type="button" class="btn btn-default btn-sm" onclick="jstree_cancel();" style="margin-left:5px"><i class="glyphicon glyphicon-remove"></i> 取消</button>' +
-                '<button type="button" class="btn btn-primary btn-sm" onclick="jstree_submit();" style="margin-left:5px"><i class="glyphicon glyphicon-ok"></i> 提交</button>'
+                '<button type="button" class="btn btn-default btn-sm" onclick="jstree_cancel();" style="margin-left:5px;margin-bottom: 20px;"><i class="glyphicon glyphicon-remove"></i> 取消</button>' +
+                '<button type="button" class="btn btn-primary btn-sm" onclick="jstree_submit();" style="margin-left:5px;margin-bottom: 20px;"><i class="glyphicon glyphicon-ok"></i> 提交</button>'
             $("#editRegon").append(html);
 
 
@@ -105,13 +120,22 @@
                     type: "get",
                     dataType: "json",
                     data: {editable: true},
+                    beforeSend:function(data){
+                        index = layer.load(1, {
+                            shade: [0.5,'#fff'] //0.1透明度的白色背景
+                        });
+                    },
                     success: function (data) {
                         $('#jstree_edit').jstree(data);
+                        $("#layui-layer-shade"+index+"").remove();
+                        $("#layui-layer"+index+"").remove();
+                        $("#jstree_edit").on("ready.jstree", function (event, data) {
+                            data.instance.open_node(46); // 展开root节点
+                        });
                     }
                 })
             })
         }
-
 
         function jstree_cancel() {
             $("#editRegon").html("");
@@ -120,6 +144,18 @@
         function jstree_create() {
             var ref = $('#jstree_edit').jstree(true),
                 sel = ref.get_selected();
+
+            var object=ref._model.data;
+            var maxid=0;
+            var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+            var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+            Object.keys(object).forEach(function(key){
+                if(parseInt(object[key].id)>parseInt(maxid) && (regPos.test(object[key].id) || regNeg.test(object[key].id))){
+                    console.log(maxid);
+                    maxid=object[key].id;
+                }
+            });
+            ref._cnt=parseInt(maxid);//最大id,防止rid重复
             var selected = jstree_selectOne(sel);
             if (selected) {
                 toastr["warning"](selected);
@@ -141,7 +177,6 @@
             } else {
                 ref.set_icon(sel, "glyphicon glyphicon-th-list");
             }
-
             if (sel) {
                 ref.edit(sel);
             }
@@ -174,13 +209,6 @@
             if (!sel.length) {
                 return false;
             }
-            /*ref.delete_node(sel);
-             if(sel[0].indexOf("_")<0){
-             deleteNodeArray.push(sel[0]);
-             }*/
-            /*$("#deleteContent").attr("nodeid", sel[0]);
-            $("#deleteNodeModal").modal('show');
-            $("#deleteContent").html('<div align="center">确认删除' + ref.get_node(sel).text + '节点？</div>')*/
             $("#deleteContent").attr("nodeid", sel[0]);
             bootbox.confirm("确认删除",function (r) {
                 if(r){
@@ -199,8 +227,13 @@
             var ref = $('#jstree_edit').jstree(true);
             sel = $('#jstree_edit').jstree("get_node", $("#deleteContent").attr("nodeid"));
             ref.delete_node(sel);
-            if (sel.id.indexOf("_") < 0) {
-                deleteNodeArray.push(sel.id);
+            // if (sel.id.indexOf("_") < 0) {
+            deleteNodeArray.push(sel.id);
+            // }
+            if(sel.children_d.length!=0){
+                for(var i=0;i<sel.children_d.length;i++){
+                    deleteNodeArray.push(sel.children_d[i]);
+                }
             }
         }
 
@@ -216,18 +249,27 @@
                         level: value.parents.length,
                         order: n
                     };
+                    if(value.parent.indexOf('_')!=-1){
+                        nodeData.parent= nodeData.parent.substring(nodeData.parent.lastIndexOf('_')+1,nodeData.parent.length)
+                    }
                     packageTreeData.push(nodeData);
                 }
             });
             $.ajax({
                 url: ctx + "/resCatalogSubmit",
                 type: "post",
-                dataType: "json",
                 data: {
                     packageTreeData: JSON.stringify(packageTreeData),
                     deleteNodeArray: JSON.stringify(deleteNodeArray)
                 },
+                beforeSend:function(data){
+                    index = layer.load(1, {
+                        shade: [0.5,'#fff'] //0.1透明度的白色背景
+                    });
+                },
                 success: function (data) {
+                    $("#layui-layer-shade"+index+"").remove();
+                    $("#layui-layer"+index+"").remove();
                     window.location.href = ctx + "/resCatalog";
 //                    toastr["success"]("资源目录添加成功！", "success！");
                 }

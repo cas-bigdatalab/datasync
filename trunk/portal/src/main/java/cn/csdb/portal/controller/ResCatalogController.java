@@ -42,8 +42,11 @@ public class ResCatalogController {
         for (int i = 0; i < ja.size(); i++) {
             JSONObject jo = ja.getJSONObject(i);
             ResCatalog_Mongo resCatalog = new ResCatalog_Mongo();
+//              System.out.println(jo.get("text")+":"+jo.get("parent"));
             if (jo.get("id").toString().indexOf("_") < 0) {
                 resCatalog.setRid(Integer.parseInt(jo.get("id").toString()));
+            }else{
+                resCatalog.setRid(Integer.parseInt(jo.get("id").toString().split("_")[1]));
             }
             resCatalog.setName(jo.get("text").toString());
             resCatalog.setLevel(Integer.parseInt(jo.get("level").toString()));
@@ -59,20 +62,20 @@ public class ResCatalogController {
             resCatalog.setUpdatetime(createTime);
             resCatalog.setCreatetime(createTime);
             int nodeid = 0;
-            if (jo.get("id").toString().indexOf("_") < 0) {
+            if (jo.get("id").toString().indexOf("_") < 0) {//不存在_
                 nodeid = resCatalogService.updateLocalResCatalog(resCatalog);
             } else {
                 nodeid = resCatalogService.savaLocalResCatalog(resCatalog);
             }
 
-            if (i < ja.size() - 1) {
-                for (int j = i + 1; j < ja.size(); j++) {
-                    JSONObject jb = ja.getJSONObject(j);
-                    if (jb.get("parent").toString().equals(jo.get("id").toString())) {
-                        jb.put("parent", nodeid);
-                    }
-                }
-            }
+//            if (i < ja.size() - 1) {
+//                for (int j = i + 1; j < ja.size(); j++) {
+//                    JSONObject jb = ja.getJSONObject(j);
+//                    if (jb.get("parent").toString().equals(jo.get("id").toString())) {
+//                        jb.put("parent", nodeid);
+//                    }
+//                }
+//            }
 
         }
         return "success";
