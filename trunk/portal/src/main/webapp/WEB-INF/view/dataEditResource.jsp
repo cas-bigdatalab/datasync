@@ -96,7 +96,7 @@
                                             <div class="col-md-5" style="padding-top:13px">
                                                 <input type="text" class="form-control" name="Task_dataName"
                                                        required="required"
-                                                       id="Task_dataName" placeholder="请输入名称（不少于15字）">
+                                                       id="Task_dataName" placeholder="请输入名称（不少于6字）">
                                             </div>
 
                                         </div>
@@ -109,7 +109,7 @@
 
 
                                                     <textarea type="text" class="form-control" cols="30" rows="4"
-                                                              placeholder="数据集简介信息（不少于50字符）"
+                                                              placeholder="数据集简介信息（不少于10字符）"
                                                               id="dataDescribeID" name="dataDescribeID"
                                                               required="required"></textarea>
 
@@ -625,22 +625,22 @@
             rules: {
                 Task_dataName: {
                     required: true,
-                    minlength: 15
+                    minlength: 6
                 },
                 dataDescribeID: {
                     required: true,
-                    minlength: 50
+                    minlength: 10
                 }
             },
             messages: {
                 Task_dataName: {
                     required: "请输入数据集名称",
-                    minlength: "不少于15个字符"
+                    minlength: "不少于6个字符"
                 },
 
                 dataDescribeID: {
                     required: "请输入简介信息",
-                    minlength: "不少于50个字符"
+                    minlength: "不少于10个字符"
                 },
             },
             errorPlacement: function (error, element) { // render error placement for each input type
