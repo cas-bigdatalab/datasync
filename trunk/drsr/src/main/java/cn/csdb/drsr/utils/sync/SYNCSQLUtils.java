@@ -258,25 +258,27 @@ public class SYNCSQLUtils {
             }
             boolean ifPortalId=!portalIdExistCopy(result2);
             while (rs.next()) {
-                result.append("INSERT INTO " + logicTable + "_sync_bak VALUES (");
+                 StringBuffer insertsql=new StringBuffer();
+                insertsql.append("INSERT INTO " + logicTable + "_sync_bak VALUES (");
                 for (int i = 0; i < columnCount; i++) {
                     if (i > 0) {
-                        result.append(", ");
+                        insertsql.append(", ");
                     }
                     Object value = rs.getObject(i + 1);
                     if (value == null) {
-                        result.append("NULL");
+                        insertsql.append("NULL");
                     } else {
-                        String outputValue = value.toString();
+                        String outputValue = value.toString().replaceAll("[\\t\\n\\r]", "");
                         outputValue = outputValue.replaceAll("'", "''");
-                        result.append("'" + outputValue + "'");
+                        insertsql.append("'" + outputValue + "'");
                     }
                 }
                 if(ifPortalId){
                     String s = UUID.randomUUID().toString();
-                    result.append(",'" + s + "'");
+                    insertsql.append(",'" + s + "'");
                 }
-                result.append(");\n");
+                insertsql.append(");\n");
+                result.append(insertsql);
             }
 
 
@@ -327,7 +329,7 @@ public class SYNCSQLUtils {
                     if (value == null) {
                         result.append("NULL");
                     } else {
-                        String outputValue = value.toString();
+                        String outputValue = value.toString().replaceAll("[\\t\\n\\r]", "");
                         outputValue = outputValue.replaceAll("'", "''");
                         result.append("'" + outputValue + "'");
                     }
