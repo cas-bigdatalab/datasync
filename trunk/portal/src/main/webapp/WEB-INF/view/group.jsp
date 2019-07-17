@@ -319,7 +319,7 @@
                         </div>
                     </div>
                     <div class="form-group" style="margin-bottom:2px;">
-                        <label class="col-sm-3 control-label">本组己有用户:</label>
+                        <label class="col-sm-3 control-label">本组已有用户:</label>
                         <div class="col-sm-8" style="padding-top: 7px;">
                             <select class='form-control select2me' name='users' id='users' multiple>
                                 <c:forEach var="item" items="${list}">
