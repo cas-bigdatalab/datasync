@@ -54,6 +54,11 @@
             display: inline;
             width: 70%;
         }
+        #select2-drop{
+            left: 780.5px!important;
+            width: 436px!important;
+            top: 590px!important;
+        }
     </style>
 </head>
 
@@ -321,7 +326,7 @@
                                     <span class="required">*</span>
                                 </label>
                             </div>
-                            <div class="col-sm-8" style="padding-top: 7px;">
+                            <div class="col-sm-8" style="padding-top: 7px;" >
                                 <select class='form-control select2me' name='permissions' id='permissions' multiple>
                                 </select>
                             </div>
