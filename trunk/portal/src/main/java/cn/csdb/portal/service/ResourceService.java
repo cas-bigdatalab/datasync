@@ -46,7 +46,6 @@ public class ResourceService {
      */
     @Transactional
     public String save(cn.csdb.portal.model.Resource resource) {
-        resourceDao.deleteComment(resource);
         return resourceDao.save(resource);
     }
 

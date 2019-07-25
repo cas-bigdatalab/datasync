@@ -1,6 +1,7 @@
 package cn.csdb.portal.controller;
 
 import cn.csdb.portal.model.*;
+import cn.csdb.portal.repository.ResourceDao;
 import cn.csdb.portal.repository.TableFieldComsDao;
 import cn.csdb.portal.service.*;
 import cn.csdb.portal.utils.FileTreeNode;
@@ -54,6 +55,8 @@ public class ResourceController {
     private DataSrcService dataSrcService;
     @Resource
     private TableFieldComsDao tableFieldComsDao;
+    @Resource
+    private ResourceDao resourceDao;
     @Resource
     private MetadataTemplateService metadataTemplateService;
     @Resource
@@ -770,20 +773,23 @@ public class ResourceController {
      *
      * @param: [resourceId]
      * @return: com.alibaba.fastjson.JSONObject
-     * @auther: hw
-     * @date: 2018/11/22 14:27
+     * @auther: shibaoping
+     * @date: 2018/07/25 09:00
      */
     @ResponseBody
     @RequestMapping("stopResource")
     public JSONObject stopResource(String resourceId) {
         JSONObject jo = new JSONObject();
         cn.csdb.portal.model.Resource resource = resourceService.getById(resourceId);
+        //删除数据集评分，将停用数据集添加到sdo_relation_disable表中
+        resourceDao.deleteComment(resource);
 
         resource.setStatus("-1"); //未完成
         resource.setvCount(0);
         resource.setdCount(0);
         resourceService.saveDeleteId(resourceId);
         String newresourceId = resourceService.save(resource);
+
 
         if (StringUtils.isNotBlank(newresourceId)) {
             jo.put("result", "success");
