@@ -76,12 +76,12 @@
         <filter-name>sitemesh</filter-name>
         <filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class>
     </filter>
-    <!--跨站安全检测-->
     <filter-mapping>
         <filter-name>sitemesh</filter-name>
         <url-pattern>/*</url-pattern>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
+    <!--跨站安全检测-->
     <filter>
         <filter-name>securityFilter</filter-name>
         <filter-class>cn.csdb.portal.common.util.SecurityFilter</filter-class>
