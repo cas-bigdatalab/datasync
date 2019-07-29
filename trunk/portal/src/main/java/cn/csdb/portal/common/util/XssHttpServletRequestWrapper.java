@@ -94,7 +94,7 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
         value = value.replaceAll(">","&gt;");
         value = value.replaceAll("'","&apos;");
 
-        value = HtmlUtils.htmlEscape(value);
+        //value = HtmlUtils.htmlEscape(value);
 
         //System.out.println("\n=============20180607过滤之后的内容:" + value);
         return value;
