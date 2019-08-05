@@ -81,6 +81,18 @@
         <url-pattern>/*</url-pattern>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
+    <!--跨站安全检测-->
+    <filter>
+        <filter-name>securityFilter</filter-name>
+        <filter-class>cn.csdb.portal.common.util.SecurityFilter</filter-class>
+    </filter>
+
+    <!-- xiajl20180116 -->
+    <filter-mapping>
+        <filter-name>securityFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
     <!--<filter>
         <filter-name>userFilter</filter-name>
         <filter-class>cn.csdb.resreg.filter.UserFilter</filter-class>
