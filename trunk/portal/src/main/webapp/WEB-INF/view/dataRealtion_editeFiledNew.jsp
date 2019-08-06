@@ -269,9 +269,9 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label regislabel">选项:</label>
                 <div class="col-sm-8">
-                    <input id="enum_text" name="enumData" type="text" class="form-control"
+                    <input id="enum_text" name="enumData" type="text" class="form-control" title="各选项采用“值=标题”的格式，选项之间采用逗号分隔，例如：male=男,female=女"
                            placeholder="各选项采用“值=标题”的格式，选项之间采用逗号分隔，例如：male=男,female=女">
-                    <input id="enum_sql" type="text" name="address" class="form-control" style="display: none"
+                    <input id="enum_sql" type="text" name="address" class="form-control" style="display: none" title="输入一个sql语句，查询出两个字段分别为值和标题，如：select value,title from yourTable"
                            placeholder="输入一个sql语句，查询出两个字段分别为值和标题，如：select value,title from yourTable">
                 </div>
             </div>
