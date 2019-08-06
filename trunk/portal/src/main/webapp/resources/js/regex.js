@@ -43,4 +43,10 @@ Date.prototype.Format = function (fmt) { //author: meizz
 };
 function formatDate(date) {
     return new Date(date).Format("yyyy-MM-dd hh:mm:ss");
+
+
+}
+function subStringDate(date) {
+    var s=date.substring(0,date.length-2);
+    return s;
 }
