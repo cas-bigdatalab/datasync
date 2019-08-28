@@ -139,12 +139,19 @@ public class FileImportService {
 
             }
             // 创建表
-            Boolean createTable = createTableSql(connection, tableName, tableFields);
+            Boolean createTable;
+            List<String> typeList= createTableSql(connection, tableName, tableFields);
+            if(typeList.get(typeList.size()-1).equals("false")){
+                createTable = false;
+            }else{
+                createTable =true ;
+            }
             if (!createTable) {
                 jsonObject.put("code", "error");
                 jsonObject.put("message", "创建表失败");
                 return jsonObject;
             }
+            typeList.remove(typeList.size()-1);
 
             // 插入数据
             Set<Map.Entry<String, List<List<String>>>> entries = mapSheet.entrySet();
@@ -157,7 +164,7 @@ public class FileImportService {
                 if (!key.equals(tableName)) {
                     continue;
                 }
-                jsonObject = insertValue2(connection, tableName, value);
+                jsonObject = insertValue2(connection, tableName, value,typeList);
                 if ("error".equals(jsonObject.get("code"))) {
                     return jsonObject;
                 }
@@ -282,16 +289,21 @@ public class FileImportService {
                 XSSFSheet sheetAt = workbook.getSheetAt(i);
                 int lastRowNum = sheetAt.getLastRowNum();
                 rowList = new ArrayList<List<String>>(lastRowNum);
-                for (int r = 0; r < lastRowNum; r++) {
-                    XSSFRow row = sheetAt.getRow(r);
-                    short lastCellNum = row.getLastCellNum();
-                    List<String> cellList = new ArrayList<String>(lastCellNum);
-                    for (int c = 0; c < lastCellNum; c++) {
-                        XSSFCell cell = row.getCell(c);
-                        String s = cell == null ? "" : cell.toString();
-                        cellList.add(s);
+                if(lastRowNum>0) {
+                    for (int r = 0; r <= lastRowNum; r++) {
+                        XSSFRow row = sheetAt.getRow(r);
+                        short lastCellNum = row.getLastCellNum();
+                        List<String> cellList = new ArrayList<String>();
+//                        根据第二行的字段名，获取最完整的列数,
+                        int realcellNum = sheetAt.getRow(1).getLastCellNum();
+//                        for (int c = 0; c < lastCellNum; c++) {
+                        for (int c = 0; c < realcellNum; c++) {
+                            XSSFCell cell = row.getCell(c);
+                            String s = cell == null ? "" : cell.toString();
+                            cellList.add(s);
+                        }
+                        rowList.add(cellList);
                     }
-                    rowList.add(cellList);
                 }
                 if (rowList.size() == 0) {
                     break;
@@ -444,11 +456,12 @@ public class FileImportService {
      * @param tableFields
      * @return
      */
-    private Boolean createTableSql(Connection connection, String tableName, List<TableField> tableFields) {
+    private  List<String> createTableSql(Connection connection, String tableName, List<TableField> tableFields) {
         List<String> primaryKeys = new ArrayList<>(3);
         StringBuffer sb = new StringBuffer("CREATE TABLE ");
         sb.append(tableName);
         sb.append("(");
+        List<String> typeList=new ArrayList<>();
         Iterator<TableField> iterator = tableFields.iterator();
         while (iterator.hasNext()) {
             TableField next = iterator.next();
@@ -459,6 +472,7 @@ public class FileImportService {
             String pk = next.getPk();
             sb.append("`" + field + "`  ");
             sb.append(type);
+            typeList.add(type);
             sb.append("(" + length + ")");
             sb.append("COMMENT '" + comment + "'");
             if ("1".equals(pk)) {
@@ -484,9 +498,11 @@ public class FileImportService {
             } catch (SQLException ee) {
                 ee.printStackTrace();
             }
-            return false;
+            typeList.add("false");
+            return typeList;
         }
-        return true;
+        typeList.add("true");
+        return typeList;
     }
 
 
@@ -498,7 +514,7 @@ public class FileImportService {
      * @param value
      * @return
      */
-    private JSONObject insertValue2(Connection connection, String tableName, List<List<String>> value) {
+    private JSONObject insertValue2(Connection connection, String tableName, List<List<String>> value,List<String> typeList) {
         JSONObject jsonObject = new JSONObject();
         String insertSql = null;
         boolean execute = true;
@@ -507,11 +523,11 @@ public class FileImportService {
         for (int i = 0; i < lists.size(); i++) {
             l.add(lists.get(i));
             if (l.size() % 1024 == 0) {
-                insertSql = getInsertSql(connection, tableName, l);
+                insertSql = getInsertSql(connection, tableName, l,typeList);
                 execute = executeSql(connection, tableName, insertSql);
                 l.clear();
             } else if (i == lists.size() - 1) {
-                insertSql = getInsertSql(connection, tableName, l);
+                insertSql = getInsertSql(connection, tableName, l,typeList);
                 execute = executeSql(connection, tableName, insertSql);
                 l.clear();
             }
@@ -533,7 +549,7 @@ public class FileImportService {
      * @param value
      * @return 获取分段insert语句
      */
-    private String getInsertSql(Connection connection, String tableName, List<List<String>> value) {
+    private String getInsertSql(Connection connection, String tableName, List<List<String>> value,List<String> typeList) {
         StringBuilder sb = new StringBuilder("INSERT INTO ");
         sb.append(tableName);
         try {
@@ -555,14 +571,21 @@ public class FileImportService {
         sb.replace(sb.length() - 1, sb.length(), ",PORTALID) VALUES");
         Iterator<List<String>> iterator = value.iterator();
         for (List<String> row : value) {
+            int i=0;
             sb.append("(");
             List<String> next = iterator.next();
             Iterator<String> iterator1 = next.iterator();
             while (iterator1.hasNext()) {
                 String next1 = iterator1.next();
                 sb.append("'");
+                if((typeList.get(i).equalsIgnoreCase("varchar")||typeList.get(i).equalsIgnoreCase("text"))&& !next1.equals("")){
+                    if(next1.indexOf("'")>-1){
+                        next1=next1.replace("'","''");
+                    }
+                }
                 sb.append(next1);
                 sb.append("' ,");
+                i++;
             }
             String s = UUID.randomUUID().toString();
             sb.append("'");
