@@ -1,12 +1,10 @@
 package cn.csdb.portal.repository;
 
-import cn.csdb.portal.model.DataSrc;
-import cn.csdb.portal.model.EnumData;
-import cn.csdb.portal.model.ShowTypeDetail;
-import cn.csdb.portal.model.ShowTypeInf;
+import cn.csdb.portal.model.*;
 import cn.csdb.portal.utils.dataSrc.DataSourceFactory;
 import cn.csdb.portal.utils.dataSrc.IDataSource;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -196,9 +194,10 @@ public class EditDataDao {
      * @Author: zcy
      * @Date: 2019/5/22
      */
-    public int updateDate(String tableName, DataSrc dataSrc, JSONArray jsonArray2, String subjectCode,
+    public JSONObject updateDate(String tableName, DataSrc dataSrc, JSONArray jsonArray2, String subjectCode,
                           String[] enumnCoumns, String delPORTALID) {
         int check = 0;
+        JSONObject jsonObject=new JSONObject();
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
         ShowTypeInf showTypeInf = showTypeInfDao.checkData(tableName, subjectCode);
@@ -219,7 +218,8 @@ public class EditDataDao {
             }
             if (updatestr.equals(" set ")) {
                 check = 1;
-                return check;
+                jsonObject.put("data","1");
+                return jsonObject;
             }
             updatestr = updatestr.substring(0, updatestr.length() - 2);
             String conditionstr = " PORTALID  = '" + delPORTALID + "' ";
@@ -244,14 +244,22 @@ public class EditDataDao {
             pst.close();
         } catch (Exception e) {
             e.printStackTrace();
+            jsonObject.put("updateResult",e);
+            return jsonObject;
         } finally {
             try {
                 connection.close();
+                if(check>0){
+                    jsonObject.put("data","1");
+                }
+//                else{
+//                    jsonObject.put("data","0");
+//                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return check;
+        return jsonObject;
     }
 
     /**
@@ -261,10 +269,11 @@ public class EditDataDao {
      * @Author: zcy
      * @Date: 2019/5/22
      */
-    public int addData(DataSrc dataSrc, String tableName, List<String> pkyList, List<String> addAuto, JSONArray jsonArray, String subjectCode, String[] enumnCoumns) {
+    public JSONObject addData(DataSrc dataSrc, String tableName, List<String> pkyList, List<String> addAuto, JSONArray jsonArray, String subjectCode, String[] enumnCoumns) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
         int check = 0;
+        JSONObject jsonObject=new JSONObject();
         ShowTypeInf showTypeInf = showTypeInfDao.checkData(tableName, subjectCode);
         try {
             String columns = "";
@@ -316,14 +325,22 @@ public class EditDataDao {
             pst.close();
         } catch (Exception e) {
             e.printStackTrace();
+            jsonObject.put("addResult",e);
+            return jsonObject;
         } finally {
             try {
                 connection.close();
+                if(check>0){
+                    jsonObject.put("data","1");
+                }
+//                else{
+//                    jsonObject.put("data","-3");
+//                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return check;
+        return jsonObject;
     }
 
     /**
@@ -455,10 +472,10 @@ public class EditDataDao {
      * @Author: zcy
      * @Date: 2019/5/20
      */
-    public List<Map<String, Object>> getTableData(DataSrc dataSrc, String tableName, int pageNo, int pageSize) {
+    public List<List<DataComposeDemo>> getTableData(DataSrc dataSrc, String tableName, int pageNo, int pageSize) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
-        List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+        List<List<DataComposeDemo>> lists=new ArrayList<>();
         int start = pageSize * (pageNo - 1);
         try {
 //           select COLUMN_NAME,DATA_TYPE,COLUMN_COMMENT from information_schema.COLUMNS where table_name = '表名' and table_schema = '数据库名称';
@@ -470,15 +487,29 @@ public class EditDataDao {
             ResultSetMetaData rsm = set.getMetaData();
 
             while (set.next()) {
-                Map<String, Object> map = new LinkedHashMap<>();
+                int j=0;
+                DataComposeDemo dataComposeDemo1=new DataComposeDemo();
+                List<DataComposeDemo> list=new ArrayList<>();
                 for (int i = 1; i <= rsm.getColumnCount(); i++) {
-                    if (set.getString(rsm.getColumnName(i)) == null) {
-                        map.put(rsm.getColumnName(i), "");
-                    } else {
-                        map.put(rsm.getColumnName(i), set.getString(rsm.getColumnName(i)));
+                    DataComposeDemo dataComposeDemo=new DataComposeDemo();
+                    if(rsm.getColumnName(i).equals("PORTALID")){
+                        dataComposeDemo1.setData(set.getString(rsm.getColumnName(i)));
+                    }else {
+                        if (set.getString(rsm.getColumnName(i)) == null) {
+                            dataComposeDemo.setData(" ");
+                        } else {
+                            dataComposeDemo.setData(set.getString(rsm.getColumnName(i)));
+                        }
+                        if(j<5){
+                            list.add(dataComposeDemo);
+                            j++;
+                        }
                     }
                 }
-                listMap.add(map);
+                if(j>=5||rsm.getColumnCount()-1<5){
+                    list.add(dataComposeDemo1);
+                }
+               lists.add(list);
             }
             pst.close();
             set.close();
@@ -491,20 +522,17 @@ public class EditDataDao {
                 e.printStackTrace();
             }
         }
-        return listMap;
+        return lists;
     }
 
     /**
-     * @Description: 检索
-     * @Param: [dataSrc, tableName, pageNo, pageSize, searchKey, columnName]
-     * @return: java.util.List<java.util.Map < java.lang.String , java.lang.Object>>
-     * @Author: zcy
-     * @Date: 2019/5/23
-*/ 
-    public List<Map<String, Object>> selectTableDataBySearchKey(DataSrc dataSrc, String tableName, int pageNo, int pageSize, String searchKey, List<String> columnName) {
+     * @Description: 检索模板
+
+     */
+    public List<List<DataComposeDemo>> selectTableDataBySearchKey(DataSrc dataSrc, String tableName, int pageNo, int pageSize, String searchKey, List<String> columnName) {
         IDataSource dataSource = DataSourceFactory.getDataSource(dataSrc.getDatabaseType());
         Connection connection = dataSource.getConnection(dataSrc.getHost(), dataSrc.getPort(), dataSrc.getUserName(), dataSrc.getPassword(), dataSrc.getDatabaseName());
-        List<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
+        List<List<DataComposeDemo>> lists=new ArrayList<>();
         int start = pageSize * (pageNo - 1);
         searchKey = "%" + searchKey + "%";
         try {
@@ -529,15 +557,29 @@ public class EditDataDao {
             ResultSetMetaData rsm = set.getMetaData();
 
             while (set.next()) {
-                Map<String, Object> map = new LinkedHashMap<>();
+                int j=0;
+                DataComposeDemo dataComposeDemo1=new DataComposeDemo();
+                List<DataComposeDemo> list=new ArrayList<>();
                 for (int i = 1; i <= rsm.getColumnCount(); i++) {
-                    if (set.getString(rsm.getColumnName(i)) == null) {
-                        map.put(rsm.getColumnName(i), "");
-                    } else {
-                        map.put(rsm.getColumnName(i), set.getString(rsm.getColumnName(i)));
+                    DataComposeDemo dataComposeDemo=new DataComposeDemo();
+                    if(rsm.getColumnName(i).equals("PORTALID")){
+                        dataComposeDemo1.setData(set.getString(rsm.getColumnName(i)));
+                    }else {
+                        if (set.getString(rsm.getColumnName(i)) == null) {
+                            dataComposeDemo.setData(" ");
+                        } else {
+                            dataComposeDemo.setData(set.getString(rsm.getColumnName(i)));
+                        }
+                        if(j<5){
+                            list.add(dataComposeDemo);
+                            j++;
+                        }
                     }
                 }
-                listMap.add(map);
+                if(j>=5||rsm.getColumnCount()-1<5){
+                    list.add(dataComposeDemo1);
+                }
+                lists.add(list);
             }
             pst.close();
             set.close();
@@ -550,8 +592,9 @@ public class EditDataDao {
                 e.printStackTrace();
             }
         }
-        return listMap;
+        return lists;
     }
+
 
     /**
      * @Description: 根据检索词查询数据总条数

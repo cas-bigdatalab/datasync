@@ -1,11 +1,13 @@
 package cn.csdb.portal.service;
 
+import cn.csdb.portal.model.DataComposeDemo;
 import cn.csdb.portal.model.DataSrc;
 import cn.csdb.portal.model.EnumData;
 import cn.csdb.portal.model.Subject;
 import cn.csdb.portal.repository.CheckUserDao;
 import cn.csdb.portal.repository.EditDataDao;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -100,10 +102,10 @@ public class EditDataService {
      * @Author: zcy
      * @Date: 2019/5/20
      */
-    public int updateDate(String tableName, String subjectCode, JSONArray jsonArray, String[] enumnCoumns, String delPORTALID) {
+    public JSONObject updateDate(String tableName, String subjectCode, JSONArray jsonArray, String[] enumnCoumns, String delPORTALID) {
         DataSrc dataSrc = getDataSrc(subjectCode);
-        int i = editDataDao.updateDate(tableName, dataSrc, jsonArray, subjectCode, enumnCoumns, delPORTALID);
-        return i;
+        JSONObject jsonObject = editDataDao.updateDate(tableName, dataSrc, jsonArray, subjectCode, enumnCoumns, delPORTALID);
+        return jsonObject;
     }
 
     /**
@@ -115,10 +117,10 @@ public class EditDataService {
      * @Author: zcy
      * @Date: 2019/5/20
      */
-    public int addData(String subjectCode, String tableName, List<String> pkyList, List<String> addAuto, JSONArray jsonArray, String[] enumnCoumns) {
+    public JSONObject addData(String subjectCode, String tableName, List<String> pkyList, List<String> addAuto, JSONArray jsonArray, String[] enumnCoumns) {
         DataSrc dataSrc = getDataSrc(subjectCode);
-        int i = editDataDao.addData(dataSrc, tableName, pkyList, addAuto, jsonArray, subjectCode, enumnCoumns);
-        return i;
+        JSONObject jsonObject = editDataDao.addData(dataSrc, tableName, pkyList, addAuto, jsonArray, subjectCode, enumnCoumns);
+        return jsonObject;
     }
 
     /**
@@ -163,16 +165,16 @@ public class EditDataService {
      * @Author: zcy
      * @Date: 2019/5/20
      */
-    public List<Map<String, Object>> getTableData(String subjectCode, String tableName, int pageNo, int pageSize, String searchKey, List<String> columnName) {
+    public  List<List<DataComposeDemo>> getTableData(String subjectCode, String tableName, int pageNo, int pageSize, String searchKey, List<String> columnName) {
         DataSrc dataSrc = getDataSrc(subjectCode);
-        List<Map<String, Object>> listMap = new ArrayList<>();
+        List<List<DataComposeDemo>> lists=new ArrayList<>();
         if (searchKey.equals("") || searchKey == null) {
-            listMap = editDataDao.getTableData(dataSrc, tableName, pageNo, pageSize);
+            lists = editDataDao.getTableData(dataSrc, tableName, pageNo, pageSize);
         } else {
-            listMap = editDataDao.selectTableDataBySearchKey(dataSrc, tableName, pageNo, pageSize, searchKey, columnName);
+            lists = editDataDao.selectTableDataBySearchKey(dataSrc, tableName, pageNo, pageSize, searchKey, columnName);
         }
 
-        return listMap;
+        return lists;
     }
 
 

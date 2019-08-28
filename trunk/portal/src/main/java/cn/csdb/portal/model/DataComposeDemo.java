@@ -6,8 +6,10 @@ public class DataComposeDemo {
   private  String autoAdd;
   private  String pkColumn;
   private  String dataType;
-  private String columnType;
-  private Object data;
+  private  String columnType;
+  private  Object data;
+  private  String columnNumber;
+  private String potalId;
 
     public Object getData() {
         return data;
@@ -63,5 +65,21 @@ public class DataComposeDemo {
 
     public void setColumnType(String columnType) {
         this.columnType = columnType;
+    }
+
+    public String getColumnNumber() {
+        return columnNumber;
+    }
+
+    public void setColumnNumber(String columnNumber) {
+        this.columnNumber = columnNumber;
+    }
+
+    public String getPotalId() {
+        return potalId;
+    }
+
+    public void setPotalId(String potalId) {
+        this.potalId = potalId;
     }
 }

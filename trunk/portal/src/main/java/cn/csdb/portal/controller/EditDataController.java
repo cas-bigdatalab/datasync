@@ -78,16 +78,27 @@ public class EditDataController {
     @RequestMapping("/showTableData")
     public JSONObject test(String subjectCode, String tableName, @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
                            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize, String searchKey) {
-        List<Map<String,Object>> list=new ArrayList<>();
+        List<List<DataComposeDemo>> lists=new ArrayList<>();
 
         Map<String, List<String>> map = editDataService.getTableStructure(subjectCode, tableName);
         List<String> list3=map.get("COLUMN_NAME");
         List<String> list4=map.get("DATA_TYPE");
         List<String> list5=map.get("COLUMN_COMMENT");
-        List<String> list6=map.get("pkColumn");
-        List<String> list7=map.get("autoAdd");
-        List<String> list8=map.get("COLUMN_TYPE");
-        list = editDataService.getTableData(subjectCode, tableName, pageNo, pageSize, searchKey, list3);
+        List<String> col_name=new ArrayList<>();
+        List<String> data_type=new ArrayList<>();
+        List<String> col_comment=new ArrayList<>();
+        int j=0;
+        for(int i=0;i<list3.size();i++){
+            if(!list3.get(i).equals("PORTALID")){
+                col_name.add(list3.get(i));
+                data_type.add(list4.get(i));
+                col_comment.add(list5.get(i));
+                j++;
+            }
+            if(j>=5){
+                break;
+            }
+        }
         int countNum = editDataService.countData(subjectCode, tableName, searchKey, list3);
 
         JSONObject jsonObject=new JSONObject();
@@ -98,51 +109,29 @@ public class EditDataController {
             jsonObject.put("tableComment", "");
         }
         int check = synchronizationTablesService.isSynchronizationTable(tableName, subjectCode);
+
+        lists = editDataService.getTableData(subjectCode, tableName, pageNo, pageSize, searchKey, list3);
+        for(int i=0;i<lists.size();i++){
+                if(lists.get(i).size()<6){
+                    lists.get(i).get(lists.get(i).size()-1).setColumnNumber("1");
+                }
+                for(int n=0;n<col_name.size();n++){
+                    lists.get(i).get(n).setDataType(data_type.get(n));
+                }
+        }
         jsonObject.put("totalCount", countNum);
         jsonObject.put("currentPage", pageNo);
         jsonObject.put("pageSize", pageSize);
         jsonObject.put("totalPages", countNum % pageSize == 0 ? countNum / pageSize : countNum / pageSize + 1);
 
         jsonObject.put("isSync", check);
-        jsonObject.put("dataDatil",list);
-        jsonObject.put("columns",list3);
-        jsonObject.put("dataType",list4);
-        jsonObject.put("columnComment",list5);
-        jsonObject.put("pkColumn",list6);
-        jsonObject.put("autoAdd",list7);
-        jsonObject.put("columnType",list8);
+        jsonObject.put("dataDatil",lists);
+        jsonObject.put("columns",col_name);
+        jsonObject.put("dataType",data_type);
+        jsonObject.put("columnComment",col_comment);
         return jsonObject;
     }
 
-
-//    显示表数据，使用template，建立数据类，未完成
-    @ResponseBody
-    @RequestMapping("/showTableDataTestTmpl")
-    public JSONObject showTableDataTestTmpl(String subjectCode, String tableName,@RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
-                           @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
-     
-        List<List<Object>> list=new ArrayList<>();
-
-        Map<String, List<String>> map = editDataService.getTableStructure(subjectCode, tableName);
-        List<String> list3=map.get("COLUMN_NAME");
-        List<String> list4=map.get("DATA_TYPE");
-        List<String> list5=map.get("COLUMN_COMMENT");
-
-        list = editDataService.getTableDataTestTmpl(subjectCode, tableName, pageNo, pageSize);
-        int countNum = editDataService.countData(subjectCode, tableName, subjectCode, list3);
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("totalCount", countNum);
-        jsonObject.put("currentPage", pageNo);
-        jsonObject.put("pageSize", pageSize);
-        jsonObject.put("totalPages", countNum % pageSize == 0 ? countNum / pageSize : countNum / pageSize + 1);
-
-        jsonObject.put("dataDatil",list);
-        jsonObject.put("columns",list3);
-        jsonObject.put("dataType",list4);
-        jsonObject.put("columnComment",list5);
-
-        return jsonObject;
-    }
 
     /**
      * @Description: 新增数据，点击保存按钮
@@ -168,8 +157,10 @@ public class EditDataController {
         for(int i=0;i<jsonArray.size();i++){
             String col = jsonArray.getJSONObject(i).getString("columnName");
             String val = jsonArray.getJSONObject(i).getString("columnValue");
+            if(list1.get(i).equals("PRI") && list2.get(i).equals("auto_increment")){
 
-            if (list1.get(i).equals("PRI") && !list2.get(i).equals("auto_increment") && !col.equals("PORTALID")) {   //有主键但不自增，判断新增主键是否重复
+            }else if (list1.get(i).equals("PRI") && !list2.get(i).equals("auto_increment") && !col.equals("PORTALID")) {
+                //有主键但不自增，判断新增主键是否重复
                 if(val!=null && !val.equals("")){
                     if (editDataService.checkPriKey(subjectCode, tableName, val, col) == 1) { //主键重复
                         jsonObject.put("data","0");
@@ -181,17 +172,18 @@ public class EditDataController {
                     jsonObject.put("prikey",col);
                     return jsonObject;
                 }
-            } else if (!col.equals("PORTALID") && list3.get(i).equals("NO")) {
-                jsonObject.put("data", "-2+" + col);    //该列不能为空
+            } else if (!col.equals("PORTALID") && list3.get(i).equals("NO") && (val==null || " ".equals(val))) {
+                jsonObject.put("data", "-2");    //该列不能为空
+                jsonObject.put("dataResult", "-2+" + col);
                 return jsonObject;
             }
         }
-        int n = editDataService.addData(subjectCode, tableName, list1, list2, jsonArray, enumnCoumns);
-        if(n==1){
-            jsonObject.put("data","1");
-        }else{
-            jsonObject.put("data","-3");
-        }
+        jsonObject = editDataService.addData(subjectCode, tableName, list1, list2, jsonArray, enumnCoumns);
+//        if(n==1){
+//            jsonObject.put("data","1");
+//        }else{
+//            jsonObject.put("data","-3");
+//        }
         return jsonObject;
     }
 
@@ -217,6 +209,28 @@ public class EditDataController {
         return jsonObject;
     }
 
+    public List<DataComposeDemo> getDataComposeDemos( Map<String, List<String>> map, List<String> list){
+        List<String> list1=map.get("COLUMN_NAME");//列明
+        List<String> list2=map.get("DATA_TYPE");//字段类型
+        List<String> list3=map.get("COLUMN_COMMENT"); //注释
+        List<String> list4=map.get("autoAdd");  //自增
+        List<String> list5=map.get("pkColumn");  //键
+        List<DataComposeDemo> dataComposeDemos=new ArrayList<>();
+        for(int i = 0; i<list1.size(); i++){
+            DataComposeDemo composeDemo=new DataComposeDemo();
+            composeDemo.setColName(list1.get(i));
+            composeDemo.setAutoAdd(list4.get(i));
+            composeDemo.setPkColumn(list5.get(i));
+            composeDemo.setColumnComment(list3.get(i));
+            composeDemo.setDataType(list2.get(i));
+            if(list.size()!=0){
+                composeDemo.setData(list.get(i));
+            }
+            dataComposeDemos.add(composeDemo);
+        }
+        return dataComposeDemos;
+    }
+
     /**
      * @Description: 点击新增数据
      * @Param: [subjectCode, tableName]
@@ -228,7 +242,6 @@ public class EditDataController {
     @RequestMapping("/toaddTableData")
     public JSONObject toaddTableData(String subjectCode,String tableName){
         JSONObject jsonObject=new JSONObject();
-//        DataSrc datasrc=getDataSrc(subjectCode);
         Map<String, List<String>> map = editDataService.getTableStructure(subjectCode, tableName);
         List<String> list1=map.get("COLUMN_NAME");//列明
         List<String> list2=map.get("DATA_TYPE");//字段类型
@@ -252,6 +265,9 @@ public class EditDataController {
             jsonObject.put("enumDataList", enumDataList);
             jsonObject.put("alert", 1);
         }
+        List<String> list=new ArrayList<>();
+        List<DataComposeDemo> dataComposeDemos=getDataComposeDemos(map,list);
+        jsonObject.put("dataComposeDemoList",dataComposeDemos);
         return jsonObject;
     }
 
@@ -342,7 +358,7 @@ public class EditDataController {
                             enumData.setKey(list1.get(i));
                             enumData.setValue(s);
                             enumDataList.add(enumData);
-
+                            jsonObject.put("alert", 1);
                         }
                         String s_val = "";
                         if (showTypeDetail.getOptionMode().equals("2")) {  //sql
@@ -366,11 +382,14 @@ public class EditDataController {
                             enumData.setValue(s_val);
                             enumData.setKey(list1.get(i));
                             enumDataList.add(enumData);
+                            jsonObject.put("alert", 1);
                         }
                     }
                 }
             }
         }
+        List<DataComposeDemo> lists=getDataComposeDemos(map,list7);
+        jsonObject.put("dataComposeDemoList",lists);
         jsonObject.put("enumDataList", enumDataList);
         jsonObject.put("data", list7);
         return jsonObject;
@@ -413,12 +432,12 @@ public class EditDataController {
             }
         }
 
-        int n = editDataService.updateDate(tableName, subjectCode, jsonArray2, enumnCoumns, delPORTALID);
-        if (n == 1) {
-            jsonObject.put("data", "1");
-        } else {
-            jsonObject.put("data", "0");
-        }
+        jsonObject = editDataService.updateDate(tableName, subjectCode, jsonArray2, enumnCoumns, delPORTALID);
+//        if (n == 1) {
+//            jsonObject.put("data", "1");
+//        } else {
+//            jsonObject.put("data", "0");
+//        }
         return jsonObject;
     }
 
@@ -434,33 +453,33 @@ public class EditDataController {
     public JSONObject toCheckTableData(String subjectCode, String tableName, String PORTALID){
         JSONObject jsonObject=new JSONObject();
         Map<String, List<String>> map = editDataService.getTableStructure(subjectCode, tableName);
-        List<String> list1=map.get("COLUMN_NAME");
-        List<String> list2=map.get("DATA_TYPE");//字段类型
-        List<String> list3=map.get("COLUMN_COMMENT"); //注释
-        List<String> list4=map.get("autoAdd");  //自增
-        List<String> list5=map.get("pkColumn");  //键
-        List<String> list6=map.get("COLUMN_TYPE"); //列类型
-        List<String> list7=map.get("COLUMN_NAME");
-
-        jsonObject.put("COLUMN_NAME",list1);
-        jsonObject.put("DATA_TYPE",list2);
-        jsonObject.put("COLUMN_COMMENT",list3);
-        jsonObject.put("autoAdd",list4);
-        jsonObject.put("pkColumn",list5);
-        jsonObject.put("COLUMN_TYPE",list6);
+//        List<String> list1=map.get("COLUMN_NAME");
+//        List<String> list2=map.get("DATA_TYPE");//字段类型
+//        List<String> list3=map.get("COLUMN_COMMENT"); //注释
+//        List<String> list4=map.get("autoAdd");  //自增
+//        List<String> list5=map.get("pkColumn");  //键
+//        List<String> list6=map.get("COLUMN_TYPE"); //列类型
+//        List<String> list7=map.get("COLUMN_NAME");
+//
+//        jsonObject.put("COLUMN_NAME",list1);
+//        jsonObject.put("DATA_TYPE",list2);
+//        jsonObject.put("COLUMN_COMMENT",list3);
+//        jsonObject.put("autoAdd",list4);
+//        jsonObject.put("pkColumn",list5);
+//        jsonObject.put("COLUMN_TYPE",list6);
         List<String> list = editDataService.getDataByPORTALID(subjectCode, tableName, PORTALID);
-        List<DataComposeDemo> dataComposeDemos=new ArrayList<>();
-        for(int i = 0; i<list7.size(); i++){
-            DataComposeDemo composeDemo=new DataComposeDemo();
-            composeDemo.setColName(list7.get(i));
-            composeDemo.setAutoAdd(list4.get(i));
-            composeDemo.setPkColumn(list5.get(i));
-            composeDemo.setColumnComment(list3.get(i));
-            composeDemo.setDataType(list2.get(i));
-            composeDemo.setColumnType(list6.get(i));
-            composeDemo.setData(list.get(i));
-            dataComposeDemos.add(composeDemo);
-        }
+        List<DataComposeDemo> dataComposeDemos=getDataComposeDemos(map,list);
+//        for(int i = 0; i<list7.size(); i++){
+//            DataComposeDemo composeDemo=new DataComposeDemo();
+//            composeDemo.setColName(list7.get(i));
+//            composeDemo.setAutoAdd(list4.get(i));
+//            composeDemo.setPkColumn(list5.get(i));
+//            composeDemo.setColumnComment(list3.get(i));
+//            composeDemo.setDataType(list2.get(i));
+//            composeDemo.setColumnType(list6.get(i));
+//            composeDemo.setData(list.get(i));
+//            dataComposeDemos.add(composeDemo);
+//        }
         jsonObject.put("data",dataComposeDemos);
         return jsonObject;
     }
