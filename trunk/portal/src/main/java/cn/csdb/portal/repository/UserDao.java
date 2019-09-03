@@ -297,15 +297,14 @@ public class UserDao {
         int deletedUserCnt = 0;
         DBObject dbObject = QueryBuilder.start().and("_id").is(id).get();
         Query query = new BasicQuery(dbObject);
-
         User user = mongoTemplate.findOne(query, User.class);
-        String[] groupArr = user.getGroups().split(",");
-        String userId = user.getId();
-        for (String groupName : groupArr)
-        {
-            dropUserFromGroup(userId, groupName);
+        if(user.getGroups()!=null){
+            String[] groupArr = user.getGroups().split(",");
+            String userId = user.getId();
+            for (String groupName : groupArr) {
+                dropUserFromGroup(userId, groupName);
+            }
         }
-
         WriteResult writeResult = mongoTemplate.remove(query, "t_user");
         deletedUserCnt = writeResult.getN();
 
