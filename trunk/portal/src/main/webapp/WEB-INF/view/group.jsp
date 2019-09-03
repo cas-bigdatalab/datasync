@@ -453,17 +453,17 @@
                         </div>
 
 
-                        <div class="form-group">
+                        <%--<div class="form-group">
                             <label class=" col-sm-3 control-label" for="userRealName">真实姓名:<span
                                     style="color: red;">*</span></label>
                             <div class="col-sm-9">
                                 <input id="userRealName" class="form-control" type="text" name="userRealName"
                                        placeholder="请输入真实姓名">
                             </div>
-                        </div>
+                        </div>--%>
                         <div class="form-group">
-                            <label class=" col-sm-3 control-label" for="idCard">证件号:<span
-                                    style="color: red;">*</span></label>
+                            <label class=" col-sm-3 control-label" for="idCard">证件号:<%--<span
+                                    style="color: red;">*</span>--%></label>
                             <div class="col-sm-9">
                                 <input id="idCard" class="form-control" type="text" name="idCard" placeholder="请输入证件号">
                             </div>
@@ -614,7 +614,7 @@
                         </div>
 
 
-                        <div class="form-group">
+                        <%--<div class="form-group">
                             <label class=" col-sm-3 control-label" for="userRealNameForUpdate">真实姓名:<span
                                     style="color: red;">*</span></label>
                             <div class="col-sm-9">
@@ -622,13 +622,13 @@
                                        name="userRealNameForUpdate"
                                        placeholder="请输入真实姓名">
                             </div>
-                        </div>
+                        </div>--%>
                         <div class="form-group">
-                            <label class=" col-sm-3 control-label" for="idCardForUpdate">证件号:<span
-                                    style="color: red;">*</span></label>
+                            <label class=" col-sm-3 control-label" for="idCardForUpdate">证件号:<%--<span
+                                    style="color: red;">*</span>--%></label>
                             <div class="col-sm-9">
                                 <input id="idCardForUpdate" class="form-control" type="text" name="idCardForUpdate"
-                                       placeholder="请输入真实姓名">
+                                       placeholder="请输入证件号">
                             </div>
                         </div>
                         <div class="form-group">
@@ -981,13 +981,13 @@
                         required: true,
                         minlength: 6
                     },
-                    userRealName: {
+                    /*userRealName: {
                         required: true
                     },
                     idCard: {
                         required: true,
                         isIdCard: true
-                    },
+                    },*/
                     sex: {
                         required: true
                     },
@@ -1010,12 +1010,12 @@
                         required: "请输入密码",
                         minlength: "密码至少为6位"
                     },
-                    userRealName: {
+                    /*userRealName: {
                         required: "请输入真实姓名"
                     },
                     idCard: {
                         required: "请输入证件号"
-                    },
+                    },*/
                     sex: {
                         required: "请选择性别"
                     }
@@ -1035,13 +1035,13 @@
                         required: true,
                         minlength: 6
                     },
-                    userRealNameForUpdate: {
+                    /*userRealNameForUpdate: {
                         required: true
                     },
                     idCardForUpdate: {
                         required: true,
                         isIdCard: true
-                    },
+                    },*/
                     sexForUpdate: {
                         required: true
                     },
@@ -1066,12 +1066,12 @@
                         minlength: "密码至少为6位"
                     },
                     /*groupsForUpdateUserDialog: "请输入用户组"*/
-                    userRealNameForUpdate: {
+                    /*userRealNameForUpdate: {
                         required: "请输入真实姓名"
                     },
                     idCardForUpdate: {
                         required: "请输入证件号"
-                    },
+                    },*/
                     sexForUpdate: {
                         required: "请选择性别"
                     }
@@ -1563,7 +1563,7 @@
                         $("#loginIdForUpdate").val(data.loginId);
 
 
-                        $("#userRealNameForUpdate").val(data.userRealName);
+                        //$("#userRealNameForUpdate").val(data.userRealName);
                         $("#idCardForUpdate").val(data.idCard);
                         $("#sexForUpdate").val(data.sex);
                         $("#phoneNoForUpdate").val(data.phoneNo);
@@ -1604,7 +1604,7 @@
                         "password": $("#passwordForUpdate").val(),
 
 
-                        "userRealName": $("#userRealNameForUpdate").val(),
+                        //"userRealName": $("#userRealNameForUpdate").val(),
                         "idCard": $("#idCardForUpdate").val(),
                         "sex": $("#sexForUpdate").val(),
                         "phoneNo": $("#phoneNoForUpdate").val(),
