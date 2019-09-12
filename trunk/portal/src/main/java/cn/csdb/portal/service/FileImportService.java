@@ -732,7 +732,14 @@ public class FileImportService {
             sb.append("( ");
             for (String i : orderNum) {
                 int j = Integer.parseInt(i);
-                sb.append("'" + row.get(j) + "',");
+                //zcy20190912修改，如果内容中包括'的特殊处理
+                if(row.get(j).indexOf("'")>-1){
+                    String tempStr = row.get(j);
+                    sb.append("'" + tempStr.replace("'","''") + "',");
+                }else {
+                    sb.append("'" + row.get(j) + "',");
+                }
+//                sb.append("'" + row.get(j) + "',");
             }
             String s = UUID.randomUUID().toString();
             sb.append("'");
