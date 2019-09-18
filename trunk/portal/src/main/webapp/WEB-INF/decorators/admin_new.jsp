@@ -65,7 +65,7 @@
             padding-bottom: unset;
         }
 
-        #content {
+        #content_bodys_div {
             overflow-y: auto !important;
             overflow-x: hidden !important;
         }
@@ -237,7 +237,7 @@
                     <div id="content-top">
                         <div class="fabu_div2"></div>
                     </div>
-                    <div id="content">
+                    <div id="content_bodys_div">
                         <sitemesh:write property="body"/>
                     </div>
                 </div>
@@ -380,7 +380,7 @@
         $page_content.css("height", "95%");
 
 
-        $("#content").height("90%");
+        $("#content_bodys_div").height("90%");
 
         // $("#alltableName").niceScroll({cursorborder: "", cursorcolor: "#155aab", boxzoom: true}); // First scrollable DIV
     });
