@@ -55,9 +55,9 @@
             width: 70%;
         }
         #select2-drop{
-            left: 780.5px!important;
-            width: 436px!important;
-            top: 590px!important;
+            /*left: 780.5px!important;*/
+            width: 438px!important;
+            top: 396px!important;
         }
     </style>
 </head>
