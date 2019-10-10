@@ -534,7 +534,10 @@ public class UserDao {
 
     public int validateLogin(String userName, String password) {
         int loginStatus = 0;
-        DBObject query = QueryBuilder.start().and("loginId").is(userName).and("password").is(password).get();
+        DBObject query = QueryBuilder.start()
+                .and("loginId").is(userName)
+                .and("password").is(password)
+                .and("subjectCode").exists(true).get();
         BasicQuery basicQuery = new BasicQuery(query);
         List<User> list = mongoTemplate.find(basicQuery, User.class);
         if (list.size() != 0) {
