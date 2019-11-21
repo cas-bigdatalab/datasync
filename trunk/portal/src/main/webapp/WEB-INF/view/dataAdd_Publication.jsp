@@ -847,8 +847,9 @@
         $("#task_phone").on("change", function () {
             $("[name='data_phone']").hide()
         });
-        $(".undeslist").delegate("input", "click", function () {
-            staticSourceTableChoice(1, this, sub, $(this).attr("keyval"), "dataResource")
+        $(".undeslist").delegate("label", "dblclick", function () {
+            staticSourceTableChoicePublish(1, this.children[0].children[0], sub, $(this)[0].innerText, "dataResource");
+            // staticSourceTableChoice(1, this.children[0].children[0],resSelectdId, $(this)[0].innerText, "dataResource");
             $("#previewTableDataAndComsButtonId").click()
         });
 

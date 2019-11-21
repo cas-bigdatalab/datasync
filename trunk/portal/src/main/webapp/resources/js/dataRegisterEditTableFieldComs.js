@@ -386,5 +386,50 @@ function editSqlFieldComs(sqlNum) {
     staticSourceTableChoice_edit(2, null, sub, sqlStr, "dataResource",S_flag);
 }
 
+/**
+ *
+ * @param obj
+ * @param dataSourceId
+ * @param tableName
+ */
+function staticSourceTableChoicePublish(editIsChoiceTableOrSql, obj, subjectCode, tableNameOrSql, refer,flag) {
+    S_flag=flag;
+    if (refer == "dataService" || !obj || subjectCode!=null) {
+        $('#editTableFieldComsId').html("");
+        $('#previewTableDataAndComsId').html("");
+
+        $('#editTableDataAndComsButtonId').parent().removeClass("active");
+        $('#previewTableDataAndComsButtonId').parent().removeClass("active");
+
+
+        $('#editTableFieldComsId').removeClass("active");
+        $('#previewTableDataAndComsId').removeClass("active");
+
+        $('#editTableDataAndComsButtonId').parent().addClass("active");
+        $('#editTableFieldComsId').addClass("active");
+        var tableInfosList = null;
+        if (editIsChoiceTableOrSql == 1) {
+            var tableInfos = getTableFieldComs(subjectCode, tableNameOrSql);
+            tableInfosList = [];
+            tableInfosList[0] = {tableName: tableNameOrSql, tableInfos: tableInfos};
+        }
+        $("#staticSourceTableChoiceModal").modal("show");
+        var html = template("editTableFieldComsTmpl", {"tableInfosList": tableInfosList});
+        $('#editTableFieldComsId').html(html);
+        curSourceTableChoice = obj;
+        curEditIsChoiceTableOrSql = editIsChoiceTableOrSql;
+        curRefer = refer;
+        if (editIsChoiceTableOrSql == 1) {
+            curTableName = tableNameOrSql;
+        }
+        preSaveEditTableFieldComs();// 页面与保存coms信息
+    } else {
+        $(obj).removeAttr("coms");
+    }
+    $("#form_wizard_1").find(".button-save").removeAttr("disabled");
+
+}
+
+
 
 
