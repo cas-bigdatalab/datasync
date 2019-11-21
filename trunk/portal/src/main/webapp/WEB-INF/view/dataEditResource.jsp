@@ -54,6 +54,13 @@
             border-radius: 50% !important;
         }
 
+        .kv-file-content {
+            display: none;
+        }
+        .file-size-info{
+            display: none !important;
+        }
+
     </style>
 </head>
 
