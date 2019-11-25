@@ -496,9 +496,6 @@
 
                     var item = {'id': tableName, 'name': tableName, 'closable': true, 'template': html};
                     closableTab.addTab(item); // 执行创建页签
-                    if (data.isSync !== 0) {
-                        $(".bianji").hide();
-                    }
                     fun_limit(subjectCode, tableName, data, searchKey);
                     closableTab.addTabComment({
                         'id': tableName,
@@ -507,7 +504,7 @@
                         'template': html
                     });
                     if (data.isSync !== 0) {
-                        $(".bianji").hide();
+                        $(ids + " .bianji").hide();
                     }
                 }
             })
@@ -582,7 +579,7 @@
                         });
                         $(ids).append(html);
                         if (data.isSync !== 0) {
-                            $(".bianji").hide();
+                            $(ids + " .bianji").hide();
                         }
                         fun_limit(subjectCode, tableName, data, searchKey);
 
