@@ -63,6 +63,7 @@
         .right_div {
             /*padding-top:8px;*/
             padding-bottom: unset;
+            height: 93% !important;
         }
 
         #content_bodys_div {
@@ -123,6 +124,16 @@
             padding-top: 17px;
             text-align: center;
         }
+        .left_div ul li a {
+            padding-left: 14% !important;
+        }
+        .con_div{
+            min-height:0px !important;
+        }
+
+        .page-content-wrapper .page-content {
+            min-height: 0px !important;
+        }
 
     </style>
 
@@ -131,14 +142,14 @@
 
 <body>
 
-<div class="con_div">
+<div class="con_div" style="height:95%">
 
-    <div class="page-container" style="height: 95%;width: 100%;margin: 0 auto;">
+    <div class="page-container" style="height: 100%;width: 100%;margin: 0 auto;">
         <!-- BEGIN SIDEBAR -->
         <div class="page-sidebar-wrapper">
             <%--NEW BAR ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！--%>
             <div class="page-sidebar" style="width: 18%">
-                <div class="left_bottom">
+                <div class="left_bottom" style="background-size: 100% 100%;">
                     <div class="left_top">
                         <%--<img src="${ctx}/resources/img/logo.png">--%>
                         <shiro:hasRole name="admin">
@@ -247,7 +258,11 @@
     </div>
 </div>
 
-<div class="foot_div">${applicationScope.menus['copyright']}</div>
+<div class="foot_div">
+    <div class="page-footer-inner" style="padding-top:0.3%;">
+        ${applicationScope.menus['copyright']}
+    </div>
+</div>
 
 
 <script src="${ctx}/resources/bundles/jquery/jquery.min.js"></script>
@@ -374,13 +389,13 @@
 
         // 根据显示器重置 div.page-content 实际内容区域大小
         var $page_content = $(".page-content");
-        $page_content.css("margin-left", $(".page-sidebar").width());
+        // $page_content.css("margin-left", $(".page-sidebar").width());
         // $page_content.css("min-height", $page_content.height() - $(".foot_div").height());
         $page_content.css("min-height", "");
-        $page_content.css("height", "95%");
+        $page_content.css("height", "100%");
 
 
-        $("#content_bodys_div").height("90%");
+        $("#content_bodys_div").height("89%");
 
         // $("#alltableName").niceScroll({cursorborder: "", cursorcolor: "#155aab", boxzoom: true}); // First scrollable DIV
     });
